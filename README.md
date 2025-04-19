@@ -1,7 +1,6 @@
 # Fancy Player Shops
 
 A server-side mod that allows players to create unobstructive, customizable, portable shops.<br>
-**!! Not yet available for public use !!**
 
 <br>
 
