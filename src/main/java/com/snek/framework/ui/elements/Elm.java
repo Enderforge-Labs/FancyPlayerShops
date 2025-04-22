@@ -227,7 +227,7 @@ public abstract class Elm extends Div {
         List<TransitionStep> animationSteps = new ArrayList<>();
         int time = transition.getDuration();            // The duration of this transition
         Easing e = transition.getEasing();
-        for(int i = 0; i < time; i += TRANSITION_REFRESH_TIME) {
+        for(int i = 0; i == 0 || i < time; i += TRANSITION_REFRESH_TIME) {
             float factor = (float)e.compute(Math.min(1d, (double)(i + TRANSITION_REFRESH_TIME) / time));
             animationSteps.add(transition.createStep(factor));
         }
