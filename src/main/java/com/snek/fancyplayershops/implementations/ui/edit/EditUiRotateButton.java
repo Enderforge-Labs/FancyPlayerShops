@@ -4,9 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.Shop;
-import com.snek.fancyplayershops.implementations.ui.ShopButton;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
-import com.snek.fancyplayershops.implementations.ui.styles.EditUiRotateButtonStyle;
+import com.snek.fancyplayershops.implementations.ui.styles.EditUiLeftRotateButtonStyle;
+import com.snek.fancyplayershops.implementations.ui.styles.EditUiRightRotateButtonStyle;
 import com.snek.fancyplayershops.implementations.ui.styles.ShopButtonStyle;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -41,7 +42,13 @@ public class EditUiRotateButton extends ShopButton {
      * @param _buttonText The text to display on the button.
      */
     public EditUiRotateButton(Shop _shop, float _rotation, Text _buttonText){
-        super(_shop, EditUi.SQUARE_BUTTON_SIZE, EditUi.SQUARE_BUTTON_SIZE, ROTATION_ANIMATION_TIME, new EditUiRotateButtonStyle());
+        super(
+            _shop,
+            EditUi.SQUARE_BUTTON_SIZE,
+            EditUi.SQUARE_BUTTON_SIZE,
+            ROTATION_ANIMATION_TIME,
+            _rotation > 0 ? new EditUiRightRotateButtonStyle() : new EditUiLeftRotateButtonStyle()
+        );
         rotation = _rotation;
         buttonText = _buttonText;
         updateDisplay(null);

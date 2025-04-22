@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui;
+package com.snek.fancyplayershops.implementations.ui.misc;
 
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.ui.elements.FancyTextElm;

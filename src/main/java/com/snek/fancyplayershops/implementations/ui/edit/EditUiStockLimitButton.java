@@ -3,8 +3,8 @@ package com.snek.fancyplayershops.implementations.ui.edit;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.Shop;
-import com.snek.fancyplayershops.implementations.ui.ShopFancyTextElm;
-import com.snek.fancyplayershops.implementations.ui.ShopTextInput;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopTextInput;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.styles.ShopButtonStyle;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;

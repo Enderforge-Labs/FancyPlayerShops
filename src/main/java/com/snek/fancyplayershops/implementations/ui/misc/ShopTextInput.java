@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui;
+package com.snek.fancyplayershops.implementations.ui.misc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -92,6 +92,8 @@ public abstract class ShopTextInput extends ShopButton {
 
     @Override
     public void onHoverExit(@Nullable PlayerEntity player) {
+        if(player != shop.user) return;
+        super.onHoverExit(player);
         exitInputState();
         if(player != null) ChatInput.removeCallback(player);
     }

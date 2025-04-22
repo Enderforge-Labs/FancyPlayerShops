@@ -7,9 +7,9 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
-import com.snek.fancyplayershops.implementations.ui.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
