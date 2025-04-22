@@ -10,11 +10,14 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
+import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.elements.ItemElm;
+import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
@@ -23,6 +26,7 @@ import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
 
 
 
@@ -156,7 +160,25 @@ public class ShopItemDisplay extends ItemElm {
         // If the shop is configured, display the current item and its name
         else {
             ((ItemElmStyle)style).setItem(_item);
-            entity.setCustomName(MinecraftUtils.getItemName(((ItemElmStyle)style).getItem()));
+
+            // Get item name as a string
+            final String fullName = MinecraftUtils.getItemName(((ItemElmStyle)style).getItem()).getString();
+            final StringBuilder truncatedName = new StringBuilder();
+
+            // Calculate the longest string that can fit in one block
+            int totLen = 0;
+            int i;
+            int ellipsisLen = FontSize.getWidth("…");
+            for(i = 0; i < fullName.length(); ++i) {
+                char c = fullName.charAt(i);
+                totLen += FontSize.getWidth(String.valueOf(c));
+                if(totLen + ellipsisLen > TextElm.TEXT_PIXEL_BLOCK_RATIO) break;
+                truncatedName.append(c);
+            }
+
+            // Set the new name and append "…" to it if it has been truncated
+            if(i < fullName.length()) truncatedName.append("…");
+            entity.setCustomName(new Txt(truncatedName.toString()).get());
         }
 
 

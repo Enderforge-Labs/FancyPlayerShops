@@ -55,10 +55,10 @@ public class EditUiLeftRotateButtonStyle extends EditUiRightRotateButtonStyle {
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition()
-            .targetBackground(getDefaultBackground()),
             new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
-            .additiveTransformBg(new Transform().scaleX(ShopButtonStyle.UNHOVERED_W).moveX(SHIFT_X))
+            .additiveTransformBg(new Transform().scaleX(ShopButtonStyle.UNHOVERED_W).moveX(SHIFT_X)),
+            new Transition()
+            .targetBackground(getDefaultBackground())
         );
     }
 }

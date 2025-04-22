@@ -24,7 +24,7 @@ import com.snek.framework.utils.Easings;
 public class ShopButtonStyle extends FancyTextElmStyle {
     public static final Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
     public static final float    UNHOVERED_W          = 0.05f;
-    public static final int      HOVER_ANIMATION_TIME = 6;
+    public static final int      HOVER_ANIMATION_TIME = 4;
 
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation  = null;

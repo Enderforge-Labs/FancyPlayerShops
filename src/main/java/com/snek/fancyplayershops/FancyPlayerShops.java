@@ -79,7 +79,7 @@ public class FancyPlayerShops implements ModInitializer {
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
 
             // Schedule focus features loop
-            Scheduler.loop(0, 2, () -> FocusFeatures.tick(server.getWorlds()));
+            Scheduler.loop(0, 1, () -> FocusFeatures.tick(server.getWorlds()));
 
             // Log initialization success
             LOGGER.info("FancyPlayerShops initialized. :3");
