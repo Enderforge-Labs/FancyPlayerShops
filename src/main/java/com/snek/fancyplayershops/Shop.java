@@ -407,7 +407,7 @@ public class Shop {
      * If no connected entity is found, a new ShopItemDisplay is created.
      * @reutrn the item display.
      */
-    public @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded(){
+    private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded(){
         if(itemDisplay == null) {
             ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
             if(rawItemDisplay == null) {
@@ -654,6 +654,27 @@ public class Shop {
 
         // Add value to default rotation and save the shop
         defaultRotation += _rotation;
+        saveShop();
+    }
+
+
+
+
+    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+    //TODO ^ add /shop stash command
+
+    /**
+     * Changes the item sold by this shop and saves it to its file.
+     * @param _item the new item.
+     */
+    public void changeItem(ItemStack _item) {
+
+        // Change item value, then serialize it and save the shop
+        item = _item.copyWithCount(1);
+        calcSerializedItem();
         saveShop();
     }
 }

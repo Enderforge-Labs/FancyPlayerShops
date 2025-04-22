@@ -1,0 +1,66 @@
+package com.snek.fancyplayershops.implementations.ui.edit;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
+import com.snek.fancyplayershops.implementations.ui.styles.EditUiItemSelectorStyle;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.util.ClickType;
+
+
+
+
+
+
+
+
+/**
+ * A button that allows the owner of the shop to change the item sold by it.
+ */
+public class EditUiItemSelector extends ShopButton {
+
+
+    /**
+     * Creates a new EditUiItemSelector.
+     * @param _shop The target shop.
+     */
+    public EditUiItemSelector(Shop _shop){
+        super(
+            _shop,
+            EditUi.ITEM_SELECTOR_SIZE,
+            EditUi.ITEM_SELECTOR_SIZE,
+            0,
+            new EditUiItemSelectorStyle()
+        );
+    }
+
+
+    @Override
+    public void updateDisplay(@Nullable Text textOverride) {
+        // Empty
+    }
+
+
+    @Override
+    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
+        boolean r = super.onClick(player, click);
+        if(r && player == shop.user) {
+
+            ItemStack item = player.getMainHandStack();
+            if(item != null && item.getItem() != Items.AIR) {
+                shop.changeItem(item);
+                //FIXME check blacklist before setting the item
+                //TODO add item blacklist
+                shop.getItemDisplay().updateDisplay();
+                ((EditUiTitle)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+            }
+        }
+        return r;
+    }
+}

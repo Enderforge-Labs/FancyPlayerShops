@@ -15,7 +15,6 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.Easings;
@@ -33,15 +32,25 @@ import com.snek.framework.utils.Utils;
  */
 public class EditUi extends ShopCanvas {
     private final @NotNull Elm bottomBorder;
+    private final @NotNull Elm title;
+    public @NotNull Elm getBottomBorder() { return bottomBorder; }
+    public @NotNull Elm getTitle() { return title; }
+
 
     // Colors
     public static final Vector3i RGB_STOCK_COLOR = Utils.HSVtoRGB(DetailsUi.C_HSV_STOCK_HIGH);
 
+
     // Layout
     public static final int   SPAWN_SIZE_TIME            = 8;
+
     public static final float SQUARE_BUTTON_SIZE         = 0.12f;
-    public static final float ROTATE_BUTTON_CENTER_Y     = 0.4f - SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
+    public static final float ROTATE_BUTTON_Y            = 0.4f - SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.3f;
+
+    public static final float ITEM_SELECTOR_SIZE         = 0.25f;
+    public static final float ITEM_SELECTOR_Y            = 0.4f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
+
 
     // Functionalities
     public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
@@ -83,6 +92,7 @@ public class EditUi extends ShopCanvas {
         e = bg.addChild(new EditUiTitle(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
+        title = (Elm)e;
 
         // Add price button
         e = bg.addChild(new EditUiPriceButton(_shop));
@@ -96,13 +106,16 @@ public class EditUi extends ShopCanvas {
 
         // Add rotation buttons
         e = bg.addChild(new EditUiRotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
-        e.move(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_CENTER_Y));
+        e.move(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
         e = bg.addChild(new EditUiRotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
-        e.move(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_CENTER_Y));
+        e.move(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
+
+        // Add item selector
+        e = bg.addChild(new EditUiItemSelector(_shop));
+        e.moveY(ITEM_SELECTOR_Y);
 
         // Add bottom border
         e = bg.addChild(new ShopUiBorder(_shop));
-        // e.setAlignmentY(AlignmentY.BOTTOM);
         e.applyAnimationNow(new Animation(
             new Transition(0,Easings.linear)
             .additiveTransform(new Transform().moveY(1 - DetailsUi.BACKGROUND_HEIGHT))

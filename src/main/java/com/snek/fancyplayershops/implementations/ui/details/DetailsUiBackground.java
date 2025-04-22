@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.Shop;
-import com.snek.fancyplayershops.implementations.ui.ShopPanelElm;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 
 
 

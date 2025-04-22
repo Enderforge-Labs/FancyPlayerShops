@@ -45,10 +45,7 @@ public class Div {
     protected @Nullable Div parent = null;
     protected final @NotNull List<Div> children = new ArrayList<>();
     public void setParent(@Nullable Div _parent) { parent = _parent; }
-    public @Nullable Div getLastChild() {
-        int s = children.size();
-        return s < 0 ? null : children.get(s - 1);
-    }
+    public @Nullable Div getParent() { return parent; }
 
 
 

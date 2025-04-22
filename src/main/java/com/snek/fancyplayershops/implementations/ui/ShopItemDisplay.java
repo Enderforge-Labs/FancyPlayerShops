@@ -18,7 +18,9 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -49,8 +51,8 @@ public class ShopItemDisplay extends ItemElm {
     public static final float    LOOP_ROT    = (float)Math.toRadians(120);
 
     // Edit animation scale and transition
-    public static final Vector3f EDIT_SCALE  = new Vector3f(0.5f);
-    public static final Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f);
+    public static final Vector3f EDIT_SCALE  = new Vector3f(0.4f);
+    public static final Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.1f, 0);
 
 
 
@@ -168,8 +170,17 @@ public class ShopItemDisplay extends ItemElm {
 
     @Override
     protected Transform __calcTransform() {
+        // float scale = 1f;
+        // if(
+        //     ((ItemElmStyle)style).getItem().getItem() instanceof BlockItem b &&
+        //     b.getBlock().getstate().getRenderType() == BlockRenderType.MODEL
+        // ) {
+        //     scale = 0.6f;
+        // }
+
         return super.__calcTransform()
             .rotY(shop.getDefaultRotation())
+            .scale(0.8f)
         ;
     }
 
@@ -244,7 +255,7 @@ public class ShopItemDisplay extends ItemElm {
 
     @Override
     public void spawn(Vector3d pos) {
-        super.spawn(new Vector3d(pos).add(0, 0.3f, 0));
+        super.spawn(new Vector3d(pos).add(0, 0.2f, 0));
 
         // Force display update to remove tracking custom name
         updateDisplay();
