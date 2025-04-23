@@ -25,6 +25,7 @@ import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
 import com.snek.fancyplayershops.implementations.ui.edit.EditUi;
 import com.snek.fancyplayershops.implementations.ui.misc.InteractionBlocker;
+import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.ui.Div;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -33,6 +34,7 @@ import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -106,10 +108,22 @@ public class Shop {
     private String worldId;
     private transient ShopItemDisplay itemDisplay = null; //! Searched when needed instead of on data loading. The chunk needs to be loaded.
     private UUID itemDisplayUUID;
+    private @Nullable UUID itemDisplayNameUUID1;
+    private @Nullable UUID itemDisplayNameUUID2;
     private BlockPos pos;
     private transient String shopIdentifierCache;
     private transient String shopIdentifierCache_noWorld;
-    public Vector3d calcDisplayPos() { return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5); }
+
+    public Vector3d calcDisplayPos() {
+        return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+    }
+    public void setItemDisplayNameUUID(UUID uuid1, UUID uuid2) {
+        itemDisplayNameUUID1 = uuid1;
+        itemDisplayNameUUID2 = uuid2;
+        saveShop();
+        System.out.println("saved " + (itemDisplayNameUUID1 == null ? "null" : itemDisplayNameUUID1.toString()));
+        System.out.println("saved " + (itemDisplayNameUUID2 == null ? "null" : itemDisplayNameUUID2.toString()));
+    }
 
 
     // Shop data
@@ -419,7 +433,12 @@ public class Shop {
                 itemDisplay = new ShopItemDisplay(this);
             }
             else {
-                itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
+                System.out.println("HERE");
+                TextDisplayEntity rawName1 = itemDisplayNameUUID1 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID1));
+                TextDisplayEntity rawName2 = itemDisplayNameUUID2 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID2));
+                System.out.println(itemDisplayNameUUID1 == null ? "null" : itemDisplayNameUUID1.toString());
+                System.out.println(itemDisplayNameUUID2 == null ? "null" : itemDisplayNameUUID2.toString());
+                itemDisplay = new ShopItemDisplay(this, rawItemDisplay, rawName1, rawName2);
             }
         }
         return itemDisplay;

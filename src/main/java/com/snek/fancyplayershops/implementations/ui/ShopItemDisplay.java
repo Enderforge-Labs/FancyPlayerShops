@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.implementations.ui;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -11,22 +12,24 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.generated.FontSize;
+import com.snek.framework.ui.elements.FancyTextElm;
 import com.snek.framework.ui.elements.ItemElm;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.ElmStyle;
+import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
+import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.entity.Entity.RemovalReason;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.item.BlockItem;
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 
 
 
@@ -41,10 +44,15 @@ import net.minecraft.text.Text;
  */
 public class ShopItemDisplay extends ItemElm {
     Shop shop;
+    FancyTextElm name;
+
+    // Layout
+    public static final float ENTITY_SHIFT_Y = 0.2f;
+    public static final float NAME_SHIFT_Y = 0.4f;
+    public static final float NAME_DISPLAY_WIDTH = 0.9f;
 
     // Task handlers. Used to cancel animations and other visual changes
     private @Nullable TaskHandler loopHandler = null;
-    private @Nullable TaskHandler nameToggleHandler = null;
 
 
     // The Y translation applied by the spawning animation
@@ -122,12 +130,18 @@ public class ShopItemDisplay extends ItemElm {
 
 
     /**
-     * Creates a new ShopItemDisplay.
+     * Creates a new ShopItemDisplay using existing display entities.
      * @param _targetShop The target shop.
      * @param _rawDisplay A vanilla ItemDisplayEntity to use to display the item.
+     * @param _rawName1 One of the TextDisplayEntity entities that make up the name of the item.
+     * @param _rawName2 One of the TextDisplayEntity entities that make up the name of the item.
      */
-    public ShopItemDisplay(@NotNull Shop _targetShop, @NotNull ItemDisplayEntity _rawDisplay) {
+    public ShopItemDisplay(@NotNull Shop _targetShop, @NotNull ItemDisplayEntity _rawDisplay, @Nullable TextDisplayEntity _rawName1, @Nullable TextDisplayEntity _rawName2) {
         this(_targetShop, new CustomItemDisplay(_rawDisplay));
+        System.out.println(_rawName1 == null ? "null" : "ok");
+        System.out.println(_rawName2 == null ? "null" : "ok");
+        if(_rawName1 != null) _rawName1.remove(RemovalReason.KILLED);
+        if(_rawName2 != null) _rawName2.remove(RemovalReason.KILLED);
     }
 
     /**
@@ -148,12 +162,34 @@ public class ShopItemDisplay extends ItemElm {
         ItemStack _item = shop.getItem();
 
 
+        // Spawn or despawn the name entity if necessary
+        if(!shop.isFocused()) {
+            if(name == null) {
+                name = new FancyTextElm(world);
+                name.style.setViewRange(0.1f);
+                shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
+                name.spawn(new Vector3d(entity.getPosCopy()).add(0, NAME_SHIFT_Y, 0));
+                name.getFgEntity().setCustomName(null);
+                name.getBgEntity().setCustomName(null);
+            }
+        }
+        else if(name != null) {
+            name.despawnNow();
+            name = null;
+            shop.setItemDisplayNameUUID(null, null);
+        }
+
+
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
         if(_item.getItem() == Items.AIR) {
             ItemStack noItem = Items.BARRIER.getDefaultStack();
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
             ((ItemElmStyle)style).setItem(noItem);
-            entity.setCustomName(MinecraftUtils.getItemName(noItem));
+            if(name != null) {
+                ((FancyTextElmStyle)name.style).setText(MinecraftUtils.getItemName(noItem));
+                name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
+                name.flushStyle();
+            }
         }
 
 
@@ -165,25 +201,30 @@ public class ShopItemDisplay extends ItemElm {
             final String fullName = MinecraftUtils.getItemName(((ItemElmStyle)style).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
-            // Calculate the longest string that can fit in one block
+            // Wrap the name and calculate the amount tof lines
             int totLen = 0;
             int i;
             int ellipsisLen = FontSize.getWidth("…");
             for(i = 0; i < fullName.length(); ++i) {
                 char c = fullName.charAt(i);
                 totLen += FontSize.getWidth(String.valueOf(c));
-                if(totLen + ellipsisLen > TextElm.TEXT_PIXEL_BLOCK_RATIO) break;
+                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > TextElm.TEXT_PIXEL_BLOCK_RATIO * (NAME_DISPLAY_WIDTH - 0.1f)) {
+                    break;
+                }
                 truncatedName.append(c);
             }
 
-            // Set the new name and append "…" to it if it has been truncated
+            // Set the new name and adjust the element height
             if(i < fullName.length()) truncatedName.append("…");
-            entity.setCustomName(new Txt(truncatedName.toString()).get());
+            if(name != null) {
+                ((FancyTextElmStyle)name.style).setText(new Txt(truncatedName.toString()).get());
+                name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
+                name.flushStyle();
+            }
         }
 
 
-        // Turn on custom name and update the entity
-        if(!shop.isFocused()) entity.setCustomNameVisible(true);
+        // Update the entity
         flushStyle();
     }
 
@@ -192,14 +233,6 @@ public class ShopItemDisplay extends ItemElm {
 
     @Override
     protected Transform __calcTransform() {
-        // float scale = 1f;
-        // if(
-        //     ((ItemElmStyle)style).getItem().getItem() instanceof BlockItem b &&
-        //     b.getBlock().getstate().getRenderType() == BlockRenderType.MODEL
-        // ) {
-        //     scale = 0.6f;
-        // }
-
         return super.__calcTransform()
             .rotY(shop.getDefaultRotation())
             .scale(0.8f)
@@ -215,8 +248,7 @@ public class ShopItemDisplay extends ItemElm {
     public void enterFocusState(){
 
         // Hide custom name
-        if(nameToggleHandler != null) nameToggleHandler.cancel();
-        entity.setCustomNameVisible(false);
+        updateDisplay();
 
         // Start animations
         applyAnimation(focusAnimation);
@@ -242,7 +274,7 @@ public class ShopItemDisplay extends ItemElm {
         applyAnimation(unfocusAnimation);
 
         // Show custom name after animations end
-        nameToggleHandler = Scheduler.schedule(unfocusAnimation.getTotalDuration(), () -> entity.setCustomNameVisible(true));
+        Scheduler.schedule(unfocusAnimation.getTotalDuration(), this::updateDisplay);
     }
     /**
      * Stops the loop animation.
@@ -277,9 +309,21 @@ public class ShopItemDisplay extends ItemElm {
 
     @Override
     public void spawn(Vector3d pos) {
-        super.spawn(new Vector3d(pos).add(0, 0.2f, 0));
 
-        // Force display update to remove tracking custom name
+        // Spawn the entity and remove tracking custom name
+        super.spawn(new Vector3d(pos).add(0, ENTITY_SHIFT_Y, 0));
+        entity.setCustomName(null);
+        entity.setCustomNameVisible(false);
+
+        // Force display update to spawn the name element
         updateDisplay();
+    }
+
+
+
+    @Override
+    public void despawn() {
+        super.despawn();
+        if(name != null) name.despawnNow();
     }
 }

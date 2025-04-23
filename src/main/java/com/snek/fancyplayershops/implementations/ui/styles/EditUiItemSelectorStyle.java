@@ -14,12 +14,13 @@ import com.snek.framework.utils.Easings;
 
 
 
-//FIXME fix stuttering hover animations. for some reason this doesnt happen on other buttons
+
 
 /**
  * The style of the EditUiItemSelector UI element.
  */
 public class EditUiItemSelectorStyle extends ShopButtonStyle {
+    public static final Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
 
 
     /**
@@ -30,6 +31,12 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
     }
 
 
+
+
+    @Override
+    public @NotNull Vector4i getDefaultBackground() {
+        return new Vector4i(HOVER_LEAVE_COLOR);
+    }
 
 
     @Override
@@ -53,10 +60,10 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition()
-            .targetBackground(getDefaultBackground()),
             new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
-            .additiveTransformBg(new Transform().scaleY(ShopButtonStyle.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleY(ShopButtonStyle.UNHOVERED_W)),
+            new Transition()
+            .targetBackground(getDefaultBackground())
         );
     }
 }
