@@ -68,6 +68,11 @@ import net.minecraft.world.World;
  */
 public class Shop {
 
+    // Limits
+    public static final double MAX_PRICE = 100d * 1000d * 1000d * 1000d;
+    public static final int    MAX_STOCK = 1 * 1000 * 1000;
+
+
     // Animation data
     public  static final int CANVAS_ANIMATION_DELAY = 5;
 
@@ -544,19 +549,8 @@ public class Shop {
      * @param canvas The new canvas.
      */
     public void changeCanvas(ShopCanvas canvas) {
-        // if(activeCanvas != null) for (Div e : activeCanvas.getChildren().get(0).getChildren()) {
-        //     e.despawn();
-        // }
-        // if(activeCanvas != null) activeCanvas.despawnNow();
         activeCanvas = canvas;
         canvas.spawn(calcDisplayPos());
-        // if(canvas != null) activeCanvas.spawn(calcDisplayPos());
-
-        // Scheduler.schedule(CANVAS_ANIMATION_DELAY, () -> {
-        //     if(activeCanvas != null) activeCanvas.despawnNow();
-        //     activeCanvas = canvas;
-        //     if(activeCanvas != null) activeCanvas.spawn(calcDisplayPos());
-        // });
     }
 
 
@@ -607,17 +601,22 @@ public class Shop {
      *     Prices under 0.01 are rounded to 0.01
      *     Prices under 0.00001 are rounded to 0.
      *     Negative values are considered invalid and return false without changing the price.
+     *     Values above MAX_PRICE are also considered invalid. //TODO add to config file
      * @param newPrice The new price
      * @return Whether the new value could be set.
      */
-    public boolean setPrice(float newPrice) {
+    public boolean setPrice(double newPrice) {
         if(newPrice < 0) {
             if(user != null) user.sendMessage(new Txt("The price cannot be negative").red().get(), true);
             return false;
         }
-        else if(newPrice < 0.00001) price = 0;
+        if(newPrice > MAX_PRICE) {
+            if(user != null) user.sendMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().get(), true);
+            return false;
+        }
+        else if(newPrice < 0.00001) price = 0d;
         else if(newPrice < 0.01000) price = 0.01;
-        else price = Math.round(newPrice * 100f) / 100f;
+        else price = Math.round(newPrice * 100d) / 100d;
         saveShop();
         return true;
     }
@@ -625,17 +624,22 @@ public class Shop {
 
 
 
+    //TODO add MAX_STOCK to config file
     /**
      * Tries to set a new stock limit for the item and sends an error message to the user if it's invalid.
      *     Amounts are rounded to the nearest integer.
      *     Negative values and 0 are considered invalid and return false without changing the stock limit.
-     *     Values that are higher than the shop's storage capacity are also considered invalid. //TODO implement shop tiers
+     *     Values above MAX_STOCK or that are higher than the shop's storage capacity are also considered invalid. //TODO implement shop tiers
      * @param newStockLimit The new stock limit.
      * @return Whether the new value could be set.
      */
     public boolean setStockLimit(float newStockLimit) {
         if(newStockLimit < 0.9999) {
             if(user != null) user.sendMessage(new Txt("The stock limit must be at least 1").red().get(), true);
+            return false;
+        }
+        if(newStockLimit > MAX_STOCK) {
+            if(user != null) user.sendMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);

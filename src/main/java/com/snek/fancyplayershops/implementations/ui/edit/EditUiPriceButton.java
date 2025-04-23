@@ -49,7 +49,7 @@ public class EditUiPriceButton extends ShopTextInput {
         try {
 
             // Try to set the new price and update the display if it's valid
-            final boolean r = shop.setPrice(Float.parseFloat(s));
+            final boolean r = shop.setPrice(Double.parseDouble(s));
             if(r) updateDisplay(null);
             return r;
         } catch(NumberFormatException e) {
