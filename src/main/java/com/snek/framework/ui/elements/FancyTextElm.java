@@ -60,6 +60,7 @@ public class FancyTextElm extends Elm {
         // Initialize permanent entity values
         getBgEntity().setText(new Txt().get());
         getFgEntity().setBackground(new Vector4i(0, 0, 0, 0));
+        getFgEntity().setLineWidth(Integer.MAX_VALUE);
     }
 
 

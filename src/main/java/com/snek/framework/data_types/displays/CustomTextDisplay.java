@@ -80,26 +80,32 @@ public class CustomTextDisplay extends CustomDisplay {
 
     // Private methods
     private static Method method_getText;
+    private static Method method_getLineWidth;
     private static Method method_getTextOpacity;
     private static Method method_getBackground;
     private static Method method_setText;
+    private static Method method_setLineWidth;
     private static Method method_setTextOpacity;
     private static Method method_setBackground;
     static {
         try {
             method_getText          = TextDisplayEntity.class.getDeclaredMethod("getText");
+            method_getLineWidth     = TextDisplayEntity.class.getDeclaredMethod("getLineWidth");
             method_getTextOpacity   = TextDisplayEntity.class.getDeclaredMethod("getTextOpacity");
             method_getBackground    = TextDisplayEntity.class.getDeclaredMethod("getBackground");
             method_setText          = TextDisplayEntity.class.getDeclaredMethod("setText",        Text.class);
+            method_setLineWidth     = TextDisplayEntity.class.getDeclaredMethod("setLineWidth",    int.class);
             method_setTextOpacity   = TextDisplayEntity.class.getDeclaredMethod("setTextOpacity", byte.class);
             method_setBackground    = TextDisplayEntity.class.getDeclaredMethod("setBackground",   int.class);
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         method_getText.setAccessible(true);
+        method_getLineWidth.setAccessible(true);
         method_getTextOpacity.setAccessible(true);
         method_getBackground.setAccessible(true);
         method_setText.setAccessible(true);
+        method_setLineWidth.setAccessible(true);
         method_setTextOpacity.setAccessible(true);
         method_setBackground.setAccessible(true);
     }
@@ -166,11 +172,30 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     /**
+     * Sets a new line width value to the entity.
+     * This is equivalent to changing the entity's "line_width" NBT.
+     * @param width The new value.
+     */
+    public void setLineWidth(int width) {
+        Utils.invokeSafe(method_setLineWidth, heldEntity, width);
+    }
+
+
+    /**
      * Retrieves the entity's text value.
      * @return The current text.
      */
     public @NotNull Text getText() {
         return textCache;
+    }
+
+
+    /**
+     * Retrieves the entity's line width value.
+     * @return The current line width.
+     */
+    public int getLineWidth() {
+        return (int)Utils.invokeSafe(method_getLineWidth, heldEntity);
     }
 
 
