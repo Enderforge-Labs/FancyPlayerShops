@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -25,11 +26,16 @@ import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
 import com.snek.fancyplayershops.implementations.ui.edit.EditUi;
 import com.snek.fancyplayershops.implementations.ui.misc.InteractionBlocker;
+import com.snek.framework.data_types.animations.Animation;
+import com.snek.framework.data_types.animations.Transform;
+import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.ui.Div;
+import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
+import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -47,6 +53,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 
@@ -77,6 +85,7 @@ public class Shop {
 
     // Animation data
     public  static final int CANVAS_ANIMATION_DELAY = 5;
+    public  static final int CANVAS_ROTATION_TIME = 8;
 
 
     // Strings
@@ -121,8 +130,6 @@ public class Shop {
         itemDisplayNameUUID1 = uuid1;
         itemDisplayNameUUID2 = uuid2;
         saveShop();
-        System.out.println("saved " + (itemDisplayNameUUID1 == null ? "null" : itemDisplayNameUUID1.toString()));
-        System.out.println("saved " + (itemDisplayNameUUID2 == null ? "null" : itemDisplayNameUUID2.toString()));
     }
 
 
@@ -143,6 +150,7 @@ public class Shop {
     private transient           boolean                   focusStatus = false;
     private transient           boolean               focusStatusNext = false;
     private transient           long                    lastClickTick = 0; //! Used to limit click rate and prevent accidental double clicks
+    private transient @NotNull  Direction               lastDirection = Direction.NORTH;
 
     public void setFocusStatusNext(boolean v) {
         focusStatusNext = v;
@@ -331,8 +339,10 @@ public class Shop {
 
                 // Recalculate transient members and update shop maps
                 if(retrievedShop != null) {
-                    retrievedShop.focusStatus     = false;
-                    retrievedShop.focusStatusNext = false;
+                    retrievedShop.focusStatus           = false;
+                    retrievedShop.focusStatusNext       = false;
+                    retrievedShop.lastDirection         = Direction.NORTH;
+                    retrievedShop.canvasRotationLimiter = new RateLimiter();
                     retrievedShop.cacheShopIdentifier();
                     try {
                         retrievedShop.calcDeserializedItem();
@@ -395,7 +405,7 @@ public class Shop {
                 interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 
                 // Start item animation and turn off the CustomName
-                findItemDisplayEntityIfNeeded().enterFocusState();
+                getItemDisplay().enterFocusState();
             }
             else {
 
@@ -413,7 +423,7 @@ public class Shop {
                 user = null;
 
                 // Turn the item display's custom name back on
-                findItemDisplayEntityIfNeeded().leaveFocusState();
+                getItemDisplay().leaveFocusState();
             }
         }
     }
@@ -433,11 +443,8 @@ public class Shop {
                 itemDisplay = new ShopItemDisplay(this);
             }
             else {
-                System.out.println("HERE");
                 TextDisplayEntity rawName1 = itemDisplayNameUUID1 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID1));
                 TextDisplayEntity rawName2 = itemDisplayNameUUID2 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID2));
-                System.out.println(itemDisplayNameUUID1 == null ? "null" : itemDisplayNameUUID1.toString());
-                System.out.println(itemDisplayNameUUID2 == null ? "null" : itemDisplayNameUUID2.toString());
                 itemDisplay = new ShopItemDisplay(this, rawItemDisplay, rawName1, rawName2);
             }
         }
@@ -581,7 +588,7 @@ public class Shop {
      */
     public void openEditUi(PlayerEntity player) {
         changeCanvas(new EditUi(this));
-        findItemDisplayEntityIfNeeded().enterEditState();
+        getItemDisplay().enterEditState();
     }
 
 
@@ -700,4 +707,41 @@ public class Shop {
         calcSerializedItem();
         saveShop();
     }
+
+
+
+
+    transient RateLimiter canvasRotationLimiter = new RateLimiter();
+    /**
+     * Updates the rotation of the active canvas to face the specified player.
+     * @param player The player.
+     */
+    public void updateCanvasRotation(PlayerEntity player) {
+        if(!canvasRotationLimiter.attempt()) return;
+
+        // Calculate target direction
+        final Vec3d playerPos = player.getPos();
+        final double dx = pos.getX() - playerPos.x;
+        final double dz = pos.getZ() - playerPos.z;
+        final double angle = Math.toDegrees(Math.atan2(-dx, dz));
+        final Direction targetDir = Direction.fromRotation(angle);
+
+        // If the canvas's direction needs updating, apply the animation and change its value
+        if(targetDir != lastDirection) {
+            Animation animation = new Animation(
+                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
+                .additiveTransform(new Transform().rotGlobalY(-Math.toRadians(targetDir.asRotation() - lastDirection.asRotation())))
+            );
+            activeCanvas.applyAnimationRecursive(animation);
+            getItemDisplay().applyAnimationRecursive(animation);
+            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
+            lastDirection = targetDir;
+        }
+    }
 }
+
+
+
+//FIXME fix inconsistent element hitboxes at extreme angles
+//FIXME fix inconsistent element hitboxes at extreme angles
+//FIXME fix inconsistent element hitboxes at extreme angles

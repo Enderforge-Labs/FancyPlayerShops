@@ -166,9 +166,10 @@ public abstract class FocusFeatures {
                     targetShop.setFocusStatusNext(true);
                     targetedShops.add(targetShop);
 
-                    // Tick hoverable elements if this player is the user of the shop
+                    // Update rotation and tick hoverable elements if this player is the user of the shop
                     if(targetShop.user == player && targetShop.activeCanvas != null) {
                         targetShop.activeCanvas.forwardHover(player);
+                        targetShop.updateCanvasRotation(player);
                     }
                 }
             }

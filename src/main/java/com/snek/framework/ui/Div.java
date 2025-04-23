@@ -155,7 +155,6 @@ public class Div {
     public void applyAnimationRecursive(@NotNull Animation animation) {
         applyAnimation(animation);
         for (Div elm : children) {
-            elm.applyAnimation(animation);
             elm.applyAnimationRecursive(animation);
         }
     }
@@ -170,7 +169,6 @@ public class Div {
     public void applyAnimationNowRecursive(@NotNull Animation animation) {
         applyAnimationNow(animation);
         for (Div elm : children) {
-            elm.applyAnimationNow(animation);
             elm.applyAnimationNowRecursive(animation);
         }
     }

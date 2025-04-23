@@ -138,8 +138,6 @@ public class ShopItemDisplay extends ItemElm {
      */
     public ShopItemDisplay(@NotNull Shop _targetShop, @NotNull ItemDisplayEntity _rawDisplay, @Nullable TextDisplayEntity _rawName1, @Nullable TextDisplayEntity _rawName2) {
         this(_targetShop, new CustomItemDisplay(_rawDisplay));
-        System.out.println(_rawName1 == null ? "null" : "ok");
-        System.out.println(_rawName2 == null ? "null" : "ok");
         if(_rawName1 != null) _rawName1.remove(RemovalReason.KILLED);
         if(_rawName2 != null) _rawName2.remove(RemovalReason.KILLED);
     }
@@ -166,7 +164,7 @@ public class ShopItemDisplay extends ItemElm {
         if(!shop.isFocused()) {
             if(name == null) {
                 name = new FancyTextElm(world);
-                name.style.setViewRange(0.1f);
+                name.style.setViewRange(0.2f);
                 shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
                 name.spawn(new Vector3d(entity.getPosCopy()).add(0, NAME_SHIFT_Y, 0));
                 name.getFgEntity().setCustomName(null);
