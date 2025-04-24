@@ -17,7 +17,7 @@ import com.snek.framework.data_types.ui.AlignmentX;
  * An element that can display a full-width, horizontally centered line of a predetermined color.
  */
 public class ShopUiBorder extends ShopPanelElm {
-    public static final float DEFAULT_HEIGHT = 0.01f;
+    public static final float DEFAULT_HEIGHT = 0.02f;
 
 
     /**

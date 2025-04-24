@@ -3,6 +3,7 @@ package com.snek.framework.utils;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -23,11 +24,12 @@ public abstract class MinecraftUtils {
 
     /**
      * Returns the custom name of an item. If the item has no custom name, the default name is returned.
+     * Potions include their effect in the name.
      * @param item The item.
      * @return The name of the item.
      */
     public static @NotNull Text getItemName(@NotNull ItemStack item) {
-        if (item.hasCustomName()) return item.getName();
+        if(item.hasCustomName()) return item.getName();
         return item.getItem().getName();
     }
 

@@ -1,18 +1,11 @@
 package com.snek.fancyplayershops.implementations.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.styles.EditUiTitleStyle;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.styles.TextElmStyle;
-import com.snek.framework.utils.Easing;
-import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
@@ -46,7 +39,11 @@ public class EditUiTitle extends ShopFancyTextElm {
     public void updateDisplay() {
         ((TextElmStyle)style).setText(new Txt()
             .cat(new Txt("Editing ").white())
-            .cat(new Txt(shop.getItem().getItem() == Items.AIR ? new Txt("an empty shop").white().get() : MinecraftUtils.getItemName(shop.getItem())))
+            .cat(new Txt(
+                shop.getItem().getItem() == Items.AIR ?
+                new Txt("an empty shop").white().get() :
+                new Txt("«").white().cat(MinecraftUtils.getItemName(shop.getItem())).cat(new Txt("»").white()).get()
+            ))
             .cat("...")
         .get());
         flushStyle();
