@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.implementations.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
@@ -96,12 +97,11 @@ public class EditUiRotateButton extends ShopButton {
         ShopItemDisplay itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
-            new Transition(ROTATION_ANIMATION_TIME, Easings.sineOut)
-            .targetTransform(
-                itemDisplay.style.getDefaultTransform()
-                .move(ShopItemDisplay.EDIT_MOVE)
-                .moveY(ShopItemDisplay.FOCUS_HEIGHT)
-                .scale(ShopItemDisplay.EDIT_SCALE)
+            new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(
+                new Transform()
+                .setRot(new Quaternionf(itemDisplay.style.getTransform().getRot      ()).invert())
+                .rot   (new Quaternionf(itemDisplay.style.getTransform().getGlobalRot()).invert())
             )
         );
     }

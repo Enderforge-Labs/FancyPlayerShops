@@ -139,10 +139,10 @@ public class Transform {
     public Transform rot          (float x, float y, float z) { rotX(x); rotY(y); rotZ(z);          return this; }
     public Transform rot          (Quaternionf r            ) { _lrot.mul(r);                       return this; }
 
-    public Transform setRotX      (float x                  ) { _lrot.rotationX(x);                 return this; }
-    public Transform setRotY      (float y                  ) { _lrot.rotationY(y);                 return this; }
-    public Transform setRotZ      (float z                  ) { _lrot.rotationZ(z);                 return this; }
-    public Transform setRot       (float x, float y, float z) { setRotX(x); setRotY(y); setRotZ(z); return this; }
+    public Transform setRotX      (float x                  ) { _lrot.rotationX(x);                 return this; } //FIXME setting the rotation resets the other axes
+    public Transform setRotY      (float y                  ) { _lrot.rotationY(y);                 return this; } //FIXME setting the rotation resets the other axes
+    public Transform setRotZ      (float z                  ) { _lrot.rotationZ(z);                 return this; } //FIXME setting the rotation resets the other axes
+    public Transform setRot       (float x, float y, float z) { setRotX(x); setRotY(y); setRotZ(z); return this; } //FIXME setting the rotation resets the other axes
     public Transform setRot       (Quaternionf r            ) { _lrot.set(r);                       return this; }
 
 
@@ -189,10 +189,10 @@ public class Transform {
     public Transform rotGlobal    (float x, float y, float z) { rotGlobalX(x); rotGlobalY(y); rotGlobalZ(z);          return this; }
     public Transform rotGlobal    (Quaternionf r            ) { _grot.mul(r);                                         return this; }
 
-    public Transform setGlobalRotX(float x                  ) { _grot.rotationX(x);                                   return this; }
-    public Transform setGlobalRotY(float y                  ) { _grot.rotationY(y);                                   return this; }
-    public Transform setGlobalRotZ(float z                  ) { _grot.rotationZ(z);                                   return this; }
-    public Transform setGlobalRot (float x, float y, float z) { setGlobalRotX(x); setGlobalRotY(y); setGlobalRotZ(z); return this; }
+    public Transform setGlobalRotX(float x                  ) { _grot.rotationX(x);                                   return this; } //FIXME setting the rotation resets the other axes
+    public Transform setGlobalRotY(float y                  ) { _grot.rotationY(y);                                   return this; } //FIXME setting the rotation resets the other axes
+    public Transform setGlobalRotZ(float z                  ) { _grot.rotationZ(z);                                   return this; } //FIXME setting the rotation resets the other axes
+    public Transform setGlobalRot (float x, float y, float z) { setGlobalRotX(x); setGlobalRotY(y); setGlobalRotZ(z); return this; } //FIXME setting the rotation resets the other axes
     public Transform setGlobalRot (Quaternionf r            ) { _grot.set(r);                                         return this; }
 
 
