@@ -763,11 +763,11 @@ public class Shop {
         final float rotation = -Math.toRadians(to * 45f - from * 45f);
         return Pair.from(
             new Animation(
-                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
+                new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
                 .additiveTransform(new Transform().rotGlobalY(rotation))
             ),
             new Animation(
-                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
+                new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
                 .additiveTransform(new Transform().rotGlobalY(rotation).rotY(-rotation))
             )
         );

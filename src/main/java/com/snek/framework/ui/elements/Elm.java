@@ -60,7 +60,7 @@ public abstract class Elm extends Div {
 
 
     // Animation handling
-    public    static final int TRANSITION_REFRESH_TIME = 1;                         // The time between transition updates. Measured in ticks
+    public    static final int TRANSITION_REFRESH_TIME = 2;                         // The time between transition updates. Measured in ticks
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
@@ -488,8 +488,8 @@ public abstract class Elm extends Div {
         // Check view intersection with the display's box
         Vector3f corner1 = new Vector3f(origin).sub(shiftX);
         Vector3f corner2 = new Vector3f(origin).add(shiftX).add(0, getAbsSize().y, 0);
-        world.spawnParticles(ParticleTypes.BUBBLE_POP, corner1.x, corner1.y, corner1.z, 0, 0, 0, 0, 0); //TODO remove
-        world.spawnParticles(ParticleTypes.BUBBLE_POP, corner2.x, corner2.y, corner2.z, 0, 0, 0, 0, 0); //TODO remove
+        // world.spawnParticles(ParticleTypes.BUBBLE_POP, corner1.x, corner1.y, corner1.z, 0, 0, 0, 0, 0); //TODO remove
+        // world.spawnParticles(ParticleTypes.BUBBLE_POP, corner2.x, corner2.y, corner2.z, 0, 0, 0, 0, 0); //TODO remove
         return SpaceUtils.checkLineRectangleIntersection(
             player.getEyePos().toVector3f(),
             player.getRotationVec(1f).toVector3f(),
