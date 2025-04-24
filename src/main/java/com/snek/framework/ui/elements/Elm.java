@@ -204,20 +204,15 @@ public abstract class Elm extends Div {
      * @param t The transition to apply.
      */
     protected void __applyAnimationTransitionNow(@NotNull Transition t) {
-        // if(t.d.hasTransform()) {
-            // if(t.isAdditive()) style.editTransform().apply(t.d.getTransform());
-            // else               style.editTransform().set  (t.d.getTransform());
-        // }
 
-        // Update existing future data
+        // Calculate step and apply it instantly
         TransitionStep step = t.createStep(1);
-        // for (InterpolatedData data : futureDataQueue) {
-        //     data.apply(step);
-        // }
         InterpolatedData data = __generateInterpolatedData();
         data.apply(step);
         __applyTransitionStep(data);
         flushStyle();
+
+        // Update existing future data if present. Instantly start the interpolation otherwise
         if(futureDataQueue.isEmpty()) {
             entity.setInterpolationDuration(0);
             entity.setStartInterpolation();
@@ -225,10 +220,6 @@ public abstract class Elm extends Div {
         else {
             futureDataQueue.get(0).apply(step);
         }
-        // int j = 0;
-        // for(; j < animationSteps.size(); ++j) {
-            // futureDataQueue.get(j + shift).apply(animationSteps.get(j));
-        // }
     }
 
 

@@ -152,7 +152,7 @@ public class Shop {
     private transient           boolean                   focusStatus = false;
     private transient           boolean               focusStatusNext = false;
     private transient           long                    lastClickTick = 0; //! Used to limit click rate and prevent accidental double clicks
-    private transient @NotNull  Direction               lastDirection = Direction.NORTH;
+    private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
 
     public void setFocusStatusNext(boolean v) {
         focusStatusNext = v;
@@ -343,7 +343,7 @@ public class Shop {
                 if(retrievedShop != null) {
                     retrievedShop.focusStatus           = false;
                     retrievedShop.focusStatusNext       = false;
-                    retrievedShop.lastDirection         = Direction.NORTH;
+                    retrievedShop.lastDirection         = 0;
                     retrievedShop.canvasRotationLimiter = new RateLimiter();
                     retrievedShop.cacheShopIdentifier();
                     try {
@@ -398,8 +398,8 @@ public class Shop {
                 // Create details canvas
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
-                if(lastDirection != Direction.NORTH) {
-                    final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(Direction.NORTH, lastDirection);
+                if(lastDirection != 0) {
+                    final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
                     activeCanvas.applyAnimationNowRecursive(animations.first);
                     itemDisplay.applyAnimationNowRecursive(animations.second);
                 }
@@ -582,8 +582,8 @@ public class Shop {
         activeCanvas = canvas;
 
         // Adjust rotation if needed
-        if(lastDirection != Direction.NORTH) {
-            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(Direction.NORTH, lastDirection);
+        if(lastDirection != 0) {
+            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
             for (Div c : canvas.getChildren().get(0).getChildren()) {
                 if(c instanceof Elm e) {
                     e.applyAnimationNowRecursive(animations.first);
@@ -740,7 +740,7 @@ public class Shop {
         final double dx = pos.getX() + 0.5d - playerPos.x;
         final double dz = pos.getZ() + 0.5d - playerPos.z;
         final double angle = Math.toDegrees(Math.atan2(-dx, dz));
-        final Direction targetDir = Direction.fromRotation(angle);
+        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;
 
         // Apply animations and update the current direction if needed
         if(targetDir != lastDirection) {
@@ -759,8 +759,8 @@ public class Shop {
      * @param to The new direction to face.
      * @return The canvas animation and the item display animation.
      */
-    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(Direction from, Direction to){
-        final float rotation = -Math.toRadians(to.asRotation() - from.asRotation());
+    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(int from, int to){
+        final float rotation = -Math.toRadians(to * 45f - from * 45f);
         return Pair.from(
             new Animation(
                 new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
