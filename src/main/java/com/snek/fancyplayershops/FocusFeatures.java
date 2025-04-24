@@ -3,7 +3,10 @@ package com.snek.fancyplayershops;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.snek.framework.utils.MinecraftUtils;
 
@@ -37,7 +40,7 @@ public abstract class FocusFeatures {
     private static final double STEP_SIZE = 0.2;
 
     // The list of shops that were targeted in the previous tick
-    private static List<Shop> targetedShopsOld = new ArrayList<>();
+    private static Set<Shop> targetedShopsOld = new LinkedHashSet<>();
 
 
 
@@ -155,22 +158,33 @@ public abstract class FocusFeatures {
         }
 
 
-        // Find currently focused shops
-        final List<Shop> targetedShops = new ArrayList<>();
+        // Find currently focused shops and their viewers
+        final Set<Shop>          targetedShops        = new LinkedHashSet<>();
+        final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
         for (ServerWorld serverWorld : serverWorlds) {
             for (PlayerEntity player : serverWorld.getPlayers()) {
                 Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
                 if(targetShop != null) {
 
-                    // Set their next focus state to true
-                    targetShop.setFocusStatusNext(true);
-                    targetedShops.add(targetShop);
-
-                    // Update rotation and tick hoverable elements if this player is the user of the shop
-                    if(targetShop.user == player && targetShop.activeCanvas != null) {
-                        targetShop.activeCanvas.forwardHover(player);
-                        targetShop.updateCanvasRotation(player);
+                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus status to true and add a viewer entry
+                    final boolean isShopNew = targetedShops.add(targetShop);
+                    if(isShopNew) {
+                        targetShop.setFocusStatusNext(true);
+                        targetedShopsViewers.add(player);
                     }
+
+                    // // Update rotation and tick hoverable elements if this player is the user of the shop
+                    // if(targetShop.user == player) {
+                    //     if(targetShop.activeCanvas != null) {
+                    //         targetShop.activeCanvas.forwardHover(player);
+                    //         targetShop.updateCanvasRotation(player);
+                    //     }
+                    // }
+
+                    // // If the player is not the user, save them as viewer.
+                    // else if(isShopNew) {
+                    //     targetedShopsViewers.add(player);
+                    // }
                 }
             }
         }
@@ -182,8 +196,19 @@ public abstract class FocusFeatures {
             if(shop.activeCanvas != null) shop.activeCanvas.forwardHover(null);
             shop.updateFocusState();
         }
+        int i = 0;
         for (Shop shop : targetedShops) {
             shop.updateFocusState();
+            if(shop.user != null) {
+                shop.activeCanvas.forwardHover(shop.user);
+                shop.updateCanvasRotation(shop.user);
+            }
+            else {
+                PlayerEntity viewer = targetedShopsViewers.get(i);
+                System.out.println("Viewer: " + (viewer == null ? "null" : viewer.getName()));
+                if(viewer != null) shop.updateCanvasRotation(viewer);
+            }
+            ++i;
         }
         targetedShopsOld = targetedShops;
     }

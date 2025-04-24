@@ -192,9 +192,9 @@ public abstract class Elm extends Div {
         for (Transition transition : animation.getTransitions()) {
             __applyAnimationTransitionNow(transition);
         }
-        flushStyle();
-        entity.setInterpolationDuration(0);
-        entity.setStartInterpolation();
+        // flushStyle();
+        // entity.setInterpolationDuration(0);
+        // entity.setStartInterpolation();
     }
 
 
@@ -204,10 +204,31 @@ public abstract class Elm extends Div {
      * @param t The transition to apply.
      */
     protected void __applyAnimationTransitionNow(@NotNull Transition t) {
-        if(t.d.hasTransform()) {
-            if(t.isAdditive()) style.editTransform().apply(t.d.getTransform());
-            else               style.editTransform().set  (t.d.getTransform());
+        // if(t.d.hasTransform()) {
+            // if(t.isAdditive()) style.editTransform().apply(t.d.getTransform());
+            // else               style.editTransform().set  (t.d.getTransform());
+        // }
+
+        // Update existing future data
+        TransitionStep step = t.createStep(1);
+        // for (InterpolatedData data : futureDataQueue) {
+        //     data.apply(step);
+        // }
+        if(futureDataQueue.isEmpty()) {
+            InterpolatedData data = __generateInterpolatedData();
+            data.apply(step);
+            __applyTransitionStep(data);
+            flushStyle();
+            entity.setInterpolationDuration(0);
+            entity.setStartInterpolation();
         }
+        else {
+            futureDataQueue.get(0).apply(step);
+        }
+        // int j = 0;
+        // for(; j < animationSteps.size(); ++j) {
+            // futureDataQueue.get(j + shift).apply(animationSteps.get(j));
+        // }
     }
 
 

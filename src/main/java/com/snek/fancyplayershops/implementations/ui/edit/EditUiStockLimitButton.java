@@ -45,16 +45,16 @@ public class EditUiStockLimitButton extends ShopTextInput {
         try {
 
             // Try to set the new stock limit, update the display if it's valid
-            final boolean r = shop.setStockLimit(Integer.parseInt(s));
-            if(r) updateDisplay(null);
-            return r;
+            if(shop.setStockLimit(Integer.parseInt(s))) updateDisplay(null);
+            return true;
+
         } catch(NumberFormatException e) {
             try {
 
                 // Try to set the new stock limit, update the display if it's valid
-                final boolean r = shop.setStockLimit(Float.parseFloat(s));
-                if(r) updateDisplay(null);
-                return r;
+                if(shop.setStockLimit(Float.parseFloat(s))) updateDisplay(null);
+                return true;
+
             } catch(NumberFormatException e2) {
                 return false;
             }

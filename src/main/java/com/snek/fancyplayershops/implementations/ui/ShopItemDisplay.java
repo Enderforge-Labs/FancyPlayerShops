@@ -26,6 +26,7 @@ import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
 import net.minecraft.entity.Entity.RemovalReason;
+import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.item.ItemStack;
@@ -165,6 +166,7 @@ public class ShopItemDisplay extends ItemElm {
             if(name == null) {
                 name = new FancyTextElm(world);
                 name.style.setViewRange(0.2f);
+                name.getEntity().setBillboardMode(BillboardMode.HORIZONTAL);
                 shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
                 name.spawn(new Vector3d(entity.getPosCopy()).add(0, NAME_SHIFT_Y, 0));
                 name.getFgEntity().setCustomName(null);

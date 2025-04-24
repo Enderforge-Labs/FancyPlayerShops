@@ -82,7 +82,7 @@ public abstract class ShopTextInput extends ShopButton {
     /**
      * The callback function called when a chat input is received.
      * @param s The input string.
-     * @return True if the string s is a valid input, false otherwise.
+     * @return True if the string s is recognized as an input and should not be broadcasted to the chat, false otherwise.
      */
     protected abstract boolean messageCallback(String s);
     public abstract void updateDisplay(@Nullable Text textOverride);

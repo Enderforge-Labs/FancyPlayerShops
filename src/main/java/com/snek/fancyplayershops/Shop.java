@@ -30,7 +30,9 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Pair;
+import com.snek.framework.data_types.containers.Triplet;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -396,8 +398,12 @@ public class Shop {
                 // Create details canvas
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
-                // activeCanvas.menuAnimationInitial = null; //TODO REMOVE
-                // activeCanvas.menuAnimationIn = null; //TODO REMOVE
+                if(lastDirection != Direction.NORTH) {
+                    System.out.println("APPLIED ANIMATION");
+                    final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(Direction.NORTH, lastDirection);
+                    activeCanvas.applyAnimationNowRecursive(animations.first);
+                    itemDisplay.applyAnimationNowRecursive(animations.second);
+                }
                 activeCanvas.spawn(calcDisplayPos());
 
                 // Create interaction blocker
@@ -410,7 +416,6 @@ public class Shop {
             else {
 
                 // Despawn active canvas
-                // activeCanvas.menuAnimationOut = null; //TODO REMOVE
                 activeCanvas.despawn();
                 activeCanvas = null;
 
@@ -576,6 +581,18 @@ public class Shop {
      */
     public void changeCanvas(ShopCanvas canvas) {
         activeCanvas = canvas;
+
+        // Adjust rotation if needed
+        if(lastDirection != Direction.NORTH) {
+            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(Direction.NORTH, lastDirection);
+            for (Div c : canvas.getChildren().get(0).getChildren()) {
+                if(c instanceof Elm e) {
+                    e.applyAnimationNowRecursive(animations.first);
+                }
+            }
+        }
+
+        // Spawn canvas into the world
         canvas.spawn(calcDisplayPos());
     }
 
@@ -721,22 +738,42 @@ public class Shop {
 
         // Calculate target direction
         final Vec3d playerPos = player.getPos();
-        final double dx = pos.getX() - playerPos.x;
-        final double dz = pos.getZ() - playerPos.z;
+        final double dx = pos.getX() + 0.5d - playerPos.x;
+        final double dz = pos.getZ() + 0.5d - playerPos.z;
         final double angle = Math.toDegrees(Math.atan2(-dx, dz));
         final Direction targetDir = Direction.fromRotation(angle);
 
-        // If the canvas's direction needs updating, apply the animation and change its value
+        // Apply animations and update the current direction if needed
+        System.out.println("current: " + lastDirection.getName());
+        System.out.println("target:  " + targetDir.getName());
         if(targetDir != lastDirection) {
-            Animation animation = new Animation(
-                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
-                .additiveTransform(new Transform().rotGlobalY(-Math.toRadians(targetDir.asRotation() - lastDirection.asRotation())))
-            );
-            activeCanvas.applyAnimationRecursive(animation);
-            getItemDisplay().applyAnimationRecursive(animation);
-            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
+            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(lastDirection, targetDir);
+            activeCanvas.applyAnimationRecursive(animations.first);
+            getItemDisplay().applyAnimationRecursive(animations.second);
             lastDirection = targetDir;
+            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
         }
+    }
+
+
+    /**
+     * Calculates the animations required to face from a specified direction to another one.
+     * @param from The starting direction.
+     * @param to The new direction to face.
+     * @return The canvas animation and the item display animation.
+     */
+    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(Direction from, Direction to){
+        final float rotation = -Math.toRadians(to.asRotation() - from.asRotation());
+        return Pair.from(
+            new Animation(
+                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
+                .additiveTransform(new Transform().rotGlobalY(rotation))
+            ),
+            new Animation(
+                new Transition(CANVAS_ROTATION_TIME, Easings.sineInOut)
+                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(-rotation))
+            )
+        );
     }
 }
 

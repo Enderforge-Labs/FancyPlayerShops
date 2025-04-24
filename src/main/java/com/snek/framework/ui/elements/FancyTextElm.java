@@ -161,14 +161,14 @@ public class FancyTextElm extends Elm {
 
 
 
-    @Override
-    protected void __applyAnimationTransitionNow(@NotNull Transition t) {
-        super.__applyAnimationTransitionNow(t);
-        if(t.d.hasOpacity    ()) getStyle().setTextOpacity(t.d.getOpacity    ());
-        if(t.d.hasBackground ()) getStyle().setBackground (t.d.getBackground ());
-        if(t.d.hasTransformFg()) getStyle().setTransformFg(t.d.getTransformFg());
-        if(t.d.hasTransformBg()) getStyle().setTransformBg(t.d.getTransformBg());
-    }
+    // @Override
+    // protected void __applyAnimationTransitionNow(@NotNull Transition t) {
+    //     super.__applyAnimationTransitionNow(t);
+    //     if(t.d.hasOpacity    ()) getStyle().setTextOpacity(t.d.getOpacity    ());
+    //     if(t.d.hasBackground ()) getStyle().setBackground (t.d.getBackground ());
+    //     if(t.d.hasTransformFg()) getStyle().setTransformFg(t.d.getTransformFg());
+    //     if(t.d.hasTransformBg()) getStyle().setTransformBg(t.d.getTransformBg());
+    // }
 
 
 
