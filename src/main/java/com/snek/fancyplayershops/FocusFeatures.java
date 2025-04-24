@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,8 +8,15 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
+import com.snek.framework.debug.DebugCheck;
+import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -172,21 +180,14 @@ public abstract class FocusFeatures {
                         targetShop.setFocusStatusNext(true);
                         targetedShopsViewers.add(player);
                     }
-
-                    // // Update rotation and tick hoverable elements if this player is the user of the shop
-                    // if(targetShop.user == player) {
-                    //     if(targetShop.activeCanvas != null) {
-                    //         targetShop.activeCanvas.forwardHover(player);
-                    //         targetShop.updateCanvasRotation(player);
-                    //     }
-                    // }
-
-                    // // If the player is not the user, save them as viewer.
-                    // else if(isShopNew) {
-                    //     targetedShopsViewers.add(player);
-                    // }
                 }
             }
+        }
+
+
+        // //! Debug window
+        if(DebugCheck.isDebug()) {
+            UiDebugWindow.getW().clear();
         }
 
 
@@ -210,5 +211,12 @@ public abstract class FocusFeatures {
             ++i;
         }
         targetedShopsOld = targetedShops;
+
+
+        //! Debug window update
+        if(DebugCheck.isDebug()) {
+            UiDebugWindow.getW().revalidate();
+            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
+        }
     }
 }
