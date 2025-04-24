@@ -52,7 +52,7 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
         return new Animation(
             new Transition()
             .targetBackground(HOVER_COLOR),
-            new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleY(1f / ShopButtonStyle.UNHOVERED_W))
         );
     }
@@ -60,7 +60,7 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleY(ShopButtonStyle.UNHOVERED_W)),
             new Transition()
             .targetBackground(getDefaultBackground())
