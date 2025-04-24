@@ -84,15 +84,6 @@ public class TextElm extends Elm {
 
 
 
-    // @Override
-    // protected void __applyAnimationTransitionNow(@NotNull Transition t) {
-    //     super.__applyAnimationTransitionNow(t);
-    //     if(t.d.hasOpacity()) getStyle().setTextOpacity(t.d.getOpacity());
-    // }
-
-
-
-
     @Override
     protected void __applyTransitionStep(@NotNull InterpolatedData d){
         super.__applyTransitionStep(d);

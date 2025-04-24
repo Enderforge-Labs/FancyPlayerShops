@@ -80,10 +80,10 @@ public class EditUi extends ShopCanvas {
         // Reset size and position, visually simulate the previous values using an instant animation
         bg.setSizeY(1);
         bg.setPosY(0);
-        bg.applyAnimationNow(new Animation(
+        bg.applyAnimationNow(
             new Transition()
             .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        ));
+        );
 
 
 
@@ -116,10 +116,10 @@ public class EditUi extends ShopCanvas {
 
         // Add bottom border
         e = bg.addChild(new ShopUiBorder(_shop));
-        e.applyAnimationNow(new Animation(
+        e.applyAnimationNow(
             new Transition(0,Easings.linear)
             .additiveTransform(new Transform().moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        ));
+        );
         bottomBorder = (Elm)e;
     }
 
@@ -139,13 +139,13 @@ public class EditUi extends ShopCanvas {
         }
 
         // Apply an animation to the background to make it look like it's stretching back to the normal height
-        bg.applyAnimation(new Animation(
+        bg.applyAnimation(
             new Transition(EditUi.SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
-        ));
-        bottomBorder.applyAnimation(new Animation(
+        );
+        bottomBorder.applyAnimation(
             new Transition(SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
-        ));
+        );
     }
 }

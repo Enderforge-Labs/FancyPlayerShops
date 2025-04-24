@@ -54,10 +54,10 @@ public class EditUiRotateButton extends ShopButton {
         updateDisplay(null);
 
         // Adjust arrow size
-        applyAnimationNow(new Animation(
+        applyAnimationNow(
             new Transition()
             .additiveTransformFg(new Transform().scale(EditUi.SQUARE_BUTTON_SIZE * 10))
-        ));
+        );
     }
 
 
@@ -75,14 +75,14 @@ public class EditUiRotateButton extends ShopButton {
             shop.addDefaultRotation(rotation);
 
             // Animate the item display to show the new rotation
-            shop.getItemDisplay().applyAnimation(new Animation(
+            shop.getItemDisplay().applyAnimation(
                 new Transition(2, Easings.sineInOut)
                 .additiveTransform(new Transform().rotY(-rotation))
-            ));
-            shop.getItemDisplay().applyAnimation(new Animation(
+            );
+            shop.getItemDisplay().applyAnimation(
                 new Transition(ROTATION_ANIMATION_TIME, Easings.sineInOut)
                 .additiveTransform(new Transform().rotY(rotation))
-            ));
+            );
         }
         return r;
     }
@@ -95,7 +95,7 @@ public class EditUiRotateButton extends ShopButton {
         // Handle item display animations
         ShopItemDisplay itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
-        itemDisplay.applyAnimation(new Animation(
+        itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.sineOut)
             .targetTransform(
                 itemDisplay.style.getDefaultTransform()
@@ -103,7 +103,7 @@ public class EditUiRotateButton extends ShopButton {
                 .moveY(ShopItemDisplay.FOCUS_HEIGHT)
                 .scale(ShopItemDisplay.EDIT_SCALE)
             )
-        ));
+        );
     }
 
 

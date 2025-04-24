@@ -192,9 +192,6 @@ public abstract class Elm extends Div {
         for (Transition transition : animation.getTransitions()) {
             __applyAnimationTransitionNow(transition);
         }
-        // flushStyle();
-        // entity.setInterpolationDuration(0);
-        // entity.setStartInterpolation();
     }
 
 

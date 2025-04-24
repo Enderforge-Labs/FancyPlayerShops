@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.framework.data_types.animations.Animation;
+import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.elements.Elm;
@@ -132,6 +133,14 @@ public class Div {
     public void applyAnimation(@NotNull Animation animation) {
         // Empty
     }
+    /**
+     * Applies a transition to this element.
+     * ! Partial steps at the end of the transition are expanded to cover the entire step.
+     * @param transition The transition to apply.
+     */
+    public final void applyAnimation(@NotNull Transition transition) {
+        applyAnimation(new Animation(transition));
+    }
 
 
 
@@ -143,6 +152,13 @@ public class Div {
     public void applyAnimationNow(@NotNull Animation animation) {
         // Empty
     }
+    /**
+     * Instantly applies a transition to this element, ignoring transition times and easings.
+     * @param transition The transition to apply.
+     */
+    public final void applyAnimationNow(@NotNull Transition transition) {
+        applyAnimationNow(new Animation(transition));
+    }
 
 
 
@@ -152,11 +168,19 @@ public class Div {
      * ! Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
-    public void applyAnimationRecursive(@NotNull Animation animation) {
+    public final void applyAnimationRecursive(@NotNull Animation animation) {
         applyAnimation(animation);
         for (Div elm : children) {
             elm.applyAnimationRecursive(animation);
         }
+    }
+    /**
+     * Applies a transition to this element and all of its children.
+     * ! Partial steps at the end of the transition are expanded to cover the entire step.
+     * @param transition The transition to apply.
+     */
+    public final void applyAnimationRecursive(@NotNull Transition transition) {
+        applyAnimationRecursive(new Animation(transition));
     }
 
 
@@ -166,11 +190,18 @@ public class Div {
      * Instantly applies an animation to this element and all of its children, ignoring transition times and easings.
      * @param animation The animation to apply.
      */
-    public void applyAnimationNowRecursive(@NotNull Animation animation) {
+    public final void applyAnimationNowRecursive(@NotNull Animation animation) {
         applyAnimationNow(animation);
         for (Div elm : children) {
             elm.applyAnimationNowRecursive(animation);
         }
+    }
+    /**
+     * Instantly applies a transition to this element and all of its children, ignoring transition times and easings.
+     * @param transition The transition to apply.
+     */
+    public final void applyAnimationNowRecursive(@NotNull Transition transition) {
+        applyAnimationNowRecursive(new Animation(transition));
     }
 
 
