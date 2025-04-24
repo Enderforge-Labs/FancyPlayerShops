@@ -25,6 +25,7 @@ public abstract class Easings {
     public static final Easing elasticIn    = new Easing(Easings::_elasticIn   );
     public static final Easing elasticOut   = new Easing(Easings::_elasticOut  );
     public static final Easing elasticInOut = new Easing(Easings::_elasticInOut);
+    public static final Easing expOut       = new Easing(Easings::_expOut      );
 
 
 
@@ -38,6 +39,8 @@ public abstract class Easings {
     private static double _cubicIn    (final double x) { return     Math.pow(    x, 3); }
     private static double _cubicOut   (final double x) { return 1 - Math.pow(1 - x, 3); }
     private static double _cubicInOut (final double x) { return x < 0.5 ? 4 * Math.pow(x, 3) : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+
+    private static double _expOut     (final double x) { return  Utils.doubleEquals(x, 1, 0.001) ? 1 : 1 - Math.pow(2, -10 * x); }
 
 
     private static double _bounceIn  (final double x) { return 1 - _bounceOut(1 - x); }

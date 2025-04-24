@@ -17,8 +17,8 @@ import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
 
 
 public class ElmStyle {
-    public static final int S_TIME = 8;                         // Spawn   time. Measured in ticks
-    public static final int D_TIME = 8;                         // Despawn time. Measured in ticks
+    public static final int S_TIME = 5;                         // Spawn   time. Measured in ticks
+    public static final int D_TIME = 5;                         // Despawn time. Measured in ticks
 
 
     private Flagged<Transform>     transform        = null;     // The current transformation

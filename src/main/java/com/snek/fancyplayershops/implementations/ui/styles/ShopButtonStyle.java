@@ -24,7 +24,7 @@ import com.snek.framework.utils.Easings;
 public class ShopButtonStyle extends FancyTextElmStyle {
     public static final Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
     public static final float    UNHOVERED_W          = 0.05f;
-    public static final int      HOVER_ANIMATION_TIME = 4;
+    public static final int      HOVER_ANIMATION_TIME = 10;
 
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
@@ -65,19 +65,19 @@ public class ShopButtonStyle extends FancyTextElmStyle {
     // Default value providers
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
+            new Transition()
             .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
         );
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(1f / UNHOVERED_W))
         );
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.cubicOut)
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
         );
     }

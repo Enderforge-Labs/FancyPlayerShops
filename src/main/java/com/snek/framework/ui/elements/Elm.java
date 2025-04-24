@@ -60,7 +60,7 @@ public abstract class Elm extends Div {
 
 
     // Animation handling
-    public    static final int TRANSITION_REFRESH_TIME = 2;                         // The time between transition updates. Measured in ticks
+    public    static final int TRANSITION_REFRESH_TIME = 1;                         // The time between transition updates. Measured in ticks
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
@@ -214,11 +214,11 @@ public abstract class Elm extends Div {
         // for (InterpolatedData data : futureDataQueue) {
         //     data.apply(step);
         // }
+        InterpolatedData data = __generateInterpolatedData();
+        data.apply(step);
+        __applyTransitionStep(data);
+        flushStyle();
         if(futureDataQueue.isEmpty()) {
-            InterpolatedData data = __generateInterpolatedData();
-            data.apply(step);
-            __applyTransitionStep(data);
-            flushStyle();
             entity.setInterpolationDuration(0);
             entity.setStartInterpolation();
         }

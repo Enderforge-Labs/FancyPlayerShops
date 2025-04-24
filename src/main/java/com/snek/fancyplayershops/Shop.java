@@ -399,7 +399,6 @@ public class Shop {
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
                 if(lastDirection != Direction.NORTH) {
-                    System.out.println("APPLIED ANIMATION");
                     final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(Direction.NORTH, lastDirection);
                     activeCanvas.applyAnimationNowRecursive(animations.first);
                     itemDisplay.applyAnimationNowRecursive(animations.second);
@@ -744,8 +743,6 @@ public class Shop {
         final Direction targetDir = Direction.fromRotation(angle);
 
         // Apply animations and update the current direction if needed
-        System.out.println("current: " + lastDirection.getName());
-        System.out.println("target:  " + targetDir.getName());
         if(targetDir != lastDirection) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(lastDirection, targetDir);
             activeCanvas.applyAnimationRecursive(animations.first);

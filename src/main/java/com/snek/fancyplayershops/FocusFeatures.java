@@ -205,7 +205,6 @@ public abstract class FocusFeatures {
             }
             else {
                 PlayerEntity viewer = targetedShopsViewers.get(i);
-                System.out.println("Viewer: " + (viewer == null ? "null" : viewer.getName()));
                 if(viewer != null) shop.updateCanvasRotation(viewer);
             }
             ++i;

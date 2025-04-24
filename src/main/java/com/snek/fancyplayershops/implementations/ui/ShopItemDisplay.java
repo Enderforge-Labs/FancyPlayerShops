@@ -95,7 +95,7 @@ public class ShopItemDisplay extends ItemElm {
 
         // Setup spawn and despawn animations
         focusAnimation = new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(ElmStyle.S_TIME * 2, Easings.sineOut)
             .additiveTransform(
                 new Transform()
                 .moveY(FOCUS_HEIGHT)
@@ -103,7 +103,7 @@ public class ShopItemDisplay extends ItemElm {
             )
         );
         unfocusAnimation = new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            new Transition(ElmStyle.D_TIME * 2, Easings.sineOut)
             .targetTransform(style.getTransform())
         );
 
@@ -166,7 +166,7 @@ public class ShopItemDisplay extends ItemElm {
             if(name == null) {
                 name = new FancyTextElm(world);
                 name.style.setViewRange(0.2f);
-                name.getEntity().setBillboardMode(BillboardMode.HORIZONTAL);
+                name.style.setBillboardMode(BillboardMode.VERTICAL);
                 shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
                 name.spawn(new Vector3d(entity.getPosCopy()).add(0, NAME_SHIFT_Y, 0));
                 name.getFgEntity().setCustomName(null);
