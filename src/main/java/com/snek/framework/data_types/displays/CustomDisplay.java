@@ -43,6 +43,8 @@ public abstract class CustomDisplay {
     private static Method method_getViewRange;
     private static Method method_setBrightness;
     private static Method method_getBrightness;
+    private static Method method_getMaxRenderWidth;
+    private static Method method_getMaxRenderHeight;
     static {
         try {
             method_setTransformation        = DisplayEntity.class.getDeclaredMethod("setTransformation", AffineTransformation.class);

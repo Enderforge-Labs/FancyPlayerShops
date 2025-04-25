@@ -1,5 +1,7 @@
 package com.snek.framework.utils;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.item.TooltipData;
@@ -9,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
+import net.minecraft.item.SkullItem;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -42,6 +45,10 @@ public abstract class MinecraftUtils {
 
 
 
+
+
+
+
     /**
      * Returns the custom name of an item. If the item has no custom name, the default name is returned.
      * Potions include their effect in the name.
@@ -57,9 +64,9 @@ public abstract class MinecraftUtils {
 
 
         // Potions
-        if(item.getItem() instanceof PotionItem p) {
+        else if(item.getItem() instanceof PotionItem e) {
             final Potion potion = PotionUtil.getPotion(item);
-            final String prefix = p instanceof SplashPotionItem ? "Splash" : (p instanceof LingeringPotionItem ? "Lingering" : "");
+            final String prefix = e instanceof SplashPotionItem ? "Splash" : (e instanceof LingeringPotionItem ? "Lingering" : "");
 
             // Water bottle special case
             if(potion == Potions.WATER) {
@@ -67,7 +74,7 @@ public abstract class MinecraftUtils {
             }
 
             // Turtle master special case
-            if(potion == Potions.TURTLE_MASTER) {
+            if(potion == Potions.TURTLE_MASTER || potion == Potions.LONG_TURTLE_MASTER || potion == Potions.STRONG_TURTLE_MASTER) {
                 return new Txt(prefix + " Potion of the Turtle Master").get();
             }
 
@@ -78,15 +85,37 @@ public abstract class MinecraftUtils {
 
             // Actual potions
             else {
-                final StatusEffect effect = potion.getEffects().get(0).getEffectType();
-                return new Txt(prefix + " Potion of ").cat(effect.getName()).get();
+                if(potion == Potions.EMPTY) {
+                    return new Txt(prefix + " Potion").get();
+                }
+                final List<StatusEffectInstance> effects = potion.getEffects();
+                if(effects.isEmpty()) {
+                    return new Txt(prefix + " Potion").get();
+                }
+                final StatusEffect effect = effects.get(0).getEffectType();
+                if(effects.size() == 1) {
+                    return new Txt(prefix + " Potion of ").cat(effect.getName()).get();
+                }
+                else {
+                    return new Txt(prefix + " Potion of ").cat(effect.getName()).cat(new Txt(" & " + (effects.size() - 1) + " more").white()).get();
+                }
             }
+        }
+
+
+        // Player heads
+        else if(item.getItem() instanceof SkullItem e) {
+            return new Txt().cat(e.getName(item)).get();
         }
 
 
         // Fallback
         return item.getItem().getName();
     }
+
+
+
+
 
 
 
