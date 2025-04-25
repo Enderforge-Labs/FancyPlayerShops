@@ -11,6 +11,7 @@ A server-side mod that allows players to create unobstructive, customizable, por
 - Buy items in bulk.
 - Move shops freely without losing data.
 - View transaction history and shop statistics.
+- All shops are unaffected by fluids, fire, damage or explosions.
 
 <br>
 

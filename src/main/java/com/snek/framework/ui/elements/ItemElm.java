@@ -18,6 +18,8 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 
 
@@ -31,17 +33,35 @@ import net.minecraft.server.world.ServerWorld;
  * An element that can display items.
  */
 public class ItemElm extends Elm {
-    private static Map<String, Pair<ModelTransformationMode, Transform>> transformExceptions = new HashMap<>(Map.ofEntries(
+    private ItemElmStyle getStyle() { return (ItemElmStyle)style; }
+
+
+
+
+    // Item transform exceptions
+    private static final Map<String, Pair<ModelTransformationMode, Transform>> transformExceptions = new HashMap<>(Map.ofEntries(
         Map.entry(Items.TRIDENT.getTranslationKey(), Pair.from(
             ModelTransformationMode.GUI,
             new Transform()
         )),
         Map.entry(Items.SHIELD.getTranslationKey(),  Pair.from(
             ModelTransformationMode.GROUND,
-            new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.toRadians(180))
+            new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
         ))
     ));
-    private ItemElmStyle getStyle() { return (ItemElmStyle)style; }
+
+
+    // Tag transform exceptions
+    private static final Map<TagKey<Item>, Pair<ModelTransformationMode, Transform>> tagTransformExceptions = new HashMap<>(Map.ofEntries(
+        Map.entry(ItemTags.BANNERS, Pair.from(
+            ModelTransformationMode.NONE,
+            new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
+        ))
+    ));
+
+
+
+
 
 
 
@@ -92,12 +112,19 @@ public class ItemElm extends Elm {
     @Override
     protected Transform __calcTransform() {
 
-        // Retrieve parent transformation and exception
+        // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
         Transform t = super.__calcTransform();
         Pair<ModelTransformationMode, Transform> exception = transformExceptions.get(getStyle().getItem().getItem().getTranslationKey());
+        if(exception == null) for (var entry : tagTransformExceptions.entrySet()) {
+            if(getStyle().getItem().isIn(entry.getKey())) {
+                exception = entry.getValue();
+                break;
+            }
+        }
+
 
         // Update the entity's display type and apply the exception's transformation to the parent one if needed
         ((CustomItemDisplay)getEntity()).setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
-        return exception == null ? t : t.apply(exception.second); //FIXME shield doesn't go up enough when the edit animation is triggered
+        return exception == null ? t : t.apply(exception.second); //FIXME shield doesn't go up enough when the edit animation is triggered. prob has to do with they Y translation
     }
 }
