@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui.edit;
+package com.snek.fancyplayershops.implementations.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
@@ -9,6 +9,11 @@ import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUiItemSelector;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUiPriceButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUiRotateButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUiStockLimitButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUiTitle;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;
@@ -33,9 +38,9 @@ import com.snek.framework.utils.Utils;
 //TODO they change based on the player's currently hovered element.
 
 /**
- * A UI that allows the owner of the shop to edit it.
+ * A UI that allows the user of a shop to buy items from it.
  */
-public class EditUi extends ShopCanvas {
+public class BuyUi extends ShopCanvas {
     //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
     private final @NotNull Elm bottomBorder;
     private final @NotNull Elm title;
@@ -44,20 +49,6 @@ public class EditUi extends ShopCanvas {
     //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
 
 
-    // Colors
-    public static final Vector3i RGB_STOCK_COLOR = Utils.HSVtoRGB(DetailsUi.C_HSV_STOCK_HIGH);
-
-
-    // Layout
-    public static final float ROTATE_BUTTON_Y            = 0.4f - ShopCanvas.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
-    public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.3f;
-
-    public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = 0.4f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
-
-
-    // Functionalities
-    public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
 
 
 
@@ -70,7 +61,7 @@ public class EditUi extends ShopCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public EditUi(Shop _shop){
+    public BuyUi(Shop _shop){
 
 
         //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
@@ -101,30 +92,14 @@ public class EditUi extends ShopCanvas {
 
 
         // Add title
-        e = bg.addChild(new EditUiTitle(_shop));
+        e = bg.addChild(new BuyUiTitle(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
         title = (Elm)e;
 
-        // Add price button
-        e = bg.addChild(new EditUiPriceButton(_shop));
-        e.moveY(1f - ShopFancyTextElm.LINE_H * 2f);
-        e.setAlignmentX(AlignmentX.LEFT);
-
-        // Add stock limit button
-        e = bg.addChild(new EditUiStockLimitButton(_shop));
-        e.moveY(1f - ShopFancyTextElm.LINE_H * 3f);
-        e.setAlignmentX(AlignmentX.LEFT);
-
-        // Add rotation buttons
-        e = bg.addChild(new EditUiRotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
-        e.move(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
-        e = bg.addChild(new EditUiRotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
-        e.move(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
-
-        // Add item selector
-        e = bg.addChild(new EditUiItemSelector(_shop));
-        e.moveY(ITEM_SELECTOR_Y);
+        // Add item selector //FIXME replace with an "item inspector" element. make the selector it's subclass
+        // e = bg.addChild(new EditUiItemSelector(_shop));
+        // e.moveY(ITEM_SELECTOR_Y);
 
         // Add bottom border
         e = bg.addChild(new ShopUiBorder(_shop));
@@ -153,15 +128,15 @@ public class EditUi extends ShopCanvas {
 
         // Apply an animation to the background to make it look like it's stretching back to the normal height
         bg.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+            new Transition(BuyUi.SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
         );
         back.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+            new Transition(BuyUi.SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
         );
         bottomBorder.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+            new Transition(SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
         );
         //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn

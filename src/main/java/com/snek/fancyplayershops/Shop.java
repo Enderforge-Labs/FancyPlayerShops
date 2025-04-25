@@ -23,6 +23,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
+import com.snek.fancyplayershops.implementations.ui.buy.BuyUi;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
 import com.snek.fancyplayershops.implementations.ui.edit.EditUi;
 import com.snek.fancyplayershops.implementations.ui.misc.InteractionBlocker;
@@ -614,7 +615,10 @@ public class Shop {
         if(item.getItem() == Items.AIR) {
             player.sendMessage(SHOP_EMPTY_TEXT, true);
         }
-        //TODO actually open the UI
+        else {
+            changeCanvas(new BuyUi(this));
+            getItemDisplay().enterEditState(); //TODO use a more generic name? for the animations too
+        }
     }
 
 

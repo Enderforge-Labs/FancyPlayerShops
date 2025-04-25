@@ -5,19 +5,26 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SkullItem;
 import net.minecraft.item.SplashPotionItem;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
@@ -62,6 +69,25 @@ public abstract class MinecraftUtils {
         // Custom names
         if(item.hasCustomName()) {
             return item.getName();
+        }
+
+
+        // Spawners
+        if(item.getItem() == Items.SPAWNER && item.hasNbt()) {
+            NbtCompound nbt = item.getNbt();
+            if(nbt.contains("BlockEntityTag", NbtElement.COMPOUND_TYPE)) {
+                NbtCompound blockTag = nbt.getCompound("BlockEntityTag");
+                if(blockTag.contains("SpawnData", NbtElement.COMPOUND_TYPE)) {
+                    NbtCompound spawnData = blockTag.getCompound("SpawnData");
+                    if(spawnData.contains("entity", NbtElement.COMPOUND_TYPE)) {
+                        NbtCompound entity = spawnData.getCompound("entity");
+                        Identifier id = new Identifier(entity.getString("id"));
+                        EntityType<?> entityType = Registries.ENTITY_TYPE.get(id);
+                        return new Txt().cat(entityType.getName()).cat(new Txt(" Spawner").white()).get();
+                    }
+                }
+            }
+            //! Fallback to default name
         }
 
 

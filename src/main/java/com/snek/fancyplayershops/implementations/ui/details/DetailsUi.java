@@ -22,6 +22,10 @@ import com.snek.framework.utils.Utils;
 
 
 
+//TODO add small text elements in a corner of the UIs that tell you what each mouse button does when clicked.
+//TODO they change based on the player's currently hovered element.
+
+
 
 /**
  * A UI that shows informations about the shop.
