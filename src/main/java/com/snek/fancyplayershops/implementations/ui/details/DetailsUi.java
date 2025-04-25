@@ -1,11 +1,16 @@
 package com.snek.fancyplayershops.implementations.ui.details;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.CanvasBackground;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
+import com.snek.framework.data_types.animations.Transform;
+import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
@@ -40,9 +45,13 @@ public class DetailsUi extends ShopCanvas {
      */
     public DetailsUi(Shop _shop){
 
-        // Call superconstructo and add background
-        super(new DetailsUiBackground(_shop));
+        // Call superconstructor and add background
+        super(new CanvasBackground(_shop), new CanvasBackground(_shop));
         bg.setPosY(1 - DetailsUi.BACKGROUND_HEIGHT);
+        bg.setSize(new Vector2f(1, BACKGROUND_HEIGHT));
+        back.setPosY(1 - DetailsUi.BACKGROUND_HEIGHT);
+        back.setSize(new Vector2f(1, BACKGROUND_HEIGHT));
+        back.applyAnimationNow(new Transition().additiveTransform(new Transform().rotY((float)Math.PI)));
         Div e;
 
         // Add details display

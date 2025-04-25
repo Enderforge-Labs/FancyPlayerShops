@@ -2,6 +2,7 @@ package com.snek.framework.ui.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.Animation;
@@ -105,12 +106,13 @@ public class FancyTextElm extends Elm {
             }
             Flagged<Transform> fBg = getStyle().getFlaggedTransformBg();
             if(f.isFlagged() || fBg.isFlagged()) {
+                final Transform t = __calcTransform();
                 bg.setTransformation(
-                    __calcTransform()
+                    t.copy()
                     .apply(getStyle().getTransformBg())
-                    .scaleX(PanelElmStyle.ENTITY_BLOCK_RATIO_X * getAbsSize().x)
-                    .scaleY(PanelElmStyle.ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
-                    .moveX(PanelElmStyle.ENTITY_SHIFT_X * getAbsSize().x)
+                    .scaleX(PanelElm.ENTITY_BLOCK_RATIO_X * getAbsSize().x)
+                    .scaleY(PanelElm.ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
+                    .move(new Vector3f(PanelElm.ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(t.getRot()))
                     .toMinecraftTransform()
                 );
                 fBg.unflag();

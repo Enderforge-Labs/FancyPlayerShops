@@ -69,8 +69,8 @@ public class EditUi extends ShopCanvas {
     public EditUi(Shop _shop){
 
 
-        // Call superconstructo and add background
-        super((Elm)_shop.getActiveCanvas().getChildren().get(0));
+        // Call superconstructor and add background
+        super(_shop.getActiveCanvas().getBackground(), _shop.getActiveCanvas().getBack());
         Div e;
 
         // Instantly despawn and remove previous children
@@ -81,6 +81,12 @@ public class EditUi extends ShopCanvas {
         bg.setSizeY(1);
         bg.setPosY(0);
         bg.applyAnimationNow(
+            new Transition()
+            .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
+        );
+        back.setSizeY(1);
+        back.setPosY(0);
+        back.applyAnimationNow(
             new Transition()
             .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
         );
@@ -140,6 +146,10 @@ public class EditUi extends ShopCanvas {
 
         // Apply an animation to the background to make it look like it's stretching back to the normal height
         bg.applyAnimation(
+            new Transition(EditUi.SPAWN_SIZE_TIME, Easings.sineOut)
+            .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
+        );
+        back.applyAnimation(
             new Transition(EditUi.SPAWN_SIZE_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
         );

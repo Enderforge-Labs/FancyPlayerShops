@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -25,7 +26,9 @@ import com.snek.framework.utils.Easings;
  */
 public class ShopCanvas extends Div {
     protected final @NotNull Elm bg;
+    protected final @NotNull Elm back;
     public @NotNull Elm getBackground() { return bg; }
+    public @NotNull Elm getBack() { return back; }
 
 
     // Animation data //! Calculate translation from rotation
@@ -46,10 +49,16 @@ public class ShopCanvas extends Div {
      * Creates a new ShopCanvas
      * @param _bg The background element
      */
-    public ShopCanvas(@NotNull Elm _bg) {
+    public ShopCanvas(@NotNull Elm _bg, @NotNull Elm _back) {
         super();
+
+        // Add front
         addChild(_bg);
         bg = _bg;
+
+        // Add back
+        addChild(_back);
+        back = _back;
 
         // menuAnimationInitial = new Animation(
         //     new Transition()

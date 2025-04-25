@@ -1,6 +1,7 @@
 package com.snek.framework.ui.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.InterpolatedData;
@@ -27,6 +28,15 @@ import net.minecraft.server.world.ServerWorld;
  * Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
+
+    // The amount of panel elements of default size would be needed to cover the width of a block
+    public static final float ENTITY_BLOCK_RATIO_X = 40f;
+    public static final float ENTITY_BLOCK_RATIO_Y = 40f;
+
+    // The translation on the X axis needed to align the panel entity with the element's bounding box
+    public static final float ENTITY_SHIFT_X = -0.5f;
+
+
     private PanelElmStyle getStyle() { return (PanelElmStyle)style; }
     public CustomTextDisplay getPanelEntity() { return (CustomTextDisplay)entity; }
 
@@ -116,9 +126,11 @@ public class PanelElm extends Elm {
 
     @Override
     protected Transform __calcTransform() {
-        return super.__calcTransform()
-            .scaleX(getAbsSize().x)
-            .scaleY(getAbsSize().y)
+        final Transform t = super.__calcTransform();
+        return t.copy()
+            .scaleX(ENTITY_BLOCK_RATIO_X * getAbsSize().x)
+            .scaleY(ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
+            .move(new Vector3f(ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(t.getRot()))
         ;
     }
 }
