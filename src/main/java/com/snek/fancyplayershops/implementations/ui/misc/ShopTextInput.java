@@ -29,6 +29,7 @@ public abstract class ShopTextInput extends ShopButton {
     private final @NotNull  Text        clickFeedbackMessage;
     private       @Nullable TaskHandler inputStateHandler = null;
     private boolean cursorToggleState = true;
+    private boolean inputState = false;
 
 
     /**
@@ -59,16 +60,22 @@ public abstract class ShopTextInput extends ShopButton {
 
 
     protected void enterInputState(){
-        inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
-            updateDisplay(new Txt(cursorToggleState ? "|" : " ").get());
-            cursorToggleState = !cursorToggleState;
-        });
+        if(!inputState) {
+            inputState = true;
+            inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
+                updateDisplay(new Txt(cursorToggleState ? "|" : " ").get());
+                cursorToggleState = !cursorToggleState;
+            });
+        }
     }
 
 
     protected void exitInputState(){
-        if(inputStateHandler != null) inputStateHandler.cancel();
-        updateDisplay(null);
+        if(inputState) {
+            inputState = false;
+            if(inputStateHandler != null) inputStateHandler.cancel();
+            updateDisplay(null);
+        }
     }
 
 

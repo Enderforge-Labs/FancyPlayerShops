@@ -99,7 +99,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     @Override
     public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
         final long curTime = Scheduler.getTickNum();
-        if(lastClickTime + clickCooldown < curTime) {
+        if(lastClickTime + clickCooldown < curTime) { //TODO replace with rate limiter
             lastClickTime = curTime;
             return checkIntersection(player);
         }

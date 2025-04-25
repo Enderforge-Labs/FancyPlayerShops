@@ -208,18 +208,17 @@ public class Div {
 
 
     /**
-     * Forwards a click to all the clickable elements of this canvas.
-     * This method stops at the first element that consumes a click.
+     * Forwards a click to this element and all its children.
+     * This method stops at the first clickable element that consumes a click.
      * @param player The player that clicked.
      * @param clickType The type of click.
      */
     public void forwardClick(PlayerEntity player, ClickType clickType) {
+        if(this instanceof Clickable e && e.onClick(player, clickType)) {
+            return;
+        }
         for (Div elm : children) {
-            if(elm instanceof Clickable e) {
-                if(e.onClick(player, clickType)) return;
-                else elm.forwardClick(player, clickType);
-            }
-            else elm.forwardClick(player, clickType);
+            elm.forwardClick(player, clickType);
         }
     }
 
@@ -227,14 +226,14 @@ public class Div {
 
 
     /**
-     * Forwards a hover event to all the hoverable elements of this canvas.
+     * Forwards a hover event to this element and all of its children.
      * @param player The player that clicked.
      */
     public void forwardHover(PlayerEntity player) {
+        if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
+            e.updateHoverStatus(player);
+        }
         for (Div elm : children) {
-            if(elm instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
-                e.updateHoverStatus(player);
-            }
             elm.forwardHover(player);
         }
     }
