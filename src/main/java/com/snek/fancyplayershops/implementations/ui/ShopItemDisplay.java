@@ -235,7 +235,7 @@ public class ShopItemDisplay extends ItemElm {
     protected Transform __calcTransform() {
         return super.__calcTransform()
             .rotY(shop.getDefaultRotation())
-            .scale(0.8f)
+            .scale(0.4f)
         ;
     }
 

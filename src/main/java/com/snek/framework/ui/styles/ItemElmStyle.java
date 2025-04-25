@@ -1,9 +1,14 @@
 package com.snek.framework.ui.styles;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -16,6 +21,8 @@ import net.minecraft.item.Items;
 
 public class ItemElmStyle extends ElmStyle {
     private Flagged<ItemStack> item = null;
+
+
 
 
     /**
