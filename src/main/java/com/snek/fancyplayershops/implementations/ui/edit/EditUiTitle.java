@@ -42,7 +42,7 @@ public class EditUiTitle extends ShopFancyTextElm {
             .cat(new Txt(
                 shop.getItem().getItem() == Items.AIR ?
                 new Txt("an empty shop").white().get() :
-                new Txt("«").white().cat(MinecraftUtils.getItemName(shop.getItem())).cat(new Txt("»").white()).get()
+                new Txt("«").white().cat(MinecraftUtils.getFancyItemName(shop.getItem())).cat(new Txt("»").white()).get()
             ))
             .cat("...")
         .get());

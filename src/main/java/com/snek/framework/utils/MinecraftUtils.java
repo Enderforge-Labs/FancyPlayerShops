@@ -51,11 +51,13 @@ public abstract class MinecraftUtils {
 
     /**
      * Returns the custom name of an item. If the item has no custom name, the default name is returned.
-     * Potions include their effect in the name.
+     *     Potions and Tipped Arrows include the first of their effects.
+     *     Enchanted Books include the first of their enchantments.
+     *     Music Discs, Banner Patterns, Monster Spawners and Smithing templates show their type.
      * @param item The item.
      * @return The name of the item.
      */
-    public static @NotNull Text getItemName(@NotNull ItemStack item) {
+    public static @NotNull Text getFancyItemName(@NotNull ItemStack item) {
 
         // Custom names
         if(item.hasCustomName()) {
@@ -108,6 +110,29 @@ public abstract class MinecraftUtils {
             return new Txt().cat(e.getName(item)).get();
         }
 
+
+        // Fallback
+        return item.getItem().getName();
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Returns the custom name of an item. If the item has no custom name, the default name is returned.
+     * @param item The item.
+     * @return The name of the item.
+     */
+    public static @NotNull Text getItemName(@NotNull ItemStack item) {
+
+        // Custom names
+        if(item.hasCustomName()) {
+            return item.getName();
+        }
 
         // Fallback
         return item.getItem().getName();

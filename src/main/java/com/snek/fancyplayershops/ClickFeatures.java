@@ -1,6 +1,11 @@
 package com.snek.fancyplayershops;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import com.snek.fancyplayershops.implementations.ui.misc.InteractionBlocker;
+import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.InteractionEntity;
@@ -22,6 +27,7 @@ import net.minecraft.world.World;
  * A utility class that handles clicks from players.
  */
 public abstract class ClickFeatures {
+    private static Map<UUID, RateLimiter> clickLimiters = new HashMap<>();
     private ClickFeatures(){}
 
 
@@ -37,6 +43,18 @@ public abstract class ClickFeatures {
      * @return SUCCESS if the player clicked a shop, PASS if not.
      */
     public static ActionResult onClick(World world, PlayerEntity player, Hand hand, ClickType clickType) {
+
+        // Handle limiter
+        RateLimiter limiter = clickLimiters.get(player.getUuid());
+        if(limiter == null) {
+            limiter = new RateLimiter();
+            clickLimiters.put(player.getUuid(), limiter);
+        }
+        else if(!limiter.attempt()) return ActionResult.SUCCESS;
+        limiter.renewCooldown(1);
+
+
+        // Forward clicks to the shop
         if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
         Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {

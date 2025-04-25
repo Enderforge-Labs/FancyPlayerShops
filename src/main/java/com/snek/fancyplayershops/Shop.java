@@ -556,7 +556,7 @@ public class Shop {
         else {
             stock -= amount;
             final double totPrice = price * amount;
-            player.sendMessage(new Txt("Bought " + amount + "x " + MinecraftUtils.getItemName(item) + " for " + Utils.formatPrice(totPrice)).green().get());
+            player.sendMessage(new Txt("Bought " + amount + "x " + MinecraftUtils.getFancyItemName(item) + " for " + Utils.formatPrice(totPrice)).green().get());
             addMoney(player, -totPrice);
             ItemStack _item = item.copyWithCount(amount);
             player.giveItemStack(_item);

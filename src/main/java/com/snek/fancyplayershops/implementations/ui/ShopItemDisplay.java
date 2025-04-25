@@ -186,7 +186,7 @@ public class ShopItemDisplay extends ItemElm {
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
             ((ItemElmStyle)style).setItem(noItem);
             if(name != null) {
-                ((FancyTextElmStyle)name.style).setText(MinecraftUtils.getItemName(noItem));
+                ((FancyTextElmStyle)name.style).setText(MinecraftUtils.getFancyItemName(noItem));
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
@@ -198,7 +198,7 @@ public class ShopItemDisplay extends ItemElm {
             ((ItemElmStyle)style).setItem(_item);
 
             // Get item name as a string
-            final String fullName = MinecraftUtils.getItemName(((ItemElmStyle)style).getItem()).getString();
+            final String fullName = MinecraftUtils.getFancyItemName(((ItemElmStyle)style).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
             // Wrap the name and calculate the amount tof lines

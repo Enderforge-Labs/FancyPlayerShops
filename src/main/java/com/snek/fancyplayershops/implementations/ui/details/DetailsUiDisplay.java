@@ -69,7 +69,7 @@ public class DetailsUiDisplay extends ShopTextElm {
         else {
             double price = shop.getPrice();
             ((TextElmStyle)style).setText(new Txt()
-                .cat(new Txt(MinecraftUtils.getItemName(_item)).get())
+                .cat(new Txt(MinecraftUtils.getFancyItemName(_item)).get())
                 .cat(new Txt("\nPrice: ")).cat(new Txt(price < 0.005 ? "Free" : Utils.formatPrice(price)).bold().color(DetailsUi.C_RGB_PRICE))
                 .cat(new Txt("\nStock: ")).cat(new Txt(Utils.formatAmount(shop.getStock())).bold().color(col))
             .get());
