@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.LingeringPotionItem;
@@ -17,11 +18,17 @@ import net.minecraft.item.SkullItem;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
@@ -48,6 +55,32 @@ import net.minecraft.util.math.Vec3i;
  */
 public abstract class MinecraftUtils {
     private MinecraftUtils(){}
+
+
+
+
+
+
+
+
+    /**
+     * Plays a sound on the client of the specified player.
+     * Other players won't be able to hear it.
+     * @param player The player.
+     * @param sound The sound to play.
+     * @param volume The sound's volume.
+     * @param pitch The sound's pitch.
+     */
+    public static void playSoundClient(PlayerEntity player, SoundEvent sound, float volume, float pitch) {
+        ((ServerPlayerEntity) player).networkHandler.sendPacket(
+            new PlaySoundS2CPacket(
+                RegistryEntry.of(sound),
+                SoundCategory.BLOCKS,
+                player.getX(), player.getY(), player.getZ(),
+                volume, pitch, player.getWorld().getRandom().nextLong()
+            )
+        );
+    }
 
 
 

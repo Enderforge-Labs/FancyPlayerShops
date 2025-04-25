@@ -47,7 +47,7 @@ public class EditUiRotateButton extends ShopButton {
             _shop,
             EditUi.SQUARE_BUTTON_SIZE,
             EditUi.SQUARE_BUTTON_SIZE,
-            ROTATION_ANIMATION_TIME,
+            5,
             _rotation > 0 ? new EditUiRightRotateButtonStyle() : new EditUiLeftRotateButtonStyle()
         );
         rotation = _rotation;
@@ -77,11 +77,11 @@ public class EditUiRotateButton extends ShopButton {
 
             // Animate the item display to show the new rotation
             shop.getItemDisplay().applyAnimation(
-                new Transition(2, Easings.sineInOut)
+                new Transition(2, Easings.expOut)
                 .additiveTransform(new Transform().rotY(-rotation))
             );
             shop.getItemDisplay().applyAnimation(
-                new Transition(ROTATION_ANIMATION_TIME, Easings.sineInOut)
+                new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
                 .additiveTransform(new Transform().rotY(rotation))
             );
         }

@@ -35,6 +35,6 @@ public class RateLimiter {
      * @return True if the cooldown has expired, false otherwise.
      */
     public boolean attempt(){
-        return cooldownEnd < Scheduler.getTickNum();
+        return Scheduler.getTickNum() >= cooldownEnd;
     }
 }

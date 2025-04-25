@@ -12,9 +12,16 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.styles.ShopButtonStyle;
+import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 
@@ -30,6 +37,7 @@ import net.minecraft.util.ClickType;
  */
 public abstract class ShopButton extends FancyTextElm implements Hoverable, Clickable {
     protected final @NotNull Shop shop;
+    protected final RateLimiter clickRateLimiter = new RateLimiter();
     private         long lastClickTime = 0;
     private   final int clickCooldown;
 
@@ -98,10 +106,13 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
     @Override
     public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
-        final long curTime = Scheduler.getTickNum();
-        if(lastClickTime + clickCooldown < curTime) { //TODO replace with rate limiter
-            lastClickTime = curTime;
-            return checkIntersection(player);
+        if(clickRateLimiter.attempt()) {
+            boolean r = checkIntersection(player);
+            if(r) {
+                MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 1, 1.5f);
+                clickRateLimiter.renewCooldown(clickCooldown);
+            }
+            return r;
         }
         else {
             return false;

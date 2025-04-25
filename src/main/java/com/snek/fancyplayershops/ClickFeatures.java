@@ -50,14 +50,13 @@ public abstract class ClickFeatures {
             limiter = new RateLimiter();
             clickLimiters.put(player.getUuid(), limiter);
         }
-        else if(!limiter.attempt()) return ActionResult.SUCCESS;
-        limiter.renewCooldown(1);
 
 
-        // Forward clicks to the shop
+        // Forward clicks to the shop if the limiter allows it. Ignore offhand events
         if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
         Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
-            if(targetShop != null) {
+            if(targetShop != null && limiter.attempt()) {
+                limiter.renewCooldown(1);
                 targetShop.onClick(player, clickType);
                 return ActionResult.SUCCESS;
             }
