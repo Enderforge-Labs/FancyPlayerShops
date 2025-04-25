@@ -45,6 +45,8 @@ public abstract class CustomDisplay {
     private static Method method_getBrightness;
     private static Method method_getMaxRenderWidth;
     private static Method method_getMaxRenderHeight;
+    private static Method method_setMaxRenderWidth;
+    private static Method method_setMaxRenderHeight;
     static {
         try {
             method_setTransformation        = DisplayEntity.class.getDeclaredMethod("setTransformation", AffineTransformation.class);
@@ -56,6 +58,10 @@ public abstract class CustomDisplay {
             method_getViewRange             = DisplayEntity.class.getDeclaredMethod("getViewRange");
             method_setBrightness            = DisplayEntity.class.getDeclaredMethod("setBrightness",               Brightness.class);
             method_getBrightness            = DisplayEntity.class.getDeclaredMethod("getBrightnessUnpacked");
+            method_setMaxRenderWidth        = DisplayEntity.class.getDeclaredMethod("setDisplayWidth",                  float.class);
+            method_getMaxRenderWidth        = DisplayEntity.class.getDeclaredMethod("getDisplayWidth");
+            method_setMaxRenderHeight       = DisplayEntity.class.getDeclaredMethod("setDisplayHeight",                 float.class);
+            method_getMaxRenderHeight       = DisplayEntity.class.getDeclaredMethod("getDisplayHeight");
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
@@ -68,6 +74,10 @@ public abstract class CustomDisplay {
         method_getViewRange.setAccessible(true);
         method_setBrightness.setAccessible(true);
         method_getBrightness.setAccessible(true);
+        method_setMaxRenderWidth.setAccessible(true);
+        method_getMaxRenderWidth.setAccessible(true);
+        method_setMaxRenderHeight.setAccessible(true);
+        method_getMaxRenderHeight.setAccessible(true);
     }
 
 
@@ -253,5 +263,46 @@ public abstract class CustomDisplay {
      */
     public Vector3f getPosCopy() {
         return heldEntity.getPos().toVector3f();
+    }
+
+
+
+    /**
+     * Sets a new maximum render width to the entity.
+     * This is equivalent to changing the entity's "width" NBT.
+     * NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * @param n The new value.
+     */
+    public void setMaxRenderWidth(float n) {
+        Utils.invokeSafe(method_setMaxRenderWidth, heldEntity, n);
+    }
+
+
+    /**
+     * Retrieves the entity's maximum render width.
+     * @return The current maximum render width.
+     */
+    public float getMaxRenderWidth() {
+        return (float)Utils.invokeSafe(method_getMaxRenderWidth, heldEntity);
+    }
+
+
+    /**
+     * Sets a new maximum render height to the entity.
+     * This is equivalent to changing the entity's "height" NBT.
+     * NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * @param n The new value.
+     */
+    public void setMaxRenderHeight(float n) {
+        Utils.invokeSafe(method_setMaxRenderHeight, heldEntity, n);
+    }
+
+
+    /**
+     * Retrieves the entity's maximum render height.
+     * @return The current maximum render height.
+     */
+    public float getMaxRenderHeight() {
+        return (float)Utils.invokeSafe(method_getMaxRenderHeight, heldEntity);
     }
 }
