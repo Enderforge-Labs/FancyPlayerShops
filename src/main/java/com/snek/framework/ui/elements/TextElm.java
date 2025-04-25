@@ -5,6 +5,7 @@ import org.joml.Vector3d;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.InterpolatedData;
+import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.Pair;
@@ -145,16 +146,18 @@ public class TextElm extends Elm {
      * @return The height in blocks.
      */
     public static float calcHeight(Elm elm){
-        if(!(elm instanceof TextElm || elm instanceof FancyTextElm)) {
-            throw new RuntimeException("calcHeight used on incompatible Elm type: " + elm.getClass().getName());
-        }
+        final CustomTextDisplay _entity;
+        final Transform t;
+        /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { _entity = e.getFgEntity();                  t = e.__calcTransformFg(e.__calcTransform()); }
+        else throw new RuntimeException("calcHeight used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string and count the number of lines
-        final float lineNum = ((CustomTextDisplay)elm.entity).getText().getString().split("\n").length;
+        final float lineNum = _entity.getText().getString().split("\n").length;
         if(lineNum == 0) return 0;
 
         // Calculate their height and return it
-        return ((lineNum == 1 ? 0 : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) / TEXT_PIXEL_BLOCK_RATIO * elm.style.getTransform().getScale().y;
+        return ((lineNum == 1 ? 0 : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().y;
     }
 
 
@@ -169,12 +172,14 @@ public class TextElm extends Elm {
      * @return The width in blocks.
      */
     public static float calcWidth(Elm elm){
-        if(!(elm instanceof TextElm || elm instanceof FancyTextElm)) {
-            throw new RuntimeException("calcWidth used on incompatible Elm type: " + elm.getClass().getName());
-        }
+        final CustomTextDisplay _entity;
+        final Transform t;
+        /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { _entity = e.getFgEntity();                  t = e.__calcTransformFg(e.__calcTransform()); }
+        else throw new RuntimeException("calcWidth used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string
-        final String[] lines = ((CustomTextDisplay)elm.entity).getText().getString().split("\n");
+        final String[] lines = _entity.getText().getString().split("\n");
         if(lines.length == 0) {
             return 0;
         }
@@ -190,6 +195,6 @@ public class TextElm extends Elm {
         }
 
         // Calculate its length and return it
-        return (float)FontSize.getWidth(line.first) / TEXT_PIXEL_BLOCK_RATIO * elm.style.getTransform().getScale().x;
+        return (float)FontSize.getWidth(line.first) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().x;
     }
 }

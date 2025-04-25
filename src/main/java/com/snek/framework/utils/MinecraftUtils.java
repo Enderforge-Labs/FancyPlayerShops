@@ -1,8 +1,12 @@
 package com.snek.framework.utils;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.mojang.authlib.GameProfile;
 
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.EntityType;
@@ -25,6 +29,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -32,6 +37,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.UserCache;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
@@ -64,6 +70,26 @@ public abstract class MinecraftUtils {
 
 
     /**
+     * Returns the name of the player that matches the specified UUID.
+     *     The player can be offline, as long as they have joined the server at least once in the past.
+     * @param uuid The player's UUID.
+     * @param server The server instance.
+     * @return The player's name as a string, or null if the player never joined this server.
+     */
+    public static String getOfflinePlayerName(@NotNull UUID uuid, MinecraftServer server) {
+        Optional<GameProfile> profile = server.getUserCache().getByUuid(uuid);
+        if(profile.isEmpty()) return null;
+        return profile.get().getName();
+    }
+
+
+
+
+
+
+
+
+    /**
      * Plays a sound on the client of the specified player.
      * Other players won't be able to hear it.
      * @param player The player.
@@ -71,7 +97,7 @@ public abstract class MinecraftUtils {
      * @param volume The sound's volume.
      * @param pitch The sound's pitch.
      */
-    public static void playSoundClient(PlayerEntity player, SoundEvent sound, float volume, float pitch) {
+    public static void playSoundClient(@NotNull PlayerEntity player, @NotNull SoundEvent sound, float volume, float pitch) {
         ((ServerPlayerEntity) player).networkHandler.sendPacket(
             new PlaySoundS2CPacket(
                 RegistryEntry.of(sound),

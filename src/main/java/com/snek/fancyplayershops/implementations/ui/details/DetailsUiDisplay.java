@@ -38,7 +38,7 @@ public class DetailsUiDisplay extends ShopTextElm {
     public DetailsUiDisplay(@NotNull Shop _shop){
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
-        setSizeY(TextElm.calcHeight(this));
+        setAbsSizeY(TextElm.calcHeight(this));
         flushStyle();
     }
 
@@ -62,6 +62,7 @@ public class DetailsUiDisplay extends ShopTextElm {
             .cat(Shop.EMPTY_SHOP_NAME)
             .cat(new Txt("\nPrice: -"))
             .cat(new Txt("\nStock: -"))
+            .cat(new Txt("\nOwner: ")).cat(MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer()))
             .get());
         }
 
@@ -72,6 +73,7 @@ public class DetailsUiDisplay extends ShopTextElm {
                 .cat(new Txt(MinecraftUtils.getFancyItemName(_item)).get())
                 .cat(new Txt("\nPrice: ")).cat(new Txt(price < 0.005 ? "Free" : Utils.formatPrice(price)).bold().color(DetailsUi.C_RGB_PRICE))
                 .cat(new Txt("\nStock: ")).cat(new Txt(Utils.formatAmount(shop.getStock())).bold().color(col))
+                .cat(new Txt("\nOwner: ")).cat(MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer()))
             .get());
         }
 

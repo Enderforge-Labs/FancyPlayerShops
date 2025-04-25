@@ -290,6 +290,13 @@ public class Div {
         absSize.set(parent == null ? localSize : new Vector2f(parent.getAbsSize()).mul(localSize));
         updateAbsPosSelf();
     }
+    /**
+     * Updates the local size of this element based on the current absolute size.
+     */
+    public void updateAbsSizeInverseSelf(){
+        localSize.set(parent == null ? absSize : new Vector2f(absSize).div(parent.getAbsSize()));
+        updateAbsPosSelf();
+    }
 
 
     /**
@@ -298,6 +305,13 @@ public class Div {
      */
     public void updateAbsSize(){
         updateAbsSizeSelf();
+        for (Div c : children) c.updateAbsSize();
+    }
+    /**
+     * Updates the local size of this element based on the current absolute size, then updates the absolute size of its children, recursively.
+     */
+    public void updateAbsSizeInverse(){
+        updateAbsSizeInverseSelf();
         for (Div c : children) c.updateAbsSize();
     }
 
@@ -315,6 +329,21 @@ public class Div {
     public void setSizeY(float y) {
         localSize.y = y;
         updateAbsSize();
+    }
+
+    public void setAbsSize(@NotNull Vector2f _size) {
+        absSize.set(_size);
+        updateAbsSizeInverse();
+    }
+
+    public void setAbsSizeX(float x) {
+        absSize.x = x;
+        updateAbsSizeInverse();
+    }
+
+    public void setAbsSizeY(float y) {
+        absSize.y = y;
+        updateAbsSizeInverse();
     }
 
     public void scale(@NotNull Vector2f _size) {

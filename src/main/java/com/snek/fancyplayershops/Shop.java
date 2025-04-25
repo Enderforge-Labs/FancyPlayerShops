@@ -170,6 +170,7 @@ public class Shop {
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
     public           boolean         isFocused         () { return focusStatus;     }
+    public           UUID            getOwnerUuid      () { return ownerUUID;       }
 
 
 
@@ -466,7 +467,7 @@ public class Shop {
     public void onClick(PlayerEntity player, ClickType clickType) {
 
         // If the shop is not currently being used, flag the player as its user
-        if(user == null) {
+        if(user == null && isFocused()) {
             if(clickType == ClickType.LEFT) {
                 if(player.getUuid().equals(ownerUUID)) {
                     retrieveItem(player);

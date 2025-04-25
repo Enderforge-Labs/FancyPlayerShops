@@ -79,6 +79,45 @@ public class FancyTextElm extends Elm {
 
 
 
+    /**
+     * Helper function. Calculates the final transformation that is applied to the foreground entity.
+     * @param initialTransform The value to start from.
+     *     This is usually the transform shared between background and foreground.
+     *     The shared transform is returned by __calcTransform().
+     * @return The final transformation.
+     */
+    public Transform __calcTransformFg(@NotNull Transform initialTransform) {
+        return
+            initialTransform.copy()
+            .apply(getStyle().getTransformFg())
+            .moveZ((getZIndex() + 1) * 0.001f) //TODO move Z layer spacing to config file
+            .scale(TextElmStyle.DEFAULT_TEXT_SCALE)
+        ;
+    }
+
+    /**
+     * Helper function. Calculates the final transformation that is applied to the background entity.
+     * @param initialTransform The value to start from.
+     *     This is usually the transform shared between background and foreground.
+     *     The shared transform is returned by __calcTransform().
+     * @return The final transformation.
+     */
+    public Transform __calcTransformBg(@NotNull Transform initialTransform) {
+        return
+            initialTransform.copy()
+            .apply(getStyle().getTransformBg())
+            .scaleX(PanelElm.ENTITY_BLOCK_RATIO_X * getAbsSize().x)
+            .scaleY(PanelElm.ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
+            .move(new Vector3f(PanelElm.ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(initialTransform.getRot()))
+        ;
+    }
+
+
+
+
+
+
+
 
     @Override
     public void flushStyle() {
@@ -94,27 +133,23 @@ public class FancyTextElm extends Elm {
         // Handle transforms
         {Flagged<Transform> f = style.getFlaggedTransform();
             Flagged<Transform> fFg = getStyle().getFlaggedTransformFg();
+            Flagged<Transform> fBg = getStyle().getFlaggedTransformBg();
+
+            // Calculate superclass transform if needed
+            Transform t = null;
+            if(f.isFlagged() || fFg.isFlagged() || fBg.isFlagged()) {
+                t = __calcTransform();
+            }
+
+            // Update foreground transform if necessary
             if(f.isFlagged() || fFg.isFlagged()) {
-                fg.setTransformation(
-                    __calcTransform()
-                    .apply(getStyle().getTransformFg())
-                    .moveZ((getZIndex() + 1) * 0.001f) //TODO move Z layer spacing to config file
-                    .scale(TextElmStyle.DEFAULT_TEXT_SCALE)
-                    .toMinecraftTransform()
-                );
+                fg.setTransformation(__calcTransformFg(t).toMinecraftTransform());
                 fFg.unflag();
             }
-            Flagged<Transform> fBg = getStyle().getFlaggedTransformBg();
+
+            // Update background transform if necessary
             if(f.isFlagged() || fBg.isFlagged()) {
-                final Transform t = __calcTransform();
-                bg.setTransformation(
-                    t.copy()
-                    .apply(getStyle().getTransformBg())
-                    .scaleX(PanelElm.ENTITY_BLOCK_RATIO_X * getAbsSize().x)
-                    .scaleY(PanelElm.ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
-                    .move(new Vector3f(PanelElm.ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(t.getRot()))
-                    .toMinecraftTransform()
-                );
+                bg.setTransformation(__calcTransformBg(t).toMinecraftTransform());
                 fBg.unflag();
             }
         if(f.isFlagged()) f.unflag();}
