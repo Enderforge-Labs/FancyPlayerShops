@@ -46,7 +46,7 @@ public class EditUi_RotateButton extends ShopButton {
             _shop,
             EditUi.SQUARE_BUTTON_SIZE,
             EditUi.SQUARE_BUTTON_SIZE,
-            5,
+            2,
             _rotation > 0 ? new EditUi_RotateButtonRight_S() : new EditUi_RotateButtonLeft_S()
         );
         rotation = _rotation;

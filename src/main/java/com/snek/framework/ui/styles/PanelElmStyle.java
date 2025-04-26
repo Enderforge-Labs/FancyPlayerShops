@@ -53,7 +53,6 @@ public class PanelElmStyle extends ElmStyle {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBackground(new Vector4i(getDefaultColor().mul(new Vector4i(0, 1, 1, 1))))
-            .targetOpacity(0)
         );
     }
 
@@ -63,7 +62,6 @@ public class PanelElmStyle extends ElmStyle {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBackground(getDefaultColor())
-            .targetOpacity(255)
         );
     }
 
@@ -73,7 +71,6 @@ public class PanelElmStyle extends ElmStyle {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetBackground(new Vector4i(getDefaultColor().mul(new Vector4i(0, 1, 1, 1))))
-            .targetOpacity(0)
         );
     }
 

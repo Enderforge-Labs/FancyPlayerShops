@@ -46,6 +46,7 @@ public class DetailsUi extends ShopCanvas {
     public static final float VERTICAL_PADDING = 0.02f;
     public static final float NAMES_VALUES_WIDTH_RATIO = 0.3f;
     public static final float HEAD_SIZE = 0.2f;
+    public static final Vector2f HEAD_BG_SIZE = new Vector2f(HEAD_SIZE, HEAD_SIZE - 2 * VERTICAL_PADDING);
 
 
 
@@ -89,8 +90,8 @@ public class DetailsUi extends ShopCanvas {
 
         // Add owner's head's background
         e = bg.addChild(new ShopPanelElm(_shop, new DetailsUi_OwnerHeadBg_S()));
-        e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE - VERTICAL_PADDING));
-        e.setPosY(H0 - HEAD_SIZE + VERTICAL_PADDING);
+        e.setAbsSize(HEAD_BG_SIZE);
+        e.setPosY(H0 - HEAD_BG_SIZE.y);
         e.setAlignmentX(AlignmentX.LEFT);
 
 
