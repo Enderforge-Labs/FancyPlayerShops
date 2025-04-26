@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
+import com.snek.fancyplayershops.ui.misc.ShopTextElm;
 import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -18,14 +19,14 @@ import com.snek.framework.utils.Txt;
 /**
  * A text display that shows the name of the shop that is currently being bought from.
  */
-public class BuyUi_Title extends ShopFancyTextElm {
+public class BuyUi_Title extends ShopTextElm {
 
     /**
      * Creates a new EditUiTitle.
      * @param _shop The target shop.
      */
     public BuyUi_Title(@NotNull Shop _shop) {
-        super(_shop, 1f, ShopFancyTextElm.LINE_H, new BuyUi_Title_S());
+        super(_shop, 1f, 1f); //TODO remove size from constructor
         updateDisplay();
     }
 

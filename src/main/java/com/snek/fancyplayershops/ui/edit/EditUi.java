@@ -36,12 +36,12 @@ import com.snek.framework.utils.Utils;
  * A UI that allows the owner of the shop to edit it.
  */
 public class EditUi extends ShopCanvas {
-    //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
-    private final @NotNull Elm bottomBorder;
+    // //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
+    // private final @NotNull Elm bottomBorder;
     private final @NotNull Elm title;
-    public @NotNull Elm getBottomBorder() { return bottomBorder; }
+    // public @NotNull Elm getBottomBorder() { return bottomBorder; }
     public @NotNull Elm getTitle() { return title; }
-    //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
+    // //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
 
 
     // Colors
@@ -74,28 +74,29 @@ public class EditUi extends ShopCanvas {
 
 
         //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
-        // Call superconstructor and add background
-        super(_shop.getActiveCanvas().getBackground(), _shop.getActiveCanvas().getBack());
+        // Call superconstructor
+        super(_shop, 1f, ShopFancyTextElm.LINE_H, ShopUiBorder.DEFAULT_HEIGHT);
+        // super(_shop.getActiveCanvas().getBackground(), _shop.getActiveCanvas().getBack());
         Div e;
 
-        // Instantly despawn and remove previous children
-        for (Div c : bg.getChildren()) c.despawnNow();
-        bg.clearChildren();
+        // // Instantly despawn and remove previous children
+        // for (Div c : bg.getChildren()) c.despawnNow();
+        // bg.clearChildren();
 
-        // Reset size and position, visually simulate the previous values using an instant animation
-        bg.setSizeY(1);
-        bg.setPosY(0);
-        bg.applyAnimationNow(
-            new Transition()
-            .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        );
-        back.setSizeY(1);
-        back.setPosY(0);
-        back.applyAnimationNow(
-            new Transition()
-            .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        );
-        //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
+        // // Reset size and position, visually simulate the previous values using an instant animation
+        // bg.setSizeY(1);
+        // bg.setPosY(0);
+        // bg.applyAnimationNow(
+        //     new Transition()
+        //     .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
+        // );
+        // back.setSizeY(1);
+        // back.setPosY(0);
+        // back.applyAnimationNow(
+        //     new Transition()
+        //     .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
+        // );
+        // //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
 
 
 
@@ -103,6 +104,7 @@ public class EditUi extends ShopCanvas {
         // Add title
         e = bg.addChild(new EditUi_Title(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
+        e.setSizeY(ShopFancyTextElm.LINE_H);
         e.setAlignmentX(AlignmentX.CENTER);
         title = (Elm)e;
 
@@ -126,13 +128,13 @@ public class EditUi extends ShopCanvas {
         e = bg.addChild(new EditUi_ItemSelector(_shop));
         e.moveY(ITEM_SELECTOR_Y);
 
-        // Add bottom border
-        e = bg.addChild(new ShopUiBorder(_shop));
-        e.applyAnimationNow(
-            new Transition(0,Easings.linear)
-            .additiveTransform(new Transform().moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        );
-        bottomBorder = (Elm)e;
+        // // Add bottom border
+        // e = bg.addChild(new ShopUiBorder(_shop));
+        // e.applyAnimationNow(
+        //     new Transition(0,Easings.linear)
+        //     .additiveTransform(new Transform().moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
+        // );
+        // bottomBorder = (Elm)e;
     }
 
 
@@ -142,28 +144,28 @@ public class EditUi extends ShopCanvas {
 
 
 
-    @Override
-    public void spawn(Vector3d pos){
+    // @Override
+    // public void spawn(Vector3d pos){
 
-        //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
-        // Only spawn the children of the background element. The background itself is already spawned
-        for (Div c : bg.getChildren()) {
-            c.spawn(pos);
-        }
+    //     //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
+    //     // Only spawn the children of the background element. The background itself is already spawned
+    //     for (Div c : bg.getChildren()) {
+    //         c.spawn(pos);
+    //     }
 
-        // Apply an animation to the background to make it look like it's stretching back to the normal height
-        bg.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
-            .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
-        );
-        back.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
-            .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
-        );
-        bottomBorder.applyAnimation(
-            new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
-            .additiveTransform(new Transform().moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
-        );
-        //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
-    }
+    //     // Apply an animation to the background to make it look like it's stretching back to the normal height
+    //     bg.applyAnimation(
+    //         new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+    //         .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
+    //     );
+    //     back.applyAnimation(
+    //         new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+    //         .additiveTransform(new Transform().scaleY(1 / DetailsUi.BACKGROUND_HEIGHT).moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
+    //     );
+    //     bottomBorder.applyAnimation(
+    //         new Transition(ShopCanvas.SPAWN_SIZE_TIME, Easings.sineOut)
+    //         .additiveTransform(new Transform().moveY(-(1 - DetailsUi.BACKGROUND_HEIGHT)))
+    //     );
+    //     //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
+    // }
 }

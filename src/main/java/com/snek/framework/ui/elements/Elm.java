@@ -75,6 +75,7 @@ public abstract class Elm extends Div {
     protected boolean isSpawned = false;        // Whether the element has been spawned into the world
     private   boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
     public CustomDisplay getEntity() { return entity; }
+    public boolean isSpawned() { return isSpawned; }
 
 
 

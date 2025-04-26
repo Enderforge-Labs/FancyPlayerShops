@@ -26,8 +26,6 @@ public class ShopUiBorder extends ShopPanelElm {
      */
     public ShopUiBorder(Shop _shop, float h){
         super(_shop, new ShopUiBorder_S());
-        setSize(new Vector2f(1, h));
-        setAlignmentX(AlignmentX.CENTER);
     }
 
 
