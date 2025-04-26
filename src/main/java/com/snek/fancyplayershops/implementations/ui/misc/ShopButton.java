@@ -11,7 +11,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.Shop;
-import com.snek.fancyplayershops.implementations.ui.styles.ShopButtonStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
@@ -52,7 +51,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
      */
-    protected ShopButton(@NotNull Shop _shop, float w, float h, int _clickCooldown, ShopButtonStyle _style) {
+    protected ShopButton(@NotNull Shop _shop, float w, float h, int _clickCooldown, ShopButton_S _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
         setSize(new Vector2f(w, h));
@@ -68,7 +67,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
     protected ShopButton(@NotNull Shop _shop, float w, float h, int _clickCooldown) {
-        this(_shop, w, h, _clickCooldown, new ShopButtonStyle());
+        this(_shop, w, h, _clickCooldown, new ShopButton_S());
     }
 
 
@@ -76,7 +75,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
     @Override
     public void spawn(Vector3d pos){
-        final Animation animation = ((ShopButtonStyle)style).getHoverPrimerAnimation();
+        final Animation animation = ((ShopButton_S)style).getHoverPrimerAnimation();
         if(animation != null) {
             applyAnimationNow(animation);
         }
@@ -87,7 +86,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     @Override
     public void onHoverEnter(@NotNull PlayerEntity player) {
         if(player != shop.user) return;
-        final Animation animation = ((ShopButtonStyle)style).getHoverEnterAnimation();
+        final Animation animation = ((ShopButton_S)style).getHoverEnterAnimation();
         if(animation != null) {
             applyAnimation(animation);
         }
@@ -97,7 +96,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     @Override
     public void onHoverExit(@Nullable PlayerEntity player) {
         if(player != shop.user) return;
-        final Animation animation = ((ShopButtonStyle)style).getHoverLeaveAnimation();
+        final Animation animation = ((ShopButton_S)style).getHoverLeaveAnimation();
         if(animation != null) {
             applyAnimation(animation);
         }

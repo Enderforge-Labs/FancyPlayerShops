@@ -101,29 +101,29 @@ public class EditUi extends ShopCanvas {
 
 
         // Add title
-        e = bg.addChild(new EditUiTitle(_shop));
+        e = bg.addChild(new EditUi_Title(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
         title = (Elm)e;
 
         // Add price button
-        e = bg.addChild(new EditUiPriceButton(_shop));
+        e = bg.addChild(new EditUi_PriceButton(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.LEFT);
 
         // Add stock limit button
-        e = bg.addChild(new EditUiStockLimitButton(_shop));
+        e = bg.addChild(new EditUi_StockLimitButton(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.LEFT);
 
         // Add rotation buttons
-        e = bg.addChild(new EditUiRotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
+        e = bg.addChild(new EditUi_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
         e.move(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
-        e = bg.addChild(new EditUiRotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
+        e = bg.addChild(new EditUi_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
         e.move(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
         // Add item selector
-        e = bg.addChild(new EditUiItemSelector(_shop));
+        e = bg.addChild(new EditUi_ItemSelector(_shop));
         e.moveY(ITEM_SELECTOR_Y);
 
         // Add bottom border

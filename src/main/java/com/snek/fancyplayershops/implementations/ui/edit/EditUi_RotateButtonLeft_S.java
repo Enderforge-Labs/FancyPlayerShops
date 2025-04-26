@@ -1,9 +1,10 @@
-package com.snek.fancyplayershops.implementations.ui.styles;
+package com.snek.fancyplayershops.implementations.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4i;
 
+import com.snek.fancyplayershops.implementations.ui.misc.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -17,16 +18,16 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * The style of the EditUiItemSelector UI element.
+ * The style of the EditUiPriceButton UI element.
  */
-public class EditUiItemSelectorStyle extends ShopButtonStyle {
-    public static final Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
+public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
+    public static final float SHIFT_X = EditUi.SQUARE_BUTTON_SIZE * (1 - ShopButton_S.UNHOVERED_W);
 
 
     /**
-     * Creates a new EditUiItemSelectorStyle.
+     * Creates a new EditUiLeftRotateButtonStyle.
      */
-    public EditUiItemSelectorStyle(){
+    public EditUi_RotateButtonLeft_S(){
         super();
     }
 
@@ -34,16 +35,10 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
 
 
     @Override
-    public @NotNull Vector4i getDefaultBackground() {
-        return new Vector4i(HOVER_LEAVE_COLOR);
-    }
-
-
-    @Override
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleY(ShopButtonStyle.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X))
         );
     }
 
@@ -53,7 +48,7 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
             new Transition()
             .targetBackground(HOVER_COLOR),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(1f / ShopButtonStyle.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W).moveX(-SHIFT_X))
         );
     }
 
@@ -61,7 +56,7 @@ public class EditUiItemSelectorStyle extends ShopButtonStyle {
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(ShopButtonStyle.UNHOVERED_W)),
+            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X)),
             new Transition()
             .targetBackground(getDefaultBackground())
         );

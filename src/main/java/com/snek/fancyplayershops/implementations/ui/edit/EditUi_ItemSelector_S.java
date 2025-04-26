@@ -1,9 +1,10 @@
-package com.snek.fancyplayershops.implementations.ui.styles;
+package com.snek.fancyplayershops.implementations.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4i;
 
+import com.snek.fancyplayershops.implementations.ui.misc.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -17,15 +18,16 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * The style of the EditUiPriceButton UI element.
+ * The style of the EditUiItemSelector UI element.
  */
-public class EditUiRightRotateButtonStyle extends ShopButtonStyle {
+public class EditUi_ItemSelector_S extends ShopButton_S {
     public static final Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
 
+
     /**
-     * Creates a new EditUiRightRotateButtonStyle.
+     * Creates a new EditUiItemSelectorStyle.
      */
-    public EditUiRightRotateButtonStyle(){
+    public EditUi_ItemSelector_S(){
         super();
     }
 
@@ -42,7 +44,7 @@ public class EditUiRightRotateButtonStyle extends ShopButtonStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(ShopButtonStyle.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W))
         );
     }
 
@@ -52,7 +54,7 @@ public class EditUiRightRotateButtonStyle extends ShopButtonStyle {
             new Transition()
             .targetBackground(HOVER_COLOR),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / ShopButtonStyle.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleY(1f / ShopButton_S.UNHOVERED_W))
         );
     }
 
@@ -60,7 +62,7 @@ public class EditUiRightRotateButtonStyle extends ShopButtonStyle {
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(ShopButtonStyle.UNHOVERED_W)),
+            .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W)),
             new Transition()
             .targetBackground(getDefaultBackground())
         );

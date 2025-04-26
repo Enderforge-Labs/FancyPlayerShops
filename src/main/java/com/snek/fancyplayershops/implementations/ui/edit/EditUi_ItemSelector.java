@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
-import com.snek.fancyplayershops.implementations.ui.styles.EditUiItemSelectorStyle;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,20 +22,20 @@ import net.minecraft.util.ClickType;
 /**
  * A button that allows the owner of the shop to change the item sold by it.
  */
-public class EditUiItemSelector extends ShopButton {
+public class EditUi_ItemSelector extends ShopButton {
 
 
     /**
      * Creates a new EditUiItemSelector.
      * @param _shop The target shop.
      */
-    public EditUiItemSelector(Shop _shop){
+    public EditUi_ItemSelector(Shop _shop){
         super(
             _shop,
             EditUi.ITEM_SELECTOR_SIZE,
             EditUi.ITEM_SELECTOR_SIZE,
             0,
-            new EditUiItemSelectorStyle()
+            new EditUi_ItemSelector_S()
         );
     }
 
@@ -58,7 +57,7 @@ public class EditUiItemSelector extends ShopButton {
                 //FIXME check blacklist before setting the item
                 //TODO add item blacklist
                 shop.getItemDisplay().updateDisplay();
-                ((EditUiTitle)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+                ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
             }
         }
         return r;

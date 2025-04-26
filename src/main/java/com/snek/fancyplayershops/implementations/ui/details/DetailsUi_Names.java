@@ -26,7 +26,7 @@ import net.minecraft.item.Items;
  * The main display of DetailsUi.
  * It shows the names of informations about the shop.
  */
-public class DetailsUiDisplayNames extends ShopTextElm {
+public class DetailsUi_Names extends ShopTextElm {
 
 
 
@@ -35,7 +35,7 @@ public class DetailsUiDisplayNames extends ShopTextElm {
      * Creates a new DetailsUiDisplayNames.
      * @param _shop The target shop.
      */
-    public DetailsUiDisplayNames(@NotNull Shop _shop){
+    public DetailsUi_Names(@NotNull Shop _shop){
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
     }

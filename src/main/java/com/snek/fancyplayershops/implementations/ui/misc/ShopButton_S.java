@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui.styles;
+package com.snek.fancyplayershops.implementations.ui.misc;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +21,7 @@ import com.snek.framework.utils.Easings;
 /**
  * The style of the generic ShopButton UI element.
  */
-public class ShopButtonStyle extends FancyTextElmStyle {
+public class ShopButton_S extends FancyTextElmStyle {
     public static final Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
     public static final float    UNHOVERED_W          = 0.05f;
     public static final int      HOVER_ANIMATION_TIME = 10;
@@ -36,7 +36,7 @@ public class ShopButtonStyle extends FancyTextElmStyle {
     /**
      * Creates a new ShopButtonStyle.
      */
-    public ShopButtonStyle() {
+    public ShopButton_S() {
         super();
     }
 

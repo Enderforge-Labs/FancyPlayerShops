@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
-import com.snek.fancyplayershops.implementations.ui.styles.EditUiTitleStyle;
 import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -21,14 +20,14 @@ import net.minecraft.item.Items;
 /**
  * A text display that shows the name of the shop that is currently being edited.
  */
-public class EditUiTitle extends ShopFancyTextElm {
+public class EditUi_Title extends ShopFancyTextElm {
 
     /**
      * Creates a new EditUiTitle.
      * @param _shop The target shop.
      */
-    public EditUiTitle(@NotNull Shop _shop) {
-        super(_shop, 1f, ShopFancyTextElm.LINE_H, new EditUiTitleStyle());
+    public EditUi_Title(@NotNull Shop _shop) {
+        super(_shop, 1f, ShopFancyTextElm.LINE_H, new EditUi_Title_S());
         updateDisplay();
     }
 

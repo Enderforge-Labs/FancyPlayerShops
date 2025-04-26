@@ -9,8 +9,8 @@ import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.CanvasBackground;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
-import com.snek.fancyplayershops.implementations.ui.styles.ShopPanelElmStyle;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
@@ -70,36 +70,36 @@ public class DetailsUi extends ShopCanvas {
         Div e;
 
         // Add title
-        e = bg.addChild(new DetailsUiTitle(_shop));
+        e = bg.addChild(new DetailsUi_Title(_shop));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(1f);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(BACKGROUND_HEIGHT - e.getAbsSize().y - VERTICAL_PADDING - 0.04f); //! -0.04 is a workaround and should not be required
 
         // Add details display names
-        e = bg.addChild(new DetailsUiDisplayNames(_shop));
+        e = bg.addChild(new DetailsUi_Names(_shop));
         e.setAlignmentX(AlignmentX.LEFT);
-        ((CustomTextDisplay)((DetailsUiDisplayNames)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        ((CustomTextDisplay)((DetailsUi_Names)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(VERTICAL_PADDING);
 
         // Add details display values
-        e = bg.addChild(new DetailsUiDisplayValues(_shop));
+        e = bg.addChild(new DetailsUi_Values(_shop));
         e.setAlignmentX(AlignmentX.RIGHT);
-        ((CustomTextDisplay)((DetailsUiDisplayValues)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        ((CustomTextDisplay)((DetailsUi_Values)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(1 - NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(VERTICAL_PADDING);
 
         // Add owner's head's background
-        e = bg.addChild(new ShopPanelElm(_shop, new tmp()));
+        e = bg.addChild(new ShopPanelElm(_shop, new DetailsUi_OwnerHeadBg_S()));
         e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE - VERTICAL_PADDING));
         e.setPosY(-HEAD_SIZE + VERTICAL_PADDING);
         e.setAlignmentX(AlignmentX.LEFT);
 
         // Add owner's head
-        e = bg.addChild(new DetailsUiOwnerHead(_shop));
+        e = bg.addChild(new DetailsUi_OwnerHead(_shop));
         e.setAlignmentX(AlignmentX.LEFT);
         e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE));
         e.setPosY(-VERTICAL_PADDING);

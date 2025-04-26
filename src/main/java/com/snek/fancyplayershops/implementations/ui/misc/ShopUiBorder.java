@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.implementations.ui.misc;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.Shop;
-import com.snek.fancyplayershops.implementations.ui.styles.ShopUiBorderStyle;
 import com.snek.framework.data_types.ui.AlignmentX;
 
 
@@ -25,7 +24,7 @@ public class ShopUiBorder extends ShopPanelElm {
      * @param _shop The target shop.
      */
     public ShopUiBorder(Shop _shop, float h){
-        super(_shop, new ShopUiBorderStyle());
+        super(_shop, new ShopUiBorder_S());
         setSize(new Vector2f(1, h));
         setAlignmentX(AlignmentX.CENTER);
     }

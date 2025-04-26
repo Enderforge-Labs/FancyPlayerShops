@@ -9,11 +9,11 @@ import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
-import com.snek.fancyplayershops.implementations.ui.edit.EditUiItemSelector;
-import com.snek.fancyplayershops.implementations.ui.edit.EditUiPriceButton;
-import com.snek.fancyplayershops.implementations.ui.edit.EditUiRotateButton;
-import com.snek.fancyplayershops.implementations.ui.edit.EditUiStockLimitButton;
-import com.snek.fancyplayershops.implementations.ui.edit.EditUiTitle;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUi_ItemSelector;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUi_PriceButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUi_RotateButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUi_StockLimitButton;
+import com.snek.fancyplayershops.implementations.ui.edit.EditUi_Title;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;
@@ -92,7 +92,7 @@ public class BuyUi extends ShopCanvas {
 
 
         // Add title
-        e = bg.addChild(new BuyUiTitle(_shop));
+        e = bg.addChild(new BuyUi_Title(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
         title = (Elm)e;

@@ -6,10 +6,8 @@ import org.joml.Quaternionf;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
+import com.snek.fancyplayershops.implementations.ui.misc.ShopButton_S;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
-import com.snek.fancyplayershops.implementations.ui.styles.EditUiLeftRotateButtonStyle;
-import com.snek.fancyplayershops.implementations.ui.styles.EditUiRightRotateButtonStyle;
-import com.snek.fancyplayershops.implementations.ui.styles.ShopButtonStyle;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -29,7 +27,7 @@ import net.minecraft.util.ClickType;
 /**
  * A button that allows the owner of the shop to change the default rotation of the displayed object.
  */
-public class EditUiRotateButton extends ShopButton {
+public class EditUi_RotateButton extends ShopButton {
     public static final int ROTATION_ANIMATION_TIME = 8;
 
     private final float rotation;
@@ -42,13 +40,13 @@ public class EditUiRotateButton extends ShopButton {
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
      * @param _buttonText The text to display on the button.
      */
-    public EditUiRotateButton(Shop _shop, float _rotation, Text _buttonText){
+    public EditUi_RotateButton(Shop _shop, float _rotation, Text _buttonText){
         super(
             _shop,
             EditUi.SQUARE_BUTTON_SIZE,
             EditUi.SQUARE_BUTTON_SIZE,
             5,
-            _rotation > 0 ? new EditUiRightRotateButtonStyle() : new EditUiLeftRotateButtonStyle()
+            _rotation > 0 ? new EditUi_RotateButtonRight_S() : new EditUi_RotateButtonLeft_S()
         );
         rotation = _rotation;
         buttonText = _buttonText;
@@ -64,7 +62,7 @@ public class EditUiRotateButton extends ShopButton {
 
     @Override
     public void updateDisplay(@Nullable Text textOverride) {
-        ((ShopButtonStyle)style).setText(textOverride != null ? textOverride : buttonText);
+        ((ShopButton_S)style).setText(textOverride != null ? textOverride : buttonText);
         flushStyle();
     }
 

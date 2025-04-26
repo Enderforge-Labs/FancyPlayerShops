@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 /**
  * A UI element that displays the head of the owner of the shop.
  */
-public class DetailsUiOwnerHead extends ShopItemElm {
+public class DetailsUi_OwnerHead extends ShopItemElm {
     private boolean suppressSpawn = false;
 
 
@@ -30,8 +30,8 @@ public class DetailsUiOwnerHead extends ShopItemElm {
      * Creates a new DetailsUiOwnerHead.
      * @param _shop The target shop.
      */
-    public DetailsUiOwnerHead(Shop _shop) {
-        super(_shop);
+    public DetailsUi_OwnerHead(Shop _shop) {
+        super(_shop, new DetailsUi_OwnerHead_S());
         applyAnimationNow(new Transition().additiveTransform(new Transform().scale(DetailsUi.HEAD_SIZE).scaleZ(0.001f).rotY((float)Math.PI)));
         updateDisplay();
     }
