@@ -59,7 +59,7 @@ public class ItemElm extends Elm {
         )),
         Map.entry(ItemTags.BEDS, Pair.from(
             ModelTransformationMode.GROUND,
-            new Transform().scale(2.5f).moveY(-0.1f)
+            new Transform().scale(2.5f).moveY(-0.14f)
         ))
     ));
 
@@ -129,6 +129,8 @@ public class ItemElm extends Elm {
 
         // Update the entity's display type and apply the exception's transformation to the parent one if needed
         ((CustomItemDisplay)getEntity()).setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
-        return exception == null ? t : t.apply(exception.second); //FIXME shield doesn't go up enough when the edit animation is triggered. prob has to do with they Y translation
+        return exception == null ? t : t.apply(exception.second);
+        //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
+        //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
     }
 }
