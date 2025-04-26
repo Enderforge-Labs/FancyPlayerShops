@@ -1,10 +1,7 @@
 package com.snek.fancyplayershops.ui.misc;
 
-import org.joml.Vector2f;
-
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.styles.ShopUiBorder_S;
-import com.snek.framework.data_types.ui.AlignmentX;
 
 
 

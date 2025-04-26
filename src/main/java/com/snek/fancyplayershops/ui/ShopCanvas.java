@@ -1,15 +1,10 @@
 package com.snek.fancyplayershops.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.buy.BuyUi;
-import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -39,6 +34,13 @@ import com.snek.framework.utils.Easings;
  */
 public class ShopCanvas extends Div {
 
+    // Layout
+    public static final int   SPAWN_SIZE_TIME    = 8;
+    public static final float SQUARE_BUTTON_SIZE = 0.12f;
+
+
+
+
     // Inherited elements
     protected final @NotNull Elm bg;
     protected final @NotNull Elm back;
@@ -63,29 +65,6 @@ public class ShopCanvas extends Div {
     private final float newPosTop;
     private final float newPosBottom;
 
-
-    // // Temporary children list used to distinguish between inherited elements and new ones
-    // private List<Div> tmpChildren = new ArrayList<>();
-    // @Override
-    // public Div addChild(Div elm) {
-    //     tmpChildren.add(elm);
-    //     return super.addChild(elm);
-    // }
-    // @Override
-    // public void clearChildren() {
-    //     tmpChildren.clear();
-    //     super.clearChildren();
-    // }
-    // @Override
-    // public Div removeChild(Div elm) {
-    //     tmpChildren.remove(elm);
-    //     return super.removeChild(elm);
-    // }
-
-
-    // Layout
-    public static final int   SPAWN_SIZE_TIME    = 8;
-    public static final float SQUARE_BUTTON_SIZE = 0.12f;
 
 
 
@@ -181,62 +160,7 @@ public class ShopCanvas extends Div {
             top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop));
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
         }
-
-if(activeCanvas != null) {
-        System.out.println("newHeightBg :     " + (newHeightBg     / activeCanvas.newHeightBg));
-        System.out.println("newHeightBack :   " + (newHeightBack   / activeCanvas.newHeightBack));
-        System.out.println("newHeightTop :    " + (newHeightTop    / activeCanvas.newHeightTop));
-        System.out.println("newHeightBottom : " + (newHeightBottom / activeCanvas.newHeightBottom));}
-
-        // super(new CanvasBackground(_shop), new CanvasBackground(_shop));
-        // bg.setPosY(1 - DetailsUi.BACKGROUND_HEIGHT);
-        // bg.setSize(new Vector2f(1, BACKGROUND_HEIGHT));
-        // back.setPosY(1 - DetailsUi.BACKGROUND_HEIGHT);
-        // back.setSize(new Vector2f(1, BACKGROUND_HEIGHT));
-        // back.applyAnimationNow(new Transition().additiveTransform(new Transform().rotY((float)Math.PI)));
-        // Div e;
-
-        // // Add borders
-        // e = bg.addChild(new ShopUiBorder(_shop));
-        // e.setAlignmentY(AlignmentY.BOTTOM);
-        // e = bg.addChild(new ShopUiBorder(_shop));
-        // e.setAlignmentY(AlignmentY.TOP);
-
-        // // Call superconstructor and add background
-        // super(_shop.getActiveCanvas().getBackground(), _shop.getActiveCanvas().getBack());
-        // Div e;
-
-        // // Instantly despawn and remove previous children
-        // for(Div c : bg.getChildren()) c.despawnNow();
-        // bg.clearChildren();
-
-        // // Reset size and position, visually simulate the previous values using an instant animation
-        // bg.setSizeY(1);
-        // bg.setPosY(0);
-        // bg.applyAnimationNow(
-        //     new Transition()
-        //     .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        // );
-        // back.setSizeY(1);
-        // back.setPosY(0);
-        // back.applyAnimationNow(
-        //     new Transition()
-        //     .additiveTransform(new Transform().scaleY(DetailsUi.BACKGROUND_HEIGHT).moveY(1 - DetailsUi.BACKGROUND_HEIGHT))
-        // );
-        // //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
     }
-    // public ShopCanvas(@NotNull Elm _bg, @NotNull Elm _back) {
-    //     super();
-
-    //     // Add front
-    //     addChild(_bg);
-    //     bg = _bg;
-
-    //     // Add back
-    //     addChild(_back);
-    //     back = _back;
-
-    // }
 
 
 
@@ -258,10 +182,6 @@ if(activeCanvas != null) {
             super.spawn(pos);
         }
     }
-
-
-
-
 
 
 

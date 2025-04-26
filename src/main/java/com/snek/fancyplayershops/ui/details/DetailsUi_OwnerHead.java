@@ -6,8 +6,6 @@ import org.joml.Vector3d;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.details.styles.DetailsUi_OwnerHead_S;
 import com.snek.fancyplayershops.ui.misc.ShopItemElm;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.styles.ItemElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 
