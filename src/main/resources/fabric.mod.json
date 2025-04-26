@@ -11,7 +11,7 @@
     "environment":"*",
     "entrypoints":{
         "main":[
-            "com.snek.fancyplayershops.FancyPlayerShops"
+            "com.snek.fancyplayershops.main.FancyPlayerShops"
         ],
         "client":[
             "com.snek.fancyplayershops.FancyPlayerShopsClient"
