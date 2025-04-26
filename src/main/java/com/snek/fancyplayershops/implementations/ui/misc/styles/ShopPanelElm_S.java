@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui.misc;
+package com.snek.fancyplayershops.implementations.ui.misc.styles;
 
 import com.snek.framework.ui.styles.PanelElmStyle;
 

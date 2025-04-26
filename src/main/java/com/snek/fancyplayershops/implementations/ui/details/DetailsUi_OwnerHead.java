@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.details.styles.DetailsUi_OwnerHead_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopItemElm;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -32,7 +33,6 @@ public class DetailsUi_OwnerHead extends ShopItemElm {
      */
     public DetailsUi_OwnerHead(Shop _shop) {
         super(_shop, new DetailsUi_OwnerHead_S());
-        applyAnimationNow(new Transition().additiveTransform(new Transform().scale(DetailsUi.HEAD_SIZE).scaleZ(0.001f).rotY((float)Math.PI)));
         updateDisplay();
     }
 

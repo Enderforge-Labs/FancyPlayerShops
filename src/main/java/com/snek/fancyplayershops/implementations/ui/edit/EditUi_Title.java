@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.implementations.ui.edit;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.edit.styles.EditUi_Title_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopFancyTextElm;
 import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;

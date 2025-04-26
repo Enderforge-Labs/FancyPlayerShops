@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.implementations.ui.misc;
+package com.snek.fancyplayershops.implementations.ui.misc.styles;
 
 import org.joml.Vector4i;
 

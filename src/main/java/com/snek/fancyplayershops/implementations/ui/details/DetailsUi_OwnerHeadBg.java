@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.implementations.ui.details;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 
 

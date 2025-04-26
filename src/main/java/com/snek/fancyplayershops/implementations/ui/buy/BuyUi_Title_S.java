@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.implementations.ui.buy;
 
 import org.joml.Vector4i;
 
-import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder_S;
+import com.snek.fancyplayershops.implementations.ui.misc.styles.ShopUiBorder_S;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
 
 

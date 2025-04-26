@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.edit.styles.EditUi_ItemSelector_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
 
 import net.minecraft.entity.player.PlayerEntity;

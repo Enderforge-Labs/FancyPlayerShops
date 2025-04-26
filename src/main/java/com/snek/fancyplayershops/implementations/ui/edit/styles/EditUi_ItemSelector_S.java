@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.implementations.ui.edit;
+package com.snek.fancyplayershops.implementations.ui.edit.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4i;
 
-import com.snek.fancyplayershops.implementations.ui.misc.ShopButton_S;
+import com.snek.fancyplayershops.implementations.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;

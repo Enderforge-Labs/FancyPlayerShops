@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.implementations.ui.misc;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.Shop;
+import com.snek.fancyplayershops.implementations.ui.misc.styles.ShopPanelElm_S;
 import com.snek.framework.ui.elements.PanelElm;
 
 

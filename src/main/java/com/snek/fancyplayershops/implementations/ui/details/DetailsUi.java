@@ -7,6 +7,7 @@ import org.joml.Vector3i;
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.CanvasBackground;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
+import com.snek.fancyplayershops.implementations.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;

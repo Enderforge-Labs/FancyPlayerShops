@@ -1,9 +1,9 @@
-package com.snek.fancyplayershops.implementations.ui.details;
+package com.snek.fancyplayershops.implementations.ui.details.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
-import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm_S;
+import com.snek.fancyplayershops.implementations.ui.misc.styles.ShopPanelElm_S;
 
 
 

@@ -1,7 +1,8 @@
-package com.snek.fancyplayershops.implementations.ui.details;
+package com.snek.fancyplayershops.implementations.ui.details.styles;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.fancyplayershops.implementations.ui.details.DetailsUi;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.ui.styles.ItemElmStyle;
 

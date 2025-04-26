@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.snek.fancyplayershops.implementations.ui.misc.InteractionBlocker;
+import com.snek.fancyplayershops.implementations.ui.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.entity.Entity;
