@@ -34,6 +34,7 @@ import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.containers.Triplet;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -153,6 +154,9 @@ public class Shop {
     private transient           boolean                   focusStatus = false;
     private transient           boolean               focusStatusNext = false;
     private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
+    private transient @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
+    private transient @NotNull RateLimiter menuOpenLimiter = new RateLimiter();
+
 
     public void setFocusStatusNext(boolean v) {
         focusStatusNext = v;
@@ -346,6 +350,7 @@ public class Shop {
                     retrievedShop.focusStatusNext       = false;
                     retrievedShop.lastDirection         = 0;
                     retrievedShop.canvasRotationLimiter = new RateLimiter();
+                    retrievedShop.menuOpenLimiter = new RateLimiter();
                     retrievedShop.cacheShopIdentifier();
                     try {
                         retrievedShop.calcDeserializedItem();
@@ -392,6 +397,7 @@ public class Shop {
      * Spawns or removes the focus displays and starts item animations depending on the set next focus state.
      */
     public void updateFocusState() {
+        if(!menuOpenLimiter.attempt()) return;
         if(focusStatus != focusStatusNext) {
             focusStatus = focusStatusNext;
             if(focusStatus) {
@@ -423,7 +429,8 @@ public class Shop {
                 interactionBlocker.despawn();
                 interactionBlocker = null;
 
-                // Cancel chat input callbacks, then reset the user
+                // Cancel chat input callbacks, then reset the user and renew the focus cooldown
+                menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
                 if(user != null) ChatInput.removeCallback(user);
                 user = null;
 
@@ -495,7 +502,8 @@ public class Shop {
 
 
         // Send an error message to the player if someone else has already opened a menu in the same shop
-        else {
+        //! checking that the shop is not focused prevents erroneous "someone else is using the shop" errors in case of clicks during the focus cooldown time
+        else if(isFocused()) {
             if(clickType == ClickType.RIGHT) {
                 player.sendMessage(new Txt(
                     "Someone else is already using this shop! Left click to " +
@@ -726,7 +734,6 @@ public class Shop {
 
 
 
-    transient RateLimiter canvasRotationLimiter = new RateLimiter();
     /**
      * Updates the rotation of the active canvas to face the specified player.
      * @param player The player.

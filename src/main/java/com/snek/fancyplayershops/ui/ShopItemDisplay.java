@@ -22,6 +22,7 @@ import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
+import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
@@ -59,9 +60,11 @@ public class ShopItemDisplay extends ItemElm {
     // The Y translation applied by the spawning animation
     public static final float FOCUS_HEIGHT = 0.05f;
 
-    // Loop animation duration and rotation
-    public static final int      LOOP_TIME   = 32;
-    public static final float    LOOP_ROT    = (float)Math.toRadians(120);
+    // Animation duration and loop rotation
+    public static final int   S_TIME = ElmStyle.S_TIME * 2;
+    public static final int   D_TIME = ElmStyle.D_TIME * 2;
+    public static final int   LOOP_TIME   = 32;
+    public static final float LOOP_ROT    = (float)Math.toRadians(120);
 
     // Edit animation scale and transition
     public static final Vector3f EDIT_SCALE  = new Vector3f(0.4f);
@@ -95,7 +98,7 @@ public class ShopItemDisplay extends ItemElm {
 
         // Setup spawn and despawn animations
         focusAnimation = new Animation(
-            new Transition(ElmStyle.S_TIME * 2, Easings.sineOut)
+            new Transition(S_TIME, Easings.sineOut)
             .additiveTransform(
                 new Transform()
                 .moveY(FOCUS_HEIGHT)
@@ -103,7 +106,7 @@ public class ShopItemDisplay extends ItemElm {
             )
         );
         unfocusAnimation = new Animation(
-            new Transition(ElmStyle.D_TIME * 2, Easings.sineOut)
+            new Transition(D_TIME, Easings.sineOut)
             .targetTransform(style.getTransform())
         );
 
@@ -303,7 +306,6 @@ public class ShopItemDisplay extends ItemElm {
      * Leaves the edit state
      */
     public void leaveEditState() {
-        // Empty
         //! leaveEditAnimation not needed as the unfocus animation uses a target transform
     }
 

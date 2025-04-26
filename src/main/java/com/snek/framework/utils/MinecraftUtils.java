@@ -90,6 +90,8 @@ public abstract class MinecraftUtils {
         head.getOrCreateNbt().put("SkullOwner", ownerTag);
         return head;
     }
+    //FIXME skins of offline players aren't actually retrieved because the texture data is not loaded.
+    //FIXME Caching it manually might be necessary
 
 
 
