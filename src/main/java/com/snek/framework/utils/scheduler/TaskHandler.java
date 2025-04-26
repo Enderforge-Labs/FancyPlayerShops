@@ -32,7 +32,7 @@ public class TaskHandler {
      * Marks the task as cancelled.
      * Calling .exec() on cancelled tasks doesn't run them.
      */
-    public void cancel(){
+    public void cancel() {
         cancelled = true;
     }
 
@@ -41,7 +41,7 @@ public class TaskHandler {
      * Marks the task as scheduled.
      * This undos any previous calls to .cancel()
      */
-    public void schedule(){
+    public void schedule() {
         cancelled = false;
     }
 
@@ -49,7 +49,7 @@ public class TaskHandler {
     /**
      * Immediately runs the task if it hasn't been cancelled.
      */
-    public void compute(){
+    public void compute() {
         if(!cancelled) task.run();
     }
 }

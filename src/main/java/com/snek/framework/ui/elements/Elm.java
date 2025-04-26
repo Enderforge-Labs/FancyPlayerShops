@@ -178,7 +178,7 @@ public abstract class Elm extends Div {
 
         // Apply each transition one at a time
         int shift = 0;
-        for (Transition transition : animation.getTransitions()) {
+        for(Transition transition : animation.getTransitions()) {
             shift += __applyAnimationTransition(transition, shift);
         }
     }
@@ -191,7 +191,7 @@ public abstract class Elm extends Div {
         super.applyAnimationNow(animation);
 
         // Apply each transition one at a time
-        for (Transition transition : animation.getTransitions()) {
+        for(Transition transition : animation.getTransitions()) {
             __applyAnimationTransitionNow(transition);
         }
     }
@@ -280,7 +280,7 @@ public abstract class Elm extends Div {
      * Applies a single future data to the element.
      * @param d The future data value.
      */
-    protected void __applyTransitionStep(@NotNull InterpolatedData d){
+    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         if(d.hasTransform()) style.setTransform(d.getTransform());
     }
 
@@ -290,7 +290,7 @@ public abstract class Elm extends Div {
      * Generates a base future data from the current values of the element.
      * @return The generated future data.
      */
-    protected InterpolatedData __generateInterpolatedData(){
+    protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             style.getTransform().copy(),
             null,
@@ -303,7 +303,7 @@ public abstract class Elm extends Div {
      * @param index The index of the element to read values from.
      * @return The generated future data.
      */
-    protected InterpolatedData __generateInterpolatedData(int index){
+    protected InterpolatedData __generateInterpolatedData(int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             null,
@@ -411,9 +411,9 @@ public abstract class Elm extends Div {
      * Processes the first step of the scheduled transitions of all the queued elements
      * Must be called at the end of the tick every TRANSITION_REFRESH_TIME ticks. //FIXME make unaligned
      */
-    public static void processUpdateQueue(){
+    public static void processUpdateQueue() {
 
-        for (int i = 0; i < elmUpdateQueue.size();) {
+        for(int i = 0; i < elmUpdateQueue.size();) {
             if(elmUpdateQueue.get(i).stepTransition()) ++i;
         }
     }
@@ -425,7 +425,7 @@ public abstract class Elm extends Div {
      * Updates the new hover status of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
-    public void updateHoverStatus(@Nullable PlayerEntity player){
+    public void updateHoverStatus(@Nullable PlayerEntity player) {
         if(this instanceof Hoverable h) {
             boolean hoverStatusNext;
 
@@ -505,7 +505,7 @@ public abstract class Elm extends Div {
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
-        if (entity instanceof DisplayEntity) {
+        if(entity instanceof DisplayEntity) {
             World world = entity.getWorld();
             if(
                 world != null &&

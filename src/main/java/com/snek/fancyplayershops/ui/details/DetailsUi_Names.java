@@ -27,7 +27,7 @@ public class DetailsUi_Names extends ShopTextElm {
      * Creates a new DetailsUiDisplayNames.
      * @param _shop The target shop.
      */
-    public DetailsUi_Names(@NotNull Shop _shop){
+    public DetailsUi_Names(@NotNull Shop _shop) {
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
     }
@@ -38,7 +38,7 @@ public class DetailsUi_Names extends ShopTextElm {
     /**
      * Updates the displayed values.
      */
-    public void updateDisplay(){
+    public void updateDisplay() {
 
         ((TextElmStyle)style).setText(new Txt()
             .cat(new Txt("Price:").lightGray())

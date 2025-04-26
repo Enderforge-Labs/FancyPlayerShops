@@ -157,7 +157,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Updates the displayed item reading data from the target shop.
      */
-    public void updateDisplay(){
+    public void updateDisplay() {
         ItemStack _item = shop.getItem();
 
 
@@ -247,7 +247,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Enters the focus state, making the item more visible and starting the loop animation
      */
-    public void enterFocusState(){
+    public void enterFocusState() {
 
         // Hide custom name
         updateDisplay();
@@ -269,7 +269,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Leaves the focus state.
      */
-    public void leaveFocusState(){
+    public void leaveFocusState() {
 
         // Stop loop animation and start unfocus animation
         stopLoopAnimation();
@@ -292,7 +292,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Enters the edit state
      */
-    public void enterEditState(){
+    public void enterEditState() {
         applyAnimation(enterEditAnimation);
     }
 
@@ -302,7 +302,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Leaves the edit state
      */
-    public void leaveEditState(){
+    public void leaveEditState() {
         // Empty
         //! leaveEditAnimation not needed as the unfocus animation uses a target transform
     }

@@ -213,7 +213,7 @@ public class Shop {
      * @throws RuntimeException if the world Identifier is invalid or the ServerWorld cannot be found.
      */
     private void calcDeserializedWorldId(MinecraftServer server) throws RuntimeException {
-        for (ServerWorld w : server.getWorlds()) {
+        for(ServerWorld w : server.getWorlds()) {
             if(w.getRegistryKey().getValue().toString().equals(worldId)) {
                 world = w;
                 return;
@@ -235,7 +235,7 @@ public class Shop {
      * @param _pos The position of the new shop.
      * @param owner The player that places the shop.
      */
-    public Shop(ServerWorld _world, BlockPos _pos, PlayerEntity owner){
+    public Shop(ServerWorld _world, BlockPos _pos, PlayerEntity owner) {
         world = _world;
         ownerUUID = owner.getUuid();
         pos = _pos;
@@ -326,11 +326,11 @@ public class Shop {
     public static void loadData(MinecraftServer server) {
 
         // For each world directory
-        if(SHOP_STORAGE_DIR != null) for (File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
+        if(SHOP_STORAGE_DIR != null) for(File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
 
             // For each shop file
             File[] shopStorageFiles = shopStorageDir.listFiles();
-            if(shopStorageFiles != null) for (File shopStorageFile : shopStorageFiles) {
+            if(shopStorageFiles != null) for(File shopStorageFile : shopStorageFiles) {
 
                 // Read file
                 Shop retrievedShop = null;
@@ -391,7 +391,7 @@ public class Shop {
     /**
      * Spawns or removes the focus displays and starts item animations depending on the set next focus state.
      */
-    public void updateFocusState(){
+    public void updateFocusState() {
         if(focusStatus != focusStatusNext) {
             focusStatus = focusStatusNext;
             if(focusStatus) {
@@ -441,7 +441,7 @@ public class Shop {
      * If no connected entity is found, a new ShopItemDisplay is created.
      * @reutrn the item display.
      */
-    private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded(){
+    private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
         if(itemDisplay == null) {
             ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
             if(rawItemDisplay == null) {
@@ -522,7 +522,7 @@ public class Shop {
      * Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
      * @param owner The owner of the shop.
      */
-    public void retrieveItem(PlayerEntity owner){
+    public void retrieveItem(PlayerEntity owner) {
         if(item.getItem() == Items.AIR) {
             owner. sendMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -545,7 +545,7 @@ public class Shop {
      * @param player The player.
      * @param amount The amount of items to buy.
      */
-    public void buyItem(PlayerEntity player, int amount){
+    public void buyItem(PlayerEntity player, int amount) {
         if(item.getItem() == Items.AIR) {
             player.sendMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -582,8 +582,8 @@ public class Shop {
         // Adjust rotation if needed
         if(lastDirection != 0) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-            // for (Div c : canvas.getChildren().get(0).getChildren()) { //TODO REMOVE
-            for (Div c : canvas.getBg().getChildren()) {
+            // for(Div c : canvas.getChildren().get(0).getChildren()) { //TODO REMOVE
+            for(Div c : canvas.getBg().getChildren()) {
                 c.applyAnimationNowRecursive(animations.first);
             }
         }
@@ -759,7 +759,7 @@ public class Shop {
      * @param to The new direction to face.
      * @return The canvas animation and the item display animation.
      */
-    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(int from, int to){
+    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(int from, int to) {
         final float rotation = -Math.toRadians(to * 45f - from * 45f);
         return Pair.from(
             new Animation(

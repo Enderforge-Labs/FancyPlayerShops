@@ -81,7 +81,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * This is equivalent to changing the entity's "item_display" NBT.
      * @param displayType The new value.
      */
-    public void setDisplayType(ModelTransformationMode displayType){
+    public void setDisplayType(ModelTransformationMode displayType) {
         Utils.invokeSafe(method_setDisplayType, getRawDisplay(), displayType);
     }
 
@@ -90,7 +90,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * Retrieves the entity's display type value.
      * @return The current display type.
      */
-    public ModelTransformationMode getDisplayType(){
+    public ModelTransformationMode getDisplayType() {
         return (ModelTransformationMode)Utils.invokeSafe(method_getDisplayType, heldEntity);
     }
 }

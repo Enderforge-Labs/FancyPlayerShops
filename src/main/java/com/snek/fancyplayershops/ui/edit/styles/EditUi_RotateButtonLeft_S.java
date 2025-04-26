@@ -26,7 +26,7 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     /**
      * Creates a new EditUiLeftRotateButtonStyle.
      */
-    public EditUi_RotateButtonLeft_S(){
+    public EditUi_RotateButtonLeft_S() {
         super();
     }
 

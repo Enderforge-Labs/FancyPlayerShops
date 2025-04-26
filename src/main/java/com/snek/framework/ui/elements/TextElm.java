@@ -67,7 +67,7 @@ public class TextElm extends Elm {
      * Creates a new TextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public TextElm(@NotNull ServerWorld _world){
+    public TextElm(@NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new TextElmStyle());
     }
 
@@ -86,7 +86,7 @@ public class TextElm extends Elm {
 
 
     @Override
-    protected void __applyTransitionStep(@NotNull InterpolatedData d){
+    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasOpacity()) getStyle().setTextOpacity(d.getOpacity());
     }
@@ -95,7 +95,7 @@ public class TextElm extends Elm {
 
 
     @Override
-    protected InterpolatedData __generateInterpolatedData(){
+    protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getStyle().getTransform().copy(),
             null,
@@ -103,7 +103,7 @@ public class TextElm extends Elm {
         );
     }
     @Override
-    protected InterpolatedData __generateInterpolatedData(int index){
+    protected InterpolatedData __generateInterpolatedData(int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             null,
@@ -128,7 +128,7 @@ public class TextElm extends Elm {
 
 
     @Override
-    public boolean stepTransition(){
+    public boolean stepTransition() {
         boolean r = super.stepTransition();
         ((CustomTextDisplay)entity).tick();
         return r;
@@ -145,7 +145,7 @@ public class TextElm extends Elm {
      * NOTICE: Wrapped lines are counted as one.
      * @return The height in blocks.
      */
-    public static float calcHeight(Elm elm){
+    public static float calcHeight(Elm elm) {
         final CustomTextDisplay _entity;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }
@@ -171,7 +171,7 @@ public class TextElm extends Elm {
      * NOTICE: Wrapped lines are counted as one.
      * @return The width in blocks.
      */
-    public static float calcWidth(Elm elm){
+    public static float calcWidth(Elm elm) {
         final CustomTextDisplay _entity;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }

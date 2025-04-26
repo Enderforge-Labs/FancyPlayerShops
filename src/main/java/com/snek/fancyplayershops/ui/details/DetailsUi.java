@@ -58,7 +58,7 @@ public class DetailsUi extends ShopCanvas {
      * Creates a new DetailsUi.
      * @param _shop The target shop.
      */
-    public DetailsUi(Shop _shop){
+    public DetailsUi(Shop _shop) {
 
         // Call superconstructor
         super(_shop, BACKGROUND_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT);

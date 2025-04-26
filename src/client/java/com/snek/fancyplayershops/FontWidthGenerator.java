@@ -52,10 +52,10 @@ public abstract class FontWidthGenerator {
 
 
             // Loop extended ASCII characters
-            for (char c = 0; c < 32; c++) {
+            for(char c = 0; c < 32; c++) {
                 f.write("        widths.add(" + 0 + ");\n");
             }
-            for (char c = 32; c < 256; c++) {
+            for(char c = 32; c < 256; c++) {
                 int width = renderer.getWidth(String.valueOf(c));
                 f.write("        widths.add(" + width + ");\n");
             }

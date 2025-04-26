@@ -70,7 +70,7 @@ public class EditUi extends ShopCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public EditUi(Shop _shop){
+    public EditUi(Shop _shop) {
 
 
         //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
@@ -80,7 +80,7 @@ public class EditUi extends ShopCanvas {
         Div e;
 
         // // Instantly despawn and remove previous children
-        // for (Div c : bg.getChildren()) c.despawnNow();
+        // for(Div c : bg.getChildren()) c.despawnNow();
         // bg.clearChildren();
 
         // // Reset size and position, visually simulate the previous values using an instant animation
@@ -145,11 +145,11 @@ public class EditUi extends ShopCanvas {
 
 
     // @Override
-    // public void spawn(Vector3d pos){
+    // public void spawn(Vector3d pos) {
 
     //     //TODO MOVE TO SHOP CANVAS. It takes the borders, the background and the back side and changes their sizes on spawn
     //     // Only spawn the children of the background element. The background itself is already spawned
-    //     for (Div c : bg.getChildren()) {
+    //     for(Div c : bg.getChildren()) {
     //         c.spawn(pos);
     //     }
 

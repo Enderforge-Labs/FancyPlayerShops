@@ -69,7 +69,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public void spawn(Vector3d pos){
+    public void spawn(Vector3d pos) {
         final Animation animation = ((ShopButton_S)style).getHoverPrimerAnimation();
         if(animation != null) {
             applyAnimationNow(animation);

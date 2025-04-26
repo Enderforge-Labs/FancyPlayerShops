@@ -41,7 +41,7 @@ public class EditUi_RotateButton extends ShopButton {
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
      * @param _buttonText The text to display on the button.
      */
-    public EditUi_RotateButton(Shop _shop, float _rotation, Text _buttonText){
+    public EditUi_RotateButton(Shop _shop, float _rotation, Text _buttonText) {
         super(
             _shop,
             EditUi.SQUARE_BUTTON_SIZE,

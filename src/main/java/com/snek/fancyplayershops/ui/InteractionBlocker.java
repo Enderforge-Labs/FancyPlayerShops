@@ -85,7 +85,7 @@ public class InteractionBlocker {
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
-        if (entity instanceof InteractionEntity) {
+        if(entity instanceof InteractionEntity) {
             World world = entity.getWorld();
             if(
                 world != null &&

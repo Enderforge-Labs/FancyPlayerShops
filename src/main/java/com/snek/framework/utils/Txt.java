@@ -39,7 +39,7 @@ public class Txt {
         style = rawText.getStyle();
     }
 
-    public Txt copy(){
+    public Txt copy() {
         rawText.setStyle(style);
         return new Txt(rawText.copy());
     }
@@ -92,7 +92,7 @@ public class Txt {
         return this.cat(Text.literal(s));
     }
 
-    public Text get(){
+    public Text get() {
         rawText.setStyle(style);
         return rawText;
     }

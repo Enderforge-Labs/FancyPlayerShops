@@ -44,7 +44,7 @@ public class ShopButton_S extends FancyTextElmStyle {
 
 
     @Override
-    public void resetAll(){
+    public void resetAll() {
         super.resetAll();
         resetHoverPrimerAnimation();
         resetHoverEnterAnimation();

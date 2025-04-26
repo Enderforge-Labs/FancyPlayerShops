@@ -26,7 +26,7 @@ public class EditUi_RotateButtonRight_S extends ShopButton_S {
     /**
      * Creates a new EditUiRightRotateButtonStyle.
      */
-    public EditUi_RotateButtonRight_S(){
+    public EditUi_RotateButtonRight_S() {
         super();
     }
 

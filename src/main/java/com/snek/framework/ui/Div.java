@@ -170,7 +170,7 @@ public class Div {
      */
     public final void applyAnimationRecursive(@NotNull Animation animation) {
         applyAnimation(animation);
-        for (Div elm : children) {
+        for(Div elm : children) {
             elm.applyAnimationRecursive(animation);
         }
     }
@@ -192,7 +192,7 @@ public class Div {
      */
     public final void applyAnimationNowRecursive(@NotNull Animation animation) {
         applyAnimationNow(animation);
-        for (Div elm : children) {
+        for(Div elm : children) {
             elm.applyAnimationNowRecursive(animation);
         }
     }
@@ -217,7 +217,7 @@ public class Div {
         if(this instanceof Clickable e && e.onClick(player, clickType)) {
             return;
         }
-        for (Div elm : children) {
+        for(Div elm : children) {
             elm.forwardClick(player, clickType);
         }
     }
@@ -233,7 +233,7 @@ public class Div {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
             e.updateHoverStatus(player);
         }
-        for (Div elm : children) {
+        for(Div elm : children) {
             elm.forwardHover(player);
         }
     }
@@ -245,8 +245,8 @@ public class Div {
      * Spawns the element and its associated entities into the world.
      * @param pos The position of the spawned entities.
      */
-    public void spawn(Vector3d pos){
-        for (Div elm : children) {
+    public void spawn(Vector3d pos) {
+        for(Div elm : children) {
             elm.spawn(pos);
         }
     }
@@ -257,8 +257,8 @@ public class Div {
     /**
      * Removes the element and its associated entities from the world.
      */
-    public void despawn(){
-        for (Div elm : children) {
+    public void despawn() {
+        for(Div elm : children) {
             elm.despawn();
         }
     }
@@ -269,8 +269,8 @@ public class Div {
     /**
      * Instantly removes the entities associated with this element from the world.
      */
-    public void despawnNow(){
-        for (Div elm : children) {
+    public void despawnNow() {
+        for(Div elm : children) {
             elm.despawnNow();
         }
     }
@@ -286,14 +286,14 @@ public class Div {
      * Updates the absolute size of this element
      * using the parent's absolute size and the element's local size.
      */
-    public void updateAbsSizeSelf(){
+    public void updateAbsSizeSelf() {
         absSize.set(parent == null ? localSize : new Vector2f(parent.getAbsSize()).mul(localSize));
         updateAbsPosSelf();
     }
     /**
      * Updates the local size of this element based on the current absolute size.
      */
-    public void updateAbsSizeInverseSelf(){
+    public void updateAbsSizeInverseSelf() {
         localSize.set(parent == null ? absSize : new Vector2f(absSize).div(parent.getAbsSize()));
         updateAbsPosSelf();
     }
@@ -303,16 +303,16 @@ public class Div {
      * Updates the absolute size of this element and its children, recursively,
      * using the parent's absolute size and the element's local size.
      */
-    public void updateAbsSize(){
+    public void updateAbsSize() {
         updateAbsSizeSelf();
-        for (Div c : children) c.updateAbsSize();
+        for(Div c : children) c.updateAbsSize();
     }
     /**
      * Updates the local size of this element based on the current absolute size, then updates the absolute size of its children, recursively.
      */
-    public void updateAbsSizeInverse(){
+    public void updateAbsSizeInverse() {
         updateAbsSizeInverseSelf();
-        for (Div c : children) c.updateAbsSize();
+        for(Div c : children) c.updateAbsSize();
     }
 
 
@@ -377,7 +377,7 @@ public class Div {
      */
     protected void updateZIndex() {
         updateZIndexSelf();
-        for (Div c : children) c.updateZIndex();
+        for(Div c : children) c.updateZIndex();
     }
 
     /**
@@ -436,7 +436,7 @@ public class Div {
      */
     protected void updateAbsPos() {
         updateAbsPosSelf();
-        for (Div c : children) c.updateAbsPos();
+        for(Div c : children) c.updateAbsPos();
     }
 
 

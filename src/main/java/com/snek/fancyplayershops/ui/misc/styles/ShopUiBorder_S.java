@@ -19,13 +19,13 @@ public class ShopUiBorder_S extends ShopPanelElm_S {
     /**
      * Creates a new ShopUiBorderStyle
      */
-    public ShopUiBorder_S(){
+    public ShopUiBorder_S() {
         super();
     }
 
 
     @Override
-    public Vector4i getDefaultColor(){
+    public Vector4i getDefaultColor() {
         return new Vector4i(COLOR);
     }
 }

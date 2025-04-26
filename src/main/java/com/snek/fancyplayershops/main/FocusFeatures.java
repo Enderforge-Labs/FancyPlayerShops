@@ -72,7 +72,7 @@ public abstract class FocusFeatures {
             player
         ));
 
-        if (result != null) return result.getPos();
+        if(result != null) return result.getPos();
         else return null;
     }
 
@@ -95,7 +95,7 @@ public abstract class FocusFeatures {
 
 
         // Manually perform ray casting
-        while (distanceTraveled < maxDistance) {
+        while(distanceTraveled < maxDistance) {
 
             // Add block to list if not present
             Vec3i currentPosInt = new Vec3i((int)currentPos.x, (int)currentPos.y, (int)currentPos.z);
@@ -135,9 +135,9 @@ public abstract class FocusFeatures {
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.squaredDistanceTo(playerEyePos)));
 
             // Find target shop block
-            for (Vec3d pos : collidingBlocks) {
+            for(Vec3d pos : collidingBlocks) {
                 Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
-                for (ItemDisplayEntity e : entitiyList) {
+                for(ItemDisplayEntity e : entitiyList) {
                     if(e.getBlockPos().equals(blockPos)) {
                         return Shop.findShop(new BlockPos(blockPos), world);
                     }
@@ -161,7 +161,7 @@ public abstract class FocusFeatures {
 
 
         // Set all previously focused shops's next focus state to false
-        for (Shop shop : targetedShopsOld) {
+        for(Shop shop : targetedShopsOld) {
             shop.setFocusStatusNext(false);
         }
 
@@ -169,8 +169,8 @@ public abstract class FocusFeatures {
         // Find currently focused shops and their viewers
         final Set<Shop>          targetedShops        = new LinkedHashSet<>();
         final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
-        for (ServerWorld serverWorld : serverWorlds) {
-            for (PlayerEntity player : serverWorld.getPlayers()) {
+        for(ServerWorld serverWorld : serverWorlds) {
+            for(PlayerEntity player : serverWorld.getPlayers()) {
                 Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
                 if(targetShop != null) {
 
@@ -193,12 +193,12 @@ public abstract class FocusFeatures {
 
         // Update the displays of all the previously and currently focused shops to their next state and update the targeted shops list
         targetedShopsOld.removeAll(targetedShops);
-        for (Shop shop : targetedShopsOld) {
+        for(Shop shop : targetedShopsOld) {
             if(shop.activeCanvas != null) shop.activeCanvas.forwardHover(null);
             shop.updateFocusState();
         }
         int i = 0;
-        for (Shop shop : targetedShops) {
+        for(Shop shop : targetedShops) {
             shop.updateFocusState();
             if(shop.user != null) {
                 shop.activeCanvas.forwardHover(shop.user);

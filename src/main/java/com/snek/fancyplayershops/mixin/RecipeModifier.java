@@ -25,7 +25,7 @@
 //     private static void modifyCraftingResult(int syncId, World world, PlayerEntity player, CraftingInventory inventory, CraftingResultInventory result, CallbackInfo ci) {
 //         ItemStack originalResult = result.getStack(0);
 
-//         if (originalResult.getItem() == Items.DIAMOND_SWORD) {
+//         if(originalResult.getItem() == Items.DIAMOND_SWORD) {
 //             ItemStack modifiedResult = originalResult.copy();
 //             modifiedResult.setCustomName(Text.of("Custom Sword"));
 //             result.setStack(0, modifiedResult);

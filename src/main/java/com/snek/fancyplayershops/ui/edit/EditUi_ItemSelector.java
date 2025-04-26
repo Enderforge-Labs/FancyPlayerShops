@@ -30,7 +30,7 @@ public class EditUi_ItemSelector extends ShopButton {
      * Creates a new EditUiItemSelector.
      * @param _shop The target shop.
      */
-    public EditUi_ItemSelector(Shop _shop){
+    public EditUi_ItemSelector(Shop _shop) {
         super(
             _shop,
             EditUi.ITEM_SELECTOR_SIZE,

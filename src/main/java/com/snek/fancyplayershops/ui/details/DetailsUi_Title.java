@@ -31,7 +31,7 @@ public class DetailsUi_Title extends ShopTextElm {
      * Creates a new DetailsUiTitle.
      * @param _shop The target shop.
      */
-    public DetailsUi_Title(@NotNull Shop _shop){
+    public DetailsUi_Title(@NotNull Shop _shop) {
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
     }
@@ -42,7 +42,7 @@ public class DetailsUi_Title extends ShopTextElm {
     /**
      * Updates the displayed name.
      */
-    public void updateDisplay(){
+    public void updateDisplay() {
 
         // Empty shop case
         final ItemStack _item = shop.getItem();

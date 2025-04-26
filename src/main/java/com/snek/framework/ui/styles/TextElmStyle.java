@@ -46,7 +46,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public void resetAll(){
+    public void resetAll() {
         resetText();
         resetTextAlignment();
         resetTextOpacity();

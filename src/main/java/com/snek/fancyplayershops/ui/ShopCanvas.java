@@ -207,7 +207,7 @@ if(activeCanvas != null) {
         // Div e;
 
         // // Instantly despawn and remove previous children
-        // for (Div c : bg.getChildren()) c.despawnNow();
+        // for(Div c : bg.getChildren()) c.despawnNow();
         // bg.clearChildren();
 
         // // Reset size and position, visually simulate the previous values using an instant animation
@@ -246,10 +246,10 @@ if(activeCanvas != null) {
 
 
     @Override
-    public void spawn(Vector3d pos){
+    public void spawn(Vector3d pos) {
 
         // If the background is already spawned, only spawn its children
-        if(bg.isSpawned()) for (Div c : bg.getChildren()) {
+        if(bg.isSpawned()) for(Div c : bg.getChildren()) {
             c.spawn(pos);
         }
 
@@ -267,7 +267,7 @@ if(activeCanvas != null) {
 
 
     @Override
-    public void despawn(){
+    public void despawn() {
         super.despawn();
     }
 }

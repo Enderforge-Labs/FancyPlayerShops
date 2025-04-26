@@ -24,7 +24,7 @@ public class ShopUiBorder extends ShopPanelElm {
      * Creates a new ShopUiBorder of the specified height.
      * @param _shop The target shop.
      */
-    public ShopUiBorder(Shop _shop, float h){
+    public ShopUiBorder(Shop _shop, float h) {
         super(_shop, new ShopUiBorder_S());
     }
 
@@ -34,7 +34,7 @@ public class ShopUiBorder extends ShopPanelElm {
      * @param _shop The target shop.
      * @param h The height of the line.
      */
-    public ShopUiBorder(Shop _shop){
+    public ShopUiBorder(Shop _shop) {
         this(_shop, DEFAULT_HEIGHT);
     }
 }

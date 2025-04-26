@@ -20,13 +20,13 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
     /**
      * Creates a new DetailsUi_OwnerHeadBg_S.
      */
-    public DetailsUi_OwnerHeadBg_S(){
+    public DetailsUi_OwnerHeadBg_S() {
         super();
     }
 
 
     @Override
-    public @NotNull Vector4i getDefaultColor(){
+    public @NotNull Vector4i getDefaultColor() {
         return new Vector4i(50, 0, 0, 0);
     }
 }

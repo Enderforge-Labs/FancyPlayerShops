@@ -33,7 +33,7 @@ public class PanelElmStyle extends ElmStyle {
 
 
     @Override
-    public void resetAll(){
+    public void resetAll() {
         resetColor();
         super.resetAll();
     }
@@ -42,7 +42,7 @@ public class PanelElmStyle extends ElmStyle {
 
 
     @Override
-    public Transform getDefaultTransform(){
+    public Transform getDefaultTransform() {
         return new Transform()
         ;
     }

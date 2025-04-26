@@ -19,7 +19,7 @@ public class DetailsUi_OwnerHeadBg extends ShopPanelElm {
     /**
      * Creates a new DetailsUi_OwnerHeadBg
      */
-    public DetailsUi_OwnerHeadBg(Shop _shop){
+    public DetailsUi_OwnerHeadBg(Shop _shop) {
         super(_shop, new DetailsUi_OwnerHeadBg_S());
     }
 }

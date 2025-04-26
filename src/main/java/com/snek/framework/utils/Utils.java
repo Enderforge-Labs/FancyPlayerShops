@@ -80,7 +80,7 @@ public abstract class Utils {
 
     private static final DecimalFormat formatterPrice = new DecimalFormat("#,##0.##");
 
-    public static @NotNull String formatPrice(double price){
+    public static @NotNull String formatPrice(double price) {
         return formatPrice(price, "$", true);
     }
 
@@ -91,7 +91,7 @@ public abstract class Utils {
      * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
      * @return The formatted price.
      */
-    public static @NotNull String formatPrice(double price, @NotNull String currency, boolean thousandsSeparator){
+    public static @NotNull String formatPrice(double price, @NotNull String currency, boolean thousandsSeparator) {
         String r;
 
         // No separator
@@ -113,7 +113,7 @@ public abstract class Utils {
 
     private static final DecimalFormat formatterAmount = new DecimalFormat("#,###");
 
-    public static @NotNull String formatAmount(double amount){
+    public static @NotNull String formatAmount(double amount) {
         return formatAmount(amount, false, true);
     }
 
@@ -124,7 +124,7 @@ public abstract class Utils {
      * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
      * @return The formatted price.
      */
-    public static @NotNull String formatAmount(double amount, boolean x, boolean thousandsSeparator){
+    public static @NotNull String formatAmount(double amount, boolean x, boolean thousandsSeparator) {
         String r;
         if(thousandsSeparator) {
             r = formatterAmount.format(amount);
@@ -160,7 +160,7 @@ public abstract class Utils {
 
         float delta = max - min;
 
-        if (max != 0) {
+        if(max != 0) {
             s = delta / max;
         } else {
             s = 0;
@@ -168,16 +168,16 @@ public abstract class Utils {
             return new Vector3f(h, s, v);
         }
 
-        if (r == max) {
+        if(r == max) {
             h = (g - b) / delta;
-        } else if (g == max) {
+        } else if(g == max) {
             h = 2 + (b - r) / delta;
         } else {
             h = 4 + (r - g) / delta;
         }
 
         h *= 60;
-        if (h < 0) h += 360;
+        if(h < 0) h += 360;
 
         return new Vector3f(h, s, v);
     }
@@ -206,17 +206,17 @@ public abstract class Utils {
         float g = 0;
         float b = 0;
 
-        if (0 <= h && h < 60) {
+        if(0 <= h && h < 60) {
             r = c; g = x; b = 0;
-        } else if (60 <= h && h < 120) {
+        } else if(60 <= h && h < 120) {
             r = x; g = c; b = 0;
-        } else if (120 <= h && h < 180) {
+        } else if(120 <= h && h < 180) {
             r = 0; g = c; b = x;
-        } else if (180 <= h && h < 240) {
+        } else if(180 <= h && h < 240) {
             r = 0; g = x; b = c;
-        } else if (240 <= h && h < 300) {
+        } else if(240 <= h && h < 300) {
             r = x; g = 0; b = c;
-        } else if (300 <= h && h < 360) {
+        } else if(300 <= h && h < 360) {
             r = c; g = 0; b = x;
         }
 
@@ -248,8 +248,8 @@ public abstract class Utils {
         float v2 = hsv2.z;
 
         // Adjust hue to allow the interpolation to take the shortest path
-        if (Math.abs(h1 - h2) > 180) {
-            if (h1 > h2) h2 += 360;
+        if(Math.abs(h1 - h2) > 180) {
+            if(h1 > h2) h2 += 360;
             else h1 += 360;
         }
 
@@ -286,7 +286,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static float interpolateF(float v1, float v2, float factor){
+    public static float interpolateF(float v1, float v2, float factor) {
         return v1 + (v2 - v1) * factor;
     }
 
@@ -300,7 +300,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static double interpolateF(double v1, double v2, double factor){
+    public static double interpolateF(double v1, double v2, double factor) {
         return v1 + (v2 - v1) * factor;
     }
 
@@ -314,7 +314,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static int interpolateI(int v1, int v2, float factor){
+    public static int interpolateI(int v1, int v2, float factor) {
         return Math.round(v1 + (v2 - v1) * factor);
     }
 }

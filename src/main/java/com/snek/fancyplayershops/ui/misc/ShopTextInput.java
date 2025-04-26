@@ -59,7 +59,7 @@ public abstract class ShopTextInput extends ShopButton {
     }
 
 
-    protected void enterInputState(){
+    protected void enterInputState() {
         if(!inputState) {
             inputState = true;
             inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
@@ -70,7 +70,7 @@ public abstract class ShopTextInput extends ShopButton {
     }
 
 
-    protected void exitInputState(){
+    protected void exitInputState() {
         if(inputState) {
             inputState = false;
             if(inputStateHandler != null) inputStateHandler.cancel();

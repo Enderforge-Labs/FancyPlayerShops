@@ -64,7 +64,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * in an incorrect state after safety delays performed during short animations.
      * Must be called at the end of each animation tick. //FIXME this can cause issues if the transition ticks are not aligned wit the step size.
      */
-    public void tick(){
+    public void tick() {
         shiftLastAlpha(getTextOpacity());
 
         if(noTextUnderA26) {

@@ -26,7 +26,7 @@ public class Animation {
      * @param _transitions One or more transitions.
      */
     public Animation(@NotNull Transition... _transitions) {
-        for (Transition t : _transitions) {
+        for(Transition t : _transitions) {
             transitions.add(t);
             totalDuration += t.getDuration();
         }

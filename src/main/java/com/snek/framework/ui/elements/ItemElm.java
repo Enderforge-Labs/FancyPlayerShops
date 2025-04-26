@@ -92,7 +92,7 @@ public class ItemElm extends Elm {
      * Creates a new ItemElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public ItemElm(@NotNull ServerWorld _world){
+    public ItemElm(@NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new ItemElmStyle());
     }
 
@@ -115,7 +115,7 @@ public class ItemElm extends Elm {
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
         Transform t = super.__calcTransform();
         Pair<ModelTransformationMode, Transform> exception = transformExceptions.get(getStyle().getItem().getItem().getTranslationKey());
-        if(exception == null) for (var entry : tagTransformExceptions.entrySet()) {
+        if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
             if(getStyle().getItem().isIn(entry.getKey())) {
                 exception = entry.getValue();
                 break;

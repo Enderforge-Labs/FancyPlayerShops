@@ -67,7 +67,7 @@ public class FancyTextElmStyle extends TextElmStyle {
 
 
     @Override
-    public void resetAll(){
+    public void resetAll() {
         resetBackground();
         resetTransformFg();
         resetTransformBg();

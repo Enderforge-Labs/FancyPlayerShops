@@ -12,7 +12,7 @@ public class RateLimiter {
     /**
      * Creates a new RateLimiter.
      */
-    public RateLimiter(){
+    public RateLimiter() {
         cooldownEnd = 0;
     }
 
@@ -34,7 +34,7 @@ public class RateLimiter {
      * Checks whether the cooldown has expired.
      * @return True if the cooldown has expired, false otherwise.
      */
-    public boolean attempt(){
+    public boolean attempt() {
         return Scheduler.getTickNum() >= cooldownEnd;
     }
 }

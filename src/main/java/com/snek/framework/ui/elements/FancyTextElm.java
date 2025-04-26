@@ -69,7 +69,7 @@ public class FancyTextElm extends Elm {
      * Creates a new FancyTextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public FancyTextElm(@NotNull ServerWorld _world){
+    public FancyTextElm(@NotNull ServerWorld _world) {
         this(_world, new FancyTextElmStyle());
     }
 
@@ -188,7 +188,7 @@ public class FancyTextElm extends Elm {
 
 
     @Override
-    protected void __applyTransitionStep(@NotNull InterpolatedData d){
+    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasOpacity    ()) getStyle().setTextOpacity(d.getOpacity    ());
         if(d.hasBackground ()) getStyle().setBackground (d.getBackground ());
@@ -200,7 +200,7 @@ public class FancyTextElm extends Elm {
 
 
     @Override
-    protected InterpolatedData __generateInterpolatedData(){
+    protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getStyle().getTransform().copy(),
             new Vector4i(getStyle().getBackground()),
@@ -210,7 +210,7 @@ public class FancyTextElm extends Elm {
         );
     }
     @Override
-    protected InterpolatedData __generateInterpolatedData(int index){
+    protected InterpolatedData __generateInterpolatedData(int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             new Vector4i(futureDataQueue.get(index).getBackground()),
@@ -247,7 +247,7 @@ public class FancyTextElm extends Elm {
 
 
     @Override
-    public void despawnNow(){
+    public void despawnNow() {
         super.despawnNow();
         getFgEntity().despawn();
     }
@@ -256,7 +256,7 @@ public class FancyTextElm extends Elm {
 
 
     @Override
-    public boolean stepTransition(){
+    public boolean stepTransition() {
         boolean r = super.stepTransition();
         getFgEntity().setInterpolationDuration(TRANSITION_REFRESH_TIME);
         getFgEntity().setStartInterpolation();

@@ -78,7 +78,7 @@ public abstract class ClickFeatures {
      * @return SUCCESS if the player clicked a shop, PASS if not.
      */
     public static ActionResult onClickEntity(World world, PlayerEntity player, Hand hand, ClickType clickType, Entity entity) {
-        if(entity instanceof InteractionEntity && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)){
+        if(entity instanceof InteractionEntity && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
             return onClick(world, player, hand, clickType);
         }
         return ActionResult.PASS;

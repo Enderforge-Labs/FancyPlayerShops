@@ -34,7 +34,7 @@ public class ItemElmStyle extends ElmStyle {
 
 
     @Override
-    public void resetAll(){
+    public void resetAll() {
         resetItem();
         super.resetAll();
     }

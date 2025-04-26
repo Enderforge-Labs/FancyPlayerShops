@@ -48,8 +48,8 @@ public abstract class Easings {
         final double n = 7.5625;
         final double d = 2.75;
         if      (x < 1   / d)                   return n * x * x;
-        else if (x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
-        else if (x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
+        else if(x < 2   / d) { x -=   1.5 / d; return n * x * x + 0.75;     }
+        else if(x < 2.5 / d) { x -=  2.25 / d; return n * x * x + 0.9375;   }
         else                  { x -= 2.625 / d; return n * x * x + 0.984375; }
     }
 

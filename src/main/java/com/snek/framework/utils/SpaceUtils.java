@@ -100,14 +100,14 @@ public abstract class SpaceUtils {
      */
     static boolean isPointInQuad(@NotNull Vector2f point, @NotNull Vector2f[] quad) {
         int sign = 0;
-        for (int i = 0; i < 4; i++) {
+        for(int i = 0; i < 4; i++) {
             Vector2f a = quad[i];
             Vector2f b = quad[(i + 1) % 4];
             float cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x);
-            if (cross != 0) {
+            if(cross != 0) {
                 int newSign = cross > 0 ? 1 : -1;
-                if (sign == 0) sign = newSign;
-                else if (newSign != sign) return false;
+                if(sign == 0) sign = newSign;
+                else if(newSign != sign) return false;
             }
         }
         return true;

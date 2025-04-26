@@ -99,7 +99,7 @@ public abstract class CustomDisplay {
      * Returns the UUID of the raw display entity.
      * @return The UUID.
      */
-    public UUID getUuid(){
+    public UUID getUuid() {
         return heldEntity.getUuid();
     }
 

@@ -70,7 +70,7 @@ public class PanelElm extends Elm {
      * Creates a new PanelElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public PanelElm(@NotNull ServerWorld _world){
+    public PanelElm(@NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new PanelElmStyle());
     }
 
@@ -88,7 +88,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    protected void __applyTransitionStep(@NotNull InterpolatedData d){
+    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasBackground()) getStyle().setColor(d.getBackground());
     }
@@ -97,7 +97,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    protected InterpolatedData __generateInterpolatedData(){
+    protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getStyle().getTransform().copy(),
             new Vector4i(getStyle().getColor()),
@@ -105,7 +105,7 @@ public class PanelElm extends Elm {
         );
     }
     @Override
-    protected InterpolatedData __generateInterpolatedData(int index){
+    protected InterpolatedData __generateInterpolatedData(int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             new Vector4i(futureDataQueue.get(index).getBackground()),
@@ -117,7 +117,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    public boolean stepTransition(){
+    public boolean stepTransition() {
         return super.stepTransition();
     }
 

@@ -43,7 +43,7 @@ public class ElmStyle {
     /**
      * Resets all the fields to their default value.
      */
-    public void resetAll(){
+    public void resetAll() {
         resetTransform();
         resetViewRange();
         resetBillboardMode();

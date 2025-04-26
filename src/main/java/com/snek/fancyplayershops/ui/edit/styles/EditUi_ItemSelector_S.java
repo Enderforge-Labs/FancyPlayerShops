@@ -27,7 +27,7 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
     /**
      * Creates a new EditUiItemSelectorStyle.
      */
-    public EditUi_ItemSelector_S(){
+    public EditUi_ItemSelector_S() {
         super();
     }
 

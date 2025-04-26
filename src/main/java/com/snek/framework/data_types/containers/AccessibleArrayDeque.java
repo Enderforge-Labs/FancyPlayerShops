@@ -134,7 +134,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * VMs excel at optimizing simple array loops where indices are
      * incrementing or decrementing over a valid slice, e.g.
      *
-     *  for (int i = start; i < end; i++) ... elements[i]
+     *  for(int i = start; i < end; i++) ... elements[i]
      *
      * Because in a circular array, elements are in general stored in
      * two disjoint such slices, we help the VM by writing unusual
@@ -184,18 +184,18 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         int newCapacity;
         // Double capacity if small; else grow by 50%
         int jump = (oldCapacity < 64) ? (oldCapacity + 2) : (oldCapacity >> 1);
-        if (jump < needed
+        if(jump < needed
                 || (newCapacity = (oldCapacity + jump)) - MAX_ARRAY_SIZE > 0)
             newCapacity = newCapacity(needed, jump);
         final Object[] es = elements = Arrays.copyOf(elements, newCapacity);
         // Exceptionally, here tail == head needs to be disambiguated
-        if (tail < head || (tail == head && es[head] != null)) {
+        if(tail < head || (tail == head && es[head] != null)) {
             // wrap around; slide first leg forward to end of array
             int newSpace = newCapacity - oldCapacity;
             System.arraycopy(es, head,
                     es, head + newSpace,
                     oldCapacity - head);
-            for (int i = head, to = (head += newSpace); i < to; i++)
+            for(int i = head, to = (head += newSpace); i < to; i++)
                 es[i] = null;
         }
     }
@@ -204,12 +204,12 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     private int newCapacity(int needed, int jump) {
         final int oldCapacity = elements.length;
         final int minCapacity = oldCapacity + needed;
-        if (minCapacity - MAX_ARRAY_SIZE > 0) {
-            if (minCapacity < 0)
+        if(minCapacity - MAX_ARRAY_SIZE > 0) {
+            if(minCapacity < 0)
                 throw new IllegalStateException("Sorry, deque too big");
             return Integer.MAX_VALUE;
         }
-        if (needed > jump)
+        if(needed > jump)
             return minCapacity;
         return (oldCapacity + jump - MAX_ARRAY_SIZE < 0)
                 ? oldCapacity + jump
@@ -255,7 +255,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * Precondition and postcondition: 0 <= i < modulus.
      */
     static final int inc(int i, int modulus) {
-        if (++i >= modulus)
+        if(++i >= modulus)
             i = 0;
         return i;
     }
@@ -265,7 +265,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * Precondition and postcondition: 0 <= i < modulus.
      */
     static final int dec(int i, int modulus) {
-        if (--i < 0)
+        if(--i < 0)
             i = modulus - 1;
         return i;
     }
@@ -278,7 +278,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     static final int inc(int i, int distance, int modulus) {
         i += distance;
-        if (i - modulus >= 0)
+        if(i - modulus >= 0)
             i -= modulus;
         return i;
     }
@@ -293,7 +293,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     static final int sub(int i, int j, int modulus) {
         i -= j;
-        if (i < 0)
+        if(i < 0)
             i += modulus;
         return i;
     }
@@ -315,7 +315,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     static final <E> E nonNullElementAt(Object[] es, int i) {
         @SuppressWarnings("unchecked")
         E e = (E) es[i];
-        if (e == null)
+        if(e == null)
             throw new ConcurrentModificationException();
         return e;
     }
@@ -331,11 +331,11 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * @throws NullPointerException if the specified element is null
      */
     public void addFirst(E e) {
-        if (e == null)
+        if(e == null)
             throw new NullPointerException();
         final Object[] es = elements;
         es[head = dec(head, es.length)] = e;
-        if (head == tail)
+        if(head == tail)
             grow(1);
     }
 
@@ -349,11 +349,11 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * @throws NullPointerException if the specified element is null
      */
     public void addLast(E e) {
-        if (e == null)
+        if(e == null)
             throw new NullPointerException();
         final Object[] es = elements;
         es[tail] = e;
-        if (head == (tail = inc(tail, es.length)))
+        if(head == (tail = inc(tail, es.length)))
             grow(1);
     }
 
@@ -371,7 +371,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     public boolean addAll(Collection<? extends E> c) {
         final int s;
         final int needed;
-        if ((needed = (s = size()) + c.size() + 1 - elements.length) > 0)
+        if((needed = (s = size()) + c.size() + 1 - elements.length) > 0)
             grow(needed);
         copyElements(c);
         return size() > s;
@@ -410,7 +410,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     public E removeFirst() {
         E e = pollFirst();
-        if (e == null)
+        if(e == null)
             throw new NoSuchElementException();
         return e;
     }
@@ -420,7 +420,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     public E removeLast() {
         E e = pollLast();
-        if (e == null)
+        if(e == null)
             throw new NoSuchElementException();
         return e;
     }
@@ -429,7 +429,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         final Object[] es;
         final int h;
         E e = elementAt(es = elements, h = head);
-        if (e != null) {
+        if(e != null) {
             es[h] = null;
             head = inc(h, es.length);
         }
@@ -440,7 +440,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         final Object[] es;
         final int t;
         E e = elementAt(es = elements, t = dec(tail, es.length));
-        if (e != null)
+        if(e != null)
             es[tail = t] = null;
         return e;
     }
@@ -450,7 +450,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     public E getFirst() {
         E e = elementAt(elements, head);
-        if (e == null)
+        if(e == null)
             throw new NoSuchElementException();
         return e;
     }
@@ -461,7 +461,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     public E getLast() {
         final Object[] es = elements;
         E e = elementAt(es, dec(tail, es.length));
-        if (e == null)
+        if(e == null)
             throw new NoSuchElementException();
         return e;
     }
@@ -488,15 +488,15 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * @return {@code true} if the deque contained the specified element
      */
     public boolean removeFirstOccurrence(Object o) {
-        if (o != null) {
+        if(o != null) {
             final Object[] es = elements;
-            for (int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-                for (; i < to; i++)
-                    if (o.equals(es[i])) {
+            for(int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+                for(; i < to; i++)
+                    if(o.equals(es[i])) {
                         delete(i);
                         return true;
                     }
-                if (to == end)
+                if(to == end)
                     break;
             }
         }
@@ -516,15 +516,15 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * @return {@code true} if the deque contained the specified element
      */
     public boolean removeLastOccurrence(Object o) {
-        if (o != null) {
+        if(o != null) {
             final Object[] es = elements;
-            for (int i = tail, end = head, to = (i >= end) ? end : 0;; i = es.length, to = end) {
-                for (i--; i > to - 1; i--)
-                    if (o.equals(es[i])) {
+            for(int i = tail, end = head, to = (i >= end) ? end : 0;; i = es.length, to = end) {
+                for(i--; i > to - 1; i--)
+                    if(o.equals(es[i])) {
                         delete(i);
                         return true;
                     }
-                if (to == end)
+                if(to == end)
                     break;
             }
         }
@@ -674,9 +674,9 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         final int front = sub(i, h = head, capacity);
         // number of elements after to-be-deleted elt
         final int back = sub(t = tail, i, capacity) - 1;
-        if (front < back) {
+        if(front < back) {
             // move front elements forwards
-            if (h <= i) {
+            if(h <= i) {
                 System.arraycopy(es, h, es, h + 1, front);
             } else { // Wrap around
                 System.arraycopy(es, 0, es, 1, i);
@@ -689,7 +689,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         } else {
             // move back elements backwards
             tail = dec(t, capacity);
-            if (i <= tail) {
+            if(i <= tail) {
                 System.arraycopy(es, i + 1, es, i, back);
             } else { // Wrap around
                 System.arraycopy(es, i + 1, es, i, capacity - (i + 1));
@@ -760,7 +760,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         }
 
         public E next() {
-            if (remaining <= 0)
+            if(remaining <= 0)
                 throw new NoSuchElementException();
             final Object[] es = elements;
             E e = nonNullElementAt(es, cursor);
@@ -770,13 +770,13 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         }
 
         void postDelete(boolean leftShifted) {
-            if (leftShifted)
+            if(leftShifted)
                 cursor = dec(cursor, elements.length);
         }
 
         @Override
         public final void remove() {
-            if (lastRet < 0)
+            if(lastRet < 0)
                 throw new IllegalStateException();
             postDelete(delete(lastRet));
             lastRet = -1;
@@ -786,17 +786,17 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         public void forEachRemaining(Consumer<? super E> action) {
             Objects.requireNonNull(action);
             int r;
-            if ((r = remaining) <= 0)
+            if((r = remaining) <= 0)
                 return;
             remaining = 0;
             final Object[] es = elements;
-            if (es[cursor] == null || sub(tail, cursor, es.length) != r)
+            if(es[cursor] == null || sub(tail, cursor, es.length) != r)
                 throw new ConcurrentModificationException();
-            for (int i = cursor, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-                for (; i < to; i++)
+            for(int i = cursor, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+                for(; i < to; i++)
                     action.accept(elementAt(es, i));
-                if (to == end) {
-                    if (end != tail)
+                if(to == end) {
+                    if(end != tail)
                         throw new ConcurrentModificationException();
                     lastRet = dec(end, es.length);
                     break;
@@ -812,7 +812,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
 
         @Override
         public final E next() {
-            if (remaining <= 0)
+            if(remaining <= 0)
                 throw new NoSuchElementException();
             final Object[] es = elements;
             E e = nonNullElementAt(es, cursor);
@@ -823,7 +823,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
 
         @Override
         void postDelete(boolean leftShifted) {
-            if (!leftShifted)
+            if(!leftShifted)
                 cursor = inc(cursor, elements.length);
         }
 
@@ -831,18 +831,18 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         public final void forEachRemaining(Consumer<? super E> action) {
             Objects.requireNonNull(action);
             int r;
-            if ((r = remaining) <= 0)
+            if((r = remaining) <= 0)
                 return;
             remaining = 0;
             final Object[] es = elements;
-            if (es[cursor] == null || sub(cursor, head, es.length) + 1 != r)
+            if(es[cursor] == null || sub(cursor, head, es.length) + 1 != r)
                 throw new ConcurrentModificationException();
-            for (int i = cursor, end = head, to = (i >= end) ? end : 0;; i = es.length - 1, to = end) {
+            for(int i = cursor, end = head, to = (i >= end) ? end : 0;; i = es.length - 1, to = end) {
                 // hotspot generates faster code than for: i >= to !
-                for (; i > to - 1; i--)
+                for(; i > to - 1; i--)
                     action.accept(elementAt(es, i));
-                if (to == end) {
-                    if (end != head)
+                if(to == end) {
+                    if(end != head)
                         throw new ConcurrentModificationException();
                     lastRet = end;
                     break;
@@ -888,7 +888,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         /** Ensures late-binding initialization; then returns fence. */
         private int getFence() { // force initialization
             int t;
-            if ((t = fence) < 0) {
+            if((t = fence) < 0) {
                 t = fence = tail;
                 cursor = head;
             }
@@ -906,20 +906,20 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
 
         @Override
         public void forEachRemaining(Consumer<? super E> action) {
-            if (action == null)
+            if(action == null)
                 throw new NullPointerException();
             final int end = getFence();
             final int cursor = this.cursor;
             final Object[] es = elements;
-            if (cursor != end) {
+            if(cursor != end) {
                 this.cursor = end;
                 // null check at both ends of range is sufficient
-                if (es[cursor] == null || es[dec(end, es.length)] == null)
+                if(es[cursor] == null || es[dec(end, es.length)] == null)
                     throw new ConcurrentModificationException();
-                for (int i = cursor, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-                    for (; i < to; i++)
+                for(int i = cursor, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+                    for(; i < to; i++)
                         action.accept(elementAt(es, i));
-                    if (to == end)
+                    if(to == end)
                         break;
                 }
             }
@@ -928,12 +928,12 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         public boolean tryAdvance(Consumer<? super E> action) {
             Objects.requireNonNull(action);
             final Object[] es = elements;
-            if (fence < 0) {
+            if(fence < 0) {
                 fence = tail;
                 cursor = head;
             } // late-binding
             final int i;
-            if ((i = cursor) == fence)
+            if((i = cursor) == fence)
                 return false;
             E e = nonNullElementAt(es, i);
             cursor = inc(i, es.length);
@@ -960,11 +960,11 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     public void forEach(Consumer<? super E> action) {
         Objects.requireNonNull(action);
         final Object[] es = elements;
-        for (int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-            for (; i < to; i++)
+        for(int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+            for(; i < to; i++)
                 action.accept(elementAt(es, i));
-            if (to == end) {
-                if (end != tail)
+            if(to == end) {
+                if(end != tail)
                     throw new ConcurrentModificationException();
                 break;
             }
@@ -1002,12 +1002,12 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     private boolean bulkRemove(Predicate<? super E> filter) {
         final Object[] es = elements;
         // Optimize for initial run of survivors
-        for (int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-            for (; i < to; i++)
-                if (filter.test(elementAt(es, i)))
+        for(int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+            for(; i < to; i++)
+                if(filter.test(elementAt(es, i)))
                     return bulkRemoveModified(filter, i);
-            if (to == end) {
-                if (end != tail)
+            if(to == end) {
+                if(end != tail)
                     throw new ConcurrentModificationException();
                 break;
             }
@@ -1044,33 +1044,33 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         final int end = tail;
         final long[] deathRow = nBits(sub(end, beg, capacity));
         deathRow[0] = 1L; // set bit 0
-        for (int i = beg + 1, to = (i <= end) ? end : es.length, k = beg;; i = 0, to = end, k -= capacity) {
-            for (; i < to; i++)
-                if (filter.test(elementAt(es, i)))
+        for(int i = beg + 1, to = (i <= end) ? end : es.length, k = beg;; i = 0, to = end, k -= capacity) {
+            for(; i < to; i++)
+                if(filter.test(elementAt(es, i)))
                     setBit(deathRow, i - k);
-            if (to == end)
+            if(to == end)
                 break;
         }
         // a two-finger traversal, with hare i reading, tortoise w writing
         int w = beg;
-        for (int i = beg + 1, to = (i <= end) ? end : es.length, k = beg;; w = 0) { // w rejoins i on second leg
+        for(int i = beg + 1, to = (i <= end) ? end : es.length, k = beg;; w = 0) { // w rejoins i on second leg
             // In this loop, i and w are on the same leg, with i > w
-            for (; i < to; i++)
-                if (isClear(deathRow, i - k))
+            for(; i < to; i++)
+                if(isClear(deathRow, i - k))
                     es[w++] = es[i];
-            if (to == end)
+            if(to == end)
                 break;
             // In this loop, w is on the first leg, i on the second
-            for (i = 0, to = end, k -= capacity; i < to && w < capacity; i++)
-                if (isClear(deathRow, i - k))
+            for(i = 0, to = end, k -= capacity; i < to && w < capacity; i++)
+                if(isClear(deathRow, i - k))
                     es[w++] = es[i];
-            if (i >= to) {
-                if (w == capacity)
+            if(i >= to) {
+                if(w == capacity)
                     w = 0; // "corner" case
                 break;
             }
         }
-        if (end != tail)
+        if(end != tail)
             throw new ConcurrentModificationException();
         circularClear(es, tail = w, end);
         return true;
@@ -1086,13 +1086,13 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      */
     @Override
     public boolean contains(Object o) {
-        if (o != null) {
+        if(o != null) {
             final Object[] es = elements;
-            for (int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-                for (; i < to; i++)
-                    if (o.equals(es[i]))
+            for(int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+                for(; i < to; i++)
+                    if(o.equals(es[i]))
                         return true;
-                if (to == end)
+                if(to == end)
                     break;
             }
         }
@@ -1133,10 +1133,10 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
      * Condition i == end means "empty" - nothing to do.
      */
     private static void circularClear(Object[] es, int i, int end) {
-        for (int to = (i <= end) ? end : es.length;; i = 0, to = end) {
-            for (; i < to; i++)
+        for(int to = (i <= end) ? end : es.length;; i = 0, to = end) {
+            for(; i < to; i++)
                 es[i] = null;
-            if (to == end)
+            if(to == end)
                 break;
         }
     }
@@ -1167,7 +1167,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
         final int head = this.head;
         final int tail = this.tail;
         final int end;
-        if ((end = tail + ((head <= tail) ? 0 : es.length)) >= 0) {
+        if((end = tail + ((head <= tail) ? 0 : es.length)) >= 0) {
             // Uses null extension feature of copyOfRange
             a = Arrays.copyOfRange(es, head, end, klazz);
         } else {
@@ -1175,7 +1175,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
             a = Arrays.copyOfRange(es, 0, end - head, klazz);
             System.arraycopy(es, head, a, 0, es.length - head);
         }
-        if (end != tail)
+        if(end != tail)
             System.arraycopy(es, 0, a, es.length - head, tail);
         return a;
     }
@@ -1226,15 +1226,15 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
     @Override
     public <T> T[] toArray(T[] a) {
         final int size;
-        if ((size = size()) > a.length)
+        if((size = size()) > a.length)
             return toArray((Class<T[]>) a.getClass());
         final Object[] es = elements;
-        for (int i = head, j = 0, len = Math.min(size, es.length - i);; i = 0, len = tail) {
+        for(int i = head, j = 0, len = Math.min(size, es.length - i);; i = 0, len = tail) {
             System.arraycopy(es, i, a, j, len);
-            if ((j += len) == size)
+            if((j += len) == size)
                 break;
         }
-        if (size < a.length)
+        if(size < a.length)
             a[size] = null;
         return a;
     }
@@ -1280,10 +1280,10 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
 
         // Write out elements in order.
         final Object[] es = elements;
-        for (int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
-            for (; i < to; i++)
+        for(int i = head, end = tail, to = (i <= end) ? end : es.length;; i = 0, to = end) {
+            for(; i < to; i++)
                 s.writeObject(es[i]);
-            if (to == end)
+            if(to == end)
                 break;
         }
     }

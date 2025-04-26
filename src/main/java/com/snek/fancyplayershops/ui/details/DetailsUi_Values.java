@@ -33,7 +33,7 @@ public class DetailsUi_Values extends ShopTextElm {
      * Creates a new DetailsUiDisplayValues.
      * @param _shop The target shop.
      */
-    public DetailsUi_Values(@NotNull Shop _shop){
+    public DetailsUi_Values(@NotNull Shop _shop) {
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
     }
@@ -44,7 +44,7 @@ public class DetailsUi_Values extends ShopTextElm {
     /**
      * Updates the displayed values using the current item name, price and stock.
      */
-    public void updateDisplay(){
+    public void updateDisplay() {
 
         // Calculate the color of the stock amount and retrieve the owner's name
         float factor = 1.0f - shop.getStock() / 1000f;

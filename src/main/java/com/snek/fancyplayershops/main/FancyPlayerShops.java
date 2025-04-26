@@ -145,9 +145,9 @@ public class FancyPlayerShops implements ModInitializer {
      * Callback for item use events.
      * Checks if the held item is a shop item. If it is, it spawns a new shop.
      */
-    public static ActionResult onItemUse(World world, PlayerEntity player, Hand hand, BlockHitResult hitResult){
+    public static ActionResult onItemUse(World world, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.getItem() == SHOP_ITEM_ID && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
+        if(stack.getItem() == SHOP_ITEM_ID && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerWorld serverWorld && player.getAbilities().allowModifyWorld) {
