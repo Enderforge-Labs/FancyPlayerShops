@@ -26,16 +26,25 @@ public class Transform {
 
 
     /**
+     * Creates a new Matrix4f using the current translation, local rotation, scale and global rotation values.
+     * @return The transformation matric.
+     */
+    public Matrix4f toMatrixTransform() {
+        Matrix4f m = new Matrix4f();
+        m.rotate   (_grot );
+        m.translate(_pos  );
+        m.rotate   (_lrot );
+        m.scale    (_scale);
+        return m;
+    }
+
+
+    /**
      * Creates a new AffineTransformation using the current translation, local rotation, scale and global rotation values.
      * @return The transformation.
      */
     public AffineTransformation toMinecraftTransform() {
-        Matrix4f m = new Matrix4f();
-        m.rotate   (_grot );
-        m.translate(_pos  );
-        m.scale    (_scale);
-        m.rotate   (_lrot );
-        return new AffineTransformation(m);
+        return new AffineTransformation(toMatrixTransform());
     }
 
 

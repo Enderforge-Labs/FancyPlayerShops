@@ -3,12 +3,14 @@ package com.snek.fancyplayershops.implementations.ui.details;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.joml.Vector4i;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.CanvasBackground;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
+import com.snek.fancyplayershops.implementations.ui.styles.ShopPanelElmStyle;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
@@ -89,6 +91,12 @@ public class DetailsUi extends ShopCanvas {
         e.setSizeX(1 - NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(VERTICAL_PADDING);
+
+        // Add owner's head's background
+        e = bg.addChild(new ShopPanelElm(_shop, new tmp()));
+        e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE - VERTICAL_PADDING));
+        e.setPosY(-HEAD_SIZE + VERTICAL_PADDING);
+        e.setAlignmentX(AlignmentX.LEFT);
 
         // Add owner's head
         e = bg.addChild(new DetailsUiOwnerHead(_shop));

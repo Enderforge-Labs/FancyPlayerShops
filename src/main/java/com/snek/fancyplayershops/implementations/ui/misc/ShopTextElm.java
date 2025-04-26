@@ -7,6 +7,7 @@ import com.snek.fancyplayershops.Shop;
 import com.snek.framework.ui.elements.FancyTextElm;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.ElmStyle;
+import com.snek.framework.ui.styles.TextElmStyle;
 
 
 
@@ -44,8 +45,6 @@ public class ShopTextElm extends TextElm {
      * @param h The height of the text element, expressed in blocks.
      */
     public ShopTextElm(@NotNull Shop _shop, float w, float h) {
-        super(_shop.getWorld());
-        shop = _shop;
-        setSize(new Vector2f(w, h));
+        this(_shop, w, h, new TextElmStyle());
     }
 }
