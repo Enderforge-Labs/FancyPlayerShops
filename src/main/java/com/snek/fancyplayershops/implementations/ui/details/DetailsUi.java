@@ -3,13 +3,11 @@ package com.snek.fancyplayershops.implementations.ui.details;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
-import org.joml.Vector4i;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.CanvasBackground;
 import com.snek.fancyplayershops.implementations.ui.ShopCanvas;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
-import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm_S;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;

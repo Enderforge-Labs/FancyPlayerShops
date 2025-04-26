@@ -18,7 +18,6 @@ import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
-import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;

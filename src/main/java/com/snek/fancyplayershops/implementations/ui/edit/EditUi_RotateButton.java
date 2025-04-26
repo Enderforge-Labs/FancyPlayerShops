@@ -8,7 +8,6 @@ import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopButton_S;
 import com.snek.fancyplayershops.implementations.ui.ShopItemDisplay;
-import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;

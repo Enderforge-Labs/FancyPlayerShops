@@ -1,12 +1,9 @@
 package com.snek.fancyplayershops.implementations.ui;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
 
 
 

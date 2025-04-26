@@ -5,7 +5,6 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.Shop;
 import com.snek.framework.ui.elements.FancyTextElm;
-import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
 
 
