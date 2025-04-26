@@ -56,6 +56,10 @@ public class ItemElm extends Elm {
         Map.entry(ItemTags.BANNERS, Pair.from(
             ModelTransformationMode.NONE,
             new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
+        )),
+        Map.entry(ItemTags.BEDS, Pair.from(
+            ModelTransformationMode.GROUND,
+            new Transform().scale(2.5f).moveY(-0.1f)
         ))
     ));
 

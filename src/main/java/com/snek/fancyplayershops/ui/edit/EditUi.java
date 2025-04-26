@@ -78,13 +78,13 @@ public class EditUi extends ShopCanvas {
 
 
         // Add price button
-        e = bg.addChild(new EditUi_PriceButton(_shop));
+        e = bg.addChild(new EditUi_PriceInput(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.LEFT);
 
 
         // Add stock limit button
-        e = bg.addChild(new EditUi_StockLimitButton(_shop));
+        e = bg.addChild(new EditUi_StockLimitInput(_shop));
         e.moveY(1f - ShopFancyTextElm.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.LEFT);
 

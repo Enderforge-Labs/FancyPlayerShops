@@ -51,7 +51,10 @@ public abstract class ShopTextInput extends ShopButton {
     public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
         boolean r = super.onClick(player, click);
         if(r) {
-            enterInputState();
+            if(!inputState) {
+                enterInputState();
+                playButtonSound(player);
+            }
             player.sendMessage(clickFeedbackMessage, true);
             ChatInput.setCallback(player, this::__internal_messageCallback);
         }

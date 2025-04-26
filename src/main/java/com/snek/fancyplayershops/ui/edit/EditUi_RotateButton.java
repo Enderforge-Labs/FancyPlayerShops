@@ -83,6 +83,8 @@ public class EditUi_RotateButton extends ShopButton {
                 new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
                 .additiveTransform(new Transform().rotY(rotation))
             );
+
+            playButtonSound(player);
         }
         return r;
     }

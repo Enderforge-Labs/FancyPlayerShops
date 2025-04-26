@@ -582,7 +582,6 @@ public class Shop {
         // Adjust rotation if needed
         if(lastDirection != 0) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-            // for(Div c : canvas.getChildren().get(0).getChildren()) { //TODO REMOVE
             for(Div c : canvas.getBg().getChildren()) {
                 c.applyAnimationNowRecursive(animations.first);
             }

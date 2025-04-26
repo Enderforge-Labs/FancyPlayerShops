@@ -21,9 +21,9 @@ import net.minecraft.text.Text;
 /**
  * A button that allows the owner of the shop to change its stock limit.
  */
-public class EditUi_StockLimitButton extends ShopTextInput {
+public class EditUi_StockLimitInput extends ShopTextInput {
 
-    public EditUi_StockLimitButton(@NotNull Shop _shop) {
+    public EditUi_StockLimitInput(@NotNull Shop _shop) {
         super(_shop, 0.75f, ShopFancyTextElm.LINE_H, new Txt("Send the new stock limit in chat!").green().get());
         updateDisplay(null);
     }

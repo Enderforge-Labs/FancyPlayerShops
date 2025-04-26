@@ -22,13 +22,13 @@ import net.minecraft.text.Text;
 /**
  * A button that allows the owner of the shop to change its price.
  */
-public class EditUi_PriceButton extends ShopTextInput {
+public class EditUi_PriceInput extends ShopTextInput {
 
     /**
      * Creates a new EditUiPriceButton.
      * @param _shop The target shop.
      */
-    public EditUi_PriceButton(@NotNull Shop _shop) {
+    public EditUi_PriceInput(@NotNull Shop _shop) {
         super(_shop, 0.75f, ShopFancyTextElm.LINE_H, new Txt("Send the new price in chat!").green().get());
         updateDisplay(null);
     }

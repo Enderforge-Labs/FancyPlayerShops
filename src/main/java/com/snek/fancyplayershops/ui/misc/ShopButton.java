@@ -102,10 +102,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
         if(clickRateLimiter.attempt()) {
             boolean r = checkIntersection(player);
-            if(r) {
-                MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 1, 1.5f);
-                clickRateLimiter.renewCooldown(clickCooldown);
-            }
+            if(r) clickRateLimiter.renewCooldown(clickCooldown);
             return r;
         }
         else {
@@ -119,4 +116,13 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * @param textOverride If not null, it replaces the shop's data.
      */
     public abstract void updateDisplay(@Nullable Text textOverride);
+
+
+    /**
+     * Plays the button click sound to the specified player.
+     * @param player The player to play the sound to.
+     */
+    protected void playButtonSound(@NotNull PlayerEntity player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 1, 1.5f);
+    }
 }

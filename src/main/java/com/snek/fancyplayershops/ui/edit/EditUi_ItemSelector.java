@@ -59,6 +59,7 @@ public class EditUi_ItemSelector extends ShopButton {
                 //TODO add item blacklist
                 shop.getItemDisplay().updateDisplay();
                 ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+                playButtonSound(player);
             }
         }
         return r;
