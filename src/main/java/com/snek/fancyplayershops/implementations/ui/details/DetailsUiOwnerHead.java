@@ -32,7 +32,7 @@ public class DetailsUiOwnerHead extends ShopItemElm {
      */
     public DetailsUiOwnerHead(Shop _shop) {
         super(_shop);
-        applyAnimationNow(new Transition().additiveTransform(new Transform().scale(DetailsUi.HEAD_SIZE).scaleZ(0.1f).rotY((float)Math.PI)));
+        applyAnimationNow(new Transition().additiveTransform(new Transform().scale(DetailsUi.HEAD_SIZE).scaleZ(0.001f).rotY((float)Math.PI)));
         updateDisplay();
     }
 
