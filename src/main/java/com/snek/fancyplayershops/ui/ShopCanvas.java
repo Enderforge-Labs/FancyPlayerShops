@@ -107,7 +107,7 @@ public class ShopCanvas extends Div {
         ShopCanvas activeCanvas = _shop.getActiveCanvas();
 
         // Calculate new heights
-        newHeightBg     = height - heightTop - heightTop;
+        newHeightBg     = height - heightTop - heightBottom;
         newHeightBack   = height;
         newHeightTop    = heightTop;
         newHeightBottom = heightBottom;
