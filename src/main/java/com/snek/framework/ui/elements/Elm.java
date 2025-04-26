@@ -28,6 +28,7 @@ import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Entity.RemovalReason;
+import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -503,7 +504,7 @@ public abstract class Elm extends Div {
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
-        if (entity instanceof TextDisplayEntity) {
+        if (entity instanceof DisplayEntity) {
             World world = entity.getWorld();
             if(
                 world != null &&

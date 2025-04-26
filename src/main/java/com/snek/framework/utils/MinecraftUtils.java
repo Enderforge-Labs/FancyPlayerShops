@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.authlib.GameProfile;
 
@@ -22,6 +23,7 @@ import net.minecraft.item.SkullItem;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -70,13 +72,40 @@ public abstract class MinecraftUtils {
 
 
     /**
+     * Returns an ItemStack containing 1 player head with owner the player that matches the specified UUID.
+     *     The player can be offline, as long as they have joined the server at least once in the past.
+     * @param uuid The player's UUID.
+     * @param server The server instance.
+     * @return The player's head as an ItemStack, or null if the player never joined this server.
+     */
+    public static @Nullable ItemStack getOfflinePlayerHead(@NotNull UUID uuid, @NotNull MinecraftServer server) {
+
+        // Fetch player profile cache
+        final Optional<GameProfile> profile = server.getUserCache().getByUuid(uuid);
+        if(profile.isEmpty()) return null;
+        final NbtCompound ownerTag = NbtHelper.writeGameProfile(new NbtCompound(), profile.get());
+
+        // Create ItemStack with the retrieved data
+        ItemStack head = new ItemStack(Items.PLAYER_HEAD);
+        head.getOrCreateNbt().put("SkullOwner", ownerTag);
+        return head;
+    }
+
+
+
+
+
+
+
+
+    /**
      * Returns the name of the player that matches the specified UUID.
      *     The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
      * @param server The server instance.
      * @return The player's name as a string, or null if the player never joined this server.
      */
-    public static String getOfflinePlayerName(@NotNull UUID uuid, MinecraftServer server) {
+    public static @Nullable String getOfflinePlayerName(@NotNull UUID uuid, @NotNull MinecraftServer server) {
         Optional<GameProfile> profile = server.getUserCache().getByUuid(uuid);
         if(profile.isEmpty()) return null;
         return profile.get().getName();
