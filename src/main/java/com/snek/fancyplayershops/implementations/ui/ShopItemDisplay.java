@@ -22,6 +22,7 @@ import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
@@ -198,7 +199,9 @@ public class ShopItemDisplay extends ItemElm {
             ((ItemElmStyle)style).setItem(_item);
 
             // Get item name as a string
-            final String fullName = MinecraftUtils.getFancyItemName(((ItemElmStyle)style).getItem()).getString();
+            //TODO shorten prices to 3 characters or all cents.
+            //TODO $0.01    $0.98    $1.6    $12    $400    $1.5k    $12k    $100k    $1.5m
+            final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(((ItemElmStyle)style).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
             // Wrap the name and calculate the amount tof lines

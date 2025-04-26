@@ -36,9 +36,8 @@ public class BuyUiTitle extends ShopFancyTextElm {
      */
     public void updateDisplay() {
         ((TextElmStyle)style).setText(new Txt()
-            .cat(new Txt("Buying ").white())
-            .cat(new Txt("«").white().cat(MinecraftUtils.getFancyItemName(shop.getItem())).cat(new Txt("»").white()).get())
-            .cat("...")
+            .cat(new Txt("Buying: ").white())
+            .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
         .get());
         flushStyle();
     }

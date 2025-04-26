@@ -153,11 +153,11 @@ public class TextElm extends Elm {
         else throw new RuntimeException("calcHeight used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string and count the number of lines
-        final float lineNum = _entity.getText().getString().split("\n").length;
+        final int lineNum = _entity.getText().getString().split("\n").length;
         if(lineNum == 0) return 0;
 
         // Calculate their height and return it
-        return ((lineNum == 1 ? 0 : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().y;
+        return ((lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().y;
     }
 
 

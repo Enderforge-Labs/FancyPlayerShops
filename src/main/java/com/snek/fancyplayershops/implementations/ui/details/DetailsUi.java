@@ -11,10 +11,15 @@ import com.snek.fancyplayershops.implementations.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.implementations.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.utils.Utils;
+
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 
 
 
@@ -33,12 +38,15 @@ import com.snek.framework.utils.Utils;
 public class DetailsUi extends ShopCanvas {
 
     // Colors
-    public static final Vector3i C_RGB_PRICE      = new Vector3i(243, 255, 0);
-    public static final Vector3f C_HSV_STOCK_HIGH = Utils.RGBtoHSV(new Vector3i(0, 223, 0)); //! Float instead of int for more precision
-    public static final Vector3f C_HSV_STOCK_LOW  = Utils.RGBtoHSV(new Vector3i(200, 0, 0)); //! Float instead of int for more precision
+    public static final int LOW_S_COLOR_MIN = 110;
+    public static final Vector3i C_RGB_PRICE      = new Vector3i(243, 255, LOW_S_COLOR_MIN);
+    public static final Vector3f C_HSV_STOCK_HIGH = Utils.RGBtoHSV(new Vector3i(LOW_S_COLOR_MIN, 223, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
+    public static final Vector3f C_HSV_STOCK_LOW  = Utils.RGBtoHSV(new Vector3i(200, LOW_S_COLOR_MIN, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
 
     // Layout
     public static final float BACKGROUND_HEIGHT = 0.4f;
+    public static final float VERTICAL_PADDING = 0.02f;
+    public static final float NAMES_VALUES_WIDTH_RATIO = 0.3f;
 
 
 
@@ -58,10 +66,28 @@ public class DetailsUi extends ShopCanvas {
         back.applyAnimationNow(new Transition().additiveTransform(new Transform().rotY((float)Math.PI)));
         Div e;
 
-        // Add details display
-        e = bg.addChild(new DetailsUiDisplay(_shop));
+        // Add title
+        e = bg.addChild(new DetailsUiTitle(_shop));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setAlignmentY(AlignmentY.CENTER);
+        e.setSizeX(1f);
+        e.setAbsSizeY(TextElm.calcHeight((Elm)e));
+        e.setPosY(BACKGROUND_HEIGHT - e.getAbsSize().y - VERTICAL_PADDING - 0.04f); //! -0.04 is a workaround and should not be required
+
+        // Add details display names
+        e = bg.addChild(new DetailsUiDisplayNames(_shop));
+        e.setAlignmentX(AlignmentX.LEFT);
+        ((CustomTextDisplay)((DetailsUiDisplayNames)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        e.setSizeX(NAMES_VALUES_WIDTH_RATIO);
+        e.setAbsSizeY(TextElm.calcHeight((Elm)e));
+        e.setPosY(VERTICAL_PADDING);
+
+        // Add details display values
+        e = bg.addChild(new DetailsUiDisplayValues(_shop));
+        e.setAlignmentX(AlignmentX.RIGHT);
+        ((CustomTextDisplay)((DetailsUiDisplayValues)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        e.setSizeX(1 - NAMES_VALUES_WIDTH_RATIO);
+        e.setAbsSizeY(TextElm.calcHeight((Elm)e));
+        e.setPosY(VERTICAL_PADDING);
 
         // Add borders
         e = bg.addChild(new ShopUiBorder(_shop));

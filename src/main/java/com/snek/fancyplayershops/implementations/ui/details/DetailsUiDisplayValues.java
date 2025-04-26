@@ -24,22 +24,20 @@ import net.minecraft.item.Items;
 
 /**
  * The main display of DetailsUi.
- * It shows informations about the shop.
+ * It shows the values of informations about the shop.
  */
-public class DetailsUiDisplay extends ShopTextElm {
+public class DetailsUiDisplayValues extends ShopTextElm {
 
 
 
 
     /**
-     * Creates a new DetailsUiDisplay.
+     * Creates a new DetailsUiDisplayValues.
      * @param _shop The target shop.
      */
-    public DetailsUiDisplay(@NotNull Shop _shop){
+    public DetailsUiDisplayValues(@NotNull Shop _shop){
         super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
         updateDisplay();
-        setAbsSizeY(TextElm.calcHeight(this));
-        flushStyle();
     }
 
 
@@ -50,19 +48,18 @@ public class DetailsUiDisplay extends ShopTextElm {
      */
     public void updateDisplay(){
 
-        // Calculate the color of the stock amount
+        // Calculate the color of the stock amount and retrieve the owner's name
         float factor = 1.0f - shop.getStock() / 1000f;
         Vector3i col = Utils.HSVtoRGB(new Vector3f(DetailsUi.C_HSV_STOCK_LOW).add(new Vector3f(DetailsUi.C_HSV_STOCK_HIGH).sub(DetailsUi.C_HSV_STOCK_LOW).mul(1.0f - (factor * factor))));
+        String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer());
 
 
         // Empty shop case
-        final ItemStack _item = shop.getItem();
-        if(_item.getItem() == Items.AIR) {
+        if(shop.getItem().getItem() == Items.AIR) {
             ((TextElmStyle)style).setText(new Txt()
-            .cat(Shop.EMPTY_SHOP_NAME)
-            .cat(new Txt("\nPrice: -"))
-            .cat(new Txt("\nStock: -"))
-            .cat(new Txt("\nOwner: ")).cat(MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer()))
+                .cat(new Txt("-").lightGray())
+                .cat(new Txt("\n-").lightGray())
+                .cat("\n" + ownerName)
             .get());
         }
 
@@ -70,10 +67,9 @@ public class DetailsUiDisplay extends ShopTextElm {
         else {
             double price = shop.getPrice();
             ((TextElmStyle)style).setText(new Txt()
-                .cat(new Txt(MinecraftUtils.getFancyItemName(_item)).get())
-                .cat(new Txt("\nPrice: ")).cat(new Txt(price < 0.005 ? "Free" : Utils.formatPrice(price)).bold().color(DetailsUi.C_RGB_PRICE))
-                .cat(new Txt("\nStock: ")).cat(new Txt(Utils.formatAmount(shop.getStock())).bold().color(col))
-                .cat(new Txt("\nOwner: ")).cat(MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer()))
+                .cat(new Txt(price < 0.005 ? "Free" : Utils.formatPrice(price)).bold().color(DetailsUi.C_RGB_PRICE))
+                .cat("\n").cat(new Txt(Utils.formatAmount(shop.getStock())).bold().color(col))
+                .cat("\n" + ownerName)
             .get());
         }
 

@@ -38,13 +38,12 @@ public class EditUiTitle extends ShopFancyTextElm {
      */
     public void updateDisplay() {
         ((TextElmStyle)style).setText(new Txt()
-            .cat(new Txt("Editing ").white())
+            .cat(new Txt("Editing: ").white())
             .cat(new Txt(
                 shop.getItem().getItem() == Items.AIR ?
                 new Txt("an empty shop").white().get() :
-                new Txt("«").white().cat(MinecraftUtils.getFancyItemName(shop.getItem())).cat(new Txt("»").white()).get()
+                new Txt(MinecraftUtils.getFancyItemName(shop.getItem())).get()
             ))
-            .cat("...")
         .get());
         flushStyle();
     }

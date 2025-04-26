@@ -23,10 +23,4 @@ public class ShopPanelElmStyle extends PanelElmStyle {
     public ShopPanelElmStyle() {
         super();
     }
-
-
-    @Override
-    public @NotNull Vector4i getDefaultColor() {
-        return new Vector4i(130, 40, 50, 50);
-    }
 }

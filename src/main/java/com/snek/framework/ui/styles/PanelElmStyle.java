@@ -44,9 +44,6 @@ public class PanelElmStyle extends ElmStyle {
     @Override
     public Transform getDefaultTransform(){
         return new Transform()
-            // .scaleX(ENTITY_BLOCK_RATIO_X)
-            // .scaleY(ENTITY_BLOCK_RATIO_Y)
-            // .moveX(ENTITY_SHIFT_X)
         ;
     }
 
@@ -83,7 +80,7 @@ public class PanelElmStyle extends ElmStyle {
 
 
 
-    public @NotNull Vector4i getDefaultColor () { return new Vector4i(130, 2, 20, 20); }
+    public @NotNull Vector4i getDefaultColor () { return new Vector4i(180, 2, 20, 20); }
     public void resetColor () { color = Flagged.from(getDefaultColor()); }
     public void setColor (@NotNull Vector4i _color ) { color.set(_color); }
     public @NotNull Flagged<Vector4i> getFlaggedColor () { return color; }
