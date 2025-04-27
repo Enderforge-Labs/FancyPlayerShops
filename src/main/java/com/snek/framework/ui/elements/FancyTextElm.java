@@ -12,6 +12,7 @@ import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
+import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.PanelElmStyle;
@@ -19,6 +20,7 @@ import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
@@ -121,9 +123,6 @@ public class FancyTextElm extends Elm {
 
     @Override
     public void flushStyle() {
-        //! super.flushStyle() not called as it unflags style data but only applies it to the background element.
-        //! The transform also needs to be applied differently because of the Z-Layer size of fancy text elements.
-        //! View range and billboard mode need custom handling as well.
 
         // Alias entities
         CustomTextDisplay fg = getFgEntity();
@@ -131,28 +130,36 @@ public class FancyTextElm extends Elm {
 
 
         // Handle transforms
-        {Flagged<Transform> f = style.getFlaggedTransform();
+        {
+            Flagged<Transform> f = style.getFlaggedTransform();
             Flagged<Transform> fFg = getStyle().getFlaggedTransformFg();
             Flagged<Transform> fBg = getStyle().getFlaggedTransformBg();
+            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getStyle().getFlaggedTextAlignment().isFlagged() || getStyle().getFlaggedText().isFlagged() || fBg.isFlagged();
+            final boolean bgNeedsUpdate = f.isFlagged() || fBg.isFlagged();
+            if(f.isFlagged()) f.unflag();
+
 
             // Calculate superclass transform if needed
             Transform t = null;
-            if(f.isFlagged() || fFg.isFlagged() || fBg.isFlagged()) {
+            if(fgNeedsUpdate || bgNeedsUpdate) {
                 t = __calcTransform();
-            }
 
-            // Update foreground transform if necessary
-            if(f.isFlagged() || fFg.isFlagged()) {
-                fg.setTransformation(__calcTransformFg(t).toMinecraftTransform());
-                fFg.unflag();
-            }
+                // Update foreground transform if necessary
+                if(fgNeedsUpdate) {
+                    final Transform tFg = __calcTransformFg(t);
+                    if(getStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
+                    if(getStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
+                    fg.setTransformation(tFg.toMinecraftTransform());
+                    fFg.unflag();
+                }
 
-            // Update background transform if necessary
-            if(f.isFlagged() || fBg.isFlagged()) {
-                bg.setTransformation(__calcTransformBg(t).toMinecraftTransform());
-                fBg.unflag();
+                // Update background transform if necessary
+                if(bgNeedsUpdate) {
+                    bg.setTransformation(__calcTransformBg(t).toMinecraftTransform());
+                    fBg.unflag();
+                }
             }
-        if(f.isFlagged()) f.unflag();}
+        }
 
 
         // Handle the other Elm values normally, applying them to both entities
@@ -171,9 +178,14 @@ public class FancyTextElm extends Elm {
 
 
         // Handle TextElm values
-        { Flagged<Text>     f = getStyle().getFlaggedText();        if(f.isFlagged()) { fg.setText       (f.get()); f.unflag(); }}
-        { Flagged<Integer>  f = getStyle().getFlaggedTextOpacity(); if(f.isFlagged()) { fg.setTextOpacity(f.get()); f.unflag(); }}
-        { Flagged<Vector4i> f = getStyle().getFlaggedBackground();  if(f.isFlagged()) { bg.setBackground (f.get()); f.unflag(); }}
+        { Flagged<Text>          f = getStyle().getFlaggedText();          if(f.isFlagged()) { fg.setText         (f.get()); f.unflag(); }}
+        { Flagged<Integer>       f = getStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { fg.setTextOpacity  (f.get()); f.unflag(); }}
+        { Flagged<TextAlignment> f = getStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { fg.setTextAlignment(f.get()); f.unflag(); }}
+        { Flagged<Vector4i>      f = getStyle().getFlaggedBackground();    if(f.isFlagged()) { bg.setBackground   (f.get()); f.unflag(); }}
+
+
+        // Transform, view range and billboard mode are already unflagged
+        super.flushStyle();
     }
 
 

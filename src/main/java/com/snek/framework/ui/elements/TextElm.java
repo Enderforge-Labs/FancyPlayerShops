@@ -11,12 +11,15 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
+import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.styles.ElmStyle;
+import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.TextElmStyle;
 
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
@@ -76,10 +79,29 @@ public class TextElm extends Elm {
 
     @Override
     public void flushStyle() {
+
+        // Handle transform calculations separately
+        {
+            Flagged<Transform> f = style.getFlaggedTransform();
+            if(f.isFlagged() || getStyle().getFlaggedTextAlignment().isFlagged() || getStyle().getFlaggedText().isFlagged()) {
+                final Transform t = __calcTransform();
+                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcWidth(this)) / 2f);
+                if(getStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcWidth(this)) / 2f);
+                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("size:  " + getAbsSize().x);
+                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("width: " + calcWidth(this));
+                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("adjustement: " + (-(getAbsSize().x - calcWidth(this)) / 2f));
+                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("------------------------");
+                entity.setTransformation(t.toMinecraftTransform());
+                f.unflag();
+            }
+        }
+
+        // Call superconstructor (transform is already unflagged) and handle the other values normally
         super.flushStyle();
         CustomTextDisplay e2 = (CustomTextDisplay)entity;
-        { Flagged<Text>     f = getStyle().getFlaggedText();        if(f.isFlagged()) { e2.setText       (f.get()); f.unflag(); }}
-        { Flagged<Integer>  f = getStyle().getFlaggedTextOpacity(); if(f.isFlagged()) { e2.setTextOpacity(f.get()); f.unflag(); }}
+        { Flagged<Text>          f = getStyle().getFlaggedText();          if(f.isFlagged()) { e2.setText         (f.get()); f.unflag(); }}
+        { Flagged<Integer>       f = getStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { e2.setTextOpacity  (f.get()); f.unflag(); }}
+        { Flagged<TextAlignment> f = getStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { e2.setTextAlignment(f.get()); f.unflag(); }}
     }
 
 
@@ -137,6 +159,8 @@ public class TextElm extends Elm {
 
 
 
+    //TODO cache width and update it when flushing the style.
+    //TODO check transforms and everything else that could change it
     /**
      * Calculates the in-world height of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
      * NOTICE: The height can be inaccurate as a lot of assumptions are made to calculate it.
@@ -146,14 +170,14 @@ public class TextElm extends Elm {
      * @return The height in blocks.
      */
     public static float calcHeight(Elm elm) {
-        final CustomTextDisplay _entity;
+        final Text text;
         final Transform t;
-        /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }
-        else if(elm instanceof FancyTextElm e) { _entity = e.getFgEntity();                  t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(elm instanceof TextElm      e) { text = e.getStyle()                  .getText(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { text = ((FancyTextElmStyle)(e.style)).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcHeight used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string and count the number of lines
-        final int lineNum = _entity.getText().getString().split("\n").length;
+        final int lineNum = text.getString().split("\n").length;
         if(lineNum == 0) return 0;
 
         // Calculate their height and return it
@@ -163,6 +187,8 @@ public class TextElm extends Elm {
 
 
 
+    //TODO cache width and update it when flushing the style.
+    //TODO check transforms and everything else that could change it
     /**
      * Calculates the in-world width of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
      * NOTICE: The width can be inaccurate as a lot of assumptions are made to calculate it.
@@ -172,29 +198,37 @@ public class TextElm extends Elm {
      * @return The width in blocks.
      */
     public static float calcWidth(Elm elm) {
-        final CustomTextDisplay _entity;
+        final Text text;
         final Transform t;
-        /**/ if(elm instanceof TextElm      e) { _entity = (CustomTextDisplay)e.getEntity(); t =                     e.__calcTransform();  }
-        else if(elm instanceof FancyTextElm e) { _entity = e.getFgEntity();                  t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(elm instanceof TextElm      e) { text = e.getStyle()                  .getText(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { text = ((FancyTextElmStyle)(e.style)).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcWidth used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string
-        final String[] lines = _entity.getText().getString().split("\n");
+        final String[] lines = text.getString().split("\n");
         if(lines.length == 0) {
             return 0;
         }
 
-        // Find the longest line if necessary
-        final Pair<String, Integer> line = Pair.from(lines[0], lines[0].length());
-        if(lines.length > 1) for(int i = 1; i < lines.length; ++i) {
-            final int len = lines[i].length();
-            if(len > line.second) {
-                line.first = lines[i];
-                line.second = len;
-            }
+        // Find the longest line and save its length in pixels
+        int maxWidth = 0;
+        for(int i = 0; i < lines.length; ++i) {
+            int w = FontSize.getWidth(lines[i]);
+            if(w > maxWidth) maxWidth = w;
         }
 
-        // Calculate its length and return it
-        return (float)FontSize.getWidth(line.first) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().x;
+        // final Pair<String, Integer> line = Pair.from(lines[0], lines[0].length());
+        // if(lines.length > 1) for(int i = 0; i < lines.length; ++i) {
+        //     final int len = lines[i].length();
+        //     if(len > line.second) {
+        //         line.first = lines[i];
+        //         line.second = len;
+        //     }
+        // }
+
+        // Calculate its length in blocks and return it
+        System.out.println("    pixels:  " + maxWidth);
+        System.out.println("    t scale: " + t.getScale().x);
+        return (float)maxWidth / TEXT_PIXEL_BLOCK_RATIO * t.getScale().x;
     }
 }

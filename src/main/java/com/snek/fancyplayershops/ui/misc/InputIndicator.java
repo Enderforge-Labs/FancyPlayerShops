@@ -11,9 +11,11 @@ import com.snek.fancyplayershops.ui.misc.styles.MouseButtonUp_S;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 import net.minecraft.util.ClickType;
 
 
@@ -27,7 +29,7 @@ import net.minecraft.util.ClickType;
  * A UI element that can display the actions mouse clicks would perform on the currently hovered element.
  */
 public class InputIndicator extends ShopDiv {
-    public static final Vector2f BUTTON_SIZE = new Vector2f(0.5f, 0.5f);
+    public static final Vector2f BUTTON_SIZE = new Vector2f(0.5f, 0.6f);
     public static final Vector2f MOUSE_SIZE  = new Vector2f(0.025f, 1f);
 
 
@@ -56,6 +58,7 @@ public class InputIndicator extends ShopDiv {
         e = addChild(new ShopTextElm(_shop, new InputIndicatorText_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x, 0.5f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
+        ((TextElmStyle)((TextElm)e).style).setTextAlignment(TextAlignment.LEFT);
         text = (ShopTextElm)e;
 
 

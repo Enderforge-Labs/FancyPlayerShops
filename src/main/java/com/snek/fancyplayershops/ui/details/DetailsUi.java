@@ -14,6 +14,7 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.TextElm;
+import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Utils;
 
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
@@ -73,7 +74,7 @@ public class DetailsUi extends ShopCanvas {
         // Add details display names
         e = bg.addChild(new DetailsUi_Names(_shop));
         e.setAlignmentX(AlignmentX.LEFT);
-        ((CustomTextDisplay)((DetailsUi_Names)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        ((TextElmStyle)((DetailsUi_Names)e).style).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(H0 + VERTICAL_PADDING);
@@ -82,7 +83,7 @@ public class DetailsUi extends ShopCanvas {
         // Add details display values
         e = bg.addChild(new DetailsUi_Values(_shop));
         e.setAlignmentX(AlignmentX.RIGHT);
-        ((CustomTextDisplay)((DetailsUi_Values)e).getEntity()).setTextAlignment(TextAlignment.LEFT);
+        ((TextElmStyle)((DetailsUi_Values)e).style).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(1 - NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(H0 + VERTICAL_PADDING);
