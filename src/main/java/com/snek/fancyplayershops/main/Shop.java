@@ -41,6 +41,7 @@ import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
+import com.snek.framework.utils.scheduler.TaskHandler;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
@@ -156,6 +157,7 @@ public class Shop {
     private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
     private transient @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
     private transient @NotNull RateLimiter menuOpenLimiter = new RateLimiter();
+    private transient @Nullable TaskHandler interactionBlockerDeletionHandler;
 
 
     public void setFocusStatusNext(boolean v) {
@@ -413,6 +415,7 @@ public class Shop {
                 activeCanvas.spawn(calcDisplayPos());
 
                 // Create interaction blocker
+                if(interactionBlockerDeletionHandler != null) interactionBlockerDeletionHandler.cancel();
                 interactionBlocker = new InteractionBlocker(this);
                 interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 
@@ -425,9 +428,12 @@ public class Shop {
                 activeCanvas.despawn();
                 activeCanvas = null;
 
-                // Despawn interaction blocker
-                interactionBlocker.despawn();
-                interactionBlocker = null;
+                // Despawn interaction blocker after despawn animations end
+                if(interactionBlockerDeletionHandler != null) interactionBlockerDeletionHandler.cancel();
+                interactionBlockerDeletionHandler = Scheduler.schedule(ShopItemDisplay.D_TIME, () -> {
+                    interactionBlocker.despawn();
+                    interactionBlocker = null;
+                });
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
@@ -473,50 +479,56 @@ public class Shop {
      */
     public void onClick(PlayerEntity player, ClickType clickType) {
 
-        // If the shop is not currently being used, flag the player as its user
-        if(user == null && isFocused()) {
-            if(clickType == ClickType.LEFT) {
-                if(player.getUuid().equals(ownerUUID)) {
-                    retrieveItem(player);
+
+        // If the shop is currently focused
+        //! checking that the shop is focused prevents erroneous "someone else is using the shop" errors
+        //! in case of clicks during the focus cooldown time or before the focus is actually registered
+        if(isFocused()) {
+
+            // If the shop is not currently being used, flag the player as its user
+            if(user == null) {
+                if(clickType == ClickType.LEFT) {
+                    if(player.getUuid().equals(ownerUUID)) {
+                        retrieveItem(player);
+                    }
+                    else {
+                        buyItem(player, 1);
+                    }
                 }
                 else {
-                    buyItem(player, 1);
+                    user = player;
+                    if(player.getUuid().equals(ownerUUID)) {
+                        openEditUi(player);
+                    }
+                    else {
+                        openBuyUi(player);
+                    }
                 }
             }
+
+
+            // If the player that clicked has already opened a menu, forward the click event to it
+            else if(user == player) {
+                activeCanvas.forwardClick(player, clickType);
+            }
+
+
+            // Send an error message to the player if someone else has already opened a menu in the same shop
             else {
-                user = player;
-                if(player.getUuid().equals(ownerUUID)) {
-                    openEditUi(player);
+                if(clickType == ClickType.RIGHT) {
+                    player.sendMessage(new Txt(
+                        "Someone else is already using this shop! Left click to " +
+                        (player.getUuid().equals(ownerUUID) ? "retrieve" : "buy") +
+                        " one item."
+                    ).lightGray().get(), true);
                 }
                 else {
-                    openBuyUi(player);
-                }
-            }
-        }
-
-
-        // If the player that clicked has already opened a menu, forward the click event to it
-        else if(user == player) {
-            activeCanvas.forwardClick(player, clickType);
-        }
-
-
-        // Send an error message to the player if someone else has already opened a menu in the same shop
-        //! checking that the shop is not focused prevents erroneous "someone else is using the shop" errors in case of clicks during the focus cooldown time
-        else if(isFocused()) {
-            if(clickType == ClickType.RIGHT) {
-                player.sendMessage(new Txt(
-                    "Someone else is already using this shop! Left click to " +
-                    (player.getUuid().equals(ownerUUID) ? "retrieve" : "buy") +
-                    " one item."
-                ).lightGray().get(), true);
-            }
-            else {
-                if(player.getUuid().equals(ownerUUID)) {
-                    retrieveItem(player);
-                }
-                else {
-                    buyItem(player, 1);
+                    if(player.getUuid().equals(ownerUUID)) {
+                        retrieveItem(player);
+                    }
+                    else {
+                        buyItem(player, 1);
+                    }
                 }
             }
         }
@@ -739,7 +751,7 @@ public class Shop {
      * @param player The player.
      */
     public void updateCanvasRotation(PlayerEntity player) {
-        if(!canvasRotationLimiter.attempt()) return;
+        if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
 
         // Calculate target direction
         final Vec3d playerPos = player.getPos();

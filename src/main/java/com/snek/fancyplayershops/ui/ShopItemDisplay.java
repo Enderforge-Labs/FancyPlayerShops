@@ -263,6 +263,7 @@ public class ShopItemDisplay extends ItemElm {
      * Starts the loop animation.
      */
     public void startLoopAnimation() {
+        if(loopHandler != null) loopHandler.cancel();
         loopHandler = Scheduler.loop(0, loopAnimation.getTotalDuration(), () -> applyAnimation(loopAnimation));
     }
 
@@ -285,7 +286,7 @@ public class ShopItemDisplay extends ItemElm {
      * Stops the loop animation.
      */
     public void stopLoopAnimation() {
-        loopHandler.cancel();
+        if(loopHandler != null) loopHandler.cancel();
         futureDataQueue.clear();
     }
 
