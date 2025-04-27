@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -31,10 +30,7 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Pair;
-import com.snek.framework.data_types.containers.Triplet;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -58,7 +54,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -77,7 +72,6 @@ import net.minecraft.world.World;
 
 
 
-// TODO fix broken shops and blocks if they don't exist in the world when the map is loaded
 /**
  * A placed player shop.
  */
@@ -120,7 +114,7 @@ public class Shop {
     // Basic data
     private transient ServerWorld world;
     private String worldId;
-    private transient ShopItemDisplay itemDisplay = null; //! Searched when needed instead of on data loading. The chunk needs to be loaded.
+    private transient ShopItemDisplay itemDisplay = null; //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private UUID itemDisplayUUID;
     private @Nullable UUID itemDisplayNameUUID1;
     private @Nullable UUID itemDisplayNameUUID2;

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 
@@ -48,11 +49,17 @@ public class FancyPlayerShops implements ModInitializer {
 
 
     // Shop item data
-    public static final Item SHOP_ITEM_ID = Items.REDSTONE;
-    public static final ItemStack shopItem = new ItemStack(SHOP_ITEM_ID);
+    public static final ItemStack shopItem;
     public static final String SHOP_ITEM_NBT_KEY = MOD_ID + ".item.shop_item";
+    public static final String SHOP_ITEM_NAME    = "Item Shop";
+    //! ^ Don't use the name to check the item. Shops should work even when renamed in an anvil or by mods
     static {
-        shopItem.setCustomName(new Txt("Shop").get());
+        shopItem = MinecraftUtils.createCustomHead(
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
+            "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
+            //! Idk why this is on 2 lines. I like being able to see all of it
+        );
+        shopItem.setCustomName(new Txt(SHOP_ITEM_NAME).get());
         NbtCompound nbt = shopItem.getOrCreateNbt();
         nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
     }
@@ -143,11 +150,16 @@ public class FancyPlayerShops implements ModInitializer {
 
     /**
      * Callback for item use events.
-     * Checks if the held item is a shop item. If it is, it spawns a new shop.
+     * Checks if the held item is a shop item. If it is, it spawns a new shop at the targeted location.
+     * @param world The world.
+     * @param player The player that clicked.
+     * @param hand The hand used.
+     * @param hitResult The hit result of the click action.
+     * @return SUCCESS if the player tried to place a shop, PASS otherwise.
      */
     public static ActionResult onItemUse(World world, PlayerEntity player, Hand hand, BlockHitResult hitResult) {
         ItemStack stack = player.getStackInHand(hand);
-        if(stack.getItem() == SHOP_ITEM_ID && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
+        if(stack.getItem() == Items.PLAYER_HEAD && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerWorld serverWorld && player.getAbilities().allowModifyWorld) {

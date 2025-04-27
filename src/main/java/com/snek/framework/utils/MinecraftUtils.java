@@ -24,6 +24,7 @@ import net.minecraft.item.SplashPotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -72,11 +73,46 @@ public abstract class MinecraftUtils {
 
 
     /**
-     * Returns an ItemStack containing 1 player head with owner the player that matches the specified UUID.
+     * Returns an ItemStack containing a player head with texture the specified Base64 string.
+     * @param texture The Base64-encoded texture as a string.
+     * @return The head as an ItemStack of count 1.
+     */
+    public static ItemStack createCustomHead(String texture) {
+
+        // Create the texture list NBT using the provided Base64 texture
+        NbtCompound NBT_texture = new NbtCompound();
+        NBT_texture.putString("Value", texture);
+        NbtList NBT_textures = new NbtList();
+        NBT_textures.add(NBT_texture);
+
+        // Create the properties NBT
+        NbtCompound NBT_properties = new NbtCompound();
+        NBT_properties.put("textures", NBT_textures);
+
+        // Create the skullOwner NBT using a random UUID and the properties NBT
+        NbtCompound NBT_skullOwner = new NbtCompound();
+        NBT_skullOwner.putUuid("Id", UUID.randomUUID());
+        NBT_skullOwner.put("Properties", NBT_properties);
+
+        // Create the ItemStack and return it
+        ItemStack head = new ItemStack(Items.PLAYER_HEAD, 1);
+        head.getOrCreateNbt().put("SkullOwner", NBT_skullOwner);
+        return head;
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Returns an ItemStack containing a player head with owner the player that matches the specified UUID.
      *     The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
      * @param server The server instance.
-     * @return The player's head as an ItemStack, or null if the player never joined this server.
+     * @return The player's head as an ItemStack of count 1, or null if the player never joined this server.
      */
     public static @Nullable ItemStack getOfflinePlayerHead(@NotNull UUID uuid, @NotNull MinecraftServer server) {
 
@@ -91,7 +127,7 @@ public abstract class MinecraftUtils {
         return head;
     }
     //FIXME skins of offline players aren't actually retrieved because the texture data is not loaded.
-    //FIXME Caching it manually might be necessary
+    //FIXME Caching it manually might be necessary. if cached, use createCustomHead with the base-64 texture value instead of the player cache
 
 
 
