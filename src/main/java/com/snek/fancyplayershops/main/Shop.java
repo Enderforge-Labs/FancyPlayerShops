@@ -411,7 +411,10 @@ public class Shop {
                 activeCanvas.spawn(calcDisplayPos());
 
                 // Create interaction blocker
+                //! Only spawning a new one if the deletion handler is present doesn't work as it can be left there from previous calls while being cancelled.
+                //! Cancelling it regardless and removing the entity to spawn a new one makes sure the interaction blocker is never null when it's needed
                 if(interactionBlockerDeletionHandler != null) interactionBlockerDeletionHandler.cancel();
+                if(interactionBlocker != null) interactionBlocker.despawn();
                 interactionBlocker = new InteractionBlocker(this);
                 interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 

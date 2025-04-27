@@ -1,26 +1,14 @@
 package com.snek.fancyplayershops.mixin;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.resource.Resource;
 import net.minecraft.screen.CraftingScreenHandler;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
 
 import java.util.Optional;
 
@@ -64,9 +52,8 @@ public abstract class CraftingScreenHandlerMixin {
         if(inventory.size() != 9) return;
 
 
-        // Get recipe manager from a world and retrieve the shop's recipe
-        final ServerWorld world = FancyPlayerShops.getServer().getWorlds().iterator().next();
-        final RecipeManager recipeManager = world.getRecipeManager();
+        // Get recipe manager from the server and retrieve the shop's recipe
+        final RecipeManager recipeManager = FancyPlayerShops.getServer().getRecipeManager();
         final Identifier recipeId = new Identifier(FancyPlayerShops.MOD_ID, "shop_item");
         final Optional<? extends Recipe<?>> recipeOptional = recipeManager.get(recipeId);
         if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the shop item could not be found: " + recipeId + ".");
@@ -74,13 +61,12 @@ public abstract class CraftingScreenHandlerMixin {
 
 
         // Check if the grid matches the recipe
-        if (recipe instanceof ShapedRecipe r) {
-            if(r.matches((CraftingInventory)inventory, world)) {
+        if(recipe instanceof ShapedRecipe r) {
+            if(r.matches((CraftingInventory)inventory, null)) { //! World parameter isn't actually used by the function
 
                 // Replace the output item
-                CraftingScreenHandler self = (CraftingScreenHandler)(Object)this;
                 result.setStack(0, FancyPlayerShops.shopItem.copy());
-                self.sendContentUpdates();
+                ((CraftingScreenHandler)(Object)this).sendContentUpdates();
             }
         }
     }

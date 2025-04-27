@@ -77,6 +77,7 @@ public abstract class ShopCommand {
                         You can see details about your shops and sales history using the command /shop stats.
                         """
                     ).get(), false);
+                    //FIXME update message
                     return 1;
                 }))
             );

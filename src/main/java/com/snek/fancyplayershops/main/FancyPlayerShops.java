@@ -175,10 +175,12 @@ public class FancyPlayerShops implements ModInitializer {
                 // Remove item if the player is not in creative mode
                 if(!player.getAbilities().creativeMode) stack.setCount(stack.getCount() - 1);
 
-                // Calculate block position and create the new shop. Send a feedback message to the player
+                // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
-                new Shop(serverWorld, blockPos, player);
-                player.sendMessage(new Txt("New shop created! Right click it to configure.").green().get(), true);
+                if(Shop.findShop(blockPos, world) == null) {
+                    new Shop(serverWorld, blockPos, player);
+                    player.sendMessage(new Txt("New shop created! Right click it to configure.").green().get(), true);
+                }
             }
 
             // If not, send an error message to the player
