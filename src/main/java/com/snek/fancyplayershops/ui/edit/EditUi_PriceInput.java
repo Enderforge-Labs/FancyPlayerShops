@@ -29,7 +29,7 @@ public class EditUi_PriceInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public EditUi_PriceInput(@NotNull Shop _shop) {
-        super(_shop, 0.75f, ShopFancyTextElm.LINE_H, new Txt("Send the new price in chat!").green().get());
+        super(_shop, "Change price", "TODO", new Txt("Send the new price in chat!").green().get());
         updateDisplay(null);
     }
 

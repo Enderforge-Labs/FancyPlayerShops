@@ -27,7 +27,7 @@ public class EditUi_Title extends ShopTextElm {
      * @param _shop The target shop.
      */
     public EditUi_Title(@NotNull Shop _shop) {
-        super(_shop, 1f, 1f); //TODO remove size from this constructor
+        super(_shop);
         updateDisplay();
     }
 

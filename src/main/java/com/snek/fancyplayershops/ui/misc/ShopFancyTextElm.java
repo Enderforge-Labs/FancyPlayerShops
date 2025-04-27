@@ -15,7 +15,7 @@ import com.snek.framework.ui.styles.FancyTextElmStyle;
 
 
 /**
- * A generic FancyTextElm with configurable width and height and a target shop.
+ * A generic FancyTextElm with a target shop.
  */
 public class ShopFancyTextElm extends FancyTextElm {
     public static final float LINE_H = 0.1f;
@@ -25,26 +25,19 @@ public class ShopFancyTextElm extends FancyTextElm {
     /**
      * Creates a new ShopFancyTextElm ustin a custom style.
      * @param _shop The target shop.
-     * @param w The width of the text element, expressed in blocks.
-     * @param h The height of the text element, expressed in blocks.
      * @param _style The custom style.
      */
-    public ShopFancyTextElm(@NotNull Shop _shop, float w, float h, FancyTextElmStyle _style) {
+    public ShopFancyTextElm(@NotNull Shop _shop, FancyTextElmStyle _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
-        setSize(new Vector2f(w, h));
     }
 
 
     /**
      * Creates a new ShopFancyTextElm using the default style.
      * @param _shop The target shop.
-     * @param w The width of the text element, expressed in blocks.
-     * @param h The height of the text element, expressed in blocks.
      */
-    public ShopFancyTextElm(@NotNull Shop _shop, float w, float h) {
-        super(_shop.getWorld());
-        shop = _shop;
-        setSize(new Vector2f(w, h));
+    public ShopFancyTextElm(@NotNull Shop _shop) {
+        this(_shop, new FancyTextElmStyle());
     }
 }

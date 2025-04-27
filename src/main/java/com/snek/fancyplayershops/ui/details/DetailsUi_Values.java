@@ -34,7 +34,7 @@ public class DetailsUi_Values extends ShopTextElm {
      * @param _shop The target shop.
      */
     public DetailsUi_Values(@NotNull Shop _shop) {
-        super(_shop, 1, DetailsUi.BACKGROUND_HEIGHT);
+        super(_shop);
         updateDisplay();
     }
 

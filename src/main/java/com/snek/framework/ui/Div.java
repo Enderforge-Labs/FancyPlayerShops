@@ -483,6 +483,12 @@ public class Div {
         updateAbsPos();
     }
 
+    public void setAlignment(@NotNull AlignmentX _alignmentX, @NotNull AlignmentY _alignmentY) {
+        alignmentX = _alignmentX;
+        alignmentY = _alignmentY;
+        updateAbsPos();
+    }
+
 
 
 

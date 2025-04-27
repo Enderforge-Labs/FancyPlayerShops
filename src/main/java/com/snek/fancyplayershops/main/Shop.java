@@ -144,7 +144,7 @@ public class Shop {
 
     // Shop status
     private transient @Nullable InteractionBlocker interactionBlocker = null;
-    public  transient @Nullable ShopCanvas               activeCanvas = null;
+    private transient @Nullable ShopCanvas               activeCanvas = null;
     public  transient @Nullable PlayerEntity                     user = null;
     private transient           boolean                   focusStatus = false;
     private transient           boolean               focusStatusNext = false;

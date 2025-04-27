@@ -7,7 +7,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.screen.CraftingScreenHandler;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;
@@ -37,8 +36,7 @@ public abstract class CraftingScreenHandlerMixin {
 
 
     // Shadow the result field to access it directly
-    @Shadow
-    private CraftingResultInventory result;
+    @Shadow private CraftingResultInventory result;
 
 
 

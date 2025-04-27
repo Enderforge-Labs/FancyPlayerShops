@@ -33,8 +33,8 @@ public class EditUi_ItemSelector extends ShopButton {
     public EditUi_ItemSelector(Shop _shop) {
         super(
             _shop,
-            EditUi.ITEM_SELECTOR_SIZE,
-            EditUi.ITEM_SELECTOR_SIZE,
+            "TODO inspect item",
+            "Change item",
             0,
             new EditUi_ItemSelector_S()
         );

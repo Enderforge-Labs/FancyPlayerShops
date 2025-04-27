@@ -194,14 +194,14 @@ public abstract class FocusFeatures {
         // Update the displays of all the previously and currently focused shops to their next state and update the targeted shops list
         targetedShopsOld.removeAll(targetedShops);
         for(Shop shop : targetedShopsOld) {
-            if(shop.activeCanvas != null) shop.activeCanvas.forwardHover(null);
+            if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(null);
             shop.updateFocusState();
         }
         int i = 0;
         for(Shop shop : targetedShops) {
             shop.updateFocusState();
             if(shop.user != null) {
-                shop.activeCanvas.forwardHover(shop.user);
+                if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(shop.user);
                 shop.updateCanvasRotation(shop.user);
             }
             else {

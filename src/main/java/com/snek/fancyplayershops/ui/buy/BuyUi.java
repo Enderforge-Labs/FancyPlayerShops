@@ -1,14 +1,19 @@
 package com.snek.fancyplayershops.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
+import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
+import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
+
+import net.minecraft.util.ClickType;
 
 
 
@@ -25,8 +30,10 @@ import com.snek.framework.ui.elements.Elm;
 /**
  * A UI that allows the user of a shop to buy items from it.
  */
-public class BuyUi extends ShopCanvas {
+public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull Elm title;
+    private final @NotNull InputIndicator lmbIndicator;
+    private final @NotNull InputIndicator rmbIndicator;
     public @NotNull Elm getTitle() { return title; }
 
 
@@ -57,5 +64,25 @@ public class BuyUi extends ShopCanvas {
         // Add item selector //FIXME replace with an "item inspector" element. make the selector it's subclass
         // e = bg.addChild(new EditUiItemSelector(_shop));
         // e.moveY(ITEM_SELECTOR_Y);
+
+
+        // Add input indicators
+        e = bg.addChild(new InputIndicator(_shop, ClickType.LEFT));
+        e.setSize(InputIndicator.DEFAULT_INDICATOR_SIZE);
+        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT);
+        e.setAlignmentX(AlignmentX.LEFT);
+        lmbIndicator = (InputIndicator)e;
+
+        e = bg.addChild(new InputIndicator(_shop, ClickType.RIGHT));
+        e.setSize(InputIndicator.DEFAULT_INDICATOR_SIZE);
+        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        rmbIndicator = (InputIndicator)e;
     }
+
+
+
+
+    @Override public @Nullable InputIndicator getLmbIndicator() { return lmbIndicator; }
+    @Override public @Nullable InputIndicator getRmbIndicator() { return rmbIndicator; }
 }

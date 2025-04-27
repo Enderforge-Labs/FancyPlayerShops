@@ -16,7 +16,7 @@ import com.snek.framework.ui.styles.TextElmStyle;
 
 
 /**
- * A generic TextElm with configurable width and height and a target shop.
+ * A generic TextElm with a target shop.
  */
 public class ShopTextElm extends TextElm {
     public static final float LINE_H = 0.1f;
@@ -26,24 +26,19 @@ public class ShopTextElm extends TextElm {
     /**
      * Creates a new ShopTextElm using a custom style.
      * @param _shop The target shop.
-     * @param w The width of the text element, expressed in blocks.
-     * @param h The height of the text element, expressed in blocks.
      * @param _style The custom style.
      */
-    public ShopTextElm(@NotNull Shop _shop, float w, float h, ElmStyle _style) {
+    public ShopTextElm(@NotNull Shop _shop, ElmStyle _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
-        setSize(new Vector2f(w, h));
     }
 
 
     /**
      * Creates a new ShopTextElm using the default style.
      * @param _shop The target shop.
-     * @param w The width of the text element, expressed in blocks.
-     * @param h The height of the text element, expressed in blocks.
      */
-    public ShopTextElm(@NotNull Shop _shop, float w, float h) {
-        this(_shop, w, h, new TextElmStyle());
+    public ShopTextElm(@NotNull Shop _shop) {
+        this(_shop, new TextElmStyle());
     }
 }

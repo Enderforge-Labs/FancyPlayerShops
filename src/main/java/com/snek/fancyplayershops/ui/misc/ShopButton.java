@@ -11,6 +11,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.scheduler.RateLimiter;
@@ -29,11 +30,15 @@ import net.minecraft.util.ClickType;
 
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
+ * It also specifies action names for the input indicators to display.
  */
 public abstract class ShopButton extends FancyTextElm implements Hoverable, Clickable {
     protected final @NotNull Shop shop;
     protected final RateLimiter clickRateLimiter = new RateLimiter();
     private   final int clickCooldown;
+
+    private final @Nullable String lmbActionName;
+    private final @Nullable String rmbActionName;
 
 
 
@@ -41,15 +46,16 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     /**
      * Creates a new ShopButton using a custom style.
      * @param _shop The target shop.
-     * @param w The width of the button, expressed in blocks.
-     * @param h The height of the button, expressed in blocks.
+     * @param _lmbActionName The name of the action associated with left clicks.
+     * @param _rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
      */
-    protected ShopButton(@NotNull Shop _shop, float w, float h, int _clickCooldown, ShopButton_S _style) {
+    protected ShopButton(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, int _clickCooldown, ShopButton_S _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
-        setSize(new Vector2f(w, h));
+        lmbActionName = _lmbActionName;
+        rmbActionName = _rmbActionName;
         clickCooldown = _clickCooldown;
     }
 
@@ -57,12 +63,12 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     /**
      * Creates a new ShopButton using the default style.
      * @param _shop The target shop.
-     * @param w The width of the button, expressed in blocks.
-     * @param h The height of the button, expressed in blocks.
+     * @param _lmbActionName The name of the action associated with left clicks.
+     * @param _rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected ShopButton(@NotNull Shop _shop, float w, float h, int _clickCooldown) {
-        this(_shop, w, h, _clickCooldown, new ShopButton_S());
+    protected ShopButton(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, int _clickCooldown) {
+        this(_shop, _lmbActionName, _rmbActionName, _clickCooldown, new ShopButton_S());
     }
 
 
@@ -84,6 +90,14 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
         final Animation animation = ((ShopButton_S)style).getHoverEnterAnimation();
         if(animation != null) {
             applyAnimation(animation);
+        }
+
+        // Update input displays if present
+        if(shop.getActiveCanvas() != null) {
+            if(shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+                c.getLmbIndicator().updateDisplay(lmbActionName);
+                c.getRmbIndicator().updateDisplay(rmbActionName);
+            }
         }
     }
 

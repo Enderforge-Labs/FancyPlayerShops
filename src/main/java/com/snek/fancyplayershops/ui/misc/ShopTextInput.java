@@ -39,8 +39,8 @@ public abstract class ShopTextInput extends ShopButton {
      * @param h The height of the button, expressed in blocks.
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected ShopTextInput(@NotNull Shop _shop, float w, float h, Text _clickFeedbackMessage) {
-        super(_shop, w, h, 1);
+    protected ShopTextInput(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, Text _clickFeedbackMessage) {
+        super(_shop, _lmbActionName, _rmbActionName, 1);
         clickFeedbackMessage = _clickFeedbackMessage;
     }
 
