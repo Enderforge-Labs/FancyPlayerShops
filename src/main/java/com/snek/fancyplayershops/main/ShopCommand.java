@@ -47,7 +47,7 @@ public abstract class ShopCommand {
                 //TODO replace with crafting recipe
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("create").executes(context -> {
                     PlayerEntity player = context.getSource().getPlayer();
-                    player.dropStack(FancyPlayerShops.shopItem.copy());
+                    player.dropStack(FancyPlayerShops.getShopItemCopy());
                     return 1;
                 }))
 

@@ -13,8 +13,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
@@ -22,14 +25,13 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
-import org.joml.Vector4i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.ui.InteractionBlocker;
-import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -57,19 +59,51 @@ public class FancyPlayerShops implements ModInitializer {
 
 
     // Shop item data
-    public static final ItemStack shopItem;
+    //! Don't use the name or tooltip to check the item. Shops should work even when renamed in an anvil or modified by mods
+    private static final @NotNull ItemStack shopItem;
     public static final String SHOP_ITEM_NBT_KEY = MOD_ID + ".item.shop_item";
-    public static final String SHOP_ITEM_NAME    = "Item Shop";
-    //! ^ Don't use the name to check the item. Shops should work even when renamed in an anvil or by mods
+
+    // Shop item texture
+    public static final String SHOP_ITEM_TEXTURE =
+        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
+        "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
+        //! Idk why this is on 2 lines. I like being able to see all of it
+    ;
+
+    // Shop item name
+    public static final Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(140, 190, 160);
+    public static final Text   SHOP_ITEM_NAME =
+        new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
+    .get();
+
+    // Shop item description
+    public static final Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(180, 230, 200);
+    public static final Text[] SHOP_ITEM_DESCRITPION = {
+        new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
+        new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
+        new Txt("").noItalic().get()
+    };
+
+
+
+
+    // Initialize shop item stack
     static {
-        shopItem = MinecraftUtils.createCustomHead(
-            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
-            "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
-            //! Idk why this is on 2 lines. I like being able to see all of it
-        );
-        shopItem.setCustomName(new Txt(SHOP_ITEM_NAME).noItalic().bold().color(new Vector3i(140, 190, 160)).get());
+
+        // Create item and set custom name
+        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE);
+        shopItem.setCustomName(SHOP_ITEM_NAME);
+
+        // Set identification tag
         NbtCompound nbt = shopItem.getOrCreateNbt();
         nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
+
+        // Set lore
+        NbtList lore = new NbtList();
+        for (Text line : SHOP_ITEM_DESCRITPION) {
+            lore.add(NbtString.of(Text.Serializer.toJson(line)));
+        }
+        shopItem.getOrCreateSubNbt("display").put("Lore", lore);
     }
 
 
@@ -191,5 +225,19 @@ public class FancyPlayerShops implements ModInitializer {
             return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
+    }
+
+
+
+
+
+
+
+
+    public static final @NotNull ItemStack getShopItemCopy() {
+        return shopItem.copy();
+    }
+    public static final @NotNull ItemStack createShopSnapshot() {
+        return shopItem.copy(); //FIXME actually copy the shop data
     }
 }

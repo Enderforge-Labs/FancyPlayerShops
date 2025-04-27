@@ -66,7 +66,7 @@ public class InputIndicator extends ShopDiv {
 
         e = m.addChild(new ShopPanelElm(shop, button == ClickType.LEFT ? new MouseButtonDown_S() : new MouseButtonUp_S()));
         e.setSize(BUTTON_SIZE);
-        e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
+        e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
         e = m.addChild(new ShopPanelElm(shop, new MouseButtonUp_S()));
         e.setSize(new Vector2f(1f, 1 - BUTTON_SIZE.y));
@@ -82,10 +82,10 @@ public class InputIndicator extends ShopDiv {
      */
     public void updateDisplay(@Nullable String description){
         if(description != null) {
-            ((TextElmStyle)text.style).setText(new Txt(description).gray().get());
+            ((TextElmStyle)text.style).setText(new Txt(description).lightGray().get());
         }
         else {
-            ((TextElmStyle)text.style).setText(new Txt("EMPTY").gray().get());
+            ((TextElmStyle)text.style).setText(new Txt("EMPTY").lightGray().get());
         }
         text.flushStyle();
     }

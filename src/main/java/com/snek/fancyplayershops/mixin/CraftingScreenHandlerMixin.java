@@ -63,7 +63,7 @@ public abstract class CraftingScreenHandlerMixin {
             if(r.matches((CraftingInventory)inventory, null)) { //! World parameter isn't actually used by the function
 
                 // Replace the output item
-                result.setStack(0, FancyPlayerShops.shopItem.copy());
+                result.setStack(0, FancyPlayerShops.getShopItemCopy());
                 ((CraftingScreenHandler)(Object)this).sendContentUpdates();
             }
         }
