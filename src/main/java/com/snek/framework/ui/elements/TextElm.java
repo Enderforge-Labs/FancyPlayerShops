@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector4i;
 
+import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -16,6 +17,7 @@ import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
+import com.snek.framework.ui.styles.PanelElmStyle;
 import com.snek.framework.ui.styles.TextElmStyle;
 
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
@@ -35,7 +37,8 @@ import net.minecraft.text.Text;
  * This class has transparent background. For a text element with background color, use FancyTextElm.
  */
 public class TextElm extends Elm {
-    private TextElmStyle getStyle() { return (TextElmStyle)style; }
+    private CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
+    private TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
 
     // This value identifies the amount of rendered text pixels that fit in a minecraft block
     public static final int TEXT_PIXEL_BLOCK_RATIO = 40;
@@ -51,8 +54,8 @@ public class TextElm extends Elm {
      */
     protected TextElm(@NotNull ServerWorld _world, @NotNull CustomDisplay _entity, @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
-        ((CustomTextDisplay)entity).setBackground(new Vector4i(0, 0, 0, 0));
-        ((CustomTextDisplay)entity).setLineWidth(Integer.MAX_VALUE);
+        getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
+        getThisEntity().setLineWidth(Integer.MAX_VALUE);
     }
 
 
@@ -82,26 +85,21 @@ public class TextElm extends Elm {
 
         // Handle transform calculations separately
         {
-            Flagged<Transform> f = style.getFlaggedTransform();
-            if(f.isFlagged() || getStyle().getFlaggedTextAlignment().isFlagged() || getStyle().getFlaggedText().isFlagged()) {
+            Flagged<Transform> f = getThisStyle().getFlaggedTransform();
+            if(f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
                 final Transform t = __calcTransform();
-                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcWidth(this)) / 2f);
-                if(getStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcWidth(this)) / 2f);
-                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("size:  " + getAbsSize().x);
-                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("width: " + calcWidth(this));
-                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("adjustement: " + (-(getAbsSize().x - calcWidth(this)) / 2f));
-                if(getStyle().getTextAlignment() == TextAlignment.LEFT ) System.out.println("------------------------");
-                entity.setTransformation(t.toMinecraftTransform());
+                if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcWidth(this)) / 2f);
+                if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcWidth(this)) / 2f);
+                getThisEntity().setTransformation(t.toMinecraftTransform());
                 f.unflag();
             }
         }
 
         // Call superconstructor (transform is already unflagged) and handle the other values normally
         super.flushStyle();
-        CustomTextDisplay e2 = (CustomTextDisplay)entity;
-        { Flagged<Text>          f = getStyle().getFlaggedText();          if(f.isFlagged()) { e2.setText         (f.get()); f.unflag(); }}
-        { Flagged<Integer>       f = getStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { e2.setTextOpacity  (f.get()); f.unflag(); }}
-        { Flagged<TextAlignment> f = getStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { e2.setTextAlignment(f.get()); f.unflag(); }}
+        { Flagged<Text>          f = getThisStyle().getFlaggedText();          if(f.isFlagged()) { getThisEntity().setText         (f.get()); f.unflag(); }}
+        { Flagged<Integer>       f = getThisStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { getThisEntity().setTextOpacity  (f.get()); f.unflag(); }}
+        { Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { getThisEntity().setTextAlignment(f.get()); f.unflag(); }}
     }
 
 
@@ -110,7 +108,7 @@ public class TextElm extends Elm {
     @Override
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
-        if(d.hasOpacity()) getStyle().setTextOpacity(d.getOpacity());
+        if(d.hasOpacity()) getThisStyle().setTextOpacity(d.getOpacity());
     }
 
 
@@ -119,9 +117,9 @@ public class TextElm extends Elm {
     @Override
     protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
-            getStyle().getTransform().copy(),
+            getThisStyle().getTransform().copy(),
             null,
-            getStyle().getTextOpacity()
+            getThisStyle().getTextOpacity()
         );
     }
     @Override
@@ -138,7 +136,6 @@ public class TextElm extends Elm {
 
     @Override
     public void spawn(Vector3d pos) {
-        if(style.getDespawnAnimation() != null) applyAnimationNow(style.getDespawnAnimation());
         super.spawn(pos);
     }
 
@@ -152,7 +149,7 @@ public class TextElm extends Elm {
     @Override
     public boolean stepTransition() {
         boolean r = super.stepTransition();
-        ((CustomTextDisplay)entity).tick();
+        getThisEntity().tick();
         return r;
     }
 
@@ -172,8 +169,8 @@ public class TextElm extends Elm {
     public static float calcHeight(Elm elm) {
         final Text text;
         final Transform t;
-        /**/ if(elm instanceof TextElm      e) { text = e.getStyle()                  .getText(); t =                     e.__calcTransform();  }
-        else if(elm instanceof FancyTextElm e) { text = ((FancyTextElmStyle)(e.style)).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { text = e.getStyle(FancyTextElmStyle.class).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcHeight used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string and count the number of lines
@@ -200,8 +197,8 @@ public class TextElm extends Elm {
     public static float calcWidth(Elm elm) {
         final Text text;
         final Transform t;
-        /**/ if(elm instanceof TextElm      e) { text = e.getStyle()                  .getText(); t =                     e.__calcTransform();  }
-        else if(elm instanceof FancyTextElm e) { text = ((FancyTextElmStyle)(e.style)).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
+        else if(elm instanceof FancyTextElm e) { text = e.getStyle(FancyTextElmStyle.class).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcWidth used on incompatible Elm type: " + elm.getClass().getName());
 
         // Retrieve the current text as a string

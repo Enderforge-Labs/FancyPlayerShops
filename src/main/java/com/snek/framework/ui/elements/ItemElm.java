@@ -12,6 +12,7 @@ import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.ui.styles.ElmStyle;
+import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
 
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -33,7 +34,8 @@ import net.minecraft.server.world.ServerWorld;
  * An element that can display items.
  */
 public class ItemElm extends Elm {
-    private ItemElmStyle getStyle() { return (ItemElmStyle)style; }
+    private CustomItemDisplay getThisEntity() { return getEntity(CustomItemDisplay.class); }
+    private ItemElmStyle      getThisStyle () { return getStyle (ItemElmStyle     .class); }
 
 
 
@@ -106,8 +108,7 @@ public class ItemElm extends Elm {
     @Override
     public void flushStyle() {
         super.flushStyle();
-        CustomItemDisplay e2 = (CustomItemDisplay)entity;
-        { Flagged<ItemStack> f = getStyle().getFlaggedItem(); if(f.isFlagged()) { e2.setItemStack(f.get()); f.unflag(); }}
+        { Flagged<ItemStack> f = getThisStyle().getFlaggedItem(); if(f.isFlagged()) { getThisEntity().setItemStack(f.get()); f.unflag(); }}
     }
 
 
@@ -118,9 +119,9 @@ public class ItemElm extends Elm {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
         Transform t = super.__calcTransform();
-        Pair<ModelTransformationMode, Transform> exception = transformExceptions.get(getStyle().getItem().getItem().getTranslationKey());
+        Pair<ModelTransformationMode, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem().getTranslationKey());
         if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
-            if(getStyle().getItem().isIn(entry.getKey())) {
+            if(getThisStyle().getItem().isIn(entry.getKey())) {
                 exception = entry.getValue();
                 break;
             }
@@ -128,7 +129,7 @@ public class ItemElm extends Elm {
 
 
         // Update the entity's display type and apply the exception's transformation to the parent one if needed
-        ((CustomItemDisplay)getEntity()).setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
+        getThisEntity().setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
         return exception == null ? t : t.apply(exception.second);
         //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
         //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales

@@ -14,6 +14,7 @@ import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.PanelElmStyle;
 import com.snek.framework.utils.Txt;
 
+import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.server.world.ServerWorld;
 
 
@@ -28,6 +29,8 @@ import net.minecraft.server.world.ServerWorld;
  * Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
+    private CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
+    private PanelElmStyle     getThisStyle () { return getStyle (PanelElmStyle    .class); }
 
     // The amount of panel elements of default size would be needed to cover the width of a block
     public static final float ENTITY_BLOCK_RATIO_X = 40f;
@@ -36,9 +39,6 @@ public class PanelElm extends Elm {
     // The translation on the X axis needed to align the panel entity with the element's bounding box
     public static final float ENTITY_SHIFT_X = -0.5f;
 
-
-    private PanelElmStyle getStyle() { return (PanelElmStyle)style; }
-    public CustomTextDisplay getPanelEntity() { return (CustomTextDisplay)entity; }
 
 
 
@@ -52,7 +52,7 @@ public class PanelElm extends Elm {
      */
     protected PanelElm(@NotNull ServerWorld _world, @NotNull CustomDisplay _entity, @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
-        getPanelEntity().setText(new Txt().get());
+        getThisEntity().setText(new Txt().get());
     }
 
 
@@ -80,8 +80,7 @@ public class PanelElm extends Elm {
     @Override
     public void flushStyle() {
         super.flushStyle();
-        CustomTextDisplay e = getPanelEntity();
-        { Flagged<Vector4i> f = getStyle().getFlaggedColor(); if(f.isFlagged()) { e.setBackground(f.get()); f.unflag(); }}
+        { Flagged<Vector4i> f = getThisStyle().getFlaggedColor(); if(f.isFlagged()) { getThisEntity().setBackground(f.get()); f.unflag(); }}
     }
 
 
@@ -90,7 +89,7 @@ public class PanelElm extends Elm {
     @Override
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
-        if(d.hasBackground()) getStyle().setColor(d.getBackground());
+        if(d.hasBackground()) getThisStyle().setColor(d.getBackground());
     }
 
 
@@ -99,8 +98,8 @@ public class PanelElm extends Elm {
     @Override
     protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
-            getStyle().getTransform().copy(),
-            new Vector4i(getStyle().getColor()),
+            getThisStyle().getTransform().copy(),
+            new Vector4i(getThisStyle().getColor()),
             null
         );
     }

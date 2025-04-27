@@ -40,7 +40,7 @@ public class FancyTextElm extends Elm {
     private @NotNull CustomDisplay text;
     public CustomTextDisplay getFgEntity() { return (CustomTextDisplay)text; }
     public CustomTextDisplay getBgEntity() { return (CustomTextDisplay)getEntity(); }
-    private FancyTextElmStyle getStyle() { return (FancyTextElmStyle)style; }
+    private FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
 
 
 
@@ -91,7 +91,7 @@ public class FancyTextElm extends Elm {
     public Transform __calcTransformFg(@NotNull Transform initialTransform) {
         return
             initialTransform.copy()
-            .apply(getStyle().getTransformFg())
+            .apply(getThisStyle().getTransformFg())
             .moveZ((getZIndex() + 1) * 0.001f) //TODO move Z layer spacing to config file
             .scale(TextElmStyle.DEFAULT_TEXT_SCALE)
         ;
@@ -107,7 +107,7 @@ public class FancyTextElm extends Elm {
     public Transform __calcTransformBg(@NotNull Transform initialTransform) {
         return
             initialTransform.copy()
-            .apply(getStyle().getTransformBg())
+            .apply(getThisStyle().getTransformBg())
             .scaleX(PanelElm.ENTITY_BLOCK_RATIO_X * getAbsSize().x)
             .scaleY(PanelElm.ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
             .move(new Vector3f(PanelElm.ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(initialTransform.getRot()))
@@ -131,10 +131,10 @@ public class FancyTextElm extends Elm {
 
         // Handle transforms
         {
-            Flagged<Transform> f = style.getFlaggedTransform();
-            Flagged<Transform> fFg = getStyle().getFlaggedTransformFg();
-            Flagged<Transform> fBg = getStyle().getFlaggedTransformBg();
-            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getStyle().getFlaggedTextAlignment().isFlagged() || getStyle().getFlaggedText().isFlagged() || fBg.isFlagged();
+            Flagged<Transform> f   = getThisStyle().getFlaggedTransform();
+            Flagged<Transform> fFg = getThisStyle().getFlaggedTransformFg();
+            Flagged<Transform> fBg = getThisStyle().getFlaggedTransformBg();
+            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged();
             final boolean bgNeedsUpdate = f.isFlagged() || fBg.isFlagged();
             if(f.isFlagged()) f.unflag();
 
@@ -147,8 +147,8 @@ public class FancyTextElm extends Elm {
                 // Update foreground transform if necessary
                 if(fgNeedsUpdate) {
                     final Transform tFg = __calcTransformFg(t);
-                    if(getStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
-                    if(getStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
+                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
+                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
                     fg.setTransformation(tFg.toMinecraftTransform());
                     fFg.unflag();
                 }
@@ -163,13 +163,13 @@ public class FancyTextElm extends Elm {
 
 
         // Handle the other Elm values normally, applying them to both entities
-        {Flagged<Float> f = style.getFlaggedViewRange();
+        {Flagged<Float> f = getThisStyle().getFlaggedViewRange();
         if(f.isFlagged()) {
             fg.setViewRange(f.get());
             bg.setViewRange(f.get());
             f.unflag();
         }}
-        {Flagged<BillboardMode> f = style.getFlaggedBillboardMode();
+        {Flagged<BillboardMode> f = getThisStyle().getFlaggedBillboardMode();
         if(f.isFlagged()) {
             fg.setBillboardMode(f.get());
             bg.setBillboardMode(f.get());
@@ -178,10 +178,10 @@ public class FancyTextElm extends Elm {
 
 
         // Handle TextElm values
-        { Flagged<Text>          f = getStyle().getFlaggedText();          if(f.isFlagged()) { fg.setText         (f.get()); f.unflag(); }}
-        { Flagged<Integer>       f = getStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { fg.setTextOpacity  (f.get()); f.unflag(); }}
-        { Flagged<TextAlignment> f = getStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { fg.setTextAlignment(f.get()); f.unflag(); }}
-        { Flagged<Vector4i>      f = getStyle().getFlaggedBackground();    if(f.isFlagged()) { bg.setBackground   (f.get()); f.unflag(); }}
+        { Flagged<Text>          f = getThisStyle().getFlaggedText();          if(f.isFlagged()) { fg.setText         (f.get()); f.unflag(); }}
+        { Flagged<Integer>       f = getThisStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { fg.setTextOpacity  (f.get()); f.unflag(); }}
+        { Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { fg.setTextAlignment(f.get()); f.unflag(); }}
+        { Flagged<Vector4i>      f = getThisStyle().getFlaggedBackground();    if(f.isFlagged()) { bg.setBackground   (f.get()); f.unflag(); }}
 
 
         // Transform, view range and billboard mode are already unflagged
@@ -202,10 +202,10 @@ public class FancyTextElm extends Elm {
     @Override
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
-        if(d.hasOpacity    ()) getStyle().setTextOpacity(d.getOpacity    ());
-        if(d.hasBackground ()) getStyle().setBackground (d.getBackground ());
-        if(d.hasTransformFg()) getStyle().setTransformFg(d.getTransformFg());
-        if(d.hasTransformBg()) getStyle().setTransformBg(d.getTransformBg());
+        if(d.hasOpacity    ()) getThisStyle().setTextOpacity(d.getOpacity    ());
+        if(d.hasBackground ()) getThisStyle().setBackground (d.getBackground ());
+        if(d.hasTransformFg()) getThisStyle().setTransformFg(d.getTransformFg());
+        if(d.hasTransformBg()) getThisStyle().setTransformBg(d.getTransformBg());
     }
 
 
@@ -214,11 +214,11 @@ public class FancyTextElm extends Elm {
     @Override
     protected InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
-            getStyle().getTransform().copy(),
-            new Vector4i(getStyle().getBackground()),
-            getStyle().getTextOpacity(),
-            getStyle().getTransformFg().copy(),
-            getStyle().getTransformBg().copy()
+            getThisStyle().getTransform().copy(),
+            new Vector4i(getThisStyle().getBackground()),
+            getThisStyle().getTextOpacity(),
+            getThisStyle().getTransformFg().copy(),
+            getThisStyle().getTransformBg().copy()
         );
     }
     @Override

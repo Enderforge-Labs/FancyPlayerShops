@@ -74,8 +74,25 @@ public abstract class Elm extends Div {
     public    @NotNull ElmStyle      style;     // The style of the element
     protected boolean isSpawned = false;        // Whether the element has been spawned into the world
     private   boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
-    public CustomDisplay getEntity() { return entity; }
     public boolean isSpawned() { return isSpawned; }
+
+
+    public CustomDisplay getEntity() {
+        return entity;
+    }
+    public <T> T getEntity(Class<T> type) {
+        if(type.isInstance(entity)) return type.cast(entity);
+        else throw new ClassCastException("Cannot cast entity from " + entity.getClass().getName() + " to " + type.getName());
+    }
+
+
+    public ElmStyle getStyle() {
+        return style;
+    }
+    public <T> T getStyle(Class<T> type) {
+        if(type.isInstance(style)) return type.cast(style);
+        else throw new ClassCastException("Cannot cast style from " + style.getClass().getName() + " to " + type.getName());
+    }
 
 
 
