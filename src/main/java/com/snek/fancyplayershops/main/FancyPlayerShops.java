@@ -23,10 +23,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3i;
+import org.joml.Vector4i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.ui.InteractionBlocker;
+import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -64,7 +67,7 @@ public class FancyPlayerShops implements ModInitializer {
             "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
             //! Idk why this is on 2 lines. I like being able to see all of it
         );
-        shopItem.setCustomName(new Txt(SHOP_ITEM_NAME).get());
+        shopItem.setCustomName(new Txt(SHOP_ITEM_NAME).noItalic().bold().color(new Vector3i(140, 190, 160)).get());
         NbtCompound nbt = shopItem.getOrCreateNbt();
         nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
     }

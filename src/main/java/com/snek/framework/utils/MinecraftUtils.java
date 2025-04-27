@@ -75,15 +75,15 @@ public abstract class MinecraftUtils {
 
 
     /**
-     * Returns an ItemStack containing a player head with texture the specified Base64 string.
-     * @param texture The Base64-encoded texture as a string.
+     * Returns an ItemStack containing a player head with texture the specified skin ID.
+     * @param skin The Base-64 skin ID.
      * @return The head as an ItemStack of count 1.
      */
-    public static ItemStack createCustomHead(String texture) {
+    public static ItemStack createCustomHead(String skin) {
 
-        // Create the texture list NBT using the provided Base64 texture
+        // Create the texture list NBT using the provided Base64 texture ID
         NbtCompound NBT_texture = new NbtCompound();
-        NBT_texture.putString("Value", texture);
+        NBT_texture.putString("Value", skin);
         NbtList NBT_textures = new NbtList();
         NBT_textures.add(NBT_texture);
 

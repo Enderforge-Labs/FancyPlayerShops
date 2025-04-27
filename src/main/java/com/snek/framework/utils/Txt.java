@@ -1,6 +1,7 @@
 package com.snek.framework.utils;
 
 import org.joml.Vector3i;
+import org.joml.Vector4i;
 
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -71,11 +72,20 @@ public class Txt {
         style = style.withColor((rgb.x << 16) | (rgb.y << 8) | rgb.z);
         return this;
     }
-    public Txt color     (int rgb) { style = style.withColor        (rgb ); return this; }
-    public Txt bold             () { style = style.withBold         (true); return this; }
-    public Txt italic           () { style = style.withItalic       (true); return this; }
-    public Txt withObfuscated   () { style = style.withObfuscated   (true); return this; }
-    public Txt withStrikethrough() { style = style.withStrikethrough(true); return this; }
+    public Txt color(Vector4i rgb) { //ARGB //TODO comment method
+        style = style.withColor((rgb.y << 16) | (rgb.z << 8) | rgb.w);
+        return this;
+    }
+    public Txt color (int rgb) { style = style.withColor        (rgb ); return this; }
+    public Txt bold         () { style = style.withBold         (true); return this; }
+    public Txt italic       () { style = style.withItalic       (true); return this; }
+    public Txt obfuscated   () { style = style.withObfuscated   (true); return this; }
+    public Txt strikethrough() { style = style.withStrikethrough(true); return this; }
+
+    public Txt noBold         () { style = style.withBold         (false); return this; }
+    public Txt noItalic       () { style = style.withItalic       (false); return this; }
+    public Txt noObfuscated   () { style = style.withObfuscated   (false); return this; }
+    public Txt noStrikethrough() { style = style.withStrikethrough(false); return this; }
 
 
     public Txt cat(Text s) {
