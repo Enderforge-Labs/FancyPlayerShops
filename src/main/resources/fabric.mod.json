@@ -15,11 +15,11 @@
         ],
         "client":[
             "com.snek.fancyplayershops.FancyPlayerShopsClient"
-        ],
-        "mixins":[
-            "fancyplayershops.mixins.json"
         ]
     },
+    "mixins":[
+        "fancyplayershops.mixins.json"
+    ],
 	"depends": {
 		"fabricloader": ">=0.16.10",
 		"minecraft": "~1.20.1",

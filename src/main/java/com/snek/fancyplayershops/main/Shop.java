@@ -321,12 +321,14 @@ public class Shop {
     /**
      * Loads all the player shops into the runtime map.
      * Must be called on server started event (After the worlds are loaded!).
-     * @param server The server instance.
      */
-    public static void loadData(MinecraftServer server) {
+    public static void loadData() {
+        if(FancyPlayerShops.getServer() == null) throw new RuntimeException("Shops could not be loaded: Server instance is null.");
+        if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
+
 
         // For each world directory
-        if(SHOP_STORAGE_DIR != null) for(File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
+        for(File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
 
             // For each shop file
             File[] shopStorageFiles = shopStorageDir.listFiles();
@@ -350,7 +352,7 @@ public class Shop {
                     retrievedShop.cacheShopIdentifier();
                     try {
                         retrievedShop.calcDeserializedItem();
-                        retrievedShop.calcDeserializedWorldId(server);
+                        retrievedShop.calcDeserializedWorldId(FancyPlayerShops.getServer());
                         shopsByOwner.put(retrievedShop.ownerUUID.toString(), retrievedShop);
                         shopsByCoords.put(retrievedShop.shopIdentifierCache, retrievedShop);
                     } catch (RuntimeException e) {

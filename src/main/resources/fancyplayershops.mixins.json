@@ -3,7 +3,7 @@
 	"package": "com.snek.fancyplayershops.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"RecipeModifier"
+		"CraftingScreenHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

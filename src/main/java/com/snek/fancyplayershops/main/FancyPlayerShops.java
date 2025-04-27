@@ -10,10 +10,10 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ClickType;
@@ -22,6 +22,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,10 @@ import com.snek.framework.utils.scheduler.Scheduler;
  * The main class of the mod FancyPlayerShops.
  */
 public class FancyPlayerShops implements ModInitializer {
+
+    // Server instance
+    private static @Nullable MinecraftServer serverInstance = null;
+    public static @Nullable MinecraftServer getServer() { return serverInstance; }
 
     // Mod ID and console logger
     public static final String MOD_ID = "fancyplayershops";
@@ -79,8 +84,11 @@ public class FancyPlayerShops implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 
+            // Save server instance
+            serverInstance = server;
+
             // Load shop data
-            Shop.loadData(server);
+            Shop.loadData();
 
             // Schedule UI element update loop
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);

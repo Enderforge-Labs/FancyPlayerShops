@@ -65,6 +65,8 @@ import net.minecraft.util.math.Vec3i;
 public abstract class MinecraftUtils {
     private MinecraftUtils(){}
 
+    public static final UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+
 
 
 
@@ -89,9 +91,10 @@ public abstract class MinecraftUtils {
         NbtCompound NBT_properties = new NbtCompound();
         NBT_properties.put("textures", NBT_textures);
 
-        // Create the skullOwner NBT using a random UUID and the properties NBT
+        // Create the skullOwner NBT using a hard-coded UUID and the properties NBT
+        //! A UUID is required for heads to display the custom texture, even if it's invalid.
         NbtCompound NBT_skullOwner = new NbtCompound();
-        NBT_skullOwner.putUuid("Id", UUID.randomUUID());
+        NBT_skullOwner.putUuid("Id", HEAD_OWNER_UUID);
         NBT_skullOwner.put("Properties", NBT_properties);
 
         // Create the ItemStack and return it
