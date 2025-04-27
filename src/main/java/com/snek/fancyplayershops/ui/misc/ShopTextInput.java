@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.ChatInput;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
@@ -40,7 +41,7 @@ public abstract class ShopTextInput extends ShopButton {
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
     protected ShopTextInput(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, Text _clickFeedbackMessage) {
-        super(_shop, _lmbActionName, _rmbActionName, 1);
+        super(_shop, _lmbActionName, _rmbActionName, 1, new ShopTextInput_S());
         clickFeedbackMessage = _clickFeedbackMessage;
     }
 

@@ -136,7 +136,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * Plays the button click sound to the specified player.
      * @param player The player to play the sound to.
      */
-    protected void playButtonSound(@NotNull PlayerEntity player) {
+    public static void playButtonSound(@NotNull PlayerEntity player) {
         MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 1, 1.5f);
     }
 }

@@ -28,7 +28,7 @@ import net.minecraft.util.ClickType;
  * A UI element that can display the actions mouse clicks would perform on the currently hovered element.
  */
 public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas {
-    public static final Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.1f);
+    public static final Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.08f);
     public static final float INDICATOR_SIZE_SPACING = 0.2f;
     public static final Vector2f INDICATOR_SIZE = new Vector2f(1, (1 - INDICATOR_SIZE_SPACING) / 2);
 

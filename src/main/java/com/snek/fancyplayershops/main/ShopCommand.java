@@ -71,13 +71,10 @@ public abstract class ShopCommand {
                     //TODO add colors and styles
                     player.sendMessage(new Txt(
                         """
-                        Craft shop blocks using glass panes, a sign and redstone.
-                        You can rotate shops using a wrench or pick them up by shift-rclicking them with it.
-                        Right click a shop to configure and restock it. Each shop can contain up to a set amount of the same item.
+                        Craft an Item Shop in the crafting table and place it to get started!.
                         You can see details about your shops and sales history using the command /shop stats.
                         """
                     ).get(), false);
-                    //FIXME update message
                     return 1;
                 }))
             );

@@ -138,6 +138,7 @@ public abstract class Elm extends Div {
         if(!getAbsPos().equals(oldPos)) {
             style.editTransform();
             flushStyle();
+            System.out.println("> abs pos");
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -150,6 +151,7 @@ public abstract class Elm extends Div {
         if(getZIndex() != oldZIndex) {
             style.editTransform();
             flushStyle();
+            System.out.println("> z index");
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -298,7 +300,7 @@ public abstract class Elm extends Div {
      * @param d The future data value.
      */
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
-        if(d.hasTransform()) style.setTransform(d.getTransform());
+        if(d.hasTransform()) {style.setTransform(d.getTransform()); System.out.println("> animation changed transform");}
     }
 
 

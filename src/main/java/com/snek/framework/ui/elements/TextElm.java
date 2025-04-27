@@ -224,8 +224,6 @@ public class TextElm extends Elm {
         // }
 
         // Calculate its length in blocks and return it
-        System.out.println("    pixels:  " + maxWidth);
-        System.out.println("    t scale: " + t.getScale().x);
         return (float)maxWidth / TEXT_PIXEL_BLOCK_RATIO * t.getScale().x;
     }
 }

@@ -26,6 +26,7 @@ import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.buy.BuyUi;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.edit.EditUi;
+import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -606,8 +607,9 @@ public class Shop {
             }
         }
 
-        // Spawn canvas into the world
+        // Spawn canvas into the world and play a sound to the user
         canvas.spawn(calcDisplayPos());
+        if(user != null) ShopButton.playButtonSound(user);
     }
 
 
