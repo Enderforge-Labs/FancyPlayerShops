@@ -82,10 +82,11 @@ public class InputIndicator extends ShopDiv {
      */
     public void updateDisplay(@Nullable String description){
         if(description != null) {
-            ((TextElmStyle)text.style).setText(new Txt(description).get());
+            ((TextElmStyle)text.style).setText(new Txt(description).gray().get());
         }
         else {
-            ((TextElmStyle)text.style).setText(new Txt("TODO").get());
+            ((TextElmStyle)text.style).setText(new Txt("EMPTY").gray().get());
         }
+        text.flushStyle();
     }
 }

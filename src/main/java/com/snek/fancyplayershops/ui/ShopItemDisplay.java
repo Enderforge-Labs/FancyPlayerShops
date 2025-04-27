@@ -229,6 +229,8 @@ public class ShopItemDisplay extends ItemElm {
 
 
         // Update the entity
+        //! Flag the transform to make sure items with different base transforms are recalculated without waiting for animations
+        style.editTransform();
         flushStyle();
     }
 

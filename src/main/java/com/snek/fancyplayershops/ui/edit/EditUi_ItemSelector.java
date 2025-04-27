@@ -31,13 +31,7 @@ public class EditUi_ItemSelector extends ShopButton {
      * @param _shop The target shop.
      */
     public EditUi_ItemSelector(Shop _shop) {
-        super(
-            _shop,
-            "TODO inspect item",
-            "Change item",
-            0,
-            new EditUi_ItemSelector_S()
-        );
+        super(_shop, "TODO inspect item", "Change item", 0, new EditUi_ItemSelector_S());
     }
 
 
