@@ -36,7 +36,7 @@ public class EditUi_Title extends ShopTextElm {
      * Updates the displayed text, reading data from the target shop.
      */
     public void updateDisplay() {
-        ((TextElmStyle)style).setText(new Txt()
+        getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Editing: ").white())
             .cat(new Txt(
                 shop.getItem().getItem() == Items.AIR ?

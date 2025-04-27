@@ -54,7 +54,7 @@ public class DetailsUi_Values extends ShopTextElm {
 
         // Empty shop case
         if(shop.getItem().getItem() == Items.AIR) {
-            ((TextElmStyle)style).setText(new Txt()
+            getStyle(TextElmStyle.class).setText(new Txt()
                 .cat(new Txt("-").lightGray())
                 .cat(new Txt("\n-").lightGray())
                 .cat("\n" + ownerName)
@@ -64,7 +64,7 @@ public class DetailsUi_Values extends ShopTextElm {
         // Configured shop case
         else {
             double price = shop.getPrice();
-            ((TextElmStyle)style).setText(new Txt()
+            getStyle(TextElmStyle.class).setText(new Txt()
                 .cat(new Txt(price < 0.005 ? "Free" : Utils.formatPrice(price)).bold().color(DetailsUi.C_RGB_PRICE))
                 .cat("\n").cat(new Txt(Utils.formatAmount(shop.getStock())).bold().color(col))
                 .cat("\n" + ownerName)

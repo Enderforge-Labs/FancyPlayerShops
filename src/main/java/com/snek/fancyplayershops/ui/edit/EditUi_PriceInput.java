@@ -36,7 +36,7 @@ public class EditUi_PriceInput extends ShopTextInput {
 
     @Override
     public void updateDisplay(Text textOverride) {
-        ((ShopButton_S)style).setText(textOverride != null ? textOverride : new Txt()
+        getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).color(DetailsUi.C_RGB_PRICE))
         .get());
         flushStyle();

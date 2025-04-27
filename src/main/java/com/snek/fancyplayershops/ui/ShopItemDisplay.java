@@ -106,7 +106,7 @@ public class ShopItemDisplay extends ItemElm {
         );
         unfocusAnimation = new Animation(
             new Transition(D_TIME, Easings.sineOut)
-            .targetTransform(style.getTransform())
+            .targetTransform(getStyle().getTransform())
         );
 
 
@@ -167,10 +167,10 @@ public class ShopItemDisplay extends ItemElm {
         if(!shop.isFocused()) {
             if(name == null) {
                 name = new FancyTextElm(world);
-                name.style.setViewRange(0.2f);
-                name.style.setBillboardMode(BillboardMode.VERTICAL);
+                name.getStyle().setViewRange(0.2f);
+                name.getStyle().setBillboardMode(BillboardMode.VERTICAL);
                 shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
-                name.spawn(new Vector3d(entity.getPosCopy()).add(0, NAME_SHIFT_Y, 0));
+                name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
                 name.getFgEntity().setCustomName(null);
                 name.getBgEntity().setCustomName(null);
             }
@@ -186,9 +186,9 @@ public class ShopItemDisplay extends ItemElm {
         if(_item.getItem() == Items.AIR) {
             ItemStack noItem = Items.BARRIER.getDefaultStack();
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
-            ((ItemElmStyle)style).setItem(noItem);
+            getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
-                ((FancyTextElmStyle)name.style).setText(MinecraftUtils.getFancyItemName(noItem));
+                name.getStyle(FancyTextElmStyle.class).setText(MinecraftUtils.getFancyItemName(noItem));
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
@@ -197,12 +197,12 @@ public class ShopItemDisplay extends ItemElm {
 
         // If the shop is configured, display the current item and its name
         else {
-            ((ItemElmStyle)style).setItem(_item);
+            getStyle(ItemElmStyle.class).setItem(_item);
 
             // Get item name as a string
             //TODO shorten prices to 3 characters or all cents.
             //TODO $0.01    $0.98    $1.6    $12    $400    $1.5k    $12k    $100k    $1.5m
-            final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(((ItemElmStyle)style).getItem()).getString();
+            final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
             // Wrap the name and calculate the amount tof lines
@@ -221,7 +221,7 @@ public class ShopItemDisplay extends ItemElm {
             // Set the new name and adjust the element height
             if(i < fullName.length()) truncatedName.append("…");
             if(name != null) {
-                ((FancyTextElmStyle)name.style).setText(new Txt(truncatedName.toString()).get());
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).get());
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
@@ -230,7 +230,7 @@ public class ShopItemDisplay extends ItemElm {
 
         // Update the entity
         //! Flag the transform to make sure items with different base transforms are recalculated without waiting for animations
-        style.editTransform();
+        getStyle().editTransform();
         flushStyle();
     }
 
@@ -318,8 +318,8 @@ public class ShopItemDisplay extends ItemElm {
 
         // Spawn the entity and remove tracking custom name
         super.spawn(new Vector3d(pos).add(0, ENTITY_SHIFT_Y, 0));
-        entity.setCustomName(null);
-        entity.setCustomNameVisible(false);
+        getEntity().setCustomName(null);
+        getEntity().setCustomNameVisible(false);
 
         // Force display update to spawn the name element
         updateDisplay();

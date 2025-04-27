@@ -31,7 +31,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
 
     @Override
     public void updateDisplay(Text textOverride) {
-        ((ShopButton_S)style).setText(textOverride != null ? textOverride : new Txt()
+        getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).color(EditUi.RGB_STOCK_COLOR))
         .get());
         flushStyle();

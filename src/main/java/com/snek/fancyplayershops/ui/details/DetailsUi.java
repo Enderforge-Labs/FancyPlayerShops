@@ -74,7 +74,7 @@ public class DetailsUi extends ShopCanvas {
         // Add details display names
         e = bg.addChild(new DetailsUi_Names(_shop));
         e.setAlignmentX(AlignmentX.LEFT);
-        ((TextElmStyle)((DetailsUi_Names)e).style).setTextAlignment(TextAlignment.LEFT);
+        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(H0 + VERTICAL_PADDING);
@@ -83,7 +83,7 @@ public class DetailsUi extends ShopCanvas {
         // Add details display values
         e = bg.addChild(new DetailsUi_Values(_shop));
         e.setAlignmentX(AlignmentX.RIGHT);
-        ((TextElmStyle)((DetailsUi_Values)e).style).setTextAlignment(TextAlignment.LEFT);
+        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         e.setSizeX(1 - NAMES_VALUES_WIDTH_RATIO);
         e.setAbsSizeY(TextElm.calcHeight((Elm)e));
         e.setPosY(H0 + VERTICAL_PADDING);

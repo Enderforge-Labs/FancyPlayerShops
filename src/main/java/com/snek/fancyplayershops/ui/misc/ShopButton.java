@@ -76,7 +76,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
     @Override
     public void spawn(Vector3d pos) {
-        final Animation animation = ((ShopButton_S)style).getHoverPrimerAnimation();
+        final Animation animation = getStyle(ShopButton_S.class).getHoverPrimerAnimation();
         if(animation != null) {
             applyAnimationNow(animation);
         }
@@ -87,7 +87,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     @Override
     public void onHoverEnter(@NotNull PlayerEntity player) {
         if(player != shop.user) return;
-        final Animation animation = ((ShopButton_S)style).getHoverEnterAnimation();
+        final Animation animation = getStyle(ShopButton_S.class).getHoverEnterAnimation();
         if(animation != null) {
             applyAnimation(animation);
         }
@@ -105,7 +105,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     @Override
     public void onHoverExit(@Nullable PlayerEntity player) {
         if(player != shop.user) return;
-        final Animation animation = ((ShopButton_S)style).getHoverLeaveAnimation();
+        final Animation animation = getStyle(ShopButton_S.class).getHoverLeaveAnimation();
         if(animation != null) {
             applyAnimation(animation);
         }

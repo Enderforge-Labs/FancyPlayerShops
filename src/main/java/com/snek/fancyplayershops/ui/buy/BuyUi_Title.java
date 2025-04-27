@@ -34,7 +34,7 @@ public class BuyUi_Title extends ShopTextElm {
      * Updates the displayed text, reading data from the target shop.
      */
     public void updateDisplay() {
-        ((TextElmStyle)style).setText(new Txt()
+        getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Buying: ").white())
             .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
         .get());

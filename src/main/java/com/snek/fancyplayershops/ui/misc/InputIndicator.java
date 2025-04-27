@@ -11,6 +11,7 @@ import com.snek.fancyplayershops.ui.misc.styles.MouseButtonUp_S;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
@@ -58,7 +59,7 @@ public class InputIndicator extends ShopDiv {
         e = addChild(new ShopTextElm(_shop, new InputIndicatorText_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x, 0.5f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
-        ((TextElmStyle)((TextElm)e).style).setTextAlignment(TextAlignment.LEFT);
+        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         text = (ShopTextElm)e;
 
 
@@ -85,10 +86,10 @@ public class InputIndicator extends ShopDiv {
      */
     public void updateDisplay(@Nullable String description){
         if(description != null) {
-            ((TextElmStyle)text.style).setText(new Txt(description).lightGray().get());
+            text.getStyle(TextElmStyle.class).setText(new Txt(description).lightGray().get());
         }
         else {
-            ((TextElmStyle)text.style).setText(new Txt("EMPTY").lightGray().get());
+            text.getStyle(TextElmStyle.class).setText(new Txt("EMPTY").lightGray().get());
         }
         text.flushStyle();
     }

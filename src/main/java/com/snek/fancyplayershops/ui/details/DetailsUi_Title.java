@@ -47,12 +47,12 @@ public class DetailsUi_Title extends ShopTextElm {
         // Empty shop case
         final ItemStack _item = shop.getItem();
         if(_item.getItem() == Items.AIR) {
-            ((TextElmStyle)style).setText(new Txt(Shop.EMPTY_SHOP_NAME).get());
+            getStyle(TextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).get());
         }
 
         // Configured shop case
         else {
-            ((TextElmStyle)style).setText(new Txt(MinecraftUtils.getFancyItemName(_item)).bold().get());
+            getStyle(TextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(_item)).bold().get());
         }
 
         // Flush style

@@ -40,7 +40,7 @@ public class DetailsUi_Names extends ShopTextElm {
      */
     public void updateDisplay() {
 
-        ((TextElmStyle)style).setText(new Txt()
+        getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Price:").lightGray())
             .cat(new Txt("\nStock:").lightGray())
             .cat(new Txt("\nOwner:").lightGray())

@@ -43,7 +43,7 @@ public class DetailsUi_OwnerHead extends ShopItemElm {
     public void updateDisplay() {
         final @Nullable ItemStack head = MinecraftUtils.getOfflinePlayerHead(shop.getOwnerUuid(), shop.getWorld().getServer());
         if(head == null) suppressSpawn = true; //! Prevent rendering the default skins in case of cached player data lookup issues
-        else ((ItemElmStyle)style).setItem(head);
+        else getStyle(ItemElmStyle.class).setItem(head);
     }
 
 

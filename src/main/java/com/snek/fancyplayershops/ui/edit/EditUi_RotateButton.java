@@ -63,7 +63,7 @@ public class EditUi_RotateButton extends ShopButton {
 
     @Override
     public void updateDisplay(@Nullable Text textOverride) {
-        ((ShopButton_S)style).setText(textOverride != null ? textOverride : buttonText);
+        getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : buttonText);
         flushStyle();
     }
 
@@ -101,8 +101,8 @@ public class EditUi_RotateButton extends ShopButton {
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(
                 new Transform()
-                .setRot(new Quaternionf(itemDisplay.style.getTransform().getRot      ()).invert())
-                .rot   (new Quaternionf(itemDisplay.style.getTransform().getGlobalRot()).invert())
+                .setRot(new Quaternionf(itemDisplay.getStyle().getTransform().getRot      ()).invert())
+                .rot   (new Quaternionf(itemDisplay.getStyle().getTransform().getGlobalRot()).invert())
             )
         );
     }

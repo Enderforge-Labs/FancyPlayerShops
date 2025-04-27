@@ -70,11 +70,11 @@ public abstract class Elm extends Div {
 
     // In-world data
     protected @NotNull ServerWorld   world;     // The world this Elm will be spawned in
-    protected @NotNull CustomDisplay entity;    // The display entity held by this element
-    public    @NotNull ElmStyle      style;     // The style of the element
+    private   @NotNull CustomDisplay entity;    // The display entity held by this element
+    private   @NotNull ElmStyle      style;     // The style of the element
     protected boolean isSpawned = false;        // Whether the element has been spawned into the world
     private   boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
-    public boolean isSpawned() { return isSpawned; }
+    public    boolean isSpawned() { return isSpawned; }
 
 
     public CustomDisplay getEntity() {
