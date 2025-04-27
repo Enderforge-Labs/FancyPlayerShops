@@ -1,0 +1,79 @@
+package com.snek.fancyplayershops.ui.misc;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
+
+import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.fancyplayershops.ui.misc.styles.InputIndicatorText_S;
+import com.snek.fancyplayershops.ui.misc.styles.MouseButtonDown_S;
+import com.snek.fancyplayershops.ui.misc.styles.MouseButtonUp_S;
+import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.ui.Div;
+import com.snek.framework.ui.styles.TextElmStyle;
+import com.snek.framework.utils.Txt;
+
+import net.minecraft.util.ClickType;
+
+
+
+
+
+
+
+
+/**
+ * A UI element that can display the actions mouse clicks would perform on the currently hovered element.
+ */
+public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas {
+    public static final Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.1f);
+    public static final float INDICATOR_SIZE_SPACING = 0.2f;
+    public static final Vector2f INDICATOR_SIZE = new Vector2f(1, (1 - INDICATOR_SIZE_SPACING) / 2);
+
+    private final @NotNull InputIndicator lmbIndicator;
+    private final @NotNull InputIndicator rmbIndicator;
+
+
+
+
+    /**
+     * Creates a new DualInputIndicator.
+     * @param _shop The target shop.
+     */
+    public DualInputIndicator(@NotNull Shop _shop){
+        super(_shop);
+        Div e;
+
+
+        // Add left click display
+        e = addChild(new InputIndicator(_shop, ClickType.LEFT));
+        e.setSize(INDICATOR_SIZE);
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
+        lmbIndicator = (InputIndicator)e;
+
+
+        // Add right click display
+        e = addChild(new InputIndicator(_shop, ClickType.RIGHT));
+        e.setSize(INDICATOR_SIZE);
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
+        rmbIndicator = (InputIndicator)e;
+    }
+
+
+
+
+    /**
+     * Updates the display to show the new action.
+     * @param description The description of the action associated with a button click. Can be null.
+     */
+    public void updateDisplay(@Nullable String lmbDescription, @Nullable String rmbDescription){
+        lmbIndicator.updateDisplay(lmbDescription);
+        rmbIndicator.updateDisplay(rmbDescription);
+    }
+
+
+    @Override public @NotNull InputIndicator getLmbIndicator() { return lmbIndicator; }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return rmbIndicator; }
+}

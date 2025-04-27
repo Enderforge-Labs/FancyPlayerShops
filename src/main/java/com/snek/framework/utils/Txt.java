@@ -46,22 +46,43 @@ public class Txt {
     }
 
 
-    public Txt black    () { return color(       0); }
-    public Txt blue     () { return color(     170); }
-    public Txt green    () { return color(   43520); }
-    public Txt aqua     () { return color(   43690); }
-    public Txt darkRed  () { return color(11141120); }
-    public Txt purple   () { return color(11141290); }
-    public Txt gold     () { return color(16755200); }
-    public Txt lightGray() { return color(11184810); }
-    public Txt gray     () { return color( 5592405); }
-    public Txt lightBlue() { return color( 5592575); }
-    public Txt lime     () { return color( 5635925); }
-    public Txt cyan     () { return color( 5636095); }
-    public Txt red      () { return color(16733525); }
-    public Txt magenta  () { return color(16733695); }
-    public Txt yellow   () { return color(16777045); }
-    public Txt white    () { return color(16777215); }
+
+    public static final Vector3i COLOR_BLACK     = new Vector3i(  0,   0,   0);
+    public static final Vector3i COLOR_BLUE      = new Vector3i(  0,   0, 170);
+    public static final Vector3i COLOR_GREEN     = new Vector3i(  0, 170,   0);
+    public static final Vector3i COLOR_AQUA      = new Vector3i(  0, 170, 170);
+    public static final Vector3i COLOR_DARKRED   = new Vector3i(170,   0,   0);
+    public static final Vector3i COLOR_PURPLE    = new Vector3i(170,   0, 170);
+    public static final Vector3i COLOR_GOLD      = new Vector3i(255, 170,   0);
+    public static final Vector3i COLOR_LIGHTGRAY = new Vector3i(170, 170, 170);
+    public static final Vector3i COLOR_GRAY      = new Vector3i( 85,  85,  85);
+    public static final Vector3i COLOR_LIGHTBLUE = new Vector3i( 85,  85, 255);
+    public static final Vector3i COLOR_LIME      = new Vector3i( 85, 255,  85);
+    public static final Vector3i COLOR_CYAN      = new Vector3i( 85, 255, 255);
+    public static final Vector3i COLOR_RED       = new Vector3i(255,  85,  85);
+    public static final Vector3i COLOR_MAGENTA   = new Vector3i(255,  85, 255);
+    public static final Vector3i COLOR_YELLOW    = new Vector3i(255, 255,  85);
+    public static final Vector3i COLOR_WHITE     = new Vector3i(255, 255, 255);
+
+
+    public Txt black    () { return color(COLOR_BLACK    ); }
+    public Txt blue     () { return color(COLOR_BLUE     ); }
+    public Txt green    () { return color(COLOR_GREEN    ); }
+    public Txt aqua     () { return color(COLOR_AQUA     ); }
+    public Txt darkRed  () { return color(COLOR_DARKRED  ); }
+    public Txt purple   () { return color(COLOR_PURPLE   ); }
+    public Txt gold     () { return color(COLOR_GOLD     ); }
+    public Txt lightGray() { return color(COLOR_LIGHTGRAY); }
+    public Txt gray     () { return color(COLOR_GRAY     ); }
+    public Txt lightBlue() { return color(COLOR_LIGHTBLUE); }
+    public Txt lime     () { return color(COLOR_LIME     ); }
+    public Txt cyan     () { return color(COLOR_CYAN     ); }
+    public Txt red      () { return color(COLOR_RED      ); }
+    public Txt magenta  () { return color(COLOR_MAGENTA  ); }
+    public Txt yellow   () { return color(COLOR_YELLOW   ); }
+    public Txt white    () { return color(COLOR_WHITE    ); }
+
+
 
 
     public Txt color(int r, int g, int b) {
@@ -86,6 +107,8 @@ public class Txt {
     public Txt noItalic       () { style = style.withItalic       (false); return this; }
     public Txt noObfuscated   () { style = style.withObfuscated   (false); return this; }
     public Txt noStrikethrough() { style = style.withStrikethrough(false); return this; }
+
+
 
 
     public Txt cat(Text s) {

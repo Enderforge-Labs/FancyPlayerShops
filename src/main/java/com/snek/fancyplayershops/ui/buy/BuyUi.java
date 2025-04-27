@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
+import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
@@ -32,8 +33,7 @@ import net.minecraft.util.ClickType;
  */
 public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull Elm title;
-    private final @NotNull InputIndicator lmbIndicator;
-    private final @NotNull InputIndicator rmbIndicator;
+    private final @NotNull DualInputIndicator inputIndicator;
     public @NotNull Elm getTitle() { return title; }
 
 
@@ -67,22 +67,16 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add input indicators
-        e = bg.addChild(new InputIndicator(_shop, ClickType.LEFT));
-        e.setSize(InputIndicator.DEFAULT_INDICATOR_SIZE);
-        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT);
-        e.setAlignmentX(AlignmentX.LEFT);
-        lmbIndicator = (InputIndicator)e;
-
-        e = bg.addChild(new InputIndicator(_shop, ClickType.RIGHT));
-        e.setSize(InputIndicator.DEFAULT_INDICATOR_SIZE);
-        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        rmbIndicator = (InputIndicator)e;
+        e = bg.addChild(new DualInputIndicator(_shop));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT * 2);
+        e.setAlignmentX(AlignmentX.CENTER);
+        inputIndicator = (DualInputIndicator)e;
     }
 
 
 
 
-    @Override public @Nullable InputIndicator getLmbIndicator() { return lmbIndicator; }
-    @Override public @Nullable InputIndicator getRmbIndicator() { return rmbIndicator; }
+    @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

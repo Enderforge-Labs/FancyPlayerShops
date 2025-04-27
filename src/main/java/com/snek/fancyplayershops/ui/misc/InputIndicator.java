@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.styles.InputIndicatorText_S;
 import com.snek.fancyplayershops.ui.misc.styles.MouseButtonDown_S;
 import com.snek.fancyplayershops.ui.misc.styles.MouseButtonUp_S;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -27,8 +28,7 @@ import net.minecraft.util.ClickType;
  */
 public class InputIndicator extends ShopDiv {
     public static final Vector2f BUTTON_SIZE = new Vector2f(0.5f, 0.5f);
-    public static final Vector2f MOUSE_SIZE  = new Vector2f(0.2f, 1f);
-    public static final Vector2f DEFAULT_INDICATOR_SIZE  = new Vector2f(1f, 0.2f);
+    public static final Vector2f MOUSE_SIZE  = new Vector2f(0.025f, 1f);
 
 
     private final @NotNull ShopTextElm text;
@@ -53,7 +53,7 @@ public class InputIndicator extends ShopDiv {
 
 
         // Add text element
-        e = addChild(new ShopTextElm(_shop));
+        e = addChild(new ShopTextElm(_shop, new InputIndicatorText_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x, 0.5f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         text = (ShopTextElm)e;
@@ -68,7 +68,7 @@ public class InputIndicator extends ShopDiv {
         e.setSize(BUTTON_SIZE);
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
-        e = m.addChild(new ShopPanelElm(shop, new MouseButtonUp_S()));
+        e = m.addChild(new ShopPanelElm(shop, new MouseButtonDown_S()));
         e.setSize(new Vector2f(1f, 1 - BUTTON_SIZE.y));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
     }

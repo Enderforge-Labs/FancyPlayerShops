@@ -16,7 +16,8 @@ public class InputIndicatorText_S extends TextElmStyle {
     }
 
 
+    @Override
     public Transform getDefaultTransform() {
-        return super.getTransform().scale(0.5f);
+        return super.getDefaultTransform().scale(0.5f);
     }
 }

@@ -1,8 +1,13 @@
 package com.snek.fancyplayershops.ui.misc.styles;
 
+import org.joml.Vector3i;
 import org.joml.Vector4i;
 
-import com.snek.framework.ui.styles.PanelElmStyle;
+import com.snek.framework.utils.Txt;
+
+
+
+
 
 
 
@@ -13,8 +18,10 @@ public class MouseButtonDown_S extends ShopPanelElm_S {
         super();
     }
 
+
     @Override
     public Vector4i getDefaultColor(){
-        return new Vector4i(255, 255, 0, 0);
+        final Vector3i color = Txt.COLOR_LIGHTGRAY;
+        return new Vector4i(255, color.x, color.y, color.z);
     }
 }

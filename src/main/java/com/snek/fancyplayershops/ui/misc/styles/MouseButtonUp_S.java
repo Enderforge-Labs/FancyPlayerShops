@@ -7,14 +7,19 @@ import com.snek.framework.ui.styles.PanelElmStyle;
 
 
 
+
+
+
+
 public class MouseButtonUp_S extends ShopPanelElm_S {
 
     public MouseButtonUp_S(){
         super();
     }
 
+
     @Override
     public Vector4i getDefaultColor(){
-        return new Vector4i(255, 255, 255, 255);
+        return new Vector4i(255, 200, 200, 200);
     }
 }
