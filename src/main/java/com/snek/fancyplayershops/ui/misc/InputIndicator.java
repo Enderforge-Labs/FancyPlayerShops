@@ -99,7 +99,7 @@ public class InputIndicator extends ShopDiv {
             text.getStyle(TextElmStyle.class).setText(new Txt(description).lightGray().get());
         }
         else {
-            text.getStyle(TextElmStyle.class).setText(new Txt("EMPTY").lightGray().get());
+            //FIXME hide the text
         }
         text.flushStyle();
     }

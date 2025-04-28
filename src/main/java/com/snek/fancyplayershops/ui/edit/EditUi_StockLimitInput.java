@@ -24,7 +24,7 @@ import net.minecraft.text.Text;
 public class EditUi_StockLimitInput extends ShopTextInput {
 
     public EditUi_StockLimitInput(@NotNull Shop _shop) {
-        super(_shop, "Change stock limit", "TODO", new Txt("Send the new stock limit in chat!").green().get());
+        super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").green().get());
         updateDisplay(null);
     }
 

@@ -90,7 +90,7 @@ public class TextElm extends Elm {
                 final Transform t = __calcTransform();
                 if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcWidth(this)) / 2f);
                 if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcWidth(this)) / 2f);
-                getThisEntity().setTransformation(t.toMinecraftTransform());
+                getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                 f.unflag();
             }
         }

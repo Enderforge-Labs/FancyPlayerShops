@@ -31,7 +31,7 @@ public class EditUi_ItemSelector extends ShopButton {
      * @param _shop The target shop.
      */
     public EditUi_ItemSelector(Shop _shop) {
-        super(_shop, "TODO inspect item", "Change item", 0, new EditUi_ItemSelector_S());
+        super(_shop, "Inspect item", "Change item", 0, new EditUi_ItemSelector_S());
     }
 
 
@@ -59,3 +59,6 @@ public class EditUi_ItemSelector extends ShopButton {
         return r;
     }
 }
+//TODO make this a subclass of item inspector
+//TODO     item inspectors show the price graph, the mod the item comes from, the name, the description
+//TODO     it also lets you open an inventory to see it as a real item

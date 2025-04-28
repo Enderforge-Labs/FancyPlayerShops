@@ -67,6 +67,15 @@ public abstract class Elm extends Div {
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
     private int queueLingerTicks = 0;
 
+    // Forced imperceptible changes applied to the entity's interpolated data.
+    //! Minecraft's display entity rendering system repeats ticks if the new value doesn't differ from the old one.
+    //! EPSILON is either added or subtracted from the target value intermittently in order to minimize error build ups and prevent visual tick duplicates.
+    //! 0.000001 is the minimum value difference Minecraft can recognize as a change.
+    public static final float EPSILON = 0.0000011f;
+    protected int epsilonPolarity = 1;
+
+
+
 
     // In-world data
     protected @NotNull ServerWorld   world;     // The world this Elm will be spawned in
@@ -123,7 +132,15 @@ public abstract class Elm extends Div {
      * This does not start an interpolation.
      */
     protected void flushStyle() {
-        { Flagged<Transform>     f = style.getFlaggedTransform();     if(f.isFlagged()) { entity.setTransformation(__calcTransform().toMinecraftTransform()); f.unflag(); }}
+        epsilonPolarity *= -1;
+        {
+            Flagged<Transform>
+            f = style.getFlaggedTransform();
+            if(f.isFlagged()) {
+                entity.setTransformation(__calcTransform().moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
+                f.unflag();
+            }
+        }
         { Flagged<Float>         f = style.getFlaggedViewRange();     if(f.isFlagged()) { entity.setViewRange     (f.get()                                 ); f.unflag(); }}
         { Flagged<BillboardMode> f = style.getFlaggedBillboardMode(); if(f.isFlagged()) { entity.setBillboardMode (f.get()                                 ); f.unflag(); }}
     }
@@ -138,7 +155,6 @@ public abstract class Elm extends Div {
         if(!getAbsPos().equals(oldPos)) {
             style.editTransform();
             flushStyle();
-            System.out.println("> abs pos");
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -151,7 +167,6 @@ public abstract class Elm extends Div {
         if(getZIndex() != oldZIndex) {
             style.editTransform();
             flushStyle();
-            System.out.println("> z index");
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -300,7 +315,7 @@ public abstract class Elm extends Div {
      * @param d The future data value.
      */
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
-        if(d.hasTransform()) {style.setTransform(d.getTransform()); System.out.println("> animation changed transform");}
+        if(d.hasTransform()) { style.setTransform(d.getTransform()); }
     }
 
 
@@ -405,11 +420,22 @@ public abstract class Elm extends Div {
      * @return false if the element has been removed from the update queue, true otherwise.
      */
     protected boolean stepTransition() {
+
+        // // Apply epsilon to the step's transform, then invert its polarity
+        // InterpolatedData data = ;
+        // if(data.hasTransform()) data.getTransform().moveZ(EPSILON * epsilonPolarity);
+        // epsilonPolarity *= -1;
+        // if(!this.getClass().getSimpleName().equals("ShopItemDisplay")) System.out.println("updated: " + this.getClass().getSimpleName());
+
+
+        // Apply step and update the entity
         __applyTransitionStep(futureDataQueue.removeFirst());
         flushStyle();
         entity.setInterpolationDuration(TRANSITION_REFRESH_TIME);
         entity.setStartInterpolation();
 
+
+        // Remove the element from the update queue if no steps are left and linger ticks have ran out
         if(futureDataQueue.isEmpty()) {
             if(queueLingerTicks > 0) {
                 elmUpdateQueue.remove(this);

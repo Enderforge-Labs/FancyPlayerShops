@@ -66,6 +66,7 @@ public abstract class ShopTextInput extends ShopButton {
     protected void enterInputState() {
         if(!inputState) {
             inputState = true;
+            cursorToggleState = true;
             inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
                 updateDisplay(new Txt(cursorToggleState ? "|" : " ").get());
                 cursorToggleState = !cursorToggleState;

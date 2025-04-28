@@ -37,10 +37,10 @@ import net.minecraft.text.Text;
 public class FancyTextElm extends Elm {
 
     // In-world data
-    private @NotNull CustomDisplay text;
-    public CustomTextDisplay getFgEntity() { return (CustomTextDisplay)text; }
-    public CustomTextDisplay getBgEntity() { return (CustomTextDisplay)getEntity(); }
-    private FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
+    private final @NotNull CustomDisplay text;
+    public  @NotNull CustomTextDisplay getFgEntity() { return (CustomTextDisplay)text; }
+    public  @NotNull CustomTextDisplay getBgEntity() { return getEntity(CustomTextDisplay.class); }
+    private @NotNull FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
 
 
 
@@ -125,8 +125,8 @@ public class FancyTextElm extends Elm {
     public void flushStyle() {
 
         // Alias entities
-        CustomTextDisplay fg = getFgEntity();
-        CustomTextDisplay bg = getBgEntity();
+        final @NotNull CustomTextDisplay fg = getFgEntity();
+        final @NotNull CustomTextDisplay bg = getBgEntity();
 
 
         // Handle transforms
@@ -136,7 +136,6 @@ public class FancyTextElm extends Elm {
             Flagged<Transform> fBg = getThisStyle().getFlaggedTransformBg();
             final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged();
             final boolean bgNeedsUpdate = f.isFlagged() || fBg.isFlagged();
-            if(f.isFlagged()) System.out.println("[true transform]");
             if(f.isFlagged()) f.unflag();
 
 
@@ -150,16 +149,14 @@ public class FancyTextElm extends Elm {
                     final Transform tFg = __calcTransformFg(t);
                     if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
                     if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
-                    fg.setTransformation(tFg.toMinecraftTransform());
+                    fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
-                    System.out.println("updated: bg transform");
                 }
 
                 // Update background transform if necessary
                 if(bgNeedsUpdate) {
-                    bg.setTransformation(__calcTransformBg(t).toMinecraftTransform());
+                    bg.setTransformation(__calcTransformBg(t).moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fBg.unflag();
-                    System.out.println("updated: fg transform");
                 }
             }
         }
@@ -171,27 +168,24 @@ public class FancyTextElm extends Elm {
             fg.setViewRange(f.get());
             bg.setViewRange(f.get());
             f.unflag();
-            System.out.println("updated: view range");
         }}
         {Flagged<BillboardMode> f = getThisStyle().getFlaggedBillboardMode();
         if(f.isFlagged()) {
             fg.setBillboardMode(f.get());
             bg.setBillboardMode(f.get());
             f.unflag();
-            System.out.println("updated: billboard");
         }}
 
 
         // Handle TextElm values
-        { Flagged<Text>          f = getThisStyle().getFlaggedText();          if(f.isFlagged()) { fg.setText         (f.get()); f.unflag(); System.out.println("updated: Text");}}
-        { Flagged<Integer>       f = getThisStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { fg.setTextOpacity  (f.get()); f.unflag(); System.out.println("updated: TextOpacity");}}
-        { Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { fg.setTextAlignment(f.get()); f.unflag(); System.out.println("updated: TextAlignment");}}
-        { Flagged<Vector4i>      f = getThisStyle().getFlaggedBackground();    if(f.isFlagged()) { bg.setBackground   (f.get()); f.unflag(); System.out.println("updated: Background");}}
+        { Flagged<Text>          f = getThisStyle().getFlaggedText();          if(f.isFlagged()) { fg.setText         (f.get()); f.unflag(); }}
+        { Flagged<Integer>       f = getThisStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { fg.setTextOpacity  (f.get()); f.unflag(); }}
+        { Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { fg.setTextAlignment(f.get()); f.unflag(); }}
+        { Flagged<Vector4i>      f = getThisStyle().getFlaggedBackground();    if(f.isFlagged()) { bg.setBackground   (f.get()); f.unflag(); }}
 
 
         // Transform, view range and billboard mode are already unflagged
         super.flushStyle();
-        System.out.println("----------------------------------");
     }
 
 
@@ -208,10 +202,10 @@ public class FancyTextElm extends Elm {
     @Override
     protected void __applyTransitionStep(@NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
-        if(d.hasOpacity    ()) {getThisStyle().setTextOpacity(d.getOpacity    ()); System.out.println("> animation changed Opacity");}
-        if(d.hasBackground ()) {getThisStyle().setBackground (d.getBackground ()); System.out.println("> animation changed Background");}
-        if(d.hasTransformFg()) {getThisStyle().setTransformFg(d.getTransformFg()); System.out.println("> animation changed TransformFg");}
-        if(d.hasTransformBg()) {getThisStyle().setTransformBg(d.getTransformBg()); System.out.println("> animation changed TransformBg");}
+        if(d.hasOpacity    ()) { getThisStyle().setTextOpacity(d.getOpacity    ()); }
+        if(d.hasBackground ()) { getThisStyle().setBackground (d.getBackground ()); }
+        if(d.hasTransformFg()) { getThisStyle().setTransformFg(d.getTransformFg()); }
+        if(d.hasTransformBg()) { getThisStyle().setTransformBg(d.getTransformBg()); }
     }
 
 
@@ -276,6 +270,7 @@ public class FancyTextElm extends Elm {
     @Override
     public boolean stepTransition() {
         boolean r = super.stepTransition();
+        getThisStyle().editTransform();
         getFgEntity().setInterpolationDuration(TRANSITION_REFRESH_TIME);
         getFgEntity().setStartInterpolation();
         getFgEntity().tick();

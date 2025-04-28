@@ -33,6 +33,8 @@ public abstract class CustomDisplay {
     protected @NotNull DisplayEntity heldEntity;
 
 
+
+
     // Private methods
     private static Method method_setTransformation;
     private static Method method_setInterpolationDuration;
