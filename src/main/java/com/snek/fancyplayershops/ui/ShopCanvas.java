@@ -72,7 +72,6 @@ public class ShopCanvas extends Div {
 
 
 
-
     /**
      * Creates a new ShopCanvas.
      * @param _shop The target shop.

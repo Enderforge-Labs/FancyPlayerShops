@@ -8,6 +8,13 @@ import java.util.Objects;
 
 
 
+
+
+
+
+/**
+ *
+ */
 public class FancyPlayerShopsClient implements ClientModInitializer {
     private boolean isGenerated = false;
 
@@ -18,7 +25,6 @@ public class FancyPlayerShopsClient implements ClientModInitializer {
     public void setIsGenerated(boolean isGenerated) {
         this.isGenerated = isGenerated;
     }
-
 
 
     @Override

@@ -119,6 +119,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
+
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 
             // Save server instance

@@ -792,9 +792,3 @@ public class Shop {
         );
     }
 }
-
-
-
-//FIXME fix inconsistent element hitboxes at extreme angles
-//FIXME fix inconsistent element hitboxes at extreme angles
-//FIXME fix inconsistent element hitboxes at extreme angles

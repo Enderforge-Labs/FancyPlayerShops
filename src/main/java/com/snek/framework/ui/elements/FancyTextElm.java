@@ -81,6 +81,7 @@ public class FancyTextElm extends Elm {
 
 
 
+
     /**
      * Helper function. Calculates the final transformation that is applied to the foreground entity.
      * @param initialTransform The value to start from.

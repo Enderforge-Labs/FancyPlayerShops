@@ -194,6 +194,8 @@ public abstract class Elm extends Div {
 
 
 
+
+
     /**
      * Instantly calculates animation steps and adds this element to the update queue.
      * ! Partial steps at the end of the animation are expanded to cover the entire step.

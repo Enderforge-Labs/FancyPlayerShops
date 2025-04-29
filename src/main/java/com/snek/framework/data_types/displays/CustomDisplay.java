@@ -269,6 +269,7 @@ public abstract class CustomDisplay {
 
 
 
+
     /**
      * Sets a new maximum render width to the entity.
      * This is equivalent to changing the entity's "width" NBT.

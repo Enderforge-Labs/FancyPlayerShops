@@ -102,6 +102,7 @@ public class InputIndicator extends ShopDiv {
 
 
 
+
     @Override
     public void spawn(Vector3d pos) {
         if(posCache == null) posCache = new Vector3d();
