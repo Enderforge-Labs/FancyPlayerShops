@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
  * A utility class that can store tasks and execute them after a specified delay.
  */
 public abstract class Scheduler {
-    private Scheduler(){}
+    private Scheduler() {}
     private static long tickNum = 0;
     private static final PriorityQueue<TaskHandler> taskQueue = new PriorityQueue<>(Comparator.comparingLong(e -> e.getTargetTick()));
 

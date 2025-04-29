@@ -63,7 +63,7 @@ import net.minecraft.util.math.Vec3i;
  * A utility class providing functions to handle Minecraft classes and data.
  */
 public abstract class MinecraftUtils {
-    private MinecraftUtils(){}
+    private MinecraftUtils() {}
 
     public static final UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
 

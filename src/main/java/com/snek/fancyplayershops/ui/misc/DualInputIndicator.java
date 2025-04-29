@@ -42,7 +42,7 @@ public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas 
      * Creates a new DualInputIndicator.
      * @param _shop The target shop.
      */
-    public DualInputIndicator(@NotNull Shop _shop){
+    public DualInputIndicator(@NotNull Shop _shop) {
         super(_shop);
         Div e;
 

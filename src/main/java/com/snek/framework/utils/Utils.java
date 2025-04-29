@@ -21,7 +21,7 @@ import org.joml.Vector4i;
  * A utility class that provides a collection of useful methods.
  */
 public abstract class Utils {
-    private Utils(){}
+    private Utils() {}
 
 
 

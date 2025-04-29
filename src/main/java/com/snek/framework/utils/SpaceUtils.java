@@ -26,7 +26,7 @@ import net.minecraft.server.world.ServerWorld;
  * A utility class providing functions for 2D and 3D Euclidean geometry calculations.
  */
 public abstract class SpaceUtils {
-    private SpaceUtils(){}
+    private SpaceUtils() {}
 
 
     /**

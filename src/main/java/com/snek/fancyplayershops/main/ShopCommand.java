@@ -20,7 +20,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
  * A utility class that registers and handles in-game commands.
  */
 public abstract class ShopCommand {
-    private ShopCommand(){}
+    private ShopCommand() {}
 
 
     /**

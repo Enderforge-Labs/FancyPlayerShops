@@ -100,7 +100,7 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Set lore
         NbtList lore = new NbtList();
-        for (Text line : SHOP_ITEM_DESCRITPION) {
+        for(Text line : SHOP_ITEM_DESCRITPION) {
             lore.add(NbtString.of(Text.Serializer.toJson(line)));
         }
         shopItem.getOrCreateSubNbt("display").put("Lore", lore);

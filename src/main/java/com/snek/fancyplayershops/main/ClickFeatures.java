@@ -28,7 +28,7 @@ import net.minecraft.world.World;
  */
 public abstract class ClickFeatures {
     private static Map<UUID, RateLimiter> clickLimiters = new HashMap<>();
-    private ClickFeatures(){}
+    private ClickFeatures() {}
 
 
     //FIXME detect item use events as well

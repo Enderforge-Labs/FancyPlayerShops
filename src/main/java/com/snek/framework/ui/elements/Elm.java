@@ -253,7 +253,7 @@ public abstract class Elm extends Div {
             entity.setStartInterpolation();
         }
         else {
-            for (InterpolatedData d : futureDataQueue) {
+            for(InterpolatedData d : futureDataQueue) {
                 d.apply(step);
             }
         }

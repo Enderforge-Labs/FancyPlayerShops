@@ -60,7 +60,7 @@ public class UiDebugWindow extends JPanel {
             final int y3 = centerY - (int)(400 * vertices.get(i + 2).y);
             final int x4 = centerX - (int)(400 * vertices.get(i + 3).x);
             final int y4 = centerY - (int)(400 * vertices.get(i + 3).y);
-            g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] {y1, y2, y3, y4 }, 4);
+            g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
         }
 
 

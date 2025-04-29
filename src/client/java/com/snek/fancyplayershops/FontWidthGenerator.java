@@ -17,7 +17,7 @@ import net.minecraft.client.font.TextRenderer;
 
 
 public abstract class FontWidthGenerator {
-    private FontWidthGenerator(){}
+    private FontWidthGenerator() {}
     public static final String CLASS_NAME   = "FontSize";
     public static final String DIR_PATH     = "fancyplayershops/generated";
     public static final String FILE_PATH    = DIR_PATH + "/" + CLASS_NAME + ".java";

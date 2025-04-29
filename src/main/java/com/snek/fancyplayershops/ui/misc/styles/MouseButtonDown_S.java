@@ -14,13 +14,13 @@ import com.snek.framework.utils.Txt;
 
 public class MouseButtonDown_S extends ShopPanelElm_S {
 
-    public MouseButtonDown_S(){
+    public MouseButtonDown_S() {
         super();
     }
 
 
     @Override
-    public Vector4i getDefaultColor(){
+    public Vector4i getDefaultColor() {
         final Vector3i color = Txt.COLOR_LIGHTGRAY;
         return new Vector4i(255, color.x, color.y, color.z);
     }

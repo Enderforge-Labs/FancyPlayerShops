@@ -59,7 +59,7 @@ public class InputIndicator extends ShopDiv {
      * @param _shop The target shop.
      * @param button The button to display.
      */
-    public InputIndicator(@NotNull Shop _shop, @NotNull ClickType _button){
+    public InputIndicator(@NotNull Shop _shop, @NotNull ClickType _button) {
         super(_shop);
         // button = _button;
         Div e;

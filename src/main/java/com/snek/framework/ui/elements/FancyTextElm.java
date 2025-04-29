@@ -164,13 +164,13 @@ public class FancyTextElm extends Elm {
 
 
         // Handle the other Elm values normally, applying them to both entities
-        {Flagged<Float> f = getThisStyle().getFlaggedViewRange();
+        { Flagged<Float> f = getThisStyle().getFlaggedViewRange();
         if(f.isFlagged()) {
             fg.setViewRange(f.get());
             bg.setViewRange(f.get());
             f.unflag();
         }}
-        {Flagged<BillboardMode> f = getThisStyle().getFlaggedBillboardMode();
+        { Flagged<BillboardMode> f = getThisStyle().getFlaggedBillboardMode();
         if(f.isFlagged()) {
             fg.setBillboardMode(f.get());
             bg.setBillboardMode(f.get());

@@ -18,7 +18,7 @@ import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlign
 
 public class ShopTextInput_S extends ShopButton_S {
 
-    public ShopTextInput_S(){
+    public ShopTextInput_S() {
         super();
     }
 
@@ -34,7 +34,7 @@ public class ShopTextInput_S extends ShopButton_S {
 
 
     @Override
-    public @NotNull TextAlignment getDefaultTextAlignment(){
+    public @NotNull TextAlignment getDefaultTextAlignment() {
         return TextAlignment.LEFT;
     }
 }

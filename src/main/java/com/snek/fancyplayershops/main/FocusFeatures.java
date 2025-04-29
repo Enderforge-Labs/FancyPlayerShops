@@ -41,7 +41,7 @@ import net.minecraft.world.World;
  * Utility class containing methods to detect shops players are looking at and display additional informations.
  */
 public abstract class FocusFeatures {
-    private FocusFeatures(){}
+    private FocusFeatures() {}
 
     // Ray tracing data
     private static final double MAX_DISTANCE = 5;  // Maximum distance to check
