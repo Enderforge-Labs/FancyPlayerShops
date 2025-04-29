@@ -31,6 +31,11 @@ public class FancyPlayerShopsClient implements ClientModInitializer {
         return isGenerated;
     }
 
+
+    /**
+     * Sets the current state of the data.
+     * @param isGenerated Whether the data has been generated.
+     */
     public void setIsGenerated(boolean isGenerated) {
         this.isGenerated = isGenerated;
     }

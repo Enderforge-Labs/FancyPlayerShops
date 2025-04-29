@@ -205,14 +205,14 @@ public class ShopItemDisplay extends ItemElm {
             final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
-            // Wrap the name and calculate the amount tof lines
-            int totLen = 0;
+            // Wrap the name and calculate the amount of lines
             int i;
-            int ellipsisLen = FontSize.getWidth("…");
+            float totLen = 0;
+            float ellipsisLen = FontSize.getWidth("…");
             for(i = 0; i < fullName.length(); ++i) {
                 char c = fullName.charAt(i);
                 totLen += FontSize.getWidth(String.valueOf(c));
-                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > TextElm.TEXT_PIXEL_BLOCK_RATIO * (NAME_DISPLAY_WIDTH - 0.1f)) {
+                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
                     break;
                 }
                 truncatedName.append(c);
@@ -288,7 +288,7 @@ public class ShopItemDisplay extends ItemElm {
      */
     public void stopLoopAnimation() {
         if(loopHandler != null) loopHandler.cancel();
-        futureDataQueue.clear();
+        futureDataQueue.clear(); //FIXME THIS STOPS OTHER ANIMATIONS. DO NOT DO THIS EVER. find a different way to cancel rotations
     }
 
 

@@ -40,9 +40,6 @@ public class TextElm extends Elm {
     private CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
     private TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
 
-    // This value identifies the amount of rendered text pixels that fit in a minecraft block
-    public static final int TEXT_PIXEL_BLOCK_RATIO = 40;
-
 
 
 
@@ -178,7 +175,7 @@ public class TextElm extends Elm {
         if(lineNum == 0) return 0;
 
         // Calculate their height and return it
-        return ((lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) / TEXT_PIXEL_BLOCK_RATIO * t.getScale().y;
+        return ((lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * FontSize.getHeight()) * t.getScale().y;
     }
 
 
@@ -208,9 +205,9 @@ public class TextElm extends Elm {
         }
 
         // Find the longest line and save its length in pixels
-        int maxWidth = 0;
+        float maxWidth = 0;
         for(int i = 0; i < lines.length; ++i) {
-            int w = FontSize.getWidth(lines[i]);
+            final float w = FontSize.getWidth(lines[i]);
             if(w > maxWidth) maxWidth = w;
         }
 
@@ -224,6 +221,6 @@ public class TextElm extends Elm {
         // }
 
         // Calculate its length in blocks and return it
-        return (float)maxWidth / TEXT_PIXEL_BLOCK_RATIO * t.getScale().x;
+        return maxWidth * t.getScale().x;
     }
 }
