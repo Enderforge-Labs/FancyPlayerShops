@@ -236,7 +236,7 @@ public class Div {
      */
     public void forwardHover(PlayerEntity player) {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
-            e.updateHoverStatus(player);
+            e.updateHoverState(player);
         }
         for(Div elm : children) {
             elm.forwardHover(player);

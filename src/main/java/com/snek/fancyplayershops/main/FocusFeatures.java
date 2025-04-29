@@ -162,7 +162,7 @@ public abstract class FocusFeatures {
 
         // Set all previously focused shops's next focus state to false
         for(Shop shop : targetedShopsOld) {
-            shop.setFocusStatusNext(false);
+            shop.setFocusStateNext(false);
         }
 
 
@@ -174,10 +174,10 @@ public abstract class FocusFeatures {
                 Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
                 if(targetShop != null) {
 
-                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus status to true and add a viewer entry
+                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true and add a viewer entry
                     final boolean isShopNew = targetedShops.add(targetShop);
                     if(isShopNew) {
-                        targetShop.setFocusStatusNext(true);
+                        targetShop.setFocusStateNext(true);
                         targetedShopsViewers.add(player);
                     }
                 }

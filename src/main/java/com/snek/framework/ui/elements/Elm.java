@@ -471,26 +471,26 @@ public abstract class Elm extends Div {
 
 
     /**
-     * Updates the new hover status of the element and executes the specified callbacks.
+     * Updates the new hover state of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
-    public void updateHoverStatus(@Nullable PlayerEntity player) {
+    public void updateHoverState(@Nullable PlayerEntity player) {
         if(this instanceof Hoverable h) {
-            boolean hoverStatusNext;
+            boolean hoverStateNext;
 
 
-            // Calculate next hover status
+            // Calculate next hover state
             if(player == null) {
-                hoverStatusNext = false;
+                hoverStateNext = false;
             }
             else {
-                hoverStatusNext = checkIntersection(player);
+                hoverStateNext = checkIntersection(player);
             }
 
 
-            // Update current status and run hover status change callbacks if needed
-            if(isHovered != hoverStatusNext) {
-                isHovered = hoverStatusNext;
+            // Update current state and run hover state change callbacks if needed
+            if(isHovered != hoverStateNext) {
+                isHovered = hoverStateNext;
                 if(isHovered) {
                     h.onHoverEnter(player);
                 }

@@ -143,20 +143,20 @@ public class Shop {
     private float  defaultRotation = 0f;
 
 
-    // Shop status
+    // Shop state
     private transient @Nullable InteractionBlocker interactionBlocker = null;
     private transient @Nullable ShopCanvas               activeCanvas = null;
     public  transient @Nullable PlayerEntity                     user = null;
-    private transient           boolean                   focusStatus = false;
-    private transient           boolean               focusStatusNext = false;
+    private transient           boolean                    focusState = false;
+    private transient           boolean                focusStateNext = false;
     private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
     private transient @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
     private transient @NotNull RateLimiter menuOpenLimiter = new RateLimiter();
     private transient @Nullable TaskHandler interactionBlockerDeletionHandler;
 
 
-    public void setFocusStatusNext(boolean v) {
-        focusStatusNext = v;
+    public void setFocusStateNext(boolean v) {
+        focusStateNext = v;
     }
 
 
@@ -170,7 +170,7 @@ public class Shop {
     public           int             getStock          () { return stock;           }
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
-    public           boolean         isFocused         () { return focusStatus;     }
+    public           boolean         isFocused         () { return focusState;     }
     public           UUID            getOwnerUuid      () { return ownerUUID;       }
 
 
@@ -345,8 +345,8 @@ public class Shop {
 
                 // Recalculate transient members and update shop maps
                 if(retrievedShop != null) {
-                    retrievedShop.focusStatus           = false;
-                    retrievedShop.focusStatusNext       = false;
+                    retrievedShop.focusState           = false;
+                    retrievedShop.focusStateNext       = false;
                     retrievedShop.lastDirection         = 0;
                     retrievedShop.canvasRotationLimiter = new RateLimiter();
                     retrievedShop.menuOpenLimiter = new RateLimiter();
@@ -397,9 +397,9 @@ public class Shop {
      */
     public void updateFocusState() {
         if(!menuOpenLimiter.attempt()) return;
-        if(focusStatus != focusStatusNext) {
-            focusStatus = focusStatusNext;
-            if(focusStatus) {
+        if(focusState != focusStateNext) {
+            focusState = focusStateNext;
+            if(focusState) {
 
                 // Create details canvas
                 if(activeCanvas != null) activeCanvas.despawnNow();
