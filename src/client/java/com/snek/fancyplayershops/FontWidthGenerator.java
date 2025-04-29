@@ -65,12 +65,6 @@ public abstract class FontWidthGenerator {
             f.write("    }\n");
 
 
-            // // Skip control characters
-            // for(char c = 0; c < 32; c++) {
-            //     f.write("0x0, ");
-            // }
-            // f.write("\n        ");
-
             // Iterate through all the other characters
             for(int i = 0; i < PARTS; ++i) {
                 f.write("\n    private static final void init_" + i + "() {\n        ");

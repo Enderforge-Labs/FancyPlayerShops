@@ -137,11 +137,12 @@ public abstract class FocusFeatures {
             // Find target shop block
             for(Vec3d pos : collidingBlocks) {
                 Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
-                for(ItemDisplayEntity e : entitiyList) {
-                    if(e.getBlockPos().equals(blockPos)) {
-                        return Shop.findShop(new BlockPos(blockPos), world);
-                    }
-                }
+                // for(ItemDisplayEntity e : entitiyList) {
+                    // if(e.getBlockPos().equals(blockPos)) {
+                Shop shop =  Shop.findShop(new BlockPos(blockPos), world);
+                if(shop != null) return shop;
+                    // }
+                // }
             }
         }
 

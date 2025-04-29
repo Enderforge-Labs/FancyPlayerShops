@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -141,12 +143,25 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-        // Create and register shop block rclick event
+        // Create and register block click events (shop placement + prevents early clicks going through the shop)
+        AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
+            ActionResult r;
+            r = ClickFeatures.onClickBlock(world, player, hand, ClickType.LEFT, blockPos.add(direction.getVector()));
+            return r;
+        });
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             ActionResult r;
-            r = ClickFeatures.onClick(world, player, hand, ClickType.RIGHT);
+            r = ClickFeatures.onClickBlock(world, player, hand, ClickType.RIGHT, hitResult.getBlockPos().add(hitResult.getSide().getVector()));
             if(r == ActionResult.PASS) r = onItemUse(world, player, hand, hitResult);
             return r;
+        });
+
+
+
+
+        // Create and register entity click events (interaction blocker clicks)
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            return ClickFeatures.onClickEntity(world, player, hand, ClickType.LEFT, entity);
         });
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             return ClickFeatures.onClickEntity(world, player, hand, ClickType.RIGHT, entity);
@@ -155,14 +170,11 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-        // Create and register shop block lclick event
-        AttackBlockCallback.EVENT.register((player, world, hand, blockPos, diretion) -> {
-            ActionResult r;
-            r = ClickFeatures.onClick(world, player, hand, ClickType.LEFT);
-            return r;
-        });
-        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickFeatures.onClickEntity(world, player, hand, ClickType.LEFT, entity);
+        // Create and register item use events (prevents early clicks going through the shop)
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            final ActionResult r = ClickFeatures.onUseItem(world, player, hand);
+            if(r == ActionResult.FAIL) return TypedActionResult.fail(player.getStackInHand(hand));
+            /**/                  else return TypedActionResult.pass(player.getStackInHand(hand));
         });
 
 
@@ -172,7 +184,7 @@ public class FancyPlayerShops implements ModInitializer {
         ServerTickEvents.END_SERVER_TICK.register(server -> { Scheduler.tick(); });
 
 
-        // Register focus display purge
+        // Register entity display purge
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             Elm.onEntityLoad(entity);
             InteractionBlocker.onEntityLoad(entity);
@@ -223,7 +235,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // If not, send an error message to the player
             else player.sendMessage(new Txt("You cannot create a shop here!").darkRed().get(), true);
-            return ActionResult.SUCCESS;
+            return ActionResult.FAIL;
         }
         return ActionResult.PASS;
     }
