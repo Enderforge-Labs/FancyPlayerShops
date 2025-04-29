@@ -251,7 +251,9 @@ public abstract class Elm extends Div {
             entity.setStartInterpolation();
         }
         else {
-            futureDataQueue.get(0).apply(step);
+            for (InterpolatedData d : futureDataQueue) {
+                d.apply(step);
+            }
         }
     }
 
@@ -493,6 +495,18 @@ public abstract class Elm extends Div {
                 else {
                     h.onHoverExit(player);
                 }
+            }
+
+
+            // Call hover tick callback
+            if(isHovered) {
+                h.onHoverTick(player);
+            }
+
+
+            // Call check tick callback
+            if(isHovered) {
+                h.onCheckTick(player);
             }
         }
     }

@@ -84,6 +84,8 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     }
 
 
+
+
     @Override
     public void onHoverEnter(@NotNull PlayerEntity player) {
         if(player != shop.user) return;
@@ -91,15 +93,22 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
         if(animation != null) {
             applyAnimation(animation);
         }
+    }
+
+
+
+
+    @Override
+    public void onCheckTick(PlayerEntity player) {
 
         // Update input displays if present
-        if(shop.getActiveCanvas() != null) {
-            if(shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
-                c.getLmbIndicator().updateDisplay(lmbActionName);
-                c.getRmbIndicator().updateDisplay(rmbActionName);
-            }
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(lmbActionName);
+            c.getRmbIndicator().updateDisplay(rmbActionName);
         }
     }
+
+
 
 
     @Override
@@ -109,7 +118,15 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
         if(animation != null) {
             applyAnimation(animation);
         }
+
+        // Update input displays if present
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(null);
+            c.getRmbIndicator().updateDisplay(null);
+        }
     }
+
+
 
 
     @Override
@@ -125,11 +142,15 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
     }
 
 
+
+
     /**
      * Updates the displayed text, reading data from the target shop.
      * @param textOverride If not null, it replaces the shop's data.
      */
     public abstract void updateDisplay(@Nullable Text textOverride);
+
+
 
 
     /**

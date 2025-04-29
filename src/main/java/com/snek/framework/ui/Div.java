@@ -8,11 +8,13 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 
+import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.interfaces.Clickable;
 import com.snek.framework.ui.interfaces.Hoverable;
 
@@ -150,6 +152,7 @@ public class Div {
      * @param animation The animation to apply.
      */
     public void applyAnimationNow(@NotNull Animation animation) {
+        if(this instanceof InputIndicator e) System.out.println("animation: " + animation.getTransitions().get(0).d.getTransform().getPos().y);
         // Empty
     }
     /**
@@ -201,7 +204,9 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimationNowRecursive(@NotNull Transition transition) {
+        if(this instanceof InputIndicator e) System.out.println("before:   " + e.text.getStyle().getTransform().getPos().y);
         applyAnimationNowRecursive(new Animation(transition));
+        if(this instanceof InputIndicator e) System.out.println("after:    " + e.text.getStyle().getTransform().getPos().y);
     }
 
 

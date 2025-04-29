@@ -62,18 +62,6 @@ public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas 
     }
 
 
-
-
-    /**
-     * Updates the display to show the new action.
-     * @param description The description of the action associated with a button click. Can be null.
-     */
-    public void updateDisplay(@Nullable String lmbDescription, @Nullable String rmbDescription){
-        lmbIndicator.updateDisplay(lmbDescription);
-        rmbIndicator.updateDisplay(rmbDescription);
-    }
-
-
     @Override public @NotNull InputIndicator getLmbIndicator() { return lmbIndicator; }
     @Override public @NotNull InputIndicator getRmbIndicator() { return rmbIndicator; }
 }
