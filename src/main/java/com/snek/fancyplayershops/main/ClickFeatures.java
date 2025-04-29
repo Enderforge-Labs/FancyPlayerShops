@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
@@ -29,23 +32,25 @@ import net.minecraft.world.World;
  * A utility class that handles clicks from players.
  */
 public abstract class ClickFeatures {
-    private static Map<UUID, RateLimiter> clickLimiters = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, @NotNull RateLimiter> clickLimiters = new HashMap<>();
     private ClickFeatures() {}
+
+
 
 
     /**
      * Handles left and right clicks on shop blocks before the interaction blocker is spawned.
-     * Must be called on AttackBlockCallback and UseBlockCallback events.
+     * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
-     * @return SUCCESS if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a shop, PASS if not.
      */
-    private static ActionResult onClick(World world, PlayerEntity player, Hand hand, ClickType clickType) {
+    private static @NotNull ActionResult onClick(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType) {
 
         // Handle limiter
-        RateLimiter limiter = clickLimiters.get(player.getUuid());
+        @Nullable RateLimiter limiter = clickLimiters.get(player.getUuid());
         if(limiter == null) {
             limiter = new RateLimiter();
             clickLimiters.put(player.getUuid(), limiter);
@@ -54,7 +59,7 @@ public abstract class ClickFeatures {
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
         if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
-            Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
+            final @Nullable Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
@@ -71,15 +76,15 @@ public abstract class ClickFeatures {
 
     /**
      * Handles left and right clicks on shop interactions.
-     * Must be called on AttackEntityCallback and UseEntityCallback events.
+     * <p> Must be called on AttackEntityCallback and UseEntityCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param entity The entity.
-     * @return SUCCESS if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static ActionResult onClickEntity(World world, PlayerEntity player, Hand hand, ClickType clickType, Entity entity) {
+    public static @NotNull ActionResult onClickEntity(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType, final @NotNull Entity entity) {
         if(entity instanceof InteractionEntity && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
             return onClick(world, player, hand, clickType);
         }
@@ -91,18 +96,18 @@ public abstract class ClickFeatures {
 
     /**
      * Handles left and right clicks on shop blocks before the interaction blocker is spawned.
-     * Must be called on AttackBlockCallback and UseBlockCallback events.
+     * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param pos The position of the clicked block.
-     * @return SUCCESS if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static ActionResult onClickBlock(World world, PlayerEntity player, Hand hand, ClickType clickType, Vec3i pos) {
+    public static @NotNull ActionResult onClickBlock(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType, final @NotNull Vec3i pos) {
 
         // Check ray casting result
-        ActionResult r =  onClick(world, player, hand, clickType);
+        final @NotNull ActionResult r =  onClick(world, player, hand, clickType);
 
 
         // If the ray casting fails, check the block reported by the event.
@@ -119,13 +124,13 @@ public abstract class ClickFeatures {
 
     /**
      * Handles right clicks on shop blocks before the interaction blocker is spawned.
-     * Must be called on useItemCallback events.
+     * <p> Must be called on useItemCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
-     * @return SUCCESS if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static ActionResult onUseItem(World world, PlayerEntity player, Hand hand) {
+    public static @NotNull ActionResult onUseItem(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand) {
         return onClick(world, player, hand, ClickType.RIGHT);
     }
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.message.SignedMessage;
@@ -22,28 +23,28 @@ import net.minecraft.network.message.SignedMessage;
  */
 public abstract class ChatInput {
     private ChatInput() {}
-    private static @NotNull Map<UUID, Predicate<String>> callbacks = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
 
 
     /**
      * Removes the callback for the specified player.
-     * Future messages from this player will not be detected nor blocked.
+     * <p> Future messages from this player will not be detected nor blocked.
      * @param player The player.
      */
-    public static void removeCallback(@NotNull PlayerEntity player) {
+    public static void removeCallback(final @NotNull PlayerEntity player) {
         callbacks.remove(player.getUuid());
     }
 
 
     /**
      * Sets a callback that is fired the next time the player sends a message in chat.
-     * Commands are ignored.
+     * <p> Commands are ignored.
      * @param player The player.
      * @param callback The callback function. It must take a String and return a boolean.
      *     The return value controls whether the message is blocked.
      *     Returning true will let the server broadcast the message in chat.
      */
-    public static void setCallback(@NotNull PlayerEntity player, @NotNull Predicate<String> callback) {
+    public static void setCallback(final @NotNull PlayerEntity player, final @NotNull Predicate<@NotNull String> callback) {
         callbacks.put(player.getUuid(), callback);
     }
 
@@ -54,8 +55,8 @@ public abstract class ChatInput {
      * @param player The player that sent the message.
      * @return Whether the message should be blocked.
      */
-    public static boolean onMessage(SignedMessage message, PlayerEntity player) {
-        Predicate<String> callback = callbacks.get(player.getUuid());   // Find callback for the specified player
+    public static boolean onMessage(final @NotNull SignedMessage message, final @NotNull PlayerEntity player) {
+        final @NotNull Predicate<@NotNull String> callback = callbacks.get(player.getUuid()); // Find callback for the specified player
         if(callback != null) {                                          // If present
             if(callback.test(message.getContent().getString())) {           // Execute the callback. If it returns true
                 callbacks.remove(player.getUuid());                             // Remove the callback

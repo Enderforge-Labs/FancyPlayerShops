@@ -20,25 +20,28 @@ import net.minecraft.client.font.TextRenderer;
  */
 public abstract class FontWidthGenerator {
     private FontWidthGenerator() {}
-    public static final String CLASS_NAME   = "FontSize";
-    public static final String DIR_PATH     = "fancyplayershops/generated";
-    public static final String FILE_PATH    = DIR_PATH + "/" + CLASS_NAME + ".java";
-    public static final String PACKAGE_NAME = "com.snek.framework.generated";
-
-    public static final int PARTS = 32;
+    public static final String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated package"
+    public static final String PACKAGE_PATH = "fancyplayershops/generated";              // The path to the "generated" package
+    public static final String CLASS_NAME   = "FontSize";                                // The name of the generated class
+    public static final String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
+    public static final int    PARTS = 32;                                               // The number of methods to split the initialization into
 
 
 
 
     /**
      * Retrieves the width of every character in the extended ASCII and saves it in the output file.
-     *     The output file is a ready-to-use Java class with methods that can be used to compute the width and height a String would have
-     *     when rendered in-game as non-bold text through a TextDisplayEntity with transform scale 1.0f and no shearing.
+     * <p>
+     * The output file is a ready-to-use Java class with methods that can be used to compute the width and height a String would have
+     * when rendered in-game as non-bold text through a TextDisplayEntity with transform scale 1.0f and no shearing.
      */
     public static void generate() {
-        TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+
+
+        // Retrieve text renderer from the client instance and create the generated package
+        final TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
         try {
-            Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(DIR_PATH));
+            Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,6 +49,9 @@ public abstract class FontWidthGenerator {
 
         // Print the widths to the source file
         try(FileWriter f = new FileWriter(FabricLoader.getInstance().getConfigDir().resolve(FILE_PATH).toString())) {
+
+
+            // Write package, class, fields and static initializer
             f.write(
                 "package " + PACKAGE_NAME + ";\n" +
                 "\n\n\n\n" +
@@ -65,11 +71,11 @@ public abstract class FontWidthGenerator {
             f.write("    }\n");
 
 
-            // Iterate through all the other characters
+            // Write initializer methods
             for(int i = 0; i < PARTS; ++i) {
                 f.write("\n    private static final void init_" + i + "() {\n        ");
                 for(int c0 = 32; c0 < Character.MAX_VALUE / PARTS; c0++) {
-                    char c = (char)((Character.MAX_VALUE / PARTS) * i + c0);
+                    final char c = (char)((Character.MAX_VALUE / PARTS) * i + c0);
                     f.write(String.format("w[%d] = 0x%01x", (int)c, c < 32 ? 0 : renderer.getWidth(String.valueOf(c))));
                     if(c < Character.MAX_VALUE - 1) {
                         f.write(";");

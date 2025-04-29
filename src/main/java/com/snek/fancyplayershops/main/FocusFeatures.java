@@ -1,22 +1,18 @@
 package com.snek.fancyplayershops.main;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
 
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +34,7 @@ import net.minecraft.world.World;
 
 
 /**
- * Utility class containing methods to detect shops players are looking at and display additional informations.
+ * Utility class containing methods to detect shops players are looking at and handle hover events.
  */
 public abstract class FocusFeatures {
     private FocusFeatures() {}
@@ -48,22 +44,23 @@ public abstract class FocusFeatures {
     private static final double STEP_SIZE = 0.2;
 
     // The list of shops that were targeted in the previous tick
-    private static Set<Shop> targetedShopsOld = new LinkedHashSet<>();
+    private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
 
 
 
 
     /**
      * Returns the position of the block targeted by a player.
+     * <p> The ray casting is hitbox-based, so it can go through gaps in non-full blocks and it ignores fluids.
      * @param player The player.
-     * @return The position of the targeted block.
+     * @return The position of the targeted block, or null if no block is found.
      */
-    private static Vec3d getTargetBlockPrecise(PlayerEntity player) {
-        World world = player.getEntityWorld();
+    private static @Nullable Vec3d getTargetBlockPrecise(final @NotNull PlayerEntity player) {
+        final @NotNull World world = player.getWorld();
 
         // Perform ray cast
-        Vec3d eyePos = player.getEyePos();
-        Vec3d lookDirection = player.getRotationVec(1.0F);
+        final @NotNull Vec3d eyePos = player.getEyePos();
+        final @NotNull Vec3d lookDirection = player.getRotationVec(1.0F);
         BlockHitResult result = world.raycast(new RaycastContext(
             eyePos,
             eyePos.add(lookDirection.multiply(MAX_DISTANCE)),
@@ -117,7 +114,7 @@ public abstract class FocusFeatures {
 
     /**
      * Finds the closest shop block that directly collides with the player's view.
-     * The ray casting is hitbox-based, so it can go through gaps in non-full blocks and it ignores fluids.
+     * <p> The ray casting is hitbox-based, so it can go through gaps in non-full blocks and it ignores fluids.
      * @param player The player.
      * @return The Shop instance of the shop block, or null if the player is not looking at one.
      */

@@ -123,7 +123,7 @@ public class InteractionBlocker {
         //!  │                                                                                                              //!
         //!  │                                                                                                              //!
         /*!  │    // Create the custom command source and use DUMMY as output to silence it                                 //!
-        /*!  │  */MinecraftServer server = entity.getServer();                                                              //!
+        /*!  │  */MinecraftServer server = FancyPlayerShops.getServer();                                                    //!
         /*!  │  */ServerWorld world = (ServerWorld)entity.getWorld();                                                       //!
         /*!  │  */ServerCommandSource source = new ServerCommandSource(                                                     //!
         /*!  │  */    CommandOutput.DUMMY, Vec3d.ZERO, Vec2f.ZERO, world,                                                   //!

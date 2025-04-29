@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextElm;
 import com.snek.framework.ui.styles.TextElmStyle;
@@ -49,7 +50,7 @@ public class DetailsUi_Values extends ShopTextElm {
         // Calculate the color of the stock amount and retrieve the owner's name
         float factor = 1.0f - shop.getStock() / 1000f;
         Vector3i col = Utils.HSVtoRGB(new Vector3f(DetailsUi.C_HSV_STOCK_LOW).add(new Vector3f(DetailsUi.C_HSV_STOCK_HIGH).sub(DetailsUi.C_HSV_STOCK_LOW).mul(1.0f - (factor * factor))));
-        String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), shop.getWorld().getServer());
+        String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
 
 
         // Empty shop case

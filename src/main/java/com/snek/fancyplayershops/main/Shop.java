@@ -324,7 +324,6 @@ public class Shop {
      * Must be called on server started event (After the worlds are loaded!).
      */
     public static void loadData() {
-        if(FancyPlayerShops.getServer() == null) throw new RuntimeException("Shops could not be loaded: Server instance is null.");
         if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
 
 

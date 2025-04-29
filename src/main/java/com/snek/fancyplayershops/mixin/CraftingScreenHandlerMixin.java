@@ -46,7 +46,6 @@ public abstract class CraftingScreenHandlerMixin {
      */
     @Inject(method = "onContentChanged", at = @At("TAIL"))
     private void onCraftUpdate(Inventory inventory, CallbackInfo ci) {
-        if(FancyPlayerShops.getServer() == null) throw new RuntimeException("Couldn't handle crafting content change: server instance is null.");
         if(inventory.size() != 9) return;
 
 
