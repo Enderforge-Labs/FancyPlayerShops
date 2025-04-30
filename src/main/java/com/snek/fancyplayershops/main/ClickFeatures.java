@@ -28,6 +28,8 @@ import net.minecraft.world.World;
 
 
 
+//FIXME buttons in the same block as a shop can be clicked, for some reason.
+//FIXME placing blocks instead of properly blocked.
 /**
  * A utility class that handles clicks from players.
  */
@@ -50,7 +52,7 @@ public abstract class ClickFeatures {
     private static @NotNull ActionResult onClick(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType) {
 
         // Handle limiter
-        @Nullable RateLimiter limiter = clickLimiters.get(player.getUuid());
+        RateLimiter limiter = clickLimiters.get(player.getUuid());
         if(limiter == null) {
             limiter = new RateLimiter();
             clickLimiters.put(player.getUuid(), limiter);
@@ -59,7 +61,7 @@ public abstract class ClickFeatures {
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
         if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
-            final @Nullable Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
+            final Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
@@ -107,7 +109,7 @@ public abstract class ClickFeatures {
     public static @NotNull ActionResult onClickBlock(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType, final @NotNull Vec3i pos) {
 
         // Check ray casting result
-        final @NotNull ActionResult r =  onClick(world, player, hand, clickType);
+        final ActionResult r =  onClick(world, player, hand, clickType);
 
 
         // If the ray casting fails, check the block reported by the event.

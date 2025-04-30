@@ -56,13 +56,13 @@ public abstract class ChatInput {
      * @return Whether the message should be blocked.
      */
     public static boolean onMessage(final @NotNull SignedMessage message, final @NotNull PlayerEntity player) {
-        final @NotNull Predicate<@NotNull String> callback = callbacks.get(player.getUuid()); // Find callback for the specified player
-        if(callback != null) {                                          // If present
-            if(callback.test(message.getContent().getString())) {           // Execute the callback. If it returns true
-                callbacks.remove(player.getUuid());                             // Remove the callback
-                return true;                                                    // Block the message
-            }                                                               // If not
-            return false;                                                       // Broadcast the message
+        final Predicate<String> callback = callbacks.get(player.getUuid()); // Find callback for the specified player
+        if(callback != null) {                                              // If present
+            if(callback.test(message.getContent().getString())) {               // Execute the callback. If it returns true
+                callbacks.remove(player.getUuid());                                 // Remove the callback
+                return true;                                                        // Block the message
+            }                                                                   // If not
+            return false;                                                           // Broadcast the message
         }
 
         // Broadcast the message if the player has no associated callback

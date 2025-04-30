@@ -104,12 +104,12 @@ public class FancyPlayerShops implements ModInitializer {
         shopItem.setCustomName(SHOP_ITEM_NAME);
 
         // Set identification tag
-        final @NotNull NbtCompound nbt = shopItem.getOrCreateNbt();
+        final NbtCompound nbt = shopItem.getOrCreateNbt();
         nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
 
         // Set lore
         final NbtList lore = new NbtList();
-        for(final @NotNull Text line : SHOP_ITEM_DESCRITPION) {
+        for(final Text line : SHOP_ITEM_DESCRITPION) {
             lore.add(NbtString.of(Text.Serializer.toJson(line)));
         }
         shopItem.getOrCreateSubNbt("display").put("Lore", lore);
@@ -177,7 +177,7 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register item use events (prevents early clicks going through the shop)
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            final ActionResult r = ClickFeatures.onUseItem(world, player, hand);
+            ActionResult r = ClickFeatures.onUseItem(world, player, hand);
             if(r == ActionResult.FAIL) return TypedActionResult.fail(player.getStackInHand(hand));
             /**/                  else return TypedActionResult.pass(player.getStackInHand(hand));
         });
@@ -225,7 +225,7 @@ public class FancyPlayerShops implements ModInitializer {
      * @return SUCCESS if the player tried to place a shop, PASS otherwise.
      */
     public static @NotNull ActionResult onItemUse(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull BlockHitResult hitResult) {
-        final @Nullable ItemStack stack = player.getStackInHand(hand);
+        final ItemStack stack = player.getStackInHand(hand);
         if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
@@ -235,7 +235,7 @@ public class FancyPlayerShops implements ModInitializer {
                 if(!player.getAbilities().creativeMode) stack.setCount(stack.getCount() - 1);
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
-                final @NotNull BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
+                final BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
                 if(Shop.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
                     player.sendMessage(new Txt("New shop created! Right click it to configure.").lime().bold().get(), true);

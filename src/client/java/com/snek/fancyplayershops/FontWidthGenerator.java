@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -20,11 +22,11 @@ import net.minecraft.client.font.TextRenderer;
  */
 public abstract class FontWidthGenerator {
     private FontWidthGenerator() {}
-    public static final String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated package"
-    public static final String PACKAGE_PATH = "fancyplayershops/generated";              // The path to the "generated" package
-    public static final String CLASS_NAME   = "FontSize";                                // The name of the generated class
-    public static final String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
-    public static final int    PARTS = 32;                                               // The number of methods to split the initialization into
+    public static final @NotNull String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated package"
+    public static final @NotNull String PACKAGE_PATH = "fancyplayershops/generated";              // The path to the "generated" package
+    public static final @NotNull String CLASS_NAME   = "FontSize";                                // The name of the generated class
+    public static final @NotNull String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
+    public static final          int    PARTS = 32;                                               // The number of methods to split the initialization into
 
 
 
@@ -51,9 +53,10 @@ public abstract class FontWidthGenerator {
         try(FileWriter f = new FileWriter(FabricLoader.getInstance().getConfigDir().resolve(FILE_PATH).toString())) {
 
 
-            // Write package, class, fields and static initializer
+            // Write package, imports, class, fields and static initializer
             f.write(
                 "package " + PACKAGE_NAME + ";\n" +
+                "import org.jetbrains.annotations.NotNull;\n" +
                 "\n\n\n\n" +
                 "public final class " + CLASS_NAME + "{\n" +
                 "    private " + CLASS_NAME + "() {}\n" +
@@ -94,7 +97,7 @@ public abstract class FontWidthGenerator {
                      * Calculates the width a string would have when rendered.
                      * This includes the space between each character.
                      */
-                    public static float getWidth(String s) {
+                    public static float getWidth(final @NotNull String s) {
                         int r = 0;
                         for(int i = 0; i < s.length(); ++i) {
                             final char c = s.charAt(i);

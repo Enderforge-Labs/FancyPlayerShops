@@ -56,12 +56,12 @@ public abstract class FocusFeatures {
      * @return The position of the targeted block, or null if no block is found.
      */
     private static @Nullable Vec3d getTargetBlockPrecise(final @NotNull PlayerEntity player) {
-        final @NotNull World world = player.getWorld();
+        final World world = player.getWorld();
 
         // Perform ray cast
-        final @NotNull Vec3d eyePos = player.getEyePos();
-        final @NotNull Vec3d lookDirection = player.getRotationVec(1.0F);
-        BlockHitResult result = world.raycast(new RaycastContext(
+        final Vec3d eyePos = player.getEyePos();
+        final Vec3d lookDirection = player.getRotationVec(1.0F);
+        final BlockHitResult result = world.raycast(new RaycastContext(
             eyePos,
             eyePos.add(lookDirection.multiply(MAX_DISTANCE)),
             ShapeType.OUTLINE,
@@ -81,12 +81,12 @@ public abstract class FocusFeatures {
      * @param player The player to cast the ray from.
      * @return A list of coordinates, one for each full block the ray collides with. Not sorted.
      */
-    private static List<Vec3d> getViewCollisisons(PlayerEntity player, double maxDistance) {
-        List<Vec3d> blockPositions = new ArrayList<>();
+    private static @NotNull List<@NotNull Vec3d> getViewCollisisons(final @NotNull PlayerEntity player, final double maxDistance) {
+        final List<Vec3d> blockPositions = new ArrayList<>();
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
-        Vec3d lookDirection = player.getRotationVec(1.0F);
-        Vec3d step = lookDirection.normalize().multiply(STEP_SIZE);
+        final Vec3d lookDirection = player.getRotationVec(1.0F);
+        final Vec3d step = lookDirection.normalize().multiply(STEP_SIZE);
         Vec3d currentPos = player.getEyePos();
         double distanceTraveled = 0;
 
@@ -95,7 +95,7 @@ public abstract class FocusFeatures {
         while(distanceTraveled < maxDistance) {
 
             // Add block to list if not present
-            Vec3i currentPosInt = new Vec3i((int)currentPos.x, (int)currentPos.y, (int)currentPos.z);
+            final Vec3i currentPosInt = new Vec3i((int)currentPos.x, (int)currentPos.y, (int)currentPos.z);
             if(lastBlockPosition != currentPosInt) {
                 lastBlockPosition = currentPosInt;
                 blockPositions.add(currentPos);
@@ -118,12 +118,12 @@ public abstract class FocusFeatures {
      * @param player The player.
      * @return The Shop instance of the shop block, or null if the player is not looking at one.
      */
-    public static Shop getLookedAtShop(PlayerEntity player, ServerWorld world) {
-
-        // Get the list of nearby item display entities
+    public static Shop getLookedAtShop(final @NotNull PlayerEntity player, final @NotNull ServerWorld world) {
         final Vec3d playerEyePos = player.getEyePos();
-        List<ItemDisplayEntity> entitiyList = player.getWorld().getEntitiesByClass(ItemDisplayEntity.class, Box.from(playerEyePos).expand(MAX_DISTANCE), e->true);
-        if(!entitiyList.isEmpty()) {
+
+
+        // If there is at least one item display entity in the player's reach distance
+        if(!player.getWorld().getEntitiesByClass(ItemDisplayEntity.class, Box.from(playerEyePos).expand(MAX_DISTANCE), e->true).isEmpty()) {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3d targetBlock = getTargetBlockPrecise(player);
@@ -132,19 +132,15 @@ public abstract class FocusFeatures {
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.squaredDistanceTo(playerEyePos)));
 
             // Find target shop block
-            for(Vec3d pos : collidingBlocks) {
-                Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
-                // for(ItemDisplayEntity e : entitiyList) {
-                    // if(e.getBlockPos().equals(blockPos)) {
-                Shop shop =  Shop.findShop(new BlockPos(blockPos), world);
+            for(final Vec3d pos : collidingBlocks) {
+                final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
+                final Shop shop = Shop.findShop(new BlockPos(blockPos), world);
                 if(shop != null) return shop;
-                    // }
-                // }
             }
         }
 
 
-        // Return null if no item display entity is near the player or no targeted shop block was found
+        // Return null if no item display entity is near the player or no shop block is targeted
         return null;
     }
 
@@ -155,11 +151,11 @@ public abstract class FocusFeatures {
      * Tick operations. This function spawns and removes the focus displays depending on what players are currently looking at.
      * @param serverWorlds The list of world to process. Only shops in these world are updated.
      */
-    public static void tick(Iterable<ServerWorld> serverWorlds) {
+    public static void tick(final @NotNull Iterable<@NotNull ServerWorld> serverWorlds) {
 
 
         // Set all previously focused shops's next focus state to false
-        for(Shop shop : targetedShopsOld) {
+        for(final Shop shop : targetedShopsOld) {
             shop.setFocusStateNext(false);
         }
 
@@ -167,9 +163,9 @@ public abstract class FocusFeatures {
         // Find currently focused shops and their viewers
         final Set<Shop>          targetedShops        = new LinkedHashSet<>();
         final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
-        for(ServerWorld serverWorld : serverWorlds) {
-            for(PlayerEntity player : serverWorld.getPlayers()) {
-                Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
+        for(final ServerWorld serverWorld : serverWorlds) {
+            for(final PlayerEntity player : serverWorld.getPlayers()) {
+                final Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
                 if(targetShop != null) {
 
                     // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true and add a viewer entry
@@ -191,22 +187,20 @@ public abstract class FocusFeatures {
 
         // Update the displays of all the previously and currently focused shops to their next state and update the targeted shops list
         targetedShopsOld.removeAll(targetedShops);
-        for(Shop shop : targetedShopsOld) {
+        for(final Shop shop : targetedShopsOld) {
             if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(null);
             shop.updateFocusState();
         }
-        int i = 0;
-        for(Shop shop : targetedShops) {
+        for(final Shop shop : targetedShops) {
             shop.updateFocusState();
             if(shop.user != null) {
                 if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(shop.user);
                 shop.updateCanvasRotation(shop.user);
             }
             else {
-                PlayerEntity viewer = targetedShopsViewers.get(i);
-                if(viewer != null) shop.updateCanvasRotation(viewer);
+                final PlayerEntity viewer = targetedShopsViewers.get(0);
+                shop.updateCanvasRotation(viewer);
             }
-            ++i;
         }
         targetedShopsOld = targetedShops;
 
