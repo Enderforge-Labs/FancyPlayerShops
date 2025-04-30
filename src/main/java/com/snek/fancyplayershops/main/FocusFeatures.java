@@ -147,6 +147,10 @@ public abstract class FocusFeatures {
 
 
 
+
+
+
+
     /**
      * Tick operations. This function spawns and removes the focus displays depending on what players are currently looking at.
      * @param serverWorlds The list of world to process. Only shops in these world are updated.
@@ -161,18 +165,31 @@ public abstract class FocusFeatures {
 
 
         // Find currently focused shops and their viewers
-        final Set<Shop>          targetedShops        = new LinkedHashSet<>();
-        final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
+        final Set<Shop> targetedShops = new LinkedHashSet<>();
+        // final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
         for(final ServerWorld serverWorld : serverWorlds) {
             for(final PlayerEntity player : serverWorld.getPlayers()) {
-                final Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
-                if(targetShop != null) {
+                final Shop shop = FocusFeatures.getLookedAtShop(player, serverWorld);
+                if(shop != null) {
 
-                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true and add a viewer entry
-                    final boolean isShopNew = targetedShops.add(targetShop);
+                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
+                    final boolean isShopNew = targetedShops.add(shop);
                     if(isShopNew) {
-                        targetShop.setFocusStateNext(true);
-                        targetedShopsViewers.add(player);
+                        shop.setFocusStateNext(true);
+                        shop.viewer = player;
+                        // targetedShopsViewers.add(player);
+                    }
+
+                    // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
+                    else {
+                        if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.viewer)) {
+                            shop.viewer = player;
+                        }
+                        // getl
+                        // if(targetShop.viewer != targetShop.user) targetShop.viewer = player;
+                        // PlayerEntity viewer;
+                        // if(player == targetShop.user) viewer = player;
+                        // else if(player.getUuid())
                     }
                 }
             }
@@ -191,16 +208,24 @@ public abstract class FocusFeatures {
             if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(null);
             shop.updateFocusState();
         }
+
+
         for(final Shop shop : targetedShops) {
-            shop.updateFocusState();
             if(shop.user != null) {
-                if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(shop.user);
-                shop.updateCanvasRotation(shop.user);
+                if(shop.getActiveCanvas() != null) {
+                    shop.getActiveCanvas().forwardHover(shop.user);
+                }
+                if(shop.viewer != shop.user) {
+                    shop.setFocusStateNext(false);
+                }
+                // shop.updateCanvasRotation(shop.user);
             }
-            else {
-                final PlayerEntity viewer = targetedShopsViewers.get(0);
-                shop.updateCanvasRotation(viewer);
-            }
+            shop.updateFocusState();
+            shop.updateCanvasRotation();
+            // else {
+            //     final PlayerEntity viewer = targetedShopsViewers.get(0);
+            //     shop.updateCanvasRotation(viewer);
+            // }
         }
         targetedShopsOld = targetedShops;
 
@@ -210,5 +235,17 @@ public abstract class FocusFeatures {
             UiDebugWindow.getW().revalidate();
             UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
         }
+    }
+
+
+
+
+
+
+    //TODO comment
+    public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull PlayerEntity player){
+        if(player == shop.user) return 0;
+        if(player.getUuid() == shop.getOwnerUuid()) return -1;
+        return -2;
     }
 }

@@ -147,6 +147,7 @@ public class Shop {
     private transient @Nullable InteractionBlocker interactionBlocker = null;
     private transient @Nullable ShopCanvas               activeCanvas = null;
     public  transient @Nullable PlayerEntity                     user = null;
+    public  transient @Nullable PlayerEntity                   viewer = null;
     private transient           boolean                    focusState = false;
     private transient           boolean                focusStateNext = false;
     private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
@@ -747,14 +748,14 @@ public class Shop {
 
 
     /**
-     * Updates the rotation of the active canvas to face the specified player.
-     * @param player The player.
+     * Updates the rotation of the active canvas to face the current viewer.
      */
-    public void updateCanvasRotation(PlayerEntity player) {
+    // public void updateCanvasRotation(PlayerEntity player) {
+    public void updateCanvasRotation() {
         if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
 
         // Calculate target direction
-        final Vec3d playerPos = player.getPos();
+        final Vec3d playerPos = viewer.getPos();
         final double dx = pos.getX() + 0.5d - playerPos.x;
         final double dz = pos.getZ() + 0.5d - playerPos.z;
         final double angle = Math.toDegrees(Math.atan2(-dx, dz));
