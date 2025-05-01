@@ -352,6 +352,17 @@ public abstract class Elm extends Div {
 
 
 
+    /**
+     * Retrieves a copy of the last transform queued in the future data queue.
+     * @return The last transform in the future data queue, or the current transform if the queue is empty.
+     */
+    public @NotNull Transform genLastTransform(){
+        return futureDataQueue.isEmpty() ? getStyle().getTransform().copy() : futureDataQueue.peekLast().getTransform().copy();
+    }
+
+
+
+
     @Override
     public void spawn(Vector3d pos) {
         if(isSpawned) return;

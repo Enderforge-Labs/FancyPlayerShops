@@ -71,7 +71,8 @@ public class ShopItemDisplay extends ItemElm {
 
 
 
-    // Setup spawn and despawn animations
+    // // Setup spawn and despawn animations
+    // Setup focus animation (unfocus animation is created dynamically)
     private static final @NotNull Animation focusAnimation = new Animation(
         new Transition(S_TIME, Easings.sineOut)
         .additiveTransform(
@@ -120,7 +121,7 @@ public class ShopItemDisplay extends ItemElm {
         updateDisplay();
 
 
-        // Setup despawn animation
+        // Setup unfocus animation
         unfocusAnimation = new Animation(
             new Transition(D_TIME, Easings.sineOut)
             .targetTransform(getStyle().getTransform())
@@ -277,7 +278,13 @@ public class ShopItemDisplay extends ItemElm {
 
         // Stop loop animation and start unfocus animation
         stopLoopAnimation();
+        // final Transform startingTransform = futureDataQueue.isEmpty() ? getStyle().getTransform() : futureDataQueue.peekLast().getTransform();
+        // final Animation unfocusAnimation = new Animation(
+        //     new Transition(D_TIME, Easings.sineOut)
+        //     .targetTransform(startingTransform.delta(getStyle().getTransform()))
+        // );
         applyAnimation(unfocusAnimation);
+
 
         // Show custom name after animations end
         Scheduler.schedule(unfocusAnimation.getTotalDuration(), this::updateDisplay);
@@ -287,7 +294,7 @@ public class ShopItemDisplay extends ItemElm {
      */
     public void stopLoopAnimation() {
         if(loopHandler != null) loopHandler.cancel();
-        futureDataQueue.clear(); //FIXME THIS STOPS OTHER ANIMATIONS. DO NOT DO THIS EVER. find a different way to cancel rotations
+        // futureDataQueue.clear(); //FIXME THIS STOPS OTHER ANIMATIONS. DO NOT DO THIS EVER. find a different way to cancel rotations
     }
 
 

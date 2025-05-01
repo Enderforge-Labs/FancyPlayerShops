@@ -125,6 +125,23 @@ public class Transform {
 
 
     /**
+     * Calculates the transform that would have to be applied to this transform in order to reach the provided one.
+     * @param t The target transform.
+     * @return The calculated transform.
+     */
+    public Transform delta(Transform t) {
+        return new Transform(
+            t._pos.sub(_pos, new Vector3f()),
+            t._lrot.mul(_lrot.invert(new Quaternionf()), new Quaternionf()),
+            t._scale.div(_scale, new Vector3f()),
+            t._grot.mul(_grot.invert(new Quaternionf()), new Quaternionf())
+        );
+    }
+
+
+
+
+    /**
      * Applies a linear interpolation to this transform.
      * @param target The target transform.
      * @param factor The factor. Using 0 will return a copy of this, using 1 will return a copy of target.
@@ -147,11 +164,6 @@ public class Transform {
     public Transform rotZ         (float z                  ) { _lrot.rotateZ(z);                   return this; }
     public Transform rot          (float x, float y, float z) { rotX(x); rotY(y); rotZ(z);          return this; }
     public Transform rot          (Quaternionf r            ) { _lrot.mul(r);                       return this; }
-
-    public Transform setRotX      (float x                  ) { _lrot.rotationX(x);                 return this; } //FIXME setting the rotation resets the other axes
-    public Transform setRotY      (float y                  ) { _lrot.rotationY(y);                 return this; } //FIXME setting the rotation resets the other axes
-    public Transform setRotZ      (float z                  ) { _lrot.rotationZ(z);                 return this; } //FIXME setting the rotation resets the other axes
-    public Transform setRot       (float x, float y, float z) { setRotX(x); setRotY(y); setRotZ(z); return this; } //FIXME setting the rotation resets the other axes
     public Transform setRot       (Quaternionf r            ) { _lrot.set(r);                       return this; }
 
 
@@ -197,11 +209,6 @@ public class Transform {
     public Transform rotGlobalZ   (float z                  ) { _grot.rotateZ(z);                                     return this; }
     public Transform rotGlobal    (float x, float y, float z) { rotGlobalX(x); rotGlobalY(y); rotGlobalZ(z);          return this; }
     public Transform rotGlobal    (Quaternionf r            ) { _grot.mul(r);                                         return this; }
-
-    public Transform setGlobalRotX(float x                  ) { _grot.rotationX(x);                                   return this; } //FIXME setting the rotation resets the other axes
-    public Transform setGlobalRotY(float y                  ) { _grot.rotationY(y);                                   return this; } //FIXME setting the rotation resets the other axes
-    public Transform setGlobalRotZ(float z                  ) { _grot.rotationZ(z);                                   return this; } //FIXME setting the rotation resets the other axes
-    public Transform setGlobalRot (float x, float y, float z) { setGlobalRotX(x); setGlobalRotY(y); setGlobalRotZ(z); return this; } //FIXME setting the rotation resets the other axes
     public Transform setGlobalRot (Quaternionf r            ) { _grot.set(r);                                         return this; }
 
 
