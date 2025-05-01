@@ -32,7 +32,7 @@ public class EditUi_RotateButton extends ShopButton {
     public static final int ROTATION_ANIMATION_TIME = 8;
 
     private final float rotation;
-    private final Text buttonText;
+    private final @NotNull Text buttonText;
 
 
     /**
@@ -41,7 +41,7 @@ public class EditUi_RotateButton extends ShopButton {
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
      * @param _buttonText The text to display on the button.
      */
-    public EditUi_RotateButton(Shop _shop, float _rotation, Text _buttonText) {
+    public EditUi_RotateButton(final @NotNull Shop _shop, final float _rotation, final @NotNull Text _buttonText) {
         super(
             _shop,
             "Rotate once",
@@ -62,15 +62,15 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void updateDisplay(@Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Text textOverride) {
         getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : buttonText);
         flushStyle();
     }
 
 
     @Override
-    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
-        boolean r = super.onClick(player, click);
+    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+        final boolean r = super.onClick(player, click);
         if(r) {
             shop.addDefaultRotation(rotation);
 
@@ -91,11 +91,11 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void onHoverEnter(PlayerEntity player) {
+    public void onHoverEnter(final @NotNull PlayerEntity player) {
         super.onHoverEnter(player);
 
         // Handle item display animations
-        ShopItemDisplay itemDisplay = shop.getItemDisplay();
+        final ShopItemDisplay itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
@@ -109,7 +109,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void onHoverExit(PlayerEntity player) {
+    public void onHoverExit(final @Nullable PlayerEntity player) {
         super.onHoverExit(player);
 
         // Handle item display animations

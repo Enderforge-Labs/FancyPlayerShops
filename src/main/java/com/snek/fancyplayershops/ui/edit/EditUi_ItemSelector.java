@@ -30,23 +30,23 @@ public class EditUi_ItemSelector extends ShopButton {
      * Creates a new EditUiItemSelector.
      * @param _shop The target shop.
      */
-    public EditUi_ItemSelector(Shop _shop) {
+    public EditUi_ItemSelector(final @NotNull Shop _shop) {
         super(_shop, "Inspect item", "Change item", 0, new EditUi_ItemSelector_S());
     }
 
 
     @Override
-    public void updateDisplay(@Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Text textOverride) {
         // Empty
     }
 
 
     @Override
-    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
-        boolean r = super.onClick(player, click);
+    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+        final boolean r = super.onClick(player, click);
         if(r && player == shop.getuser()) {
 
-            ItemStack item = player.getMainHandStack();
+            final ItemStack item = player.getMainHandStack();
             if(item != null && item.getItem() != Items.AIR) {
                 shop.changeItem(item);
                 //FIXME check blacklist before setting the item

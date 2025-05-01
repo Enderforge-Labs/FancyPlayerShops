@@ -24,7 +24,7 @@ public class BuyUi_Title extends ShopTextElm {
      * Creates a new EditUiTitle.
      * @param _shop The target shop.
      */
-    public BuyUi_Title(@NotNull Shop _shop) {
+    public BuyUi_Title(final @NotNull Shop _shop) {
         super(_shop);
         updateDisplay();
     }

@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
@@ -14,7 +13,6 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 
-import net.minecraft.util.ClickType;
 
 
 
@@ -47,7 +45,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public BuyUi(Shop _shop) {
+    public BuyUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
         super(_shop, 1, ShopFancyTextElm.LINE_H, ShopUiBorder.DEFAULT_HEIGHT);

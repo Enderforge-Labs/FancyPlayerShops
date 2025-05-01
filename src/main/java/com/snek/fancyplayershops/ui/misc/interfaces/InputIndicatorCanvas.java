@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.ui.misc.interfaces;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 

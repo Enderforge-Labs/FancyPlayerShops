@@ -22,9 +22,9 @@ import com.snek.framework.utils.Easings;
  * The style of the generic ShopButton UI element.
  */
 public class ShopButton_S extends FancyTextElmStyle {
-    public static final Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
-    public static final float    UNHOVERED_W          = 0.05f;
-    public static final int      HOVER_ANIMATION_TIME = 10;
+    public static final @NotNull Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
+    public static final          float    UNHOVERED_W          = 0.05f;
+    public static final          int      HOVER_ANIMATION_TIME = 10;
 
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
@@ -90,15 +90,15 @@ public class ShopButton_S extends FancyTextElmStyle {
 
 
     // Setters
-    public void setHoverPrimerAnimation(@Nullable Animation _hoverPrimerAnimation) { hoverPrimerAnimation.set(_hoverPrimerAnimation); }
-    public void setHoverEnterAnimation (@Nullable Animation _hoverEnterAnimation ) { hoverEnterAnimation .set(_hoverEnterAnimation ); }
-    public void setHoverLeaveAnimation (@Nullable Animation _hoverLeaveAnimation ) { hoverLeaveAnimation .set(_hoverLeaveAnimation ); }
+    public void setHoverPrimerAnimation(final @Nullable Animation _hoverPrimerAnimation) { hoverPrimerAnimation.set(_hoverPrimerAnimation); }
+    public void setHoverEnterAnimation (final @Nullable Animation _hoverEnterAnimation ) { hoverEnterAnimation .set(_hoverEnterAnimation ); }
+    public void setHoverLeaveAnimation (final @Nullable Animation _hoverLeaveAnimation ) { hoverLeaveAnimation .set(_hoverLeaveAnimation ); }
 
 
     // Flagged getters
-    public @Nullable Flagged<Animation> getFlaggedHoverPrimerAnimation() { return hoverPrimerAnimation;}
-    public @Nullable Flagged<Animation> getFlaggedHoverEnterAnimation () { return hoverEnterAnimation ;}
-    public @Nullable Flagged<Animation> getFlaggedHoverLeaveAnimation () { return hoverLeaveAnimation ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation() { return hoverPrimerAnimation;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation () { return hoverEnterAnimation ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation () { return hoverLeaveAnimation ;}
 
 
     // Getters

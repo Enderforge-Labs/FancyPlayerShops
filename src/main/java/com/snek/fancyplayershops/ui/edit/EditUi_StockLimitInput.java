@@ -1,9 +1,9 @@
 package com.snek.fancyplayershops.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.utils.Txt;
@@ -23,14 +23,18 @@ import net.minecraft.text.Text;
  */
 public class EditUi_StockLimitInput extends ShopTextInput {
 
-    public EditUi_StockLimitInput(@NotNull Shop _shop) {
+    /**
+     * Creates a new EditUi_StockLimitInput.
+     * @param _shop The target shop.
+     */
+    public EditUi_StockLimitInput(final @NotNull Shop _shop) {
         super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").green().get());
         updateDisplay(null);
     }
 
 
     @Override
-    public void updateDisplay(Text textOverride) {
+    public void updateDisplay(final @Nullable Text textOverride) {
         getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).color(EditUi.RGB_STOCK_COLOR))
         .get());
@@ -41,7 +45,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
 
 
     @Override
-    protected boolean messageCallback(String s) {
+    protected boolean messageCallback(final @NotNull String s) {
         try {
 
             // Try to set the new stock limit, update the display if it's valid

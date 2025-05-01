@@ -1,10 +1,10 @@
 package com.snek.fancyplayershops.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
-import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.utils.Txt;
@@ -28,14 +28,14 @@ public class EditUi_PriceInput extends ShopTextInput {
      * Creates a new EditUiPriceButton.
      * @param _shop The target shop.
      */
-    public EditUi_PriceInput(@NotNull Shop _shop) {
+    public EditUi_PriceInput(final @NotNull Shop _shop) {
         super(_shop, null, "Change price", new Txt("Send the new price in chat!").green().get());
         updateDisplay(null);
     }
 
 
     @Override
-    public void updateDisplay(Text textOverride) {
+    public void updateDisplay(final @Nullable Text textOverride) {
         getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).color(DetailsUi.C_RGB_PRICE))
         .get());
@@ -43,9 +43,8 @@ public class EditUi_PriceInput extends ShopTextInput {
     }
 
 
-
     @Override
-    protected boolean messageCallback(String s) {
+    protected boolean messageCallback(final @NotNull String s) {
         try {
 
             // Try to set the new price and update the display if it's valid

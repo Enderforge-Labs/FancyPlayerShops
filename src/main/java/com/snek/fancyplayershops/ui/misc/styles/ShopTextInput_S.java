@@ -16,8 +16,14 @@ import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlign
 
 
 
+/**
+ * The style of the generic ShopTextInput UI element.
+ */
 public class ShopTextInput_S extends ShopButton_S {
 
+    /**
+     * Creates a new ShopTextInput_S.
+     */
     public ShopTextInput_S() {
         super();
     }

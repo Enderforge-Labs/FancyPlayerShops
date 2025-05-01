@@ -24,13 +24,11 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
 
 
     /**
-     * Creates a new EditUiLeftRotateButtonStyle.
+     * Creates a new EditUiLeftRotateButton_S.
      */
     public EditUi_RotateButtonLeft_S() {
         super();
     }
-
-
 
 
     @Override
@@ -40,7 +38,6 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
             .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
@@ -50,7 +47,6 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
             .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W).moveX(-SHIFT_X))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(

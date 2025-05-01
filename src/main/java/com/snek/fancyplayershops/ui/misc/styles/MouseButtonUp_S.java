@@ -6,7 +6,6 @@ import org.joml.Vector4i;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.ui.styles.PanelElmStyle;
 
 
 
@@ -15,10 +14,16 @@ import com.snek.framework.ui.styles.PanelElmStyle;
 
 
 
+/**
+ * The style of the MouseButtonUp UI element.
+ */
 public class MouseButtonUp_S extends ShopPanelElm_S {
     public static final float BUTTON_SCALE = 1.2f;
 
 
+    /**
+     * Creates a new MouseButtonUp_S.
+     */
     public MouseButtonUp_S() {
         super();
     }
@@ -28,6 +33,7 @@ public class MouseButtonUp_S extends ShopPanelElm_S {
     public @NotNull Vector4i getDefaultColor() {
         return new Vector4i(255, 240, 240, 240);
     }
+
 
     @Override
     public @NotNull Transform getDefaultTransform() {

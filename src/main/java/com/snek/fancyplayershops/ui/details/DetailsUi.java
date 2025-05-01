@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops.ui.details;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -9,7 +10,6 @@ import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
-import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
@@ -25,9 +25,6 @@ import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlign
 
 
 
-//TODO add small text elements in a corner of the UIs that tell you what each mouse button does when clicked.
-//TODO they change based on the player's currently hovered element.
-
 
 
 /**
@@ -37,18 +34,18 @@ public class DetailsUi extends ShopCanvas {
 
     // Colors
     public static final int LOW_S_COLOR_MIN = 110;
-    public static final Vector3i C_RGB_PRICE      = new Vector3i(243, 255, LOW_S_COLOR_MIN);
-    public static final Vector3f C_HSV_STOCK_HIGH = Utils.RGBtoHSV(new Vector3i(LOW_S_COLOR_MIN, 223, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
-    public static final Vector3f C_HSV_STOCK_LOW  = Utils.RGBtoHSV(new Vector3i(200, LOW_S_COLOR_MIN, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
+    public static final @NotNull Vector3i C_RGB_PRICE      = new Vector3i(243, 255, LOW_S_COLOR_MIN);
+    public static final @NotNull Vector3f C_HSV_STOCK_HIGH = Utils.RGBtoHSV(new Vector3i(LOW_S_COLOR_MIN, 223, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
+    public static final @NotNull Vector3f C_HSV_STOCK_LOW  = Utils.RGBtoHSV(new Vector3i(200, LOW_S_COLOR_MIN, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
 
     // Layout
-    public static final float BACKGROUND_HEIGHT = 0.4f;
-    public static final float H0 = 1 - BACKGROUND_HEIGHT;
-    public static final float VERTICAL_PADDING = 0.02f;
-    public static final float DETAILS_W = 0.9f;
-    public static final float NAMES_VALUES_WIDTH_RATIO = 0.35f;
-    public static final float HEAD_SIZE = 0.2f;
-    public static final Vector2f HEAD_BG_SIZE = new Vector2f(HEAD_SIZE, HEAD_SIZE - 2 * VERTICAL_PADDING);
+    public static final float BACKGROUND_HEIGHT = 0.4f;         // The absolute height of the background element
+    public static final float H0 = 1 - BACKGROUND_HEIGHT;       // The height at which the background element starts
+    public static final float VERTICAL_PADDING = 0.02f;         // The distance of elements from the top and bottom edges
+    public static final float DETAILS_W = 0.9f;                 // The total width of the main displays
+    public static final float NAMES_VALUES_WIDTH_RATIO = 0.35f; // The ration between the width of the names and the width of the values
+    public static final float HEAD_SIZE = 0.2f;                 // The size of the owner's head
+    public static final @NotNull Vector2f HEAD_BG_SIZE = new Vector2f(HEAD_SIZE, HEAD_SIZE - 2 * VERTICAL_PADDING);
 
 
 
@@ -57,7 +54,7 @@ public class DetailsUi extends ShopCanvas {
      * Creates a new DetailsUi.
      * @param _shop The target shop.
      */
-    public DetailsUi(Shop _shop) {
+    public DetailsUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
         super(_shop, BACKGROUND_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT);
@@ -73,7 +70,7 @@ public class DetailsUi extends ShopCanvas {
 
 
         // Add details display
-        Div details = bg.addChild(new Div());
+        final Div details = bg.addChild(new Div());
         {
             // Add details display names
             e = details.addChild(new DetailsUi_Names(_shop));

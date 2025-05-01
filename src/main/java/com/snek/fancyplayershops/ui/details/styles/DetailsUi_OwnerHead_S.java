@@ -19,7 +19,7 @@ import com.snek.framework.ui.styles.ItemElmStyle;
 public class DetailsUi_OwnerHead_S extends ItemElmStyle {
 
     /**
-     * Creates a new DetailsUi_OwnerHead.
+     * Creates a new DetailsUi_OwnerHead_S.
      */
     public DetailsUi_OwnerHead_S() {
         super();

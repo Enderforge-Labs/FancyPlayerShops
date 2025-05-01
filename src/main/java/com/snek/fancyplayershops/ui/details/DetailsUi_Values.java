@@ -22,12 +22,10 @@ import net.minecraft.item.Items;
 
 
 /**
- * The main display of DetailsUi.
- * It shows the values of informations about the shop.
+ * Part of the main display of DetailsUi.
+ * <p> It shows the values of informations about the shop.
  */
 public class DetailsUi_Values extends ShopTextElm {
-
-
 
 
     /**
@@ -48,9 +46,14 @@ public class DetailsUi_Values extends ShopTextElm {
     public void updateDisplay() {
 
         // Calculate the color of the stock amount and retrieve the owner's name
-        float factor = 1.0f - shop.getStock() / 1000f;
-        Vector3i col = Utils.HSVtoRGB(new Vector3f(DetailsUi.C_HSV_STOCK_LOW).add(new Vector3f(DetailsUi.C_HSV_STOCK_HIGH).sub(DetailsUi.C_HSV_STOCK_LOW).mul(1.0f - (factor * factor))));
-        String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
+        final String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
+        final float factor = 1.0f - shop.getStock() / 1000f;
+        final Vector3i col = Utils.HSVtoRGB(
+            new Vector3f(DetailsUi.C_HSV_STOCK_LOW)
+            .add(new Vector3f(DetailsUi.C_HSV_STOCK_HIGH)
+            .sub(DetailsUi.C_HSV_STOCK_LOW)
+            .mul(1.0f - (factor * factor)))
+        );
 
 
         // Empty shop case

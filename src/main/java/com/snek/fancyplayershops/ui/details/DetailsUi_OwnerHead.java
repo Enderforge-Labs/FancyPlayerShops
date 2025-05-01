@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops.ui.details;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
@@ -30,7 +31,7 @@ public class DetailsUi_OwnerHead extends ShopItemElm {
      * Creates a new DetailsUiOwnerHead.
      * @param _shop The target shop.
      */
-    public DetailsUi_OwnerHead(Shop _shop) {
+    public DetailsUi_OwnerHead(final @NotNull Shop _shop) {
         super(_shop, new DetailsUi_OwnerHead_S());
         updateDisplay();
     }

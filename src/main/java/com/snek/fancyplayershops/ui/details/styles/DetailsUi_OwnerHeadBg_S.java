@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.ui.details.styles;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4i;
 
 import com.snek.fancyplayershops.ui.details.DetailsUi;
@@ -25,8 +26,6 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
     public static final float PRIMER_H = 0.001f;
 
 
-
-
     /**
      * Creates a new DetailsUi_OwnerHeadBg_S.
      */
@@ -42,17 +41,15 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
 
 
     @Override
-    public Animation getDefaultPrimerAnimation() {
+    public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBackground(new Vector4i(getDefaultColor().mul(new Vector4i(0, 1, 1, 1))))
             .additiveTransform(new Transform().scaleY(PRIMER_H).moveY(DetailsUi.HEAD_BG_SIZE.y))
         );
     }
-
-
     @Override
-    public Animation getDefaultSpawnAnimation() {
+    public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBackground(getDefaultColor())

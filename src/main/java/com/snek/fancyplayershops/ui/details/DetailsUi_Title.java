@@ -20,18 +20,16 @@ import net.minecraft.item.Items;
 
 /**
  * The title display of DetailsUi.
- * It shows the name of the shop.
+ * <p> It shows the name of the shop.
  */
 public class DetailsUi_Title extends ShopTextElm {
-
-
 
 
     /**
      * Creates a new DetailsUiTitle.
      * @param _shop The target shop.
      */
-    public DetailsUi_Title(@NotNull Shop _shop) {
+    public DetailsUi_Title(final @NotNull Shop _shop) {
         super(_shop);
         updateDisplay();
     }
