@@ -74,7 +74,7 @@ import net.minecraft.world.World;
 
 
 /**
- * A placed player shop.
+ * This class manages a player shop that is placed somewhere in a world.
  */
 public class Shop {
 
@@ -84,8 +84,8 @@ public class Shop {
 
 
     // Animation data
-    public  static final int CANVAS_ANIMATION_DELAY = 5;
-    public  static final int CANVAS_ROTATION_TIME = 8;
+    public static final int CANVAS_ANIMATION_DELAY = 5;
+    public static final int CANVAS_ROTATION_TIME = 8;
 
 
     // Strings
@@ -95,7 +95,7 @@ public class Shop {
 
 
     // Storage files
-    private static final Path SHOP_STORAGE_DIR;
+    private static final @NotNull Path SHOP_STORAGE_DIR;
     static {
         SHOP_STORAGE_DIR = FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID + "/shops");
         try {
@@ -103,61 +103,49 @@ public class Shop {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
     }
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
-    private static final Map<String, Shop> shopsByCoords = new HashMap<>();
-    private static final Map<String, Shop> shopsByOwner  = new HashMap<>();
+    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
+    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
 
 
 
 
     // Basic data
-    private transient ServerWorld world;
-    private String worldId;
-    private transient ShopItemDisplay itemDisplay = null; //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private UUID itemDisplayUUID;
-    private @Nullable UUID itemDisplayNameUUID1;
-    private @Nullable UUID itemDisplayNameUUID2;
-    private BlockPos pos;
-    private transient String shopIdentifierCache;
-    private transient String shopIdentifierCache_noWorld;
-
-    public Vector3d calcDisplayPos() {
-        return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-    }
-    public void setItemDisplayNameUUID(UUID uuid1, UUID uuid2) {
-        itemDisplayNameUUID1 = uuid1;
-        itemDisplayNameUUID2 = uuid2;
-        saveShop();
-    }
+    private transient @NotNull  ServerWorld     world;                          // The world this shop was placed in
+    private           @NotNull  String          worldId;                        // The Identifier of the world
+    private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display
+    private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
+    private           @Nullable UUID            itemDisplayNameUUID1 = null;    // The UUID of one of the two the name display entities
+    private           @Nullable UUID            itemDisplayNameUUID2 = null;    // The UUID of one of the two the name display entities
+    private           @NotNull  BlockPos        pos;                            // The position of the shop
+    private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
+    private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, without including the world
 
 
     // Shop data
-    private transient ItemStack item = Items.AIR.getDefaultStack();
-    private UUID   ownerUUID;
-    private String serializedItem;
-    private double price    = 0;
-    private int    stock    = 0;
-    private int    maxStock = 1000;
-    private float  defaultRotation = 0f;
+    private transient @NotNull ItemStack item = Items.AIR.getDefaultStack();    // The configured item
+    private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
+    private           @NotNull String    serializedItem;                        // The item in serialized form
+    private                    int       stock           = 0;                   // The current stock
+    private                    double    price           = 0;                   // The configured price for each item
+    private                    int       maxStock        = 1000;                // The configured maximum stock
+    private                    float     defaultRotation = 0f;                  // The configured item rotation
 
 
-    // Shop status
-    private transient @Nullable InteractionBlocker interactionBlocker = null;
-    private transient @Nullable ShopCanvas               activeCanvas = null;
-    public  transient @Nullable PlayerEntity                     user = null;
-    private transient           boolean                   focusStatus = false;
-    private transient           boolean               focusStatusNext = false;
-    private transient           int                     lastDirection = 0; //! Represents the current cartinal or intercardinal direction, 0 to 7
-    private transient @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
-    private transient @NotNull RateLimiter menuOpenLimiter = new RateLimiter();
+    // Shop state
+    private transient @Nullable InteractionBlocker interactionBlocker = null;   // The interaction entity used to block client-side clicks
+    private transient @Nullable ShopCanvas               activeCanvas = null;   // The menu that is currently being displayed to the viewer
+    private transient @Nullable PlayerEntity                     user = null;   // The current user of the shop (the player that first opened a menu)
+    private transient @Nullable PlayerEntity                   viewer = null;   // The prioritized viewer
+    private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
+    private transient           boolean                focusStateNext = false;  // The next focus state
+    private transient           int                     lastDirection = 0;      // The current cartinal or intercardinal direction of the canvas, 0 to 7
+    private transient @NotNull  RateLimiter     canvasRotationLimiter = new RateLimiter();
+    private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
     private transient @Nullable TaskHandler interactionBlockerDeletionHandler;
-
-
-    public void setFocusStatusNext(boolean v) {
-        focusStatusNext = v;
-    }
 
 
     // Accessors
@@ -170,17 +158,41 @@ public class Shop {
     public           int             getStock          () { return stock;           }
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
-    public           boolean         isFocused         () { return focusStatus;     }
+    public           int             getCanvasDirection() { return lastDirection;   }
+    public           boolean         isFocused         () { return focusState;      }
     public           UUID            getOwnerUuid      () { return ownerUUID;       }
+    public           PlayerEntity    getuser           () { return user;            }
+    public           PlayerEntity    getViewer         () { return viewer;          }
+    public           void            setViewer         (final @Nullable PlayerEntity _viewer        ) { viewer         = _viewer;         }
+    public           void            setFocusStateNext (final           boolean      _nextFocusState) { focusStateNext = _nextFocusState; }
+
+
+
+
 
 
 
 
     /**
-     * Saves the item in its serialized form.
+     * Calculates the position display entities should be spawned at.
+     * @return The absolute position of display entities.
+     */
+    public @NotNull Vector3d calcDisplayPos() {
+        return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+    }
+    public void setItemDisplayNameUUID(UUID uuid1, UUID uuid2) {
+        itemDisplayNameUUID1 = uuid1;
+        itemDisplayNameUUID2 = uuid2;
+        saveShop();
+    }
+
+
+    /**
+     * Computes the serialized form of the item.
+     * @throws RuntimeException if the item cannot be serialized.
      */
     private void calcSerializedItem() {
-        var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
+        final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
         if(result.isEmpty()) {
             throw new RuntimeException("Could not serialize shop item");
         }
@@ -189,10 +201,11 @@ public class Shop {
 
 
     /**
-     * Saves the item in its Item form, reading data from its serialized version.
+     * Computes the ItemStack form of the item, reading data from its serialized version.
+     * @throws RuntimeException if the item cannot be deserialized.
      */
     private void calcDeserializedItem() {
-        var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
+        final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
         if(result.isEmpty()) {
             throw new RuntimeException("Could not deserialize shop item");
         }
@@ -201,7 +214,7 @@ public class Shop {
 
 
     /**
-     * Retrieves the world ID from the ServerWorld value and saves it in worldId.
+     * Computes the Identifier of the world.
      */
     private void calcSerializedWorldId() {
         worldId = world.getRegistryKey().getValue().toString();
@@ -209,12 +222,12 @@ public class Shop {
 
 
     /**
-     * Tries to deserialize the world Identifier and find the ServerWorld it belongs to.
+     * Tries find the ServerWorld the world identifier belongs to.
      * @param server The server instance.
      * @throws RuntimeException if the world Identifier is invalid or the ServerWorld cannot be found.
      */
     private void calcDeserializedWorldId(MinecraftServer server) throws RuntimeException {
-        for(ServerWorld w : server.getWorlds()) {
+        for(final ServerWorld w : server.getWorlds()) {
             if(w.getRegistryKey().getValue().toString().equals(worldId)) {
                 world = w;
                 return;
@@ -222,6 +235,42 @@ public class Shop {
         }
         throw new RuntimeException("Invalid shop data: Specified world \"" + worldId + "\" was not found");
     }
+
+
+    /**
+     * Computes and caches the shop identifiers.
+     */
+    private void cacheShopIdentifier() {
+        shopIdentifierCache         = calcShopIdentifier(pos, worldId);
+        shopIdentifierCache_noWorld = calcShopIdentifier(pos);
+    }
+
+
+    /**
+     * Calculates a shop identifier from a position and the world ID.
+     * @param _pos The position.
+     * @param worldId The world ID.
+     * @return The generated identifier.
+     */
+    private static String calcShopIdentifier(final @NotNull BlockPos _pos, final @NotNull String worldId) {
+        return calcShopIdentifier(_pos) + "," + worldId;
+    }
+    /**
+     * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
+     * @param _pos The position.
+     * @return The generated identifier.
+     */
+    private static String calcShopIdentifier(final @NotNull BlockPos _pos) {
+        return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -236,7 +285,7 @@ public class Shop {
      * @param _pos The position of the new shop.
      * @param owner The player that places the shop.
      */
-    public Shop(ServerWorld _world, BlockPos _pos, PlayerEntity owner) {
+    public Shop(final @NotNull ServerWorld _world, final @NotNull BlockPos _pos, final @NotNull PlayerEntity owner) {
         world = _world;
         ownerUUID = owner.getUuid();
         pos = _pos;
@@ -258,32 +307,6 @@ public class Shop {
 
 
 
-    /**
-     * Sets the shop identifier.
-     */
-    private void cacheShopIdentifier() {
-        shopIdentifierCache         = calcShopIdentifier(pos, worldId);
-        shopIdentifierCache_noWorld = calcShopIdentifier(pos);
-    }
-
-    /**
-     * Calculates a shop identifier from a position and the world ID.
-     * @param _pos The position.
-     * @param worldId The world ID.
-     * @return The generated identifier.
-     */
-    private static String calcShopIdentifier(BlockPos _pos, String worldId) {
-        return calcShopIdentifier(_pos) + "," + worldId;
-    }
-
-    /**
-     * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
-     * @param _pos The position.
-     * @return The generated identifier.
-     */
-    private static String calcShopIdentifier(BlockPos _pos) {
-        return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
-    }
 
 
 
@@ -309,7 +332,7 @@ public class Shop {
 
         // Create this shop's config file if absent, then save the JSON in it
         final File shopStorageFile = new File(shopStorageDir + "/" + shopIdentifierCache_noWorld + ".json");
-        try (Writer writer = new FileWriter(shopStorageFile)) {
+        try (final Writer writer = new FileWriter(shopStorageFile)) {
             new Gson().toJson(this, writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -321,23 +344,20 @@ public class Shop {
 
     /**
      * Loads all the player shops into the runtime map.
-     * Must be called on server started event (After the worlds are loaded!).
+     * <p> Must be called on server started event (After the worlds are loaded!).
      */
     public static void loadData() {
-        if(FancyPlayerShops.getServer() == null) throw new RuntimeException("Shops could not be loaded: Server instance is null.");
-        if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
-
 
         // For each world directory
-        for(File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
+        for(final File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
 
             // For each shop file
-            File[] shopStorageFiles = shopStorageDir.listFiles();
+            final File[] shopStorageFiles = shopStorageDir.listFiles();
             if(shopStorageFiles != null) for(File shopStorageFile : shopStorageFiles) {
 
                 // Read file
                 Shop retrievedShop = null;
-                try (Reader reader = new FileReader(shopStorageFile)) {
+                try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -345,8 +365,8 @@ public class Shop {
 
                 // Recalculate transient members and update shop maps
                 if(retrievedShop != null) {
-                    retrievedShop.focusStatus           = false;
-                    retrievedShop.focusStatusNext       = false;
+                    retrievedShop.focusState           = false;
+                    retrievedShop.focusStateNext       = false;
                     retrievedShop.lastDirection         = 0;
                     retrievedShop.canvasRotationLimiter = new RateLimiter();
                     retrievedShop.menuOpenLimiter = new RateLimiter();
@@ -369,23 +389,21 @@ public class Shop {
 
     /**
      * Returns the Shop instance present at a certain block position.
-     * Returns null if no shop is there.
      * @param pos The block position.
      * @param worldId The ID of the world the shop is in.
-     * @return The shop, or null.
+     * @return The shop, or null if no shop is there.
     */
-    public static Shop findShop(BlockPos pos, String worldId) {
+    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull String worldId) {
         return shopsByCoords.get(calcShopIdentifier(pos, worldId));
     }
 
     /**
      * Returns the Shop instance present at a certain block position.
-     * Returns null if no shop is there.
      * @param pos The block position.
      * @param world The world the shop is in.
-     * @return The shop, or null.
+     * @return The shop, or null if no shop is there.
     */
-    public static Shop findShop(BlockPos pos, World world) {
+    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull World world) {
         return findShop(pos, world.getRegistryKey().getValue().toString());
     }
 
@@ -397,17 +415,17 @@ public class Shop {
      */
     public void updateFocusState() {
         if(!menuOpenLimiter.attempt()) return;
-        if(focusStatus != focusStatusNext) {
-            focusStatus = focusStatusNext;
-            if(focusStatus) {
+        if(focusState != focusStateNext) {
+            focusState = focusStateNext;
+            if(focusState) {
 
                 // Create details canvas
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
                 if(lastDirection != 0) {
                     final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-                    activeCanvas.applyAnimationNowRecursive(animations.first);
-                    itemDisplay.applyAnimationNowRecursive(animations.second);
+                    activeCanvas.applyAnimationNowRecursive(animations.getFirst());
+                    itemDisplay.applyAnimationNowRecursive(animations.getSecond());
                 }
                 activeCanvas.spawn(calcDisplayPos());
 
@@ -451,18 +469,18 @@ public class Shop {
 
     /**
      * Finds the display entity connected to this shop and saves it to this.itemDisplay.
-     * If no connected entity is found, a new ShopItemDisplay is created.
+     * <p> If no connected entity is found, a new ShopItemDisplay is created.
      * @reutrn the item display.
      */
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
         if(itemDisplay == null) {
-            ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
+            final ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
             if(rawItemDisplay == null) {
                 itemDisplay = new ShopItemDisplay(this);
             }
             else {
-                TextDisplayEntity rawName1 = itemDisplayNameUUID1 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID1));
-                TextDisplayEntity rawName2 = itemDisplayNameUUID2 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID2));
+                final TextDisplayEntity rawName1 = itemDisplayNameUUID1 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID1));
+                final TextDisplayEntity rawName2 = itemDisplayNameUUID2 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID2));
                 itemDisplay = new ShopItemDisplay(this, rawItemDisplay, rawName1, rawName2);
             }
         }
@@ -477,7 +495,7 @@ public class Shop {
      * @param player The player that clicked the shop.
      * @param click The click type.
      */
-    public void onClick(PlayerEntity player, ClickType clickType) {
+    public void onClick(final @NotNull PlayerEntity player, final @NotNull ClickType clickType) {
 
 
         // If the shop is currently focused
@@ -539,10 +557,10 @@ public class Shop {
 
     /**
      * Retrieves one item from the shop at no cost and gives it to the owner.
-     * Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
+     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
      * @param owner The owner of the shop.
      */
-    public void retrieveItem(PlayerEntity owner) {
+    public void retrieveItem(final @NotNull PlayerEntity owner) {
         if(item.getItem() == Items.AIR) {
             owner. sendMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -551,7 +569,7 @@ public class Shop {
         }
         else {
             --stock;
-            ItemStack _item = item.copyWithCount(1);
+            final ItemStack _item = item.copyWithCount(1);
             owner.giveItemStack(_item);
         }
     }
@@ -561,11 +579,11 @@ public class Shop {
 
     /**
      * Makes a player buy a specified amount of items from the shop.
-     * Sends an error message to the player if the shop is unconfigured or doesn't contain enough item.
+     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain enough item.
      * @param player The player.
      * @param amount The amount of items to buy.
      */
-    public void buyItem(PlayerEntity player, int amount) {
+    public void buyItem(final @NotNull PlayerEntity player, final int amount) {
         if(item.getItem() == Items.AIR) {
             player.sendMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -580,7 +598,7 @@ public class Shop {
             final double totPrice = price * amount;
             player.sendMessage(new Txt("Bought " + amount + "x " + MinecraftUtils.getFancyItemName(item) + " for " + Utils.formatPrice(totPrice)).green().get());
             addMoney(player, -totPrice);
-            ItemStack _item = item.copyWithCount(amount);
+            final ItemStack _item = item.copyWithCount(amount);
             player.giveItemStack(_item);
         }
 
@@ -596,14 +614,14 @@ public class Shop {
      * Switches the active canvas with a new one (after a delay to avoid overlapping them).
      * @param canvas The new canvas.
      */
-    public void changeCanvas(ShopCanvas canvas) {
+    public void changeCanvas(final @NotNull ShopCanvas canvas) {
         activeCanvas = canvas;
 
         // Adjust rotation if needed
         if(lastDirection != 0) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-            for(Div c : canvas.getBg().getChildren()) {
-                c.applyAnimationNowRecursive(animations.first);
+            for(final Div c : canvas.getBg().getChildren()) {
+                c.applyAnimationNowRecursive(animations.getFirst());
             }
         }
 
@@ -619,7 +637,7 @@ public class Shop {
      * Opens the edit shop UI.
      * @param player The player.
      */
-    public void openEditUi(PlayerEntity player) {
+    public void openEditUi(final @NotNull PlayerEntity player) {
         changeCanvas(new EditUi(this));
         getItemDisplay().enterEditState();
     }
@@ -631,7 +649,7 @@ public class Shop {
      * Opens the buy item UI.
      * @param player The player.
      */
-    public void openBuyUi(PlayerEntity player) {
+    public void openBuyUi(final @NotNull PlayerEntity player) {
         if(item.getItem() == Items.AIR) {
             player.sendMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -647,10 +665,10 @@ public class Shop {
     private static final String objectiveName = "tmp_balance";
 
     //FIXME use economy mod API instead of scoreboards
-    public void addMoney(PlayerEntity player, double amount) {
-        ServerScoreboard s = player.getServer().getScoreboard();
+    public void addMoney(final @NotNull PlayerEntity player, final double amount) {
+        final ServerScoreboard s = player.getServer().getScoreboard();
         if(!s.containsObjective(objectiveName)) s.addObjective(objectiveName, ScoreboardCriterion.DUMMY, new Txt(objectiveName).get(), RenderType.INTEGER);
-        ScoreboardPlayerScore score = s.getPlayerScore(player.getName().getString(), s.getObjective(objectiveName));
+        final ScoreboardPlayerScore score = s.getPlayerScore(player.getName().getString(), s.getObjective(objectiveName));
         score.incrementScore((int)amount);
     }
 
@@ -659,15 +677,15 @@ public class Shop {
 
     /**
      * Tries to set a new price for the item and sends an error message to the user if it's invalid.
-     *     Prices are automatically rounded to the nearest hundredth.
-     *     Prices under 0.01 are rounded to 0.01
-     *     Prices under 0.00001 are rounded to 0.
-     *     Negative values are considered invalid and return false without changing the price.
-     *     Values above MAX_PRICE are also considered invalid. //TODO add to config file
+     *     <p> Prices are automatically rounded to the nearest hundredth.
+     *     <p> Prices under 0.01 are rounded to 0.01
+     *     <p> Prices under 0.00001 are rounded to 0.
+     *     <p> Negative values are considered invalid and return false without changing the price.
+     *     <p> Values above MAX_PRICE are also considered invalid. //TODO add to config file
      * @param newPrice The new price
      * @return Whether the new value could be set.
      */
-    public boolean setPrice(double newPrice) {
+    public boolean setPrice(final double newPrice) {
         if(newPrice < 0) {
             if(user != null) user.sendMessage(new Txt("The price cannot be negative").red().get(), true);
             return false;
@@ -686,16 +704,15 @@ public class Shop {
 
 
 
-    //TODO add MAX_STOCK to config file
     /**
      * Tries to set a new stock limit for the item and sends an error message to the user if it's invalid.
-     *     Amounts are rounded to the nearest integer.
-     *     Negative values and 0 are considered invalid and return false without changing the stock limit.
-     *     Values above MAX_STOCK or that are higher than the shop's storage capacity are also considered invalid. //TODO implement shop tiers
+     *     <p> Amounts are rounded to the nearest integer.
+     *     <p> Negative values and 0 are considered invalid and return false without changing the stock limit.
+     *     <p> Values above MAX_STOCK or that are higher than the shop's storage capacity are also considered invalid. //TODO implement shop tiers
      * @param newStockLimit The new stock limit.
      * @return Whether the new value could be set.
      */
-    public boolean setStockLimit(float newStockLimit) {
+    public boolean setStockLimit(final float newStockLimit) {
         if(newStockLimit < 0.9999) {
             if(user != null) user.sendMessage(new Txt("The stock limit must be at least 1").red().get(), true);
             return false;
@@ -716,7 +733,7 @@ public class Shop {
      * Adds a specified rotation to the default rotation of the item display and saves the shop to its file.
      * @param _rotation The rotation to add.
      */
-    public void addDefaultRotation(float _rotation) {
+    public void addDefaultRotation(final float _rotation) {
 
         // Add value to default rotation and save the shop
         defaultRotation += _rotation;
@@ -736,7 +753,7 @@ public class Shop {
      * Changes the item sold by this shop and saves it to its file.
      * @param _item the new item.
      */
-    public void changeItem(ItemStack _item) {
+    public void changeItem(final @NotNull ItemStack _item) {
 
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
@@ -748,28 +765,29 @@ public class Shop {
 
 
     /**
-     * Updates the rotation of the active canvas to face the specified player.
-     * @param player The player.
+     * Updates the rotation of the active canvas to face the current viewer.
      */
-    public void updateCanvasRotation(PlayerEntity player) {
+    public void updateCanvasRotation() {
         if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
 
         // Calculate target direction
-        final Vec3d playerPos = player.getPos();
-        final double dx = pos.getX() + 0.5d - playerPos.x;
-        final double dz = pos.getZ() + 0.5d - playerPos.z;
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));
-        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;
+        final Vec3d playerPos = viewer.getPos();                            // Get player position
+        final double dx = pos.getX() + 0.5d - playerPos.x;                  // Calculate X difference
+        final double dz = pos.getZ() + 0.5d - playerPos.z;                  // Calculate Z difference
+        final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
+        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
 
         // Apply animations and update the current direction if needed
         if(targetDir != lastDirection) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(lastDirection, targetDir);
-            activeCanvas.applyAnimationRecursive(animations.first);
-            getItemDisplay().applyAnimationRecursive(animations.second);
+            activeCanvas.applyAnimationRecursive(animations.getFirst());
+            getItemDisplay().applyAnimationRecursive(animations.getSecond());
             lastDirection = targetDir;
             canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
         }
     }
+
+
 
 
     /**
@@ -778,7 +796,7 @@ public class Shop {
      * @param to The new direction to face.
      * @return The canvas animation and the item display animation.
      */
-    public static @NotNull Pair<Animation, Animation> calcCanvasRotationAnimation(int from, int to) {
+    public static @NotNull Pair<@NotNull Animation, @NotNull Animation> calcCanvasRotationAnimation(final int from, final int to) {
         final float rotation = -Math.toRadians(to * 45f - from * 45f);
         return Pair.from(
             new Animation(
@@ -787,14 +805,8 @@ public class Shop {
             ),
             new Animation(
                 new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(-rotation))
+                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
             )
         );
     }
 }
-
-
-
-//FIXME fix inconsistent element hitboxes at extreme angles
-//FIXME fix inconsistent element hitboxes at extreme angles
-//FIXME fix inconsistent element hitboxes at extreme angles

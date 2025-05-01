@@ -12,7 +12,6 @@ import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.ui.styles.ElmStyle;
-import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
 
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -34,14 +33,20 @@ import net.minecraft.server.world.ServerWorld;
  * An element that can display items.
  */
 public class ItemElm extends Elm {
-    private CustomItemDisplay getThisEntity() { return getEntity(CustomItemDisplay.class); }
-    private ItemElmStyle      getThisStyle () { return getStyle (ItemElmStyle     .class); }
+    private @NotNull CustomItemDisplay getThisEntity() { return getEntity(CustomItemDisplay.class); }
+    private @NotNull ItemElmStyle      getThisStyle () { return getStyle (ItemElmStyle     .class); }
 
 
 
 
     // Item transform exceptions
-    private static final Map<String, Pair<ModelTransformationMode, Transform>> transformExceptions = new HashMap<>(Map.ofEntries(
+    private static final @NotNull Map<
+        @NotNull String,
+        @NotNull Pair<
+            @NotNull ModelTransformationMode,
+            @NotNull Transform
+        >
+    > transformExceptions = new HashMap<>(Map.ofEntries(
         Map.entry(Items.TRIDENT.getTranslationKey(), Pair.from(
             ModelTransformationMode.GUI,
             new Transform()
@@ -54,7 +59,13 @@ public class ItemElm extends Elm {
 
 
     // Tag transform exceptions
-    private static final Map<TagKey<Item>, Pair<ModelTransformationMode, Transform>> tagTransformExceptions = new HashMap<>(Map.ofEntries(
+    private static final @NotNull Map<
+        @NotNull TagKey<@NotNull Item>,
+        @NotNull Pair<
+            @NotNull ModelTransformationMode,
+            @NotNull Transform
+        >
+    > tagTransformExceptions = new HashMap<>(Map.ofEntries(
         Map.entry(ItemTags.BANNERS, Pair.from(
             ModelTransformationMode.NONE,
             new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
@@ -78,9 +89,9 @@ public class ItemElm extends Elm {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected ItemElm(@NotNull ServerWorld _world, @NotNull CustomDisplay _entity, @NotNull ElmStyle _style) {
+    protected ItemElm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
-        ((CustomItemDisplay)getEntity()).setDisplayType(ModelTransformationMode.NONE);
+        getThisEntity().setDisplayType(ModelTransformationMode.NONE);
     }
 
 
@@ -89,7 +100,7 @@ public class ItemElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected ItemElm(@NotNull ServerWorld _world, @NotNull ElmStyle _style) {
+    protected ItemElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomItemDisplay(_world), _style);
     }
 
@@ -98,7 +109,7 @@ public class ItemElm extends Elm {
      * Creates a new ItemElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public ItemElm(@NotNull ServerWorld _world) {
+    public ItemElm(final @NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new ItemElmStyle());
     }
 
@@ -108,17 +119,22 @@ public class ItemElm extends Elm {
     @Override
     public void flushStyle() {
         super.flushStyle();
-        { Flagged<ItemStack> f = getThisStyle().getFlaggedItem(); if(f.isFlagged()) { getThisEntity().setItemStack(f.get()); f.unflag(); }}
+
+        // Apply item stack
+        { final Flagged<ItemStack> f = getThisStyle().getFlaggedItem();
+        if(f.isFlagged()) {
+            getThisEntity().setItemStack(f.get());
+            f.unflag();
+        }}
     }
 
 
 
 
     @Override
-    protected Transform __calcTransform() {
+    protected @NotNull Transform __calcTransform() {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
-        Transform t = super.__calcTransform();
         Pair<ModelTransformationMode, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem().getTranslationKey());
         if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
             if(getThisStyle().getItem().isIn(entry.getKey())) {
@@ -127,10 +143,10 @@ public class ItemElm extends Elm {
             }
         }
 
-
         // Update the entity's display type and apply the exception's transformation to the parent one if needed
-        getThisEntity().setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
-        return exception == null ? t : t.apply(exception.second);
+        getThisEntity().setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.getFirst());
+        final Transform t = super.__calcTransform();
+        return exception == null ? t : t.apply(exception.getSecond());
         //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
         //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
     }

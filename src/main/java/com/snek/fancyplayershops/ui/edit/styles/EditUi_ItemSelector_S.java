@@ -25,13 +25,11 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
 
 
     /**
-     * Creates a new EditUiItemSelectorStyle.
+     * Creates a new EditUiItemSelector_S.
      */
     public EditUi_ItemSelector_S() {
         super();
     }
-
-
 
 
     @Override
@@ -47,7 +45,6 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
             .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
@@ -57,7 +54,6 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
             .additiveTransformBg(new Transform().scaleY(1f / ShopButton_S.UNHOVERED_W))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(

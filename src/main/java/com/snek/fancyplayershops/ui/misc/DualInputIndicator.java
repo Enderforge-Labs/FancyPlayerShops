@@ -1,19 +1,13 @@
 package com.snek.fancyplayershops.ui.misc;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.ui.misc.styles.InputIndicatorText_S;
-import com.snek.fancyplayershops.ui.misc.styles.MouseButtonDown_S;
-import com.snek.fancyplayershops.ui.misc.styles.MouseButtonUp_S;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.styles.TextElmStyle;
-import com.snek.framework.utils.Txt;
 
 import net.minecraft.util.ClickType;
 
@@ -28,9 +22,9 @@ import net.minecraft.util.ClickType;
  * A UI element that can display the actions mouse clicks would perform on the currently hovered element.
  */
 public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas {
-    public static final Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.08f);
+    public static final @NotNull Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.08f);
     public static final float INDICATOR_SIZE_SPACING = 0.2f;
-    public static final Vector2f INDICATOR_SIZE = new Vector2f(1, (1 - INDICATOR_SIZE_SPACING) / 2);
+    public static final @NotNull Vector2f INDICATOR_SIZE = new Vector2f(1, (1 - INDICATOR_SIZE_SPACING) / 2);
 
     private final @NotNull InputIndicator lmbIndicator;
     private final @NotNull InputIndicator rmbIndicator;
@@ -42,7 +36,7 @@ public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas 
      * Creates a new DualInputIndicator.
      * @param _shop The target shop.
      */
-    public DualInputIndicator(@NotNull Shop _shop){
+    public DualInputIndicator(final @NotNull Shop _shop) {
         super(_shop);
         Div e;
 

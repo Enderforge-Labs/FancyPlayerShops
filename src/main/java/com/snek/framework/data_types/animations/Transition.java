@@ -24,7 +24,7 @@ public class Transition {
 
     // Optional data
     private boolean additive;
-    public final InterpolatedData d;
+    public final @NotNull InterpolatedData d;
 
 
 
@@ -34,7 +34,7 @@ public class Transition {
      * @param _duration The total duration of the transition.
      * @param _easing The type of easing to use.
      */
-    public Transition(int _duration, Easing _easing) {
+    public Transition(final int _duration, final @NotNull Easing _easing) {
         duration  = _duration;
         easing    = _easing;
 
@@ -58,7 +58,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition targetTransform(Transform _transform) {
+    public @NotNull Transition targetTransform(final @NotNull Transform _transform) {
         d.setTransform(_transform);
         additive = false;
         return this;
@@ -68,7 +68,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition additiveTransform(Transform _transform) {
+    public @NotNull Transition additiveTransform(final @NotNull Transform _transform) {
         d.setTransform(_transform);
         additive = true;
         return this;
@@ -80,7 +80,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition targetTransformFg(Transform _transform) {
+    public @NotNull Transition targetTransformFg(final @NotNull Transform _transform) {
         d.setTransformFg(_transform);
         additive = false;
         return this;
@@ -90,7 +90,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition additiveTransformFg(Transform _transform) {
+    public @NotNull Transition additiveTransformFg(final @NotNull Transform _transform) {
         d.setTransformFg(_transform);
         additive = true;
         return this;
@@ -102,7 +102,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition targetTransformBg(Transform _transform) {
+    public @NotNull Transition targetTransformBg(final @NotNull Transform _transform) {
         d.setTransformBg(_transform);
         additive = false;
         return this;
@@ -112,7 +112,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public Transition additiveTransformBg(Transform _transform) {
+    public @NotNull Transition additiveTransformBg(final @NotNull Transform _transform) {
         d.setTransformBg(_transform);
         additive = true;
         return this;
@@ -124,7 +124,7 @@ public class Transition {
      * @param _background The background color value.
      * @return This transition.
      */
-    public Transition targetBackground(Vector4i _background) {
+    public @NotNull Transition targetBackground(final @NotNull Vector4i _background) {
         d.setBackground(_background);
         return this;
     }
@@ -135,7 +135,7 @@ public class Transition {
      * @param _opacity The text opacity value.
      * @return This transition.
      */
-    public Transition targetOpacity(Integer _opacity) {
+    public @NotNull Transition targetOpacity(final int _opacity) {
         d.setOpacity(_opacity);
         return this;
     }
@@ -148,7 +148,7 @@ public class Transition {
      * @param factor The interpolation factor.
      * @return The animation step.
      */
-    public TransitionStep createStep(float factor) {
+    public @NotNull TransitionStep createStep(final float factor) {
         return new TransitionStep(factor, additive, d);
     }
 
@@ -156,7 +156,7 @@ public class Transition {
 
 
     // Getters
-    public int     getDuration() { return duration; }
-    public Easing  getEasing  () { return easing;   }
-    public boolean isAdditive () { return additive; }
+    public          int     getDuration() { return duration; }
+    public @NotNull Easing  getEasing  () { return easing;   }
+    public          boolean isAdditive () { return additive; }
 }

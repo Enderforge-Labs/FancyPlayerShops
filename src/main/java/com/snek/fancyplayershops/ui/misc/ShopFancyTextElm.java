@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.ui.misc;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.ui.elements.FancyTextElm;
@@ -27,7 +26,7 @@ public class ShopFancyTextElm extends FancyTextElm {
      * @param _shop The target shop.
      * @param _style The custom style.
      */
-    public ShopFancyTextElm(@NotNull Shop _shop, FancyTextElmStyle _style) {
+    public ShopFancyTextElm(final @NotNull Shop _shop, final @NotNull FancyTextElmStyle _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
     }
@@ -37,7 +36,7 @@ public class ShopFancyTextElm extends FancyTextElm {
      * Creates a new ShopFancyTextElm using the default style.
      * @param _shop The target shop.
      */
-    public ShopFancyTextElm(@NotNull Shop _shop) {
+    public ShopFancyTextElm(final @NotNull Shop _shop) {
         this(_shop, new FancyTextElmStyle());
     }
 }

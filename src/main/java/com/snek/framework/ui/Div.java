@@ -152,7 +152,6 @@ public class Div {
      * @param animation The animation to apply.
      */
     public void applyAnimationNow(@NotNull Animation animation) {
-        if(this instanceof InputIndicator e) System.out.println("animation: " + animation.getTransitions().get(0).d.getTransform().getPos().y);
         // Empty
     }
     /**
@@ -204,9 +203,7 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimationNowRecursive(@NotNull Transition transition) {
-        if(this instanceof InputIndicator e) System.out.println("before:   " + e.text.getStyle().getTransform().getPos().y);
         applyAnimationNowRecursive(new Animation(transition));
-        if(this instanceof InputIndicator e) System.out.println("after:    " + e.text.getStyle().getTransform().getPos().y);
     }
 
 
@@ -236,7 +233,7 @@ public class Div {
      */
     public void forwardHover(PlayerEntity player) {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
-            e.updateHoverStatus(player);
+            e.updateHoverState(player);
         }
         for(Div elm : children) {
             elm.forwardHover(player);
@@ -365,6 +362,7 @@ public class Div {
         localSize.y *= y;
         updateAbsSize();
     }
+
 
 
 

@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 /**
  * An abstract wrapper for Minecraft's Display Entities.
- * This class allows for better customization and more readable code.
+ * <p> This class allows for better customization and more readable code.
  */
 public abstract class CustomDisplay {
     protected @NotNull DisplayEntity heldEntity;
@@ -36,19 +36,19 @@ public abstract class CustomDisplay {
 
 
     // Private methods
-    private static Method method_setTransformation;
-    private static Method method_setInterpolationDuration;
-    private static Method method_setStartInterpolation;
-    private static Method method_setBillboardMode;
-    private static Method method_getBillboardMode;
-    private static Method method_setViewRange;
-    private static Method method_getViewRange;
-    private static Method method_setBrightness;
-    private static Method method_getBrightness;
-    private static Method method_getMaxRenderWidth;
-    private static Method method_getMaxRenderHeight;
-    private static Method method_setMaxRenderWidth;
-    private static Method method_setMaxRenderHeight;
+    private static @NotNull Method method_setTransformation;
+    private static @NotNull Method method_setInterpolationDuration;
+    private static @NotNull Method method_setStartInterpolation;
+    private static @NotNull Method method_setBillboardMode;
+    private static @NotNull Method method_getBillboardMode;
+    private static @NotNull Method method_setViewRange;
+    private static @NotNull Method method_getViewRange;
+    private static @NotNull Method method_setBrightness;
+    private static @NotNull Method method_getBrightness;
+    private static @NotNull Method method_getMaxRenderWidth;
+    private static @NotNull Method method_getMaxRenderHeight;
+    private static @NotNull Method method_setMaxRenderWidth;
+    private static @NotNull Method method_setMaxRenderHeight;
     static {
         try {
             method_setTransformation        = DisplayEntity.class.getDeclaredMethod("setTransformation", AffineTransformation.class);
@@ -89,7 +89,7 @@ public abstract class CustomDisplay {
      * Creates a new CustomDisplay using an existing DisplayEntity as in-world entity.
      * @param _heldEntity The display entity.
      */
-    protected CustomDisplay(@NotNull DisplayEntity _heldEntity) {
+    protected CustomDisplay(final @NotNull DisplayEntity _heldEntity) {
         heldEntity = _heldEntity;
         setBrightness(new Brightness(15, 15));
     }
@@ -113,7 +113,7 @@ public abstract class CustomDisplay {
      * @param world The world to spawn the entity in.
      * @param pos The position of the spawned entity.
      */
-    public void spawn(@NotNull World world, Vector3d pos) {
+    public void spawn(final @NotNull World world, final @NotNull Vector3d pos) {
         heldEntity.setPosition(pos.x, pos.y, pos.z);
         world.spawnEntity(heldEntity);
     }
@@ -135,27 +135,27 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new transformation value to the entity.
-     * This is equivalent to changing the entity's "transformation" NBT.
+     * <p> This is equivalent to changing the entity's "transformation" NBT.
      * @param transformation The new value.
      */
-    public void setTransformation(@NotNull AffineTransformation transformation) {
+    public void setTransformation(final @NotNull AffineTransformation transformation) {
         Utils.invokeSafe(method_setTransformation, heldEntity, transformation);
     }
 
 
     /**
      * Sets a new interpolation duration value to the entity.
-     * This is equivalent to changing the entity's "interpolation_duration" NBT.
+     * <p> This is equivalent to changing the entity's "interpolation_duration" NBT.
      * @param duration The new value, measured in ticks
      */
-    public void setInterpolationDuration(int duration) {
+    public void setInterpolationDuration(final int duration) {
         Utils.invokeSafe(method_setInterpolationDuration, heldEntity, duration);
     }
 
 
     /**
      * Starts the interpolation at the end of the current tick.
-     * This is equivalent to setting the entity's "start_interpolation" NBT to 0.
+     * <p> This is equivalent to setting the entity's "start_interpolation" NBT to 0.
      */
     public void setStartInterpolation() {
         Utils.invokeSafe(method_setStartInterpolation, heldEntity, 0);
@@ -164,10 +164,10 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new billboard mode value to the entity.
-     * This is equivalent to changing the entity's "billboard" NBT.
+     * <p> This is equivalent to changing the entity's "billboard" NBT.
      * @param billboardMode The new value.
      */
-    public void setBillboardMode(@NotNull BillboardMode billboardMode) {
+    public void setBillboardMode(final @NotNull BillboardMode billboardMode) {
         Utils.invokeSafe(method_setBillboardMode, heldEntity, billboardMode);
     }
 
@@ -176,25 +176,25 @@ public abstract class CustomDisplay {
      * Retrieves the entity's billboard mode.
      * @return The current billboard mode.
      */
-    public BillboardMode getBillboardMode() {
+    public @NotNull BillboardMode getBillboardMode() {
         return (BillboardMode)Utils.invokeSafe(method_getBillboardMode, heldEntity);
     }
 
 
     /**
      * Sets a new view range value to the entity.
-     * This is equivalent to changing the entity's "view_range" NBT.
-     * The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p> This is equivalent to changing the entity's "view_range" NBT.
+     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
      * @param viewRange The new value.
      */
-    public void setViewRange(float viewRange) {
+    public void setViewRange(final float viewRange) {
         Utils.invokeSafe(method_setViewRange, heldEntity, viewRange);
     }
 
 
     /**
      * Retrieves the entity's view range.
-     * The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
      * @return The current view range.
      */
     public float getViewRange() {
@@ -204,10 +204,10 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new brightness value to the entity.
-     * This is equivalent to changing the entity's "brightness" NBT.
+     * <p> This is equivalent to changing the entity's "brightness" NBT.
      * @param brightness
      */
-    public void setBrightness(@NotNull Brightness brightness) {
+    public void setBrightness(final @NotNull Brightness brightness) {
         Utils.invokeSafe(method_setBrightness, heldEntity, brightness);
     }
 
@@ -216,27 +216,27 @@ public abstract class CustomDisplay {
      * Retrieves the entity's brightness.
      * @return The current brightness.
      */
-    public Brightness getBrightness() {
+    public @NotNull Brightness getBrightness() {
         return (Brightness)Utils.invokeSafe(method_getBrightness, heldEntity);
     }
 
 
     /**
      * Sets a new custom name value to the entity.
-     * This is equivalent to changing the entity's "custom_name" NBT.
+     * <p> This is equivalent to changing the entity's "custom_name" NBT.
      * @param name The new value.
      */
-    public void setCustomName(@NotNull Text name) {
+    public void setCustomName(final @NotNull Text name) {
         heldEntity.setCustomName(name);
     }
 
 
     /**
      * Sets a new custom name visible value to the entity.
-     * This is equivalent to changing the entity's "custom_name_visible" NBT.
+     * <p> This is equivalent to changing the entity's "custom_name_visible" NBT.
      * @param name The new value.
      */
-    public void setCustomNameVisible(boolean nameVisible) {
+    public void setCustomNameVisible(final boolean nameVisible) {
         heldEntity.setCustomNameVisible(nameVisible);
     }
 
@@ -245,7 +245,7 @@ public abstract class CustomDisplay {
      * Sets a new glowing value to the entity.
      * @param name The new value. True makes the entity glow. False makes it stop glowing.
      */
-    public void setGlowing(boolean glowing) {
+    public void setGlowing(final boolean glowing) {
         heldEntity.setGlowing(glowing);
     }
 
@@ -254,7 +254,7 @@ public abstract class CustomDisplay {
      * Sets a new position to the entity.
      * @param pos The new position.
      */
-    public void setPos(Vector3f pos) {
+    public void setPos(final @NotNull Vector3f pos) {
         heldEntity.setPosition(new Vec3d(pos));
     }
 
@@ -263,19 +263,20 @@ public abstract class CustomDisplay {
      * Retrieves the entity's position and returns a copy of it.
      * @return A copy of the current position.
      */
-    public Vector3f getPosCopy() {
+    public @NotNull Vector3f getPosCopy() {
         return heldEntity.getPos().toVector3f();
     }
 
 
 
+
     /**
      * Sets a new maximum render width to the entity.
-     * This is equivalent to changing the entity's "width" NBT.
-     * NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * <p> This is equivalent to changing the entity's "width" NBT.
+     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
-    public void setMaxRenderWidth(float n) {
+    public void setMaxRenderWidth(final float n) {
         Utils.invokeSafe(method_setMaxRenderWidth, heldEntity, n);
     }
 
@@ -291,11 +292,11 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new maximum render height to the entity.
-     * This is equivalent to changing the entity's "height" NBT.
-     * NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * <p> This is equivalent to changing the entity's "height" NBT.
+     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
-    public void setMaxRenderHeight(float n) {
+    public void setMaxRenderHeight(final float n) {
         Utils.invokeSafe(method_setMaxRenderHeight, heldEntity, n);
     }
 

@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
@@ -19,8 +18,6 @@ import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
-
-import net.minecraft.util.ClickType;
 
 
 
@@ -55,7 +52,6 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float ITEM_SELECTOR_Y            = 0.4f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
 
 
-
     // Functionalities
     public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
 
@@ -70,7 +66,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public EditUi(Shop _shop) {
+    public EditUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
         super(_shop, 1f, ShopFancyTextElm.LINE_H, ShopUiBorder.DEFAULT_HEIGHT);

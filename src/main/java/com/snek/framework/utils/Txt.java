@@ -1,5 +1,6 @@
 package com.snek.framework.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
@@ -16,116 +17,198 @@ import net.minecraft.text.Text;
 
 /**
  * A simpler but more readable minecraft.text.MutableText.
- * Use .get() to create a MutableText from this object's data.
+ * <p> Use .get() to create a MutableText from this object's data.
  */
 public class Txt {
     private MutableText rawText;
     private Style style;
 
 
+
+
+    /**
+     * Creates a new empty Txt.
+     */
     public Txt() {
         rawText = Text.empty();
         style = Style.EMPTY;
     }
-    public Txt(String s) {
+
+    /**
+     * Creates a new Txt using a String content.
+     * @param s The String.
+     */
+    public Txt(final @NotNull String s) {
         rawText = Text.literal(s);
         style = Style.EMPTY;
     }
-    public Txt(MutableText s) {
-        rawText = s.copy();
-        style = rawText.getStyle();
-    }
-    public Txt(Text s) {
+
+    /**
+     * Creates a new Txt using a copy of a MutableText as content.
+     * @param s The MutableText.
+     */
+    public Txt(final @NotNull MutableText s) {
         rawText = s.copy();
         style = rawText.getStyle();
     }
 
-    public Txt copy() {
+    /**
+     * Creates a new Txt using a copy of a Text as content.
+     * @param s The Text.
+     */
+    public Txt(final @NotNull Text s) {
+        rawText = s.copy();
+        style = rawText.getStyle();
+    }
+
+
+
+
+    /**
+     * Creates a copy of this Txt.
+     * @return A copy of this Txt.
+     */
+    public @NotNull Txt copy() {
         rawText.setStyle(style);
         return new Txt(rawText.copy());
     }
 
 
 
-    public static final Vector3i COLOR_BLACK     = new Vector3i(  0,   0,   0);
-    public static final Vector3i COLOR_BLUE      = new Vector3i(  0,   0, 170);
-    public static final Vector3i COLOR_GREEN     = new Vector3i(  0, 170,   0);
-    public static final Vector3i COLOR_AQUA      = new Vector3i(  0, 170, 170);
-    public static final Vector3i COLOR_DARKRED   = new Vector3i(170,   0,   0);
-    public static final Vector3i COLOR_PURPLE    = new Vector3i(170,   0, 170);
-    public static final Vector3i COLOR_GOLD      = new Vector3i(255, 170,   0);
-    public static final Vector3i COLOR_LIGHTGRAY = new Vector3i(170, 170, 170);
-    public static final Vector3i COLOR_GRAY      = new Vector3i( 85,  85,  85);
-    public static final Vector3i COLOR_LIGHTBLUE = new Vector3i( 85,  85, 255);
-    public static final Vector3i COLOR_LIME      = new Vector3i( 85, 255,  85);
-    public static final Vector3i COLOR_CYAN      = new Vector3i( 85, 255, 255);
-    public static final Vector3i COLOR_RED       = new Vector3i(255,  85,  85);
-    public static final Vector3i COLOR_MAGENTA   = new Vector3i(255,  85, 255);
-    public static final Vector3i COLOR_YELLOW    = new Vector3i(255, 255,  85);
-    public static final Vector3i COLOR_WHITE     = new Vector3i(255, 255, 255);
+    public static final @NotNull Vector3i COLOR_BLACK     = new Vector3i(  0,   0,   0);
+    public static final @NotNull Vector3i COLOR_BLUE      = new Vector3i(  0,   0, 170);
+    public static final @NotNull Vector3i COLOR_GREEN     = new Vector3i(  0, 170,   0);
+    public static final @NotNull Vector3i COLOR_AQUA      = new Vector3i(  0, 170, 170);
+    public static final @NotNull Vector3i COLOR_DARKRED   = new Vector3i(170,   0,   0);
+    public static final @NotNull Vector3i COLOR_PURPLE    = new Vector3i(170,   0, 170);
+    public static final @NotNull Vector3i COLOR_GOLD      = new Vector3i(255, 170,   0);
+    public static final @NotNull Vector3i COLOR_LIGHTGRAY = new Vector3i(170, 170, 170);
+    public static final @NotNull Vector3i COLOR_GRAY      = new Vector3i( 85,  85,  85);
+    public static final @NotNull Vector3i COLOR_LIGHTBLUE = new Vector3i( 85,  85, 255);
+    public static final @NotNull Vector3i COLOR_LIME      = new Vector3i( 85, 255,  85);
+    public static final @NotNull Vector3i COLOR_CYAN      = new Vector3i( 85, 255, 255);
+    public static final @NotNull Vector3i COLOR_RED       = new Vector3i(255,  85,  85);
+    public static final @NotNull Vector3i COLOR_MAGENTA   = new Vector3i(255,  85, 255);
+    public static final @NotNull Vector3i COLOR_YELLOW    = new Vector3i(255, 255,  85);
+    public static final @NotNull Vector3i COLOR_WHITE     = new Vector3i(255, 255, 255);
 
 
-    public Txt black    () { return color(COLOR_BLACK    ); }
-    public Txt blue     () { return color(COLOR_BLUE     ); }
-    public Txt green    () { return color(COLOR_GREEN    ); }
-    public Txt aqua     () { return color(COLOR_AQUA     ); }
-    public Txt darkRed  () { return color(COLOR_DARKRED  ); }
-    public Txt purple   () { return color(COLOR_PURPLE   ); }
-    public Txt gold     () { return color(COLOR_GOLD     ); }
-    public Txt lightGray() { return color(COLOR_LIGHTGRAY); }
-    public Txt gray     () { return color(COLOR_GRAY     ); }
-    public Txt lightBlue() { return color(COLOR_LIGHTBLUE); }
-    public Txt lime     () { return color(COLOR_LIME     ); }
-    public Txt cyan     () { return color(COLOR_CYAN     ); }
-    public Txt red      () { return color(COLOR_RED      ); }
-    public Txt magenta  () { return color(COLOR_MAGENTA  ); }
-    public Txt yellow   () { return color(COLOR_YELLOW   ); }
-    public Txt white    () { return color(COLOR_WHITE    ); }
+    public @NotNull Txt black    () { return color(COLOR_BLACK    ); }
+    public @NotNull Txt blue     () { return color(COLOR_BLUE     ); }
+    public @NotNull Txt green    () { return color(COLOR_GREEN    ); }
+    public @NotNull Txt aqua     () { return color(COLOR_AQUA     ); }
+    public @NotNull Txt darkRed  () { return color(COLOR_DARKRED  ); }
+    public @NotNull Txt purple   () { return color(COLOR_PURPLE   ); }
+    public @NotNull Txt gold     () { return color(COLOR_GOLD     ); }
+    public @NotNull Txt lightGray() { return color(COLOR_LIGHTGRAY); }
+    public @NotNull Txt gray     () { return color(COLOR_GRAY     ); }
+    public @NotNull Txt lightBlue() { return color(COLOR_LIGHTBLUE); }
+    public @NotNull Txt lime     () { return color(COLOR_LIME     ); }
+    public @NotNull Txt cyan     () { return color(COLOR_CYAN     ); }
+    public @NotNull Txt red      () { return color(COLOR_RED      ); }
+    public @NotNull Txt magenta  () { return color(COLOR_MAGENTA  ); }
+    public @NotNull Txt yellow   () { return color(COLOR_YELLOW   ); }
+    public @NotNull Txt white    () { return color(COLOR_WHITE    ); }
 
 
 
 
-    public Txt color(int r, int g, int b) {
+    /**
+     * Sets the color of the text.
+     * @param r The Red value. 0-255.
+     * @param g The Green value. 0-255.
+     * @param b The Blue value. 0-255.
+     * @return This.
+     */
+    public @NotNull Txt color(final int r, final int g, final int b) {
         style = style.withColor((r << 16) | (g << 8) | b);
         return this;
     }
-    public Txt color(Vector3i rgb) {
+
+    /**
+     * Sets the color of the text.
+     * @param rgb A vector representing the Red, Green and Blue values. 0-255.
+     * @return This.
+     */
+    public @NotNull Txt color(final @NotNull Vector3i rgb) {
         style = style.withColor((rgb.x << 16) | (rgb.y << 8) | rgb.z);
         return this;
     }
-    public Txt color(Vector4i rgb) { //ARGB //TODO comment method
-        style = style.withColor((rgb.y << 16) | (rgb.z << 8) | rgb.w);
+
+
+    /**
+     * Sets the color of the text.
+     * @param argb A vector representing the Alpha, Red, Green and Blue values. 0-255, Alpha is ignored.
+     * @return This.
+     */
+    public @NotNull Txt color(final @NotNull Vector4i argb) {
+        style = style.withColor((argb.y << 16) | (argb.z << 8) | argb.w);
         return this;
     }
-    public Txt color (int rgb) { style = style.withColor        (rgb ); return this; }
-    public Txt bold         () { style = style.withBold         (true); return this; }
-    public Txt italic       () { style = style.withItalic       (true); return this; }
-    public Txt obfuscated   () { style = style.withObfuscated   (true); return this; }
-    public Txt strikethrough() { style = style.withStrikethrough(true); return this; }
 
-    public Txt noBold         () { style = style.withBold         (false); return this; }
-    public Txt noItalic       () { style = style.withItalic       (false); return this; }
-    public Txt noObfuscated   () { style = style.withObfuscated   (false); return this; }
-    public Txt noStrikethrough() { style = style.withStrikethrough(false); return this; }
-
-
+    /**
+     * Sets the color of the text.
+     * @param rgb An int representing the Red, Green and Blue values, each using 1 byte of the int. 0-255. The first byte is ignored.
+     * @return This.
+     */
+    public @NotNull Txt color(final int rgb) {
+        style = style.withColor(rgb);
+        return this;
+    }
 
 
-    public Txt cat(Text s) {
+
+
+    public @NotNull Txt bold           () { style = style.withBold         (true); return this; }
+    public @NotNull Txt italic         () { style = style.withItalic       (true); return this; }
+    public @NotNull Txt obfuscated     () { style = style.withObfuscated   (true); return this; }
+    public @NotNull Txt strikethrough  () { style = style.withStrikethrough(true); return this; }
+
+    public @NotNull Txt noBold         () { style = style.withBold         (false); return this; }
+    public @NotNull Txt noItalic       () { style = style.withItalic       (false); return this; }
+    public @NotNull Txt noObfuscated   () { style = style.withObfuscated   (false); return this; }
+    public @NotNull Txt noStrikethrough() { style = style.withStrikethrough(false); return this; }
+
+
+
+
+    /**
+     * Concatenates a Text to this Txt.
+     * @param s The Text value.
+     * @return This.
+     */
+    public @NotNull Txt cat(final @NotNull Text s) {
         rawText.append(s);
         return this;
     }
 
-    public Txt cat(Txt s) {
+    /**
+     * Concatenates a Txt to this Txt.
+     * @param s The Txt value.
+     * @return This.
+     */
+    public @NotNull Txt cat(final @NotNull Txt s) {
         rawText.append(s.get());
         return this;
     }
 
-    public Txt cat(String s) {
+    /**
+     * Concatenates a String to this Txt.
+     * @param s The String value.
+     * @return This.
+     */
+    public @NotNull Txt cat(final @NotNull String s) {
         return this.cat(Text.literal(s));
     }
 
-    public Text get() {
+
+
+
+    /**
+     * Returns a copy of this Txt as a Minecraft Text.
+     * @return The Text value.
+     */
+    public @NotNull Text get() {
         rawText.setStyle(style);
         return rawText;
     }

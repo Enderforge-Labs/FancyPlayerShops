@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,8 +46,7 @@ public abstract class CraftingScreenHandlerMixin {
      * Detects the current items in the crafting grid and replaces the output with the shop item if necessary.
      */
     @Inject(method = "onContentChanged", at = @At("TAIL"))
-    private void onCraftUpdate(Inventory inventory, CallbackInfo ci) {
-        if(FancyPlayerShops.getServer() == null) throw new RuntimeException("Couldn't handle crafting content change: server instance is null.");
+    private void onCraftUpdate(final @NotNull Inventory inventory, final @NotNull CallbackInfo ci) {
         if(inventory.size() != 9) return;
 
 

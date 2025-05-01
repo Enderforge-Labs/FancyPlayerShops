@@ -3,6 +3,8 @@ package com.snek.framework.utils.scheduler;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import org.jetbrains.annotations.NotNull;
+
 
 
 
@@ -14,9 +16,9 @@ import java.util.PriorityQueue;
  * A utility class that can store tasks and execute them after a specified delay.
  */
 public abstract class Scheduler {
-    private Scheduler(){}
+    private Scheduler() {}
     private static long tickNum = 0;
-    private static final PriorityQueue<TaskHandler> taskQueue = new PriorityQueue<>(Comparator.comparingLong(e -> e.getTargetTick()));
+    private static final @NotNull PriorityQueue<@NotNull TaskHandler> taskQueue = new PriorityQueue<>(Comparator.comparingLong(e -> e.getTargetTick()));
 
     /**
      * Returns the current tick number.
@@ -31,13 +33,18 @@ public abstract class Scheduler {
 
     /*
      * The tick function of the scheduler.
-     * Must be called exactly one time at the end of every server tick.
+     * <p> Must be called exactly one time at the end of every server tick.
      */
     public static void tick() {
-        while(taskQueue.peek() != null && taskQueue.peek().getTargetTick() <= tickNum) {
-            TaskHandler handler = taskQueue.poll();
+
+        // For each task that has to be executed
+        while(taskQueue.peek().getTargetTick() <= tickNum) {
+
+            // Execute it
+            final TaskHandler handler = taskQueue.poll();
             handler.compute();
 
+            // Renew task handler if it's a LoopTaskHadler and has not been cancelled
             if(handler instanceof LoopTaskHandler h && !h.cancelled) {
                 h.setTargetTick(tickNum + h.getInterval());
                 taskQueue.add(h);
@@ -57,8 +64,8 @@ public abstract class Scheduler {
      * @param task The task to run.
      * @return The handler of the newly created task schedule.
      */
-    public static LoopTaskHandler loop(long delay, long interval, Runnable task) {
-        LoopTaskHandler handler = new LoopTaskHandler(tickNum + delay, interval, task);
+    public static @NotNull LoopTaskHandler loop(final long delay, final long interval, final @NotNull Runnable task) {
+        @NotNull LoopTaskHandler handler = new LoopTaskHandler(tickNum + delay, interval, task);
         taskQueue.add(handler);
         return handler;
     }
@@ -72,8 +79,8 @@ public abstract class Scheduler {
      * @param task The task to run.
      * @return The handler of the newly created task schedule.
      */
-    public static TaskHandler schedule(long delay, Runnable task) {
-        TaskHandler handler = new TaskHandler(tickNum + delay, task);
+    public static @NotNull TaskHandler schedule(final long delay, final @NotNull Runnable task) {
+        @NotNull TaskHandler handler = new TaskHandler(tickNum + delay, task);
         taskQueue.add(handler);
         return handler;
     }
@@ -86,7 +93,7 @@ public abstract class Scheduler {
      * @param task The task to run.
      * @return The handler of the newly created task schedule.
      */
-    public static TaskHandler run(Runnable task) {
+    public static @NotNull TaskHandler run(final @NotNull Runnable task) {
         return schedule(0, task);
     }
 }

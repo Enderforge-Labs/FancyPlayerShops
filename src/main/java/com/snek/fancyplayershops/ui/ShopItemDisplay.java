@@ -14,7 +14,6 @@ import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.elements.FancyTextElm;
 import com.snek.framework.ui.elements.ItemElm;
-import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
 import com.snek.framework.ui.styles.ItemElmStyle;
@@ -41,11 +40,11 @@ import net.minecraft.item.Items;
 
 /**
  * An item display that shows the item currently being sold by a shop.
- * Unconfigured shops show a barrier item.
+ * <p> Unconfigured shops show a barrier item.
  */
 public class ShopItemDisplay extends ItemElm {
-    Shop shop;
-    FancyTextElm name;
+    private final @NotNull Shop         shop;
+    private       @NotNull FancyTextElm name;
 
     // Layout
     public static final float ENTITY_SHIFT_Y = 0.2f;
@@ -66,20 +65,47 @@ public class ShopItemDisplay extends ItemElm {
     public static final float LOOP_ROT    = (float)Math.toRadians(120);
 
     // Edit animation scale and transition
-    public static final Vector3f EDIT_SCALE  = new Vector3f(0.4f);
-    public static final Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.1f, 0);
+    public static final @NotNull Vector3f EDIT_SCALE  = new Vector3f(0.4f);
+    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.1f, 0);
 
 
 
 
-    // Focus and loop animations
-    private final @NotNull Animation focusAnimation;
-    private final @NotNull Animation unfocusAnimation;
-    private final @NotNull Animation loopAnimation;
+    // // Setup spawn and despawn animations
+    // Setup focus animation (unfocus animation is created dynamically)
+    private static final @NotNull Animation focusAnimation = new Animation(
+        new Transition(S_TIME, Easings.sineOut)
+        .additiveTransform(
+            new Transform()
+            .moveY(FOCUS_HEIGHT)
+            .rotY(LOOP_ROT / 2)
+        )
+    );
+    private static @NotNull Animation unfocusAnimation;
 
-    // Edit animations
-    private final @NotNull Animation enterEditAnimation;
+
+    // Setup loop animation
+    private static final @NotNull Animation loopAnimation = new Animation(
+        new Transition(LOOP_TIME, Easings.linear)
+        .additiveTransform(new Transform().rotY(LOOP_ROT))
+    );
+
+
+    // Setup edit animiations
     //! leaveEditAnimation not needed as the unfocus animation uses a target transform
+    private static final @NotNull Animation enterEditAnimation = new Animation(
+        new Transition(Shop.CANVAS_ANIMATION_DELAY, Easings.sineOut)
+        .additiveTransform(
+            new Transform()
+            .scale(EDIT_SCALE)
+            .move(EDIT_MOVE)
+            .rotY(LOOP_ROT / 2)
+        )
+    );
+
+
+
+
 
 
 
@@ -89,43 +115,16 @@ public class ShopItemDisplay extends ItemElm {
      * @param _shop The target shop.
      * @param _display A CustomItemDisplay to use to display the item.
      */
-    public ShopItemDisplay(@NotNull Shop _shop, @NotNull CustomItemDisplay _display) {
+    public ShopItemDisplay(final @NotNull Shop _shop, final @NotNull CustomItemDisplay _display) {
         super(_shop.getWorld(), _display, new ItemElmStyle());
         shop = _shop;
         updateDisplay();
 
 
-        // Setup spawn and despawn animations
-        focusAnimation = new Animation(
-            new Transition(S_TIME, Easings.sineOut)
-            .additiveTransform(
-                new Transform()
-                .moveY(FOCUS_HEIGHT)
-                .rotY(LOOP_ROT / 2)
-            )
-        );
+        // Setup unfocus animation
         unfocusAnimation = new Animation(
             new Transition(D_TIME, Easings.sineOut)
             .targetTransform(getStyle().getTransform())
-        );
-
-
-        // Setup loop animation
-        loopAnimation = new Animation(
-            new Transition(LOOP_TIME, Easings.linear)
-            .additiveTransform(new Transform().rotY(LOOP_ROT))
-        );
-
-
-        // Setup edit animiations
-        enterEditAnimation = new Animation(
-            new Transition(Shop.CANVAS_ANIMATION_DELAY, Easings.sineOut)
-            .additiveTransform(
-                new Transform()
-                .scale(EDIT_SCALE)
-                .move(EDIT_MOVE)
-                .rotY(LOOP_ROT / 2)
-            )
         );
     }
 
@@ -139,17 +138,18 @@ public class ShopItemDisplay extends ItemElm {
      * @param _rawName1 One of the TextDisplayEntity entities that make up the name of the item.
      * @param _rawName2 One of the TextDisplayEntity entities that make up the name of the item.
      */
-    public ShopItemDisplay(@NotNull Shop _targetShop, @NotNull ItemDisplayEntity _rawDisplay, @Nullable TextDisplayEntity _rawName1, @Nullable TextDisplayEntity _rawName2) {
+    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplayEntity _rawDisplay, final @Nullable TextDisplayEntity _rawName1, final @Nullable TextDisplayEntity _rawName2) {
         this(_targetShop, new CustomItemDisplay(_rawDisplay));
         if(_rawName1 != null) _rawName1.remove(RemovalReason.KILLED);
         if(_rawName2 != null) _rawName2.remove(RemovalReason.KILLED);
     }
 
+
     /**
      * Creates a new ShopItemDisplay.
      * @param _targetShop The target shop.
      */
-    public ShopItemDisplay(@NotNull Shop _targetShop) {
+    public ShopItemDisplay(final @NotNull Shop _targetShop) {
         this(_targetShop, new CustomItemDisplay(_targetShop.getWorld()));
     }
 
@@ -160,7 +160,7 @@ public class ShopItemDisplay extends ItemElm {
      * Updates the displayed item reading data from the target shop.
      */
     public void updateDisplay() {
-        ItemStack _item = shop.getItem();
+        final ItemStack _item = shop.getItem();
 
 
         // Spawn or despawn the name entity if necessary
@@ -184,7 +184,7 @@ public class ShopItemDisplay extends ItemElm {
 
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
         if(_item.getItem() == Items.AIR) {
-            ItemStack noItem = Items.BARRIER.getDefaultStack();
+            final ItemStack noItem = Items.BARRIER.getDefaultStack();
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
@@ -205,14 +205,14 @@ public class ShopItemDisplay extends ItemElm {
             final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
-            // Wrap the name and calculate the amount tof lines
-            int totLen = 0;
+            // Wrap the name and calculate the amount of lines
             int i;
-            int ellipsisLen = FontSize.getWidth("…");
+            float totLen = 0;
+            final float ellipsisLen = FontSize.getWidth("…");
             for(i = 0; i < fullName.length(); ++i) {
-                char c = fullName.charAt(i);
+                final char c = fullName.charAt(i);
                 totLen += FontSize.getWidth(String.valueOf(c));
-                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > TextElm.TEXT_PIXEL_BLOCK_RATIO * (NAME_DISPLAY_WIDTH - 0.1f)) {
+                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
                     break;
                 }
                 truncatedName.append(c);
@@ -238,7 +238,7 @@ public class ShopItemDisplay extends ItemElm {
 
 
     @Override
-    protected Transform __calcTransform() {
+    protected @NotNull Transform __calcTransform() {
         return super.__calcTransform()
             .rotY(shop.getDefaultRotation())
             .scale(0.4f)
@@ -288,7 +288,6 @@ public class ShopItemDisplay extends ItemElm {
      */
     public void stopLoopAnimation() {
         if(loopHandler != null) loopHandler.cancel();
-        futureDataQueue.clear();
     }
 
 
@@ -313,8 +312,9 @@ public class ShopItemDisplay extends ItemElm {
 
 
 
+
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity and remove tracking custom name
         super.spawn(new Vector3d(pos).add(0, ENTITY_SHIFT_Y, 0));

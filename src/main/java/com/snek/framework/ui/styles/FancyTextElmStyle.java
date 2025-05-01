@@ -1,6 +1,7 @@
 package com.snek.framework.ui.styles;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.Animation;
@@ -16,14 +17,17 @@ import com.snek.framework.utils.Easings;
 
 
 
+/**
+ * The default style of the generic FancyTextElm UI element.
+ */
 public class FancyTextElmStyle extends TextElmStyle {
-    private Flagged<Vector4i> background = null;
-    private Flagged<Transform> transformFg = null;
-    private Flagged<Transform> transformBg = null;
+    private @NotNull Flagged<@NotNull Vector4i>  background  = null;
+    private @NotNull Flagged<@NotNull Transform> transformFg = null;
+    private @NotNull Flagged<@NotNull Transform> transformBg = null;
 
 
     /**
-     * Creates a new default FancyTextElmStyle.
+     * Creates a new FancyTextElmStyle.
      */
     public FancyTextElmStyle() {
         super();
@@ -31,7 +35,7 @@ public class FancyTextElmStyle extends TextElmStyle {
 
 
     @Override
-    public Animation getDefaultPrimerAnimation() {
+    public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetBackground(new Vector4i(0))
@@ -41,7 +45,7 @@ public class FancyTextElmStyle extends TextElmStyle {
 
 
     @Override
-    public Animation getDefaultSpawnAnimation() {
+    public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBackground(background.get())
@@ -51,7 +55,7 @@ public class FancyTextElmStyle extends TextElmStyle {
 
 
     @Override
-    public Animation getDefaultDespawnAnimation() {
+    public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetBackground(new Vector4i(0))
@@ -86,19 +90,19 @@ public class FancyTextElmStyle extends TextElmStyle {
     public void resetTransformFg () { transformFg = Flagged.from(getDefaultTransformFg() ); }
     public void resetTransformBg () { transformBg = Flagged.from(getDefaultTransformBg() ); }
 
-    public void setBackground  (@NotNull Vector4i  _background ) { background .set(_background ); }
-    public void setTransformFg (@NotNull Transform _transformFg) { transformFg.set(_transformFg); }
-    public void setTransformBg (@NotNull Transform _transformBg) { transformBg.set(_transformBg); }
+    public void setBackground  (final @NotNull Vector4i  _background ) { background .set(_background ); }
+    public void setTransformFg (final @NotNull Transform _transformFg) { transformFg.set(_transformFg); }
+    public void setTransformBg (final @NotNull Transform _transformBg) { transformBg.set(_transformBg); }
 
-    public @NotNull Flagged<Vector4i>  getFlaggedBackground () { return background; }
-    public @NotNull Flagged<Transform> getFlaggedTransformFg() { return transformFg; }
-    public @NotNull Flagged<Transform> getFlaggedTransformBg() { return transformBg; }
+    public @NotNull Flagged<@NotNull Vector4i>  getFlaggedBackground () { return background; }
+    public @NotNull Flagged<@NotNull Transform> getFlaggedTransformFg() { return transformFg; }
+    public @NotNull Flagged<@NotNull Transform> getFlaggedTransformBg() { return transformBg; }
 
     public @NotNull Vector4i  getBackground () { return background .get(); }
-    public @NotNull Transform getTransformFg() { return transformFg .get(); }
-    public @NotNull Transform getTransformBg() { return transformBg .get(); }
+    public @NotNull Transform getTransformFg() { return transformFg.get(); }
+    public @NotNull Transform getTransformBg() { return transformBg.get(); }
 
     public @NotNull Vector4i  editBackground () { return background .edit(); }
-    public @NotNull Transform editTransformFg() { return transformFg .edit(); }
-    public @NotNull Transform editTransformBg() { return transformBg .edit(); }
+    public @NotNull Transform editTransformFg() { return transformFg.edit(); }
+    public @NotNull Transform editTransformBg() { return transformBg.edit(); }
 }

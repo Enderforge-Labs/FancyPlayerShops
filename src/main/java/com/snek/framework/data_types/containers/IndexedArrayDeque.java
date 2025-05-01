@@ -2,6 +2,9 @@ package com.snek.framework.data_types.containers;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 
 
@@ -25,7 +28,7 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
      * @return The element.
      */
     @SuppressWarnings("unchecked")
-    public E get(int index) {
+    public @Nullable E get(final int index) {
         if(index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
@@ -42,7 +45,7 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
      * @param f The supplier function used to create new elements.
      * @return The element at index <index>.
      */
-    public E getOrAdd(int index, Supplier<E> f) {
+    public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> f) {
         while(index >= size()) add(f.get());
         return get(index);
     }
@@ -54,7 +57,7 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
      * @param index The index.
      * @param value The new value.
      */
-    public void set(int index, E value) {
+    public void set(final int index, final @Nullable E value) {
         if(index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }

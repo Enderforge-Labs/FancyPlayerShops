@@ -21,16 +21,14 @@ import com.snek.framework.utils.Easings;
  * The style of the EditUiPriceButton UI element.
  */
 public class EditUi_RotateButtonRight_S extends ShopButton_S {
-    public static final Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
+    public static final @NotNull Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
 
     /**
-     * Creates a new EditUiRightRotateButtonStyle.
+     * Creates a new EditUiRightRotateButton_S.
      */
     public EditUi_RotateButtonRight_S() {
         super();
     }
-
-
 
 
     @Override
@@ -46,7 +44,6 @@ public class EditUi_RotateButtonRight_S extends ShopButton_S {
             .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
@@ -56,7 +53,6 @@ public class EditUi_RotateButtonRight_S extends ShopButton_S {
             .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W))
         );
     }
-
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(

@@ -21,14 +21,18 @@ import org.joml.Vector4i;
  * A utility class that provides a collection of useful methods.
  */
 public abstract class Utils {
-    private Utils(){}
+    private Utils() {}
+
+    // Formatters
+    private static final DecimalFormat formatterPrice  = new DecimalFormat("#,##0.##");
+    private static final DecimalFormat formatterAmount = new DecimalFormat("#,###");
 
 
 
 
     /**
      * Checks if a double value is within a certain threshold from a target value.
-     * This is used to avoid precision related problems when comparing double values.
+     * <p> This is used to avoid precision related problems when comparing double values.
      * @param n The value to check
      * @param target The target value
      * @param threshold The threshold to use
@@ -46,7 +50,7 @@ public abstract class Utils {
      * @param args The arguments to use. Can be empty.
      * @return The return value of the method.
      */
-    public static @Nullable Object invokeSafe(@NotNull Method method, @NotNull Object target, Object... args) {
+    public static @Nullable Object invokeSafe(final @NotNull Method method, final @NotNull Object target, final @Nullable Object... args) {
         try {
             return method.invoke(target, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -63,7 +67,7 @@ public abstract class Utils {
      * @param delay The delay expressed in milliseconds.
      * @param task The task to run.
      */
-    public static void runAsync(int delay, @NotNull Runnable task) {
+    public static void runAsync(final int delay, final @NotNull Runnable task) {
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
@@ -78,9 +82,16 @@ public abstract class Utils {
 
 
 
-    private static final DecimalFormat formatterPrice = new DecimalFormat("#,##0.##");
 
-    public static @NotNull String formatPrice(double price) {
+
+
+
+    /**
+     * Returns the value <price> expressed as a string and formatted using $ as currency symbol and thousands separators.
+     * @param price The price to format.
+     * @return The formatted price.
+     */
+    public static @NotNull String formatPrice(final double price) {
         return formatPrice(price, "$", true);
     }
 
@@ -91,15 +102,15 @@ public abstract class Utils {
      * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
      * @return The formatted price.
      */
-    public static @NotNull String formatPrice(double price, @NotNull String currency, boolean thousandsSeparator) {
-        String r;
+    public static @NotNull String formatPrice(final double price, final @NotNull String currency, final boolean thousandsSeparator) {
+        final String r;
 
-        // No separator
+        // Separator
         if(thousandsSeparator) {
             r = currency + formatterPrice.format(price);
         }
 
-        // Separator
+        // No separator
         else {
             r = String.format("%s%.2f", currency, price);
         }
@@ -111,9 +122,16 @@ public abstract class Utils {
 
 
 
-    private static final DecimalFormat formatterAmount = new DecimalFormat("#,###");
 
-    public static @NotNull String formatAmount(double amount) {
+
+
+
+    /**
+     * Returns the value <amount> expressed as a string and formatted using thousands separators.
+     * @param amount The amount to format.
+     * @return The formatted price.
+     */
+    public static @NotNull String formatAmount(final double amount) {
         return formatAmount(amount, false, true);
     }
 
@@ -124,14 +142,20 @@ public abstract class Utils {
      * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
      * @return The formatted price.
      */
-    public static @NotNull String formatAmount(double amount, boolean x, boolean thousandsSeparator) {
-        String r;
+    public static @NotNull String formatAmount(final double amount, final boolean x, final boolean thousandsSeparator) {
+        final String r;
+
+        // Separator
         if(thousandsSeparator) {
             r = formatterAmount.format(amount);
         }
+
+        // No separator
         else {
             r = String.valueOf(amount);
         }
+
+        // Add trailing x if requested
         return x ? "x" + r : r;
     }
 
@@ -141,24 +165,25 @@ public abstract class Utils {
 
     /**
      * Converts an RGB color to HSV.
-     *     Hue:         0 to 360.0
-     *     Saturation:  0 to 1.0
-     *     Value:       0 to 1.0
+     * <p> Hue:         0 to 360.0
+     * <p> Saturation:  0 to 1.0
+     * <p> Value:       0 to 1.0
      * @param rgb The RGB color.
      * @return The color as an HSV value.
      */
-    public static @NotNull Vector3f RGBtoHSV(@NotNull Vector3i rgb) {
-        float r = rgb.x / 255.0f;
-        float g = rgb.y / 255.0f;
-        float b = rgb.z / 255.0f;
+    public static @NotNull Vector3f RGBtoHSV(final @NotNull Vector3i rgb) {
+        final float r = rgb.x / 255.0f;
+        final float g = rgb.y / 255.0f;
+        final float b = rgb.z / 255.0f;
 
-        float max = Math.max(r, Math.max(g, b));
-        float min = Math.min(r, Math.min(g, b));
+        final float max = Math.max(r, Math.max(g, b));
+        final float min = Math.min(r, Math.min(g, b));
+        final float delta = max - min;
+
         float h = 0;
-        float s;
-        float v = max;
+        final float s;
+        final float v = max;
 
-        float delta = max - min;
 
         if(max != 0) {
             s = delta / max;
@@ -187,20 +212,20 @@ public abstract class Utils {
 
     /**
      * Converts an HSV color to RGB.
-     *     Red:   0 to 255
-     *     Green: 0 to 255
-     *     Blue:  0 to 255
+     * <p> Red:   0 to 255
+     * <p> Green: 0 to 255
+     * <p> Blue:  0 to 255
      * @param hsv The HSV color.
      * @return The color as an HSV value.
      */
-    public static Vector3i HSVtoRGB(Vector3f hsv) {
-        float h = hsv.x;
-        float s = hsv.y;
-        float v = hsv.z;
+    public static @NotNull Vector3i HSVtoRGB(final @NotNull Vector3f hsv) {
+        final float h = hsv.x;
+        final float s = hsv.y;
+        final float v = hsv.z;
 
-        float c = v * s;
-        float x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-        float m = v - c;
+        final float c = v * s;
+        final float x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+        final float m = v - c;
 
         float r = 0;
         float g = 0;
@@ -235,17 +260,17 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting color.
      */
-    public static Vector3i interpolateRGB(Vector3i rgb1, Vector3i rgb2, float factor) {
-        Vector3f hsv1 = RGBtoHSV(rgb1);
-        Vector3f hsv2 = RGBtoHSV(rgb2);
+    public static @NotNull Vector3i interpolateRGB(final @NotNull Vector3i rgb1, final @NotNull Vector3i rgb2, final float factor) {
+        final Vector3f hsv1 = RGBtoHSV(rgb1);
+        final Vector3f hsv2 = RGBtoHSV(rgb2);
 
         float h1 = hsv1.x;
-        float s1 = hsv1.y;
-        float v1 = hsv1.z;
+        final float s1 = hsv1.y;
+        final float v1 = hsv1.z;
 
         float h2 = hsv2.x;
-        float s2 = hsv2.y;
-        float v2 = hsv2.z;
+        final float s2 = hsv2.y;
+        final float v2 = hsv2.z;
 
         // Adjust hue to allow the interpolation to take the shortest path
         if(Math.abs(h1 - h2) > 180) {
@@ -271,9 +296,17 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting color.
      */
-    public static Vector4i interpolateARGB(Vector4i argb1, Vector4i argb2, float factor) {
-        Vector3i rgbRet = interpolateRGB(new Vector3i(argb1.y, argb1.z, argb1.w), new Vector3i(argb2.y, argb2.z, argb2.w), factor);
-        return new Vector4i(interpolateI(argb1.x, argb2.x, factor), rgbRet.x, rgbRet.y, rgbRet.z);
+    public static @NotNull Vector4i interpolateARGB(final @NotNull Vector4i argb1, final @NotNull Vector4i argb2, final float factor) {
+        final Vector3i rgbRet = interpolateRGB(
+            new Vector3i(argb1.y, argb1.z, argb1.w),
+            new Vector3i(argb2.y, argb2.z, argb2.w), factor
+        );
+        return new Vector4i(
+            interpolateI(argb1.x, argb2.x, factor),
+            rgbRet.x,
+            rgbRet.y,
+            rgbRet.z
+        );
     }
 
 
@@ -286,7 +319,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static float interpolateF(float v1, float v2, float factor) {
+    public static float interpolateF(final float v1, final float v2, final float factor) {
         return v1 + (v2 - v1) * factor;
     }
 
@@ -300,7 +333,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static double interpolateF(double v1, double v2, double factor) {
+    public static double interpolateF(final double v1, final double v2, final double factor) {
         return v1 + (v2 - v1) * factor;
     }
 
@@ -314,7 +347,7 @@ public abstract class Utils {
      * @param factor The interpolation factor.
      * @return The resulting value.
      */
-    public static int interpolateI(int v1, int v2, float factor) {
+    public static int interpolateI(final int v1, final int v2, final float factor) {
         return Math.round(v1 + (v2 - v1) * factor);
     }
 }

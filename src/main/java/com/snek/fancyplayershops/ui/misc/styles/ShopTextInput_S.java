@@ -16,9 +16,15 @@ import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlign
 
 
 
+/**
+ * The style of the generic ShopTextInput UI element.
+ */
 public class ShopTextInput_S extends ShopButton_S {
 
-    public ShopTextInput_S(){
+    /**
+     * Creates a new ShopTextInput_S.
+     */
+    public ShopTextInput_S() {
         super();
     }
 
@@ -34,7 +40,7 @@ public class ShopTextInput_S extends ShopButton_S {
 
 
     @Override
-    public @NotNull TextAlignment getDefaultTextAlignment(){
+    public @NotNull TextAlignment getDefaultTextAlignment() {
         return TextAlignment.LEFT;
     }
 }

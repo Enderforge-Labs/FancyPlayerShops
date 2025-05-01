@@ -22,9 +22,9 @@ import net.minecraft.text.Text;
 public class TextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
 
-    private Flagged<Text>          text          = null;
-    private Flagged<TextAlignment> textAlignment = null;
-    private Flagged<Integer>       textOpacity   = null;
+    private @NotNull Flagged<@NotNull Text>          text          = null;
+    private @NotNull Flagged<@NotNull TextAlignment> textAlignment = null;
+    private @NotNull Flagged<@NotNull Integer>       textOpacity   = null;
 
 
 
@@ -57,7 +57,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public Animation getDefaultPrimerAnimation() {
+    public @NotNull Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition()
             .targetOpacity(0)
@@ -66,7 +66,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public Animation getDefaultSpawnAnimation() {
+    public @NotNull Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetOpacity(255)
@@ -75,7 +75,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public Animation getDefaultDespawnAnimation() {
+    public @NotNull Animation getDefaultDespawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetOpacity(0)
@@ -98,15 +98,15 @@ public class TextElmStyle extends ElmStyle {
 
 
     // Setters
-    public void setText         (@NotNull Text          _text         ) { text         .set(_text         ); }
-    public void setTextAlignment(@NotNull TextAlignment _textAlignment) { textAlignment.set(_textAlignment); }
-    public void setTextOpacity  (         int           _textOpacity  ) { textOpacity  .set(_textOpacity  ); }
+    public void setText         (final @NotNull Text          _text         ) { text         .set(_text         ); }
+    public void setTextAlignment(final @NotNull TextAlignment _textAlignment) { textAlignment.set(_textAlignment); }
+    public void setTextOpacity  (final          int           _textOpacity  ) { textOpacity  .set(_textOpacity  ); }
 
 
     // Flagged getters
-    public @NotNull Flagged<Text>          getFlaggedText         () { return text;          }
-    public @NotNull Flagged<TextAlignment> getFlaggedTextAlignment() { return textAlignment; }
-    public @NotNull Flagged<Integer>       getFlaggedTextOpacity  () { return textOpacity;   }
+    public @NotNull Flagged<@NotNull Text>          getFlaggedText         () { return text;          }
+    public @NotNull Flagged<@NotNull TextAlignment> getFlaggedTextAlignment() { return textAlignment; }
+    public @NotNull Flagged<@NotNull Integer>       getFlaggedTextOpacity  () { return textOpacity;   }
 
 
     // Getters

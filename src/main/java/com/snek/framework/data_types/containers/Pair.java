@@ -1,5 +1,8 @@
 package com.snek.framework.data_types.containers;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 
 
@@ -11,8 +14,18 @@ package com.snek.framework.data_types.containers;
  * A simple collection of two values of different types.
  */
 public class Pair<F, S> {
-    public F first;
-    public S second;
+    private @Nullable F first;
+    private @Nullable S second;
+
+    // Getters
+    public @Nullable F getFirst () { return first;  }
+    public @Nullable S getSecond() { return second; }
+
+    // Setters
+    public void setFirst (final @Nullable F _first ) { first  = _first;  }
+    public void setSecond(final @Nullable S _second) { second = _second; }
+
+
 
 
     /**
@@ -30,7 +43,7 @@ public class Pair<F, S> {
      * @param _first The first value.
      * @param _second The second value.
      */
-    public Pair(F _first, S _second) {
+    public Pair(final @Nullable F _first, final @Nullable S _second) {
         first  = _first;
         second = _second;
     }
@@ -42,7 +55,7 @@ public class Pair<F, S> {
      * @param _second The second value.
      * @return The newly created Pair.
      */
-    public static <K, V> Pair<K, V> from(K first, V second) {
+    public static <K, V> @NotNull Pair<@Nullable K, @Nullable V> from(final @Nullable K first, final @Nullable V second) {
         return new Pair<>(first, second);
     }
 }
