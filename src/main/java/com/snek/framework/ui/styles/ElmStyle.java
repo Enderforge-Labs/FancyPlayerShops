@@ -16,24 +16,29 @@ import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
 
 
 
+/**
+ * The default style of the generic Elm UI element.
+ */
 public class ElmStyle {
-    public static final int S_TIME = 5;                         // Spawn   time. Measured in ticks
-    public static final int D_TIME = 5;                         // Despawn time. Measured in ticks
+    public static final int S_TIME = 5; // Spawn   time. Measured in ticks
+    public static final int D_TIME = 5; // Despawn time. Measured in ticks
 
 
-    private Flagged<Transform>     transform        = null;     // The current transformation
-    private Flagged<Float>         viewRange        = null;     // The view range. 1.0f = 64 blocks
-    private Flagged<BillboardMode> billboardMode    = null;     // The billboard mode. Defines how the rendered entity is rotated relatively to the player's camera
+    // Data
+    private @NotNull  Flagged<@NotNull Transform>     transform        = null;   // The current transformation
+    private @NotNull  Flagged<@NotNull Float>         viewRange        = null;   // The view range. 1.0f = 64 blocks
+    private @NotNull  Flagged<@NotNull BillboardMode> billboardMode    = null;   // The billboard mode. Defines how the rendered entity is rotated relatively to the player's camera
 
-    private Flagged<Animation>     primerAnimation  = null;     // The animation used to prepare the element to receive the spawning animation. Applied instantly.
-    private Flagged<Animation>     spawnAnimation   = null;     // The spawning animation. Played when the entity is spawned into the world
-    private Flagged<Animation>     despawnAnimation = null;     // The despawning animation. Played before the entity is removed from the world
+    // Animations
+    private @Nullable Flagged<@NotNull Animation>     primerAnimation  = null;   // The animation used to prepare the element to receive the spawning animation. Applied instantly.
+    private @Nullable Flagged<@NotNull Animation>     spawnAnimation   = null;   // The spawning animation. Played when the entity is spawned into the world
+    private @Nullable Flagged<@NotNull Animation>     despawnAnimation = null;   // The despawning animation. Played before the entity is removed from the world
 
 
 
 
     /**
-     * Creates a new default ElmStyle.
+     * Creates a new ElmStyle.
      */
     public ElmStyle() {
         // Empty
@@ -74,12 +79,12 @@ public class ElmStyle {
 
 
     // Setters
-    public void setTransform       (@NotNull  Transform     _transform    ) { transform       .set(_transform    ); }
-    public void setViewRange       (          float         _viewRange    ) { viewRange       .set(_viewRange    ); }
-    public void setBillboardMode   (@NotNull  BillboardMode _billboardMode) { billboardMode   .set(_billboardMode); }
-    public void setPrimerAnimation (@Nullable Animation     _animation    ) { primerAnimation  .set(_animation   ); }
-    public void setSpawnAnimation  (@Nullable Animation     _animation    ) { spawnAnimation  .set(_animation    ); }
-    public void setDespawnAnimation(@Nullable Animation     _animation    ) { despawnAnimation.set(_animation    ); }
+    public void setTransform       (final @NotNull  Transform     _transform    ) { transform       .set(_transform    ); }
+    public void setViewRange       (final           float         _viewRange    ) { viewRange       .set(_viewRange    ); }
+    public void setBillboardMode   (final @NotNull  BillboardMode _billboardMode) { billboardMode   .set(_billboardMode); }
+    public void setPrimerAnimation (final @Nullable Animation     _animation    ) { primerAnimation  .set(_animation   ); }
+    public void setSpawnAnimation  (final @Nullable Animation     _animation    ) { spawnAnimation  .set(_animation    ); }
+    public void setDespawnAnimation(final @Nullable Animation     _animation    ) { despawnAnimation.set(_animation    ); }
 
 
     // Getters
@@ -92,19 +97,19 @@ public class ElmStyle {
 
 
     // Flagged getters
-    public @NotNull  Flagged<Transform>     getFlaggedTransform       () { return transform;        }
-    public           Flagged<Float>         getFlaggedViewRange       () { return viewRange;        }
-    public @NotNull  Flagged<BillboardMode> getFlaggedBillboardMode   () { return billboardMode;    }
-    public @Nullable Flagged<Animation>     getFlaggedPrimerAnimation () { return primerAnimation;  }
-    public @Nullable Flagged<Animation>     getFlaggedSpawnAnimation  () { return spawnAnimation;   }
-    public @Nullable Flagged<Animation>     getFlaggedDespawnAnimation() { return despawnAnimation; }
+    public @NotNull  Flagged<@NotNull Transform>     getFlaggedTransform       () { return transform;        }
+    public @NotNull  Flagged<@NotNull Float>         getFlaggedViewRange       () { return viewRange;        }
+    public @NotNull  Flagged<@NotNull BillboardMode> getFlaggedBillboardMode   () { return billboardMode;    }
+    public @Nullable Flagged<@NotNull Animation>     getFlaggedPrimerAnimation () { return primerAnimation;  }
+    public @Nullable Flagged<@NotNull Animation>     getFlaggedSpawnAnimation  () { return spawnAnimation;   }
+    public @Nullable Flagged<@NotNull Animation>     getFlaggedDespawnAnimation() { return despawnAnimation; }
 
 
     // Edit getters
-    public @NotNull  Transform     editTransform       () { return transform       .edit(); }
-    //!                            editViewRange       Primitive types cannot be edited
-    //!                            editBillboardMode   Primitive types cannot be edited
-    public @Nullable Animation     editPrimerAnimation () { return primerAnimation .edit(); }
-    public @Nullable Animation     editSpawnAnimation  () { return spawnAnimation  .edit(); }
-    public @Nullable Animation     editDespawnAnimation() { return despawnAnimation.edit(); }
+    public @NotNull  Transform editTransform       () { return transform       .edit(); }
+    //!                        editViewRange       Primitive types cannot be edited
+    //!                        editBillboardMode   Primitive types cannot be edited
+    public @Nullable Animation editPrimerAnimation () { return primerAnimation .edit(); }
+    public @Nullable Animation editSpawnAnimation  () { return spawnAnimation  .edit(); }
+    public @Nullable Animation editDespawnAnimation() { return despawnAnimation.edit(); }
 }

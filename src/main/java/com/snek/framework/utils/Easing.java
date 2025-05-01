@@ -13,19 +13,19 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that can store and compute a unary operator on request.
- * This is meant for interpolation easings.
+ * <p> This is meant for interpolation easings.
  */
 public final class Easing {
-    private @NotNull UnaryOperator<Double> f;
+    private @NotNull UnaryOperator<@NotNull Double> f;
 
 
     /**
      * Creates a new Easing with the specified operator.
      * @param _f The operator.
-     *     This function takes the linear progress and returns the corresponding progress that
+     * <p> This function takes the linear progress and returns the corresponding progress that
      *     the custom easing would produce at the same point in time.
      */
-    public Easing(@NotNull UnaryOperator<Double> _f) {
+    public Easing(final @NotNull UnaryOperator<@NotNull Double> _f) {
         f = _f;
     }
 
@@ -36,7 +36,7 @@ public final class Easing {
      * @param x The linear progress.
      * @return The progress with the custom easing applied.
      */
-    public double compute(double x) {
+    public double compute(final double x) {
         return f.apply(x);
     }
 }

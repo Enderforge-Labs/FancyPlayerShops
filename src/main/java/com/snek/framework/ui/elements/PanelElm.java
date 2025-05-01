@@ -6,7 +6,6 @@ import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
@@ -14,7 +13,6 @@ import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.PanelElmStyle;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.server.world.ServerWorld;
 
 
@@ -26,11 +24,11 @@ import net.minecraft.server.world.ServerWorld;
 
 /**
  * A simple UI element with a background color and animations.
- * Panels default to a 1x1 blocks size.
+ * <p> Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
-    private CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private PanelElmStyle     getThisStyle () { return getStyle (PanelElmStyle    .class); }
+    private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
+    private @NotNull PanelElmStyle     getThisStyle () { return getStyle (PanelElmStyle    .class); }
 
     // The amount of panel elements of default size would be needed to cover the width of a block
     public static final float ENTITY_BLOCK_RATIO_X = 40f;
@@ -50,7 +48,7 @@ public class PanelElm extends Elm {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected PanelElm(@NotNull ServerWorld _world, @NotNull CustomDisplay _entity, @NotNull ElmStyle _style) {
+    protected PanelElm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
         getThisEntity().setText(new Txt().get());
     }
@@ -61,7 +59,7 @@ public class PanelElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected PanelElm(@NotNull ServerWorld _world, @NotNull ElmStyle _style) {
+    protected PanelElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 
@@ -70,7 +68,7 @@ public class PanelElm extends Elm {
      * Creates a new PanelElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public PanelElm(@NotNull ServerWorld _world) {
+    public PanelElm(final @NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new PanelElmStyle());
     }
 
@@ -80,14 +78,21 @@ public class PanelElm extends Elm {
     @Override
     public void flushStyle() {
         super.flushStyle();
-        { Flagged<Vector4i> f = getThisStyle().getFlaggedColor(); if(f.isFlagged()) { getThisEntity().setBackground(f.get()); f.unflag(); }}
+
+
+        // Apply color
+        { final Flagged<Vector4i> f = getThisStyle().getFlaggedColor();
+        if(f.isFlagged()) {
+            getThisEntity().setBackground(f.get());
+            f.unflag();
+        }}
     }
 
 
 
 
     @Override
-    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
+    protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasBackground()) getThisStyle().setColor(d.getBackground());
     }
@@ -96,7 +101,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    protected InterpolatedData __generateInterpolatedData() {
+    protected @NotNull InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getThisStyle().getTransform().copy(),
             new Vector4i(getThisStyle().getColor()),
@@ -104,7 +109,7 @@ public class PanelElm extends Elm {
         );
     }
     @Override
-    protected InterpolatedData __generateInterpolatedData(int index) {
+    protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             new Vector4i(futureDataQueue.get(index).getBackground()),
@@ -124,7 +129,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    protected Transform __calcTransform() {
+    protected @NotNull Transform __calcTransform() {
         final Transform t = super.__calcTransform();
         return t.copy()
             .scaleX(ENTITY_BLOCK_RATIO_X * getAbsSize().x)

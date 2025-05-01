@@ -30,9 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.Entity.RemovalReason;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
@@ -55,7 +53,7 @@ import net.minecraft.world.World;
  * An abstract class that represents a visible UI Element.
  */
 public abstract class Elm extends Div {
-    public static final String ENTITY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.displayentity";
+    public static final @NotNull String ENTITY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.displayentity";
     public static final int QUEUE_LINGER_TICKS = 4;
     // ^ Additional update ticks the element stays in the update queue for after all of its steps have been processed.
 
@@ -78,27 +76,47 @@ public abstract class Elm extends Div {
 
 
     // In-world data
-    protected @NotNull ServerWorld   world;     // The world this Elm will be spawned in
-    private   @NotNull CustomDisplay entity;    // The display entity held by this element
-    private   @NotNull ElmStyle      style;     // The style of the element
-    protected boolean isSpawned = false;        // Whether the element has been spawned into the world
-    private   boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
-    public    boolean isSpawned() { return isSpawned; }
+    protected final @NotNull ServerWorld   world;     // The world this Elm will be spawned in
+    private   final @NotNull CustomDisplay entity;    // The display entity held by this element
+    private   final @NotNull ElmStyle      style;     // The style of the element
+    protected       boolean isSpawned = false;        // Whether the element has been spawned into the world
+    private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
+    public          boolean isSpawned() { return isSpawned; }
 
 
+
+
+    /**
+     * Retrieves the display held by this element.
+     * @return The custom display.
+     */
     public CustomDisplay getEntity() {
         return entity;
     }
-    public <T> T getEntity(Class<T> type) {
+    /**
+     * Retrieves the custom display held by this element as the specified subclass.
+     * @param type The sublass to cast the custom display to.
+     * @return The custom display casted to the specified class.
+     */
+    public <T> @NotNull T getEntity(final @NotNull Class<T> type) {
         if(type.isInstance(entity)) return type.cast(entity);
         else throw new ClassCastException("Cannot cast entity from " + entity.getClass().getName() + " to " + type.getName());
     }
 
 
+    /**
+     * Retrieves the style used by this element.
+     * @return The style.
+     */
     public ElmStyle getStyle() {
         return style;
     }
-    public <T> T getStyle(Class<T> type) {
+    /**
+     * Retrieves the style used by this element as the specified subclass.
+     * @param type The sublass to cast the style to.
+     * @return The style casted to the specified class.
+     */
+    public <T> @NotNull T getStyle(final @NotNull Class<T> type) {
         if(type.isInstance(style)) return type.cast(style);
         else throw new ClassCastException("Cannot cast style from " + style.getClass().getName() + " to " + type.getName());
     }
@@ -116,7 +134,7 @@ public abstract class Elm extends Div {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected Elm(@NotNull ServerWorld _world, CustomDisplay _entity, @NotNull ElmStyle _style) {
+    protected Elm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super();
         world  = _world;
         entity = _entity;
@@ -133,16 +151,27 @@ public abstract class Elm extends Div {
      */
     protected void flushStyle() {
         epsilonPolarity *= -1;
-        {
-            Flagged<Transform>
-            f = style.getFlaggedTransform();
-            if(f.isFlagged()) {
-                entity.setTransformation(__calcTransform().moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
-                f.unflag();
-            }
-        }
-        { Flagged<Float>         f = style.getFlaggedViewRange();     if(f.isFlagged()) { entity.setViewRange     (f.get()                                 ); f.unflag(); }}
-        { Flagged<BillboardMode> f = style.getFlaggedBillboardMode(); if(f.isFlagged()) { entity.setBillboardMode (f.get()                                 ); f.unflag(); }}
+
+        // Apply transform
+        { final Flagged<Transform> f = style.getFlaggedTransform();
+        if(f.isFlagged()) {
+            entity.setTransformation(__calcTransform().moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
+            f.unflag();
+        }}
+
+        // Apply view range
+        { final Flagged<Float> f = style.getFlaggedViewRange();
+        if(f.isFlagged()) {
+            entity.setViewRange(f.get());
+            f.unflag();
+        }}
+
+        // Apply billboard mode
+        { final Flagged<BillboardMode> f = style.getFlaggedBillboardMode();
+        if(f.isFlagged()) {
+            entity.setBillboardMode(f.get());
+            f.unflag();
+        }}
     }
 
 
@@ -150,7 +179,7 @@ public abstract class Elm extends Div {
 
     @Override
     protected void updateAbsPosSelf() {
-        Vector2f oldPos = new Vector2f(getAbsPos());
+        final Vector2f oldPos = new Vector2f(getAbsPos());
         super.updateAbsPosSelf();
         if(!getAbsPos().equals(oldPos)) {
             style.editTransform();
@@ -162,7 +191,7 @@ public abstract class Elm extends Div {
 
     @Override
     protected void updateZIndexSelf() {
-        int oldZIndex = getZIndex();
+        final int oldZIndex = getZIndex();
         super.updateZIndexSelf();
         if(getZIndex() != oldZIndex) {
             style.editTransform();
@@ -180,10 +209,10 @@ public abstract class Elm extends Div {
 
     /**
      * Calculates the final transform to apply to the entity.
-     * This takes into account the element's position, alignment options, Z-index and visual transform.
+     * <p> This takes into account the element's position, alignment options, Z-index and visual transform.
      * @return The transform.
      */
-    protected Transform __calcTransform() {
+    protected @NotNull Transform __calcTransform() {
         return style.getTransform().copy()
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * 0.001f) //TODO move Z layer spacing to config file
         ;
@@ -198,11 +227,11 @@ public abstract class Elm extends Div {
 
     /**
      * Instantly calculates animation steps and adds this element to the update queue.
-     * ! Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
     @Override
-    public void applyAnimation(@NotNull Animation animation) {
+    public void applyAnimation(final @NotNull Animation animation) {
         super.applyAnimation(animation);
 
         // Add element to the update queue and update the queued state
@@ -214,7 +243,7 @@ public abstract class Elm extends Div {
 
         // Apply each transition one at a time
         int shift = 0;
-        for(Transition transition : animation.getTransitions()) {
+        for(final Transition transition : animation.getTransitions()) {
             shift += __applyAnimationTransition(transition, shift);
         }
     }
@@ -223,11 +252,11 @@ public abstract class Elm extends Div {
 
 
     @Override
-    public void applyAnimationNow(@NotNull Animation animation) {
+    public void applyAnimationNow(final @NotNull Animation animation) {
         super.applyAnimationNow(animation);
 
         // Apply each transition one at a time
-        for(Transition transition : animation.getTransitions()) {
+        for(final Transition transition : animation.getTransitions()) {
             __applyAnimationTransitionNow(transition);
         }
     }
@@ -235,14 +264,14 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * Instantly calculates the result of a single transition and applies it to the element.
+     * <p> Instantly calculates the result of a single transition and applies it to the element.
      * @param t The transition to apply.
      */
-    protected void __applyAnimationTransitionNow(@NotNull Transition t) {
+    protected void __applyAnimationTransitionNow(final @NotNull Transition t) {
 
         // Calculate step and apply it instantly
-        TransitionStep step = t.createStep(1);
-        InterpolatedData data = __generateInterpolatedData();
+        final TransitionStep step = t.createStep(1);
+        final InterpolatedData data = __generateInterpolatedData();
         data.apply(step);
         __applyTransitionStep(data);
         flushStyle();
@@ -264,20 +293,20 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * Instantly calculates the steps of a single transition and adds them to this element's future data.
+     * <p> Instantly calculates the steps of a single transition and adds them to this element's future data.
      * @param transition The transition to apply.
      * @param shift the amount of future data to skip before applying this transition.
      * @return The amount of future data this transition affected.
      */
-    private int __applyAnimationTransition(@NotNull Transition transition, int shift) {
+    private int __applyAnimationTransition(final @NotNull Transition transition, final int shift) {
 
 
         // Calculate transition as a list of steps
-        List<TransitionStep> animationSteps = new ArrayList<>();
-        int time = transition.getDuration();            // The duration of this transition
-        Easing e = transition.getEasing();
+        final List<TransitionStep> animationSteps = new ArrayList<>();
+        final int time = transition.getDuration();            // The duration of this transition
+        final Easing e = transition.getEasing();
         for(int i = 0; i == 0 || i < time; i += TRANSITION_REFRESH_TIME) {
-            float factor = (float)e.compute(Math.min(1d, (double)(i + TRANSITION_REFRESH_TIME) / time));
+            final float factor = (float)e.compute(Math.min(1d, (double)(i + TRANSITION_REFRESH_TIME) / time));
             animationSteps.add(transition.createStep(factor));
         }
 
@@ -300,7 +329,7 @@ public abstract class Elm extends Div {
         }
 
         // If the amount of future data is larger than the amount of steps, apply the last step to the remaining data
-        TransitionStep lastStep = animationSteps.get(animationSteps.size() - 1);
+        final TransitionStep lastStep = animationSteps.get(animationSteps.size() - 1);
         for(; j + shift < futureDataQueue.size(); ++j) {
             futureDataQueue.get(j + shift).apply(lastStep);
         }
@@ -315,20 +344,20 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * Applies a single future data to the element.
+     * <p> Applies a single future data to the element.
      * @param d The future data value.
      */
-    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
+    protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
         if(d.hasTransform()) { style.setTransform(d.getTransform()); }
     }
 
 
     /**
      * Helper function.
-     * Generates a base future data from the current values of the element.
+     * <p> Generates a base future data from the current values of the element.
      * @return The generated future data.
      */
-    protected InterpolatedData __generateInterpolatedData() {
+    protected @NotNull InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             style.getTransform().copy(),
             null,
@@ -337,11 +366,11 @@ public abstract class Elm extends Div {
     }
     /**
      * Helper function.
-     * Generates a base future data from the values stored in an element of the future data queue.
+     * <p> Generates a base future data from the values stored in an element of the future data queue.
      * @param index The index of the element to read values from.
      * @return The generated future data.
      */
-    protected InterpolatedData __generateInterpolatedData(int index) {
+    protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             null,
@@ -364,12 +393,12 @@ public abstract class Elm extends Div {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         if(isSpawned) return;
 
         // Flush previous changes to the entity to avoid bad interpolations and spawn the entity into the world
         flushStyle();
-        Animation primerAnimation = style.getPrimerAnimation();
+        final Animation primerAnimation = style.getPrimerAnimation();
         if(primerAnimation != null) {
             applyAnimationNow(primerAnimation);
         }
@@ -382,7 +411,7 @@ public abstract class Elm extends Div {
 
 
         // Handle animations
-        Animation animation = style.getSpawnAnimation();
+        final Animation animation = style.getSpawnAnimation();
         if(animation != null) {
             applyAnimation(animation);
         }
@@ -405,7 +434,7 @@ public abstract class Elm extends Div {
         isSpawned = false;
 
         // Handle animations
-        Animation animation = style.getDespawnAnimation();
+        final Animation animation = style.getDespawnAnimation();
         if(animation != null) {
             applyAnimation(animation);
 
@@ -436,13 +465,6 @@ public abstract class Elm extends Div {
      */
     protected boolean stepTransition() {
 
-        // // Apply epsilon to the step's transform, then invert its polarity
-        // InterpolatedData data = ;
-        // if(data.hasTransform()) data.getTransform().moveZ(EPSILON * epsilonPolarity);
-        // epsilonPolarity *= -1;
-        // if(!this.getClass().getSimpleName().equals("ShopItemDisplay")) System.out.println("updated: " + this.getClass().getSimpleName());
-
-
         // Apply step and update the entity
         __applyTransitionStep(futureDataQueue.removeFirst());
         flushStyle();
@@ -468,8 +490,8 @@ public abstract class Elm extends Div {
 
 
     /**
-     * Processes the first step of the scheduled transitions of all the queued elements
-     * Must be called at the end of the tick every TRANSITION_REFRESH_TIME ticks. //FIXME make unaligned
+     * Processes the first step of the scheduled transitions of all the queued elements.
+     * <p> Must be called at the end of the tick every TRANSITION_REFRESH_TIME ticks.
      */
     public static void processUpdateQueue() {
 
@@ -485,7 +507,7 @@ public abstract class Elm extends Div {
      * Updates the new hover state of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
-    public void updateHoverState(@Nullable PlayerEntity player) {
+    public void updateHoverState(final @Nullable PlayerEntity player) {
         if(this instanceof Hoverable h) {
             boolean hoverStateNext;
 
@@ -533,18 +555,18 @@ public abstract class Elm extends Div {
 
     /**
      * Checks if a player is looking at this element.
-     *     More specifically, it checks if the view vector of the player intersects
+     * <p> More specifically, it checks if the view vector of the player intersects
      *     with the bounding box of this UI element, from any direction or distance.
      * @param player The player.
      * @return true if the player is looking at this element, false otherwise.
      */
-    public boolean checkIntersection(PlayerEntity player) {
+    public boolean checkIntersection(final @NotNull PlayerEntity player) {
         if(!isSpawned || style.getBillboardMode() != BillboardMode.FIXED) return false;
-        Transform t = __calcTransform();
+        final Transform t = __calcTransform();
 
 
         // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
-        Vector3f origin =
+        final Vector3f origin =
             new Vector3f(t.getPos())
             .rotate(t.getGlobalRot())
             .add(entity.getPosCopy())
@@ -552,15 +574,15 @@ public abstract class Elm extends Div {
 
 
         // Calculate corner X position relative to the origin using the entity's local coordinate system
-        Vector3f shiftX = new Vector3f(getAbsSize().x / 2, 0, 0);
+        final Vector3f shiftX = new Vector3f(getAbsSize().x / 2, 0, 0);
         shiftX.rotate(t.getRot()).rotate(t.getGlobalRot());
 
 
         // Check view intersection with the display's box
-        Vector3f corner1 = new Vector3f(origin).sub(shiftX);
-        Vector3f corner2 = new Vector3f(origin).add(shiftX);
-        Vector3f corner3 = new Vector3f(origin).add(shiftX).add(0, getAbsSize().y, 0);
-        Vector3f corner4 = new Vector3f(origin).sub(shiftX).add(0, getAbsSize().y, 0);
+        final Vector3f corner1 = new Vector3f(origin).sub(shiftX);
+        final Vector3f corner2 = new Vector3f(origin).add(shiftX);
+        final Vector3f corner3 = new Vector3f(origin).add(shiftX).add(0, getAbsSize().y, 0);
+        final Vector3f corner4 = new Vector3f(origin).sub(shiftX).add(0, getAbsSize().y, 0);
         return SpaceUtils.checkLineRectangleIntersection(
             player.getEyePos().toVector3f(),
             player.getRotationVec(1f).toVector3f(),
@@ -573,14 +595,13 @@ public abstract class Elm extends Div {
 
     /**
      * Checks for stray displays and purges them.
-     * Must be called on entity load event.
+     * <p> Must be called on entity load event.
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
         if(entity instanceof DisplayEntity) {
-            World world = entity.getWorld();
             if(
-                world != null &&
+                entity.getWorld() != null &&
                 entity.getCustomName() != null &&
                 entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
             ) {

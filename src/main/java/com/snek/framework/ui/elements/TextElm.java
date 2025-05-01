@@ -4,23 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector4i;
 
-import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
-import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
-import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.generated.FontSize;
-import com.snek.framework.ui.Div;
 import com.snek.framework.ui.styles.ElmStyle;
 import com.snek.framework.ui.styles.FancyTextElmStyle;
-import com.snek.framework.ui.styles.PanelElmStyle;
 import com.snek.framework.ui.styles.TextElmStyle;
 
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -37,8 +30,8 @@ import net.minecraft.text.Text;
  * This class has transparent background. For a text element with background color, use FancyTextElm.
  */
 public class TextElm extends Elm {
-    private CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
+    private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
+    private @NotNull TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
 
 
 
@@ -49,7 +42,7 @@ public class TextElm extends Elm {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected TextElm(@NotNull ServerWorld _world, @NotNull CustomDisplay _entity, @NotNull ElmStyle _style) {
+    protected TextElm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
@@ -61,7 +54,7 @@ public class TextElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected TextElm(@NotNull ServerWorld _world, @NotNull ElmStyle _style) {
+    protected TextElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 
@@ -70,7 +63,7 @@ public class TextElm extends Elm {
      * Creates a new TextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public TextElm(@NotNull ServerWorld _world) {
+    public TextElm(final @NotNull ServerWorld _world) {
         this(_world, new CustomTextDisplay(_world), new TextElmStyle());
     }
 
@@ -82,7 +75,7 @@ public class TextElm extends Elm {
 
         // Handle transform calculations separately
         {
-            Flagged<Transform> f = getThisStyle().getFlaggedTransform();
+            final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
             if(f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
                 final Transform t = __calcTransform();
                 if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcWidth(this)) / 2f);
@@ -94,16 +87,28 @@ public class TextElm extends Elm {
 
         // Call superconstructor (transform is already unflagged) and handle the other values normally
         super.flushStyle();
-        { Flagged<Text>          f = getThisStyle().getFlaggedText();          if(f.isFlagged()) { getThisEntity().setText         (f.get()); f.unflag(); }}
-        { Flagged<Integer>       f = getThisStyle().getFlaggedTextOpacity();   if(f.isFlagged()) { getThisEntity().setTextOpacity  (f.get()); f.unflag(); }}
-        { Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment(); if(f.isFlagged()) { getThisEntity().setTextAlignment(f.get()); f.unflag(); }}
+        { final Flagged<Text> f = getThisStyle().getFlaggedText();
+        if(f.isFlagged()) {
+            getThisEntity().setText(f.get());
+            f.unflag();
+        }}
+        { final Flagged<Integer> f = getThisStyle().getFlaggedTextOpacity();
+        if(f.isFlagged()) {
+            getThisEntity().setTextOpacity(f.get());
+            f.unflag();
+        }}
+        { final Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment();
+        if(f.isFlagged()) {
+            getThisEntity().setTextAlignment(f.get());
+            f.unflag();
+        }}
     }
 
 
 
 
     @Override
-    protected void __applyTransitionStep(@NotNull InterpolatedData d) {
+    protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasOpacity()) getThisStyle().setTextOpacity(d.getOpacity());
     }
@@ -112,7 +117,7 @@ public class TextElm extends Elm {
 
 
     @Override
-    protected InterpolatedData __generateInterpolatedData() {
+    protected @NotNull InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getThisStyle().getTransform().copy(),
             null,
@@ -120,7 +125,7 @@ public class TextElm extends Elm {
         );
     }
     @Override
-    protected InterpolatedData __generateInterpolatedData(int index) {
+    protected @NotNull InterpolatedData __generateInterpolatedData(int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
             null,
@@ -132,7 +137,7 @@ public class TextElm extends Elm {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         super.spawn(pos);
     }
 
@@ -145,7 +150,7 @@ public class TextElm extends Elm {
 
     @Override
     public boolean stepTransition() {
-        boolean r = super.stepTransition();
+        final boolean r = super.stepTransition();
         getThisEntity().tick();
         return r;
     }
@@ -157,13 +162,12 @@ public class TextElm extends Elm {
     //TODO check transforms and everything else that could change it
     /**
      * Calculates the in-world height of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
-     * NOTICE: The height can be inaccurate as a lot of assumptions are made to calculate it.
-     *     The returned value is the best possible approximation.
-     * NOTICE: This operation is fairly expensive. The result should be cached whenever possible.
-     * NOTICE: Wrapped lines are counted as one.
+     * <p> NOTICE: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p> NOTICE: This operation is fairly expensive. The result should be cached whenever possible.
+     * <p> NOTICE: Wrapped lines are counted as one.
      * @return The height in blocks.
      */
-    public static float calcHeight(Elm elm) {
+    public static float calcHeight(final @NotNull Elm elm) {
         final Text text;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
@@ -185,13 +189,12 @@ public class TextElm extends Elm {
     //TODO check transforms and everything else that could change it
     /**
      * Calculates the in-world width of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
-     * NOTICE: The width can be inaccurate as a lot of assumptions are made to calculate it.
-     *     The returned value is the best possible approximation.
-     * NOTICE: This operation is fairly expensive. The result should be cached whenever possible.
-     * NOTICE: Wrapped lines are counted as one.
+     * <p> NOTICE: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p> NOTICE: This operation is fairly expensive. The result should be cached whenever possible.
+     * <p> NOTICE: Wrapped lines are counted as one.
      * @return The width in blocks.
      */
-    public static float calcWidth(Elm elm) {
+    public static float calcWidth(final @NotNull Elm elm) {
         final Text text;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
@@ -210,15 +213,6 @@ public class TextElm extends Elm {
             final float w = FontSize.getWidth(lines[i]);
             if(w > maxWidth) maxWidth = w;
         }
-
-        // final Pair<String, Integer> line = Pair.from(lines[0], lines[0].length());
-        // if(lines.length > 1) for(int i = 0; i < lines.length; ++i) {
-        //     final int len = lines[i].length();
-        //     if(len > line.second) {
-        //         line.first = lines[i];
-        //         line.second = len;
-        //     }
-        // }
 
         // Calculate its length in blocks and return it
         return maxWidth * t.getScale().x;

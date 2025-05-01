@@ -1,17 +1,23 @@
 package com.snek.framework.utils.scheduler;
 
+import org.jetbrains.annotations.NotNull;
+
+
+
+
+
 
 
 
 /**
  * A class that lets you control scheduled tasks.
- * Instances of this class are returned by the Scheduler's methods.
+ * <p> Instances of this class are returned by the Scheduler's methods.
  */
 public class TaskHandler {
     private long targetTick;
     public long getTargetTick() { return targetTick; }
     public void setTargetTick(long n) { targetTick = n; }
-    protected final Runnable task;
+    protected final @NotNull Runnable task;
     protected boolean cancelled = false;
 
 
@@ -22,7 +28,7 @@ public class TaskHandler {
      * @param _targetTick The tick the task is scheduled for.
      * @param _task The task to execute.
      */
-    public TaskHandler(long _targetTick, Runnable _task) {
+    public TaskHandler(final long _targetTick, final @NotNull Runnable _task) {
         targetTick = _targetTick;
         task = _task;
     }
@@ -30,7 +36,7 @@ public class TaskHandler {
 
     /**
      * Marks the task as cancelled.
-     * Calling .exec() on cancelled tasks doesn't run them.
+     * <p> Calling .exec() on cancelled tasks doesn't run them.
      */
     public void cancel() {
         cancelled = true;
@@ -39,7 +45,7 @@ public class TaskHandler {
 
     /**
      * Marks the task as scheduled.
-     * This undos any previous calls to .cancel()
+     * <p> This undos any previous calls to .cancel()
      */
     public void schedule() {
         cancelled = false;
