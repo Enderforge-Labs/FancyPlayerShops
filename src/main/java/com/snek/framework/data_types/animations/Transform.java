@@ -19,18 +19,18 @@ import net.minecraft.util.math.AffineTransformation;
  * It can be converted to a Minecraft AffineTransformation.
  */
 public class Transform {
-    protected @NotNull Vector3f    _pos;
-    protected @NotNull Quaternionf _lrot;
-    protected @NotNull Vector3f    _scale;
-    protected @NotNull Quaternionf _grot;
+    protected final @NotNull Vector3f    _pos;
+    protected final @NotNull Quaternionf _lrot;
+    protected final @NotNull Vector3f    _scale;
+    protected final @NotNull Quaternionf _grot;
 
 
     /**
      * Creates a new Matrix4f using the current translation, local rotation, scale and global rotation values.
      * @return The transformation matric.
      */
-    public Matrix4f toMatrixTransform() {
-        Matrix4f m = new Matrix4f();
+    public @NotNull Matrix4f toMatrixTransform() {
+        final Matrix4f m = new Matrix4f();
         m.rotate   (_grot );
         m.translate(_pos  );
         m.rotate   (_lrot );
@@ -43,7 +43,7 @@ public class Transform {
      * Creates a new AffineTransformation using the current translation, local rotation, scale and global rotation values.
      * @return The transformation.
      */
-    public AffineTransformation toMinecraftTransform() {
+    public @NotNull AffineTransformation toMinecraftTransform() {
         return new AffineTransformation(toMatrixTransform());
     }
 
@@ -70,7 +70,7 @@ public class Transform {
      * @param __scale The scale.
      * @param __globalRot The global rotation
      */
-    public Transform(@NotNull Vector3f __pos, @NotNull Quaternionf __rot, @NotNull Vector3f __scale, @NotNull Quaternionf __globalRot) {
+    public Transform(final @NotNull Vector3f __pos, final @NotNull Quaternionf __rot, final @NotNull Vector3f __scale, final @NotNull Quaternionf __globalRot) {
         _pos   = new Vector3f(__pos);
         _lrot  = new Quaternionf(__rot);
         _scale = new Vector3f(__scale);
@@ -97,7 +97,7 @@ public class Transform {
      * @param t The new value.
      * @return This transform.
      */
-    public Transform set(@NotNull Transform t) {
+    public @NotNull Transform set(final @NotNull Transform t) {
         _pos   .set(t._pos);
         _lrot  .set(t._lrot);
         _scale .set(t._scale);
@@ -113,7 +113,7 @@ public class Transform {
      * @param t The transform to apply.
      * @return this transform.
      */
-    public Transform apply(Transform t) {
+    public @NotNull Transform apply(final @NotNull Transform t) {
         move(t._pos);
         rot(t._lrot);
         scale(t._scale);
@@ -129,7 +129,7 @@ public class Transform {
      * @param t The target transform.
      * @return The calculated transform.
      */
-    public Transform delta(Transform t) {
+    public @NotNull Transform delta(final @NotNull Transform t) {
         return new Transform(
             t._pos.sub(_pos, new Vector3f()),
             t._lrot.mul(_lrot.invert(new Quaternionf()), new Quaternionf()),
@@ -147,7 +147,7 @@ public class Transform {
      * @param factor The factor. Using 0 will return a copy of this, using 1 will return a copy of target.
      * @return this transform.
      */
-    public Transform interpolate(Transform target, float factor) {
+    public @NotNull Transform interpolate(final @NotNull Transform target, final float factor) {
         _pos  .lerp (target._pos,   factor);
         _lrot .slerp(target._lrot,  factor);
         _scale.lerp (target._scale, factor);
@@ -159,57 +159,57 @@ public class Transform {
 
 
     // Left rotation
-    public Transform rotX         (float x                  ) { _lrot.rotateX(x);                   return this; }
-    public Transform rotY         (float y                  ) { _lrot.rotateY(y);                   return this; }
-    public Transform rotZ         (float z                  ) { _lrot.rotateZ(z);                   return this; }
-    public Transform rot          (float x, float y, float z) { rotX(x); rotY(y); rotZ(z);          return this; }
-    public Transform rot          (Quaternionf r            ) { _lrot.mul(r);                       return this; }
-    public Transform setRot       (Quaternionf r            ) { _lrot.set(r);                       return this; }
+    public @NotNull Transform rotX         (final float x                  ) { _lrot.rotateX(x); return this; }
+    public @NotNull Transform rotY         (final float y                  ) { _lrot.rotateY(y); return this; }
+    public @NotNull Transform rotZ         (final float z                  ) { _lrot.rotateZ(z); return this; }
+    public @NotNull Transform rot          (final @NotNull Quaternionf r   ) { _lrot.mul(r);     return this; }
+    public @NotNull Transform setRot       (final @NotNull Quaternionf r   ) { _lrot.set(r);     return this; }
+    public @NotNull Transform rot          (final float x, final float y, final float z) { rotX(x); rotY(y); rotZ(z); return this; }
 
 
 
 
     // Translation
-    public Transform moveX        (float x                  ) { _pos.x += x;                        return this; }
-    public Transform moveY        (float y                  ) { _pos.y += y;                        return this; }
-    public Transform moveZ        (float z                  ) { _pos.z += z;                        return this; }
-    public Transform move         (float x, float y, float z) { moveX(x); moveY(y); moveZ(z);       return this; }
-    public Transform move         (Vector3f s               ) { _pos.add(s);                        return this; }
+    public @NotNull Transform moveX        (final float x                  ) { _pos.x += x; return this; }
+    public @NotNull Transform moveY        (final float y                  ) { _pos.y += y; return this; }
+    public @NotNull Transform moveZ        (final float z                  ) { _pos.z += z; return this; }
+    public @NotNull Transform move         (final @NotNull Vector3f s      ) { _pos.add(s); return this; }
+    public @NotNull Transform move         (final float x, final float y, final float z) { moveX(x); moveY(y); moveZ(z); return this; }
 
-    public Transform setPosX      (float x                  ) { _pos.x = x;                         return this; }
-    public Transform setPosY      (float y                  ) { _pos.y = y;                         return this; }
-    public Transform setPosZ      (float z                  ) { _pos.z = z;                         return this; }
-    public Transform setPos       (float x, float y, float z) { setPosX(x); setPosY(y); setPosZ(z); return this; }
-    public Transform setPos       (Vector3f s               ) { _pos.set(s);                        return this; }
+    public @NotNull Transform setPosX      (final float x                  ) { _pos.x = x;  return this; }
+    public @NotNull Transform setPosY      (final float y                  ) { _pos.y = y;  return this; }
+    public @NotNull Transform setPosZ      (final float z                  ) { _pos.z = z;  return this; }
+    public @NotNull Transform setPos       (final @NotNull Vector3f s      ) { _pos.set(s); return this; }
+    public @NotNull Transform setPos       (final float x, final float y, final float z) { setPosX(x); setPosY(y); setPosZ(z); return this; }
 
 
 
 
     // Scale
-    public Transform scaleX       (float x                  ) { _scale.x *= x;                            return this; }
-    public Transform scaleY       (float y                  ) { _scale.y *= y;                            return this; }
-    public Transform scaleZ       (float z                  ) { _scale.z *= z;                            return this; }
-    public Transform scale        (float x, float y, float z) { scaleX(x); scaleY(y); scaleZ(z);          return this; }
-    public Transform scale        (float n                  ) { scale(n, n, n);                           return this; }
-    public Transform scale        (Vector3f s               ) { _scale.mul(s);                            return this; }
+    public @NotNull Transform scaleX       (final float x                  ) { _scale.x *= x;  return this; }
+    public @NotNull Transform scaleY       (final float y                  ) { _scale.y *= y;  return this; }
+    public @NotNull Transform scaleZ       (final float z                  ) { _scale.z *= z;  return this; }
+    public @NotNull Transform scale        (final float n                  ) { scale(n, n, n); return this; }
+    public @NotNull Transform scale        (final @NotNull  Vector3f s     ) { _scale.mul(s);  return this; }
+    public @NotNull Transform scale        (final float x, final float y, final float z) { scaleX(x); scaleY(y); scaleZ(z); return this; }
 
-    public Transform setScaleX    (float x                  ) { _scale.x = x;                             return this; }
-    public Transform setScaleY    (float y                  ) { _scale.y = y;                             return this; }
-    public Transform setScaleZ    (float z                  ) { _scale.z = z;                             return this; }
-    public Transform setScale     (float x, float y, float z) { setScaleX(x); setScaleY(y); setScaleZ(z); return this; }
-    public Transform setScale     (float n                  ) { setScale(n, n, n);                        return this; }
-    public Transform setScale     (Vector3f s               ) { _scale.set(s);                            return this; }
+    public @NotNull Transform setScaleX    (final float x                  ) { _scale.x = x;       return this; }
+    public @NotNull Transform setScaleY    (final float y                  ) { _scale.y = y;       return this; }
+    public @NotNull Transform setScaleZ    (final float z                  ) { _scale.z = z;       return this; }
+    public @NotNull Transform setScale     (final float n                   ) { setScale(n, n, n); return this; }
+    public @NotNull Transform setScale     (final @NotNull Vector3f s     ) { _scale.set(s);       return this; }
+    public @NotNull Transform setScale     (final float x, final float y, final float z) { setScaleX(x); setScaleY(y); setScaleZ(z); return this; }
 
 
 
 
     // Right rotation
-    public Transform rotGlobalX   (float x                  ) { _grot.rotateX(x);                                     return this; }
-    public Transform rotGlobalY   (float y                  ) { _grot.rotateY(y);                                     return this; }
-    public Transform rotGlobalZ   (float z                  ) { _grot.rotateZ(z);                                     return this; }
-    public Transform rotGlobal    (float x, float y, float z) { rotGlobalX(x); rotGlobalY(y); rotGlobalZ(z);          return this; }
-    public Transform rotGlobal    (Quaternionf r            ) { _grot.mul(r);                                         return this; }
-    public Transform setGlobalRot (Quaternionf r            ) { _grot.set(r);                                         return this; }
+    public @NotNull Transform rotGlobalX   (final float x                  ) { _grot.rotateX(x); return this; }
+    public @NotNull Transform rotGlobalY   (final float y                  ) { _grot.rotateY(y); return this; }
+    public @NotNull Transform rotGlobalZ   (final float z                  ) { _grot.rotateZ(z); return this; }
+    public @NotNull Transform rotGlobal    (final @NotNull Quaternionf r   ) { _grot.mul(r);     return this; }
+    public @NotNull Transform setGlobalRot (final @NotNull Quaternionf r   ) { _grot.set(r);     return this; }
+    public @NotNull Transform rotGlobal    (final float x, final float y, final float z) { rotGlobalX(x); rotGlobalY(y); rotGlobalZ(z); return this; }
 
 
 

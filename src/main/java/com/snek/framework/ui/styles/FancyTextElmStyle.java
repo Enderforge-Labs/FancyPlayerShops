@@ -95,10 +95,10 @@ public class FancyTextElmStyle extends TextElmStyle {
     public @NotNull Flagged<Transform> getFlaggedTransformBg() { return transformBg; }
 
     public @NotNull Vector4i  getBackground () { return background .get(); }
-    public @NotNull Transform getTransformFg() { return transformFg .get(); }
-    public @NotNull Transform getTransformBg() { return transformBg .get(); }
+    public @NotNull Transform getTransformFg() { return transformFg.get(); }
+    public @NotNull Transform getTransformBg() { return transformBg.get(); }
 
     public @NotNull Vector4i  editBackground () { return background .edit(); }
-    public @NotNull Transform editTransformFg() { return transformFg .edit(); }
-    public @NotNull Transform editTransformBg() { return transformBg .edit(); }
+    public @NotNull Transform editTransformFg() { return transformFg.edit(); }
+    public @NotNull Transform editTransformBg() { return transformBg.edit(); }
 }

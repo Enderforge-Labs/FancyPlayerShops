@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * This class identifies an animation expressed as a list of Transitions.
  */
 public class Animation {
-    private final @NotNull List<Transition> transitions = new ArrayList<>();
+    private final @NotNull List<@NotNull Transition> transitions = new ArrayList<>();
     private int totalDuration = 0;
 
 
@@ -25,8 +25,8 @@ public class Animation {
      * Creates a new Animation.
      * @param _transitions One or more transitions.
      */
-    public Animation(@NotNull Transition... _transitions) {
-        for(Transition t : _transitions) {
+    public Animation(final @NotNull Transition... _transitions) {
+        for(final Transition t : _transitions) {
             transitions.add(t);
             totalDuration += t.getDuration();
         }
@@ -37,7 +37,7 @@ public class Animation {
      * Returns the list of transitions that make up this animation as a read-only list.
      * @return The translations.
      */
-    public List<Transition> getTransitions() {
+    public @NotNull List<@NotNull Transition> getTransitions() {
         return Collections.unmodifiableList(transitions);
     }
 

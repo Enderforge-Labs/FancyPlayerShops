@@ -2,6 +2,8 @@ package com.snek.framework.data_types.containers;
 
 import java.util.Objects;
 
+import org.jetbrains.annotations.Nullable;
+
 
 
 
@@ -13,7 +15,7 @@ import java.util.Objects;
  * A wrapper class that can track value changes of the contained object.
  */
 public class Flagged<T> {
-    private T value;
+    private @Nullable T value;
     private boolean flag = true;
 
 
@@ -21,7 +23,7 @@ public class Flagged<T> {
      * Creates a new Flagged value.
      * @param _value The initial value.
      */
-    private Flagged(T _value) {
+    private Flagged(final @Nullable T _value) {
         this.value = _value;
     }
 
@@ -30,7 +32,7 @@ public class Flagged<T> {
      * @param value The initial value.
      * @return The newly created Flagged object.
      */
-    public static <T> Flagged<T> from(T value) {
+    public static <T> Flagged<T> from(final @Nullable T value) {
         return new Flagged<>(value);
     }
 
@@ -41,7 +43,7 @@ public class Flagged<T> {
      * Returns the current value without flagging the object.
      * @return The value.
      */
-    public T get() {
+    public @Nullable T get() {
         return value;
     }
 
@@ -51,7 +53,7 @@ public class Flagged<T> {
      * Flags the object if !this.get().equals(_value).
      * @param _value The new value.
      */
-    public void set(T _value) {
+    public void set(final @Nullable T _value) {
         if(!Objects.equals(value, _value)) flag = true;
         value = _value;
     }
@@ -63,7 +65,7 @@ public class Flagged<T> {
      * This method always flags the object without checking for changes.
      * @return The object.
      */
-    public T edit() {
+    public @Nullable T edit() {
         flag = true;
         return value;
     }

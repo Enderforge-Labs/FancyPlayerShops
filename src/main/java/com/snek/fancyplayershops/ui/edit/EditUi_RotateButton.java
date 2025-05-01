@@ -10,7 +10,6 @@ import com.snek.fancyplayershops.ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_RotateButtonRight_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
-import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;
@@ -98,23 +97,11 @@ public class EditUi_RotateButton extends ShopButton {
         // Handle item display animations
         final ShopItemDisplay itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
-
-        // final Transform startingTransform = futureDataQueue.isEmpty() ? getStyle().getTransform() : futureDataQueue.peekLast().getTransform();
-        // final Animation unfocusAnimation = new Animation(
-        //     new Transition(D_TIME, Easings.sineOut)
-        //     .targetTransform(startingTransform.delta(getStyle().getTransform()))
-        // );
         itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
-            // .additiveTransform(
             .targetTransform(
-                // itemDisplay.getStyle().getTransform().copy()
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
-                // // .rot(itemDisplay.getStyle().getTransform().getRot      ().invert(new Quaternionf()))
-                // .rot(itemDisplay.getStyle().getTransform().getRot      ())
-                // // .rot(itemDisplay.getStyle().getTransform().getGlobalRot().invert(new Quaternionf()))
-                // .rot(itemDisplay.getStyle().getTransform().getGlobalRot())
             )
         );
     }
