@@ -160,9 +160,9 @@ public class Shop {
     public           float           getDefaultRotation() { return defaultRotation; }
     public           int             getCanvasDirection() { return lastDirection;   }
     public           boolean         isFocused         () { return focusState;      }
-    public           UUID            getOwnerUuid      () { return ownerUUID;       }
-    public           PlayerEntity    getuser           () { return user;            }
-    public           PlayerEntity    getViewer         () { return viewer;          }
+    public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
+    public @Nullable PlayerEntity    getuser           () { return user;            }
+    public @Nullable PlayerEntity    getViewer         () { return viewer;          }
     public           void            setViewer         (final @Nullable PlayerEntity _viewer        ) { viewer         = _viewer;         }
     public           void            setFocusStateNext (final           boolean      _nextFocusState) { focusStateNext = _nextFocusState; }
 
