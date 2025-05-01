@@ -104,7 +104,7 @@ public abstract class ShopTextInput extends ShopButton {
 
     @Override
     public void onHoverExit(@Nullable PlayerEntity player) {
-        if(player != shop.user) return;
+        if(player != shop.getuser()) return;
         super.onHoverExit(player);
         exitInputState();
         if(player != null) ChatInput.removeCallback(player);

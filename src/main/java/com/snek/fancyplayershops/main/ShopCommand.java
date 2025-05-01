@@ -31,8 +31,9 @@ public abstract class ShopCommand {
             dispatcher.register(LiteralArgumentBuilder.<ServerCommandSource>literal("shop")
 
 
+                // UI test
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("config_test").executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
+                    final PlayerEntity player = context.getSource().getPlayer();
                     try {
                         player.sendMessage(new Txt("Opening shop inventory...").get(), false);
                         player.openHandledScreen(new ShopConfigUI_Factory());
@@ -44,30 +45,33 @@ public abstract class ShopCommand {
                 }))
 
 
-                //TODO replace with crafting recipe
+                // Item give command (Admin only)
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("create").executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
+                    final PlayerEntity player = context.getSource().getPlayer();
                     player.dropStack(FancyPlayerShops.getShopItemCopy());
                     return 1;
                 }))
 
 
+                // Balance claim
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("claim").executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
+                    final PlayerEntity player = context.getSource().getPlayer();
                     player.sendMessage(new Txt("You claimed your shop balance.").get(), false);
                     return 1;
                 }))
 
 
+                // Shop statistics
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("stats").executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
+                    final PlayerEntity player = context.getSource().getPlayer();
                     player.sendMessage(new Txt("opened stats //todo remove message").get(), false);
                     return 1;
                 }))
 
 
+                // Shop mod info
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("help").executes(context -> {
-                    PlayerEntity player = context.getSource().getPlayer();
+                    final PlayerEntity player = context.getSource().getPlayer();
                     //TODO add colors and styles
                     player.sendMessage(new Txt(
                         """

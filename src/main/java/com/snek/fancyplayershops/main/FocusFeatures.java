@@ -166,7 +166,6 @@ public abstract class FocusFeatures {
 
         // Find currently focused shops and their viewers
         final Set<Shop> targetedShops = new LinkedHashSet<>();
-        // final List<PlayerEntity> targetedShopsViewers = new ArrayList<>();
         for(final ServerWorld serverWorld : serverWorlds) {
             for(final PlayerEntity player : serverWorld.getPlayers()) {
                 final Shop shop = FocusFeatures.getLookedAtShop(player, serverWorld);
@@ -176,20 +175,14 @@ public abstract class FocusFeatures {
                     final boolean isShopNew = targetedShops.add(shop);
                     if(isShopNew) {
                         shop.setFocusStateNext(true);
-                        shop.viewer = player;
-                        // targetedShopsViewers.add(player);
+                        shop.setViewer(player);
                     }
 
                     // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
                     else {
-                        if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.viewer)) {
-                            shop.viewer = player;
+                        if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
+                            shop.setViewer(player);
                         }
-                        // getl
-                        // if(targetShop.viewer != targetShop.user) targetShop.viewer = player;
-                        // PlayerEntity viewer;
-                        // if(player == targetShop.user) viewer = player;
-                        // else if(player.getUuid())
                     }
                 }
             }
@@ -202,30 +195,30 @@ public abstract class FocusFeatures {
         }
 
 
-        // Update the displays of all the previously and currently focused shops to their next state and update the targeted shops list
+        // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
         targetedShopsOld.removeAll(targetedShops);
         for(final Shop shop : targetedShopsOld) {
-            if(shop.getActiveCanvas() != null) shop.getActiveCanvas().forwardHover(null);
+            shop.setViewer(null);
             shop.updateFocusState();
         }
 
 
+        // Update looked-at shops
         for(final Shop shop : targetedShops) {
-            if(shop.user != null) {
+            if(shop.getuser() != null) {
+
+                // Send hover events to focused shops
                 if(shop.getActiveCanvas() != null) {
-                    shop.getActiveCanvas().forwardHover(shop.user);
+                    shop.getActiveCanvas().forwardHover(shop.getuser());
                 }
-                if(shop.viewer != shop.user) {
+
+                // If the user isn't looking at the shop anymore, unfocus it
+                if(shop.getViewer() != shop.getuser()) {
                     shop.setFocusStateNext(false);
                 }
-                // shop.updateCanvasRotation(shop.user);
             }
             shop.updateFocusState();
             shop.updateCanvasRotation();
-            // else {
-            //     final PlayerEntity viewer = targetedShopsViewers.get(0);
-            //     shop.updateCanvasRotation(viewer);
-            // }
         }
         targetedShopsOld = targetedShops;
 
@@ -242,9 +235,19 @@ public abstract class FocusFeatures {
 
 
 
-    //TODO comment
+
+
+    /**
+     * Calculates the priority the provided player has on a shop display.
+     * @param shop The shop.
+     * @param player The player.
+     * @return The priority.
+     *     <p> User:          Highest priority
+     *     <p> Owner:         Lower priority
+     *     <p> Other players: Lowest priority
+     */
     public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull PlayerEntity player){
-        if(player == shop.user) return 0;
+        if(player == shop.getuser()) return 0;
         if(player.getUuid() == shop.getOwnerUuid()) return -1;
         return -2;
     }

@@ -44,7 +44,7 @@ public class EditUi_ItemSelector extends ShopButton {
     @Override
     public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
         boolean r = super.onClick(player, click);
-        if(r && player == shop.user) {
+        if(r && player == shop.getuser()) {
 
             ItemStack item = player.getMainHandStack();
             if(item != null && item.getItem() != Items.AIR) {
