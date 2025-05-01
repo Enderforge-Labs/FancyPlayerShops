@@ -102,6 +102,7 @@ public class EditUi_RotateButton extends ShopButton {
             .targetTransform(
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
+                .rotY(shop.getCanvasDirection() / 8f * (float)(2f * Math.PI))
             )
         );
     }

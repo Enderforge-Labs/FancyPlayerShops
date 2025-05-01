@@ -158,6 +158,7 @@ public class Shop {
     public           int             getStock          () { return stock;           }
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
+    public           int             getCanvasDirection() { return lastDirection;   }
     public           boolean         isFocused         () { return focusState;      }
     public           UUID            getOwnerUuid      () { return ownerUUID;       }
     public           PlayerEntity    getuser           () { return user;            }
@@ -804,7 +805,7 @@ public class Shop {
             ),
             new Animation(
                 new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(-rotation))
+                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
             )
         );
     }
