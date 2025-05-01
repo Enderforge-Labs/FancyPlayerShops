@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 /**
  * A wrapper for Minecraft's TextDisplayEntity.
- * This class allows for better customization and more readable code.
+ * <p> This class allows for better customization and more readable code.
  */
 public class CustomTextDisplay extends CustomDisplay {
     public @NotNull TextDisplayEntity getRawDisplay() { return (TextDisplayEntity)heldEntity; }
@@ -39,10 +39,10 @@ public class CustomTextDisplay extends CustomDisplay {
 
     // Opacity cache. This is used to understand if the entity is currently interpolating from less than 26 to 26 or more
     // or vice versa, avoiding making changes until the interpolation is complete.
-    private int[] lastAlpha = new int[3];
+    private final @NotNull int[] lastAlpha = new int[3];
     private long lastAlphaUpdate = 0;
     private boolean lastAlphaInitialized = false;
-    private void shiftLastAlpha(int _new) {
+    private void shiftLastAlpha(final int _new) {
         if(lastAlphaUpdate >= Scheduler.getTickNum()) return;
 
         if(!lastAlphaInitialized) {
@@ -62,15 +62,15 @@ public class CustomTextDisplay extends CustomDisplay {
     /**
      * This method flushes the opacity cache and ensures the displayed text doesn't remain
      * in an incorrect state after safety delays performed during short animations.
-     * Must be called at the end of each animation tick. //FIXME this can cause issues if the transition ticks are not aligned wit the step size.
+     * <p> Must be called at the end of each animation tick. //FIXME this can cause issues if the transition ticks are not aligned wit the step size.
      */
     public void tick() {
         shiftLastAlpha(getTextOpacity());
 
         if(noTextUnderA26) {
-            boolean a0 = lastAlpha[0] < 26; //! Always equal to the current (or target) opacity
-            boolean a1 = lastAlpha[1] < 26;
-            boolean a2 = lastAlpha[2] < 26;
+            final boolean a0 = lastAlpha[0] < 26; //! Always equal to the current (or target) opacity
+            final boolean a1 = lastAlpha[1] < 26;
+            final boolean a2 = lastAlpha[2] < 26;
             if(a0 == a1 && a1 != a2) setText(textCache);
         }
     }
@@ -79,14 +79,14 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     // Private methods
-    private static Method method_getText;
-    private static Method method_getLineWidth;
-    private static Method method_getTextOpacity;
-    private static Method method_getBackground;
-    private static Method method_setText;
-    private static Method method_setLineWidth;
-    private static Method method_setTextOpacity;
-    private static Method method_setBackground;
+    private static @NotNull Method method_getText;
+    private static @NotNull Method method_getLineWidth;
+    private static @NotNull Method method_getTextOpacity;
+    private static @NotNull Method method_getBackground;
+    private static @NotNull Method method_setText;
+    private static @NotNull Method method_setLineWidth;
+    private static @NotNull Method method_setTextOpacity;
+    private static @NotNull Method method_setBackground;
     static {
         try {
             method_getText          = TextDisplayEntity.class.getDeclaredMethod("getText");
@@ -119,7 +119,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(@NotNull TextDisplayEntity _rawDisplay, boolean _noTextUnderA26) {
+    public CustomTextDisplay(final @NotNull TextDisplayEntity _rawDisplay, final boolean _noTextUnderA26) {
         super(_rawDisplay);
         noTextUnderA26 = _noTextUnderA26;
     }
@@ -130,7 +130,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(@NotNull World _world, boolean _noTextUnderA26) {
+    public CustomTextDisplay(final @NotNull World _world, final boolean _noTextUnderA26) {
         super(new TextDisplayEntity(EntityType.TEXT_DISPLAY, _world));
         noTextUnderA26 = _noTextUnderA26;
     }
@@ -140,7 +140,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * Creates a new CustomTextDisplay using an existing TextDisplayEntity.
      * @param _rawDisplay The display entity.
      */
-    public CustomTextDisplay(@NotNull TextDisplayEntity _rawDisplay) {
+    public CustomTextDisplay(final @NotNull TextDisplayEntity _rawDisplay) {
         this(_rawDisplay, true);
     }
 
@@ -148,7 +148,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * Creates a new CustomTextDisplay in the specified world.
      * @param _world The world.
      */
-    public CustomTextDisplay(@NotNull World _world) {
+    public CustomTextDisplay(final @NotNull World _world) {
         this(_world, true);
     }
 
@@ -157,10 +157,10 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new text value to the entity.
-     * This is equivalent to changing the entity's "text" NBT.
+     * <p> This is equivalent to changing the entity's "text" NBT.
      * @param text The new value.
      */
-    public void setText(@NotNull Text text) {
+    public void setText(final @NotNull Text text) {
         if(noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26) {
             Utils.invokeSafe(method_setText, heldEntity, EMPTY_TEXT);
         }
@@ -173,10 +173,10 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new line width value to the entity.
-     * This is equivalent to changing the entity's "line_width" NBT.
+     * <p> This is equivalent to changing the entity's "line_width" NBT.
      * @param width The new value.
      */
-    public void setLineWidth(int width) {
+    public void setLineWidth(final int width) {
         Utils.invokeSafe(method_setLineWidth, heldEntity, width);
     }
 
@@ -214,11 +214,11 @@ public class CustomTextDisplay extends CustomDisplay {
     /**
      * Sets the alpha value of the rendered text.
      * @param a The alpha value.
-     *     Values smaller than 26 are converted to 26 unless noTextUnderA26 is set to true, in which case the text not rendered at all.
-     *     This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
-     * NOTICE:
-     *     Interpolation is broken. Opacity values are NOT converted back to 0-255 range
-     *     before interpolating, but the raw byte value (0 to 127, -128 to -1) is used instead.
+     *  <p> Values smaller than 26 are converted to 26 unless noTextUnderA26 is set to true, in which case the text is not rendered at all.
+     *  <p> This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
+     *  <p> NOTICE:
+     *  <p> Interpolation is broken. Opacity values are NOT converted back to 0-255 range
+     *  <p> before interpolating, but the raw byte value (0 to 127, -128 to -1) is used instead.
      */
     public void setTextOpacity(int a) {
         shiftLastAlpha(a);
@@ -245,17 +245,17 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current text opacity.
      */
     public int getTextOpacity() {
-        int a = (byte)Utils.invokeSafe(method_getTextOpacity, getRawDisplay());
+        final int a = (byte)Utils.invokeSafe(method_getTextOpacity, getRawDisplay());
         return a < 0 ? a + 256 : a;
     }
 
 
     /**
      * Sets a new background color value to the entity.
-     * This is equivalent to changing the entity's "background" NBT.
+     * <p> This is equivalent to changing the entity's "background" NBT.
      * @param argb The new value.
      */
-    public void setBackground(@NotNull Vector4i argb) {
+    public void setBackground(final @NotNull Vector4i argb) {
         Utils.invokeSafe(method_setBackground, getRawDisplay(), (argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
     }
 
@@ -265,18 +265,18 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current background color.
      */
     public @NotNull Vector4i getBackground() {
-        int bg = (int)Utils.invokeSafe(method_getBackground, getRawDisplay());
+        final int bg = (int)Utils.invokeSafe(method_getBackground, getRawDisplay());
         return new Vector4i((bg >> 24) & 0xFF, (bg >> 16) & 0xFF, (bg >> 8) & 0xFF, bg & 0xFF);
     }
 
 
     /**
      * Sets a new text alignment value to the entity.
-     * This is equivalent to changing the entity's "text alignment" NBT.
+     * <p> This is equivalent to changing the entity's "text alignment" NBT.
      * @param alignment The new value.
      */
-    public void setTextAlignment(TextAlignment alignment) {
-        NbtCompound nbt = new NbtCompound();
+    public void setTextAlignment(final @NotNull TextAlignment alignment) {
+        final NbtCompound nbt = new NbtCompound();
         heldEntity.writeNbt(nbt);
         nbt.putString("alignment", alignment.asString());
         heldEntity.readNbt(nbt);

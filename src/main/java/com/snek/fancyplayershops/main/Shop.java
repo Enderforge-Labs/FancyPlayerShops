@@ -423,8 +423,8 @@ public class Shop {
                 activeCanvas = new DetailsUi(this);
                 if(lastDirection != 0) {
                     final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-                    activeCanvas.applyAnimationNowRecursive(animations.first);
-                    itemDisplay.applyAnimationNowRecursive(animations.second);
+                    activeCanvas.applyAnimationNowRecursive(animations.getFirst());
+                    itemDisplay.applyAnimationNowRecursive(animations.getSecond());
                 }
                 activeCanvas.spawn(calcDisplayPos());
 
@@ -620,7 +620,7 @@ public class Shop {
         if(lastDirection != 0) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
             for(final Div c : canvas.getBg().getChildren()) {
-                c.applyAnimationNowRecursive(animations.first);
+                c.applyAnimationNowRecursive(animations.getFirst());
             }
         }
 
@@ -779,8 +779,8 @@ public class Shop {
         // Apply animations and update the current direction if needed
         if(targetDir != lastDirection) {
             final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(lastDirection, targetDir);
-            activeCanvas.applyAnimationRecursive(animations.first);
-            getItemDisplay().applyAnimationRecursive(animations.second);
+            activeCanvas.applyAnimationRecursive(animations.getFirst());
+            getItemDisplay().applyAnimationRecursive(animations.getSecond());
             lastDirection = targetDir;
             canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
         }

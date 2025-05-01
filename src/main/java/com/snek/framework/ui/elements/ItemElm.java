@@ -129,8 +129,8 @@ public class ItemElm extends Elm {
 
 
         // Update the entity's display type and apply the exception's transformation to the parent one if needed
-        getThisEntity().setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.first);
-        return exception == null ? t : t.apply(exception.second);
+        getThisEntity().setDisplayType(exception == null ? ModelTransformationMode.NONE : exception.getFirst());
+        return exception == null ? t : t.apply(exception.getSecond());
         //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
         //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
     }

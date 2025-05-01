@@ -27,6 +27,8 @@ public abstract class FontWidthGenerator {
     public static final @NotNull String CLASS_NAME   = "FontSize";                                // The name of the generated class
     public static final @NotNull String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
     public static final          int    PARTS = 32;                                               // The number of methods to split the initialization into
+    public static final          int    BREAK = 32;                                               // The maximum number of values to place in a single line
+    public static final          int    SECTOR_SIZE  = (Character.MAX_VALUE + 1) / PARTS;
 
 
 
@@ -65,7 +67,7 @@ public abstract class FontWidthGenerator {
                 "    public static final int TEXT_PIXEL_BLOCK_RATIO = 40;\n" +
                 "\n"+
                 "    // The list of widths\n" +
-                "    private static final int[] w = new int[" + (Character.MAX_VALUE - 1) + "];\n" +
+                "    private static final int[] w = new int[" + (int)Character.MAX_VALUE + "];\n" +
                 "    static {\n"
             );
             for(int i = 0; i < PARTS; ++i) {
@@ -76,16 +78,24 @@ public abstract class FontWidthGenerator {
 
             // Write initializer methods
             for(int i = 0; i < PARTS; ++i) {
-                f.write("\n    private static final void init_" + i + "() {\n        ");
-                for(int c0 = 32; c0 < Character.MAX_VALUE / PARTS; c0++) {
-                    final char c = (char)((Character.MAX_VALUE / PARTS) * i + c0);
-                    f.write(String.format("w[%d] = 0x%01x", (int)c, c < 32 ? 0 : renderer.getWidth(String.valueOf(c))));
-                    if(c < Character.MAX_VALUE - 1) {
-                        f.write(";");
-                        f.write(((c + 1) % 32 == 0) ? "\n        " : " ");
+                f.write("\n    private static void init_" + i + "() {\n");
+                f.write("        final @NotNull int[] a = new int[] {\n            ");
+                for(int c0 = 0; c0 < SECTOR_SIZE; ++c0) {
+                    final char c = (char)(SECTOR_SIZE * i + c0);
+                    if(c < Character.MAX_VALUE) {
+                        f.write(String.format("0x%01x", c < 32 ? 0 : renderer.getWidth(String.valueOf(c))));
+                        f.write(",");
+                        if(c0 < SECTOR_SIZE - 1) f.write(((c + 1) % BREAK == 0) ? "\n            " : " ");
                     }
+                    else break;
                 }
-                f.write("\n    }\n");
+                f.write(String.format(
+                    "\n        };" +
+                    "\n        for(int i = 0; i < %d; ++i) w[%d + i] = a[i];\n",
+                    SECTOR_SIZE - (i == PARTS - 1 ? 1 : 0),
+                    SECTOR_SIZE * i
+                ));
+                f.write("    }\n");
             }
 
 
@@ -95,7 +105,7 @@ public abstract class FontWidthGenerator {
                 """
                     /**
                      * Calculates the width a string would have when rendered.
-                     * This includes the space between each character.
+                     * <p> This includes the space between each character.
                      */
                     public static float getWidth(final @NotNull String s) {
                         int r = 0;
@@ -117,7 +127,7 @@ public abstract class FontWidthGenerator {
                 """
                     /**
                      * Returns the height a line would have when rendered.
-                     * This does NOT include the space between lines.
+                     * <p> This does NOT include the space between lines.
                      */
                     public static float getHeight() {
                         return 9f / TEXT_PIXEL_BLOCK_RATIO;
