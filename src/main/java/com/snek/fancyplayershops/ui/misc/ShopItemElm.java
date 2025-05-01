@@ -25,7 +25,7 @@ public class ShopItemElm extends ItemElm {
      * @param _shop The target shop.
      * @param _style The custom style.
      */
-    public ShopItemElm(@NotNull Shop _shop, ItemElmStyle _style) {
+    public ShopItemElm(final @NotNull Shop _shop, final @NotNull ItemElmStyle _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
     }
@@ -35,7 +35,7 @@ public class ShopItemElm extends ItemElm {
      * Creates a new ShopItemElm using the default style.
      * @param _shop The target shop.
      */
-    public ShopItemElm(@NotNull Shop _shop) {
+    public ShopItemElm(final @NotNull Shop _shop) {
         this(_shop, new ItemElmStyle());
     }
 }

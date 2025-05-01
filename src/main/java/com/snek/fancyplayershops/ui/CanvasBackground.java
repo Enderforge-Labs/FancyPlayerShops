@@ -21,7 +21,7 @@ public class CanvasBackground extends ShopPanelElm {
      * Creates a new CanvasBackground.
      * @param _shop The target shop.
      */
-    public CanvasBackground(@NotNull Shop _shop) {
+    public CanvasBackground(final @NotNull Shop _shop) {
         super(_shop);
     }
 }

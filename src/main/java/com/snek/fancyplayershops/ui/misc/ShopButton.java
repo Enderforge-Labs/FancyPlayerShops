@@ -7,7 +7,6 @@ import com.snek.framework.ui.interfaces.Hoverable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
@@ -30,7 +29,7 @@ import net.minecraft.util.ClickType;
 
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
- * It also specifies action names for the input indicators to display.
+ * <p> It also specifies action names for the input indicators to display.
  */
 public abstract class ShopButton extends FancyTextElm implements Hoverable, Clickable {
     protected final @NotNull Shop shop;
@@ -51,7 +50,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
      */
-    protected ShopButton(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, int _clickCooldown, ShopButton_S _style) {
+    protected ShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown, final ShopButton_S _style) {
         super(_shop.getWorld(), _style);
         shop = _shop;
         lmbActionName = _lmbActionName;
@@ -67,7 +66,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * @param _rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected ShopButton(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, int _clickCooldown) {
+    protected ShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown) {
         this(_shop, _lmbActionName, _rmbActionName, _clickCooldown, new ShopButton_S());
     }
 
@@ -75,7 +74,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         final Animation animation = getStyle(ShopButton_S.class).getHoverPrimerAnimation();
         if(animation != null) {
             applyAnimationNow(animation);
@@ -87,7 +86,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public void onHoverEnter(@NotNull PlayerEntity player) {
+    public void onHoverEnter(final @NotNull PlayerEntity player) {
         if(player != shop.getuser()) return;
         final Animation animation = getStyle(ShopButton_S.class).getHoverEnterAnimation();
         if(animation != null) {
@@ -99,7 +98,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public void onCheckTick(PlayerEntity player) {
+    public void onCheckTick(final @NotNull PlayerEntity player) {
 
         // Update input displays if present
         if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
@@ -112,7 +111,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public void onHoverExit(@Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable PlayerEntity player) {
         if(player != shop.getuser()) return;
         final Animation animation = getStyle(ShopButton_S.class).getHoverLeaveAnimation();
         if(animation != null) {
@@ -130,9 +129,9 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
 
 
     @Override
-    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
+    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
         if(clickRateLimiter.attempt()) {
-            boolean r = checkIntersection(player);
+            final boolean r = checkIntersection(player);
             if(r) clickRateLimiter.renewCooldown(clickCooldown);
             return r;
         }
@@ -157,7 +156,7 @@ public abstract class ShopButton extends FancyTextElm implements Hoverable, Clic
      * Plays the button click sound to the specified player.
      * @param player The player to play the sound to.
      */
-    public static void playButtonSound(@NotNull PlayerEntity player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 1, 1.5f);
+    public static void playButtonSound(final @NotNull PlayerEntity player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
     }
 }

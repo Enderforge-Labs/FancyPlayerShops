@@ -32,14 +32,14 @@ import net.minecraft.world.World;
 
 /**
  * A special interaction entity that is used by shops to block unwanted players interactions.
- *     This stops client-side clicks on blocks and entities behind the shop block
- *     and client-side item use events, preventing annoying UI flashes and visual artifacts.
+ * <p> This stops client-side clicks on blocks and entities behind the shop block
+ * <p> and client-side item use events, preventing annoying UI flashes and visual artifacts.
  */
 public class InteractionBlocker {
 
     // Private methods of InteractionEntity
-    private static Method method_setWidth;
-    private static Method method_setHeight;
+    private static @NotNull Method method_setWidth;
+    private static @NotNull Method method_setHeight;
     static {
         try {
             method_setWidth  = InteractionEntity.class.getDeclaredMethod("setInteractionWidth",  float.class);
@@ -59,8 +59,8 @@ public class InteractionBlocker {
 
 
     // In-world data
-    private final InteractionEntity entity;
-    private final Shop shop;
+    private final @NotNull InteractionEntity entity;
+    private final @NotNull Shop shop;
 
 
 
@@ -69,7 +69,7 @@ public class InteractionBlocker {
      * Creates a new InteractionBlocker.
      * @param _shop The target shop.
      */
-    public InteractionBlocker(Shop _shop) {
+    public InteractionBlocker(final @NotNull Shop _shop) {
         shop = _shop;
         entity = new InteractionEntity(EntityType.INTERACTION, shop.getWorld());
         Utils.invokeSafe(method_setHeight, entity, 1.01f);
@@ -81,12 +81,12 @@ public class InteractionBlocker {
 
     /**
      * Checks for stray interaction entities and purges them.
-     * Must be called on entity load event.
+     * <p> Must be called on entity load event.
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
         if(entity instanceof InteractionEntity) {
-            World world = entity.getWorld();
+            final World world = entity.getWorld();
             if(
                 world != null &&
                 entity.getCustomName() != null &&
@@ -104,7 +104,7 @@ public class InteractionBlocker {
      * Spawns the interaction entity into the world.
      * @param pos The coordinates at which to spawn the entity.
      */
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity, move it to the specified coords and set a temporary name to allow the command to recognize it
         shop.getWorld().spawnEntity(entity);
@@ -123,9 +123,9 @@ public class InteractionBlocker {
         //!  │                                                                                                              //!
         //!  │                                                                                                              //!
         /*!  │    // Create the custom command source and use DUMMY as output to silence it                                 //!
-        /*!  │  */MinecraftServer server = FancyPlayerShops.getServer();                                                    //!
-        /*!  │  */ServerWorld world = (ServerWorld)entity.getWorld();                                                       //!
-        /*!  │  */ServerCommandSource source = new ServerCommandSource(                                                     //!
+        /*!  │  */final MinecraftServer server = FancyPlayerShops.getServer();                                              //!
+        /*!  │  */final ServerWorld world = (ServerWorld)entity.getWorld();                                                 //!
+        /*!  │  */final ServerCommandSource source = new ServerCommandSource(                                               //!
         /*!  │  */    CommandOutput.DUMMY, Vec3d.ZERO, Vec2f.ZERO, world,                                                   //!
         /*!  │  */    4, COMMAND_SOURCE_NAME, new Txt(COMMAND_SOURCE_NAME).get(), server, (Entity)null                      //!
         /*!  │  */);                                                                                                        //!

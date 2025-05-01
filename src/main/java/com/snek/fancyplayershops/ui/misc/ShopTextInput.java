@@ -27,10 +27,10 @@ import net.minecraft.util.ClickType;
 public abstract class ShopTextInput extends ShopButton {
     public static final int CURSOR_TOGGLE_DELAY = 10;
 
-    private final @NotNull  Text        clickFeedbackMessage;
+    private final @Nullable Text        clickFeedbackMessage;
     private       @Nullable TaskHandler inputStateHandler = null;
-    private boolean cursorToggleState = true;
-    private boolean inputState = false;
+    private                 boolean     cursorToggleState = true;
+    private                 boolean     inputState        = false;
 
 
     /**
@@ -40,7 +40,7 @@ public abstract class ShopTextInput extends ShopButton {
      * @param h The height of the button, expressed in blocks.
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected ShopTextInput(@NotNull Shop _shop, @Nullable String _lmbActionName, @Nullable String _rmbActionName, Text _clickFeedbackMessage) {
+    protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Text _clickFeedbackMessage) {
         super(_shop, _lmbActionName, _rmbActionName, 1, new ShopTextInput_S());
         clickFeedbackMessage = _clickFeedbackMessage;
     }
@@ -49,20 +49,24 @@ public abstract class ShopTextInput extends ShopButton {
 
 
     @Override
-    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click) {
-        boolean r = super.onClick(player, click);
+    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+        final boolean r = super.onClick(player, click);
         if(r) {
             if(!inputState) {
                 enterInputState();
                 playButtonSound(player);
             }
-            player.sendMessage(clickFeedbackMessage, true);
+            if(clickFeedbackMessage != null) player.sendMessage(clickFeedbackMessage, true);
             ChatInput.setCallback(player, this::__internal_messageCallback);
         }
         return r;
     }
 
 
+    /**
+     * Enters the input state.
+     * <p> This hides the text to show a blinking cursor.
+     */
     protected void enterInputState() {
         if(!inputState) {
             inputState = true;
@@ -75,6 +79,10 @@ public abstract class ShopTextInput extends ShopButton {
     }
 
 
+    /**
+     * Exists the input state.
+     * <p> This stops the blinking animation, hides the cursor and shows the text.
+     */
     protected void exitInputState() {
         if(inputState) {
             inputState = false;
@@ -84,8 +92,13 @@ public abstract class ShopTextInput extends ShopButton {
     }
 
 
-    protected boolean __internal_messageCallback(String s) {
-        boolean r = messageCallback(s);
+    /**
+     * A wrapper for the message callback.
+     * @param s The input string.
+     * @return True if the string s is recognized as an input and should not be broadcasted to the chat, false otherwise.
+     */
+    protected boolean __internal_messageCallback(final @NotNull String s) {
+        final boolean r = messageCallback(s);
         if(r) exitInputState();
         return r;
     }
@@ -96,14 +109,13 @@ public abstract class ShopTextInput extends ShopButton {
      * @param s The input string.
      * @return True if the string s is recognized as an input and should not be broadcasted to the chat, false otherwise.
      */
-    protected abstract boolean messageCallback(String s);
-    public abstract void updateDisplay(@Nullable Text textOverride);
+    protected abstract boolean messageCallback(@NotNull String s);
 
 
 
 
     @Override
-    public void onHoverExit(@Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable PlayerEntity player) {
         if(player != shop.getuser()) return;
         super.onHoverExit(player);
         exitInputState();

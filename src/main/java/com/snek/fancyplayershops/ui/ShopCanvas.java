@@ -29,8 +29,8 @@ import com.snek.framework.utils.Easings;
 
 /**
  * A generic canvas class used to create shop menus.
- *     It creates and manages a background panel, a back side panel and a top and bottom borders,
- *     which are kept spawned and are inherited by future canvases until the targeted shop stops being focused.
+ * <p> It creates and manages a background panel, a back side panel and a top and bottom borders,
+ * <p> which are kept spawned and are inherited by future canvases until the targeted shop stops being focused.
  */
 public class ShopCanvas extends Div {
 
@@ -79,10 +79,10 @@ public class ShopCanvas extends Div {
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    public ShopCanvas(@NotNull Shop _shop, float height, float heightTop, float heightBottom) {
+    public ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
         super();
         setSize(new Vector2f(1f, 1f));
-        ShopCanvas activeCanvas = _shop.getActiveCanvas();
+        final ShopCanvas activeCanvas = _shop.getActiveCanvas();
 
         // Calculate new heights
         newHeightBg     = height - heightTop - heightBottom;
@@ -140,7 +140,7 @@ public class ShopCanvas extends Div {
         else {
 
             // Instantly despawn and remove previous children of the background element
-            for(Div c : activeCanvas.getBg().getChildren()) c.despawnNow();
+            for(final Div c : activeCanvas.getBg().getChildren()) c.despawnNow();
             activeCanvas.getBg().clearChildren();
 
             // Inherit the elements
@@ -169,10 +169,10 @@ public class ShopCanvas extends Div {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
 
         // If the background is already spawned, only spawn its children
-        if(bg.isSpawned()) for(Div c : bg.getChildren()) {
+        if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
             c.spawn(pos);
         }
 
