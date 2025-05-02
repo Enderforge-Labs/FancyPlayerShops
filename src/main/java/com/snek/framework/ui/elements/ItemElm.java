@@ -11,8 +11,8 @@ import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
-import com.snek.framework.ui.styles.ElmStyle;
-import com.snek.framework.ui.styles.ItemElmStyle;
+import com.snek.framework.ui.elements.styles.ElmStyle;
+import com.snek.framework.ui.elements.styles.ItemElmStyle;
 
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.item.Item;

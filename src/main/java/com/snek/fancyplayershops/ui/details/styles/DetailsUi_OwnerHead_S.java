@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.ui.styles.ItemElmStyle;
+import com.snek.framework.ui.elements.styles.ItemElmStyle;
 
 
 

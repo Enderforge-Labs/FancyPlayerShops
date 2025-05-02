@@ -10,9 +10,9 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.generated.FontSize;
-import com.snek.framework.ui.styles.ElmStyle;
-import com.snek.framework.ui.styles.FancyTextElmStyle;
-import com.snek.framework.ui.styles.TextElmStyle;
+import com.snek.framework.ui.elements.styles.ElmStyle;
+import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
+import com.snek.framework.ui.elements.styles.TextElmStyle;
 
 import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 import net.minecraft.server.world.ServerWorld;
