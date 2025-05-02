@@ -57,7 +57,8 @@ public class PolylineSetElm extends Div {
                 final float angle = (float)Math.atan2(dir.y, dir.x);
                 e.applyAnimationNow(new Animation(
                     new Transition()
-                    .targetBackground(l.getColor())
+                    .targetBgColor(l.getColor())
+                    .targetBgAlpha(l.getAlpha())
                     .additiveTransform(
                         new Transform()
                         .scale(len, l.getWidth(), 1)

@@ -61,11 +61,11 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
+        super.spawn(pos);
         final Animation animation = getStyle(ButtonElmStyle.class).getHoverPrimerAnimation();
         if(animation != null) {
             applyAnimationNow(animation);
         }
-        super.spawn(pos);
     }
 
 

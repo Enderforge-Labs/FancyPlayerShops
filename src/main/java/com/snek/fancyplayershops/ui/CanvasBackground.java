@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopPanelElm;
+import com.snek.fancyplayershops.ui.misc.styles.CanvasBackground_S;
 
 
 
@@ -22,6 +23,6 @@ public class CanvasBackground extends ShopPanelElm {
      * @param _shop The target shop.
      */
     public CanvasBackground(final @NotNull Shop _shop) {
-        super(_shop);
+        super(_shop, new CanvasBackground_S());
     }
 }

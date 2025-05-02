@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.ui.edit;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
-import org.joml.Vector4i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
@@ -127,7 +126,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         //TODO
         e = bg.addChild(new PolylineSetElm(_shop.getWorld(),
             new PolylineData(
-                new Vector4i(255, 255, 0, 0), 0.1f,
+                new Vector3i(255, 0, 0), 255, 0.1f,
                 new Vector2f(0, 0),
                 new Vector2f(1, 1)
             )

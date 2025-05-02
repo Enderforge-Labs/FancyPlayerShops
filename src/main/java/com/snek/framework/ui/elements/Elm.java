@@ -360,6 +360,7 @@ public abstract class Elm extends Div {
         return new InterpolatedData(
             style.getTransform().copy(),
             null,
+            null,
             null
         );
     }
@@ -372,6 +373,7 @@ public abstract class Elm extends Div {
     protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
         return new InterpolatedData(
             futureDataQueue.get(index).getTransform().copy(),
+            null,
             null,
             null
         );

@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.ui.edit.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector4i;
+import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
@@ -21,7 +21,6 @@ import com.snek.framework.utils.Easings;
  * The style of the EditUiItemSelector UI element.
  */
 public class EditUi_ItemSelector_S extends ShopButton_S {
-    public static final Vector4i HOVER_LEAVE_COLOR = new Vector4i(HOVER_COLOR).mul(new Vector4i(0, 1, 1, 1));
 
 
     /**
@@ -33,8 +32,8 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
 
 
     @Override
-    public @NotNull Vector4i getDefaultBackground() {
-        return new Vector4i(HOVER_LEAVE_COLOR);
+    public @NotNull Vector3i getDefaultBgColor() {
+        return new Vector3i(HOVER_COLOR);
     }
 
 
@@ -42,6 +41,7 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
+            .targetBgAlpha(0)
             .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W))
         );
     }
@@ -49,7 +49,7 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition()
-            .targetBackground(HOVER_COLOR),
+            .targetBgAlpha(getDefaultBgAlpha()),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleY(1f / ShopButton_S.UNHOVERED_W))
         );
@@ -60,7 +60,7 @@ public class EditUi_ItemSelector_S extends ShopButton_S {
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W)),
             new Transition()
-            .targetBackground(getDefaultBackground())
+            .targetBgAlpha(0)
         );
     }
 }

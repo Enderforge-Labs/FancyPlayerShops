@@ -3,6 +3,7 @@ package com.snek.framework.ui.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.InterpolatedData;
@@ -189,11 +190,16 @@ public class FancyTextElm extends Elm {
             fg.setTextAlignment(f.get());
             f.unflag();
         }}
-        { final Flagged<Vector4i> f = getThisStyle().getFlaggedBackground();
-        if(f.isFlagged()) {
-            bg.setBackground(f.get());
-            f.unflag();
-        }}
+        {
+            final Flagged<Vector3i> fc = getThisStyle().getFlaggedBgColor();
+            final Flagged<Integer>  fa = getThisStyle().getFlaggedBgAlpha();
+            if(fc.isFlagged() || fa.isFlagged()) {
+                final Vector3i color = fc.get();
+                bg.setBackground(new Vector4i(fa.get(), color.x, color.y, color.z));
+                fa.unflag();
+                fc.unflag();
+            }
+        }
 
 
         // Transform, view range and billboard mode are already unflagged
@@ -215,7 +221,8 @@ public class FancyTextElm extends Elm {
     protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
         if(d.hasOpacity    ()) { getThisStyle().setTextOpacity(d.getOpacity    ()); }
-        if(d.hasBackground ()) { getThisStyle().setBackground (d.getBackground ()); }
+        if(d.hasBgAlpha    ()) { getThisStyle().setBgAlpha    (d.getBgAlpha    ()); }
+        if(d.hasBgColor    ()) { getThisStyle().setBgColor    (d.getBgColor    ()); }
         if(d.hasTransformFg()) { getThisStyle().setTransformFg(d.getTransformFg()); }
         if(d.hasTransformBg()) { getThisStyle().setTransformBg(d.getTransformBg()); }
     }
@@ -227,7 +234,8 @@ public class FancyTextElm extends Elm {
     protected @NotNull InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getThisStyle().getTransform().copy(),
-            new Vector4i(getThisStyle().getBackground()),
+            new Vector3i(getThisStyle().getBgColor()),
+            getThisStyle().getBgAlpha(),
             getThisStyle().getTextOpacity(),
             getThisStyle().getTransformFg().copy(),
             getThisStyle().getTransformBg().copy()
@@ -235,12 +243,14 @@ public class FancyTextElm extends Elm {
     }
     @Override
     protected @NotNull InterpolatedData __generateInterpolatedData(int index) {
+        final InterpolatedData fd = futureDataQueue.get(index);
         return new InterpolatedData(
-            futureDataQueue.get(index).getTransform().copy(),
-            new Vector4i(futureDataQueue.get(index).getBackground()),
-            futureDataQueue.get(index).getOpacity(),
-            futureDataQueue.get(index).getTransformFg().copy(),
-            futureDataQueue.get(index).getTransformBg().copy()
+            fd.getTransform().copy(),
+            new Vector3i(fd.getBgColor()),
+            fd.getBgAlpha(),
+            fd.getOpacity(),
+            fd.getTransformFg().copy(),
+            fd.getTransformBg().copy()
         );
     }
 

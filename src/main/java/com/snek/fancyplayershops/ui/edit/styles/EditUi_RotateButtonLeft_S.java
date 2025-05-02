@@ -35,6 +35,7 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
+            .targetBgAlpha(0)
             .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X))
         );
     }
@@ -42,7 +43,7 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition()
-            .targetBackground(HOVER_COLOR),
+            .targetBgAlpha(getDefaultBgAlpha()),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W).moveX(-SHIFT_X))
         );
@@ -53,7 +54,7 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X)),
             new Transition()
-            .targetBackground(getDefaultBackground())
+            .targetBgAlpha(0)
         );
     }
 }

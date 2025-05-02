@@ -1,7 +1,8 @@
 package com.snek.framework.data_types.animations;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector4i;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3i;
 
 import com.snek.framework.utils.Easing;
 import com.snek.framework.utils.Easings;
@@ -39,7 +40,7 @@ public class Transition {
         easing    = _easing;
 
         additive   = false;
-        d = new InterpolatedData(null, null, null);
+        d = new InterpolatedData(null, null, null, null);
     }
 
 
@@ -58,7 +59,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransform(final @NotNull Transform _transform) {
+    public @NotNull Transition targetTransform(final @Nullable Transform _transform) {
         d.setTransform(_transform);
         additive = false;
         return this;
@@ -68,7 +69,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransform(final @NotNull Transform _transform) {
+    public @NotNull Transition additiveTransform(final @Nullable Transform _transform) {
         d.setTransform(_transform);
         additive = true;
         return this;
@@ -80,7 +81,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransformFg(final @NotNull Transform _transform) {
+    public @NotNull Transition targetTransformFg(final @Nullable Transform _transform) {
         d.setTransformFg(_transform);
         additive = false;
         return this;
@@ -90,7 +91,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransformFg(final @NotNull Transform _transform) {
+    public @NotNull Transition additiveTransformFg(final @Nullable Transform _transform) {
         d.setTransformFg(_transform);
         additive = true;
         return this;
@@ -102,7 +103,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransformBg(final @NotNull Transform _transform) {
+    public @NotNull Transition targetTransformBg(final @Nullable Transform _transform) {
         d.setTransformBg(_transform);
         additive = false;
         return this;
@@ -112,7 +113,7 @@ public class Transition {
      * @param _transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransformBg(final @NotNull Transform _transform) {
+    public @NotNull Transition additiveTransformBg(final @Nullable Transform _transform) {
         d.setTransformBg(_transform);
         additive = true;
         return this;
@@ -121,11 +122,22 @@ public class Transition {
 
     /**
      * Specifies that the background color of the element this transition is applied to needs to reach a certain value.
-     * @param _background The background color value.
+     * @param _color The background color value.
      * @return This transition.
      */
-    public @NotNull Transition targetBackground(final @NotNull Vector4i _background) {
-        d.setBackground(_background);
+    public @NotNull Transition targetBgColor(final @Nullable Vector3i _bgColor) {
+        d.setBgColor(_bgColor);
+        return this;
+    }
+
+
+    /**
+     * Specifies that the background transparency of the element this transition is applied to needs to reach a certain value.
+     * @param _alpha The background transparency value.
+     * @return This transition.
+     */
+    public @NotNull Transition targetBgAlpha(final @Nullable Integer _bgAlpha) {
+        d.setBgAlpha(_bgAlpha);
         return this;
     }
 
@@ -135,7 +147,7 @@ public class Transition {
      * @param _opacity The text opacity value.
      * @return This transition.
      */
-    public @NotNull Transition targetOpacity(final int _opacity) {
+    public @NotNull Transition targetOpacity(final @Nullable Integer _opacity) {
         d.setOpacity(_opacity);
         return this;
     }

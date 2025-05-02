@@ -1,7 +1,7 @@
 package com.snek.fancyplayershops.ui.misc.styles;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector4i;
+import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
@@ -30,8 +30,8 @@ public class MouseButtonUp_S extends ShopPanelElm_S {
 
 
     @Override
-    public @NotNull Vector4i getDefaultColor() {
-        return new Vector4i(255, 240, 240, 240);
+    public @NotNull Vector3i getDefaultColor() {
+        return new Vector3i(240, 240, 240);
     }
 
 

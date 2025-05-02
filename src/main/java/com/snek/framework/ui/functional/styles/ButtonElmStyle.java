@@ -2,7 +2,7 @@ package com.snek.framework.ui.functional.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector4i;
+import org.joml.Vector3i;
 
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -22,7 +22,7 @@ import com.snek.framework.utils.Easings;
  * The style of the generic ButtonElm UI element.
  */
 public class ButtonElmStyle extends FancyTextElmStyle {
-    public static final @NotNull Vector4i HOVER_COLOR          = new Vector4i(255, 110, 160, 130);
+    public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(110, 160, 130);
     public static final          float    UNHOVERED_W          = 0.05f;
     public static final          int      HOVER_ANIMATION_TIME = 10;
 
@@ -55,10 +55,14 @@ public class ButtonElmStyle extends FancyTextElmStyle {
 
 
     @Override
-    public @NotNull Vector4i getDefaultBackground() {
-        return new Vector4i(HOVER_COLOR);
+    public @NotNull Vector3i getDefaultBgColor() {
+        return new Vector3i(HOVER_COLOR);
     }
 
+    @Override
+    public int getDefaultBgAlpha() {
+        return 255;
+    }
 
 
 

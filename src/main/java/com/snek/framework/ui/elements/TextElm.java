@@ -121,15 +121,18 @@ public class TextElm extends Elm {
         return new InterpolatedData(
             getThisStyle().getTransform().copy(),
             null,
+            null,
             getThisStyle().getTextOpacity()
         );
     }
     @Override
     protected @NotNull InterpolatedData __generateInterpolatedData(int index) {
+        final InterpolatedData fd = futureDataQueue.get(index);
         return new InterpolatedData(
-            futureDataQueue.get(index).getTransform().copy(),
+            fd.getTransform().copy(),
             null,
-            futureDataQueue.get(index).getOpacity()
+            null,
+            fd.getOpacity()
         );
     }
 

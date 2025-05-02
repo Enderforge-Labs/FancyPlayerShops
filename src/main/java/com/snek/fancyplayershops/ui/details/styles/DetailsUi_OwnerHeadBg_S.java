@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.ui.details.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector4i;
+import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.styles.ShopPanelElm_S;
@@ -35,8 +35,14 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
 
 
     @Override
-    public @NotNull Vector4i getDefaultColor() {
-        return new Vector4i(50, 0, 0, 0);
+    public @NotNull Vector3i getDefaultColor() {
+        return new Vector3i(0, 0, 0);
+    }
+
+
+    @Override
+    public int getDefaultAlpha() {
+        return 50;
     }
 
 
@@ -44,7 +50,7 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
-            .targetBackground(new Vector4i(getDefaultColor().mul(new Vector4i(0, 1, 1, 1))))
+            .targetBgAlpha(0)
             .additiveTransform(new Transform().scaleY(PRIMER_H).moveY(DetailsUi.HEAD_BG_SIZE.y))
         );
     }
@@ -52,7 +58,7 @@ public class DetailsUi_OwnerHeadBg_S extends ShopPanelElm_S {
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
-            .targetBackground(getDefaultColor())
+            .targetBgAlpha(getDefaultAlpha())
             .additiveTransform(new Transform().scaleY(1f / PRIMER_H).moveY(-DetailsUi.HEAD_BG_SIZE.y))
         );
     }

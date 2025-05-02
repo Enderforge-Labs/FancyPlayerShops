@@ -2,6 +2,7 @@ package com.snek.framework.ui.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.joml.Vector4i;
 
 import com.snek.framework.data_types.animations.InterpolatedData;
@@ -81,11 +82,16 @@ public class PanelElm extends Elm {
 
 
         // Apply color
-        { final Flagged<Vector4i> f = getThisStyle().getFlaggedColor();
-        if(f.isFlagged()) {
-            getThisEntity().setBackground(f.get());
-            f.unflag();
-        }}
+        {
+            final Flagged<Vector3i> fc = getThisStyle().getFlaggedColor();
+            final Flagged<Integer>  fa = getThisStyle().getFlaggedAlpha();
+            if(fc.isFlagged() || fa.isFlagged()) {
+                final Vector3i color = fc.get();
+                getThisEntity().setBackground(new Vector4i(fa.get(), color.x, color.y, color.z));
+                fa.unflag();
+                fc.unflag();
+            }
+        }
     }
 
 
@@ -94,7 +100,8 @@ public class PanelElm extends Elm {
     @Override
     protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
         super.__applyTransitionStep(d);
-        if(d.hasBackground()) getThisStyle().setColor(d.getBackground());
+        if(d.hasBgColor()) getThisStyle().setColor(d.getBgColor());
+        if(d.hasBgAlpha()) getThisStyle().setAlpha(d.getBgAlpha());
     }
 
 
@@ -104,15 +111,18 @@ public class PanelElm extends Elm {
     protected @NotNull InterpolatedData __generateInterpolatedData() {
         return new InterpolatedData(
             getThisStyle().getTransform().copy(),
-            new Vector4i(getThisStyle().getColor()),
+            new Vector3i(getThisStyle().getColor()),
+            getThisStyle().getAlpha(),
             null
         );
     }
     @Override
     protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
+        final InterpolatedData fd = futureDataQueue.get(index);
         return new InterpolatedData(
-            futureDataQueue.get(index).getTransform().copy(),
-            new Vector4i(futureDataQueue.get(index).getBackground()),
+            fd.getTransform().copy(),
+            new Vector3i(fd.getBgColor()),
+            fd.getBgAlpha(),
             null
         );
     }
