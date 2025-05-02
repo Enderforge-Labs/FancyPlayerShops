@@ -78,8 +78,8 @@ import net.minecraft.world.World;
 public class Shop {
 
     // Limits
-    public static final double MAX_PRICE = 100d * 1000d * 1000d * 1000d;
-    public static final int    MAX_STOCK = 1 * 1000 * 1000;
+    public static final double MAX_PRICE = 100_000_000_000d;
+    public static final int    MAX_STOCK =       1_000_000;
 
 
     // Animation data

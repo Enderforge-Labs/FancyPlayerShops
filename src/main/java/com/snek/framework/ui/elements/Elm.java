@@ -477,7 +477,6 @@ public abstract class Elm extends Div {
         if(futureDataQueue.isEmpty()) {
             if(queueLingerTicks > 0) {
                 --queueLingerTicks;
-                System.out.println("linger tick #" + queueLingerTicks);
             }
             else {
                 elmUpdateQueue.remove(this);

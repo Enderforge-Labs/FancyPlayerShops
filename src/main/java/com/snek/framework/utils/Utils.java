@@ -86,6 +86,53 @@ public abstract class Utils {
 
 
 
+
+
+    /**
+     * Returns the value <price> expressed as a string and formatted using $ as currency symbol, abbreviating the number to 3 digits.
+     * @param price The price to format.
+     * @return The formatted price.
+     */
+    public static @NotNull String formatPriceShort(final double price) {
+        return formatPriceShort(price, "$");
+    }
+
+
+    /**
+     * Returns the value <price> expressed as a string and formatted as specified, abbreviating the number to 3 digits.
+     * @param price The price to format.
+     * @param currency The currency symbol to use as prefix.
+     * @return The formatted price.
+     */
+    public static @NotNull String formatPriceShort(final double price, final @NotNull String currency) {
+        final String[] suffixes = { "", "k", "m", "b", "t", "q" };
+        int exp = 0;
+        double scaled = price;
+
+        // Calculate exponent
+        while(scaled >= 1000 && exp < suffixes.length - 1) {
+            scaled /= 1000;
+            exp++;
+        }
+
+        // Find optimal formatting
+        String formatted;
+        if     (scaled < 10 ) formatted = String.format("%.2f", scaled);
+        else if(scaled < 100) formatted = String.format("%.1f", scaled);
+        else                  formatted = String.format("%.0f", scaled);
+
+        // Trim trailing .00 or .0
+        if (formatted.contains(".")) {
+            formatted = formatted.replaceAll("\\.?0+$", "");
+        }
+
+        // Return the formatted price with prefix and suffix added
+        return currency + formatted + suffixes[exp];
+    }
+
+
+
+
     /**
      * Returns the value <price> expressed as a string and formatted using $ as currency symbol and thousands separators.
      * @param price The price to format.
@@ -95,10 +142,11 @@ public abstract class Utils {
         return formatPrice(price, "$", true);
     }
 
+
     /**
      * Returns the value <price> expressed as a string and formatted as specified.
      * @param price The price to format.
-     * @param currency The currency symbol to use as prefix. [default: "$"]
+     * @param currency The currency symbol to use as prefix.
      * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
      * @return The formatted price.
      */
@@ -138,8 +186,8 @@ public abstract class Utils {
     /**
      * Returns the value <amount> expressed as a string and formatted as specified.
      * @param amount The amount to format.
-     * @param x Whether the amount should be prefixed with a lowercase "x". [default: false]
-     * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
+     * @param x Whether the amount should be prefixed with a lowercase "x".
+     * @param thousandsSeparator Whether to use a separator between thousands.
      * @return The formatted price.
      */
     public static @NotNull String formatAmount(final double amount, final boolean x, final boolean thousandsSeparator) {

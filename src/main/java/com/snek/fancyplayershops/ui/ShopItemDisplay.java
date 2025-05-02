@@ -173,7 +173,6 @@ public class ShopItemDisplay extends ItemElm {
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
-                System.out.println("NAME SET TO: " + MinecraftUtils.getFancyItemName(noItem).getString());
                 name.getStyle(FancyTextElmStyle.class).setText(MinecraftUtils.getFancyItemName(noItem));
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
@@ -186,9 +185,7 @@ public class ShopItemDisplay extends ItemElm {
             getStyle(ItemElmStyle.class).setItem(_item);
 
             // Get item name as a string
-            //TODO shorten prices to 3 characters or all cents.
-            //TODO $0.01    $0.98    $1.6    $12    $400    $1.5k    $12k    $100k    $1.5m
-            final String fullName = Utils.formatPrice(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
+            final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
             final StringBuilder truncatedName = new StringBuilder();
 
             // Wrap the name and calculate the amount of lines
@@ -207,7 +204,6 @@ public class ShopItemDisplay extends ItemElm {
             // Set the new name and adjust the element height
             if(i < fullName.length()) truncatedName.append("…");
             if(name != null) {
-                System.out.println("NAME SET TO: " + truncatedName.toString());
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).get());
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
