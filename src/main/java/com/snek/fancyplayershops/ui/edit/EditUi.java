@@ -45,11 +45,11 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = 0.4f - ShopCanvas.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
+    public static final float ROTATE_BUTTON_Y            = 0.45f - ShopCanvas.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.3f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = 0.4f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
+    public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
 
 
     // Functionalities

@@ -67,12 +67,11 @@ public class ShopItemDisplay extends ItemElm {
 
     // Edit animation scale and transition
     public static final @NotNull Vector3f EDIT_SCALE  = new Vector3f(0.4f);
-    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.1f, 0);
+    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.15f, 0);
 
 
 
 
-    // // Setup spawn and despawn animations
     // Setup focus animation (unfocus animation is created dynamically)
     private static final @NotNull Animation focusAnimation = new Animation(
         new Transition(S_TIME, Easings.sineOut)

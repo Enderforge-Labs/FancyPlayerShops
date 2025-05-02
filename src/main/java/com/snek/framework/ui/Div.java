@@ -8,13 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.interfaces.Clickable;
 import com.snek.framework.ui.interfaces.Hoverable;
 
