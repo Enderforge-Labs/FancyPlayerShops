@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.ui.InteractionBlocker;
+import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -196,6 +197,7 @@ public class FancyPlayerShops implements ModInitializer {
         // Register entity display purge
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
             Elm.onEntityLoad(entity);
+            ShopItemDisplay.onEntityLoad(entity);
             InteractionBlocker.onEntityLoad(entity);
         });
 

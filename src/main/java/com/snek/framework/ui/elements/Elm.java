@@ -465,7 +465,9 @@ public abstract class Elm extends Div {
     protected boolean stepTransition() {
 
         // Apply step and update the entity
-        __applyTransitionStep(futureDataQueue.removeFirst());
+        if(!futureDataQueue.isEmpty()) {
+            __applyTransitionStep(futureDataQueue.removeFirst());
+        }
         flushStyle();
         entity.setInterpolationDuration(TRANSITION_REFRESH_TIME);
         entity.setStartInterpolation();
@@ -474,11 +476,12 @@ public abstract class Elm extends Div {
         // Remove the element from the update queue if no steps are left and linger ticks have ran out
         if(futureDataQueue.isEmpty()) {
             if(queueLingerTicks > 0) {
-                elmUpdateQueue.remove(this);
-                isQueued = false;
+                --queueLingerTicks;
+                System.out.println("linger tick #" + queueLingerTicks);
             }
             else {
-                --queueLingerTicks;
+                elmUpdateQueue.remove(this);
+                isQueued = false;
             }
             return false;
         }
@@ -597,7 +600,7 @@ public abstract class Elm extends Div {
      * <p> Must be called on entity load event.
      * @param entity The entity.
      */
-    public static void onEntityLoad(@NotNull Entity entity) {
+    public static void onEntityLoad(final @NotNull Entity entity) {
         if(entity instanceof DisplayEntity) {
             if(
                 entity.getWorld() != null &&

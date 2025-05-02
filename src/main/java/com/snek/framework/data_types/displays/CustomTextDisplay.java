@@ -47,8 +47,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
         if(!lastAlphaInitialized) {
             lastAlphaInitialized = true;
-            lastAlpha[2] = _new;
-            lastAlpha[1] = _new;
+            lastAlpha[2] = 0;
+            lastAlpha[1] = 0;
             lastAlpha[0] = _new;
         }
         else {
@@ -236,6 +236,7 @@ public class CustomTextDisplay extends CustomDisplay {
         else if(lastAlpha[1] >= 26 && lastAlpha[2] < 26) {
             Utils.invokeSafe(method_setText, heldEntity, textCache);
         }
+        System.out.println("A: [ " + lastAlpha[1] + ", " + lastAlpha[2] + " ]");
         Utils.invokeSafe(method_setTextOpacity, getRawDisplay(), (byte)(a > 127 ? a - 256 : a));
     }
 

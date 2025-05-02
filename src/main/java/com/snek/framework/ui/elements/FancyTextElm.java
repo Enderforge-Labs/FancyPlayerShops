@@ -180,10 +180,11 @@ public class FancyTextElm extends Elm {
             f.unflag();
         }}
         { final Flagged<Integer> f = getThisStyle().getFlaggedTextOpacity();
-        if(f.isFlagged()) {
+            //! Opacity is updated every time to keep the opacity cache moving
             fg.setTextOpacity(f.get());
+            System.out.println("Updated opacity to " + f.get());
             f.unflag();
-        }}
+        }
         { final Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment();
         if(f.isFlagged()) {
             fg.setTextAlignment(f.get());

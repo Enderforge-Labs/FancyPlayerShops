@@ -42,7 +42,6 @@ import com.snek.framework.utils.scheduler.TaskHandler;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -109,6 +108,7 @@ public class Shop {
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
+    private static boolean dataLoaded = false;
 
 
 
@@ -118,8 +118,8 @@ public class Shop {
     private           @NotNull  String          worldId;                        // The Identifier of the world
     private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           @Nullable UUID            itemDisplayNameUUID1 = null;    // The UUID of one of the two the name display entities
-    private           @Nullable UUID            itemDisplayNameUUID2 = null;    // The UUID of one of the two the name display entities
+    // private           @Nullable UUID            itemDisplayNameUUID1 = null;    // The UUID of one of the two the name display entities
+    // private           @Nullable UUID            itemDisplayNameUUID2 = null;    // The UUID of one of the two the name display entities
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
     private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, without including the world
@@ -179,11 +179,6 @@ public class Shop {
      */
     public @NotNull Vector3d calcDisplayPos() {
         return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-    }
-    public void setItemDisplayNameUUID(UUID uuid1, UUID uuid2) {
-        itemDisplayNameUUID1 = uuid1;
-        itemDisplayNameUUID2 = uuid2;
-        saveShop();
     }
 
 
@@ -343,10 +338,14 @@ public class Shop {
 
 
     /**
-     * Loads all the player shops into the runtime map.
+     * Loads all the player shops into the runtime map if needed.
      * <p> Must be called on server started event (After the worlds are loaded!).
+     * <p> If the data has already been loaded, the call will have no effect.
      */
     public static void loadData() {
+        if(dataLoaded) return;
+        dataLoaded = true;
+
 
         // For each world directory
         for(final File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
@@ -475,14 +474,8 @@ public class Shop {
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
         if(itemDisplay == null) {
             final ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
-            if(rawItemDisplay == null) {
-                itemDisplay = new ShopItemDisplay(this);
-            }
-            else {
-                final TextDisplayEntity rawName1 = itemDisplayNameUUID1 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID1));
-                final TextDisplayEntity rawName2 = itemDisplayNameUUID2 == null ? null : (TextDisplayEntity)(world.getEntity(itemDisplayNameUUID2));
-                itemDisplay = new ShopItemDisplay(this, rawItemDisplay, rawName1, rawName2);
-            }
+            if(rawItemDisplay == null) itemDisplay = new ShopItemDisplay(this);
+            else                       itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
         }
         return itemDisplay;
     }

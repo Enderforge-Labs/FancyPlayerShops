@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -24,10 +25,9 @@ import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.minecraft.entity.Entity.RemovalReason;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -43,8 +43,9 @@ import net.minecraft.item.Items;
  * <p> Unconfigured shops show a barrier item.
  */
 public class ShopItemDisplay extends ItemElm {
-    private final @NotNull Shop         shop;
-    private       @NotNull FancyTextElm name;
+    public static final @NotNull String ITEM_DISPLAY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.itemdisplay";
+    private final @NotNull  Shop         shop;
+    private       @Nullable FancyTextElm name;
 
     // Layout
     public static final float ENTITY_SHIFT_Y = 0.2f;
@@ -81,7 +82,7 @@ public class ShopItemDisplay extends ItemElm {
             .rotY(LOOP_ROT / 2)
         )
     );
-    private static @NotNull Animation unfocusAnimation;
+    private @NotNull Animation unfocusAnimation;
 
 
     // Setup loop animation
@@ -138,10 +139,8 @@ public class ShopItemDisplay extends ItemElm {
      * @param _rawName1 One of the TextDisplayEntity entities that make up the name of the item.
      * @param _rawName2 One of the TextDisplayEntity entities that make up the name of the item.
      */
-    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplayEntity _rawDisplay, final @Nullable TextDisplayEntity _rawName1, final @Nullable TextDisplayEntity _rawName2) {
+    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplayEntity _rawDisplay) {
         this(_targetShop, new CustomItemDisplay(_rawDisplay));
-        if(_rawName1 != null) _rawName1.remove(RemovalReason.KILLED);
-        if(_rawName2 != null) _rawName2.remove(RemovalReason.KILLED);
     }
 
 
@@ -164,22 +163,8 @@ public class ShopItemDisplay extends ItemElm {
 
 
         // Spawn or despawn the name entity if necessary
-        if(!shop.isFocused()) {
-            if(name == null) {
-                name = new FancyTextElm(world);
-                name.getStyle().setViewRange(0.2f);
-                name.getStyle().setBillboardMode(BillboardMode.VERTICAL);
-                shop.setItemDisplayNameUUID(name.getFgEntity().getUuid(), name.getBgEntity().getUuid());
-                name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
-                name.getFgEntity().setCustomName(null);
-                name.getBgEntity().setCustomName(null);
-            }
-        }
-        else if(name != null) {
-            name.despawnNow();
-            name = null;
-            shop.setItemDisplayNameUUID(null, null);
-        }
+        if(!shop.isFocused()) spawnNameEntity();
+        else                despawnNameEntity();
 
 
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
@@ -188,6 +173,7 @@ public class ShopItemDisplay extends ItemElm {
             noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
+                System.out.println("NAME SET TO: " + MinecraftUtils.getFancyItemName(noItem).getString());
                 name.getStyle(FancyTextElmStyle.class).setText(MinecraftUtils.getFancyItemName(noItem));
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
@@ -221,6 +207,7 @@ public class ShopItemDisplay extends ItemElm {
             // Set the new name and adjust the element height
             if(i < fullName.length()) truncatedName.append("…");
             if(name != null) {
+                System.out.println("NAME SET TO: " + truncatedName.toString());
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).get());
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
@@ -318,7 +305,7 @@ public class ShopItemDisplay extends ItemElm {
 
         // Spawn the entity and remove tracking custom name
         super.spawn(new Vector3d(pos).add(0, ENTITY_SHIFT_Y, 0));
-        getEntity().setCustomName(null);
+        getEntity().setCustomName(new Txt(ITEM_DISPLAY_CUSTOM_NAME).get());
         getEntity().setCustomNameVisible(false);
 
         // Force display update to spawn the name element
@@ -331,5 +318,60 @@ public class ShopItemDisplay extends ItemElm {
     public void despawn() {
         super.despawn();
         if(name != null) name.despawnNow();
+    }
+
+
+
+
+    /**
+     * Spawns the name text display if needed.
+     */
+    public void spawnNameEntity(){
+        if(name == null) {
+            name = new FancyTextElm(world);
+            name.getStyle().setViewRange(0.2f);
+            name.getStyle().setBillboardMode(BillboardMode.VERTICAL);
+            name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
+        }
+    }
+
+
+
+
+    /**
+     * Despawns the name text display if needed.
+     */
+    public void despawnNameEntity(){
+        if(name != null) {
+            name.despawnNow();
+            name = null;
+        }
+    }
+
+
+
+
+    /**
+     * Forcibly sets the item display of a loaded shop when the display entity is loaded into the world.
+     * This makes sure the name display is visible before the shops is focused by a player.
+     * <p> Must be called on entity load event.
+     * @param entity The loaded entity.
+     */
+    public static void onEntityLoad(final @NotNull Entity entity) {
+        if(entity instanceof ItemDisplayEntity) {
+            if(
+                entity.getWorld() != null &&
+                entity.getCustomName() != null &&
+                entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
+            ) {
+                //! Force data loading in case this event gets called before the scheduled data loading
+                Shop.loadData();
+
+                final Shop shop = Shop.findShop(entity.getBlockPos(), entity.getWorld());
+                if(shop != null) shop.getItemDisplay();
+                //! getItemDisplay() retrieves the item display entity and creates the associated ShopItemDisplay,
+                //! whose constructor spawns the name entities.
+            }
+        }
     }
 }
