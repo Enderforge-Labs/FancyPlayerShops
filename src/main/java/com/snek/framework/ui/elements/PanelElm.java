@@ -144,7 +144,7 @@ public class PanelElm extends Elm {
         return t.copy()
             .scaleX(ENTITY_BLOCK_RATIO_X * getAbsSize().x)
             .scaleY(ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
-            .move(new Vector3f(ENTITY_SHIFT_X * getAbsSize().x, 0, 0).rotate(t.getRot()))
+            .moveX(ENTITY_SHIFT_X * getAbsSize().x)
         ;
     }
 }

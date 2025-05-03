@@ -16,7 +16,7 @@ import net.minecraft.util.math.AffineTransformation;
 
 /**
  * A single transformation specified as local rotation, translation, scale and global rotation.
- * It can be converted to a Minecraft AffineTransformation.
+ * <p> It can be converted to a Minecraft AffineTransformation.
  */
 public class Transform {
     protected final @NotNull Vector3f    _pos;
@@ -50,7 +50,7 @@ public class Transform {
 
     /**
      * Creates a new Transform with default data:
-     *     No local rotation.
+     * <p> No local rotation.
      *     No translation.
      *     Scale 1.
      *     No global rotation.

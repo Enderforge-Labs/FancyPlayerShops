@@ -125,9 +125,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
         //TODO
         e = bg.addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(
-                new Vector3i(255, 0, 0), 255, 0.1f,
-                new Vector2f(0, 0),
+            new PolylineData(new Vector3i(255, 0, 0), 255, 0.1f,
+                new Vector2f(0.4f, 0.2f),
                 new Vector2f(1, 1)
             )
         ));

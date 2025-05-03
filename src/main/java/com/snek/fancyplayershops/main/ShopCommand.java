@@ -45,7 +45,9 @@ public abstract class ShopCommand {
                 }))
 
 
-                // Item give command (Admin only)
+                //TODO add admin only test commands that spawn thousands of shops
+                //TODO add admin only test commands that remove all shops in a radius
+                // Item give command (Admin only) //FIXME make admin only
                 .then(LiteralArgumentBuilder.<ServerCommandSource>literal("create").executes(context -> {
                     final PlayerEntity player = context.getSource().getPlayer();
                     player.dropStack(FancyPlayerShops.getShopItemCopy());

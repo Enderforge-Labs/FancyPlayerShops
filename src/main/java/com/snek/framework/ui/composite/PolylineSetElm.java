@@ -24,10 +24,9 @@ import net.minecraft.server.world.ServerWorld;
 
 /**
  * A composite UI element that can display many polylines.
- * <p> Each polyline is defined by a list of 2 or more points and has a configurable thickness and color.
+ * <p> Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
  */
 public class PolylineSetElm extends Div {
-    // final @NotNull List<@NotNull PolylineData> polylines;
 
 
     /**
@@ -36,38 +35,52 @@ public class PolylineSetElm extends Div {
      */
     public PolylineSetElm(ServerWorld _world, final @NotNull PolylineData... _polylines) {
         super();
-        // polylines = List.of(_polylines);
 
-        // For each polyline
+        // Create lines and add them to the children list
         for(final PolylineData l : _polylines) {
-
-            // For each line
             final List<Vector2f> points = l.getPoints();
             for(int i = 0; i < points.size() - 1; ++i) {
-
-                // Create a new panel element
-                final PanelElm e = (PanelElm)addChild(new PanelElm(_world));
-                e.setSize(new Vector2f(1f, 1f));
-
-                // Change its color and make it a line of the specified width using a linear transformation
-                final Vector2f a = points.get(i);
-                final Vector2f b = points.get(i + 1);
-                final Vector2f dir = b.sub(a, new Vector2f());
-                final float len = dir.length();
-                final float angle = (float)Math.atan2(dir.y, dir.x);
-                e.applyAnimationNow(new Animation(
-                    new Transition()
-                    .targetBgColor(l.getColor())
-                    .targetBgAlpha(l.getAlpha())
-                    .additiveTransform(
-                        new Transform()
-                        .scale(len, l.getWidth(), 1)
-                        .rotZ(angle)
-                        .move((a.x + b.x) / 2, (a.y + b.y) / 2, 0)
-                    )
-                ));
-                System.out.println(e.getEntity(CustomTextDisplay.class).getBackground());
+                createLine(_world, l, points.get(i), points.get(i + 1));
             }
         }
     }
+
+
+
+
+    /**
+     * Creates a new line and adds it to this element's children.
+     * @param _world The world to spawn the display entities in.
+     * @param l The polyline data that specifies color, opacity and width.
+     * @param a The first point of the line.
+     * @param b The second point of the line.
+     */
+    private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b) {
+
+        // Calculate line direction, length and angle
+        final Vector2f dir = b.sub(a, new Vector2f());
+        final float len = dir.length();
+        final float angle = (float)Math.atan2(dir.y, dir.x);
+
+
+        // Create a new panel element and move it to the correct position
+        final PanelElm e = (PanelElm)addChild(new PanelElm(_world));
+        e.setSize(new Vector2f(1f, 1f));
+        e.setPos(a.add(b, new Vector2f()).div(2f));                             // Move element to the center of the line
+        e.move(dir.normalize(new Vector2f()).mul(1, -1).mul(l.getWidth() / 2)); // Adjust position (account for the width)
+        e.move(new Vector2f(-0.5f, -0.5f));                                     // Adjust position (panel position starts from the bottom left corner)
+
+
+        // Change its color, resize it and rotate it by overwriting the primer animation
+        e.getStyle().setPrimerAnimation(new Animation(
+            new Transition()
+            .targetBgColor(l.getColor())
+            .targetBgAlpha(l.getAlpha())
+            .additiveTransform(new Transform().rotZ(angle).scale(len, l.getWidth(), 0))
+        ));
+    }
+
+    //FIXME for some reason lines are aligned to the center when they really shouldn't. check alignment too, just in case
+
+    //FIXME lines with negative slope aren't rendered at the right height
 }
