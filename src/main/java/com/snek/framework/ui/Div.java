@@ -36,27 +36,27 @@ import net.minecraft.util.ClickType;
 
 /**
  * The most basic UI element. It can contain and manage any amount of UI elements.
- * By default, divs are invisible and don't exist in the minecraft world nor on the client.
- * They have a 2D size, a 2D position and alignment options.
+ * <p> By default, divs are invisible and don't exist in the minecraft world nor on the client.
+ *     They have a 2D size, a 2D position and alignment options.
  */
 public class Div {
 
 
     // Tree data
     protected @Nullable Div parent = null;
-    protected final @NotNull List<Div> children = new ArrayList<>();
-    public void setParent(@Nullable Div _parent) { parent = _parent; }
+    protected final @NotNull List<@NotNull Div> children = new ArrayList<>();
+    public void setParent(final @Nullable Div _parent) { parent = _parent; }
     public @Nullable Div getParent() { return parent; }
 
 
 
 
     // UI data
-    private @NotNull Vector2f   localSize  = new Vector2f(1, 1);
-    private @NotNull Vector2f   localPos   = new Vector2f(0, 0);
+    private final @NotNull Vector2f   localSize  = new Vector2f(1, 1);
+    private final @NotNull Vector2f   localPos   = new Vector2f(0, 0);
 
-    private @NotNull Vector2f   absSize    = new Vector2f(1, 1);
-    private @NotNull Vector2f   absPos     = new Vector2f(0, 0);
+    private final @NotNull Vector2f   absSize    = new Vector2f(1, 1);
+    private final @NotNull Vector2f   absPos     = new Vector2f(0, 0);
 
     private @NotNull AlignmentX alignmentX = AlignmentX.NONE;
     private @NotNull AlignmentY alignmentY = AlignmentY.NONE;
@@ -81,7 +81,7 @@ public class Div {
      * @param elm The new element.
      * @return elm
      */
-    public Div addChild(Div elm) {
+    public Div addChild(final @NotNull Div elm) {
         elm.parent = this;
         elm.updateAbsPos();
         elm.updateZIndex();
@@ -94,7 +94,7 @@ public class Div {
      * @param elm The removed element.
      * @return elm
      */
-    public Div removeChild(Div elm) {
+    public Div removeChild(final @NotNull Div elm) {
         elm.parent = null;
         elm.updateAbsPos();
         elm.updateZIndex();
@@ -106,7 +106,7 @@ public class Div {
      * Removes all children from this Div.
      */
     public void clearChildren() {
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.parent = null;
             elm.updateAbsPos();
             elm.updateZIndex();
@@ -118,7 +118,7 @@ public class Div {
      * Returns the list of children.
      * @return The list of children.
      */
-    public List<Div> getChildren() {
+    public @NotNull List<@NotNull Div> getChildren() {
         return children;
     }
 
@@ -127,18 +127,18 @@ public class Div {
 
     /**
      * Applies an animation to this element.
-     * ! Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
-    public void applyAnimation(@NotNull Animation animation) {
+    public void applyAnimation(final @NotNull Animation animation) {
         // Empty
     }
     /**
      * Applies a transition to this element.
-     * ! Partial steps at the end of the transition are expanded to cover the entire step.
+     * <p> Partial steps at the end of the transition are expanded to cover the entire step.
      * @param transition The transition to apply.
      */
-    public final void applyAnimation(@NotNull Transition transition) {
+    public final void applyAnimation(final @NotNull Transition transition) {
         applyAnimation(new Animation(transition));
     }
 
@@ -149,14 +149,14 @@ public class Div {
      * Instantly applies an animation to this element, ignoring transition times and easings.
      * @param animation The animation to apply.
      */
-    public void applyAnimationNow(@NotNull Animation animation) {
+    public void applyAnimationNow(final @NotNull Animation animation) {
         // Empty
     }
     /**
      * Instantly applies a transition to this element, ignoring transition times and easings.
      * @param transition The transition to apply.
      */
-    public final void applyAnimationNow(@NotNull Transition transition) {
+    public final void applyAnimationNow(final @NotNull Transition transition) {
         applyAnimationNow(new Animation(transition));
     }
 
@@ -165,21 +165,21 @@ public class Div {
 
     /**
      * Applies an animation to this element and all of its children.
-     * ! Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
-    public final void applyAnimationRecursive(@NotNull Animation animation) {
+    public final void applyAnimationRecursive(final @NotNull Animation animation) {
         applyAnimation(animation);
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.applyAnimationRecursive(animation);
         }
     }
     /**
      * Applies a transition to this element and all of its children.
-     * ! Partial steps at the end of the transition are expanded to cover the entire step.
+     * <p> Partial steps at the end of the transition are expanded to cover the entire step.
      * @param transition The transition to apply.
      */
-    public final void applyAnimationRecursive(@NotNull Transition transition) {
+    public final void applyAnimationRecursive(final @NotNull Transition transition) {
         applyAnimationRecursive(new Animation(transition));
     }
 
@@ -190,9 +190,9 @@ public class Div {
      * Instantly applies an animation to this element and all of its children, ignoring transition times and easings.
      * @param animation The animation to apply.
      */
-    public final void applyAnimationNowRecursive(@NotNull Animation animation) {
+    public final void applyAnimationNowRecursive(final @NotNull Animation animation) {
         applyAnimationNow(animation);
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.applyAnimationNowRecursive(animation);
         }
     }
@@ -200,7 +200,7 @@ public class Div {
      * Instantly applies a transition to this element and all of its children, ignoring transition times and easings.
      * @param transition The transition to apply.
      */
-    public final void applyAnimationNowRecursive(@NotNull Transition transition) {
+    public final void applyAnimationNowRecursive(final @NotNull Transition transition) {
         applyAnimationNowRecursive(new Animation(transition));
     }
 
@@ -209,15 +209,15 @@ public class Div {
 
     /**
      * Forwards a click to this element and all its children.
-     * This method stops at the first clickable element that consumes a click.
+     * <p> This method stops at the first clickable element that consumes a click.
      * @param player The player that clicked.
      * @param clickType The type of click.
      */
-    public void forwardClick(PlayerEntity player, ClickType clickType) {
+    public void forwardClick(final @NotNull PlayerEntity player, final @NotNull ClickType clickType) {
         if(this instanceof Clickable e && e.onClick(player, clickType)) {
             return;
         }
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.forwardClick(player, clickType);
         }
     }
@@ -229,11 +229,11 @@ public class Div {
      * Forwards a hover event to this element and all of its children.
      * @param player The player that clicked.
      */
-    public void forwardHover(PlayerEntity player) {
+    public void forwardHover(final @NotNull PlayerEntity player) {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
             e.updateHoverState(player);
         }
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.forwardHover(player);
         }
     }
@@ -245,8 +245,8 @@ public class Div {
      * Spawns the element and its associated entities into the world.
      * @param pos The position of the spawned entities.
      */
-    public void spawn(Vector3d pos) {
-        for(Div elm : children) {
+    public void spawn(final @NotNull Vector3d pos) {
+        for(final Div elm : children) {
             elm.spawn(pos);
         }
     }
@@ -258,7 +258,7 @@ public class Div {
      * Removes the element and its associated entities from the world.
      */
     public void despawn() {
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.despawn();
         }
     }
@@ -270,7 +270,7 @@ public class Div {
      * Instantly removes the entities associated with this element from the world.
      */
     public void despawnNow() {
-        for(Div elm : children) {
+        for(final Div elm : children) {
             elm.despawnNow();
         }
     }
@@ -305,58 +305,58 @@ public class Div {
      */
     public void updateAbsSize() {
         updateAbsSizeSelf();
-        for(Div c : children) c.updateAbsSize();
+        for(final Div c : children) c.updateAbsSize();
     }
     /**
      * Updates the local size of this element based on the current absolute size, then updates the absolute size of its children, recursively.
      */
     public void updateAbsSizeInverse() {
         updateAbsSizeInverseSelf();
-        for(Div c : children) c.updateAbsSize();
+        for(final Div c : children) c.updateAbsSize();
     }
 
 
-    public void setSize(@NotNull Vector2f _size) {
+    public void setSize(final @NotNull Vector2f _size) {
         localSize.set(_size);
         updateAbsSize();
     }
 
-    public void setSizeX(float x) {
+    public void setSizeX(final float x) {
         localSize.x = x;
         updateAbsSize();
     }
 
-    public void setSizeY(float y) {
+    public void setSizeY(final float y) {
         localSize.y = y;
         updateAbsSize();
     }
 
-    public void setAbsSize(@NotNull Vector2f _size) {
+    public void setAbsSize(final @NotNull Vector2f _size) {
         absSize.set(_size);
         updateAbsSizeInverse();
     }
 
-    public void setAbsSizeX(float x) {
+    public void setAbsSizeX(final float x) {
         absSize.x = x;
         updateAbsSizeInverse();
     }
 
-    public void setAbsSizeY(float y) {
+    public void setAbsSizeY(final float y) {
         absSize.y = y;
         updateAbsSizeInverse();
     }
 
-    public void scale(@NotNull Vector2f _size) {
+    public void scale(final @NotNull Vector2f _size) {
         localSize.mul(_size);
         updateAbsSize();
     }
 
-    public void scaleX(float x) {
+    public void scaleX(final float x) {
         localSize.x *= x;
         updateAbsSize();
     }
 
-    public void scaleY(float y) {
+    public void scaleY(final float y) {
         localSize.y *= y;
         updateAbsSize();
     }
@@ -378,7 +378,7 @@ public class Div {
      */
     protected void updateZIndex() {
         updateZIndexSelf();
-        for(Div c : children) c.updateZIndex();
+        for(final Div c : children) c.updateZIndex();
     }
 
     /**
@@ -407,11 +407,11 @@ public class Div {
     protected void updateAbsPosSelf() {
 
         // Calculate unrestricted position
-        Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();
-        Vector2f s = parent == null ? new Vector2f(1, 1) : parent.getAbsSize();
+        final Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();
+        final Vector2f s = parent == null ? new Vector2f(1, 1) : parent.getAbsSize();
 
         // Apply horizontal alignment
-        float x = switch(alignmentX) {
+        final float x = switch(alignmentX) {
             case LEFT   -> p.x - (s.x - absSize.x) / 2;
             case RIGHT  -> p.x + (s.x - absSize.x) / 2;
             case CENTER -> p.x;
@@ -419,7 +419,7 @@ public class Div {
         };
 
         // Apply vertical alignment
-        float y = switch(alignmentY) {
+        final float y = switch(alignmentY) {
             case TOP    -> p.y + (s.y - absSize.y);
             case BOTTOM -> p.y;
             case CENTER -> p.y + (s.y - absSize.y) / 2;
@@ -441,32 +441,32 @@ public class Div {
     }
 
 
-    public void setPos(@NotNull Vector2f _pos) {
+    public void setPos(final @NotNull Vector2f _pos) {
         localPos.set(_pos);
         updateAbsPos();
     }
 
-    public void setPosX(float x) {
+    public void setPosX(final float x) {
         localPos.x = x;
         updateAbsPos();
     }
 
-    public void setPosY(float y) {
+    public void setPosY(final float y) {
         localPos.y = y;
         updateAbsPos();
     }
 
-    public void move(@NotNull Vector2f _pos) {
+    public void move(final @NotNull Vector2f _pos) {
         localPos.add(_pos);
         updateAbsPos();
     }
 
-    public void moveX(float x) {
+    public void moveX(final float x) {
         localPos.x += x;
         updateAbsPos();
     }
 
-    public void moveY(float y) {
+    public void moveY(final float y) {
         localPos.y += y;
         updateAbsPos();
     }
@@ -474,17 +474,17 @@ public class Div {
 
 
 
-    public void setAlignmentX(@NotNull AlignmentX _alignmentX) {
+    public void setAlignmentX(final @NotNull AlignmentX _alignmentX) {
         alignmentX = _alignmentX;
         updateAbsPos();
     }
 
-    public void setAlignmentY(@NotNull AlignmentY _alignmentY) {
+    public void setAlignmentY(final @NotNull AlignmentY _alignmentY) {
         alignmentY = _alignmentY;
         updateAbsPos();
     }
 
-    public void setAlignment(@NotNull AlignmentX _alignmentX, @NotNull AlignmentY _alignmentY) {
+    public void setAlignment(final @NotNull AlignmentX _alignmentX, final @NotNull AlignmentY _alignmentY) {
         alignmentX = _alignmentX;
         alignmentY = _alignmentY;
         updateAbsPos();
