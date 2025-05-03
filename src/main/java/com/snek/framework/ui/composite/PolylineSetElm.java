@@ -58,29 +58,26 @@ public class PolylineSetElm extends Div {
     private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b) {
 
         // Calculate line direction, length and angle
-        final Vector2f dir = b.sub(a, new Vector2f());
-        final float len = dir.length();
-        final float angle = (float)Math.atan2(dir.y, dir.x);
+        final Vector2f dir    = b.sub(a, new Vector2f());           // The direction of the line
+        final Vector2f normal = dir.normalize(new Vector2f());      // The normalized direction of the line
+        final float    len    = dir.length();                       // The length of the lines
+        final float    angle  = (float)Math.atan2(dir.y, dir.x);    // The angle of the line
 
 
-        // Create a new panel element and move it to the correct position
-        final PanelElm e = (PanelElm)addChild(new PanelElm(_world));
-        e.setSize(new Vector2f(1f, 1f));
-        e.setPos(a.add(b, new Vector2f()).div(2f));                             // Move element to the center of the line
-        e.move(dir.normalize(new Vector2f()).mul(1, -1).mul(l.getWidth() / 2)); // Adjust position (account for the width)
-        e.move(new Vector2f(-0.5f, -0.5f));                                     // Adjust position (panel position starts from the bottom left corner)
+        // Create the panel and set its size and position
+        final PanelElm e = (PanelElm) addChild(new PanelElm(_world));
+        e.setSize(new Vector2f(len, l.getWidth()));
+        e.setPos(a.add(b, new Vector2f()).mul(0.5f).add(normal.mul(-len / 2f, new Vector2f())));
+        e.move(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f));
+        //! ^ Adjust position (account for the width)
 
 
-        // Change its color, resize it and rotate it by overwriting the primer animation
+        // Change its color and rotate it by overwriting the primer animation
         e.getStyle().setPrimerAnimation(new Animation(
             new Transition()
             .targetBgColor(l.getColor())
             .targetBgAlpha(l.getAlpha())
-            .additiveTransform(new Transform().rotZ(angle).scale(len, l.getWidth(), 0))
+            .additiveTransform(new Transform().rotZ(angle))
         ));
     }
-
-    //FIXME for some reason lines are aligned to the center when they really shouldn't. check alignment too, just in case
-
-    //FIXME lines with negative slope aren't rendered at the right height
 }
