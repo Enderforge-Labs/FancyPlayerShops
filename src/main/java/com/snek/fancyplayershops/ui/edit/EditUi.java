@@ -104,11 +104,11 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add rotation buttons
-        e = bg.addChild(new EditUi_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
+        e = bg.addChild(new EditUi_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
-        e = bg.addChild(new EditUi_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
+        e = bg.addChild(new EditUi_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
@@ -137,7 +137,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -0.5f, BOTTOM_ROW_Y));
 
-        e = bg.addChild(new EditUi_GraphButton(_shop));
+        e = bg.addChild(new EditUi_TransferButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 0.5f, BOTTOM_ROW_Y));
 

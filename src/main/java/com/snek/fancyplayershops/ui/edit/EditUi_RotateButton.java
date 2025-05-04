@@ -1,8 +1,13 @@
 package com.snek.fancyplayershops.ui.edit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
+import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
@@ -12,7 +17,13 @@ import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.ui.Div;
+import com.snek.framework.ui.composite.PolylineData;
+import com.snek.framework.ui.composite.PolylineSetElm;
 import com.snek.framework.utils.Easings;
+import com.snek.framework.utils.SpaceUtils;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -30,18 +41,17 @@ import net.minecraft.util.ClickType;
  */
 public class EditUi_RotateButton extends ShopButton {
     public static final int ROTATION_ANIMATION_TIME = 8;
-
     private final float rotation;
-    private final @NotNull Text buttonText;
+
+
 
 
     /**
      * Creates a new RotateButton.
      * @param _shop The target shop.
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
-     * @param _buttonText The text to display on the button.
      */
-    public EditUi_RotateButton(final @NotNull Shop _shop, final float _rotation, final @NotNull Text _buttonText) {
+    public EditUi_RotateButton(final @NotNull Shop _shop, final float _rotation) {
         super(
             _shop,
             "Rotate once",
@@ -50,22 +60,29 @@ public class EditUi_RotateButton extends ShopButton {
             _rotation > 0 ? new EditUi_RotateButtonRight_S() : new EditUi_RotateButtonLeft_S()
         );
         rotation = _rotation;
-        buttonText = _buttonText;
-        updateDisplay(null);
 
-        // Adjust arrow size
-        applyAnimationNow(
-            new Transition()
-            .additiveTransformFg(new Transform().scale(EditUi.SQUARE_BUTTON_SIZE * 10))
-        );
+
+        // Create line set element
+        final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
+            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.04f,
+                new Vector2f(-0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.8f),
+                new Vector2f(+0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.5f),
+                new Vector2f(-0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.2f)
+            )
+        ));
+        e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
+
+
 
 
     @Override
     public void updateDisplay(final @Nullable Text textOverride) {
-        getStyle(ShopButton_S.class).setText(textOverride != null ? textOverride : buttonText);
-        flushStyle();
+        //Empty
     }
+
+
 
 
     @Override
@@ -90,6 +107,8 @@ public class EditUi_RotateButton extends ShopButton {
     }
 
 
+
+
     @Override
     public void onHoverEnter(final @NotNull PlayerEntity player) {
         super.onHoverEnter(player);
@@ -106,6 +125,8 @@ public class EditUi_RotateButton extends ShopButton {
             )
         );
     }
+
+
 
 
     @Override

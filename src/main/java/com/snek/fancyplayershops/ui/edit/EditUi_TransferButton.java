@@ -13,7 +13,6 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
-import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,24 +26,18 @@ import net.minecraft.util.ClickType;
 
 
 
-public class EditUi_GraphButton extends ShopButton {
+public class EditUi_TransferButton extends ShopButton {
 
 
-    public EditUi_GraphButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open details", 1,  new EditUi_SquareButton_S());
-
+    public EditUi_TransferButton(final @NotNull Shop _shop){
+        super(_shop, null, "Delete shop", 1,  new EditUi_SquareButton_S());
 
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
-                new Vector2f(0.0f, 0.1f),
-                new Vector2f(0.3f, 0.6f),
-                new Vector2f(0.7f, 0.4f),
-                new Vector2f(1.0f, 0.9f).sub(0.02f, 0.05f)
-            ),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
-                SpaceUtils.rotateVec2(new Vector2f(-0.2f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.2f), (float)Math.toRadians(15)).add(1, 0.9f)
+            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
+                new Vector2f(0.0f, 1f),
+                new Vector2f(0.2f, 0f),
+                new Vector2f(0.8f, 0f),
+                new Vector2f(1.0f, 1f)
             )
         ));
         e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
@@ -62,7 +55,7 @@ public class EditUi_GraphButton extends ShopButton {
     public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            player.sendMessage(new Txt("INFO").get());
+            player.sendMessage(new Txt("SHOP DELETED").get());
         }
         return r;
     }
