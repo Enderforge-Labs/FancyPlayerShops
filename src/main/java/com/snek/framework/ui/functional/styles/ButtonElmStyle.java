@@ -23,7 +23,7 @@ import com.snek.framework.utils.Easings;
  */
 public class ButtonElmStyle extends FancyTextElmStyle {
     public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(110, 160, 130);
-    public static final          float    UNHOVERED_W          = 0.05f;
+    public static final          float    HIDDEN_W             = 0.000001f;
     public static final          int      HOVER_ANIMATION_TIME = 10;
 
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
@@ -70,19 +70,19 @@ public class ButtonElmStyle extends FancyTextElmStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
         );
     }
 

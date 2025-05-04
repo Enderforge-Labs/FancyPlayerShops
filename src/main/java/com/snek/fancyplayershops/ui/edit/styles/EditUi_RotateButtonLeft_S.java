@@ -20,7 +20,7 @@ import com.snek.framework.utils.Easings;
  * The style of the EditUiPriceButton UI element.
  */
 public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
-    public static final float SHIFT_X = EditUi.SQUARE_BUTTON_SIZE * (1 - ShopButton_S.UNHOVERED_W);
+    public static final float SHIFT_X = EditUi.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
 
 
     /**
@@ -35,26 +35,21 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgAlpha(0)
-            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition()
-            .targetBgAlpha(getDefaultBgAlpha()),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W).moveX(-SHIFT_X))
+            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W).moveX(SHIFT_X)),
-            new Transition()
-            .targetBgAlpha(0)
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
         );
     }
 }

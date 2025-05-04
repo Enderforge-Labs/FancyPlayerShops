@@ -41,26 +41,21 @@ public class EditUi_RotateButtonRight_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgAlpha(0)
-            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition()
-            .targetBgAlpha(getDefaultBgAlpha()),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / ShopButton_S.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(ShopButton_S.UNHOVERED_W)),
-            new Transition()
-            .targetBgAlpha(0)
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
         );
     }
 }

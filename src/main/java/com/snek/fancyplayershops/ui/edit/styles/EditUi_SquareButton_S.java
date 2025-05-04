@@ -41,26 +41,21 @@ public class EditUi_SquareButton_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgAlpha(0)
-            .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleY(HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition()
-            .targetBgAlpha(getDefaultBgAlpha()),
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(1f / ShopButton_S.UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleY(1f / HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(ShopButton_S.UNHOVERED_W)),
-            new Transition()
-            .targetBgAlpha(0)
+            .additiveTransformBg(new Transform().scaleY(HIDDEN_W))
         );
     }
 }
