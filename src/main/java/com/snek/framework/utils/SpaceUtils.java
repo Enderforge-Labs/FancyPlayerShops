@@ -22,6 +22,27 @@ public abstract class SpaceUtils {
     private SpaceUtils() {}
 
 
+
+
+    /**
+     * Applies a rotation to a 2d vector.
+     * <p> The original vector object is not modified. Instead, the rotation is performed on a copy.
+     * @param v The vector to rotate.
+     * @param angle The angle in radians.
+     * @return The rotated vector.
+     */
+    public static @NotNull Vector2f rotateVec2(final @NotNull Vector2f v, final float angle) {
+        final float cos = (float)Math.cos(angle);
+        final float sin = (float)Math.sin(angle);
+        return new Vector2f(
+            v.x * cos - v.y * sin,
+            v.x * sin + v.y * cos
+        );
+    }
+
+
+
+
     /**
      * Checks whether a line intersects a sphere.
      * <p> The line is assumed to be infinite in both directions, regardless of its length.

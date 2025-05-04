@@ -129,19 +129,19 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add buttons
-        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e = bg.addChild(new EditUi_MoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -1.5f, BOTTOM_ROW_Y));
 
-        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e = bg.addChild(new EditUi_GraphButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -0.5f, BOTTOM_ROW_Y));
 
-        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e = bg.addChild(new EditUi_GraphButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 0.5f, BOTTOM_ROW_Y));
 
-        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e = bg.addChild(new EditUi_DeleteButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 1.5f, BOTTOM_ROW_Y));
     }

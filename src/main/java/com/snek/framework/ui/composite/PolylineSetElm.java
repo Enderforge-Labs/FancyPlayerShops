@@ -50,14 +50,20 @@ public class PolylineSetElm extends Div {
      * Creates a new line and adds it to this element's children.
      * @param _world The world to spawn the display entities in.
      * @param l The polyline data that specifies color, opacity and width.
-     * @param a The first point of the line.
-     * @param b The second point of the line.
+     * @param _a The first point of the line.
+     * @param _b The second point of the line.
      */
-    private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b) {
+    private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f _a, final @NotNull Vector2f _b) {
+
+        // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
+        final Vector2f normal = _b.sub(_a, new Vector2f()).normalize(new Vector2f());
+        final Vector2f directionalEdge = normal.mul(l.getEdge(), new Vector2f());
+        final Vector2f a = _a.sub(directionalEdge, new Vector2f());
+        final Vector2f b = _b.add(directionalEdge, new Vector2f());
+
 
         // Calculate line direction, length and angle
         final Vector2f dir    = b.sub(a, new Vector2f());                   // The direction of the line
-        final Vector2f normal = dir.normalize(new Vector2f());              // The normalized direction of the line
         final float    len    = dir.length();                               // The length of the line
         final float    angle  = (float)Math.atan2(dir.y, dir.x);            // The angle of the line
 
