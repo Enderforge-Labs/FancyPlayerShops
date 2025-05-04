@@ -56,34 +56,20 @@ public class PolylineSetElm extends Div {
     private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b) {
 
         // Calculate line direction, length and angle
-        final Vector2f dir    = b.sub(a, new Vector2f());           // The direction of the line
-        final Vector2f normal = dir.normalize(new Vector2f());      // The normalized direction of the line
-        final float    len    = dir.length();                       // The length of the line
-        final float    angle  = (float)Math.atan2(dir.y, dir.x);    // The angle of the line
-
-        // final Vector2f boxSize = new Vector2f(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-        // final Vector2f boxMin = new Vector2f(Math.min(a.x, b.x), Math.min(a.y, b.y));
-        // final Vector2f origin        = a.add(b, new Vector2f()).mul(0.5f);
-        // final Vector2f rotAdjustment = normal.mul(-len / 2f, new Vector2f());
-        // final float    rotAdjustment = -normal.y * len / 2f;
+        final Vector2f dir    = b.sub(a, new Vector2f());                   // The direction of the line
+        final Vector2f normal = dir.normalize(new Vector2f());              // The normalized direction of the line
+        final float    len    = dir.length();                               // The length of the line
+        final float    angle  = (float)Math.atan2(dir.y, dir.x);            // The angle of the line
 
 
         // Create the panel and set its size and position
-        final PanelElm e = (PanelElm) addChild(new PanelElm(_world));
-        e.setSize(new Vector2f(len, l.getWidth()));
-        // e.setPos(origin.add(new Vector2f(0, 0), new Vector2f()));
-        e.setPos(
-            // new Vector2f(origin)
-            new Vector2f(a)
-            // .add(new Vector2f(-0.5f, 0f))
-            .add(new Vector2f(-(1 - len) / 2f, 0f))
-            // .add(new Vector2f(boxMin).mul(-0.5f, 0.5f))
-            // .add(rotAdjustment)
+        final LinePanel e = (LinePanel)addChild(new LinePanel(_world));     // Create the panel
+        e.setSize(new Vector2f(len, l.getWidth()));                         // Set the size to match the line's length and width
+        e.setPos(                                                           // Set the position
+            new Vector2f(a)                                                     // Start by moving the origin (center of lower edge) the first point
+            .add(new Vector2f(-(1 - len) / 2f, 0f))                             // Move it horizontally to align the bottom left edge with the point
+            .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
         );
-        // e.setPos(new Vector2f(0, 0));
-        e.move(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f));
-        // // ^ Adjust position (account for the width)
-        // System.out.println("min: " + boxMin);
 
 
         // Change its color and rotate it by overwriting the primer animation

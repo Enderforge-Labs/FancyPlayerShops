@@ -54,7 +54,10 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
     public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
 
-    public static final float BOTTOM_ROW_Y = 0.1f;
+    public static final float BOTTOM_ROW_Y = 0.2f;
+    public static final float BOTTOM_ROW_SPACING = 0.04f;
+    public static final float BOTTOM_ROW_SHIFT = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
+    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f;
 
 
     // Functionalities
@@ -128,19 +131,19 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add buttons
         e = bg.addChild(new EditUi_RemoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * -1.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -1.5f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_RemoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * -0.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -0.5f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_RemoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * 0.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 0.5f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_RemoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * 1.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 1.5f, BOTTOM_ROW_Y));
     }
 
 
