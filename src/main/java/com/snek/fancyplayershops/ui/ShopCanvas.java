@@ -124,7 +124,7 @@ public class ShopCanvas extends Div {
 
             // Set visual dimensions (and rotation for the back side)
             final Transform transformBg     = new Transform().scaleY(newHeightBg    ).moveY(newPosBg    );
-            final Transform transformBack   = new Transform().scaleY(newHeightBack  ).moveY(newPosBack  ).rotY((float)Math.PI);
+            final Transform transformBack   = new Transform().scaleY(newHeightBack  ).moveY(newPosBack  ).rotY((float)Math.PI).moveX(1f);
             final Transform transformTop    = new Transform().scaleY(newHeightTop   ).moveY(newPosTop   );
             final Transform transformBottom = new Transform().scaleY(newHeightBottom).moveY(newPosBottom);
             bg    .applyAnimationNow(new Transition().additiveTransform(transformBg));

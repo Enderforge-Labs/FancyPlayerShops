@@ -23,7 +23,7 @@ import com.snek.framework.utils.Easings;
  */
 public class ButtonElmStyle extends FancyTextElmStyle {
     public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(110, 160, 130);
-    public static final          float    HIDDEN_W             = 0.000001f;
+    public static final          float    HIDDEN_W             = 0.00001f;
     public static final          int      HOVER_ANIMATION_TIME = 10;
 
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
