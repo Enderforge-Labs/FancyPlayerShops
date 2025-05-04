@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.PanelElm;
 
@@ -60,16 +58,32 @@ public class PolylineSetElm extends Div {
         // Calculate line direction, length and angle
         final Vector2f dir    = b.sub(a, new Vector2f());           // The direction of the line
         final Vector2f normal = dir.normalize(new Vector2f());      // The normalized direction of the line
-        final float    len    = dir.length();                       // The length of the lines
+        final float    len    = dir.length();                       // The length of the line
         final float    angle  = (float)Math.atan2(dir.y, dir.x);    // The angle of the line
+
+        // final Vector2f boxSize = new Vector2f(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+        // final Vector2f boxMin = new Vector2f(Math.min(a.x, b.x), Math.min(a.y, b.y));
+        // final Vector2f origin        = a.add(b, new Vector2f()).mul(0.5f);
+        // final Vector2f rotAdjustment = normal.mul(-len / 2f, new Vector2f());
+        // final float    rotAdjustment = -normal.y * len / 2f;
 
 
         // Create the panel and set its size and position
         final PanelElm e = (PanelElm) addChild(new PanelElm(_world));
         e.setSize(new Vector2f(len, l.getWidth()));
-        e.setPos(a.add(b, new Vector2f()).mul(0.5f).add(normal.mul(-len / 2f, new Vector2f())));
+        // e.setPos(origin.add(new Vector2f(0, 0), new Vector2f()));
+        e.setPos(
+            // new Vector2f(origin)
+            new Vector2f(a)
+            // .add(new Vector2f(-0.5f, 0f))
+            .add(new Vector2f(-(1 - len) / 2f, 0f))
+            // .add(new Vector2f(boxMin).mul(-0.5f, 0.5f))
+            // .add(rotAdjustment)
+        );
+        // e.setPos(new Vector2f(0, 0));
         e.move(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f));
-        //! ^ Adjust position (account for the width)
+        // // ^ Adjust position (account for the width)
+        // System.out.println("min: " + boxMin);
 
 
         // Change its color and rotate it by overwriting the primer animation

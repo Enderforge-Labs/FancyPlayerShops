@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
+import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -52,6 +53,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
     public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
+
+    public static final float BOTTOM_ROW_Y = 0.1f;
 
 
     // Functionalities
@@ -99,17 +102,17 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add rotation buttons
         e = bg.addChild(new EditUi_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT, new Txt("◀").get()));
-        e.setSize(new Vector2f(EditUi.SQUARE_BUTTON_SIZE, EditUi.SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
         e = bg.addChild(new EditUi_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT, new Txt("▶").get()));
-        e.setSize(new Vector2f(EditUi.SQUARE_BUTTON_SIZE, EditUi.SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
 
         // Add item selector
         e = bg.addChild(new EditUi_ItemSelector(_shop));
-        e.setSize(new Vector2f(EditUi.ITEM_SELECTOR_SIZE, EditUi.ITEM_SELECTOR_SIZE));
+        e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
 
@@ -122,16 +125,22 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         inputIndicator = (DualInputIndicator)e;
 
 
+        // Add buttons
+        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * -1.5f, BOTTOM_ROW_Y));
 
-        //TODO
-        e = bg.addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(new Vector3i(255, 0, 0), 255, 0.1f,
-                new Vector2f(0.4f, 0.2f),
-                new Vector2f(1, 1f),
-                new Vector2f(0.2f, 0.4f)
-            )
-        ));
-        e.setSize(new Vector2f(1f, 1f));
+        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * -0.5f, BOTTOM_ROW_Y));
+
+        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * 0.5f, BOTTOM_ROW_Y));
+
+        e = bg.addChild(new EditUi_RemoveButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setPos(new Vector2f(SQUARE_BUTTON_SIZE * 1.5f, BOTTOM_ROW_Y));
     }
 
 

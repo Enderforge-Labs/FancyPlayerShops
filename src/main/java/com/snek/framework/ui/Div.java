@@ -52,16 +52,16 @@ public class Div {
 
 
     // UI data
-    private final @NotNull Vector2f   localSize  = new Vector2f(1, 1);
-    private final @NotNull Vector2f   localPos   = new Vector2f(0, 0);
+    protected final @NotNull Vector2f   localSize  = new Vector2f(1, 1);
+    protected final @NotNull Vector2f   localPos   = new Vector2f(0, 0);
 
-    private final @NotNull Vector2f   absSize    = new Vector2f(1, 1);
-    private final @NotNull Vector2f   absPos     = new Vector2f(0, 0);
+    protected final @NotNull Vector2f   absSize    = new Vector2f(1, 1);
+    protected final @NotNull Vector2f   absPos     = new Vector2f(0, 0);
 
-    private @NotNull AlignmentX alignmentX = AlignmentX.NONE;
-    private @NotNull AlignmentY alignmentY = AlignmentY.NONE;
+    protected @NotNull AlignmentX alignmentX = AlignmentX.NONE;
+    protected @NotNull AlignmentY alignmentY = AlignmentY.NONE;
 
-    private int zIndex = 0;
+    protected int zIndex = 0;
 
 
 
