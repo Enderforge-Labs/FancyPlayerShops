@@ -28,25 +28,28 @@ import net.minecraft.util.ClickType;
 
 
 public class EditUi_GraphButton extends ShopButton {
+    private static final @NotNull PolylineData[] design = new PolylineData[] {
+        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.04f,
+            new Vector2f(0.0f, 0.0f),
+            new Vector2f(0.3f, 0.4f),
+            new Vector2f(0.7f, 0.4f),
+            new Vector2f(1.0f, 0.9f).sub(0.02f, 0.05f)
+        ),
+        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
+            SpaceUtils.rotateVec2(new Vector2f(-0.2f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
+            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
+            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.2f), (float)Math.toRadians(15)).add(1, 0.9f)
+        )
+    };
+
+
 
 
     public EditUi_GraphButton(final @NotNull Shop _shop){
         super(_shop, null, "Open details", 1,  new EditUi_SquareButton_S());
 
-
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
-                new Vector2f(0.0f, 0.1f),
-                new Vector2f(0.3f, 0.6f),
-                new Vector2f(0.7f, 0.4f),
-                new Vector2f(1.0f, 0.9f).sub(0.02f, 0.05f)
-            ),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
-                SpaceUtils.rotateVec2(new Vector2f(-0.2f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.2f), (float)Math.toRadians(15)).add(1, 0.9f)
-            )
-        ));
+        // Create design
+        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
         e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

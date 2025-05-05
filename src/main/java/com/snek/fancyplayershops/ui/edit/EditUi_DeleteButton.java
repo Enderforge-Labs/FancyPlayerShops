@@ -27,19 +27,25 @@ import net.minecraft.util.ClickType;
 
 
 public class EditUi_DeleteButton extends ShopButton {
+    private static final @NotNull PolylineData[] design = new PolylineData[] {
+        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
+            new Vector2f(0.1f, 0.1f),
+            new Vector2f(0.9f, 0.9f)
+        ),
+        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
+            new Vector2f(0.1f, 0.9f),
+            new Vector2f(0.9f, 0.1f)
+        )
+    };
+
+
 
 
     public EditUi_DeleteButton(final @NotNull Shop _shop){
         super(_shop, null, "Delete shop", 1,  new EditUi_SquareButton_S());
 
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
-                new Vector2f(0.0f, 1f),
-                new Vector2f(0.2f, 0f),
-                new Vector2f(0.8f, 0f),
-                new Vector2f(1.0f, 1f)
-            )
-        ));
+        // Create design
+        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
         e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

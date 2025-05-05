@@ -1,8 +1,5 @@
 package com.snek.fancyplayershops.ui.edit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -14,7 +11,6 @@ import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_RotateButtonRight_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
-import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -23,7 +19,6 @@ import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
 import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.SpaceUtils;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -40,6 +35,22 @@ import net.minecraft.util.ClickType;
  * A button that allows the owner of the shop to change the default rotation of the displayed object.
  */
 public class EditUi_RotateButton extends ShopButton {
+    private static final PolylineData[][] designs = new PolylineData[][] {
+        new PolylineData[] {
+            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
+                new Vector2f(-0.15f * -1 + 0.5f, 0.8f),
+                new Vector2f(+0.15f * -1 + 0.5f, 0.5f),
+                new Vector2f(-0.15f * -1 + 0.5f, 0.2f)
+            )
+        },
+        new PolylineData[] {
+            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
+                new Vector2f(-0.15f * 1 + 0.5f, 0.8f),
+                new Vector2f(+0.15f * 1 + 0.5f, 0.5f),
+                new Vector2f(-0.15f * 1 + 0.5f, 0.2f)
+            )
+        }
+    };
     public static final int ROTATION_ANIMATION_TIME = 8;
     private final float rotation;
 
@@ -63,13 +74,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
         // Create line set element
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
-            new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.04f,
-                new Vector2f(-0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.8f),
-                new Vector2f(+0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.5f),
-                new Vector2f(-0.1f * (_rotation > 0 ? 1 : -1) + 0.5f, 0.2f)
-            )
-        ));
+        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), designs[_rotation > 0 ? 1 : 0]));
         e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

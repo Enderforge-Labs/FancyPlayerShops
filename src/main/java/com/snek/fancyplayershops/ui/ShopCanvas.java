@@ -5,7 +5,10 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
+import com.snek.fancyplayershops.ui.misc.styles.CanvasBack_S;
+import com.snek.fancyplayershops.ui.misc.styles.CanvasBackground_S;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -103,8 +106,8 @@ public class ShopCanvas extends Div {
         if(activeCanvas == null) {
 
             // Create the elements
-            bg     = (Elm)addChild(new CanvasBackground(_shop));
-            back   = (Elm)addChild(new CanvasBackground(_shop));
+            bg     = (Elm)addChild(new ShopPanelElm(_shop, new CanvasBackground_S()));
+            back   = (Elm)addChild(new ShopPanelElm(_shop, new CanvasBack_S()));
             top    = (Elm)addChild(new ShopUiBorder(_shop));
             bottom = (Elm)addChild(new ShopUiBorder(_shop));
 

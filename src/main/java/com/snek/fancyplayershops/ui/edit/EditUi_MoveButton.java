@@ -31,30 +31,25 @@ import net.minecraft.util.ClickType;
 
 
 public class EditUi_MoveButton extends ShopButton {
+    private static final @NotNull List<@NotNull PolylineData> design = new ArrayList<>();
+    static {
+        for(int i = 0; i < 4; ++i) {
+            design.add(new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
+                SpaceUtils.rotateVec2(new Vector2f(-0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
+                SpaceUtils.rotateVec2(new Vector2f(+0.0f,  0.5f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
+                SpaceUtils.rotateVec2(new Vector2f(+0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f)
+            ));
+        }
+    }
+
+
 
 
     public EditUi_MoveButton(final @NotNull Shop _shop){
         super(_shop, null, "Move shop", 1,  new EditUi_SquareButton_S());
 
-
-        // Define the lines
-        final List<PolylineData> polylines = new ArrayList<>();
-        for(int i = 0; i < 4; ++i) {
-            polylines.add(new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.03f,
-                SpaceUtils.rotateVec2(new Vector2f(-0.2f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f, 0.5f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.2f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f)
-            ));
-        }
-
-
-        // Create line set element
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(),
-            polylines.get(0),
-            polylines.get(1),
-            polylines.get(2),
-            polylines.get(3)
-        ));
+        // Create design
+        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design.get(0), design.get(1), design.get(2), design.get(3)));
         e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
