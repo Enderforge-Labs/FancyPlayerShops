@@ -34,7 +34,9 @@ public class EditUi_MoveButton extends ShopButton {
     private static final @NotNull List<@NotNull PolylineData> design = new ArrayList<>();
     static {
         for(int i = 0; i < 4; ++i) {
-            design.add(new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.06f,
+            design.add(new PolylineData(
+                EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
+                EditUi.TOOLBAR_FG_WIDTH, 0.06f,
                 SpaceUtils.rotateVec2(new Vector2f(-0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
                 SpaceUtils.rotateVec2(new Vector2f(+0.0f,  0.5f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
                 SpaceUtils.rotateVec2(new Vector2f(+0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f)

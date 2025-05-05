@@ -28,11 +28,15 @@ import net.minecraft.util.ClickType;
 
 public class EditUi_DeleteButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
-        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
+        new PolylineData(
+            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
+            EditUi.TOOLBAR_FG_WIDTH, 0.05f,
             new Vector2f(0.1f, 0.1f),
             new Vector2f(0.9f, 0.9f)
         ),
-        new PolylineData(new Vector3i(255, 255, 255), 255, 0.15f, 0.05f,
+        new PolylineData(
+            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
+            EditUi.TOOLBAR_FG_WIDTH, 0.05f,
             new Vector2f(0.1f, 0.9f),
             new Vector2f(0.9f, 0.1f)
         )

@@ -44,7 +44,9 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     // Colors
-    public static final Vector3i RGB_STOCK_COLOR = Utils.HSVtoRGB(DetailsUi.C_HSV_STOCK_HIGH);
+    public static final @NotNull Vector3i RGB_STOCK_COLOR  = Utils.HSVtoRGB(DetailsUi.C_HSV_STOCK_HIGH);
+    public static final @NotNull Vector3i TOOLBAR_FG_COLOR = new Vector3i(255, 255, 255);
+    public static final          int      TOOLBAR_FG_ALPHA = 255;
 
 
     // Layout
@@ -58,6 +60,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float BOTTOM_ROW_SPACING = 0.04f;
     public static final float BOTTOM_ROW_SHIFT = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
     public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f;
+    public static final float TOOLBAR_FG_WIDTH = 0.15f;
 
 
     // Functionalities
@@ -131,19 +134,19 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add buttons
         e = bg.addChild(new EditUi_MoveButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -1.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -2f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_GraphButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -0.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -1f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_TransferButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 0.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 1f, BOTTOM_ROW_Y));
 
         e = bg.addChild(new EditUi_DeleteButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 1.5f, BOTTOM_ROW_Y));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 2f, BOTTOM_ROW_Y));
     }
 
 
