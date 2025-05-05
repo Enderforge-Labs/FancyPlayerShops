@@ -140,6 +140,10 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * -1f, BOTTOM_ROW_Y));
 
+        e = bg.addChild(new EditUi_InventoryButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 0f, BOTTOM_ROW_Y));
+
         e = bg.addChild(new EditUi_TransferButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 1f, BOTTOM_ROW_Y));
