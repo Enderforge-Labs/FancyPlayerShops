@@ -27,7 +27,6 @@ public final class LinePanel extends PanelElm {
 
     @Override
     protected final void updateAbsPosSelf() {
-        // super.updateAbsPosSelf();
 
         // Calculate unrestricted position
         final Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();
@@ -52,43 +51,4 @@ public final class LinePanel extends PanelElm {
         // Update the value
         absPos.set(x, y);
     }
-
-
-
-
-    // @Override
-    // public void setPos(final @NotNull Vector2f _pos) {
-    //     localPosOg.set(_pos);
-    //     super.setPos(_pos);
-    // }
-
-    // @Override
-    // public void setPosX(final float x) {
-    //     localPosOg.x = x;
-    //     super.setPosX(x);
-    // }
-
-    // @Override
-    // public void setPosY(final float y) {
-    //     localPosOg.y = y;
-    //     super.setPosY(y);
-    // }
-
-    // @Override
-    // public void move(final @NotNull Vector2f _pos) {
-    //     localPosOg.add(_pos);
-    //     super.move(_pos);
-    // }
-
-    // @Override
-    // public void moveX(final float x) {
-    //     localPosOg.x += x;
-    //     super.moveX(x);
-    // }
-
-    // @Override
-    // public void moveY(final float y) {
-    //     localPosOg.y += y;
-    //     super.moveY(y);
-    // }
 }

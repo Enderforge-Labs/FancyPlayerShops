@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.ui.functional.TextInputElm;
 
@@ -49,8 +50,37 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     @Override
+    public void onHoverEnter(final @Nullable PlayerEntity player) {
+        if(player != shop.getuser()) return;
+        super.onHoverEnter(player);
+    }
+
+
+
+
+    @Override
+    public void onCheckTick(final @NotNull PlayerEntity player) {
+        super.onCheckTick(player);
+
+        // Update input displays if present
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(lmbActionName);
+            c.getRmbIndicator().updateDisplay(rmbActionName);
+        }
+    }
+
+
+
+
+    @Override
     public void onHoverExit(final @Nullable PlayerEntity player) {
         if(player != shop.getuser()) return;
         super.onHoverExit(player);
+
+        // Update input displays if present
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(null);
+            c.getRmbIndicator().updateDisplay(null);
+        }
     }
 }

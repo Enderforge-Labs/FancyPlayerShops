@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;

@@ -41,10 +41,10 @@ public class EditUi_TransferButton extends ShopButton {
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
             EditUi.TOOLBAR_FG_WIDTH, 0.03f,
             new Vector2f(0.0f, 0.0f),
-            new Vector2f(0.0f, 0.3f),
-            new Vector2f(0.2f, 0.5f),
-            new Vector2f(0.8f, 0.5f),
-            new Vector2f(1.0f, 0.3f),
+            new Vector2f(0.0f, 0.2f),
+            new Vector2f(0.2f, 0.4f),
+            new Vector2f(0.8f, 0.4f),
+            new Vector2f(1.0f, 0.2f),
             new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(
@@ -85,7 +85,7 @@ public class EditUi_TransferButton extends ShopButton {
     public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            player.sendMessage(new Txt("SHOP DELETED").get());
+            player.sendMessage(new Txt("OWNERSHIP CHANGE").get());
         }
         return r;
     }
