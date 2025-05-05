@@ -9,6 +9,8 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.styles.ElmStyle;
+import com.snek.framework.utils.Easings;
 
 import net.minecraft.server.world.ServerWorld;
 
@@ -24,6 +26,7 @@ import net.minecraft.server.world.ServerWorld;
  * <p> Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
  */
 public class PolylineSetElm extends Div {
+    public static final float LINE_SPAWNING_SCALE = 0.00001f;
 
 
     /**
@@ -77,12 +80,16 @@ public class PolylineSetElm extends Div {
         );
 
 
-        // Change its color and rotate it by overwriting the primer animation
+        // Change its color and rotate it by overwriting the primer animation and spawning animation
         e.getStyle().setPrimerAnimation(new Animation(
             new Transition()
             .targetBgColor(l.getColor())
             .targetBgAlpha(l.getAlpha())
-            .additiveTransform(new Transform().rotZ(angle))
+            .additiveTransform(new Transform().rotZ(angle).scaleX(0.00001f))
+        ));
+        e.getStyle().setSpawnAnimation(new Animation(
+            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            .additiveTransform(new Transform().scaleX(1f / 0.00001f))
         ));
     }
 }
