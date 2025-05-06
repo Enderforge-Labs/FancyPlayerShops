@@ -67,6 +67,22 @@ public abstract class MinecraftUtils {
 
 
 
+    /**
+     * Attempts to give an item to a player.
+     * @param player The player.
+     * @param item The item to give.
+     * @return True if the item could be given to the player, false othersise (no space in inventory).
+     */
+    public static boolean attemptGive(final @NotNull PlayerEntity player, final @NotNull ItemStack item) {
+        return player.getInventory().insertStack(item);
+    }
+
+
+
+
+
+
+
 
     /**
      * Returns an ItemStack containing a player head with texture the specified skin ID.

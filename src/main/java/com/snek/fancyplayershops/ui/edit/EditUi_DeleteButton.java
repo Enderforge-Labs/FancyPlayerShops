@@ -65,7 +65,8 @@ public class EditUi_DeleteButton extends ShopButton {
     public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            player.sendMessage(new Txt("SHOP DELETED").get());
+            shop.stash();
+            shop.delete();
         }
         return r;
     }

@@ -118,8 +118,6 @@ public class Shop {
     private           @NotNull  String          worldId;                        // The Identifier of the world
     private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    // private           @Nullable UUID            itemDisplayNameUUID1 = null;    // The UUID of one of the two the name display entities
-    // private           @Nullable UUID            itemDisplayNameUUID2 = null;    // The UUID of one of the two the name display entities
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
     private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, without including the world
@@ -140,6 +138,7 @@ public class Shop {
     private transient @Nullable ShopCanvas               activeCanvas = null;   // The menu that is currently being displayed to the viewer
     private transient @Nullable PlayerEntity                     user = null;   // The current user of the shop (the player that first opened a menu)
     private transient @Nullable PlayerEntity                   viewer = null;   // The prioritized viewer
+    private transient           boolean                 deletionState = false;  // True if the shop has been deleted, false otherwise
     private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
     private transient           boolean                focusStateNext = false;  // The next focus state
     private transient           int                     lastDirection = 0;      // The current cartinal or intercardinal direction of the canvas, 0 to 7
@@ -160,6 +159,7 @@ public class Shop {
     public           float           getDefaultRotation() { return defaultRotation; }
     public           int             getCanvasDirection() { return lastDirection;   }
     public           boolean         isFocused         () { return focusState;      }
+    public           boolean         isDeleted         () { return deletionState;   }
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
     public @Nullable PlayerEntity    getuser           () { return user;            }
     public @Nullable PlayerEntity    getViewer         () { return viewer;          }
@@ -736,17 +736,14 @@ public class Shop {
 
 
 
-    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-    //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-    //TODO ^ add /shop stash command
-
     /**
      * Changes the item sold by this shop and saves it to its file.
      * @param _item the new item.
      */
     public void changeItem(final @NotNull ItemStack _item) {
+
+        // Stash the current items
+        stash();
 
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
@@ -801,5 +798,45 @@ public class Shop {
                 .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
             )
         );
+    }
+
+
+
+
+    /**
+     * Sends the items stored in this shop to the owner's stash.
+     * <p> This method also sets the shop's stock to 0.
+     */
+    public void stash(){
+        //FIXME ACTUALLY STASH ITEMS
+        //TODO send message in chat "15x item have been sent to your stash! use /shop stash to access it"
+
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+        //TODO ^ add /shop stash command
+    }
+
+
+
+
+    /**
+     * Deletes this shop without stashing the items.
+     * <p> Any item left in the shop is fully deleted and cannot be recovered.
+     * <p> The save file of this shop is also deteled.
+     */
+    public void delete() {
+        deletionState = true;
+
+        // Remove shop from the runtime maps and despawn the entities
+        shopsByCoords.remove(shopIdentifierCache);
+        shopsByOwner.remove(ownerUUID.toString());
+        activeCanvas.despawn();
+        itemDisplay.despawn();
+        interactionBlocker.despawn();
+
+        // Delete the config file
+        final File shopStorageFile = new File(SHOP_STORAGE_DIR + "/" + worldId + "/" + shopIdentifierCache_noWorld + ".json");
+        shopStorageFile.delete();
     }
 }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
@@ -16,6 +17,7 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
+import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
 
@@ -69,7 +71,13 @@ public class EditUi_MoveButton extends ShopButton {
     public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            player.sendMessage(new Txt("SHOP MOVED").get());
+            final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
+            if(!giveResult) {
+                player.sendMessage(new Txt("Your inventory is full!").red().get());
+            }
+            else {
+                shop.delete();
+            }
         }
         return r;
     }

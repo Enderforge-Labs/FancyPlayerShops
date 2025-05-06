@@ -198,14 +198,16 @@ public abstract class FocusFeatures {
         // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
         targetedShopsOld.removeAll(targetedShops);
         for(final Shop shop : targetedShopsOld) {
-            shop.setViewer(null);
-            shop.updateFocusState();
+            if(!shop.isDeleted()) {
+                shop.setViewer(null);
+                shop.updateFocusState();
+            }
         }
 
 
         // Update looked-at shops
         for(final Shop shop : targetedShops) {
-            if(shop.getuser() != null) {
+            if(!shop.isDeleted() && shop.getuser() != null) {
 
                 // Send hover events to focused shops
                 if(shop.getActiveCanvas() != null) {
