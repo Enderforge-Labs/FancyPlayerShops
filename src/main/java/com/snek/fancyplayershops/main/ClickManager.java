@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
@@ -28,14 +27,12 @@ import net.minecraft.world.World;
 
 
 
-//FIXME buttons in the same block as a shop can be clicked, for some reason.
-//FIXME placing blocks instead of properly blocked.
 /**
  * A utility class that handles clicks from players.
  */
-public abstract class ClickFeatures {
+public abstract class ClickManager {
     private static final @NotNull Map<@NotNull UUID, @NotNull RateLimiter> clickLimiters = new HashMap<>();
-    private ClickFeatures() {}
+    private ClickManager() {}
 
 
 
@@ -61,7 +58,7 @@ public abstract class ClickFeatures {
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
         if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
-            final Shop targetShop = FocusFeatures.getLookedAtShop(player, serverWorld);
+            final Shop targetShop = HoverManager.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
@@ -116,7 +113,7 @@ public abstract class ClickFeatures {
         //! This is necessary due to the ray casting's low accuracy and slight delay.
         //! These would allow players to bypass the ray casting check by quickly clicking after changing view or by looking at the edge of the block.
         if(r == ActionResult.PASS) {
-            return Shop.findShop(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), world) == null ? ActionResult.PASS : ActionResult.FAIL;
+            return DataManager.findShop(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), world) == null ? ActionResult.PASS : ActionResult.FAIL;
         }
         else return ActionResult.FAIL;
     }

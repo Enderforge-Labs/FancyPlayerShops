@@ -21,8 +21,8 @@ import net.minecraft.network.message.SignedMessage;
 /**
  * A utility class that can detect player messages and execute callbacks based on the sender.
  */
-public abstract class ChatInput {
-    private ChatInput() {}
+public abstract class ChatManager {
+    private ChatManager() {}
     private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
 
 

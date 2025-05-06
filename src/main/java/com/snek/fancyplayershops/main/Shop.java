@@ -1,15 +1,5 @@
 package com.snek.fancyplayershops.main;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
@@ -40,7 +29,6 @@ import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -55,7 +43,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 
 
@@ -91,24 +78,6 @@ public class Shop {
     public  static final Text EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
     private static final Text SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
     private static final Text SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
-
-
-    // Storage files
-    private static final @NotNull Path SHOP_STORAGE_DIR;
-    static {
-        SHOP_STORAGE_DIR = FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID + "/shops");
-        try {
-            Files.createDirectories(SHOP_STORAGE_DIR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
-    }
-
-    // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
-    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
-    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
-    private static boolean dataLoaded = false;
 
 
 
@@ -149,6 +118,7 @@ public class Shop {
 
     // Accessors
     public @NotNull  ServerWorld     getWorld          () { return world;           }
+    public @NotNull  String          getWorldId        () { return worldId;         }
     public @NotNull  BlockPos        getPos            () { return pos;             }
     public @NotNull  ItemStack       getItem           () { return item;            }
     public @NotNull  ShopItemDisplay getItemDisplay    () { return findItemDisplayEntityIfNeeded(); }
@@ -165,6 +135,8 @@ public class Shop {
     public @Nullable PlayerEntity    getViewer         () { return viewer;          }
     public           void            setViewer         (final @Nullable PlayerEntity _viewer        ) { viewer         = _viewer;         }
     public           void            setFocusStateNext (final           boolean      _nextFocusState) { focusStateNext = _nextFocusState; }
+    public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
+    public @NotNull  String          getIdentifierNoWorld     () { return shopIdentifierCache_noWorld; }
 
 
 
@@ -199,7 +171,7 @@ public class Shop {
      * Computes the ItemStack form of the item, reading data from its serialized version.
      * @throws RuntimeException if the item cannot be deserialized.
      */
-    private void calcDeserializedItem() {
+    public void calcDeserializedItem() {
         final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
         if(result.isEmpty()) {
             throw new RuntimeException("Could not deserialize shop item");
@@ -247,7 +219,7 @@ public class Shop {
      * @param worldId The world ID.
      * @return The generated identifier.
      */
-    private static String calcShopIdentifier(final @NotNull BlockPos _pos, final @NotNull String worldId) {
+    public static String calcShopIdentifier(final @NotNull BlockPos _pos, final @NotNull String worldId) {
         return calcShopIdentifier(_pos) + "," + worldId;
     }
     /**
@@ -255,8 +227,31 @@ public class Shop {
      * @param _pos The position.
      * @return The generated identifier.
      */
-    private static String calcShopIdentifier(final @NotNull BlockPos _pos) {
+    public static String calcShopIdentifier(final @NotNull BlockPos _pos) {
         return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
+    }
+
+
+    /**
+     * Reinitializes the transient members.
+     * @return Whether the item and world id have been deserialized successfully.
+     * <p> Shops whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
+    */
+    public boolean reinitTransient(){
+        focusState            = false;
+        focusStateNext        = false;
+        lastDirection         = 0;
+        canvasRotationLimiter = new RateLimiter();
+        menuOpenLimiter = new RateLimiter();
+        cacheShopIdentifier();
+        try {
+            calcDeserializedItem();
+            calcDeserializedWorldId(FancyPlayerShops.getServer());
+            return true;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -296,114 +291,7 @@ public class Shop {
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
-        saveShop();
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Saves the shop data in its config file.
-     */
-    private void saveShop() {
-
-        // Create map entry if absent, then add the new shop to the player's shops
-        shopsByOwner.put(ownerUUID.toString(), this);
-        shopsByCoords.put(shopIdentifierCache, this);
-
-
-        // Create directory for the world
-        final Path shopStorageDir = SHOP_STORAGE_DIR.resolve(worldId);
-        try {
-            Files.createDirectories(shopStorageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        // Create this shop's config file if absent, then save the JSON in it
-        final File shopStorageFile = new File(shopStorageDir + "/" + shopIdentifierCache_noWorld + ".json");
-        try (final Writer writer = new FileWriter(shopStorageFile)) {
-            new Gson().toJson(this, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-    /**
-     * Loads all the player shops into the runtime map if needed.
-     * <p> Must be called on server started event (After the worlds are loaded!).
-     * <p> If the data has already been loaded, the call will have no effect.
-     */
-    public static void loadData() {
-        if(dataLoaded) return;
-        dataLoaded = true;
-
-
-        // For each world directory
-        for(final File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
-
-            // For each shop file
-            final File[] shopStorageFiles = shopStorageDir.listFiles();
-            if(shopStorageFiles != null) for(File shopStorageFile : shopStorageFiles) {
-
-                // Read file
-                Shop retrievedShop = null;
-                try (final Reader reader = new FileReader(shopStorageFile)) {
-                    retrievedShop = new Gson().fromJson(reader, Shop.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // Recalculate transient members and update shop maps
-                if(retrievedShop != null) {
-                    retrievedShop.focusState           = false;
-                    retrievedShop.focusStateNext       = false;
-                    retrievedShop.lastDirection         = 0;
-                    retrievedShop.canvasRotationLimiter = new RateLimiter();
-                    retrievedShop.menuOpenLimiter = new RateLimiter();
-                    retrievedShop.cacheShopIdentifier();
-                    try {
-                        retrievedShop.calcDeserializedItem();
-                        retrievedShop.calcDeserializedWorldId(FancyPlayerShops.getServer());
-                        shopsByOwner.put(retrievedShop.ownerUUID.toString(), retrievedShop);
-                        shopsByCoords.put(retrievedShop.shopIdentifierCache, retrievedShop);
-                    } catch (RuntimeException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-
-
-
-    /**
-     * Returns the Shop instance present at a certain block position.
-     * @param pos The block position.
-     * @param worldId The ID of the world the shop is in.
-     * @return The shop, or null if no shop is there.
-    */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull String worldId) {
-        return shopsByCoords.get(calcShopIdentifier(pos, worldId));
-    }
-
-    /**
-     * Returns the Shop instance present at a certain block position.
-     * @param pos The block position.
-     * @param world The world the shop is in.
-     * @return The shop, or null if no shop is there.
-    */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull World world) {
-        return findShop(pos, world.getRegistryKey().getValue().toString());
+        DataManager.saveShop(this);
     }
 
 
@@ -454,7 +342,7 @@ public class Shop {
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
-                if(user != null) ChatInput.removeCallback(user);
+                if(user != null) ChatManager.removeCallback(user);
                 user = null;
 
                 // Turn the item display's custom name back on
@@ -690,7 +578,7 @@ public class Shop {
         else if(newPrice < 0.00001) price = 0d;
         else if(newPrice < 0.01000) price = 0.01;
         else price = Math.round(newPrice * 100d) / 100d;
-        saveShop();
+        DataManager.saveShop(this);
         return true;
     }
 
@@ -715,7 +603,7 @@ public class Shop {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        saveShop();
+        DataManager.saveShop(this);
         return true;
     }
 
@@ -730,7 +618,7 @@ public class Shop {
 
         // Add value to default rotation and save the shop
         defaultRotation += _rotation;
-        saveShop();
+        DataManager.saveShop(this);
     }
 
 
@@ -748,7 +636,7 @@ public class Shop {
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
         calcSerializedItem();
-        saveShop();
+        DataManager.saveShop(this);
     }
 
 
@@ -826,17 +714,17 @@ public class Shop {
      * <p> The save file of this shop is also deteled.
      */
     public void delete() {
-        deletionState = true;
+        if(!deletionState) {
+            deletionState = true;
 
-        // Remove shop from the runtime maps and despawn the entities
-        shopsByCoords.remove(shopIdentifierCache);
-        shopsByOwner.remove(ownerUUID.toString());
-        activeCanvas.despawn();
-        itemDisplay.despawn();
-        interactionBlocker.despawn();
+            // Despawn the entities
+            if(activeCanvas != null) activeCanvas.despawn();
+            System.out.println("item display: " + (itemDisplay != null ? itemDisplay : "null")); //TODO REMOVE
+            getItemDisplay().despawn();
+            if(interactionBlocker != null) interactionBlocker.despawn();
 
-        // Delete the config file
-        final File shopStorageFile = new File(SHOP_STORAGE_DIR + "/" + worldId + "/" + shopIdentifierCache_noWorld + ".json");
-        shopStorageFile.delete();
+            // Delete the data associated with this shop
+            DataManager.deleteShop(this);
+        }
     }
 }

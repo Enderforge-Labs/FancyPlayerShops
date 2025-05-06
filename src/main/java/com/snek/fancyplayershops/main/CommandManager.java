@@ -19,8 +19,8 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 /**
  * A utility class that registers and handles in-game commands.
  */
-public abstract class ShopCommand {
-    private ShopCommand() {}
+public abstract class CommandManager {
+    private CommandManager() {}
 
 
     /**
@@ -29,6 +29,10 @@ public abstract class ShopCommand {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(LiteralArgumentBuilder.<ServerCommandSource>literal("shop")
+
+
+                //TODO add admin only test commands that spawn thousands of shops
+                //TODO add admin only test commands that remove all shops in a radius
 
 
                 // UI test
@@ -42,17 +46,15 @@ public abstract class ShopCommand {
                         e.printStackTrace();
                     }
                     return 1;
-                }))
+                }).requires(source -> source.hasPermissionLevel(2)))
 
 
-                //TODO add admin only test commands that spawn thousands of shops
-                //TODO add admin only test commands that remove all shops in a radius
-                // Item give command (Admin only) //FIXME make admin only
-                .then(LiteralArgumentBuilder.<ServerCommandSource>literal("create").executes(context -> {
+                // Item give command (pperator only)
+                .then(LiteralArgumentBuilder.<ServerCommandSource>literal("give").executes(context -> {
                     final PlayerEntity player = context.getSource().getPlayer();
                     player.dropStack(FancyPlayerShops.getShopItemCopy());
                     return 1;
-                }))
+                }).requires(source -> source.hasPermissionLevel(2)))
 
 
                 // Balance claim

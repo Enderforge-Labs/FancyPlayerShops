@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.main.DataManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.data_types.animations.Animation;
@@ -360,9 +361,9 @@ public class ShopItemDisplay extends ItemElm {
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
                 //! Force data loading in case this event gets called before the scheduled data loading
-                Shop.loadData();
+                DataManager.loadShops();
 
-                final Shop shop = Shop.findShop(entity.getBlockPos(), entity.getWorld());
+                final Shop shop = DataManager.findShop(entity.getBlockPos(), entity.getWorld());
                 if(shop != null) shop.getItemDisplay();
                 //! getItemDisplay() retrieves the item display entity and creates the associated ShopItemDisplay,
                 //! whose constructor spawns the name entities.

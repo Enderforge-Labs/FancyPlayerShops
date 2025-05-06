@@ -125,7 +125,7 @@ public class FancyPlayerShops implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ShopCommand.register();
+        CommandManager.register();
 
 
 
@@ -136,13 +136,13 @@ public class FancyPlayerShops implements ModInitializer {
             serverInstance = server;
 
             // Load shop data
-            Shop.loadData();
+            DataManager.loadShops();
 
             // Schedule UI element update loop
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
 
             // Schedule focus features loop
-            Scheduler.loop(0, 1, () -> FocusFeatures.tick(server.getWorlds()));
+            Scheduler.loop(0, 1, () -> HoverManager.tick(server.getWorlds()));
 
             // Log initialization success
             LOGGER.info("FancyPlayerShops initialized. :3");
@@ -153,11 +153,11 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register block click events (shop placement + prevents early clicks going through the shop)
         AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-            return ClickFeatures.onClickBlock(world, player, hand, ClickType.LEFT, blockPos.add(direction.getVector()));
+            return ClickManager.onClickBlock(world, player, hand, ClickType.LEFT, blockPos.add(direction.getVector()));
         });
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             ActionResult r;
-            r = ClickFeatures.onClickBlock(world, player, hand, ClickType.RIGHT, hitResult.getBlockPos().add(hitResult.getSide().getVector()));
+            r = ClickManager.onClickBlock(world, player, hand, ClickType.RIGHT, hitResult.getBlockPos().add(hitResult.getSide().getVector()));
             if(r == ActionResult.PASS) r = onItemUse(world, player, hand, hitResult);
             return r;
         });
@@ -167,10 +167,10 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register entity click events (interaction blocker clicks)
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickFeatures.onClickEntity(world, player, hand, ClickType.LEFT, entity);
+            return ClickManager.onClickEntity(world, player, hand, ClickType.LEFT, entity);
         });
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickFeatures.onClickEntity(world, player, hand, ClickType.RIGHT, entity);
+            return ClickManager.onClickEntity(world, player, hand, ClickType.RIGHT, entity);
         });
 
 
@@ -178,7 +178,7 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register item use events (prevents early clicks going through the shop)
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            ActionResult r = ClickFeatures.onUseItem(world, player, hand);
+            ActionResult r = ClickManager.onUseItem(world, player, hand);
             if(r == ActionResult.FAIL) return TypedActionResult.fail(player.getStackInHand(hand));
             /**/                  else return TypedActionResult.pass(player.getStackInHand(hand));
         });
@@ -206,7 +206,7 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Register chat input handler
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
-            return !ChatInput.onMessage(message, sender);
+            return !ChatManager.onMessage(message, sender);
         });
     }
 
@@ -238,7 +238,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
-                if(Shop.findShop(blockPos, world) == null) {
+                if(DataManager.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
                     player.sendMessage(new Txt("New shop created! Right click it to configure.").lime().bold().get(), true);
                 }

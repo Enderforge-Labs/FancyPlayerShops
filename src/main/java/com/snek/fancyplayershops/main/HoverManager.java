@@ -36,8 +36,8 @@ import net.minecraft.world.World;
 /**
  * Utility class containing methods to detect shops players are looking at and handle hover events.
  */
-public abstract class FocusFeatures {
-    private FocusFeatures() {}
+public abstract class HoverManager {
+    private HoverManager() {}
 
     // Ray tracing data
     private static final double MAX_DISTANCE = 5;  // Maximum distance to check
@@ -134,7 +134,7 @@ public abstract class FocusFeatures {
             // Find target shop block
             for(final Vec3d pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
-                final Shop shop = Shop.findShop(new BlockPos(blockPos), world);
+                final Shop shop = DataManager.findShop(new BlockPos(blockPos), world);
                 if(shop != null) return shop;
             }
         }
@@ -168,7 +168,7 @@ public abstract class FocusFeatures {
         final Set<Shop> targetedShops = new LinkedHashSet<>();
         for(final ServerWorld serverWorld : serverWorlds) {
             for(final PlayerEntity player : serverWorld.getPlayers()) {
-                final Shop shop = FocusFeatures.getLookedAtShop(player, serverWorld);
+                final Shop shop = HoverManager.getLookedAtShop(player, serverWorld);
                 if(shop != null) {
 
                     // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true

@@ -3,7 +3,7 @@ package com.snek.framework.ui.functional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.ChatInput;
+import com.snek.fancyplayershops.main.ChatManager;
 import com.snek.framework.ui.functional.styles.TextInputElmStyle;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
@@ -68,7 +68,7 @@ public abstract class TextInputElm extends ButtonElm {
                 playButtonSound(player);
             }
             if(clickFeedbackMessage != null) player.sendMessage(clickFeedbackMessage, true);
-            ChatInput.setCallback(player, this::__internal_messageCallback);
+            ChatManager.setCallback(player, this::__internal_messageCallback);
         }
         return r;
     }
@@ -129,6 +129,6 @@ public abstract class TextInputElm extends ButtonElm {
     public void onHoverExit(final @Nullable PlayerEntity player) {
         super.onHoverExit(player);
         exitInputState();
-        if(player != null) ChatInput.removeCallback(player);
+        if(player != null) ChatManager.removeCallback(player);
     }
 }
