@@ -29,8 +29,16 @@ import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreboardCriterion;
@@ -42,6 +50,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 
@@ -725,6 +734,61 @@ public class Shop {
 
             // Delete the data associated with this shop
             DataManager.deleteShop(this);
+        }
+    }
+
+
+
+
+    /**
+     * Tries to retrieve items from nearby inventories.
+     * <p> This call has no effect if the shop is fully stocked.
+     */
+    public void pullItems(){
+        if(stock >= maxStock) return;
+        pullItems(new BlockPos(0, 0, 0));
+        pullItems(new BlockPos(0, 0, +1));
+        pullItems(new BlockPos(0, 0, -1));
+        pullItems(new BlockPos(0, +1, 0));
+        pullItems(new BlockPos(0, -1, 0));
+        pullItems(new BlockPos(+1, 0, 0));
+        pullItems(new BlockPos(-1, 0, 0));
+    }
+    /**
+     * Tries to retrieve items from a specified position relative to the shop.
+     * <p> This call has no effect if the shop is fully stocked.
+     * @param rel The position of the inventory, relative to the shop.
+     */
+    public void pullItems(final @NotNull BlockPos rel){
+        if(stock >= maxStock) return;
+        final long missing = maxStock - stock;
+        final BlockPos targetPos = pos.add(rel);
+        final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.fromVector(-rel.getX(), -rel.getY(), rel.getZ());
+        final Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, targetPos, direction);
+
+        // If a storage block is found, loop through its slots
+        if(storage != null) {
+            for(StorageView<ItemVariant> slot : storage) {
+                final ItemVariant variant = slot.getResource();
+                final long amount = slot.getAmount();
+
+                // If the slot is not empty
+                if(!variant.isBlank() && amount > 0) {
+                    final ItemStack stackInSlot = variant.toStack((int) amount);
+
+                    // If the item in the slot matches the item sold by the shop
+                    if(ItemStack.canCombine(stackInSlot, item)) {
+                        try(final Transaction tx = Transaction.openOuter()) {
+                            final long extracted = slot.extract(variant, missing, tx);
+                            if(extracted > 0) {
+                                tx.commit();
+                                stock += extracted;
+                                if(extracted == missing) return;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

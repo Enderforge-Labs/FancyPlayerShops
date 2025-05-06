@@ -8,7 +8,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +41,7 @@ import net.minecraft.world.World;
  */
 public abstract class DataManager {
     private DataManager() {}
+    public static final int PULL_UPDATES_PER_TICK = 4;
 
 
 
@@ -60,6 +63,10 @@ public abstract class DataManager {
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
+
+    // Async update list
+    private static int updateIndex = 0;
+    private static List<Shop> updateSnapshot = List.of();
 
 
 
@@ -174,5 +181,30 @@ public abstract class DataManager {
         // Delete the config file
         final File shopStorageFile = new File(SHOP_STORAGE_DIR + "/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json");
         shopStorageFile.delete();
+    }
+
+
+
+
+    /**
+     * Updates PULL_UPDATES_PER_TICK shops each call, making them pull items from nearby inventories.
+     * <p> Must be called each server tick.
+     */
+    public static void pullItems(){
+
+        // Refresh snapshot if needed
+        if(updateIndex == 0) {
+            updateSnapshot = new ArrayList<>(shopsByCoords.values());
+        }
+
+        // Update shops
+        for(int i = 0; i < PULL_UPDATES_PER_TICK && updateIndex < updateSnapshot.size(); i++, updateIndex++) {
+            updateSnapshot.get(updateIndex).pullItems();
+        }
+
+        // Reset snapshop if this iteration reached its end
+        if(updateIndex >= updateSnapshot.size()) {
+            updateIndex = 0;
+        }
     }
 }
