@@ -8,7 +8,7 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Items;
 
 
 

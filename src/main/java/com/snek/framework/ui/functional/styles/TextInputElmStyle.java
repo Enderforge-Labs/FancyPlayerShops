@@ -6,9 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Easings;
-
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 
 
 

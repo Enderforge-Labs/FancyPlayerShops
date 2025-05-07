@@ -12,7 +12,7 @@ import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.utils.Easings;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 
 
@@ -33,7 +33,7 @@ public class PolylineSetElm extends Div {
      * Creates a new PolylineSetElm.
      * @param _polylines The list of polylines.
      */
-    public PolylineSetElm(ServerWorld _world, final @NotNull PolylineData... _polylines) {
+    public PolylineSetElm(ServerLevel _world, final @NotNull PolylineData... _polylines) {
         super();
 
         // Create lines and add them to the children list
@@ -55,7 +55,7 @@ public class PolylineSetElm extends Div {
      * @param _a The first point of the line.
      * @param _b The second point of the line.
      */
-    private void createLine(final @NotNull ServerWorld _world, final @NotNull PolylineData l, final @NotNull Vector2f _a, final @NotNull Vector2f _b) {
+    private void createLine(final @NotNull ServerLevel _world, final @NotNull PolylineData l, final @NotNull Vector2f _a, final @NotNull Vector2f _b) {
 
         // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
         final Vector2f normal = _b.sub(_a, new Vector2f()).normalize(new Vector2f());

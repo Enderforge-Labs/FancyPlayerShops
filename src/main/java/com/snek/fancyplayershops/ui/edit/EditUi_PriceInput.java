@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 
 
@@ -36,7 +36,7 @@ public class EditUi_PriceInput extends ShopTextInput {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).color(DetailsUi.C_RGB_PRICE))
         .get());

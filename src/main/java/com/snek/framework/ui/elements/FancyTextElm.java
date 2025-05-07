@@ -11,15 +11,15 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Display.BillboardConstraints;
 
 
 
@@ -51,7 +51,7 @@ public class FancyTextElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected FancyTextElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
+    protected FancyTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
 
         // Create element and background element
         super(_world, new CustomTextDisplay(_world), _style);
@@ -68,7 +68,7 @@ public class FancyTextElm extends Elm {
      * Creates a new FancyTextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public FancyTextElm(final @NotNull ServerWorld _world) {
+    public FancyTextElm(final @NotNull ServerLevel _world) {
         this(_world, new FancyTextElmStyle());
     }
 
@@ -166,7 +166,7 @@ public class FancyTextElm extends Elm {
             bg.setViewRange(f.get());
             f.unflag();
         }}
-        { final Flagged<BillboardMode> f = getThisStyle().getFlaggedBillboardMode();
+        { final Flagged<BillboardConstraints> f = getThisStyle().getFlaggedBillboardMode();
         if(f.isFlagged()) {
             fg.setBillboardMode(f.get());
             bg.setBillboardMode(f.get());
@@ -175,7 +175,7 @@ public class FancyTextElm extends Elm {
 
 
         // Handle TextElm values
-        { final Flagged<Text> f = getThisStyle().getFlaggedText();
+        { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             fg.setText(f.get());
             f.unflag();

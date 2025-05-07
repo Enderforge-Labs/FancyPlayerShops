@@ -3,7 +3,7 @@ package com.snek.framework.ui.interfaces;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -22,7 +22,7 @@ public interface Hoverable {
      * <p> Called when the element is first looked at by a player.
      * @param player The player that triggered the event.
      */
-    public void onHoverEnter(@NotNull PlayerEntity player);
+    public void onHoverEnter(@NotNull Player player);
 
 
     /**
@@ -30,7 +30,7 @@ public interface Hoverable {
      * <p> This method is called once for each player that is currently being checked, regardless of the result of said check.
      * @param player The player.
      */
-    public default void onCheckTick(@NotNull PlayerEntity player) {}
+    public default void onCheckTick(@NotNull Player player) {}
 
 
     /**
@@ -38,7 +38,7 @@ public interface Hoverable {
      * <p> This method is called once for each player that is currently looking at this element.
      * @param player The player.
      */
-    public default void onHoverTick(@NotNull PlayerEntity player) {}
+    public default void onHoverTick(@NotNull Player player) {}
 
 
     /**
@@ -46,5 +46,5 @@ public interface Hoverable {
      * <p> Called when the element stops being looked at by players.
      * @param player The player that triggered the event (the last player that looked at this element).
      */
-    public void onHoverExit(@Nullable PlayerEntity player);
+    public void onHoverExit(@Nullable Player player);
 }

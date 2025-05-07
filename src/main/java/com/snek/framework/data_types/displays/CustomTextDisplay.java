@@ -5,17 +5,16 @@ import java.lang.reflect.Method;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.Scheduler;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity;
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
-
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Display.TextDisplay;
+import net.minecraft.world.level.Level;
 
 
 
@@ -24,16 +23,16 @@ import net.minecraft.world.World;
 
 
 /**
- * A wrapper for Minecraft's TextDisplayEntity.
+ * A wrapper for Minecraft's TextDisplay.
  * <p> This class allows for better customization and more readable code.
  */
 public class CustomTextDisplay extends CustomDisplay {
-    public @NotNull TextDisplayEntity getRawDisplay() { return (TextDisplayEntity)heldEntity; }
+    public @NotNull TextDisplay getRawDisplay() { return (TextDisplay)heldEntity; }
 
 
-    // Text cache and flag used to remove the text when the opacity value is lower than 26
-    public static final @NotNull Text EMPTY_TEXT = new Txt().get();
-    private             @NotNull Text textCache = EMPTY_TEXT;
+    // Component cache and flag used to remove the text when the opacity value is lower than 26
+    public static final @NotNull Component EMPTY_TEXT = new Txt().get();
+    private             @NotNull Component textCache = EMPTY_TEXT;
     private final boolean noTextUnderA26;
 
 
@@ -89,14 +88,14 @@ public class CustomTextDisplay extends CustomDisplay {
     private static @NotNull Method method_setBackground;
     static {
         try {
-            method_getText          = TextDisplayEntity.class.getDeclaredMethod("getText");
-            method_getLineWidth     = TextDisplayEntity.class.getDeclaredMethod("getLineWidth");
-            method_getTextOpacity   = TextDisplayEntity.class.getDeclaredMethod("getTextOpacity");
-            method_getBackground    = TextDisplayEntity.class.getDeclaredMethod("getBackground");
-            method_setText          = TextDisplayEntity.class.getDeclaredMethod("setText",        Text.class);
-            method_setLineWidth     = TextDisplayEntity.class.getDeclaredMethod("setLineWidth",    int.class);
-            method_setTextOpacity   = TextDisplayEntity.class.getDeclaredMethod("setTextOpacity", byte.class);
-            method_setBackground    = TextDisplayEntity.class.getDeclaredMethod("setBackground",   int.class);
+            method_getText          = TextDisplay.class.getDeclaredMethod("getText");
+            method_getLineWidth     = TextDisplay.class.getDeclaredMethod("getLineWidth");
+            method_getTextOpacity   = TextDisplay.class.getDeclaredMethod("getTextOpacity");
+            method_getBackground    = TextDisplay.class.getDeclaredMethod("getBackgroundColor");
+            method_setText          = TextDisplay.class.getDeclaredMethod("setText",      Component.class);
+            method_setLineWidth     = TextDisplay.class.getDeclaredMethod("setLineWidth",       int.class);
+            method_setTextOpacity   = TextDisplay.class.getDeclaredMethod("setTextOpacity",    byte.class);
+            method_setBackground    = TextDisplay.class.getDeclaredMethod("setBackgroundColor", int.class);
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
@@ -114,12 +113,12 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     /**
-     * Creates a new CustomTextDisplay using an existing TextDisplayEntity.
+     * Creates a new CustomTextDisplay using an existing TextDisplay.
      * @param _rawDisplay The display entity.
      * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(final @NotNull TextDisplayEntity _rawDisplay, final boolean _noTextUnderA26) {
+    public CustomTextDisplay(final @NotNull TextDisplay _rawDisplay, final boolean _noTextUnderA26) {
         super(_rawDisplay);
         noTextUnderA26 = _noTextUnderA26;
     }
@@ -130,17 +129,17 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(final @NotNull World _world, final boolean _noTextUnderA26) {
-        super(new TextDisplayEntity(EntityType.TEXT_DISPLAY, _world));
+    public CustomTextDisplay(final @NotNull Level _world, final boolean _noTextUnderA26) {
+        super(new TextDisplay(EntityType.TEXT_DISPLAY, _world));
         noTextUnderA26 = _noTextUnderA26;
     }
 
 
     /**
-     * Creates a new CustomTextDisplay using an existing TextDisplayEntity.
+     * Creates a new CustomTextDisplay using an existing TextDisplay.
      * @param _rawDisplay The display entity.
      */
-    public CustomTextDisplay(final @NotNull TextDisplayEntity _rawDisplay) {
+    public CustomTextDisplay(final @NotNull TextDisplay _rawDisplay) {
         this(_rawDisplay, true);
     }
 
@@ -148,7 +147,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * Creates a new CustomTextDisplay in the specified world.
      * @param _world The world.
      */
-    public CustomTextDisplay(final @NotNull World _world) {
+    public CustomTextDisplay(final @NotNull Level _world) {
         this(_world, true);
     }
 
@@ -160,7 +159,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * <p> This is equivalent to changing the entity's "text" NBT.
      * @param text The new value.
      */
-    public void setText(final @NotNull Text text) {
+    public void setText(final @NotNull Component text) {
         if(noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26) {
             Utils.invokeSafe(method_setText, heldEntity, EMPTY_TEXT);
         }
@@ -185,7 +184,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * Retrieves the entity's text value.
      * @return The current text.
      */
-    public @NotNull Text getText() {
+    public @NotNull Component getText() {
         return textCache;
     }
 
@@ -201,11 +200,11 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Returns the actual text the entity is displaying, as opposed to the cached value, meaning that
-     * this method returns an empty Text when noTextUnderA26 is set to true and the opacity is less than 26.
+     * this method returns an empty Component when noTextUnderA26 is set to true and the opacity is less than 26.
      * @return The text value.
      */
-    public @NotNull Text getTrueText() {
-        return (Text)Utils.invokeSafe(method_getText, heldEntity);
+    public @NotNull Component getTrueText() {
+        return (Component)Utils.invokeSafe(method_getText, heldEntity);
     }
 
 
@@ -276,9 +275,9 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param alignment The new value.
      */
     public void setTextAlignment(final @NotNull TextAlignment alignment) {
-        final NbtCompound nbt = new NbtCompound();
-        heldEntity.writeNbt(nbt);
+        final CompoundTag nbt = new CompoundTag();
+        heldEntity.save(nbt);
         nbt.putString("alignment", alignment.asString());
-        heldEntity.readNbt(nbt);
+        heldEntity.load(nbt);
     }
 }

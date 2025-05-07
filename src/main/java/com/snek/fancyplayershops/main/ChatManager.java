@@ -8,8 +8,8 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.message.SignedMessage;
+import net.minecraft.network.chat.PlayerChatMessage;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -31,8 +31,8 @@ public abstract class ChatManager {
      * <p> Future messages from this player will not be detected nor blocked.
      * @param player The player.
      */
-    public static void removeCallback(final @NotNull PlayerEntity player) {
-        callbacks.remove(player.getUuid());
+    public static void removeCallback(final @NotNull Player player) {
+        callbacks.remove(player.getUUID());
     }
 
 
@@ -44,8 +44,8 @@ public abstract class ChatManager {
      *     The return value controls whether the message is blocked.
      *     Returning true will let the server broadcast the message in chat.
      */
-    public static void setCallback(final @NotNull PlayerEntity player, final @NotNull Predicate<@NotNull String> callback) {
-        callbacks.put(player.getUuid(), callback);
+    public static void setCallback(final @NotNull Player player, final @NotNull Predicate<@NotNull String> callback) {
+        callbacks.put(player.getUUID(), callback);
     }
 
 
@@ -55,11 +55,11 @@ public abstract class ChatManager {
      * @param player The player that sent the message.
      * @return Whether the message should be blocked.
      */
-    public static boolean onMessage(final @NotNull SignedMessage message, final @NotNull PlayerEntity player) {
-        final Predicate<String> callback = callbacks.get(player.getUuid()); // Find callback for the specified player
+    public static boolean onMessage(final @NotNull PlayerChatMessage message, final @NotNull Player player) {
+        final Predicate<String> callback = callbacks.get(player.getUUID()); // Find callback for the specified player
         if(callback != null) {                                              // If present
-            if(callback.test(message.getContent().getString())) {               // Execute the callback. If it returns true
-                callbacks.remove(player.getUuid());                                 // Remove the callback
+            if(callback.test(message.decoratedContent().getString())) {         // Execute the callback. If it returns true
+                callbacks.remove(player.getUUID());                                 // Remove the callback
                 return true;                                                        // Block the message
             }                                                                   // If not
             return false;                                                           // Broadcast the message

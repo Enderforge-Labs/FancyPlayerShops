@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.ui.edit.styles;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.ui.edit.EditUi;
-import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;

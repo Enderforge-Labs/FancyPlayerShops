@@ -10,7 +10,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
@@ -27,12 +26,12 @@ import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.Entity.RemovalReason;
-import net.minecraft.entity.decoration.DisplayEntity;
-import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -76,7 +75,7 @@ public abstract class Elm extends Div {
 
 
     // In-world data
-    protected final @NotNull ServerWorld   world;     // The world this Elm will be spawned in
+    protected final @NotNull ServerLevel   world;     // The world this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
     private   final @NotNull ElmStyle      style;     // The style of the element
     protected       boolean isSpawned = false;        // Whether the element has been spawned into the world
@@ -134,7 +133,7 @@ public abstract class Elm extends Div {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected Elm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
+    protected Elm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super();
         world  = _world;
         entity = _entity;
@@ -167,7 +166,7 @@ public abstract class Elm extends Div {
         }}
 
         // Apply billboard mode
-        { final Flagged<BillboardMode> f = style.getFlaggedBillboardMode();
+        { final Flagged<BillboardConstraints> f = style.getFlaggedBillboardMode();
         if(f.isFlagged()) {
             entity.setBillboardMode(f.get());
             f.unflag();
@@ -511,7 +510,7 @@ public abstract class Elm extends Div {
      * Updates the new hover state of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
-    public void updateHoverState(final @Nullable PlayerEntity player) {
+    public void updateHoverState(final @Nullable Player player) {
         if(this instanceof Hoverable h) {
             boolean hoverStateNext;
 
@@ -564,8 +563,8 @@ public abstract class Elm extends Div {
      * @param player The player.
      * @return true if the player is looking at this element, false otherwise.
      */
-    public boolean checkIntersection(final @NotNull PlayerEntity player) {
-        if(!isSpawned || style.getBillboardMode() != BillboardMode.FIXED) return false;
+    public boolean checkIntersection(final @NotNull Player player) {
+        if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return false;
         final Transform t = __calcTransform();
 
 
@@ -588,8 +587,8 @@ public abstract class Elm extends Div {
         final Vector3f corner3 = new Vector3f(origin).add(shiftX).add(0, getAbsSize().y, 0);
         final Vector3f corner4 = new Vector3f(origin).sub(shiftX).add(0, getAbsSize().y, 0);
         return SpaceUtils.checkLineRectangleIntersection(
-            player.getEyePos().toVector3f(),
-            player.getRotationVec(1f).toVector3f(),
+            player.getEyePosition().toVector3f(),
+            player.getViewVector(1f).toVector3f(),
             new Vector3f[]{ corner1, corner2, corner3, corner4 }
         );
     }
@@ -603,9 +602,9 @@ public abstract class Elm extends Div {
      * @param entity The entity.
      */
     public static void onEntityLoad(final @NotNull Entity entity) {
-        if(entity instanceof DisplayEntity) {
+        if(entity instanceof Display) {
             if(
-                entity.getWorld() != null &&
+                entity.level() != null &&
                 entity.getCustomName() != null &&
                 entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
             ) {

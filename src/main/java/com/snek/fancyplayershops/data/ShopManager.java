@@ -20,8 +20,8 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 
 
@@ -173,8 +173,8 @@ public abstract class ShopManager {
      * @param world The world the shop is in.
      * @return The shop, or null if no shop is there.
     */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull World world) {
-        return findShop(pos, world.getRegistryKey().getValue().toString());
+    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull Level world) {
+        return findShop(pos, world.dimension().location().toString());
     }
 
 

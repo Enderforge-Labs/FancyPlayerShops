@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.ui.misc.ShopItemElm;
 import com.snek.framework.ui.elements.styles.ItemElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 
 

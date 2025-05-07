@@ -7,17 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.mojang.math.Transformation;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.entity.Entity.RemovalReason;
-import net.minecraft.entity.decoration.Brightness;
-import net.minecraft.entity.decoration.DisplayEntity;
-import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.AffineTransformation;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Brightness;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.level.Level;
 
 
 
@@ -30,7 +28,7 @@ import net.minecraft.world.World;
  * <p> This class allows for better customization and more readable code.
  */
 public abstract class CustomDisplay {
-    protected @NotNull DisplayEntity heldEntity;
+    protected @NotNull Display heldEntity;
 
 
 
@@ -51,19 +49,19 @@ public abstract class CustomDisplay {
     private static @NotNull Method method_setMaxRenderHeight;
     static {
         try {
-            method_setTransformation        = DisplayEntity.class.getDeclaredMethod("setTransformation", AffineTransformation.class);
-            method_setInterpolationDuration = DisplayEntity.class.getDeclaredMethod("setInterpolationDuration",           int.class);
-            method_setStartInterpolation    = DisplayEntity.class.getDeclaredMethod("setStartInterpolation",              int.class);
-            method_setBillboardMode         = DisplayEntity.class.getDeclaredMethod("setBillboardMode",         BillboardMode.class);
-            method_getBillboardMode         = DisplayEntity.class.getDeclaredMethod("getBillboardMode");
-            method_setViewRange             = DisplayEntity.class.getDeclaredMethod("setViewRange",                     float.class);
-            method_getViewRange             = DisplayEntity.class.getDeclaredMethod("getViewRange");
-            method_setBrightness            = DisplayEntity.class.getDeclaredMethod("setBrightness",               Brightness.class);
-            method_getBrightness            = DisplayEntity.class.getDeclaredMethod("getBrightnessUnpacked");
-            method_setMaxRenderWidth        = DisplayEntity.class.getDeclaredMethod("setDisplayWidth",                  float.class);
-            method_getMaxRenderWidth        = DisplayEntity.class.getDeclaredMethod("getDisplayWidth");
-            method_setMaxRenderHeight       = DisplayEntity.class.getDeclaredMethod("setDisplayHeight",                 float.class);
-            method_getMaxRenderHeight       = DisplayEntity.class.getDeclaredMethod("getDisplayHeight");
+            method_setTransformation        = Display.class.getDeclaredMethod("setTransformation",             Transformation.class);
+            method_setInterpolationDuration = Display.class.getDeclaredMethod("setInterpolationDuration",                 int.class);
+            method_setStartInterpolation    = Display.class.getDeclaredMethod("setInterpolationDelay",                    int.class);
+            method_setBillboardMode         = Display.class.getDeclaredMethod("setBillboardConstraints", BillboardConstraints.class);
+            method_getBillboardMode         = Display.class.getDeclaredMethod("getBillboardConstraints");
+            method_setViewRange             = Display.class.getDeclaredMethod("setViewRange",                           float.class);
+            method_getViewRange             = Display.class.getDeclaredMethod("getViewRange");
+            method_setBrightness            = Display.class.getDeclaredMethod("setBrightnessOverride",             Brightness.class);
+            method_getBrightness            = Display.class.getDeclaredMethod("getPackedBrightnessOverride");
+            method_setMaxRenderWidth        = Display.class.getDeclaredMethod("setWidth",                               float.class);
+            method_getMaxRenderWidth        = Display.class.getDeclaredMethod("getWidth");
+            method_setMaxRenderHeight       = Display.class.getDeclaredMethod("setHeight",                              float.class);
+            method_getMaxRenderHeight       = Display.class.getDeclaredMethod("getHeight");
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
@@ -89,7 +87,7 @@ public abstract class CustomDisplay {
      * Creates a new CustomDisplay using an existing DisplayEntity as in-world entity.
      * @param _heldEntity The display entity.
      */
-    protected CustomDisplay(final @NotNull DisplayEntity _heldEntity) {
+    protected CustomDisplay(final @NotNull Display _heldEntity) {
         heldEntity = _heldEntity;
         setBrightness(new Brightness(15, 15));
     }
@@ -102,7 +100,7 @@ public abstract class CustomDisplay {
      * @return The UUID.
      */
     public UUID getUuid() {
-        return heldEntity.getUuid();
+        return heldEntity.getUUID();
     }
 
 
@@ -113,9 +111,9 @@ public abstract class CustomDisplay {
      * @param world The world to spawn the entity in.
      * @param pos The position of the spawned entity.
      */
-    public void spawn(final @NotNull World world, final @NotNull Vector3d pos) {
-        heldEntity.setPosition(pos.x, pos.y, pos.z);
-        world.spawnEntity(heldEntity);
+    public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
+        heldEntity.setPos(pos.x, pos.y, pos.z);
+        world.addFreshEntity(heldEntity);
     }
 
 
@@ -138,7 +136,7 @@ public abstract class CustomDisplay {
      * <p> This is equivalent to changing the entity's "transformation" NBT.
      * @param transformation The new value.
      */
-    public void setTransformation(final @NotNull AffineTransformation transformation) {
+    public void setTransformation(final @NotNull Transformation transformation) {
         Utils.invokeSafe(method_setTransformation, heldEntity, transformation);
     }
 
@@ -167,7 +165,7 @@ public abstract class CustomDisplay {
      * <p> This is equivalent to changing the entity's "billboard" NBT.
      * @param billboardMode The new value.
      */
-    public void setBillboardMode(final @NotNull BillboardMode billboardMode) {
+    public void setBillboardMode(final @NotNull BillboardConstraints billboardMode) {
         Utils.invokeSafe(method_setBillboardMode, heldEntity, billboardMode);
     }
 
@@ -176,8 +174,8 @@ public abstract class CustomDisplay {
      * Retrieves the entity's billboard mode.
      * @return The current billboard mode.
      */
-    public @NotNull BillboardMode getBillboardMode() {
-        return (BillboardMode)Utils.invokeSafe(method_getBillboardMode, heldEntity);
+    public @NotNull BillboardConstraints getBillboardMode() {
+        return (BillboardConstraints)Utils.invokeSafe(method_getBillboardMode, heldEntity);
     }
 
 
@@ -226,7 +224,7 @@ public abstract class CustomDisplay {
      * <p> This is equivalent to changing the entity's "custom_name" NBT.
      * @param name The new value.
      */
-    public void setCustomName(final @NotNull Text name) {
+    public void setCustomName(final @NotNull Component name) {
         heldEntity.setCustomName(name);
     }
 
@@ -246,7 +244,7 @@ public abstract class CustomDisplay {
      * @param name The new value. True makes the entity glow. False makes it stop glowing.
      */
     public void setGlowing(final boolean glowing) {
-        heldEntity.setGlowing(glowing);
+        heldEntity.setGlowingTag(glowing);
     }
 
 
@@ -254,8 +252,8 @@ public abstract class CustomDisplay {
      * Sets a new position to the entity.
      * @param pos The new position.
      */
-    public void setPos(final @NotNull Vector3f pos) {
-        heldEntity.setPosition(new Vec3d(pos));
+    public void setPos(final @NotNull Vector3d pos) {
+        heldEntity.setPos(pos.x, pos.y, pos.z);
     }
 
 
@@ -264,7 +262,7 @@ public abstract class CustomDisplay {
      * @return A copy of the current position.
      */
     public @NotNull Vector3f getPosCopy() {
-        return heldEntity.getPos().toVector3f();
+        return heldEntity.getPosition(1f).toVector3f();
     }
 
 

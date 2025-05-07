@@ -4,10 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 
 
 
@@ -20,7 +19,7 @@ import net.minecraft.text.Text;
  * <p> Use .get() to create a MutableText from this object's data.
  */
 public class Txt {
-    private MutableText rawText;
+    private MutableComponent rawText;
     private Style style;
 
 
@@ -30,7 +29,7 @@ public class Txt {
      * Creates a new empty Txt.
      */
     public Txt() {
-        rawText = Text.empty();
+        rawText = Component.empty();
         style = Style.EMPTY;
     }
 
@@ -39,7 +38,7 @@ public class Txt {
      * @param s The String.
      */
     public Txt(final @NotNull String s) {
-        rawText = Text.literal(s);
+        rawText = Component.literal(s);
         style = Style.EMPTY;
     }
 
@@ -47,16 +46,16 @@ public class Txt {
      * Creates a new Txt using a copy of a MutableText as content.
      * @param s The MutableText.
      */
-    public Txt(final @NotNull MutableText s) {
+    public Txt(final @NotNull MutableComponent s) {
         rawText = s.copy();
         style = rawText.getStyle();
     }
 
     /**
-     * Creates a new Txt using a copy of a Text as content.
-     * @param s The Text.
+     * Creates a new Txt using a copy of a Component as content.
+     * @param s The Component.
      */
-    public Txt(final @NotNull Text s) {
+    public Txt(final @NotNull Component s) {
         rawText = s.copy();
         style = rawText.getStyle();
     }
@@ -173,11 +172,11 @@ public class Txt {
 
 
     /**
-     * Concatenates a Text to this Txt.
-     * @param s The Text value.
+     * Concatenates a Component to this Txt.
+     * @param s The Component value.
      * @return This.
      */
-    public @NotNull Txt cat(final @NotNull Text s) {
+    public @NotNull Txt cat(final @NotNull Component s) {
         rawText.append(s);
         return this;
     }
@@ -198,17 +197,17 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt cat(final @NotNull String s) {
-        return this.cat(Text.literal(s));
+        return this.cat(Component.literal(s));
     }
 
 
 
 
     /**
-     * Returns a copy of this Txt as a Minecraft Text.
-     * @return The Text value.
+     * Returns a copy of this Txt as a Minecraft Component.
+     * @return The Component value.
      */
-    public @NotNull Text get() {
+    public @NotNull Component get() {
         rawText.setStyle(style);
         return rawText;
     }

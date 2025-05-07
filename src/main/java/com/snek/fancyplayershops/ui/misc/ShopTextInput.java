@@ -8,8 +8,8 @@ import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.ui.functional.TextInputElm;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -39,7 +39,7 @@ public abstract class ShopTextInput extends TextInputElm {
      * @param _rmbActionName The name of the action associated with right clicks.
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Text _clickFeedbackMessage) {
+    protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage) {
         super(_shop.getWorld(), _clickFeedbackMessage, new ShopTextInput_S());
         shop = _shop;
         lmbActionName = _lmbActionName;
@@ -50,7 +50,7 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     @Override
-    public void onHoverEnter(final @Nullable PlayerEntity player) {
+    public void onHoverEnter(final @Nullable Player player) {
         if(player != shop.getuser()) return;
         super.onHoverEnter(player);
     }
@@ -59,7 +59,7 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     @Override
-    public void onCheckTick(final @NotNull PlayerEntity player) {
+    public void onCheckTick(final @NotNull Player player) {
         super.onCheckTick(player);
 
         // Update input displays if present
@@ -73,7 +73,7 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     @Override
-    public void onHoverExit(final @Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable Player player) {
         if(player != shop.getuser()) return;
         super.onHoverExit(player);
 

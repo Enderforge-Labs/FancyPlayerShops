@@ -8,35 +8,35 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.LingeringPotionItem;
-import net.minecraft.item.PotionItem;
-import net.minecraft.item.SkullItem;
-import net.minecraft.item.SplashPotionItem;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.PlayerHeadItem;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -73,8 +73,8 @@ public abstract class MinecraftUtils {
      * @param item The item to give.
      * @return True if the item could be given to the player, false othersise (no space in inventory).
      */
-    public static boolean attemptGive(final @NotNull PlayerEntity player, final @NotNull ItemStack item) {
-        return player.getInventory().insertStack(item);
+    public static boolean attemptGive(final @NotNull Player player, final @NotNull ItemStack item) {
+        return player.getInventory().add(item);
     }
 
 
@@ -92,24 +92,24 @@ public abstract class MinecraftUtils {
     public static @NotNull ItemStack createCustomHead(final @NotNull String skin) {
 
         // Create the texture list NBT using the provided Base64 texture ID
-        final NbtCompound NBT_texture = new NbtCompound();
+        final CompoundTag NBT_texture = new CompoundTag();
         NBT_texture.putString("Value", skin);
-        final NbtList NBT_textures = new NbtList();
+        final ListTag NBT_textures = new ListTag();
         NBT_textures.add(NBT_texture);
 
         // Create the properties NBT
-        final NbtCompound NBT_properties = new NbtCompound();
+        final CompoundTag NBT_properties = new CompoundTag();
         NBT_properties.put("textures", NBT_textures);
 
         // Create the skullOwner NBT using a hard-coded UUID and the properties NBT
         //! A UUID is required for heads to display the custom texture, even if it's invalid.
-        final NbtCompound NBT_skullOwner = new NbtCompound();
-        NBT_skullOwner.putUuid("Id", HEAD_OWNER_UUID);
+        final CompoundTag NBT_skullOwner = new CompoundTag();
+        NBT_skullOwner.putUUID("Id", HEAD_OWNER_UUID);
         NBT_skullOwner.put("Properties", NBT_properties);
 
         // Create the ItemStack and return it
         final ItemStack head = new ItemStack(Items.PLAYER_HEAD, 1);
-        head.getOrCreateNbt().put("SkullOwner", NBT_skullOwner);
+        head.getOrCreateTag().put("SkullOwner", NBT_skullOwner);
         return head;
     }
 
@@ -130,13 +130,33 @@ public abstract class MinecraftUtils {
     public static @Nullable ItemStack getOfflinePlayerHead(final @NotNull UUID uuid, final @NotNull MinecraftServer server) {
 
         // Fetch player profile cache
-        final Optional<GameProfile> profile = server.getUserCache().getByUuid(uuid);
+        final Optional<GameProfile> profile = server.getProfileCache().get(uuid);
         if(profile.isEmpty()) return null;
-        final NbtCompound ownerTag = NbtHelper.writeGameProfile(new NbtCompound(), profile.get());
+        final GameProfile gp = profile.get();
+
+        // Create the texture list NBT using the provided Base64 texture ID
+        final ListTag NBT_textures = new ListTag();
+        for(Property property : gp.getProperties().get("textures")) {
+            final CompoundTag NBT_texture = new CompoundTag();
+            NBT_texture.putString("Value",property.getValue());
+            if(property.hasSignature()) {
+                NBT_texture.putString("Signature", property.getSignature());
+            }
+            NBT_textures.add(NBT_texture);
+        }
+
+        // Create the properties NBT
+        final CompoundTag NBT_properties = new CompoundTag();
+        NBT_properties.put("textures", NBT_textures);
+
+        // Create SkullPwner NBT tag
+        final CompoundTag NBT_skullOwner = new CompoundTag();
+        NBT_skullOwner.putString("Id", gp.getId().toString());
+        NBT_skullOwner.put("Properties", NBT_properties);
 
         // Create ItemStack with the retrieved data
         final ItemStack head = new ItemStack(Items.PLAYER_HEAD);
-        head.getOrCreateNbt().put("SkullOwner", ownerTag);
+        head.getOrCreateTag().put("SkullOwner", NBT_skullOwner);
         return head;
     }
     //FIXME skins of offline players aren't actually retrieved because the texture data is not loaded.
@@ -157,7 +177,7 @@ public abstract class MinecraftUtils {
      * @return The player's name as a string, or null if the player never joined this server.
      */
     public static @Nullable String getOfflinePlayerName(final @NotNull UUID uuid, final @NotNull MinecraftServer server) {
-        final Optional<GameProfile> profile = server.getUserCache().getByUuid(uuid);
+        final Optional<GameProfile> profile = server.getProfileCache().get(uuid);
         if(profile.isEmpty()) return null;
         return profile.get().getName();
     }
@@ -177,13 +197,14 @@ public abstract class MinecraftUtils {
      * @param volume The sound's volume.
      * @param pitch The sound's pitch.
      */
-    public static void playSoundClient(final @NotNull PlayerEntity player, final @NotNull SoundEvent sound, final float volume, final float pitch) {
-        ((ServerPlayerEntity) player).networkHandler.sendPacket(
-            new PlaySoundS2CPacket(
-                RegistryEntry.of(sound),
-                SoundCategory.BLOCKS,
+    public static void playSoundClient(final @NotNull Player player, final @NotNull SoundEvent sound, final float volume, final float pitch) {
+        ((ServerPlayer) player).connection.send(
+            new ClientboundSoundPacket(
+                Holder.direct(sound),
+                SoundSource.BLOCKS,
                 player.getX(), player.getY(), player.getZ(),
-                volume, pitch, player.getWorld().getRandom().nextLong()
+                volume, pitch,
+                player.level().getRandom().nextLong()
             )
         );
     }
@@ -203,26 +224,26 @@ public abstract class MinecraftUtils {
      * @param item The item.
      * @return The name of the item.
      */
-    public static @NotNull Text getFancyItemName(final @NotNull ItemStack item) {
+    public static @NotNull Component getFancyItemName(final @NotNull ItemStack item) {
 
         // Custom names
-        if(item.hasCustomName()) {
-            return item.getName();
+        if(item.hasCustomHoverName()) {
+            return item.getHoverName();
         }
 
 
         // Spawners
-        if(item.getItem() == Items.SPAWNER && item.hasNbt()) {
-            final NbtCompound nbt = item.getNbt();
-            if(nbt.contains("BlockEntityTag", NbtElement.COMPOUND_TYPE)) {
-                final NbtCompound blockTag = nbt.getCompound("BlockEntityTag");
-                if(blockTag.contains("SpawnData", NbtElement.COMPOUND_TYPE)) {
-                    final NbtCompound spawnData = blockTag.getCompound("SpawnData");
-                    if(spawnData.contains("entity", NbtElement.COMPOUND_TYPE)) {
-                        final NbtCompound entity = spawnData.getCompound("entity");
-                        final Identifier id = new Identifier(entity.getString("id"));
-                        final EntityType<?> entityType = Registries.ENTITY_TYPE.get(id);
-                        return new Txt().cat(entityType.getName()).cat(new Txt(" Spawner").white()).get();
+        if(item.getItem() == Items.SPAWNER && item.hasTag()) {
+            final CompoundTag nbt = item.getTag();
+            if(nbt.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
+                final CompoundTag blockTag = nbt.getCompound("BlockEntityTag");
+                if(blockTag.contains("SpawnData", Tag.TAG_COMPOUND)) {
+                    final CompoundTag spawnData = blockTag.getCompound("SpawnData");
+                    if(spawnData.contains("entity", Tag.TAG_COMPOUND)) {
+                        final CompoundTag entity = spawnData.getCompound("entity");
+                        final ResourceLocation id = new ResourceLocation(entity.getString("id"));
+                        final EntityType<?> entityType = BuiltInRegistries.ENTITY_TYPE.get(id);
+                        return new Txt().cat(entityType.getDescription()).cat(new Txt(" Spawner").white()).get();
                     }
                 }
             }
@@ -232,7 +253,7 @@ public abstract class MinecraftUtils {
 
         // Potions
         else if(item.getItem() instanceof PotionItem e) {
-            final Potion potion = PotionUtil.getPotion(item);
+            final Potion potion = PotionUtils.getPotion(item);
             final String prefix = e instanceof SplashPotionItem ? "Splash" : (e instanceof LingeringPotionItem ? "Lingering" : "");
 
             // Water bottle special case
@@ -255,29 +276,29 @@ public abstract class MinecraftUtils {
                 if(potion == Potions.EMPTY) {
                     return new Txt(prefix + " Potion").get();
                 }
-                final List<StatusEffectInstance> effects = potion.getEffects();
+                final List<MobEffectInstance> effects = potion.getEffects();
                 if(effects.isEmpty()) {
                     return new Txt(prefix + " Potion").get();
                 }
-                final StatusEffect effect = effects.get(0).getEffectType();
+                final MobEffect effect = effects.get(0).getEffect();
                 if(effects.size() == 1) {
-                    return new Txt(prefix + " Potion of ").cat(effect.getName()).get();
+                    return new Txt(prefix + " Potion of ").cat(effect.getDisplayName()).get();
                 }
                 else {
-                    return new Txt(prefix + " Potion of ").cat(effect.getName()).cat(new Txt(" & " + (effects.size() - 1) + " more").white()).get();
+                    return new Txt(prefix + " Potion of ").cat(effect.getDisplayName()).cat(new Txt(" & " + (effects.size() - 1) + " more").white()).get();
                 }
             }
         }
 
 
         // Player heads
-        else if(item.getItem() instanceof SkullItem e) {
+        else if(item.getItem() instanceof PlayerHeadItem e) {
             return new Txt().cat(e.getName(item)).get();
         }
 
 
         // Fallback
-        return item.getItem().getName();
+        return item.getItem().getName(item);
     }
 
 
@@ -292,15 +313,15 @@ public abstract class MinecraftUtils {
      * @param item The item.
      * @return The name of the item.
      */
-    public static @NotNull Text getItemName(final @NotNull ItemStack item) {
+    public static @NotNull Component getItemName(final @NotNull ItemStack item) {
 
         // Custom names
-        if(item.hasCustomName()) {
-            return item.getName();
+        if(item.hasCustomHoverName()) {
+            return item.getHoverName();
         }
 
         // Fallback
-        return item.getItem().getName();
+        return item.getItem().getName(item);
     }
 
 
@@ -316,7 +337,7 @@ public abstract class MinecraftUtils {
      * @param pos
      * @return
      */
-    public static @NotNull Vec3i doubleToBlockCoords(final @NotNull Vec3d pos) {
+    public static @NotNull Vec3i doubleToBlockCoords(final @NotNull Vec3 pos) {
         return new Vec3i(
             pos.x < 0 ? (int)(Math.floor(pos.x) - 0.1) : (int) pos.x,
             pos.y < 0 ? (int)(Math.floor(pos.y) - 0.1) : (int) pos.y,

@@ -35,21 +35,17 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.scoreboard.ScoreboardCriterion;
-import net.minecraft.scoreboard.ScoreboardPlayerScore;
-import net.minecraft.scoreboard.ServerScoreboard;
-import net.minecraft.scoreboard.ScoreboardCriterion.RenderType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -82,15 +78,15 @@ public class Shop {
 
 
     // Strings
-    public  static final Text EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
-    private static final Text SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
-    private static final Text SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
+    public  static final Component EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
+    private static final Component SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
+    private static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
 
 
 
 
     // Basic data
-    private transient @NotNull  ServerWorld     world;                          // The world this shop was placed in
+    private transient @NotNull  ServerLevel     world;                          // The world this shop was placed in
     private           @NotNull  String          worldId;                        // The Identifier of the world
     private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
@@ -100,7 +96,7 @@ public class Shop {
 
 
     // Shop data
-    private transient @NotNull ItemStack item = Items.AIR.getDefaultStack();    // The configured item
+    private transient @NotNull ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
@@ -112,8 +108,8 @@ public class Shop {
     // Shop state
     private transient @Nullable InteractionBlocker interactionBlocker = null;   // The interaction entity used to block client-side clicks
     private transient @Nullable ShopCanvas               activeCanvas = null;   // The menu that is currently being displayed to the viewer
-    private transient @Nullable PlayerEntity                     user = null;   // The current user of the shop (the player that first opened a menu)
-    private transient @Nullable PlayerEntity                   viewer = null;   // The prioritized viewer
+    private transient @Nullable Player                           user = null;   // The current user of the shop (the player that first opened a menu)
+    private transient @Nullable Player                         viewer = null;   // The prioritized viewer
     private transient           boolean                 deletionState = false;  // True if the shop has been deleted, false otherwise
     private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
     private transient           boolean                focusStateNext = false;  // The next focus state
@@ -124,7 +120,7 @@ public class Shop {
 
 
     // Accessors
-    public @NotNull  ServerWorld     getWorld          () { return world;           }
+    public @NotNull  ServerLevel     getWorld          () { return world;           }
     public @NotNull  String          getWorldId        () { return worldId;         }
     public @NotNull  BlockPos        getPos            () { return pos;             }
     public @NotNull  ItemStack       getItem           () { return item;            }
@@ -138,9 +134,9 @@ public class Shop {
     public           boolean         isFocused         () { return focusState;      }
     public           boolean         isDeleted         () { return deletionState;   }
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
-    public @Nullable PlayerEntity    getuser           () { return user;            }
-    public @Nullable PlayerEntity    getViewer         () { return viewer;          }
-    public           void            setViewer         (final @Nullable PlayerEntity _viewer        ) { viewer         = _viewer;         }
+    public @Nullable Player    getuser           () { return user;            }
+    public @Nullable Player    getViewer         () { return viewer;          }
+    public           void            setViewer         (final @Nullable Player _viewer        ) { viewer         = _viewer;         }
     public           void            setFocusStateNext (final           boolean      _nextFocusState) { focusStateNext = _nextFocusState; }
     public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
     public @NotNull  String          getIdentifierNoWorld     () { return shopIdentifierCache_noWorld; }
@@ -191,18 +187,18 @@ public class Shop {
      * Computes the Identifier of the world.
      */
     private void calcSerializedWorldId() {
-        worldId = world.getRegistryKey().getValue().toString();
+        worldId = world.dimension().location().toString();
     }
 
 
     /**
-     * Tries find the ServerWorld the world identifier belongs to.
+     * Tries find the ServerLevel the world identifier belongs to.
      * @param server The server instance.
-     * @throws RuntimeException if the world Identifier is invalid or the ServerWorld cannot be found.
+     * @throws RuntimeException if the world Identifier is invalid or the ServerLevel cannot be found.
      */
     private void calcDeserializedWorldId(MinecraftServer server) throws RuntimeException {
-        for(final ServerWorld w : server.getWorlds()) {
-            if(w.getRegistryKey().getValue().toString().equals(worldId)) {
+        for(final ServerLevel w : server.getAllLevels()) {
+            if(w.dimension().location().toString().equals(worldId)) {
                 world = w;
                 return;
             }
@@ -282,9 +278,9 @@ public class Shop {
      * @param _pos The position of the new shop.
      * @param owner The player that places the shop.
      */
-    public Shop(final @NotNull ServerWorld _world, final @NotNull BlockPos _pos, final @NotNull PlayerEntity owner) {
+    public Shop(final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull Player owner) {
         world = _world;
-        ownerUUID = owner.getUuid();
+        ownerUUID = owner.getUUID();
         pos = _pos;
 
         // Get members from serialized data and calculate shop identifier
@@ -368,7 +364,7 @@ public class Shop {
      */
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
         if(itemDisplay == null) {
-            final ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
+            final ItemDisplay rawItemDisplay = (ItemDisplay)(world.getEntity(itemDisplayUUID));
             if(rawItemDisplay == null) {
                 itemDisplay = new ShopItemDisplay(this);
             }
@@ -390,7 +386,7 @@ public class Shop {
      * @param player The player that clicked the shop.
      * @param click The click type.
      */
-    public void onClick(final @NotNull PlayerEntity player, final @NotNull ClickType clickType) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
 
 
         // If the shop is currently focused
@@ -400,8 +396,8 @@ public class Shop {
 
             // If the shop is not currently being used, flag the player as its user
             if(user == null) {
-                if(clickType == ClickType.LEFT) {
-                    if(player.getUuid().equals(ownerUUID)) {
+                if(clickType == ClickAction.PRIMARY) {
+                    if(player.getUUID().equals(ownerUUID)) {
                         retrieveItem(player);
                     }
                     else {
@@ -410,7 +406,7 @@ public class Shop {
                 }
                 else {
                     user = player;
-                    if(player.getUuid().equals(ownerUUID)) {
+                    if(player.getUUID().equals(ownerUUID)) {
                         openEditUi(player);
                     }
                     else {
@@ -428,15 +424,15 @@ public class Shop {
 
             // Send an error message to the player if someone else has already opened a menu in the same shop
             else {
-                if(clickType == ClickType.RIGHT) {
-                    player.sendMessage(new Txt(
+                if(clickType == ClickAction.SECONDARY) {
+                    player.displayClientMessage(new Txt(
                         "Someone else is already using this shop! Left click to " +
-                        (player.getUuid().equals(ownerUUID) ? "retrieve" : "buy") +
+                        (player.getUUID().equals(ownerUUID) ? "retrieve" : "buy") +
                         " one item."
                     ).lightGray().get(), true);
                 }
                 else {
-                    if(player.getUuid().equals(ownerUUID)) {
+                    if(player.getUUID().equals(ownerUUID)) {
                         retrieveItem(player);
                     }
                     else {
@@ -455,12 +451,12 @@ public class Shop {
      * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
      * @param owner The owner of the shop.
      */
-    public void retrieveItem(final @NotNull PlayerEntity owner) {
+    public void retrieveItem(final @NotNull Player owner) {
         if(item.getItem() == Items.AIR) {
-            owner. sendMessage(SHOP_EMPTY_TEXT, true);
+            owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.sendMessage(new Txt("This shop has no items in stock!").lightGray().get(), true);
+            owner.displayClientMessage(new Txt("This shop has no items in stock!").lightGray().get(), true);
         }
         else {
             --stock;
@@ -469,18 +465,18 @@ public class Shop {
 
             // Send feedback to the player
             if(MinecraftUtils.attemptGive(owner, _item)) {
-                owner.sendMessage(new Txt()
+                owner.displayClientMessage(new Txt()
                     .cat(new Txt("You retrieved 1x ").lightGray())
                     .cat(MinecraftUtils.getFancyItemName(item))
                     .cat(new Txt(" from your shop.").lightGray())
-                .get());
+                .get(), false);
             }
             else {
-                owner.sendMessage(new Txt()
+                owner.displayClientMessage(new Txt()
                     .cat(new Txt("1x ").lightGray())
                     .cat(MinecraftUtils.getFancyItemName(item))
                     .cat(new Txt(" retrieved from your shop has been sent to your stash.").lightGray())
-                .get());
+                .get(), false);
             }
         }
     }
@@ -494,15 +490,15 @@ public class Shop {
      * @param player The player.
      * @param amount The amount of items to buy.
      */
-    public void buyItem(final @NotNull PlayerEntity player, final int amount) {
+    public void buyItem(final @NotNull Player player, final int amount) {
         if(item.getItem() == Items.AIR) {
-            player.sendMessage(SHOP_EMPTY_TEXT, true);
+            player.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            player.sendMessage(SHOP_STOCK_TEXT, true);
+            player.displayClientMessage(SHOP_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            player.sendMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            player.displayClientMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             stock -= amount;
@@ -513,18 +509,18 @@ public class Shop {
 
             // Send feedback to the player
             if(MinecraftUtils.attemptGive(player, _item)) {
-                player.sendMessage(new Txt()
+                player.displayClientMessage(new Txt()
                     .cat(new Txt("Bought " + Utils.formatAmount(amount, true, true)).lightGray())
                     .cat(MinecraftUtils.getFancyItemName(item))
                     .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                .get());
+                .get(), false);
             }
             else {
-                player.sendMessage(new Txt()
+                player.displayClientMessage(new Txt()
                     .cat("" + Utils.formatAmount(amount, true, true) + " ")
                     .cat(MinecraftUtils.getFancyItemName(item))
                     .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (amount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
-                .get());
+                .get(), false);
             }
         }
 
@@ -563,7 +559,7 @@ public class Shop {
      * Opens the edit shop UI.
      * @param player The player.
      */
-    public void openEditUi(final @NotNull PlayerEntity player) {
+    public void openEditUi(final @NotNull Player player) {
         changeCanvas(new EditUi(this));
         getItemDisplay().enterEditState();
     }
@@ -575,9 +571,9 @@ public class Shop {
      * Opens the buy item UI.
      * @param player The player.
      */
-    public void openBuyUi(final @NotNull PlayerEntity player) {
+    public void openBuyUi(final @NotNull Player player) {
         if(item.getItem() == Items.AIR) {
-            player.sendMessage(SHOP_EMPTY_TEXT, true);
+            player.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else {
             changeCanvas(new BuyUi(this));
@@ -588,14 +584,14 @@ public class Shop {
 
 
 
-    private static final String objectiveName = "tmp_balance";
+    // private static final String objectiveName = "tmp_balance";
 
     //FIXME use economy mod API instead of scoreboards
-    public void addMoney(final @NotNull PlayerEntity player, final double amount) {
-        final ServerScoreboard s = player.getServer().getScoreboard();
-        if(!s.containsObjective(objectiveName)) s.addObjective(objectiveName, ScoreboardCriterion.DUMMY, new Txt(objectiveName).get(), RenderType.INTEGER);
-        final ScoreboardPlayerScore score = s.getPlayerScore(player.getName().getString(), s.getObjective(objectiveName));
-        score.incrementScore((int)amount);
+    public void addMoney(final @NotNull Player player, final double amount) {
+        // final ServerScoreboard s = player.getServer().getScoreboard();
+        // if(!s.containsObjective(objectiveName)) s.addObjective(objectiveName, ScoreboardCriterion.DUMMY, new Txt(objectiveName).get(), RenderType.INTEGER);
+        // final ScoreboardPlayerScore score = s.getPlayerScore(player.getName().getString(), s.getObjective(objectiveName));
+        // score.incrementScore((int)amount);
     }
 
 
@@ -613,11 +609,11 @@ public class Shop {
      */
     public boolean setPrice(final double newPrice) {
         if(newPrice < 0) {
-            if(user != null) user.sendMessage(new Txt("The price cannot be negative").red().bold().get(), true);
+            if(user != null) user.displayClientMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
         }
         if(newPrice > MAX_PRICE) {
-            if(user != null) user.sendMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().bold().get(), true);
+            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().bold().get(), true);
             return false;
         }
         else if(newPrice < 0.00001) price = 0d;
@@ -640,11 +636,11 @@ public class Shop {
      */
     public boolean setStockLimit(final float newStockLimit) {
         if(newStockLimit < 0.9999) {
-            if(user != null) user.sendMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
+            if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
         if(newStockLimit > MAX_STOCK) {
-            if(user != null) user.sendMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().bold().get(), true);
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
@@ -694,7 +690,7 @@ public class Shop {
         if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
 
         // Calculate target direction
-        final Vec3d playerPos = viewer.getPos();                            // Get player position
+        final Vec3 playerPos = viewer.getPosition(1f);                      // Get player position
         final double dx = pos.getX() + 0.5d - playerPos.x;                  // Calculate X difference
         final double dz = pos.getZ() + 0.5d - playerPos.z;                  // Calculate Z difference
         final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
@@ -750,11 +746,11 @@ public class Shop {
 
         // Send feedback to the player
         if(item.getItem() != Items.AIR && stock > 0) {
-            user.sendMessage(new Txt()
+            user.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ").lightGray()
                 .cat(MinecraftUtils.getFancyItemName(item))
                 .cat(new Txt(" " + (stock > 1 ? "have" : "has") + " been sent to your stash."))
-            .get());
+            .get(), false);
         }
 
 
@@ -784,11 +780,11 @@ public class Shop {
             // Give the player a default shop item
             final ItemStack _item =  FancyPlayerShops.getShopItemCopy();
             if(!MinecraftUtils.attemptGive(user, _item)) {
-                user.sendMessage(new Txt()
+                user.displayClientMessage(new Txt()
                     .cat("1x ").lightGray()
                     .cat(MinecraftUtils.getFancyItemName(_item))
                     .cat(new Txt(" has been sent to your stash."))
-                .get());
+                .get(), false);
             }
             // FIXME ACTUALLY STASH ITEMS
 
@@ -827,8 +823,8 @@ public class Shop {
      */
     public void pullItems(final @NotNull BlockPos rel){
         if(stock >= maxStock) return;
-        final BlockPos targetPos = pos.add(rel);
-        final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.fromVector(-rel.getX(), -rel.getY(), rel.getZ());
+        final BlockPos targetPos = pos.offset(rel);
+        final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
         final Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, targetPos, direction);
 
         // If a storage block is found, loop through its slots
@@ -842,9 +838,9 @@ public class Shop {
                     final ItemStack stackInSlot = variant.toStack((int) amount);
 
                     // If the item in the slot matches the item sold by the shop
-                    if(ItemStack.canCombine(stackInSlot, item)) {
+                    if(ItemStack.isSameItemSameTags(stackInSlot, item)) {
                         try(final Transaction tx = Transaction.openOuter()) {
-                            final long missing = maxStock - stock;
+                            final long missing = (long)maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();

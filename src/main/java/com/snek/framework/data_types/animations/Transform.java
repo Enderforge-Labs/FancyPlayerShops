@@ -5,7 +5,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import net.minecraft.util.math.AffineTransformation;
+import com.mojang.math.Transformation;
 
 
 
@@ -43,8 +43,8 @@ public class Transform {
      * Creates a new AffineTransformation using the current translation, local rotation, scale and global rotation values.
      * @return The transformation.
      */
-    public @NotNull AffineTransformation toMinecraftTransform() {
-        return new AffineTransformation(toMatrixTransform());
+    public @NotNull Transformation toMinecraftTransform() {
+        return new Transformation(toMatrixTransform());
     }
 
 

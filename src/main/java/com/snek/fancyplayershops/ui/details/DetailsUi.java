@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.ui.details;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
@@ -11,13 +10,11 @@ import com.snek.fancyplayershops.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.ui.misc.ShopPanelElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
-import com.snek.framework.utils.Utils;
-
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
 
 
 

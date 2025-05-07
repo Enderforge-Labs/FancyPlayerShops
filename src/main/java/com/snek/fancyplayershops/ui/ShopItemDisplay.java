@@ -26,11 +26,11 @@ import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.DisplayEntity.BillboardMode;
-import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 
 
@@ -136,10 +136,10 @@ public class ShopItemDisplay extends ItemElm {
      * Creates a new ShopItemDisplay using existing display entities.
      * @param _targetShop The target shop.
      * @param _rawDisplay A vanilla ItemDisplayEntity to use to display the item.
-     * @param _rawName1 One of the TextDisplayEntity entities that make up the name of the item.
-     * @param _rawName2 One of the TextDisplayEntity entities that make up the name of the item.
+     * @param _rawName1 One of the TextDisplay entities that make up the name of the item.
+     * @param _rawName2 One of the TextDisplay entities that make up the name of the item.
      */
-    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplayEntity _rawDisplay) {
+    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplay _rawDisplay) {
         this(_targetShop, new CustomItemDisplay(_rawDisplay));
     }
 
@@ -169,8 +169,8 @@ public class ShopItemDisplay extends ItemElm {
 
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
         if(_item.getItem() == Items.AIR) {
-            final ItemStack noItem = Items.BARRIER.getDefaultStack();
-            noItem.setCustomName(Shop.EMPTY_SHOP_NAME);
+            final ItemStack noItem = Items.BARRIER.getDefaultInstance();
+            noItem.setHoverName(Shop.EMPTY_SHOP_NAME);
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
                 name.getStyle(FancyTextElmStyle.class).setText(MinecraftUtils.getFancyItemName(noItem));
@@ -326,7 +326,7 @@ public class ShopItemDisplay extends ItemElm {
         if(name == null) {
             name = new FancyTextElm(world);
             name.getStyle().setViewRange(0.2f);
-            name.getStyle().setBillboardMode(BillboardMode.VERTICAL);
+            name.getStyle().setBillboardMode(BillboardConstraints.VERTICAL);
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
         }
     }
@@ -354,16 +354,16 @@ public class ShopItemDisplay extends ItemElm {
      * @param entity The loaded entity.
      */
     public static void onEntityLoad(final @NotNull Entity entity) {
-        if(entity instanceof ItemDisplayEntity) {
+        if(entity instanceof ItemDisplay) {
             if(
-                entity.getWorld() != null &&
+                entity.level() != null &&
                 entity.getCustomName() != null &&
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
                 //! Force data loading in case this event gets called before the scheduled data loading
                 ShopManager.loadShops();
 
-                final Shop shop = ShopManager.findShop(entity.getBlockPos(), entity.getWorld());
+                final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
                 if(shop != null) shop.getItemDisplay();
                 //! getItemDisplay() retrieves the item display entity and creates the associated ShopItemDisplay,
                 //! whose constructor spawns the name entities.

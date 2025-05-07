@@ -19,9 +19,9 @@ import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
 import com.snek.framework.utils.Easings;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -86,7 +86,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         //Empty
     }
 
@@ -94,7 +94,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r) {
             shop.addDefaultRotation(rotation);
@@ -118,7 +118,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void onHoverEnter(final @NotNull PlayerEntity player) {
+    public void onHoverEnter(final @NotNull Player player) {
         super.onHoverEnter(player);
 
         // Handle item display animations
@@ -138,7 +138,7 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public void onHoverExit(final @Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable Player player) {
         super.onHoverExit(player);
 
         // Handle item display animations

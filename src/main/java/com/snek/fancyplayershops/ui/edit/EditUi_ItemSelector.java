@@ -7,11 +7,12 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_ItemSelector_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 
 
@@ -36,17 +37,17 @@ public class EditUi_ItemSelector extends ShopButton {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         // Empty
     }
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r && player == shop.getuser()) {
 
-            final ItemStack item = player.getMainHandStack();
+            final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(item != null && item.getItem() != Items.AIR) {
                 shop.changeItem(item);
                 //FIXME check blacklist before setting the item

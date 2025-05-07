@@ -6,12 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 
 
@@ -24,7 +23,7 @@ import net.minecraft.world.World;
  * <p> This class allows for better customization and more readable code.
  */
 public class CustomItemDisplay extends CustomDisplay {
-    public @NotNull ItemDisplayEntity getRawDisplay() { return (ItemDisplayEntity)heldEntity; }
+    public @NotNull ItemDisplay getRawDisplay() { return (ItemDisplay)heldEntity; }
 
 
     // Private methods
@@ -33,9 +32,9 @@ public class CustomItemDisplay extends CustomDisplay {
     private static @NotNull Method method_getDisplayType;
     static {
         try {
-            method_setItemStack   = ItemDisplayEntity.class.getDeclaredMethod("setItemStack",                        ItemStack.class);
-            method_setDisplayType = ItemDisplayEntity.class.getDeclaredMethod("setTransformationMode", ModelTransformationMode.class);
-            method_getDisplayType = ItemDisplayEntity.class.getDeclaredMethod("getTransformationMode");
+            method_setItemStack   = ItemDisplay.class.getDeclaredMethod("setItemStack",              ItemStack.class);
+            method_setDisplayType = ItemDisplay.class.getDeclaredMethod("setItemTransform", ItemDisplayContext.class);
+            method_getDisplayType = ItemDisplay.class.getDeclaredMethod("getItemTransform");
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
@@ -51,7 +50,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * Creates a new CustomItemDisplay using an existing ItemDisplayEntity.
      * @param _rawDisplay The display entity.
      */
-    public CustomItemDisplay(final @NotNull ItemDisplayEntity _rawDisplay) {
+    public CustomItemDisplay(final @NotNull ItemDisplay _rawDisplay) {
         super(_rawDisplay);
     }
 
@@ -59,8 +58,8 @@ public class CustomItemDisplay extends CustomDisplay {
      * Creates a new CustomItemDisplay in the specified world.
      * @param _world The world.
      */
-    public CustomItemDisplay(final @NotNull World _world) {
-        super(new ItemDisplayEntity(EntityType.ITEM_DISPLAY, _world));
+    public CustomItemDisplay(final @NotNull Level _world) {
+        super(new ItemDisplay(EntityType.ITEM_DISPLAY, _world));
     }
 
 
@@ -81,7 +80,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * <p> This is equivalent to changing the entity's "item_display" NBT.
      * @param displayType The new value.
      */
-    public void setDisplayType(final @NotNull ModelTransformationMode displayType) {
+    public void setDisplayType(final @NotNull ItemDisplayContext displayType) {
         Utils.invokeSafe(method_setDisplayType, getRawDisplay(), displayType);
     }
 
@@ -90,7 +89,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * Retrieves the entity's display type value.
      * @return The current display type.
      */
-    public @NotNull ModelTransformationMode getDisplayType() {
-        return (ModelTransformationMode)Utils.invokeSafe(method_getDisplayType, heldEntity);
+    public @NotNull ItemDisplayContext getDisplayType() {
+        return (ItemDisplayContext)Utils.invokeSafe(method_getDisplayType, heldEntity);
     }
 }

@@ -13,14 +13,14 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
-import net.minecraft.util.ClickType;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -53,7 +53,7 @@ public class InputIndicator extends ShopDiv {
      * @param _shop The target shop.
      * @param button The button to display.
      */
-    public InputIndicator(final @NotNull Shop _shop, final @NotNull ClickType _button) {
+    public InputIndicator(final @NotNull Shop _shop, final @NotNull ClickAction _button) {
         super(_shop);
         Div e;
 
@@ -66,7 +66,7 @@ public class InputIndicator extends ShopDiv {
             // Add mouse button
             e = m.addChild(new ShopPanelElm(shop, new MouseButtonUp_S()));
             e.setSize(BUTTON_SIZE);
-            e.setAlignment(_button == ClickType.LEFT ? AlignmentX.LEFT : AlignmentX.RIGHT, AlignmentY.TOP);
+            e.setAlignment(_button == ClickAction.PRIMARY ? AlignmentX.LEFT : AlignmentX.RIGHT, AlignmentY.TOP);
         }
 
 

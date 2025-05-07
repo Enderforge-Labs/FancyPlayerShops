@@ -1,7 +1,6 @@
 package com.snek.framework.ui.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
@@ -14,7 +13,7 @@ import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.PanelElmStyle;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 
 
@@ -49,7 +48,7 @@ public class PanelElm extends Elm {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected PanelElm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
+    protected PanelElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
         getThisEntity().setText(new Txt().get());
     }
@@ -60,7 +59,7 @@ public class PanelElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected PanelElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
+    protected PanelElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 
@@ -69,7 +68,7 @@ public class PanelElm extends Elm {
      * Creates a new PanelElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public PanelElm(final @NotNull ServerWorld _world) {
+    public PanelElm(final @NotNull ServerLevel _world) {
         this(_world, new CustomTextDisplay(_world), new PanelElmStyle());
     }
 

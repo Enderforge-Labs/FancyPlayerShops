@@ -7,8 +7,8 @@ import java.nio.file.Files;
 import org.jetbrains.annotations.NotNull;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 
 
 
@@ -37,13 +37,13 @@ public abstract class FontWidthGenerator {
      * Retrieves the width of every character in the extended ASCII and saves it in the output file.
      * <p>
      * The output file is a ready-to-use Java class with methods that can be used to compute the width and height a String would have
-     * when rendered in-game as non-bold text through a TextDisplayEntity with transform scale 1.0f and no shearing.
+     * when rendered in-game as non-bold text through a TextDisplay with transform scale 1.0f and no shearing.
      */
     public static void generate() {
 
 
         // Retrieve text renderer from the client instance and create the generated package
-        final TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+        final Font renderer = Minecraft.getInstance().font;
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH));
         } catch (IOException e) {
@@ -83,7 +83,7 @@ public abstract class FontWidthGenerator {
                 for(int c0 = 0; c0 < SECTOR_SIZE; ++c0) {
                     final char c = (char)(SECTOR_SIZE * i + c0);
                     if(c < Character.MAX_VALUE) {
-                        f.write(String.format("0x%01x", c < 32 ? 0 : renderer.getWidth(String.valueOf(c))));
+                        f.write(String.format("0x%01x", c < 32 ? 0 : renderer.width(String.valueOf(c))));
                         f.write(",");
                         if(c0 < SECTOR_SIZE - 1) f.write(((c + 1) % BREAK == 0) ? "\n            " : " ");
                     }
@@ -120,7 +120,8 @@ public abstract class FontWidthGenerator {
             );
 
 
-            //TODO actually calculate the height
+            //FIXME actually calculate the height
+            //FIXME new mappings have .height
             // Write string width function
             f.write("\n\n\n\n");
             f.write(

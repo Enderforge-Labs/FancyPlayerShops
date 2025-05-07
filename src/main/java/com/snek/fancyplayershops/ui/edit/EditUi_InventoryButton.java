@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.ui.edit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
@@ -15,9 +14,9 @@ import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -65,16 +64,16 @@ public class EditUi_InventoryButton extends ShopButton {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         // Empty
     }
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            player.sendMessage(new Txt("INVENTORY").get());
+            player.displayClientMessage(new Txt("INVENTORY").get(), true);
         }
         return r;
     }

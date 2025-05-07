@@ -10,22 +10,22 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,13 +83,13 @@ public class FancyPlayerShops implements ModInitializer {
 
     // Shop item name
     public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
-    public static final @NotNull Text SHOP_ITEM_NAME =
+    public static final @NotNull Component SHOP_ITEM_NAME =
         new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
     .get();
 
     // Shop item description
     private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
-    private static final @NotNull Text[] SHOP_ITEM_DESCRITPION = {
+    private static final @NotNull Component[] SHOP_ITEM_DESCRITPION = {
         new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
         new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
         new Txt("").noItalic().get()
@@ -103,18 +103,18 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create item and set custom name
         shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE);
-        shopItem.setCustomName(SHOP_ITEM_NAME);
+        shopItem.setHoverName(SHOP_ITEM_NAME);
 
         // Set identification tag
-        final NbtCompound nbt = shopItem.getOrCreateNbt();
+        final CompoundTag nbt = shopItem.getOrCreateTag();
         nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
 
         // Set lore
-        final NbtList lore = new NbtList();
-        for(final Text line : SHOP_ITEM_DESCRITPION) {
-            lore.add(NbtString.of(Text.Serializer.toJson(line)));
+        final ListTag lore = new ListTag();
+        for(final Component line : SHOP_ITEM_DESCRITPION) {
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
         }
-        shopItem.getOrCreateSubNbt("display").put("Lore", lore);
+        shopItem.getOrCreateTagElement("display").put("Lore", lore);
     }
 
 
@@ -143,7 +143,7 @@ public class FancyPlayerShops implements ModInitializer {
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
 
             // Schedule focus manager loop
-            Scheduler.loop(0, 1, () -> HoverManager.tick(server.getWorlds()));
+            Scheduler.loop(0, 1, () -> HoverManager.tick(server.getAllLevels()));
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, () -> ShopManager.pullItems());
@@ -157,12 +157,12 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register block click events (shop placement + prevents early clicks going through the shop)
         AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-            return ClickManager.onClickBlock(world, player, hand, ClickType.LEFT, blockPos.add(direction.getVector()));
+            return ClickManager.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
         });
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            ActionResult r;
-            r = ClickManager.onClickBlock(world, player, hand, ClickType.RIGHT, hitResult.getBlockPos().add(hitResult.getSide().getVector()));
-            if(r == ActionResult.PASS) r = onItemUse(world, player, hand, hitResult);
+            InteractionResult r;
+            r = ClickManager.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+            if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
             return r;
         });
 
@@ -171,10 +171,10 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register entity click events (interaction blocker clicks)
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickManager.onClickEntity(world, player, hand, ClickType.LEFT, entity);
+            return ClickManager.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
         });
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickManager.onClickEntity(world, player, hand, ClickType.RIGHT, entity);
+            return ClickManager.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
         });
 
 
@@ -182,9 +182,9 @@ public class FancyPlayerShops implements ModInitializer {
 
         // Create and register item use events (prevents early clicks going through the shop)
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            ActionResult r = ClickManager.onUseItem(world, player, hand);
-            if(r == ActionResult.FAIL) return TypedActionResult.fail(player.getStackInHand(hand));
-            /**/                  else return TypedActionResult.pass(player.getStackInHand(hand));
+            InteractionResult r = ClickManager.onUseItem(world, player, hand);
+            if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
+            /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
         });
 
 
@@ -230,29 +230,29 @@ public class FancyPlayerShops implements ModInitializer {
      * @param hitResult The hit result of the click action.
      * @return SUCCESS if the player tried to place a shop, PASS otherwise.
      */
-    public static @NotNull ActionResult onItemUse(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull BlockHitResult hitResult) {
-        final ItemStack stack = player.getStackInHand(hand);
-        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasNbt() && stack.getNbt().contains(SHOP_ITEM_NBT_KEY)) {
+    public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
+        final ItemStack stack = player.getItemInHand(hand);
+        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasTag() && stack.getTag().contains(SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
-            if(world instanceof ServerWorld serverWorld && player.getAbilities().allowModifyWorld) {
+            if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
 
                 // Consume item if the player is not in creative mode
-                if(!player.getAbilities().creativeMode) stack.setCount(stack.getCount() - 1);
+                if(!player.getAbilities().instabuild) stack.setCount(stack.getCount() - 1);
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
-                final BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
+                final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 if(ShopManager.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
-                    player.sendMessage(new Txt("New shop created! Right click it to configure.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                    player.displayClientMessage(new Txt("New shop created! Right click it to configure.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                 }
             }
 
             // If not, send an error message to the player
-            else player.sendMessage(new Txt("You cannot create a shop here!").red().bold().get(), true);
-            return ActionResult.FAIL;
+            else player.displayClientMessage(new Txt("You cannot create a shop here!").red().bold().get(), true);
+            return InteractionResult.FAIL;
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
 

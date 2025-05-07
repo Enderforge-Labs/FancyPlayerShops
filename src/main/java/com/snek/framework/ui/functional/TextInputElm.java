@@ -9,10 +9,10 @@ import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -27,7 +27,7 @@ import net.minecraft.util.ClickType;
 public abstract class TextInputElm extends ButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
 
-    private final @Nullable Text        clickFeedbackMessage;
+    private final @Nullable Component        clickFeedbackMessage;
     private       @Nullable TaskHandler inputStateHandler = null;
     private                 boolean     cursorToggleState = true;
     private                 boolean     inputState        = false;
@@ -41,7 +41,7 @@ public abstract class TextInputElm extends ButtonElm {
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      * @param _style The custom style.
      */
-    protected TextInputElm(final @NotNull ServerWorld _world, final @Nullable Text _clickFeedbackMessage, final @NotNull TextInputElmStyle _style) {
+    protected TextInputElm(final @NotNull ServerLevel _world, final @Nullable Component _clickFeedbackMessage, final @NotNull TextInputElmStyle _style) {
         super(_world, 1, _style);
         clickFeedbackMessage = _clickFeedbackMessage;
     }
@@ -52,7 +52,7 @@ public abstract class TextInputElm extends ButtonElm {
      * @param _world The world in which to place the element.
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected TextInputElm(final @NotNull ServerWorld _world, final @Nullable Text _clickFeedbackMessage) {
+    protected TextInputElm(final @NotNull ServerLevel _world, final @Nullable Component _clickFeedbackMessage) {
         this(_world, _clickFeedbackMessage, new TextInputElmStyle());
     }
 
@@ -60,14 +60,14 @@ public abstract class TextInputElm extends ButtonElm {
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r) {
             if(!inputState) {
                 enterInputState();
                 playButtonSound(player);
             }
-            if(clickFeedbackMessage != null) player.sendMessage(clickFeedbackMessage, true);
+            if(clickFeedbackMessage != null) player.displayClientMessage(clickFeedbackMessage, true);
             ChatManager.setCallback(player, this::__internal_messageCallback);
         }
         return r;
@@ -126,7 +126,7 @@ public abstract class TextInputElm extends ButtonElm {
 
 
     @Override
-    public void onHoverExit(final @Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable Player player) {
         super.onHoverExit(player);
         exitInputState();
         if(player != null) ChatManager.removeCallback(player);

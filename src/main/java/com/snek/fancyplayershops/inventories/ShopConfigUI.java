@@ -1,29 +1,26 @@
 package com.snek.fancyplayershops.inventories;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 
 
 
 
-
-
-
-public class ShopConfigUI extends ScreenHandler {
-    private final SimpleInventory inventory;
+public class ShopConfigUI extends AbstractContainerMenu {
+    private final SimpleContainer inventory;
 
 
 
 
-    public ShopConfigUI(int syncId, PlayerInventory playerInventory) {
-        super(ScreenHandlerType.GENERIC_9X6, syncId);
-        this.inventory = new SimpleInventory(54);
+    public ShopConfigUI(int syncId, Inventory playerInventory) {
+        super(MenuType.GENERIC_9x6, syncId);
+        this.inventory = new SimpleContainer(54);
 
         // Add 54 storage slots
         for(int i = 0; i < 6; i++) {
@@ -50,7 +47,7 @@ public class ShopConfigUI extends ScreenHandler {
 
     //FIXME
     @Override
-    public boolean canUse(PlayerEntity player) {
+    public boolean stillValid(Player player) { //TODO check if this is correct
         return true;
     }
 
@@ -59,7 +56,7 @@ public class ShopConfigUI extends ScreenHandler {
 
     //FIXME
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         throw new UnsupportedOperationException("Unimplemented method 'quickMove'");
     }
 }

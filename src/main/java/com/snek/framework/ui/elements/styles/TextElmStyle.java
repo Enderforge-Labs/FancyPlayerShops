@@ -6,11 +6,11 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 
 
@@ -22,7 +22,7 @@ import net.minecraft.text.Text;
 public class TextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
 
-    private @NotNull Flagged<@NotNull Text>          text          = null;
+    private @NotNull Flagged<@NotNull Component>     text          = null;
     private @NotNull Flagged<@NotNull TextAlignment> textAlignment = null;
     private @NotNull Flagged<@NotNull Integer>       textOpacity   = null;
 
@@ -86,7 +86,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     // Default value providers
-    public @NotNull Text          getDefaultText         () { return new Txt().get()     ; }
+    public @NotNull Component     getDefaultText         () { return new Txt().get()     ; }
     public @NotNull TextAlignment getDefaultTextAlignment() { return TextAlignment.CENTER; }
     public          int           getDefaultTextOpacity  () { return 255                 ; }
 
@@ -98,25 +98,25 @@ public class TextElmStyle extends ElmStyle {
 
 
     // Setters
-    public void setText         (final @NotNull Text          _text         ) { text         .set(_text         ); }
+    public void setText         (final @NotNull Component     _text         ) { text         .set(_text         ); }
     public void setTextAlignment(final @NotNull TextAlignment _textAlignment) { textAlignment.set(_textAlignment); }
     public void setTextOpacity  (final          int           _textOpacity  ) { textOpacity  .set(_textOpacity  ); }
 
 
     // Flagged getters
-    public @NotNull Flagged<@NotNull Text>          getFlaggedText         () { return text;          }
+    public @NotNull Flagged<@NotNull Component>     getFlaggedText         () { return text;          }
     public @NotNull Flagged<@NotNull TextAlignment> getFlaggedTextAlignment() { return textAlignment; }
     public @NotNull Flagged<@NotNull Integer>       getFlaggedTextOpacity  () { return textOpacity;   }
 
 
     // Getters
-    public @NotNull Text          getText         () { return text         .get(); }
+    public @NotNull Component     getText         () { return text         .get(); }
     public @NotNull TextAlignment getTextAlignment() { return textAlignment.get(); }
     public          int           getTextOpacity  () { return textOpacity  .get(); }
 
 
     // Edit getters
-    public @NotNull Text     editText          () { return text         .edit(); }
-    //!                      editTextAlignment Primitive types cannot be edited
-    //!                      editTextOpacity   Primitive types cannot be edited
+    public @NotNull Component editText          () { return text         .edit(); }
+    //!                       editTextAlignment Primitive types cannot be edited
+    //!                       editTextOpacity   Primitive types cannot be edited
 }

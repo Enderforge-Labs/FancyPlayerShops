@@ -9,7 +9,7 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 
-import net.minecraft.util.ClickType;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -42,14 +42,14 @@ public class DualInputIndicator extends ShopDiv implements InputIndicatorCanvas 
 
 
         // Add left click display
-        e = addChild(new InputIndicator(_shop, ClickType.LEFT));
+        e = addChild(new InputIndicator(_shop, ClickAction.PRIMARY));
         e.setSize(INDICATOR_SIZE);
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         lmbIndicator = (InputIndicator)e;
 
 
         // Add right click display
-        e = addChild(new InputIndicator(_shop, ClickType.RIGHT));
+        e = addChild(new InputIndicator(_shop, ClickAction.SECONDARY));
         e.setSize(INDICATOR_SIZE);
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
         rmbIndicator = (InputIndicator)e;

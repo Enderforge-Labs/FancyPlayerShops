@@ -2,8 +2,8 @@ package com.snek.framework.ui.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ClickType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -26,5 +26,5 @@ public interface Clickable {
      * @param click The type of click.
      * @return Whether the function consumed the click.
      */
-    public boolean onClick(@NotNull PlayerEntity player, @NotNull ClickType click);
+    public boolean onClick(@NotNull Player player, @NotNull ClickAction click);
 }

@@ -2,14 +2,14 @@ package com.snek.fancyplayershops.ui.misc;
 
 import com.snek.framework.ui.functional.ButtonElm;
 
+import net.minecraft.world.entity.player.Player;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
-
-import net.minecraft.entity.player.PlayerEntity;
 
 
 
@@ -61,7 +61,7 @@ public abstract class ShopButton extends ButtonElm {
 
 
     @Override
-    public void onHoverEnter(final @NotNull PlayerEntity player) {
+    public void onHoverEnter(final @NotNull Player player) {
         if(player != shop.getuser()) return;
         super.onHoverEnter(player);
     }
@@ -70,7 +70,7 @@ public abstract class ShopButton extends ButtonElm {
 
 
     @Override
-    public void onCheckTick(final @NotNull PlayerEntity player) {
+    public void onCheckTick(final @NotNull Player player) {
         super.onCheckTick(player);
 
         // Update input displays if present
@@ -84,7 +84,7 @@ public abstract class ShopButton extends ButtonElm {
 
 
     @Override
-    public void onHoverExit(final @Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable Player player) {
         if(player != shop.getuser()) return;
         super.onHoverExit(player);
 

@@ -10,16 +10,16 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.InteractionEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Interaction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.level.Level;
 
 
 
@@ -47,28 +47,28 @@ public abstract class ClickManager {
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @return FAIL if the player clicked a shop, PASS if not.
      */
-    private static @NotNull ActionResult onClick(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType) {
+    private static @NotNull InteractionResult onClick(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType) {
 
         // Handle limiter
-        RateLimiter limiter = clickLimiters.get(player.getUuid());
+        RateLimiter limiter = clickLimiters.get(player.getUUID());
         if(limiter == null) {
             limiter = new RateLimiter();
-            clickLimiters.put(player.getUuid(), limiter);
+            clickLimiters.put(player.getUUID(), limiter);
         }
 
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
-        if(hand == Hand.MAIN_HAND && world instanceof ServerWorld serverWorld) {
+        if(hand == InteractionHand.MAIN_HAND && world instanceof ServerLevel serverWorld) {
             final Shop targetShop = HoverManager.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
                     targetShop.onClick(player, clickType);
                 }
-                return ActionResult.FAIL;
+                return InteractionResult.FAIL;
             }
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
 
@@ -84,11 +84,11 @@ public abstract class ClickManager {
      * @param entity The entity.
      * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static @NotNull ActionResult onClickEntity(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType, final @NotNull Entity entity) {
-        if(entity instanceof InteractionEntity && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
+    public static @NotNull InteractionResult onClickEntity(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Entity entity) {
+        if(entity instanceof Interaction && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
             return onClick(world, player, hand, clickType);
         }
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
 
@@ -104,19 +104,19 @@ public abstract class ClickManager {
      * @param pos The position of the clicked block.
      * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static @NotNull ActionResult onClickBlock(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand, final @NotNull ClickType clickType, final @NotNull Vec3i pos) {
+    public static @NotNull InteractionResult onClickBlock(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Vec3i pos) {
 
         // Check ray casting result
-        final ActionResult r =  onClick(world, player, hand, clickType);
+        final InteractionResult r =  onClick(world, player, hand, clickType);
 
 
         // If the ray casting fails, check the block reported by the event.
         //! This is necessary due to the ray casting's low accuracy and slight delay.
         //! These would allow players to bypass the ray casting check by quickly clicking after changing view or by looking at the edge of the block.
-        if(r == ActionResult.PASS) {
-            return ShopManager.findShop(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), world) == null ? ActionResult.PASS : ActionResult.FAIL;
+        if(r == InteractionResult.PASS) {
+            return ShopManager.findShop(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), world) == null ? InteractionResult.PASS : InteractionResult.FAIL;
         }
-        else return ActionResult.FAIL;
+        else return InteractionResult.FAIL;
     }
 
 
@@ -130,7 +130,7 @@ public abstract class ClickManager {
      * @param hand The hand used.
      * @return FAIL if the player clicked a shop, PASS if not.
      */
-    public static @NotNull ActionResult onUseItem(final @NotNull World world, final @NotNull PlayerEntity player, final @NotNull Hand hand) {
-        return onClick(world, player, hand, ClickType.RIGHT);
+    public static @NotNull InteractionResult onUseItem(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand) {
+        return onClick(world, player, hand, ClickAction.SECONDARY);
     }
 }

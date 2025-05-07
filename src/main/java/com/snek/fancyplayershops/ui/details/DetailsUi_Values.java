@@ -12,7 +12,7 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Items;
 
 
 

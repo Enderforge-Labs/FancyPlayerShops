@@ -16,8 +16,8 @@ import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.interfaces.Clickable;
 import com.snek.framework.ui.interfaces.Hoverable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ClickType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -213,7 +213,7 @@ public class Div {
      * @param player The player that clicked.
      * @param clickType The type of click.
      */
-    public void forwardClick(final @NotNull PlayerEntity player, final @NotNull ClickType clickType) {
+    public void forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
         if(this instanceof Clickable e && e.onClick(player, clickType)) {
             return;
         }
@@ -229,7 +229,7 @@ public class Div {
      * Forwards a hover event to this element and all of its children.
      * @param player The player that clicked.
      */
-    public void forwardHover(final @NotNull PlayerEntity player) {
+    public void forwardHover(final @NotNull Player player) {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
             e.updateHoverState(player);
         }

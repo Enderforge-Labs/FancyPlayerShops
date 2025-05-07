@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.framework.ui.elements.PanelElm;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 
 
@@ -18,7 +18,7 @@ public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
 
 
-    public LinePanel(final @NotNull ServerWorld _world) {
+    public LinePanel(final @NotNull ServerLevel _world) {
         super(_world);
     }
 

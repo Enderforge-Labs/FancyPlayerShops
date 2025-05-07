@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 
 
@@ -36,7 +36,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).color(DetailsUi.C_HSV_STOCK_HIGH))
         .get());

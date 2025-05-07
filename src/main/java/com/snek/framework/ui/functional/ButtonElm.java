@@ -12,11 +12,11 @@ import com.snek.framework.ui.interfaces.Hoverable;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -41,7 +41,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
      */
-    protected ButtonElm(final @NotNull ServerWorld _world, final int _clickCooldown, final ButtonElmStyle _style) {
+    protected ButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown, final ButtonElmStyle _style) {
         super(_world, _style);
         clickCooldown = _clickCooldown;
     }
@@ -52,7 +52,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
      * @param _world The world in which to place the element.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected ButtonElm(final @NotNull ServerWorld _world, final int _clickCooldown) {
+    protected ButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown) {
         this(_world, _clickCooldown, new ButtonElmStyle());
     }
 
@@ -72,7 +72,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public void onHoverEnter(final @NotNull PlayerEntity player) {
+    public void onHoverEnter(final @NotNull Player player) {
         final Animation animation = getStyle(ButtonElmStyle.class).getHoverEnterAnimation();
         if(animation != null) {
             applyAnimation(animation);
@@ -83,7 +83,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public void onCheckTick(final @NotNull PlayerEntity player) {
+    public void onCheckTick(final @NotNull Player player) {
         // Empty
     }
 
@@ -91,7 +91,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public void onHoverExit(final @Nullable PlayerEntity player) {
+    public void onHoverExit(final @Nullable Player player) {
         final Animation animation = getStyle(ButtonElmStyle.class).getHoverLeaveAnimation();
         if(animation != null) {
             applyAnimation(animation);
@@ -102,7 +102,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(clickRateLimiter.attempt()) {
             final boolean r = checkIntersection(player);
             if(r) clickRateLimiter.renewCooldown(clickCooldown);
@@ -119,8 +119,8 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
      * Plays the button click sound to the specified player.
      * @param player The player to play the sound to.
      */
-    public static void playButtonSound(final @NotNull PlayerEntity player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
+    public static void playButtonSound(final @NotNull Player player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
     }
 
 
@@ -130,5 +130,5 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
      * Updates the displayed text.
      * @param textOverride If not null, it replaces the shop's data.
      */
-    public abstract void updateDisplay(@Nullable Text textOverride);
+    public abstract void updateDisplay(@Nullable Component textOverride);
 }

@@ -11,17 +11,17 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity.RemovalReason;
-import net.minecraft.entity.decoration.InteractionEntity;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandOutput;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Interaction;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -42,8 +42,8 @@ public class InteractionBlocker {
     private static @NotNull Method method_setHeight;
     static {
         try {
-            method_setWidth  = InteractionEntity.class.getDeclaredMethod("setInteractionWidth",  float.class);
-            method_setHeight = InteractionEntity.class.getDeclaredMethod("setInteractionHeight", float.class);
+            method_setWidth  = Interaction.class.getDeclaredMethod("setWidth",  float.class);
+            method_setHeight = Interaction.class.getDeclaredMethod("setHeight", float.class);
         } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class InteractionBlocker {
 
 
     // In-world data
-    private final @NotNull InteractionEntity entity;
+    private final @NotNull Interaction entity;
     private final @NotNull Shop shop;
 
 
@@ -71,7 +71,7 @@ public class InteractionBlocker {
      */
     public InteractionBlocker(final @NotNull Shop _shop) {
         shop = _shop;
-        entity = new InteractionEntity(EntityType.INTERACTION, shop.getWorld());
+        entity = new Interaction(EntityType.INTERACTION, shop.getWorld());
         Utils.invokeSafe(method_setHeight, entity, 1.01f);
         Utils.invokeSafe(method_setWidth,  entity, 1.01f);
     }
@@ -85,8 +85,8 @@ public class InteractionBlocker {
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {
-        if(entity instanceof InteractionEntity) {
-            final World world = entity.getWorld();
+        if(entity instanceof Interaction) {
+            final Level world = entity.level();
             if(
                 world != null &&
                 entity.getCustomName() != null &&
@@ -107,7 +107,7 @@ public class InteractionBlocker {
     public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity, move it to the specified coords and set a temporary name to allow the command to recognize it
-        shop.getWorld().spawnEntity(entity);
+        shop.getWorld().addFreshEntity(entity);
         entity.setPos(pos.x, pos.y, pos.z);
         entity.setCustomNameVisible(false);
         entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME_UNINITIALIZED).get());
@@ -124,16 +124,16 @@ public class InteractionBlocker {
         //!  │                                                                                                              //!
         /*!  │    // Create the custom command source and use DUMMY as output to silence it                                 //!
         /*!  │  */final MinecraftServer server = FancyPlayerShops.getServer();                                              //!
-        /*!  │  */final ServerWorld world = (ServerWorld)entity.getWorld();                                                 //!
-        /*!  │  */final ServerCommandSource source = new ServerCommandSource(                                               //!
-        /*!  │  */    CommandOutput.DUMMY, Vec3d.ZERO, Vec2f.ZERO, world,                                                   //!
+        /*!  │  */final ServerLevel world = (ServerLevel)entity.level();                                                    //!
+        /*!  │  */final CommandSourceStack source = new CommandSourceStack(                                                 //!
+        /*!  │  */    CommandSource.NULL, Vec3.ZERO, Vec2.ZERO, world,                                                      //!
         /*!  │  */    4, COMMAND_SOURCE_NAME, new Txt(COMMAND_SOURCE_NAME).get(), server, (Entity)null                      //!
         /*!  │  */);                                                                                                        //!
         //!  │                                                                                                              //!
         //!  │                                                                                                              //!
         /*!  │    // Execute the command using the custom command source                                                    //!
         /*!  │  */try {                                                                                                     //!
-        /*!  │  */    server.getCommandManager().getDispatcher().execute(                                                   //!
+        /*!  │  */    server.getCommands().getDispatcher().execute(                                                         //!
         /*!  │  */        "execute as @e[type=minecraft:interaction,name=" + ENTITY_CUSTOM_NAME_UNINITIALIZED + "] " +      //!
         /*!  │  */        "run data modify entity @s Air set value 1000",                                                   //!
         /*!  │  */        source                                                                                            //!

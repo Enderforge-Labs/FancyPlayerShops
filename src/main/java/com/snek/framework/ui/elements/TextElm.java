@@ -9,14 +9,14 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 
-import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlignment;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 
 
 
@@ -42,7 +42,7 @@ public class TextElm extends Elm {
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected TextElm(final @NotNull ServerWorld _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
+    protected TextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
@@ -54,7 +54,7 @@ public class TextElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected TextElm(final @NotNull ServerWorld _world, final @NotNull ElmStyle _style) {
+    protected TextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 
@@ -63,7 +63,7 @@ public class TextElm extends Elm {
      * Creates a new TextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public TextElm(final @NotNull ServerWorld _world) {
+    public TextElm(final @NotNull ServerLevel _world) {
         this(_world, new CustomTextDisplay(_world), new TextElmStyle());
     }
 
@@ -87,7 +87,7 @@ public class TextElm extends Elm {
 
         // Call superconstructor (transform is already unflagged) and handle the other values normally
         super.flushStyle();
-        { final Flagged<Text> f = getThisStyle().getFlaggedText();
+        { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             getThisEntity().setText(f.get());
             f.unflag();
@@ -171,7 +171,7 @@ public class TextElm extends Elm {
      * @return The height in blocks.
      */
     public static float calcHeight(final @NotNull Elm elm) {
-        final Text text;
+        final Component text;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
         else if(elm instanceof FancyTextElm e) { text = e.getStyle(FancyTextElmStyle.class).getText(); t = e.__calcTransformFg(e.__calcTransform()); }
@@ -198,7 +198,7 @@ public class TextElm extends Elm {
      * @return The width in blocks.
      */
     public static float calcWidth(final @NotNull Elm elm) {
-        final Text text;
+        final Component text;
         final Transform t;
         /**/ if(elm instanceof TextElm      e) { text = e.getThisStyle()                   .getText(); t =                     e.__calcTransform();  }
         else if(elm instanceof FancyTextElm e) { text = e.getStyle(FancyTextElmStyle.class).getText(); t = e.__calcTransformFg(e.__calcTransform()); }

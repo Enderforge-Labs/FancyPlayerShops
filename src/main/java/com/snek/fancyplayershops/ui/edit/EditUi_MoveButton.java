@@ -20,9 +20,9 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -61,22 +61,22 @@ public class EditUi_MoveButton extends ShopButton {
 
 
     @Override
-    public void updateDisplay(final @Nullable Text textOverride) {
+    public void updateDisplay(final @Nullable Component textOverride) {
         // Empty
     }
 
 
     @Override
-    public boolean onClick(final @NotNull PlayerEntity player, final @NotNull ClickType click) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r) {
             final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
             if(!giveResult) {
-                player.sendMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get());
+                player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);
             }
             else {
                 shop.delete();
-                player.sendMessage(new Txt("Your shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
+                player.displayClientMessage(new Txt("Your shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), false);
             }
         }
         return r;
