@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.edit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
@@ -29,7 +30,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public EditUi_StockLimitInput(final @NotNull Shop _shop) {
-        super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").green().get());
+        super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get());
         updateDisplay(null);
     }
 

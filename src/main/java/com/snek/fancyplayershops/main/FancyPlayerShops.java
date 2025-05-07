@@ -82,8 +82,8 @@ public class FancyPlayerShops implements ModInitializer {
     ;
 
     // Shop item name
-    private static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(140, 190, 160);
-    private static final @NotNull Text SHOP_ITEM_NAME =
+    public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(140, 190, 160);
+    public static final @NotNull Text SHOP_ITEM_NAME =
         new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
     .get();
 
@@ -244,7 +244,7 @@ public class FancyPlayerShops implements ModInitializer {
                 final BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
                 if(ShopManager.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
-                    player.sendMessage(new Txt("New shop created! Right click it to configure.").lime().bold().get(), true);
+                    player.sendMessage(new Txt("New shop created! Right click it to configure.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                 }
             }
 

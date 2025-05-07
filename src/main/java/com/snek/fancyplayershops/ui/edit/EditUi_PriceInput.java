@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.edit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
@@ -29,7 +30,7 @@ public class EditUi_PriceInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public EditUi_PriceInput(final @NotNull Shop _shop) {
-        super(_shop, null, "Change price", new Txt("Send the new price in chat!").green().get());
+        super(_shop, null, "Change price", new Txt("Send the new price in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get());
         updateDisplay(null);
     }
 

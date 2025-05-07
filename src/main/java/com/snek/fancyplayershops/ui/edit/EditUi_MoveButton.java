@@ -73,10 +73,11 @@ public class EditUi_MoveButton extends ShopButton {
         if(r) {
             final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
             if(!giveResult) {
-                player.sendMessage(new Txt("Your inventory is full!").red().get());
+                player.sendMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get());
             }
             else {
                 shop.delete();
+                player.sendMessage(new Txt("Your shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
             }
         }
         return r;

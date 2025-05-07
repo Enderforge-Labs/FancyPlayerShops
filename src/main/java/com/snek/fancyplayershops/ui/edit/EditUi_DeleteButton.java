@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
@@ -67,6 +68,7 @@ public class EditUi_DeleteButton extends ShopButton {
         if(r) {
             shop.stash();
             shop.delete();
+            player.sendMessage(new Txt("Your shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
         }
         return r;
     }

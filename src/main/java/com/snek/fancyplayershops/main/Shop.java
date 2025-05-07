@@ -369,8 +369,15 @@ public class Shop {
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
         if(itemDisplay == null) {
             final ItemDisplayEntity rawItemDisplay = (ItemDisplayEntity)(world.getEntity(itemDisplayUUID));
-            if(rawItemDisplay == null) itemDisplay = new ShopItemDisplay(this);
-            else                       itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
+            if(rawItemDisplay == null) {
+                itemDisplay = new ShopItemDisplay(this);
+            }
+            else {
+                itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
+            }
+            itemDisplayUUID = itemDisplay.getEntity().getUuid();
+            itemDisplay.spawn(calcDisplayPos());
+            ShopManager.saveShop(this);
         }
         return itemDisplay;
     }
@@ -459,6 +466,7 @@ public class Shop {
             --stock;
             final ItemStack _item = item.copyWithCount(1);
             owner.giveItemStack(_item);
+            owner.sendMessage(new Txt("You retrieved 1x ").lightGray().cat(MinecraftUtils.getFancyItemName(item)).cat(new Txt(" from your shop.").lightGray()).get());
         }
     }
 
@@ -484,7 +492,7 @@ public class Shop {
         else {
             stock -= amount;
             final double totPrice = price * amount;
-            player.sendMessage(new Txt("Bought " + amount + "x " + MinecraftUtils.getFancyItemName(item) + " for " + Utils.formatPrice(totPrice)).green().get());
+            player.sendMessage(new Txt("Bought " + amount + "x ").lightGray().cat(MinecraftUtils.getFancyItemName(item)).cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray()).get());
             addMoney(player, -totPrice);
             final ItemStack _item = item.copyWithCount(amount);
             player.giveItemStack(_item);
@@ -575,11 +583,11 @@ public class Shop {
      */
     public boolean setPrice(final double newPrice) {
         if(newPrice < 0) {
-            if(user != null) user.sendMessage(new Txt("The price cannot be negative").red().get(), true);
+            if(user != null) user.sendMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
         }
         if(newPrice > MAX_PRICE) {
-            if(user != null) user.sendMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().get(), true);
+            if(user != null) user.sendMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().bold().get(), true);
             return false;
         }
         else if(newPrice < 0.00001) price = 0d;
@@ -602,11 +610,11 @@ public class Shop {
      */
     public boolean setStockLimit(final float newStockLimit) {
         if(newStockLimit < 0.9999) {
-            if(user != null) user.sendMessage(new Txt("The stock limit must be at least 1").red().get(), true);
+            if(user != null) user.sendMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
         if(newStockLimit > MAX_STOCK) {
-            if(user != null) user.sendMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().get(), true);
+            if(user != null) user.sendMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
@@ -726,9 +734,9 @@ public class Shop {
 
             // Despawn the entities
             if(activeCanvas != null) activeCanvas.despawn();
-            System.out.println("item display: " + (itemDisplay != null ? itemDisplay : "null")); //TODO REMOVE
-            getItemDisplay().despawn();
             if(interactionBlocker != null) interactionBlocker.despawn();
+            getItemDisplay().stopLoopAnimation();
+            getItemDisplay().despawn();
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);

@@ -10,6 +10,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
@@ -429,6 +430,7 @@ public abstract class Elm extends Div {
     @Override
     public void despawn() {
         if(!isSpawned) return;
+        if(this instanceof ShopItemDisplay) System.out.println("DESPAWN CALLED");
 
         // Call superclass spawn and set spawned flag to false
         super.despawn();
