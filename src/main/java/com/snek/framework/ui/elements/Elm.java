@@ -430,7 +430,6 @@ public abstract class Elm extends Div {
     @Override
     public void despawn() {
         if(!isSpawned) return;
-        if(this instanceof ShopItemDisplay) System.out.println("DESPAWN CALLED");
 
         // Call superclass spawn and set spawned flag to false
         super.despawn();

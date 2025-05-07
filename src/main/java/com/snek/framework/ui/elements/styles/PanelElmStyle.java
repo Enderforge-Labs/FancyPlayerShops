@@ -82,7 +82,7 @@ public class PanelElmStyle extends ElmStyle {
 
 
 
-    public @NotNull Vector3i getDefaultColor() { return new Vector3i(2, 20, 20); }
+    public @NotNull Vector3i getDefaultColor() { return new Vector3i(20, 2, 20); }
     public          int      getDefaultAlpha() { return 255; }
 
 

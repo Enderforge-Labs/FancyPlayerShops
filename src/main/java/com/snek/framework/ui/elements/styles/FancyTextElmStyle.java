@@ -84,7 +84,7 @@ public class FancyTextElmStyle extends TextElmStyle {
 
 
 
-    public @NotNull Vector3i  getDefaultBgColor    () { return new Vector3i(2, 20, 20); }
+    public @NotNull Vector3i  getDefaultBgColor    () { return new Vector3i(20, 2, 20); }
     public          int       getDefaultBgAlpha    () { return 130; }
     public @NotNull Transform getDefaultTransformFg() { return new Transform(); }
     public @NotNull Transform getDefaultTransformBg() { return new Transform(); }

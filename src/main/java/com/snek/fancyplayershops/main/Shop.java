@@ -465,8 +465,23 @@ public class Shop {
         else {
             --stock;
             final ItemStack _item = item.copyWithCount(1);
-            owner.giveItemStack(_item);
-            owner.sendMessage(new Txt("You retrieved 1x ").lightGray().cat(MinecraftUtils.getFancyItemName(item)).cat(new Txt(" from your shop.").lightGray()).get());
+
+
+            // Send feedback to the player
+            if(MinecraftUtils.attemptGive(owner, _item)) {
+                owner.sendMessage(new Txt()
+                    .cat(new Txt("You retrieved 1x ").lightGray())
+                    .cat(MinecraftUtils.getFancyItemName(item))
+                    .cat(new Txt(" from your shop.").lightGray())
+                .get());
+            }
+            else {
+                owner.sendMessage(new Txt()
+                    .cat(new Txt("1x ").lightGray())
+                    .cat(MinecraftUtils.getFancyItemName(item))
+                    .cat(new Txt(" retrieved from your shop has been sent to your stash.").lightGray())
+                .get());
+            }
         }
     }
 
@@ -492,10 +507,25 @@ public class Shop {
         else {
             stock -= amount;
             final double totPrice = price * amount;
-            player.sendMessage(new Txt("Bought " + amount + "x ").lightGray().cat(MinecraftUtils.getFancyItemName(item)).cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray()).get());
             addMoney(player, -totPrice);
             final ItemStack _item = item.copyWithCount(amount);
-            player.giveItemStack(_item);
+
+
+            // Send feedback to the player
+            if(MinecraftUtils.attemptGive(player, _item)) {
+                player.sendMessage(new Txt()
+                    .cat(new Txt("Bought " + Utils.formatAmount(amount, true, true)).lightGray())
+                    .cat(MinecraftUtils.getFancyItemName(item))
+                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
+                .get());
+            }
+            else {
+                player.sendMessage(new Txt()
+                    .cat("" + Utils.formatAmount(amount, true, true) + " ")
+                    .cat(MinecraftUtils.getFancyItemName(item))
+                    .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (amount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                .get());
+            }
         }
 
 
@@ -711,13 +741,26 @@ public class Shop {
      * <p> This method also sets the shop's stock to 0.
      */
     public void stash(){
-        //FIXME ACTUALLY STASH ITEMS
-        //TODO send message in chat "15x item have been sent to your stash! use /shop stash to access it"
+        // FIXME ACTUALLY STASH ITEMS
+        // TODO ^ add /shop stash command
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
+        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
 
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-        //TODO ^ add /shop stash command
+
+        // Send feedback to the player
+        if(item.getItem() != Items.AIR && stock > 0) {
+            user.sendMessage(new Txt()
+                .cat("" + Utils.formatAmount(stock, true, true) + " ").lightGray()
+                .cat(MinecraftUtils.getFancyItemName(item))
+                .cat(new Txt(" " + (stock > 1 ? "have" : "has") + " been sent to your stash."))
+            .get());
+        }
+
+
+        // Reset stock
+        stock = 0;
+        ShopManager.saveShop(this);
     }
 
 
@@ -737,6 +780,17 @@ public class Shop {
             if(interactionBlocker != null) interactionBlocker.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
+
+            // Give the player a default shop item
+            final ItemStack _item =  FancyPlayerShops.getShopItemCopy();
+            if(!MinecraftUtils.attemptGive(user, _item)) {
+                user.sendMessage(new Txt()
+                    .cat("1x ").lightGray()
+                    .cat(MinecraftUtils.getFancyItemName(_item))
+                    .cat(new Txt(" has been sent to your stash."))
+                .get());
+            }
+            // FIXME ACTUALLY STASH ITEMS
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);
@@ -773,7 +827,6 @@ public class Shop {
      */
     public void pullItems(final @NotNull BlockPos rel){
         if(stock >= maxStock) return;
-        final long missing = maxStock - stock;
         final BlockPos targetPos = pos.add(rel);
         final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.fromVector(-rel.getX(), -rel.getY(), rel.getZ());
         final Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, targetPos, direction);
@@ -791,6 +844,7 @@ public class Shop {
                     // If the item in the slot matches the item sold by the shop
                     if(ItemStack.canCombine(stackInSlot, item)) {
                         try(final Transaction tx = Transaction.openOuter()) {
+                            final long missing = maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();

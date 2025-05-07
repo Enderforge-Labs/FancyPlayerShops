@@ -82,13 +82,13 @@ public class FancyPlayerShops implements ModInitializer {
     ;
 
     // Shop item name
-    public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(140, 190, 160);
+    public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
     public static final @NotNull Text SHOP_ITEM_NAME =
         new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
     .get();
 
     // Shop item description
-    private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(180, 230, 200);
+    private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
     private static final @NotNull Text[] SHOP_ITEM_DESCRITPION = {
         new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
         new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),

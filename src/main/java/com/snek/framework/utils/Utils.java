@@ -204,7 +204,7 @@ public abstract class Utils {
         }
 
         // Add trailing x if requested
-        return x ? "x" + r : r;
+        return x ? r + "x" : r;
     }
 
 
