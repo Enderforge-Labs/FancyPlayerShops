@@ -138,10 +138,7 @@ public abstract class MinecraftUtils {
         final ListTag NBT_textures = new ListTag();
         for(Property property : gp.getProperties().get("textures")) {
             final CompoundTag NBT_texture = new CompoundTag();
-            NBT_texture.putString("Value",property.getValue());
-            if(property.hasSignature()) {
-                NBT_texture.putString("Signature", property.getSignature());
-            }
+            NBT_texture.putString("Value", property.getValue());
             NBT_textures.add(NBT_texture);
         }
 
@@ -151,7 +148,7 @@ public abstract class MinecraftUtils {
 
         // Create SkullPwner NBT tag
         final CompoundTag NBT_skullOwner = new CompoundTag();
-        NBT_skullOwner.putString("Id", gp.getId().toString());
+        NBT_skullOwner.putUUID("Id", gp.getId());
         NBT_skullOwner.put("Properties", NBT_properties);
 
         // Create ItemStack with the retrieved data
