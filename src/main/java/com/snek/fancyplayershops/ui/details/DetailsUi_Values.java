@@ -1,13 +1,13 @@
 package com.snek.fancyplayershops.ui.details;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
@@ -26,6 +26,7 @@ import net.minecraft.item.Items;
  * <p> It shows the values of informations about the shop.
  */
 public class DetailsUi_Values extends ShopTextElm {
+    final @NotNull String ownerName;
 
 
     /**
@@ -34,6 +35,7 @@ public class DetailsUi_Values extends ShopTextElm {
      */
     public DetailsUi_Values(@NotNull Shop _shop) {
         super(_shop);
+        ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
         updateDisplay();
     }
 
@@ -46,15 +48,8 @@ public class DetailsUi_Values extends ShopTextElm {
     public void updateDisplay() {
 
         // Calculate the color of the stock amount and retrieve the owner's name
-        final String ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
-        final float factor = 1.0f - shop.getStock() / 1000f;
-        final Vector3i col = Utils.HSVtoRGB(
-            new Vector3f(DetailsUi.C_HSV_STOCK_LOW)
-            .add(new Vector3f(DetailsUi.C_HSV_STOCK_HIGH)
-            .sub(DetailsUi.C_HSV_STOCK_LOW)
-            .mul(1.0f - (factor * factor)))
-        );
-
+        final float factor = Math.min(1.0f, (float)shop.getStock() / shop.getMaxStock());
+        final Vector3i col = Utils.interpolateRGB(DetailsUi.C_HSV_STOCK_LOW, DetailsUi.C_HSV_STOCK_HIGH, (float)Easings.quadOut.compute(factor));
 
         // Empty shop case
         if(shop.getItem().getItem() == Items.AIR) {

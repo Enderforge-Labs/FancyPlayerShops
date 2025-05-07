@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
@@ -36,7 +37,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
     @Override
     public void updateDisplay(final @Nullable Text textOverride) {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
-            .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).color(EditUi.RGB_STOCK_COLOR))
+            .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).color(DetailsUi.C_HSV_STOCK_HIGH))
         .get());
         flushStyle();
     }

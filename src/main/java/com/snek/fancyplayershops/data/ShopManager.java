@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.data;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,6 +16,8 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.fancyplayershops.main.Shop;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.math.BlockPos;
@@ -37,25 +39,30 @@ import net.minecraft.world.World;
 
 
 /**
- * A class that takes care of saving and loading shops and other player data.
+ * A class that handles active shops and takes care of loading and saving their data.
  */
-public abstract class DataManager {
-    private DataManager() {}
+public abstract class ShopManager {
+    private ShopManager() {}
     public static final int PULL_UPDATES_PER_TICK = 4;
 
 
 
 
     // Storage files
+    private static final @NotNull Path CONFIG_DIR;
     private static final @NotNull Path SHOP_STORAGE_DIR;
+    private static final @NotNull Path STASH_STORAGE_DIR;
     static {
-        SHOP_STORAGE_DIR = FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID + "/shops");
+        CONFIG_DIR        = FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
+        SHOP_STORAGE_DIR  = CONFIG_DIR.resolve("shops");
+        STASH_STORAGE_DIR = CONFIG_DIR.resolve("stash");
         try {
+            Files.createDirectories(CONFIG_DIR);
             Files.createDirectories(SHOP_STORAGE_DIR);
+            Files.createDirectories(STASH_STORAGE_DIR);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(SHOP_STORAGE_DIR == null) throw new RuntimeException("Shops could not be loaded: Storage directory is null.");
     }
 
 
@@ -67,6 +74,11 @@ public abstract class DataManager {
     // Async update list
     private static int updateIndex = 0;
     private static List<Shop> updateSnapshot = List.of();
+
+
+
+
+    // Player stash data
 
 
 

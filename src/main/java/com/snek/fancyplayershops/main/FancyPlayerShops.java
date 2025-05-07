@@ -33,6 +33,7 @@ import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
@@ -136,7 +137,7 @@ public class FancyPlayerShops implements ModInitializer {
             serverInstance = server;
 
             // Load shop data
-            DataManager.loadShops();
+            ShopManager.loadShops();
 
             // Schedule UI element update loop
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
@@ -145,7 +146,7 @@ public class FancyPlayerShops implements ModInitializer {
             Scheduler.loop(0, 1, () -> HoverManager.tick(server.getWorlds()));
 
             // Schedule shop pull updates
-            Scheduler.loop(0, 1, () -> DataManager.pullItems());
+            Scheduler.loop(0, 1, () -> ShopManager.pullItems());
 
             // Log initialization success
             LOGGER.info("FancyPlayerShops initialized. :3");
@@ -241,7 +242,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().add(hitResult.getSide().getVector());
-                if(DataManager.findShop(blockPos, world) == null) {
+                if(ShopManager.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
                     player.sendMessage(new Txt("New shop created! Right click it to configure.").lime().bold().get(), true);
                 }

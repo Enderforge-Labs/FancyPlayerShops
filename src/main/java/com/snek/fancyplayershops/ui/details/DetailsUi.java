@@ -31,12 +31,15 @@ import net.minecraft.entity.decoration.DisplayEntity.TextDisplayEntity.TextAlign
  * A UI that shows informations about the shop.
  */
 public class DetailsUi extends ShopCanvas {
+    private final @NotNull DetailsUi_Values values;
+    public  final @NotNull DetailsUi_Values getValues() { return values; }
+
 
     // Colors
     public static final int LOW_S_COLOR_MIN = 110;
     public static final @NotNull Vector3i C_RGB_PRICE      = new Vector3i(243, 255, LOW_S_COLOR_MIN);
-    public static final @NotNull Vector3f C_HSV_STOCK_HIGH = Utils.RGBtoHSV(new Vector3i(LOW_S_COLOR_MIN, 223, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
-    public static final @NotNull Vector3f C_HSV_STOCK_LOW  = Utils.RGBtoHSV(new Vector3i(200, LOW_S_COLOR_MIN, LOW_S_COLOR_MIN)); //! Float instead of int for more precision
+    public static final @NotNull Vector3i C_HSV_STOCK_HIGH = new Vector3i(LOW_S_COLOR_MIN, 223, LOW_S_COLOR_MIN);
+    public static final @NotNull Vector3i C_HSV_STOCK_LOW  = new Vector3i(200, LOW_S_COLOR_MIN, LOW_S_COLOR_MIN);
 
     // Layout
     public static final float BACKGROUND_HEIGHT = 0.4f;         // The absolute height of the background element
@@ -83,6 +86,7 @@ public class DetailsUi extends ShopCanvas {
             e.setAlignmentX(AlignmentX.RIGHT);
             ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
+            values = (DetailsUi_Values)e;
         }
         details.setSizeX(DETAILS_W);
         details.setAbsSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));

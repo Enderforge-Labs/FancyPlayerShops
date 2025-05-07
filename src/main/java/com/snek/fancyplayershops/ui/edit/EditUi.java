@@ -7,7 +7,6 @@ import org.joml.Vector3i;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
-import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -16,7 +15,6 @@ import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.utils.Utils;
 
 
 
@@ -37,7 +35,6 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     // Colors
-    public static final @NotNull Vector3i RGB_STOCK_COLOR  = Utils.HSVtoRGB(DetailsUi.C_HSV_STOCK_HIGH);
     public static final @NotNull Vector3i TOOLBAR_FG_COLOR = new Vector3i(255, 255, 255);
     public static final          int      TOOLBAR_FG_ALPHA = 255;
 

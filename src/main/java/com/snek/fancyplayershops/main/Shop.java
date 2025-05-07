@@ -9,6 +9,7 @@ import org.joml.Vector3d;
 
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
@@ -33,12 +34,9 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.decoration.DisplayEntity.ItemDisplayEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.scoreboard.ScoreboardCriterion;
@@ -300,7 +298,7 @@ public class Shop {
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
-        DataManager.saveShop(this);
+        ShopManager.saveShop(this);
     }
 
 
@@ -587,7 +585,7 @@ public class Shop {
         else if(newPrice < 0.00001) price = 0d;
         else if(newPrice < 0.01000) price = 0.01;
         else price = Math.round(newPrice * 100d) / 100d;
-        DataManager.saveShop(this);
+        ShopManager.saveShop(this);
         return true;
     }
 
@@ -612,7 +610,7 @@ public class Shop {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        DataManager.saveShop(this);
+        ShopManager.saveShop(this);
         return true;
     }
 
@@ -627,7 +625,7 @@ public class Shop {
 
         // Add value to default rotation and save the shop
         defaultRotation += _rotation;
-        DataManager.saveShop(this);
+        ShopManager.saveShop(this);
     }
 
 
@@ -645,7 +643,7 @@ public class Shop {
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
         calcSerializedItem();
-        DataManager.saveShop(this);
+        ShopManager.saveShop(this);
     }
 
 
@@ -733,7 +731,7 @@ public class Shop {
             if(interactionBlocker != null) interactionBlocker.despawn();
 
             // Delete the data associated with this shop
-            DataManager.deleteShop(this);
+            ShopManager.deleteShop(this);
         }
     }
 
@@ -753,6 +751,12 @@ public class Shop {
         pullItems(new BlockPos(0, -1, 0));
         pullItems(new BlockPos(+1, 0, 0));
         pullItems(new BlockPos(-1, 0, 0));
+
+        // Save shop and update detatils display
+        ShopManager.saveShop(this);
+        if(activeCanvas != null && activeCanvas instanceof DetailsUi c) {
+            c.getValues().updateDisplay();
+        }
     }
     /**
      * Tries to retrieve items from a specified position relative to the shop.

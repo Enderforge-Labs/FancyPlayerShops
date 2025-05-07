@@ -10,6 +10,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
@@ -134,7 +135,7 @@ public abstract class HoverManager {
             // Find target shop block
             for(final Vec3d pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
-                final Shop shop = DataManager.findShop(new BlockPos(blockPos), world);
+                final Shop shop = ShopManager.findShop(new BlockPos(blockPos), world);
                 if(shop != null) return shop;
             }
         }
