@@ -8,6 +8,7 @@ import org.joml.Math;
 import org.joml.Vector3d;
 
 import com.google.gson.JsonParser;
+import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.mojang.serialization.JsonOps;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
@@ -22,6 +23,7 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.functional.ButtonElm;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -100,8 +102,8 @@ public class Shop {
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
-    private                    double    price           = 0;                   // The configured price for each item
-    private                    int       maxStock        = 1000;                // The configured maximum stock
+    private                    double    price           = 1_000_000;           // The configured price for each item
+    private                    int       maxStock        = 1_000;               // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
 
 
@@ -460,6 +462,7 @@ public class Shop {
         }
         else {
             --stock;
+            ShopManager.saveShop(this);
             final ItemStack _item = item.copyWithCount(1);
 
 
@@ -501,31 +504,37 @@ public class Shop {
             player.displayClientMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            stock -= amount;
-            final double totPrice = price * amount;
-            addMoney(player, -totPrice);
-            final ItemStack _item = item.copyWithCount(amount);
+            final long totPrice = Math.round(price * amount * 100);
+            if(EconomyManager.getCurrency(player.getUUID()) >= totPrice) {
+                stock -= amount;
+                ShopManager.saveShop(this);
+                EconomyManager.subtractCurrency(player.getUUID(), totPrice);
+                final ItemStack _item = item.copyWithCount(amount);
 
 
-            // Send feedback to the player
-            if(MinecraftUtils.attemptGive(player, _item)) {
-                player.displayClientMessage(new Txt()
-                    .cat(new Txt("Bought " + Utils.formatAmount(amount, true, true)).lightGray())
-                    .cat(MinecraftUtils.getFancyItemName(item))
-                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                .get(), false);
+                // Send feedback to the player
+                if(MinecraftUtils.attemptGive(player, _item)) {
+                    player.displayClientMessage(new Txt()
+                        .cat(new Txt("Bought " + Utils.formatAmount(amount, true, true)).lightGray().cat(" "))
+                        .cat(MinecraftUtils.getFancyItemName(item))
+                        .cat(new Txt(" for " + Utils.formatPrice((double)totPrice / 100)).lightGray())
+                    .get(), false);
+                }
+                else {
+                    player.displayClientMessage(new Txt()
+                        .cat("" + Utils.formatAmount(amount, true, true) + " ")
+                        .cat(MinecraftUtils.getFancyItemName(item))
+                        .cat(new Txt(" bought for " + Utils.formatPrice((double)totPrice / 100) + " " + (amount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .get(), false);
+                }
             }
             else {
-                player.displayClientMessage(new Txt()
-                    .cat("" + Utils.formatAmount(amount, true, true) + " ")
-                    .cat(MinecraftUtils.getFancyItemName(item))
-                    .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (amount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
-                .get(), false);
+                player.displayClientMessage(new Txt("You don't have enough money to purchase this!").bold().red().get(), true);
             }
         }
 
 
-        //TODO show undo button in chat after first left click of an shop to let players undo accidental purchases
+        //TODO show undo button in transaction history to let players undo accidental purchases
         //TODO no need for retrieval undo as the owner can simply put the item back in
     }
 
@@ -549,7 +558,7 @@ public class Shop {
 
         // Spawn canvas into the world and play a sound to the user
         canvas.spawn(calcDisplayPos());
-        if(user != null) ShopButton.playButtonSound(user);
+        if(user != null) ButtonElm.playButtonSound(user);
     }
 
 
@@ -579,19 +588,6 @@ public class Shop {
             changeCanvas(new BuyUi(this));
             getItemDisplay().enterEditState(); //TODO use a more generic name? for the animations too
         }
-    }
-
-
-
-
-    // private static final String objectiveName = "tmp_balance";
-
-    //FIXME use economy mod API instead of scoreboards
-    public void addMoney(final @NotNull Player player, final double amount) {
-        // final ServerScoreboard s = player.getServer().getScoreboard();
-        // if(!s.containsObjective(objectiveName)) s.addObjective(objectiveName, ScoreboardCriterion.DUMMY, new Txt(objectiveName).get(), RenderType.INTEGER);
-        // final ScoreboardPlayerScore score = s.getPlayerScore(player.getName().getString(), s.getObjective(objectiveName));
-        // score.incrementScore((int)amount);
     }
 
 

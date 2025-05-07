@@ -75,13 +75,12 @@ public abstract class CommandManager {
                 // Shop mod info
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help").executes(context -> {
                     final Player player = context.getSource().getPlayer();
-                    //TODO add colors and styles
                     player.displayClientMessage(new Txt(
                         """
-                        Craft an Item Shop in the crafting table and place it to get started!.
+                        Craft an Item Shop in the crafting table and place it to get started!
                         You can see details about your shops and sales history using the command /shop stats.
                         """
-                    ).get(), false);
+                    ).color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
                     return 1;
                 }))
             );
