@@ -605,7 +605,7 @@ public abstract class Elm extends Div {
         if(entity instanceof Display) {
             if(
                 entity.level() != null &&
-                entity.getCustomName() != null &&
+                entity.hasCustomName() &&
                 entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
             ) {
                 entity.remove(RemovalReason.KILLED);

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
@@ -32,7 +33,7 @@ import net.minecraft.world.level.Level;
  * A utility class that handles clicks from players.
  */
 public abstract class ClickManager {
-    private static final @NotNull Map<@NotNull UUID, @NotNull RateLimiter> clickLimiters = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
     private ClickManager() {}
 
 
@@ -48,6 +49,10 @@ public abstract class ClickManager {
      * @return FAIL if the player clicked a shop, PASS if not.
      */
     private static @NotNull InteractionResult onClick(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType) {
+
+        // Skip player if they are dead or in spectator mode
+        if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
+
 
         // Handle limiter
         RateLimiter limiter = clickLimiters.get(player.getUUID());

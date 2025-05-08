@@ -349,7 +349,6 @@ public class ShopItemDisplay extends ItemElm {
 
     /**
      * Forcibly sets the item display of a loaded shop when the display entity is loaded into the world.
-     * This makes sure the name display is visible before the shops is focused by a player.
      * <p> Must be called on entity load event.
      * @param entity The loaded entity.
      */
@@ -357,12 +356,13 @@ public class ShopItemDisplay extends ItemElm {
         if(entity instanceof ItemDisplay) {
             if(
                 entity.level() != null &&
-                entity.getCustomName() != null &&
+                entity.hasCustomName() &&
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
                 //! Force data loading in case this event gets called before the scheduled data loading
                 ShopManager.loadShops();
 
+                System.out.println("ENTITY LOADED");
                 final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
                 if(shop != null) shop.getItemDisplay();
                 //! getItemDisplay() retrieves the item display entity and creates the associated ShopItemDisplay,

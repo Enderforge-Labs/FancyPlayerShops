@@ -168,21 +168,23 @@ public abstract class HoverManager {
         final Set<Shop> targetedShops = new LinkedHashSet<>();
         for(final ServerLevel serverWorld : serverWorlds) {
             for(final Player player : serverWorld.players()) {
+
+                // Skip player if they are dead or in spectator mode or they aren't looking at any shop
+                if(player.isSpectator() || player.isDeadOrDying()) continue;
                 final Shop shop = HoverManager.getLookedAtShop(player, serverWorld);
-                if(shop != null) {
+                if(shop == null) continue;
 
-                    // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
-                    final boolean isShopNew = targetedShops.add(shop);
-                    if(isShopNew) {
-                        shop.setFocusStateNext(true);
+                // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
+                final boolean isShopNew = targetedShops.add(shop);
+                if(isShopNew) {
+                    shop.setFocusStateNext(true);
+                    shop.setViewer(player);
+                }
+
+                // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
+                else {
+                    if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
                         shop.setViewer(player);
-                    }
-
-                    // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
-                    else {
-                        if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
-                            shop.setViewer(player);
-                        }
                     }
                 }
             }

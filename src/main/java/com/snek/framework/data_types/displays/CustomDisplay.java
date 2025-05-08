@@ -29,6 +29,8 @@ import net.minecraft.world.level.Level;
  */
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
+    protected boolean spawned = false;
+    public void setSpawned(final boolean _spawned) { spawned = _spawned; }
 
 
 
@@ -112,8 +114,11 @@ public abstract class CustomDisplay {
      * @param pos The position of the spawned entity.
      */
     public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
-        heldEntity.setPos(pos.x, pos.y, pos.z);
-        world.addFreshEntity(heldEntity);
+        if(!spawned) {
+            spawned = true;
+            heldEntity.setPos(pos.x, pos.y, pos.z);
+            world.addFreshEntity(heldEntity);
+        }
     }
 
 
@@ -121,7 +126,10 @@ public abstract class CustomDisplay {
      * Removes the entity from the world.
      */
     public void despawn() {
-        heldEntity.remove(RemovalReason.KILLED);
+        if(spawned) {
+            spawned = false;
+            heldEntity.remove(RemovalReason.KILLED);
+        }
     }
 
 

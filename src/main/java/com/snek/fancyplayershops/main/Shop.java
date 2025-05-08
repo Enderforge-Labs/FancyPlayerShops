@@ -139,12 +139,12 @@ public class Shop {
     public           boolean         isFocused         () { return focusState;      }
     public           boolean         isDeleted         () { return deletionState;   }
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
-    public @Nullable Player    getuser           () { return user;            }
-    public @Nullable Player    getViewer         () { return viewer;          }
-    public           void            setViewer         (final @Nullable Player _viewer        ) { viewer         = _viewer;         }
-    public           void            setFocusStateNext (final           boolean      _nextFocusState) { focusStateNext = _nextFocusState; }
+    public @Nullable Player          getuser           () { return user;            }
+    public @Nullable Player          getViewer         () { return viewer;          }
+    public           void            setViewer         (final @Nullable Player  _viewer        ) { viewer         = _viewer;         }
+    public           void            setFocusStateNext (final           boolean _nextFocusState) { focusStateNext = _nextFocusState; }
     public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
-    public @NotNull  String          getIdentifierNoWorld     () { return shopIdentifierCache_noWorld; }
+    public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
 
 
 
@@ -376,6 +376,7 @@ public class Shop {
             }
             else {
                 itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
+                itemDisplay.getEntity().setSpawned(true);
             }
             itemDisplayUUID = itemDisplay.getEntity().getUuid();
             itemDisplay.spawn(calcDisplayPos());

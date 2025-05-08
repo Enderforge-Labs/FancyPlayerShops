@@ -89,7 +89,7 @@ public class InteractionBlocker {
             final Level world = entity.level();
             if(
                 world != null &&
-                entity.getCustomName() != null &&
+                entity.hasCustomName() &&
                 entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
             ) {
                 entity.remove(RemovalReason.KILLED);
