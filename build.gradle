@@ -15,6 +15,7 @@ base {
 
 repositories {
     maven {
+        name = 'Modrinth'
         url = "https://api.modrinth.com/maven"
     }
     maven {
@@ -28,7 +29,6 @@ repositories {
 
 loom {
     splitEnvironmentSourceSets()
-
     mods {
         "fancyplayershops" {
             sourceSet sourceSets.main
@@ -42,12 +42,15 @@ loom {
 
 
 dependencies {
-    // To change the versions see the gradle.properties file
+
+    // Minecraft and mappings
     minecraft "net.minecraft:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.08@zip")
     }
+
+    // Mod dependencies
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "maven.modrinth:solstice-economy:${project.solstice_economy_version}"
@@ -64,9 +67,16 @@ processResources {
     }
 }
 
+
+
+
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
+    it.options.encoding = "UTF-8"
 }
+
+
+
 
 java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
@@ -78,6 +88,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+
+
+
 jar {
     inputs.property "archivesName", project.base.archivesName
 
@@ -85,6 +98,9 @@ jar {
         rename { "${it}_${inputs.properties.archivesName}"}
     }
 }
+
+
+
 
 // configure the maven publication
 publishing {
