@@ -17,7 +17,6 @@ import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.buy.BuyUi;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.edit.EditUi;
-import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;

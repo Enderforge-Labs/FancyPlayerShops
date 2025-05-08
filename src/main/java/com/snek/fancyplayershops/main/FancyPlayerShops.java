@@ -25,7 +25,12 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.BlockHitResult;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -120,21 +125,52 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
+    public static Path getStorageDir() {
+        return getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
+    }
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+    private boolean fatal = false;
     @Override
     public void onInitialize() {
-        CommandManager.register();
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+
+            // Save server instance
+            serverInstance = server;
+
+
+            // Create storage directories
+            for(String path : new String[] { "shops", "stash" }) {
+                try {
+                    Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
+                } catch(IOException e) {
+                    e.printStackTrace();
+                    fatal = true;
+                    return;
+                }
+            }
+        });
 
 
 
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            if(fatal) return;
 
-            // Save server instance
-            serverInstance = server;
+            // Register commands
+            CommandManager.register();
 
             // Load shop data
             ShopManager.loadShops();
@@ -150,67 +186,67 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Log initialization success
             LOGGER.info("FancyPlayerShops initialized. :3");
-        });
 
 
 
 
-        // Create and register block click events (shop placement + prevents early clicks going through the shop)
-        AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-            return ClickManager.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
-        });
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            InteractionResult r;
-            r = ClickManager.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
-            if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
-            return r;
-        });
+            // Create and register block click events (shop placement + prevents early clicks going through the shop)
+            AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
+                return ClickManager.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+            });
+            UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+                InteractionResult r;
+                r = ClickManager.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+                if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
+                return r;
+            });
 
 
 
 
-        // Create and register entity click events (interaction blocker clicks)
-        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickManager.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
-        });
-        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            return ClickManager.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
-        });
+            // Create and register entity click events (interaction blocker clicks)
+            AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+                return ClickManager.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
+            });
+            UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+                return ClickManager.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
+            });
 
 
 
 
-        // Create and register item use events (prevents early clicks going through the shop)
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            InteractionResult r = ClickManager.onUseItem(world, player, hand);
-            if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
-            /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
-        });
+            // Create and register item use events (prevents early clicks going through the shop)
+            UseItemCallback.EVENT.register((player, world, hand) -> {
+                InteractionResult r = ClickManager.onUseItem(world, player, hand);
+                if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
+                /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
+            });
 
 
 
 
-        // Register scheduler
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            Scheduler.tick();
-        });
+            // Register scheduler
+            ServerTickEvents.END_SERVER_TICK.register(_server -> {
+                Scheduler.tick();
+            });
 
 
 
 
-        // Register entity display purge
-        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-            Elm.onEntityLoad(entity);
-            ShopItemDisplay.onEntityLoad(entity);
-            InteractionBlocker.onEntityLoad(entity);
-        });
+            // Register entity display purge
+            ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+                Elm.onEntityLoad(entity);
+                ShopItemDisplay.onEntityLoad(entity);
+                InteractionBlocker.onEntityLoad(entity);
+            });
 
 
 
 
-        // Register chat input handler
-        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
-            return !ChatManager.onMessage(message, sender);
+            // Register chat input handler
+            ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
+                return !ChatManager.onMessage(message, sender);
+            });
         });
     }
 

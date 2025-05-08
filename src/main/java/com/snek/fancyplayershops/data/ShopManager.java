@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -48,24 +47,6 @@ public abstract class ShopManager {
 
 
 
-    // Storage files
-    private static final @NotNull Path CONFIG_DIR;
-    private static final @NotNull Path SHOP_STORAGE_DIR;
-    private static final @NotNull Path STASH_STORAGE_DIR;
-    static {
-        CONFIG_DIR        = FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
-        SHOP_STORAGE_DIR  = CONFIG_DIR.resolve("shops");
-        STASH_STORAGE_DIR = CONFIG_DIR.resolve("stash");
-        try {
-            Files.createDirectories(CONFIG_DIR);
-            Files.createDirectories(SHOP_STORAGE_DIR);
-            Files.createDirectories(STASH_STORAGE_DIR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
@@ -74,11 +55,6 @@ public abstract class ShopManager {
     // Async update list
     private static int updateIndex = 0;
     private static List<Shop> updateSnapshot = List.of();
-
-
-
-
-    // Player stash data
 
 
 
@@ -98,16 +74,16 @@ public abstract class ShopManager {
 
 
         // Create directory for the world
-        final Path shopStorageDir = SHOP_STORAGE_DIR.resolve(shop.getWorldId());
+        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
         try {
-            Files.createDirectories(shopStorageDir);
+            Files.createDirectories(levelStorageDir);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
         // Create this shop's config file if absent, then save the JSON in it
-        final File shopStorageFile = new File(shopStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
+        final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
         try (final Writer writer = new FileWriter(shopStorageFile)) {
             new Gson().toJson(shop, writer);
         } catch (IOException e) {
@@ -128,11 +104,10 @@ public abstract class ShopManager {
         dataLoaded = true;
 
 
-        // For each world directory
-        for(final File shopStorageDir : SHOP_STORAGE_DIR.toFile().listFiles()) {
+        for(final File levelStorageDir : FancyPlayerShops.getStorageDir().resolve("shops").toFile().listFiles()) {
 
             // For each shop file
-            final File[] shopStorageFiles = shopStorageDir.listFiles();
+            final File[] shopStorageFiles = levelStorageDir.listFiles();
             if(shopStorageFiles != null) for(File shopStorageFile : shopStorageFiles) {
 
                 // Read file
@@ -191,7 +166,7 @@ public abstract class ShopManager {
         shopsByOwner.remove(shop.getOwnerUuid().toString());
 
         // Delete the config file
-        final File shopStorageFile = new File(SHOP_STORAGE_DIR + "/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json");
+        final File shopStorageFile = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json").toFile();
         shopStorageFile.delete();
     }
 
