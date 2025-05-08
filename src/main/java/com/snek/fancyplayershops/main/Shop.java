@@ -31,6 +31,7 @@ import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -42,10 +43,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
 
@@ -296,6 +300,7 @@ public class Shop {
 
         // Save the shop
         ShopManager.saveShop(this);
+        ShopManager.registerShop(this);
     }
 
 
@@ -796,7 +801,11 @@ public class Shop {
      * <p> This call has no effect if the shop is fully stocked.
      */
     public void pullItems(){
-        if(stock >= maxStock) return;
+        if(stock >= maxStock || item.getItem() == Items.AIR) return;
+        final ChunkPos chunkPos = new ChunkPos(pos);
+        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;
+        final int oldStock = stock;
+
         pullItems(new BlockPos(0, 0, 0));
         pullItems(new BlockPos(0, 0, +1));
         pullItems(new BlockPos(0, 0, -1));
@@ -805,12 +814,17 @@ public class Shop {
         pullItems(new BlockPos(+1, 0, 0));
         pullItems(new BlockPos(-1, 0, 0));
 
-        // Save shop and update detatils display
+        // Save shop and update detatils display if needed
+        if(oldStock == stock) return;
         ShopManager.saveShop(this);
         if(activeCanvas != null && activeCanvas instanceof DetailsUi c) {
             c.getValues().updateDisplay();
         }
     }
+
+
+
+
     /**
      * Tries to retrieve items from a specified position relative to the shop.
      * <p> This call has no effect if the shop is fully stocked.
@@ -819,8 +833,16 @@ public class Shop {
     public void pullItems(final @NotNull BlockPos rel){
         if(stock >= maxStock) return;
         final BlockPos targetPos = pos.offset(rel);
+        final ChunkPos chunkPos = new ChunkPos(pos);
+        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;
+        final BlockEntity be = world.getBlockEntity(targetPos);
+        if(be == null) return;
+
+
+        // Calculate side and find the storage block
         final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
         final Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, targetPos, direction);
+
 
         // If a storage block is found, loop through its slots
         if(storage != null) {

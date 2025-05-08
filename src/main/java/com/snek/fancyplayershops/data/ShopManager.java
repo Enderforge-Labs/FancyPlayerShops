@@ -10,10 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -42,19 +44,19 @@ import net.minecraft.world.level.Level;
  */
 public abstract class ShopManager {
     private ShopManager() {}
-    public static final int PULL_UPDATES_PER_TICK = 4;
+    public static final int PULL_UPDATES_PER_TICK = 1;
 
 
 
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
     private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
-    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByOwner  = new HashMap<>();
+    private static final @NotNull Map<@NotNull String, @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
 
     // Async update list
     private static int updateIndex = 0;
-    private static List<Shop> updateSnapshot = List.of();
+    private static @NotNull List<@NotNull Shop> updateSnapshot = List.of();
 
 
 
@@ -64,14 +66,32 @@ public abstract class ShopManager {
 
 
     /**
+     * Registers the shop in the runtime maps.
+     * <p> Calling this method on a shop that's already registered will have no effect.
+     */
+    public static void registerShop(final @NotNull Shop shop) {
+        shopsByCoords.put(shop.getIdentifier(), shop);
+        shopsByOwner.putIfAbsent(shop.getOwnerUuid().toString(), new HashSet<>());
+        shopsByOwner.get(shop.getOwnerUuid().toString()).add(shop);
+    }
+
+    /**
+     * Unregisters the shop from the runtime maps.
+     * <p> Calling this method on a shop that's already not registered will have no effect.
+     */
+    public static void unregisterShop(final @NotNull Shop shop) {
+        shopsByCoords.remove(shop.getIdentifier(), shop);
+        final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid().toString());
+        if(set != null) set.remove(shop);
+    }
+
+
+
+
+    /**
      * Saves the shop data in its config file.
      */
     public static void saveShop(final @NotNull Shop shop) {
-
-        // Create map entry if absent, then add the new shop to the player's shops
-        shopsByOwner .put(shop.getOwnerUuid().toString(), shop);
-        shopsByCoords.put(shop.getIdentifier(),           shop);
-
 
         // Create directory for the world
         final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
@@ -121,8 +141,7 @@ public abstract class ShopManager {
                 // Recalculate transient members and update shop maps
                 if(retrievedShop != null) {
                     if(retrievedShop.reinitTransient()) {
-                        shopsByOwner .put(retrievedShop.getOwnerUuid().toString(), retrievedShop);
-                        shopsByCoords.put(retrievedShop.getIdentifier(),           retrievedShop);
+                        registerShop(retrievedShop);
                     }
                 }
             }
@@ -162,8 +181,7 @@ public abstract class ShopManager {
     public static void deleteShop(final @NotNull Shop shop) {
 
         // Remove shop from the runtime maps
-        shopsByCoords.remove(shop.getIdentifier());
-        shopsByOwner.remove(shop.getOwnerUuid().toString());
+        unregisterShop(shop);
 
         // Delete the config file
         final File shopStorageFile = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json").toFile();
