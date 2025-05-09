@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.CraftingMenu;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -65,7 +64,7 @@ public abstract class CraftingScreenHandlerMixin {
 
                 // Replace the output item
                 resultSlots.setItem(0, FancyPlayerShops.getShopItemCopy());
-                ((CraftingMenu)(Object)this).broadcastChanges(); //FIXME check if this is correct
+                ((CraftingMenu)(Object)this).broadcastChanges();
             }
         }
     }

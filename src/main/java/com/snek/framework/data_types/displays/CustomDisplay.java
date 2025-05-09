@@ -30,7 +30,6 @@ import net.minecraft.world.level.Level;
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
-    // public void setSpawned(final boolean _spawned) { spawned = _spawned; }
 
 
 

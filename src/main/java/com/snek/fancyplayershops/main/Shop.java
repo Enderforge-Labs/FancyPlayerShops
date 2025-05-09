@@ -31,7 +31,6 @@ import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 import com.snek.framework.utils.scheduler.TaskHandler;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -42,9 +41,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Display.ItemDisplay;
-import net.minecraft.world.entity.Entity.RemovalReason;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
@@ -94,7 +90,6 @@ public class Shop {
     // Basic data
     private transient @NotNull  ServerLevel     world;                          // The world this shop was placed in
     private           @NotNull  String          worldId;                        // The Identifier of the world
-    // private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display //TODO REMOVE
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
@@ -296,7 +291,6 @@ public class Shop {
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        // itemDisplayUUID = itemDisplay.getEntity().getUuid(); //TODO REMOVE
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
@@ -384,18 +378,10 @@ public class Shop {
      */
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
 
-        // final ItemDisplay rawItemDisplay = (ItemDisplay)(world.getEntity(itemDisplayUUID));
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
-            // rawItemDisplay == null || rawItemDisplay.isRemoved()) {
             itemDisplay = new ShopItemDisplay(this);
             itemDisplay.spawn(calcDisplayPos());
         }
-        //     itemDisplayUUID = itemDisplay.getEntity().getUuid();
-        //     ShopManager.saveShop(this);
-        // }
-        // else {
-        //     System.out.println("used item display " + itemDisplay.getEntity().getUuid().toString());
-        // }
         return itemDisplay;
     }
 

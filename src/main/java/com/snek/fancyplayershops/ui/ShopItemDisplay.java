@@ -19,6 +19,7 @@ import com.snek.framework.ui.elements.ItemElm;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 import com.snek.framework.ui.elements.styles.ItemElmStyle;
+import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -121,7 +122,6 @@ public class ShopItemDisplay extends ItemElm {
         super(_shop.getWorld(), _display, new ItemElmStyle());
         shop = _shop;
         //! updateDisplay call is in spawn()
-        // updateDisplay();
 
 
         // Setup unfocus animation
@@ -197,7 +197,7 @@ public class ShopItemDisplay extends ItemElm {
             for(i = 0; i < fullName.length(); ++i) {
                 final char c = fullName.charAt(i);
                 totLen += FontSize.getWidth(String.valueOf(c));
-                if((totLen + ellipsisLen) * FancyTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
+                if((totLen + ellipsisLen) * TextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
                     break;
                 }
                 truncatedName.append(c);

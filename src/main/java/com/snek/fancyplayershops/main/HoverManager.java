@@ -16,10 +16,8 @@ import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Position;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Display.ItemDisplay;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
