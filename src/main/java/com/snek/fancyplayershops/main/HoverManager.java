@@ -16,13 +16,14 @@ import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display.ItemDisplay;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -122,8 +123,23 @@ public abstract class HoverManager {
         final Vec3 playerEyePos = player.getEyePosition();
 
 
-        // If there is at least one item display entity in the player's reach distance
-        if(!player.level().getEntitiesOfClass(ItemDisplay.class, new AABB(playerEyePos, playerEyePos).inflate(MAX_DISTANCE), e->true).isEmpty()) {
+        // Check the number of shops in the chunks the player can reach
+        final BlockPos playerPos = player.blockPosition();
+        final ChunkPos playerChunk = new ChunkPos(playerPos);
+        boolean check = ShopManager.chunkHasShops(playerChunk);
+        final int reach = (int)Math.round(MAX_DISTANCE);
+        int minX = playerPos.getX() - reach;
+        int maxX = playerPos.getX() + reach;
+        int minZ = playerPos.getZ() - reach;
+        int maxZ = playerPos.getZ() + reach;
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+
+
+        // If they contain at least one shop
+        if(check) {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3 targetBlock = getTargetBlockPrecise(player);

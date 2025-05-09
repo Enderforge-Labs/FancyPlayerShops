@@ -43,6 +43,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -93,7 +94,7 @@ public class Shop {
     // Basic data
     private transient @NotNull  ServerLevel     world;                          // The world this shop was placed in
     private           @NotNull  String          worldId;                        // The Identifier of the world
-    private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display
+    // private           @NotNull  UUID            itemDisplayUUID;                // The UUID of the item display //TODO REMOVE
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
@@ -295,7 +296,7 @@ public class Shop {
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        itemDisplayUUID = itemDisplay.getEntity().getUuid();
+        // itemDisplayUUID = itemDisplay.getEntity().getUuid(); //TODO REMOVE
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
@@ -363,25 +364,38 @@ public class Shop {
 
 
 
+    public void invalidateItemDisplay(){
+        System.out.println("[INVALIDATED]");
+        if(itemDisplay != null) {
+            System.out.println("[DESPAWNED]");
+            itemDisplay.despawnNow();
+            itemDisplay = null;
+        }
+        getItemDisplay();
+    }
+
+
+
+
     /**
      * Finds the display entity connected to this shop and saves it to this.itemDisplay.
      * <p> If no connected entity is found, a new ShopItemDisplay is created.
      * @reutrn the item display.
      */
     private @NotNull ShopItemDisplay findItemDisplayEntityIfNeeded() {
-        if(itemDisplay == null) {
-            final ItemDisplay rawItemDisplay = (ItemDisplay)(world.getEntity(itemDisplayUUID));
-            if(rawItemDisplay == null) {
-                itemDisplay = new ShopItemDisplay(this);
-            }
-            else {
-                itemDisplay = new ShopItemDisplay(this, rawItemDisplay);
-                itemDisplay.getEntity().setSpawned(true);
-            }
-            itemDisplayUUID = itemDisplay.getEntity().getUuid();
+
+        // final ItemDisplay rawItemDisplay = (ItemDisplay)(world.getEntity(itemDisplayUUID));
+        if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
+            // rawItemDisplay == null || rawItemDisplay.isRemoved()) {
+            itemDisplay = new ShopItemDisplay(this);
             itemDisplay.spawn(calcDisplayPos());
-            ShopManager.saveShop(this);
         }
+        //     itemDisplayUUID = itemDisplay.getEntity().getUuid();
+        //     ShopManager.saveShop(this);
+        // }
+        // else {
+        //     System.out.println("used item display " + itemDisplay.getEntity().getUuid().toString());
+        // }
         return itemDisplay;
     }
 

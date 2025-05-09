@@ -29,6 +29,7 @@ import com.snek.framework.utils.scheduler.TaskHandler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Display.BillboardConstraints;
 import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -119,7 +120,8 @@ public class ShopItemDisplay extends ItemElm {
     public ShopItemDisplay(final @NotNull Shop _shop, final @NotNull CustomItemDisplay _display) {
         super(_shop.getWorld(), _display, new ItemElmStyle());
         shop = _shop;
-        updateDisplay();
+        //! updateDisplay call is in spawn()
+        // updateDisplay();
 
 
         // Setup unfocus animation
@@ -362,11 +364,16 @@ public class ShopItemDisplay extends ItemElm {
                 //! Force data loading in case this event gets called before the scheduled data loading
                 ShopManager.loadShops();
 
-                System.out.println("ENTITY LOADED");
-                final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
-                if(shop != null) shop.getItemDisplay();
-                //! getItemDisplay() retrieves the item display entity and creates the associated ShopItemDisplay,
-                //! whose constructor spawns the name entities.
+                // Remove entity
+                if(!entity.isRemoved()) {
+                    entity.remove(RemovalReason.KILLED);
+
+                    // Respawn shop item display if needed
+                    final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
+                    if(shop != null) {
+                        shop.invalidateItemDisplay();
+                    }
+                }
             }
         }
     }

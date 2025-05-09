@@ -30,7 +30,7 @@ import net.minecraft.world.level.Level;
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
-    public void setSpawned(final boolean _spawned) { spawned = _spawned; }
+    // public void setSpawned(final boolean _spawned) { spawned = _spawned; }
 
 
 
@@ -82,6 +82,10 @@ public abstract class CustomDisplay {
         method_getMaxRenderHeight.setAccessible(true);
     }
 
+    public boolean isRemoved(){
+        return heldEntity.isRemoved();
+    }
+
 
 
 
@@ -128,7 +132,10 @@ public abstract class CustomDisplay {
     public void despawn() {
         if(spawned) {
             spawned = false;
-            heldEntity.remove(RemovalReason.KILLED);
+
+            if(!heldEntity.isRemoved()) {
+                heldEntity.remove(RemovalReason.KILLED);
+            }
         }
     }
 

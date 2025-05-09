@@ -22,6 +22,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
 
@@ -50,7 +51,7 @@ public abstract class ShopManager {
 
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
-    private static final @NotNull Map<@NotNull String, @NotNull Shop> shopsByCoords = new HashMap<>();
+    private static final @NotNull Map<@NotNull String, @Nullable Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull String, @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
 
@@ -58,6 +59,8 @@ public abstract class ShopManager {
     private static int updateIndex = 0;
     private static @NotNull List<@NotNull Shop> updateSnapshot = List.of();
 
+    // Keeps track of the amount of shops in each chunk
+    private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
 
 
 
@@ -70,9 +73,14 @@ public abstract class ShopManager {
      * <p> Calling this method on a shop that's already registered will have no effect.
      */
     public static void registerShop(final @NotNull Shop shop) {
-        shopsByCoords.put(shop.getIdentifier(), shop);
-        shopsByOwner.putIfAbsent(shop.getOwnerUuid().toString(), new HashSet<>());
-        shopsByOwner.get(shop.getOwnerUuid().toString()).add(shop);
+        if(shopsByCoords.put(shop.getIdentifier(), shop) == null){
+            shopsByOwner.putIfAbsent(shop.getOwnerUuid().toString(), new HashSet<>());
+            shopsByOwner.get(shop.getOwnerUuid().toString()).add(shop);
+
+            final ChunkPos chunkPos = new ChunkPos(shop.getPos());
+            chunkShopNumber.putIfAbsent(chunkPos, 0);
+            chunkShopNumber.put(chunkPos, chunkShopNumber.get(chunkPos) + 1);
+        }
     }
 
     /**
@@ -80,9 +88,18 @@ public abstract class ShopManager {
      * <p> Calling this method on a shop that's already not registered will have no effect.
      */
     public static void unregisterShop(final @NotNull Shop shop) {
-        shopsByCoords.remove(shop.getIdentifier(), shop);
-        final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid().toString());
-        if(set != null) set.remove(shop);
+        if(shopsByCoords.remove(shop.getIdentifier(), shop)) {
+            final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid().toString());
+            if(set != null) set.remove(shop);
+
+            final ChunkPos chunkPos = new ChunkPos(shop.getPos());
+            chunkShopNumber.put(chunkPos, chunkShopNumber.get(chunkPos) - 1);
+        }
+    }
+
+    public static boolean chunkHasShops(final @NotNull ChunkPos chunkPos) {
+        final Integer n = chunkShopNumber.get(chunkPos);
+        return n != null && n > 0;
     }
 
 
