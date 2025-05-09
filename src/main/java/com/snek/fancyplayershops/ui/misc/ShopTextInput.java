@@ -40,7 +40,7 @@ public abstract class ShopTextInput extends TextInputElm {
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
     protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage) {
-        super(_shop.getWorld(), _clickFeedbackMessage, new ShopTextInput_S());
+        super(_shop.getWorld(), _clickFeedbackMessage, new ShopTextInput_S(_shop));
         shop = _shop;
         lmbActionName = _lmbActionName;
         rmbActionName = _rmbActionName;
@@ -50,7 +50,7 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     @Override
-    public void onHoverEnter(final @Nullable Player player) {
+    public void onHoverEnter(final @NotNull Player player) {
         if(player != shop.getuser()) return;
         super.onHoverEnter(player);
     }

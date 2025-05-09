@@ -71,7 +71,7 @@ public class EditUi_RotateButton extends ShopButton {
             "Rotate once",
             "Rotate quickly",
             2,
-            _rotation > 0 ? new EditUi_RotateButtonRight_S() : new EditUi_RotateButtonLeft_S()
+            _rotation > 0 ? new EditUi_RotateButtonRight_S(_shop) : new EditUi_RotateButtonLeft_S(_shop)
         );
         rotation = _rotation;
 

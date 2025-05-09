@@ -54,7 +54,7 @@ public abstract class ShopButton extends ButtonElm {
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
     protected ShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown) {
-        this(_shop, _lmbActionName, _rmbActionName, _clickCooldown, new ShopButton_S());
+        this(_shop, _lmbActionName, _rmbActionName, _clickCooldown, new ShopButton_S(_shop));
     }
 
 

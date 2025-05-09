@@ -49,7 +49,7 @@ public class EditUi_MoveButton extends ShopButton {
 
 
     public EditUi_MoveButton(final @NotNull Shop _shop){
-        super(_shop, null, "Move shop", 1,  new EditUi_SquareButton_S());
+        super(_shop, null, "Move shop", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design.get(0), design.get(1), design.get(2), design.get(3)));

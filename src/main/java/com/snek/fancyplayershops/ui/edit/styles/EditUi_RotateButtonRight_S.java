@@ -2,8 +2,8 @@ package com.snek.fancyplayershops.ui.edit.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -18,22 +18,16 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * The style of the EditUiPriceButton UI element.
+ * The style of the EditUi_PriceButton UI element.
  */
 public class EditUi_RotateButtonRight_S extends ShopButton_S {
 
 
     /**
-     * Creates a new EditUiRightRotateButton_S.
+     * Creates a new EditUi_RightRotateButton_S.
      */
-    public EditUi_RotateButtonRight_S() {
-        super();
-    }
-
-
-    @Override
-    public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(HOVER_COLOR);
+    public EditUi_RotateButtonRight_S(final @NotNull Shop _shop) {
+        super(_shop);
     }
 
 

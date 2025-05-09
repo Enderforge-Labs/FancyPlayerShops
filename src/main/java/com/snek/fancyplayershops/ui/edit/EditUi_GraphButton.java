@@ -49,7 +49,7 @@ public class EditUi_GraphButton extends ShopButton {
 
 
     public EditUi_GraphButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open details", 1,  new EditUi_SquareButton_S());
+        super(_shop, null, "Open details", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));

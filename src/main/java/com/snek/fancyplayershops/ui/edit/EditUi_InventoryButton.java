@@ -54,7 +54,7 @@ public class EditUi_InventoryButton extends ShopButton {
 
 
     public EditUi_InventoryButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open inventory", 1,  new EditUi_SquareButton_S());
+        super(_shop, null, "Open inventory", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));

@@ -46,7 +46,7 @@ public class EditUi_DeleteButton extends ShopButton {
 
 
     public EditUi_DeleteButton(final @NotNull Shop _shop){
-        super(_shop, null, "Delete shop", 1,  new EditUi_SquareButton_S());
+        super(_shop, null, "Delete shop", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));

@@ -1,8 +1,10 @@
 package com.snek.fancyplayershops.ui.edit.styles;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.ui.edit.EditUi;
+import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -16,17 +18,17 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * The style of the EditUiPriceButton UI element.
+ * The style of the EditUi_PriceButton UI element.
  */
 public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
-    public static final float SHIFT_X = EditUi.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
+    public static final float SHIFT_X = ShopCanvas.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
 
 
     /**
-     * Creates a new EditUiLeftRotateButton_S.
+     * Creates a new EditUi_LeftRotateButton_S.
      */
-    public EditUi_RotateButtonLeft_S() {
-        super();
+    public EditUi_RotateButtonLeft_S(final @NotNull Shop _shop) {
+        super(_shop);
     }
 
 

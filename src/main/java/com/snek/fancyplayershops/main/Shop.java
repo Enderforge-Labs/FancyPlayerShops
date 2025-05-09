@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import com.google.gson.JsonParser;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
@@ -85,6 +87,14 @@ public class Shop {
     private static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
 
 
+    // Color theme data
+    public static final float COLOR1_V = 0.65f;
+    public static final float COLOR1_S = 0.2f;
+    public static final float COLOR2_V = 0.08f;
+    public static final float COLOR2_S = 0.50f;
+    public static final float COLOR_DEFAULT_HUE = 300f;
+
+
 
 
     // Basic data
@@ -104,6 +114,7 @@ public class Shop {
     private                    double    price           = 1_000_000;           // The configured price for each item
     private                    int       maxStock        = 1_000;               // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
+    private                    float     colorThemeHue   = 300f;                // The configured hue of the color theme
 
 
     // Shop state
@@ -141,6 +152,7 @@ public class Shop {
     public           void            setFocusStateNext (final           boolean _nextFocusState) { focusStateNext = _nextFocusState; }
     public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
+    public           float           getColorThemeHue  () { return colorThemeHue; }
 
 
 
@@ -870,5 +882,34 @@ public class Shop {
                 }
             }
         }
+    }
+
+
+
+
+    /**
+     * Changes the hue of the color theme.
+     * @param _hue The new hue value.
+     */
+    public void setColorThemeHue(final float _hue) {
+        colorThemeHue = _hue;
+        ShopManager.saveShop(this);
+    }
+
+    /**
+     * Returns the main color of the color theme.
+     * @return The RGB color value.
+     */
+    public Vector3i getThemeColor1() {
+        System.out.println("hue: " + colorThemeHue);
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR1_S, COLOR1_V));
+    }
+
+    /**
+     * Returns the secondary color of the color theme.
+     * @return The RGB color value.
+     */
+    public Vector3i getThemeColor2() {
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR2_S, COLOR2_V));
     }
 }

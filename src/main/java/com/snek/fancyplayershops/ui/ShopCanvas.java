@@ -24,12 +24,6 @@ import com.snek.framework.utils.Easings;
 
 
 
-//TODO add a "line" element that draws a single line using two 2d points
-
-//TODO add a "polyline" element that draws the line using a list of 2d points
-//TODO put it in the "composite" elements directory
-//TODO composite elements automatically spawn their children and have special behaviour
-
 /**
  * A generic canvas class used to create shop menus.
  * <p> It creates and manages a background panel, a back side panel and a top and bottom borders,
@@ -106,10 +100,11 @@ public class ShopCanvas extends Div {
         if(activeCanvas == null) {
 
             // Create the elements
-            bg     = (Elm)addChild(new ShopPanelElm(_shop, new CanvasBackground_S()));
+            bg     = (Elm)addChild(new ShopPanelElm(_shop, new CanvasBackground_S(_shop)));
             back   = (Elm)addChild(new ShopPanelElm(_shop, new CanvasBack_S()));
             top    = (Elm)addChild(new ShopUiBorder(_shop));
             bottom = (Elm)addChild(new ShopUiBorder(_shop));
+
 
             // Set their size, position and alignments
             bg    .setSize(new Vector2f(1f, 1f));
@@ -124,6 +119,7 @@ public class ShopCanvas extends Div {
             bottom.setSize(new Vector2f(1f, 1f));
             bottom.setAlignmentX(AlignmentX.CENTER);
             bottom.setAlignmentY(AlignmentY.TOP);
+
 
             // Set visual dimensions (and rotation for the back side)
             final Transform transformBg     = new Transform().scaleY(newHeightBg    ).moveY(newPosBg    );

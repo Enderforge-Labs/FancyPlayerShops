@@ -2,8 +2,8 @@ package com.snek.fancyplayershops.ui.edit.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -24,16 +24,10 @@ public class EditUi_SquareButton_S extends ShopButton_S {
 
 
     /**
-     * Creates a new EditUiSquareButton_S.
+     * Creates a new EditUi_SquareButton_S.
      */
-    public EditUi_SquareButton_S() {
-        super();
-    }
-
-
-    @Override
-    public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(HOVER_COLOR);
+    public EditUi_SquareButton_S(final @NotNull Shop _shop) {
+        super(_shop);
     }
 
 
