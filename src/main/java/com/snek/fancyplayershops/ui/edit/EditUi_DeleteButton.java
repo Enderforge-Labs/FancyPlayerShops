@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
@@ -58,19 +59,20 @@ public class EditUi_DeleteButton extends ShopButton {
     }
 
 
+
+
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
         // Empty
     }
 
 
+
+
     @Override
     public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final boolean r = super.onClick(player, click);
         if(r) {
-            shop.stash();
-            shop.delete();
-
 
             // Send feedback message
             if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
@@ -86,13 +88,19 @@ public class EditUi_DeleteButton extends ShopButton {
             // Give the player a default shop item
             final ItemStack defaultShopItem =  FancyPlayerShops.getShopItemCopy();
             if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
+                StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
+                //! ^ saveStash() call is done by shop.stash()
                 player.displayClientMessage(new Txt()
-                    .cat("1x ").lightGray()
+                    .cat("1x ")
                     .cat(MinecraftUtils.getFancyItemName(defaultShopItem))
-                    .cat(new Txt(" has been sent to your stash."))
-                .get(), false);
+                    .cat(" has been sent to your stash.")
+                .lightGray().get(), false);
             }
-            //FIXME actually stash item
+
+
+            // Stash and delete the shop
+            shop.stash();
+            shop.delete();
         }
         return r;
     }

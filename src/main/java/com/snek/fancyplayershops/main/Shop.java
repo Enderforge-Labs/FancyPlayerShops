@@ -11,6 +11,7 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
@@ -464,6 +465,8 @@ public class Shop {
                 .get(), false);
             }
             else {
+                StashManager.stashItem(ownerUUID, _item, 1);
+                StashManager.saveStash(ownerUUID);
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt("1x ").lightGray())
                     .cat(MinecraftUtils.getFancyItemName(item))
@@ -478,7 +481,7 @@ public class Shop {
 
     /**
      * Makes a player buy a specified amount of items from the shop.
-     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain enough item.
+     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param player The player.
      * @param amount The amount of items to buy.
      */
@@ -510,6 +513,8 @@ public class Shop {
                     .get(), false);
                 }
                 else {
+                    StashManager.stashItem(ownerUUID, _item, amount);
+                    StashManager.saveStash(ownerUUID);
                     player.displayClientMessage(new Txt()
                         .cat("" + Utils.formatAmount(amount, true, true) + " ")
                         .cat(MinecraftUtils.getFancyItemName(item))
@@ -722,20 +727,20 @@ public class Shop {
      * <p> This method also sets the shop's stock to 0.
      */
     public void stash(){
-        // FIXME ACTUALLY STASH ITEMS
+
+        // Stash items
+        StashManager.stashItem(ownerUUID, item, stock);
+        StashManager.saveStash(ownerUUID);
         // TODO ^ add /shop stash command
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
-        //BUG remove previous item stock and send it to the owner's stash to prevent duplication bugs
 
 
         // Send feedback to the player
         if(item.getItem() != Items.AIR && stock > 0) {
             user.displayClientMessage(new Txt()
-                .cat("" + Utils.formatAmount(stock, true, true) + " ").lightGray()
+                .cat("" + Utils.formatAmount(stock, true, true) + " ")
                 .cat(MinecraftUtils.getFancyItemName(item))
-                .cat(new Txt(" " + (stock > 1 ? "have" : "has") + " been sent to your stash."))
-            .get(), false);
+                .cat(" " + (stock > 1 ? "have" : "has") + " been sent to your stash.")
+            .lightGray().get(), false);
         }
 
 
@@ -761,7 +766,6 @@ public class Shop {
             if(interactionBlocker != null) interactionBlocker.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
-            // FIXME ACTUALLY STASH ITEMS
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);
