@@ -1,6 +1,10 @@
 package com.snek.fancyplayershops.main;
 
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.inventories.ShopConfigUI_Factory;
 import com.snek.framework.utils.Txt;
 
@@ -34,30 +38,50 @@ public abstract class CommandManager {
             dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("shop")
 
 
-                // UI test
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("config_test").executes(context -> {
-                    final Player player = context.getSource().getPlayer();
-                    try {
-                        player.displayClientMessage(new Txt("Opening shop inventory...").get(), false);
-                        player.openMenu(new ShopConfigUI_Factory());
-                    }
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                    return 1;
-                }).requires(source -> source.hasPermission(2)))
+                // Operator commands
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("op")
+                .requires(source -> source.hasPermission(2))
+
+                    // UI test
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("config_test")
+                    .executes(context -> {
+                        final Player player = context.getSource().getPlayer();
+                        try {
+                            player.displayClientMessage(new Txt("Opening shop inventory...").get(), false);
+                            player.openMenu(new ShopConfigUI_Factory());
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                        return 1;
+                    }))
 
 
-                // Item give command (pperator only)
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give").executes(context -> {
-                    final Player player = context.getSource().getPlayer();
-                    player.getInventory().add(FancyPlayerShops.getShopItemCopy());
-                    return 1;
-                }).requires(source -> source.hasPermission(2)))
+                    // Item give command
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
+                    .executes(context -> {
+                        final Player player = context.getSource().getPlayer();
+                        player.getInventory().add(FancyPlayerShops.getShopItemCopy());
+                        return 1;
+                    }))
+
+
+                    // Purge command
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("purge")
+                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
+                    .executes(context -> {
+                        final Player player = context.getSource().getPlayer();
+                        final float radius = FloatArgumentType.getFloat(context, "radius");
+                        final int n = ShopManager.purge(player.level(), player.getPosition(1f).toVector3f(), radius);
+                        player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
+                        return 1;
+                    })))
+                )
 
 
                 // Balance claim
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim").executes(context -> {
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
+                .executes(context -> {
                     final Player player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt("You claimed your shop balance.").get(), false);
                     return 1;
@@ -65,7 +89,8 @@ public abstract class CommandManager {
 
 
                 // Shop statistics
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stats").executes(context -> {
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stats")
+                .executes(context -> {
                     final Player player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt("opened stats //todo remove message").get(), false);
                     return 1;
@@ -73,7 +98,8 @@ public abstract class CommandManager {
 
 
                 // Shop mod info
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help").executes(context -> {
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                .executes(context -> {
                     final Player player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt(
                         """

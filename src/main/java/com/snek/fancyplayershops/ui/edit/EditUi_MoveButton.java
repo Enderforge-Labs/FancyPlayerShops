@@ -82,10 +82,10 @@ public class EditUi_MoveButton extends ShopButton {
                     .cat(new Txt("Your empty shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
                 .get(), false);
                 else player.displayClientMessage(new Txt()
-                    .cat(new Txt("Your shop \"").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-                    .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
-                    .cat(new Txt("\" has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-                .get(), false);
+                    .cat(new Txt("Your shop \""))
+                    .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
+                    .cat(new Txt("\" has been converted into an item."))
+                .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
                 // Delete shop

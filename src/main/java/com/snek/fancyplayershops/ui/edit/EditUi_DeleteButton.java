@@ -79,10 +79,10 @@ public class EditUi_DeleteButton extends ShopButton {
                 .cat(new Txt("Your empty shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
             .get(), false);
             else player.displayClientMessage(new Txt()
-                .cat(new Txt("Your shop \"")).color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR)
-                .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
-                .cat(new Txt("\" has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-            .get(), false);
+                .cat(new Txt("Your shop \""))
+                .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
+                .cat(new Txt("\" has been deleted."))
+            .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
             // Give the player a default shop item
@@ -92,7 +92,7 @@ public class EditUi_DeleteButton extends ShopButton {
                 //! ^ saveStash() call is done by shop.stash()
                 player.displayClientMessage(new Txt()
                     .cat("1x ")
-                    .cat(MinecraftUtils.getFancyItemName(defaultShopItem))
+                    .cat(MinecraftUtils.getFancyItemName(defaultShopItem).getString())
                     .cat(" has been sent to your stash.")
                 .lightGray().get(), false);
             }

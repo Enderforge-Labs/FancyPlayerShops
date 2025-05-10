@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,12 +17,17 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.utils.Txt;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
@@ -241,5 +247,41 @@ public abstract class ShopManager {
         if(updateIndex >= updateSnapshot.size()) {
             updateIndex = 0;
         }
+    }
+
+
+
+
+
+
+
+    /**
+     * Removes all shops near the specified position, sending all the items to their owner's stash.
+     * @param world The target world.
+     * @param pos The center of the purge radius.
+     * @param radius The maximum distance from pos shops can have in order to be purged.
+     * @return The number of shops that were removed.
+     */
+    public static int purge(final @NotNull Level world, final @NotNull Vector3f pos, final float radius) {
+        int r = 0;
+        final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
+        for(final Shop shop : shops) {
+            if(shop.getWorld() == world && shop.calcDisplayPos().sub(pos).length() <= radius) {
+
+                // Send feedback to affected player if they are online
+                final Player owner = world.getPlayerByUUID(shop.getOwnerUuid());
+                if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
+                    .cat(new Txt("Your shop \"")).red()
+                    .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
+                    .cat(new Txt("\" has been deleted by an admin.").red())
+                .get(), false);
+
+                // Stash and delete the shop, then increase the deleted shops counter
+                shop.stash();
+                shop.delete();
+                ++r;
+            }
+        }
+        return r;
     }
 }

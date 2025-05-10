@@ -735,10 +735,11 @@ public class Shop {
 
 
         // Send feedback to the player
-        if(item.getItem() != Items.AIR && stock > 0) {
-            user.displayClientMessage(new Txt()
+        final Player owner = world.getPlayerByUUID(ownerUUID);
+        if(owner != null && item.getItem() != Items.AIR && stock > 0) {
+            owner.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ")
-                .cat(MinecraftUtils.getFancyItemName(item))
+                .cat(MinecraftUtils.getFancyItemName(item).getString())
                 .cat(" " + (stock > 1 ? "have" : "has") + " been sent to your stash.")
             .lightGray().get(), false);
         }
