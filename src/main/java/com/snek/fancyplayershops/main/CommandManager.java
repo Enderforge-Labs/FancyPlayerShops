@@ -15,6 +15,10 @@ import net.minecraft.world.entity.player.Player;
 
 
 
+
+
+//TODO add admin only test commands that spawn thousands of shops
+//TODO add admin only test commands that remove all shops in a radius
 /**
  * A utility class that registers and handles in-game commands.
  */
@@ -28,10 +32,6 @@ public abstract class CommandManager {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("shop")
-
-
-                //TODO add admin only test commands that spawn thousands of shops
-                //TODO add admin only test commands that remove all shops in a radius
 
 
                 // UI test

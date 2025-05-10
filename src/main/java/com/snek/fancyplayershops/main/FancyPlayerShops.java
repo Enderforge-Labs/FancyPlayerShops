@@ -145,9 +145,15 @@ public class FancyPlayerShops implements ModInitializer {
     private boolean fatal = false;
     @Override
     public void onInitialize() {
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 
-            // Save server instance
+
+        // Register commands
+        CommandManager.register();
+
+
+
+
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             serverInstance = server;
 
 
@@ -168,9 +174,6 @@ public class FancyPlayerShops implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             if(fatal) return;
-
-            // Register commands
-            CommandManager.register();
 
             // Load shop data
             ShopManager.loadShops();
