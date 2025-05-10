@@ -72,7 +72,7 @@ import net.minecraft.world.phys.Vec3;
 public class Shop {
 
     // Limits
-    public static final double DEFAULT_PRICE = 1_000_000d;
+    public static final double DEFAULT_PRICE = 1_000d;
     public static final int    DEFAULT_STOCK = 1_000;
     public static final double MAX_PRICE     = 100_000_000_000d;
     public static final int    MAX_STOCK     = 1_000_000;
@@ -499,12 +499,13 @@ public class Shop {
             buyer.displayClientMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            final long totPrice = Math.round(price * amount * 100);
-            if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
+            final float totPrice = (float)price * amount; //TODO
+            final long totPriceL = Math.round(totPrice * 100f);
+            if(EconomyManager.getCurrency(buyer.getUUID()) >= totPriceL) {
                 stock -= amount;
                 ShopManager.saveShop(this);
-                EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
-                BalanceManager.addBalance(ownerUUID, amount);
+                EconomyManager.subtractCurrency(buyer.getUUID(), totPriceL);
+                BalanceManager.addBalance(ownerUUID, totPrice);
                 BalanceManager.saveBalance(ownerUUID);
 
 
@@ -514,7 +515,7 @@ public class Shop {
                     buyer.displayClientMessage(new Txt()
                         .cat("Bought " + Utils.formatAmount(amount, true, true) + " ")
                         .cat(MinecraftUtils.getFancyItemName(item).getString())
-                        .cat(" for " + Utils.formatPrice((double)totPrice / 100))
+                        .cat(" for " + Utils.formatPrice(totPrice))
                     .lightGray().get(), false);
                 }
                 final int stashedAmount = _item.getCount();
@@ -524,8 +525,14 @@ public class Shop {
                     buyer.displayClientMessage(new Txt()
                         .cat("" + Utils.formatAmount(stashedAmount, true, true) + " ")
                         .cat(MinecraftUtils.getFancyItemName(item).getString())
-                        .cat(" bought for " + Utils.formatPrice((double)totPrice / 100) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.")
+                        .cat(" bought for " + Utils.formatPrice(totPrice) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.")
                     .lightGray().get(), false);
+                }
+
+
+                // Update stock amount displays
+                if(activeCanvas != null) {
+                    if(activeCanvas instanceof DetailsUi c) c.getValues().updateDisplay();
                 }
             }
             else {

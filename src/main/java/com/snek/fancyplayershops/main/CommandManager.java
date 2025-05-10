@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.main;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.inventories.ShopConfigUI_Factory;
 import com.snek.framework.utils.Txt;
@@ -95,7 +96,7 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
                 .executes(context -> {
                     final Player player = context.getSource().getPlayer();
-                    player.displayClientMessage(new Txt("You claimed your shop balance.").get(), false);
+                    BalanceManager.claim(player);
                     return 1;
                 }))
 
