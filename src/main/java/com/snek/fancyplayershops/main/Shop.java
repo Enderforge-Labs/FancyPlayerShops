@@ -371,9 +371,7 @@ public class Shop {
 
 
     public void invalidateItemDisplay(){
-        System.out.println("[INVALIDATED]");
         if(itemDisplay != null) {
-            System.out.println("[DESPAWNED]");
             itemDisplay.despawnNow();
             itemDisplay = null;
         }
@@ -776,9 +774,9 @@ public class Shop {
 
 
     /**
-     * Deletes this shop without stashing the items.
+     * Deletes this shop without stashing the items or giving the player an unconfigured shop.
      * <p> Any item left in the shop is fully deleted and cannot be recovered.
-     * <p> The save file of this shop is also deteled.
+     * <p> The save file of this shop is also deleted.
      */
     public void delete() {
         if(!deletionState) {
@@ -789,16 +787,6 @@ public class Shop {
             if(interactionBlocker != null) interactionBlocker.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
-
-            // Give the player a default shop item
-            final ItemStack _item =  FancyPlayerShops.getShopItemCopy();
-            if(!MinecraftUtils.attemptGive(user, _item)) {
-                user.displayClientMessage(new Txt()
-                    .cat("1x ").lightGray()
-                    .cat(MinecraftUtils.getFancyItemName(_item))
-                    .cat(new Txt(" has been sent to your stash."))
-                .get(), false);
-            }
             // FIXME ACTUALLY STASH ITEMS
 
             // Delete the data associated with this shop
@@ -901,7 +889,6 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor1() {
-        System.out.println("hue: " + colorThemeHue);
         return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR1_S, COLOR1_V));
     }
 

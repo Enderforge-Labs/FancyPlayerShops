@@ -225,7 +225,7 @@ public abstract class MinecraftUtils {
 
         // Custom names
         if(item.hasCustomHoverName()) {
-            return item.getHoverName();
+            return getItemName(item);
         }
 
 
@@ -290,12 +290,12 @@ public abstract class MinecraftUtils {
 
         // Player heads
         else if(item.getItem() instanceof PlayerHeadItem e) {
-            return new Txt().cat(e.getName(item)).get();
+            return new Txt(e.getName(item)).white().get();
         }
 
 
         // Fallback
-        return item.getItem().getName(item);
+        return getItemName(item);
     }
 
 
@@ -314,11 +314,12 @@ public abstract class MinecraftUtils {
 
         // Custom names
         if(item.hasCustomHoverName()) {
-            return item.getHoverName();
+            final Component name = item.getHoverName();
+            return name.getStyle().getColor() == null ? new Txt(name).white().get() : name;
         }
 
         // Fallback
-        return item.getItem().getName(item);
+        return new Txt(item.getItem().getName(item)).white().get();
     }
 
 

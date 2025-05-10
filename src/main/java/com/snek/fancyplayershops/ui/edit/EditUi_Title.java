@@ -36,13 +36,12 @@ public class EditUi_Title extends ShopTextElm {
      * Updates the displayed text, reading data from the target shop.
      */
     public void updateDisplay() {
-        getStyle(TextElmStyle.class).setText(new Txt()
+        if(shop.getItem().getItem() == Items.AIR) getStyle(TextElmStyle.class).setText(new Txt()
+            .cat(new Txt("Editing an empty shop").white())
+        .get());
+        else getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Editing: ").white())
-            .cat(new Txt(
-                shop.getItem().getItem() == Items.AIR ?
-                new Txt("an empty shop").white().get() :
-                new Txt(MinecraftUtils.getFancyItemName(shop.getItem())).get()
-            ))
+            .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
         .get());
         flushStyle();
     }

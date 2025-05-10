@@ -13,11 +13,14 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
+import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 
 
@@ -67,7 +70,29 @@ public class EditUi_DeleteButton extends ShopButton {
         if(r) {
             shop.stash();
             shop.delete();
-            player.displayClientMessage(new Txt("Your shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), false);
+
+
+            // Send feedback message
+            if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
+                .cat(new Txt("Your empty shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
+            .get(), false);
+            else player.displayClientMessage(new Txt()
+                .cat(new Txt("Your shop \"")).color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR)
+                .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
+                .cat(new Txt("\" has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
+            .get(), false);
+
+
+            // Give the player a default shop item
+            final ItemStack defaultShopItem =  FancyPlayerShops.getShopItemCopy();
+            if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
+                player.displayClientMessage(new Txt()
+                    .cat("1x ").lightGray()
+                    .cat(MinecraftUtils.getFancyItemName(defaultShopItem))
+                    .cat(new Txt(" has been sent to your stash."))
+                .get(), false);
+            }
+            //FIXME actually stash item
         }
         return r;
     }
