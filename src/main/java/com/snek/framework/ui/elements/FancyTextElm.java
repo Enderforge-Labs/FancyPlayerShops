@@ -51,7 +51,7 @@ public class FancyTextElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected FancyTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
+    public FancyTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
 
         // Create element and background element
         super(_world, new CustomTextDisplay(_world), _style);

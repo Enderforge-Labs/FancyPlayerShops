@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;

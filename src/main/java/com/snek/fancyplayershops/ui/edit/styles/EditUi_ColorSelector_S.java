@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
 import com.snek.framework.data_types.animations.Animation;

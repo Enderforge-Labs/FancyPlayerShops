@@ -5,23 +5,17 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.misc.styles.CanvasBackground_S;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.FancyTextElm;
 import com.snek.framework.ui.elements.PanelElm;
-import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 import com.snek.framework.ui.elements.styles.PanelElmStyle;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;

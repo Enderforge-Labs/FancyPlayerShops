@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.styles.SimpleNameDisplay_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -326,7 +327,7 @@ public class ShopItemDisplay extends ItemElm {
      */
     public void spawnNameEntity(){
         if(name == null) {
-            name = new FancyTextElm(world);
+            name = new FancyTextElm(world, new SimpleNameDisplay_S(shop));
             name.getStyle().setViewRange(0.2f);
             name.getStyle().setBillboardMode(BillboardConstraints.VERTICAL);
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
