@@ -27,4 +27,5 @@ public interface Clickable {
      * @return Whether the function consumed the click.
      */
     public boolean onClick(@NotNull Player player, @NotNull ClickAction click);
+    //FIXME use "attemptClick" to check and make onClick void. only call onClick if attemptClick returns true. do something similar for hoverable
 }

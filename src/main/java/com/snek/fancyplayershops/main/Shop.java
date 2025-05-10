@@ -72,8 +72,10 @@ import net.minecraft.world.phys.Vec3;
 public class Shop {
 
     // Limits
-    public static final double MAX_PRICE = 100_000_000_000d;
-    public static final int    MAX_STOCK =       1_000_000;
+    public static final double DEFAULT_PRICE = 1_000_000d;
+    public static final int    DEFAULT_STOCK = 1_000;
+    public static final double MAX_PRICE     = 100_000_000_000d;
+    public static final int    MAX_STOCK     = 1_000_000;
 
 
     // Animation data
@@ -88,10 +90,10 @@ public class Shop {
 
 
     // Color theme data
-    public static final float COLOR1_V = 0.65f;
     public static final float COLOR1_S = 0.2f;
-    public static final float COLOR2_V = 0.08f;
-    public static final float COLOR2_S = 0.50f;
+    public static final float COLOR1_V = 0.75f;
+    public static final float COLOR2_S = 0.40f;
+    public static final float COLOR2_V = 0.3f;
     public static final float COLOR_DEFAULT_HUE = 300f;
 
 
@@ -111,10 +113,10 @@ public class Shop {
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
-    private                    double    price           = 1_000_000;           // The configured price for each item
-    private                    int       maxStock        = 1_000;               // The configured maximum stock
+    private                    double    price           = DEFAULT_PRICE;       // The configured price for each item
+    private                    int       maxStock        = DEFAULT_STOCK;       // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
-    private                    float     colorThemeHue   = 300f;                // The configured hue of the color theme
+    private                    float     colorThemeHue   = COLOR_DEFAULT_HUE;   // The configured hue of the color theme
 
 
     // Shop state

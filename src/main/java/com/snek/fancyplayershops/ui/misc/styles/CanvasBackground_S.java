@@ -30,6 +30,6 @@ public class CanvasBackground_S extends ShopPanelElm_S {
 
     @Override
     public int getDefaultAlpha() {
-        return 180;
+        return 100;
     }
 }

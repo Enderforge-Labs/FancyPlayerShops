@@ -41,15 +41,18 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
     // Layout
     public static final float ROTATE_BUTTON_Y            = 0.45f - SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
-    public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.3f;
+    public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
     public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
 
-    public static final float BOTTOM_ROW_SPACING = 0.04f;
-    public static final float BOTTOM_ROW_SHIFT = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
-    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f;
-    public static final float TOOLBAR_FG_WIDTH = 0.15f;
+    public static final float BOTTOM_ROW_SPACING         = 0.04f;
+    public static final float BOTTOM_ROW_SHIFT           = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
+    public static final float BOTTOM_ROW_CONTENT_SIZE    = 0.6f;
+    public static final float TOOLBAR_FG_WIDTH           = 0.15f;
+
+    public static final @NotNull Vector2f COLOR_SELECTOR_SIZE     = new Vector2f(0.2f, 0.08f);
+    public static final          float    COLOR_SELECTOR_HIDDEN_W = 0.1f;
 
 
     // Functionalities
@@ -140,6 +143,44 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         e = bg.addChild(new EditUi_DeleteButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * 2f, 0));
+
+
+        // Add color selectors
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 000f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 2.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 050f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 1.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 100f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 0.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 150f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -0.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 200f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -1.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 250f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -2.5f);
+
+        e = bg.addChild(new EditUi_ColorSelector(_shop, 300f));
+        e.setSize(COLOR_SELECTOR_SIZE);
+        e.setAlignmentX(AlignmentX.RIGHT);
+        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -3.5f);
+
     }
 
 
