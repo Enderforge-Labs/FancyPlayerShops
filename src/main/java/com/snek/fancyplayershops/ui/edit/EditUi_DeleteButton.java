@@ -79,9 +79,9 @@ public class EditUi_DeleteButton extends ShopButton {
                 .cat(new Txt("Your empty shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
             .get(), false);
             else player.displayClientMessage(new Txt()
-                .cat(new Txt("Your shop \""))
+                .cat("Your shop \"")
                 .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
-                .cat(new Txt("\" has been deleted."))
+                .cat("\" has been deleted.")
             .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 

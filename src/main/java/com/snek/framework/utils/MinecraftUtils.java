@@ -109,6 +109,7 @@ public abstract class MinecraftUtils {
      * Attempts to give an item to a player.
      * @param player The player.
      * @param item The item to give.
+     * <p> Partial insertions modify the count of the item stack to indicate the amount of items that didn't fit in the inventory.
      * @return True if the item could be given to the player, false othersise (no space in inventory).
      */
     public static boolean attemptGive(final @NotNull Player player, final @NotNull ItemStack item) {
