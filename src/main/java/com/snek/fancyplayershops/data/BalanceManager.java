@@ -14,7 +14,12 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
+import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
+
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -105,22 +110,45 @@ public abstract class BalanceManager {
         dataLoaded = true;
 
 
-        for(final File levelStorageDir : FancyPlayerShops.getStorageDir().resolve("balance").toFile().listFiles()) {
+        // For each balance file
+        final File[] balanceStorageFiles = FancyPlayerShops.getStorageDir().resolve("balance").toFile().listFiles();
+        if(balanceStorageFiles != null) for(final File balanceStorageFile : balanceStorageFiles) {
 
-            // For each shop file
-            final File[] balanceStorageFiles = levelStorageDir.listFiles();
-            if(balanceStorageFiles != null) for(final File balanceStorageFile : balanceStorageFiles) {
-
-                // Read the file
-                final String fileName = levelStorageDir.getName();
-                final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
-                try(FileReader reader = new FileReader(balanceStorageFile)) {
-                    final Float balance = new Gson().fromJson(reader, Float.class);
-                    addBalance(playerUID, balance);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            // Read the file
+            final String fileName = balanceStorageFile.getName();
+            final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+            try(FileReader reader = new FileReader(balanceStorageFile)) {
+                final Float balance = new Gson().fromJson(reader, Float.class);
+                addBalance(playerUUID, balance);
+                System.out.println("Added " + balance + " balance to " + playerUUID);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Moves the shop balance of a player to their personal balance.
+     * Sends a feedback message to the player indicating how much was claimed, or that the balance is empty in case there was nothing to claim.
+     * @param player The player.
+     */
+    public static void claim(final @NotNull Player player) {
+        final Float balance = balances.put(player.getUUID(), 0f);
+        saveBalance(player.getUUID());
+
+        if(balance == null || balance < 0.005d) {
+            player.displayClientMessage(new Txt("Your shop balance is empty. There is nothing to claim right now.").lightGray().get(), false);
+        }
+        else {
+            EconomyManager.addCurrency(player.getUUID(), (long)(balance * 100d));
+            player.displayClientMessage(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get(), false);
         }
     }
 }

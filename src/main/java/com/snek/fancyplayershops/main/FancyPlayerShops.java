@@ -38,7 +38,9 @@ import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
@@ -175,8 +177,11 @@ public class FancyPlayerShops implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             if(fatal) return;
 
-            // Load shop data
+            // Load persistent data
             ShopManager.loadShops();
+            StashManager.loadStashes();
+            BalanceManager.loadBalances();
+
 
             // Schedule UI element update loop
             Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);

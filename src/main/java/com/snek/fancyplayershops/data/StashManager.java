@@ -128,30 +128,27 @@ public abstract class StashManager {
         dataLoaded = true;
 
 
-        for(final File levelStorageDir : FancyPlayerShops.getStorageDir().resolve("stash").toFile().listFiles()) {
+        // For each stash storage file
+        final File[] stashStorageFiles = FancyPlayerShops.getStorageDir().resolve("stash").toFile().listFiles();
+        if(stashStorageFiles != null) for(final File stashStorageFile : stashStorageFiles) {
 
-            // For each stash file
-            final File[] stashStorageFiles = levelStorageDir.listFiles();
-            if(stashStorageFiles != null) for(final File stashStorageFile : stashStorageFiles) {
+            // Read the file
+            final String fileName = stashStorageFile.getName();
+            final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+            final JsonArray jsonEntries;
+            try(FileReader reader = new FileReader(stashStorageFile)) {
+                jsonEntries = new Gson().fromJson(reader, JsonArray.class);
 
-                // Read the file
-                final String fileName = levelStorageDir.getName();
-                final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
-                final JsonArray jsonEntries;
-                try(FileReader reader = new FileReader(stashStorageFile)) {
-                    jsonEntries = new Gson().fromJson(reader, JsonArray.class);
-
-                    // Load the data into the runtime map
-                    for (final JsonElement _jsonEntry : jsonEntries.asList()) {
-                        final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
-                        stashItem(playerUID,
-                            MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
-                            jsonEntry.get("count").getAsInt()
-                        );
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                // Load the data into the runtime map
+                for (final JsonElement _jsonEntry : jsonEntries.asList()) {
+                    final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
+                    stashItem(playerUID,
+                        MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
+                        jsonEntry.get("count").getAsInt()
+                    );
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
