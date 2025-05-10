@@ -1,0 +1,126 @@
+package com.snek.fancyplayershops.data;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.google.gson.Gson;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * A class that handles player balances.
+ */
+public abstract class BalanceManager {
+    private BalanceManager() {}
+
+
+    // Player balance data
+    private static final @NotNull Map<@NotNull UUID, Float> balances = new HashMap<>();
+    private static boolean dataLoaded = false;
+
+
+
+
+
+
+
+
+    /**
+     * Adds the specified amount of money to the balance of the player.
+     * @param playerUUID The UUID of the player.
+     * @param count The amount of money to add.
+     */
+    public static void addBalance(final @NotNull UUID playerUUID, final float amount) {
+        balances.merge(playerUUID, amount, Float::sum);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Saves the balance of the specified player in its config file.
+     * @param playerUUID The UUID of the player.
+     */
+    public static void saveBalance(final @NotNull UUID playerUUID) {
+        final Float balance = balances.get(playerUUID);
+        if(balance == null) return;
+
+
+        // Create directory for the world
+        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("balance");
+        try {
+            Files.createDirectories(levelStorageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Create this player's config file if absent, then save the JSON in it
+        final File balanceStorageFile = new File(levelStorageDir + "/" + playerUUID.toString() + ".json");
+        try (final Writer writer = new FileWriter(balanceStorageFile)) {
+            new Gson().toJson(balance, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    /**
+     * Loads all the player balances into the runtime map if needed.
+     * <p> Must be called on server started event (After the worlds are loaded!).
+     * <p> If the data has already been loaded, the call will have no effect.
+     */
+    public static void loadBalances() {
+        if(dataLoaded) return;
+        dataLoaded = true;
+
+
+        for(final File levelStorageDir : FancyPlayerShops.getStorageDir().resolve("balance").toFile().listFiles()) {
+
+            // For each shop file
+            final File[] balanceStorageFiles = levelStorageDir.listFiles();
+            if(balanceStorageFiles != null) for(final File balanceStorageFile : balanceStorageFiles) {
+
+                // Read the file
+                final String fileName = levelStorageDir.getName();
+                final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+                try(FileReader reader = new FileReader(balanceStorageFile)) {
+                    final Float balance = new Gson().fromJson(reader, Float.class);
+                    addBalance(playerUID, balance);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
+import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
@@ -501,10 +502,12 @@ public class Shop {
                 stock -= amount;
                 ShopManager.saveShop(this);
                 EconomyManager.subtractCurrency(player.getUUID(), totPrice);
-                final ItemStack _item = item.copyWithCount(amount);
+                BalanceManager.addBalance(ownerUUID, amount);
+                BalanceManager.saveBalance(ownerUUID);
 
 
                 // Send feedback to the player
+                final ItemStack _item = item.copyWithCount(amount);
                 if(MinecraftUtils.attemptGive(player, _item)) {
                     player.displayClientMessage(new Txt()
                         .cat(new Txt("Bought " + Utils.formatAmount(amount, true, true)).lightGray().cat(" "))

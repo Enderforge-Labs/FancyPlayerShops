@@ -41,7 +41,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 /**
- * A class that handles player stashes
+ * A class that handles player stashes.
  */
 public abstract class StashManager {
     private StashManager() {}
@@ -68,8 +68,7 @@ public abstract class StashManager {
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
-        stashes.putIfAbsent(playerUUID, new ArrayList<>());
-        stashes.get(playerUUID).add(new StashEntry(item, count));
+        stashes.computeIfAbsent(playerUUID, k -> new ArrayList<>()).add(new StashEntry(item, count));
     }
 
 
@@ -98,7 +97,6 @@ public abstract class StashManager {
 
 
         // Create the JSON array that contains the player's stash entries
-        final File stashStorageFile = new File(levelStorageDir + "/" + playerUUID.toString() + ".json");
         final JsonArray jsonEntries = new JsonArray();
         for (final StashEntry entry: entries) {
             final JsonObject jsonEntry = new JsonObject();
@@ -109,6 +107,7 @@ public abstract class StashManager {
 
 
         // Create this player's config file if absent, then save the JSON in it
+        final File stashStorageFile = new File(levelStorageDir + "/" + playerUUID.toString() + ".json");
         try (final Writer writer = new FileWriter(stashStorageFile)) {
             new Gson().toJson(jsonEntries, writer);
         } catch (IOException e) {
@@ -131,7 +130,7 @@ public abstract class StashManager {
 
         for(final File levelStorageDir : FancyPlayerShops.getStorageDir().resolve("stash").toFile().listFiles()) {
 
-            // For each shop file
+            // For each stash file
             final File[] stashStorageFiles = levelStorageDir.listFiles();
             if(stashStorageFiles != null) for(final File stashStorageFile : stashStorageFiles) {
 
