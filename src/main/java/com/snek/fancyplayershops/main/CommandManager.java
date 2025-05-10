@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.main;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.ShopManager;
@@ -10,6 +9,7 @@ import com.snek.framework.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
 
@@ -72,8 +72,20 @@ public abstract class CommandManager {
                     .executes(context -> {
                         final Player player = context.getSource().getPlayer();
                         final float radius = FloatArgumentType.getFloat(context, "radius");
-                        final int n = ShopManager.purge(player.level(), player.getPosition(1f).toVector3f(), radius);
+                        final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
                         player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
+                        return 1;
+                    })))
+
+
+                    // Purge command
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
+                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 4f))
+                    .executes(context -> {
+                        final Player player = context.getSource().getPlayer();
+                        final float radius = FloatArgumentType.getFloat(context, "radius");
+                        final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+                        player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
                         return 1;
                     })))
                 )

@@ -9,11 +9,11 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,10 +26,12 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -51,6 +53,7 @@ import net.minecraft.world.level.Level;
  */
 public abstract class ShopManager {
     private ShopManager() {}
+    private static final Random rnd = new Random();
     public static final int PULL_UPDATES_PER_TICK = 1;
 
 
@@ -262,7 +265,7 @@ public abstract class ShopManager {
      * @param radius The maximum distance from pos shops can have in order to be purged.
      * @return The number of shops that were removed.
      */
-    public static int purge(final @NotNull Level world, final @NotNull Vector3f pos, final float radius) {
+    public static int purge(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
         final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
         for(final Shop shop : shops) {
@@ -280,6 +283,36 @@ public abstract class ShopManager {
                 shop.stash();
                 shop.delete();
                 ++r;
+            }
+        }
+        return r;
+    }
+
+
+
+
+    /**
+     * Fill an area around the specified position with shop blocks.
+     * @param world The target world.
+     * @param pos The center of the fill area.
+     * @param radius The maximum distance to reach on each cardinal direction.
+     * @param owner The owner of the newly created shops.
+     * @return The number of shops that were created.
+     */
+    public static int fill(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
+        int r = 0;
+        for(float i = pos.x - radius; i < pos.x + radius; ++i) {
+            for(float j = pos.y - radius; j < pos.y + radius; ++j) {
+                for(float k = pos.z - radius; k < pos.z + radius; ++k) {
+                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vec3(i, j, k)));
+                    if(world.getBlockState(blockPos).isAir()) {
+                        final Shop shop = new Shop(world, blockPos, owner);
+                        shop.changeItem(Items.STONE.getDefaultInstance());
+                        shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
+                        shop.invalidateItemDisplay();
+                        ++r;
+                    }
+                }
             }
         }
         return r;
