@@ -105,8 +105,13 @@ public abstract class ShopManager {
 
 
 
+
+
+
+
     /**
-     * Saves the shop data in its config file.
+     * Saves the data of the specified shop in its config file.
+     * @param shop The shop to save.
      */
     public static void saveShop(final @NotNull Shop shop) {
 
@@ -145,9 +150,9 @@ public abstract class ShopManager {
 
             // For each shop file
             final File[] shopStorageFiles = levelStorageDir.listFiles();
-            if(shopStorageFiles != null) for(File shopStorageFile : shopStorageFiles) {
+            if(shopStorageFiles != null) for(final File shopStorageFile : shopStorageFiles) {
 
-                // Read file
+                // Read file and deserialize the data
                 Shop retrievedShop = null;
                 try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
@@ -164,6 +169,10 @@ public abstract class ShopManager {
             }
         }
     }
+
+
+
+
 
 
 
@@ -204,6 +213,10 @@ public abstract class ShopManager {
         final File shopStorageFile = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json").toFile();
         shopStorageFile.delete();
     }
+
+
+
+
 
 
 

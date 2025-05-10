@@ -7,8 +7,10 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mojang.serialization.JsonOps;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
@@ -60,6 +62,42 @@ public abstract class MinecraftUtils {
     private MinecraftUtils() {}
 
     public static final @NotNull UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+
+
+
+
+
+
+
+
+    /**
+     * Computes the serialized form of an ItemStack.
+     * @return The serialized ItemStack as a String.
+     * @throws RuntimeException if the item cannot be serialized.
+     */
+    public static @NotNull String serializeItem(final @NotNull ItemStack item) {
+        final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
+        if(result.isEmpty()) {
+            throw new RuntimeException("Could not serialize shop item");
+        }
+        return result.get().toString();
+    }
+
+
+
+
+    /**
+     * Computes the ItemStack form of a serialized item.
+     * @return The deserialized ItemStack.
+     * @throws RuntimeException if the item cannot be deserialized.
+     */
+    public static @NotNull ItemStack deserializeItem(final @NotNull String serializedItem) {
+        final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
+        if(result.isEmpty()) {
+            throw new RuntimeException("Could not deserialize shop item");
+        }
+        return result.get().getFirst();
+    }
 
 
 

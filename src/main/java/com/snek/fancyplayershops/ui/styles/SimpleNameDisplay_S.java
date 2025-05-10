@@ -15,12 +15,9 @@ import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 
 
 public class SimpleNameDisplay_S extends FancyTextElmStyle {
-    protected final @NotNull Shop shop;
 
-
-    public SimpleNameDisplay_S(final @NotNull Shop _shop) {
+    public SimpleNameDisplay_S() {
         super();
-        shop = _shop;
     }
 
 

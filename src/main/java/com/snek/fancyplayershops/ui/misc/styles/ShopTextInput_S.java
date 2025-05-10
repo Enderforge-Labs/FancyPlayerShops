@@ -17,7 +17,7 @@ import com.snek.framework.ui.functional.styles.TextInputElmStyle;
  * The style of the generic ShopTextInput UI element.
  */
 public class ShopTextInput_S extends TextInputElmStyle {
-    protected final Shop shop;
+    protected final @NotNull Shop shop;
 
 
     /**

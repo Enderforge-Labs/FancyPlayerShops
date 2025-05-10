@@ -9,9 +9,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import com.google.gson.JsonParser;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
-import com.mojang.serialization.JsonOps;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopCanvas;
@@ -173,32 +171,6 @@ public class Shop {
 
 
     /**
-     * Computes the serialized form of the item.
-     * @throws RuntimeException if the item cannot be serialized.
-     */
-    private void calcSerializedItem() {
-        final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
-        if(result.isEmpty()) {
-            throw new RuntimeException("Could not serialize shop item");
-        }
-        serializedItem = result.get().toString();
-    }
-
-
-    /**
-     * Computes the ItemStack form of the item, reading data from its serialized version.
-     * @throws RuntimeException if the item cannot be deserialized.
-     */
-    public void calcDeserializedItem() {
-        final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
-        if(result.isEmpty()) {
-            throw new RuntimeException("Could not deserialize shop item");
-        }
-        item = result.get().getFirst();
-    }
-
-
-    /**
      * Computes the Identifier of the world.
      */
     private void calcSerializedWorldId() {
@@ -263,7 +235,7 @@ public class Shop {
         menuOpenLimiter = new RateLimiter();
         cacheShopIdentifier();
         try {
-            calcDeserializedItem();
+            item = MinecraftUtils.deserializeItem(serializedItem);
             calcDeserializedWorldId(FancyPlayerShops.getServer());
             return true;
         } catch (RuntimeException e) {
@@ -299,7 +271,7 @@ public class Shop {
         pos = _pos;
 
         // Get members from serialized data and calculate shop identifier
-        calcSerializedItem();
+        serializedItem = MinecraftUtils.serializeItem(item);
         calcSerializedWorldId();
         cacheShopIdentifier();
 
@@ -689,7 +661,7 @@ public class Shop {
 
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
-        calcSerializedItem();
+        serializedItem = MinecraftUtils.serializeItem(item);
         ShopManager.saveShop(this);
     }
 
