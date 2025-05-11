@@ -875,9 +875,8 @@ public class Shop {
      * @param newOwner The new owner.
      */
     public void changeOwner(final @NotNull Player newOwner) {
+        if(ownerUUID.equals(newOwner.getUUID())) return;
         final Player oldOwner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
-
-        //FIXME stop players from transferring to themselves
 
 
         // Send feedback to old owner
@@ -895,7 +894,9 @@ public class Shop {
         .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
-        // Actually change the owner and save the shop
+        // Actually change the owner and save the shop, then force it to unfocus to prevent the previous owner from accessing the UI
+        focusStateNext = false;
+        updateFocusState();
         ownerUUID = newOwner.getUUID();
         ShopManager.saveShop(this);
     }
