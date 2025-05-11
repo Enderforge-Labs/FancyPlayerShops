@@ -40,13 +40,15 @@ public class TransferUi_NameInput extends ShopTextInput {
         if(shop.getActiveCanvas() instanceof TransferUi c) {
             getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
                 .cat("New owner: ")
-                .cat(FancyPlayerShops.getServer().getPlayerList().getPlayer(c.getNewOwnerUUID()).getName().getString())
+                .cat(
+                    c.getNewOwnerUUID().equals(shop.getOwnerUuid()) ? "-" :
+                    FancyPlayerShops.getServer().getPlayerList().getPlayer(c.getNewOwnerUUID()).getName().getString()
+                )
             .white().get());
         }
         else {
             getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
-                .cat("New owner: ")
-                .cat(FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())
+                .cat("New owner: -")
             .white().get());
         }
         flushStyle();
@@ -56,10 +58,15 @@ public class TransferUi_NameInput extends ShopTextInput {
     @Override
     protected boolean messageCallback(final @NotNull String s) {
 
+        //TODO check if the username is valid
+
         // Try to set the new owner and update the display if it's valid
         final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
         if(newOwner == null) {
             shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
+        }
+        else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
+            shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
         }
         else {
             ((TransferUi)shop.getActiveCanvas()).setNewOwnerUUID(newOwner.getUUID());

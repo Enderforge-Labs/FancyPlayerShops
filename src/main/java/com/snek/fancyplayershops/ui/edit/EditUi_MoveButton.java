@@ -76,13 +76,8 @@ public class EditUi_MoveButton extends ShopButton {
         else {
 
             // Send feedback message to the player
-            if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
-                .cat(new Txt("Your empty shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-            .get(), false);
-            else player.displayClientMessage(new Txt()
-                .cat(new Txt("Your shop \""))
-                .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
-                .cat(new Txt("\" has been converted into an item."))
+            player.displayClientMessage(new Txt()
+                .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
             .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 

@@ -871,24 +871,26 @@ public class Shop {
 
     /**
      * Changes the owner of this shop and sends a feedback message to the old owner.
+     * <p> If the new owner and the current one are the same player, this call will have no effect.
      * @param newOwner The new owner.
      */
     public void changeOwner(final @NotNull Player newOwner) {
         final Player oldOwner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
 
+        //FIXME stop players from transferring to themselves
+
 
         // Send feedback to old owner
         oldOwner.displayClientMessage(new Txt()
-            .cat("You successfully transferred the ownership of your shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\" ")
-            .cat("to " + newOwner.getName().getString() + ".")
+            .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
+            .cat("" + newOwner.getName().getString() + ".")
         .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
         newOwner.displayClientMessage(new Txt()
-            .cat("" + oldOwner.getName().getString())
-            .cat(" transferred ownership of their shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\" to you.")
-            .cat(" You can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
+            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
+            .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + world.dimension().location().toString())
         .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
@@ -924,5 +926,16 @@ public class Shop {
      */
     public Vector3i getThemeColor2() {
         return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR2_S, COLOR2_V));
+    }
+
+
+
+
+
+
+
+
+    public @NotNull String getDecoratedName(){
+        return item.getItem() == Items.AIR ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
     }
 }
