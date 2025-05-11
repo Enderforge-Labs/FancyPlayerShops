@@ -1,6 +1,7 @@
 package com.snek.framework.ui.elements.styles;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
@@ -57,7 +58,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public @NotNull Animation getDefaultPrimerAnimation() {
+    public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition()
             .targetOpacity(0)
@@ -66,7 +67,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public @NotNull Animation getDefaultSpawnAnimation() {
+    public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetOpacity(255)
@@ -75,7 +76,7 @@ public class TextElmStyle extends ElmStyle {
 
 
     @Override
-    public @NotNull Animation getDefaultDespawnAnimation() {
+    public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetOpacity(0)

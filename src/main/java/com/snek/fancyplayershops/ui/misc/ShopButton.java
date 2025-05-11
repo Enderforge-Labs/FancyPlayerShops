@@ -70,8 +70,8 @@ public abstract class ShopButton extends ButtonElm {
 
 
     @Override
-    public void onCheckTick(final @NotNull Player player) {
-        super.onCheckTick(player);
+    public void onHoverTick(final @NotNull Player player) {
+        super.onHoverTick(player);
 
         // Update input displays if present
         if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
@@ -94,6 +94,4 @@ public abstract class ShopButton extends ButtonElm {
             c.getRmbIndicator().updateDisplay(null);
         }
     }
-
-
 }

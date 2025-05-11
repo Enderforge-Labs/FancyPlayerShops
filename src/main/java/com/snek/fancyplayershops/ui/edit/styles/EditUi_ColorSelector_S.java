@@ -22,7 +22,7 @@ import com.snek.framework.utils.Easings;
  * The style of the EditUi_ColorSelector UI element.
  */
 public class EditUi_ColorSelector_S extends ShopButton_S {
-    public static final float SHIFT_X = EditUi.COLOR_SELECTOR_SIZE.x * (1 - EditUi.COLOR_SELECTOR_HIDDEN_W);
+    public static final float SHIFT_X = EditUi.COLOR_SELECTOR_W * (1 - EditUi.COLOR_SELECTOR_HIDDEN_W);
 
 
     /**

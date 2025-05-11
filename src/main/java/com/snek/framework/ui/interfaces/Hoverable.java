@@ -30,14 +30,6 @@ public interface Hoverable {
      * <p> This method is called once for each player that is currently being checked, regardless of the result of said check.
      * @param player The player.
      */
-    public default void onCheckTick(@NotNull Player player) {}
-
-
-    /**
-     * Tick callback.
-     * <p> This method is called once for each player that is currently looking at this element.
-     * @param player The player.
-     */
     public default void onHoverTick(@NotNull Player player) {}
 
 

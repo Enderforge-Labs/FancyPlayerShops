@@ -4,22 +4,14 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
-import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.edit.EditUi;
-import com.snek.fancyplayershops.ui.edit.EditUi_ColorSelector;
 import com.snek.fancyplayershops.ui.edit.EditUi_DeleteButton;
 import com.snek.fancyplayershops.ui.edit.EditUi_GraphButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_ItemSelector;
 import com.snek.fancyplayershops.ui.edit.EditUi_MoveButton;
 import com.snek.fancyplayershops.ui.edit.EditUi_OpenBuyMenuButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_PriceInput;
-import com.snek.fancyplayershops.ui.edit.EditUi_RotateButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_StockLimitInput;
-import com.snek.fancyplayershops.ui.edit.EditUi_TransferButton;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -78,9 +70,9 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add player name input
         e = bg.addChild(new TransferUi_NameInput(_shop));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
-        e.setAlignmentX(AlignmentX.CENTER);
+        e.setAlignmentX(AlignmentX.LEFT);
 
 
         // Add confirm button

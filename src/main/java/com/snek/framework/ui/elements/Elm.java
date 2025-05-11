@@ -532,25 +532,20 @@ public abstract class Elm extends Div {
             if(isHovered != hoverStateNext && (!(this instanceof ButtonElm) || hoverRateLimiter.attempt())) {
                 isHovered = hoverStateNext;
                 if(isHovered) {
-                    if(getStyle() instanceof ButtonElmStyle s) hoverRateLimiter.renewCooldown(s.getHoverEnterAnimation().getTotalDuration());
                     h.onHoverEnter(player);
                 }
                 else {
-                    if(getStyle() instanceof ButtonElmStyle s) hoverRateLimiter.renewCooldown(s.getHoverLeaveAnimation().getTotalDuration());
+                    if(getStyle() instanceof ButtonElmStyle s) {
+                        hoverRateLimiter.renewCooldown(s.getHoverLeaveAnimation().getTotalDuration());
+                    }
                     h.onHoverExit(player);
                 }
             }
 
 
             // Call hover tick callback
-            if(isHovered) {
-                h.onHoverTick(player);
-            }
-
-
-            // Call check tick callback
-            if(isHovered) {
-                h.onCheckTick(player);
+            if(player != null) {
+                if(isHovered) h.onHoverTick(player);
             }
         }
     }

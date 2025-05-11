@@ -87,7 +87,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public void onCheckTick(final @NotNull Player player) {
+    public void onHoverTick(final @NotNull Player player) {
         // Empty
     }
 
