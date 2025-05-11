@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.buy.BuyUi;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -25,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_InventoryButton extends ShopButton {
+public class EditUi_OpenBuyMenuButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
@@ -53,8 +54,8 @@ public class EditUi_InventoryButton extends ShopButton {
 
 
 
-    public EditUi_InventoryButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open inventory", 1,  new EditUi_SquareButton_S(_shop));
+    public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop){
+        super(_shop, null, "Open buy menu", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
@@ -71,6 +72,6 @@ public class EditUi_InventoryButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        player.displayClientMessage(new Txt("INVENTORY").get(), true);
+        shop.changeCanvas(new BuyUi(shop));
     }
 }
