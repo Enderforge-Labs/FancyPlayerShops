@@ -29,8 +29,11 @@ import net.minecraft.world.inventory.ClickAction;
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
  */
 public abstract class ButtonElm extends FancyTextElm implements Hoverable, Clickable {
-    protected final RateLimiter clickRateLimiter = new RateLimiter();
+    protected final RateLimiter clickRateLimiter       = new RateLimiter();
+    protected final RateLimiter initialCooldownLimiter = new RateLimiter();
     private   final int clickCooldown;
+
+    public static final int INITIAL_COOLDOWN = 10;
 
 
 
@@ -61,6 +64,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
+        initialCooldownLimiter.renewCooldown(INITIAL_COOLDOWN);
         super.spawn(pos);
         final Animation animation = getStyle(ButtonElmStyle.class).getHoverPrimerAnimation();
         if(animation != null) {
@@ -103,11 +107,10 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
     @Override
     public boolean attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        if(clickRateLimiter.attempt()) {
-            clickRateLimiter.renewCooldown(clickCooldown);
-            return checkIntersection(player);
-        }
-        else return false;
+        if(!initialCooldownLimiter.attempt()) return false;
+        if(!clickRateLimiter.attempt()) return false;
+        clickRateLimiter.renewCooldown(clickCooldown);
+        return checkIntersection(player);
     }
 
 

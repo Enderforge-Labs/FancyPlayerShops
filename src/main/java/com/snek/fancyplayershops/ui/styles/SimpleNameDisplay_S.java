@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.ui.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.styles.ShopUiBorder_S;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 
