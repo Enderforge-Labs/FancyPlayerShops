@@ -51,8 +51,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float BOTTOM_ROW_CONTENT_SIZE    = 0.6f;
     public static final float TOOLBAR_FG_WIDTH           = 0.15f;
 
-    public static final @NotNull Vector2f COLOR_SELECTOR_SIZE     = new Vector2f(0.2f, 0.08f);
-    public static final          float    COLOR_SELECTOR_HIDDEN_W = 0.1f;
+    public static final float COLOR_SELECTOR_W        = 0.2f;
+    public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
 
 
     // Functionalities
@@ -146,40 +146,14 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add color selectors
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 000f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 2.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 050f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 1.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 100f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * 0.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 150f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -0.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 200f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -1.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 250f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -2.5f);
-
-        e = bg.addChild(new EditUi_ColorSelector(_shop, 300f));
-        e.setSize(COLOR_SELECTOR_SIZE);
-        e.setAlignmentX(AlignmentX.RIGHT);
-        e.setPosY(0.5f + COLOR_SELECTOR_SIZE.y * -3.5f);
+        final int[] hues = new int[] { 0, 25, 55, 95, 135, 180, 220, 260, 300 };
+        for(int i = 0; i < hues.length; ++i) {
+            final float h = (1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
+            e = bg.addChild(new EditUi_ColorSelector(_shop, hues[i]));
+            e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
+            e.setAlignmentX(AlignmentX.RIGHT);
+            e.setPosY(1f - ShopFancyTextElm.LINE_H - h * (i + 1));
+        }
     }
 
 
