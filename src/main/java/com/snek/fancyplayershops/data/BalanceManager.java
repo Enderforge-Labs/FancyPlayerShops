@@ -120,7 +120,6 @@ public abstract class BalanceManager {
             try(FileReader reader = new FileReader(balanceStorageFile)) {
                 final Double balance = new Gson().fromJson(reader, Double.class);
                 addBalance(playerUUID, balance);
-                System.out.println("Added " + balance + " balance to " + playerUUID);
             } catch (IOException e) {
                 e.printStackTrace();
             }

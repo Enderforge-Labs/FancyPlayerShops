@@ -20,10 +20,13 @@ import com.snek.framework.data_types.containers.IndexedArrayDeque;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.styles.ElmStyle;
+import com.snek.framework.ui.functional.ButtonElm;
+import com.snek.framework.ui.functional.styles.ButtonElmStyle;
 import com.snek.framework.ui.interfaces.Hoverable;
 import com.snek.framework.utils.Easing;
 import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.scheduler.RateLimiter;
 import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.server.level.ServerLevel;
@@ -81,6 +84,7 @@ public abstract class Elm extends Div {
     protected       boolean isSpawned = false;        // Whether the element has been spawned into the world
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
     public          boolean isSpawned() { return isSpawned; }
+    protected final RateLimiter hoverRateLimiter = new RateLimiter();
 
 
 
@@ -506,16 +510,16 @@ public abstract class Elm extends Div {
 
 
 
+    //TODO save the currently hovered element and only check that one + stop at the first consumed hover event instead of firing it on every single element
     /**
      * Updates the new hover state of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
     public void updateHoverState(final @Nullable Player player) {
         if(this instanceof Hoverable h) {
-            boolean hoverStateNext;
-
 
             // Calculate next hover state
+            final boolean hoverStateNext;
             if(player == null) {
                 hoverStateNext = false;
             }
@@ -525,12 +529,14 @@ public abstract class Elm extends Div {
 
 
             // Update current state and run hover state change callbacks if needed
-            if(isHovered != hoverStateNext) {
+            if(isHovered != hoverStateNext && (!(this instanceof ButtonElm) || hoverRateLimiter.attempt())) {
                 isHovered = hoverStateNext;
                 if(isHovered) {
+                    if(getStyle() instanceof ButtonElmStyle s) hoverRateLimiter.renewCooldown(s.getHoverEnterAnimation().getTotalDuration());
                     h.onHoverEnter(player);
                 }
                 else {
+                    if(getStyle() instanceof ButtonElmStyle s) hoverRateLimiter.renewCooldown(s.getHoverLeaveAnimation().getTotalDuration());
                     h.onHoverExit(player);
                 }
             }
