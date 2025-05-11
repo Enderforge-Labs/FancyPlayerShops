@@ -70,6 +70,7 @@ import net.minecraft.world.phys.Vec3;
  * This class manages a player shop that is placed somewhere in a world.
  */
 public class Shop {
+    public static final int INTERACTION_BLOCKER_DESPAWN_DELAY = 10;
 
     // Limits
     public static final double DEFAULT_PRICE = 1_000d;
@@ -777,7 +778,7 @@ public class Shop {
 
             // Despawn the entities
             if(activeCanvas != null) activeCanvas.despawn();
-            if(interactionBlocker != null) interactionBlocker.despawn();
+            if(interactionBlocker != null) Scheduler.schedule(INTERACTION_BLOCKER_DESPAWN_DELAY, interactionBlocker::despawn);
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
 
