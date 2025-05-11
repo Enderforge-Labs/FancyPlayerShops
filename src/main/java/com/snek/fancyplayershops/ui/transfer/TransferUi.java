@@ -91,25 +91,18 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add buttons
-        e = bg.addChild(new EditUi_MoveButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * -2f, 0));
-
-        e = bg.addChild(new EditUi_GraphButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * -1f, 0));
-
-        e = bg.addChild(new EditUi_OpenBuyMenuButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * 0f, 0));
-
-        e = bg.addChild(new TransferUi_BackButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * 1f, 0));
-
-        e = bg.addChild(new EditUi_DeleteButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * 2f, 0));
+        final Div[] buttons = new Div[] {
+            new EditUi_MoveButton(_shop),
+            new EditUi_GraphButton(_shop),
+            new EditUi_OpenBuyMenuButton(_shop),
+            new TransferUi_BackButton(_shop),
+            new EditUi_DeleteButton(_shop),
+        };
+        for(int i = 0; i < buttons.length; ++i) {
+            e = bg.addChild(buttons[i]);
+            e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+            e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)), 0));
+        }
     }
 
 

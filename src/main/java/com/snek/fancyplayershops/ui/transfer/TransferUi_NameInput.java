@@ -8,7 +8,6 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +34,8 @@ public class TransferUi_NameInput extends ShopTextInput {
     }
 
 
+
+
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
         if(shop.getActiveCanvas() instanceof TransferUi c) {
@@ -55,21 +56,28 @@ public class TransferUi_NameInput extends ShopTextInput {
     }
 
 
+
+
     @Override
     protected boolean messageCallback(final @NotNull String s) {
 
-        //TODO check if the username is valid
+        // Check if the name is not a valid username
+        if(!s.matches("^\\w{3,16}$")) {
+            shop.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
+        }
 
-        // Try to set the new owner and update the display if it's valid
-        final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
-        if(newOwner == null) {
-            shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
-        }
-        else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
-            shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
-        }
+        // If it is, try to set the new owner and update the display in case of success
         else {
-            ((TransferUi)shop.getActiveCanvas()).setNewOwnerUUID(newOwner.getUUID());
+            final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
+            if(newOwner == null) {
+                shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
+            }
+            else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
+                shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
+            }
+            else {
+                ((TransferUi)shop.getActiveCanvas()).setNewOwnerUUID(newOwner.getUUID());
+            }
         }
         return true;
     }
