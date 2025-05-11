@@ -218,7 +218,8 @@ public class Div {
             e.onClick(player, clickType);
             return;
         }
-        for(final Div elm : children) {
+        final List<Div> _children = new ArrayList<>(children);
+        for(final Div elm : _children) {
             elm.forwardClick(player, clickType);
         }
     }
@@ -234,7 +235,8 @@ public class Div {
         if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
             e.updateHoverState(player);
         }
-        for(final Div elm : children) {
+        final List<Div> _children = new ArrayList<>(children);
+        for(final Div elm : _children) {
             elm.forwardHover(player);
         }
     }

@@ -29,7 +29,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public EditUi_StockLimitInput(final @NotNull Shop _shop) {
-        super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get());
+        super(_shop, null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
         updateDisplay(null);
     }
 

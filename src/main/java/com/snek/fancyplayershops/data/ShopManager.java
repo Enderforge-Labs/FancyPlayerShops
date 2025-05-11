@@ -272,7 +272,7 @@ public abstract class ShopManager {
             if(shop.getWorld() == world && shop.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
-                final Player owner = world.getPlayerByUUID(shop.getOwnerUuid());
+                final Player owner = FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
                 if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
                     .cat(new Txt("Your shop \"")).red()
                     .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())

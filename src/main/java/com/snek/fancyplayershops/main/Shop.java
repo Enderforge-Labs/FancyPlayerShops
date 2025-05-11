@@ -19,6 +19,7 @@ import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.buy.BuyUi;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.edit.EditUi;
+import com.snek.fancyplayershops.ui.transfer.TransferUi;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -749,7 +750,7 @@ public class Shop {
 
 
         // Send feedback to the player
-        final Player owner = world.getPlayerByUUID(ownerUUID);
+        final Player owner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
         if(owner != null && item.getItem() != Items.AIR && stock > 0) {
             owner.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ")
@@ -863,6 +864,38 @@ public class Shop {
                 }
             }
         }
+    }
+
+
+
+
+    /**
+     * Changes the owner of this shop and sends a feedback message to the old owner.
+     * @param newOwner The new owner.
+     */
+    public void changeOwner(final @NotNull Player newOwner) {
+        final Player oldOwner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
+
+
+        // Send feedback to old owner
+        oldOwner.displayClientMessage(new Txt()
+            .cat("You successfully transferred the ownership of your shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\" ")
+            .cat("to " + newOwner.getName().getString() + ".")
+        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+
+
+        // Send feedback to new owner
+        newOwner.displayClientMessage(new Txt()
+            .cat("" + oldOwner.getName().getString())
+            .cat(" transferred ownership of their shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\" to you.")
+            .cat(" You can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
+            .cat(" in the dimension " + world.dimension().location().toString())
+        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+
+
+        // Actually change the owner and save the shop
+        ownerUUID = newOwner.getUUID();
+        ShopManager.saveShop(this);
     }
 
 
