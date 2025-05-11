@@ -59,30 +59,26 @@ public class EditUi_ColorSelector extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
 
-            // Change theme hue
-            shop.setColorThemeHue(hue);
-            ShopManager.saveShop(shop);
+        // Change theme hue
+        shop.setColorThemeHue(hue);
+        ShopManager.saveShop(shop);
 
 
-            // Reset colored backgrounds of themed elements
-            final PanelElm bg = (PanelElm)shop.getActiveCanvas().getBg(); {
-                bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(CanvasBackground_S.class).getDefaultColor()));
-            }
-            for(Div c : shop.getActiveCanvas().getBg().getChildren()) {
-                if(!(c instanceof EditUi_ColorSelector)) {
-                    if(c instanceof FancyTextElm e) {
-                        e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()));
-                    }
-                    else if(c instanceof PanelElm e) {
-                        e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()));
-                    }
+        // Reset colored backgrounds of themed elements
+        final PanelElm bg = (PanelElm)shop.getActiveCanvas().getBg(); {
+            bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(CanvasBackground_S.class).getDefaultColor()));
+        }
+        for(Div c : shop.getActiveCanvas().getBg().getChildren()) {
+            if(!(c instanceof EditUi_ColorSelector)) {
+                if(c instanceof FancyTextElm e) {
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()));
+                }
+                else if(c instanceof PanelElm e) {
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()));
                 }
             }
         }
-        return r;
     }
 }

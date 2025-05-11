@@ -94,24 +94,20 @@ public class EditUi_RotateButton extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
-            shop.addDefaultRotation(rotation);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        shop.addDefaultRotation(rotation);
 
-            // Animate the item display to show the new rotation
-            shop.getItemDisplay().applyAnimation(
-                new Transition(2, Easings.expOut)
-                .additiveTransform(new Transform().rotY(-rotation))
-            );
-            shop.getItemDisplay().applyAnimation(
-                new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
-                .additiveTransform(new Transform().rotY(rotation))
-            );
+        // Animate the item display to show the new rotation
+        shop.getItemDisplay().applyAnimation(
+            new Transition(2, Easings.expOut)
+            .additiveTransform(new Transform().rotY(-rotation))
+        );
+        shop.getItemDisplay().applyAnimation(
+            new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().rotY(rotation))
+        );
 
-            playButtonSound(player);
-        }
-        return r;
+        playButtonSound(player);
     }
 
 

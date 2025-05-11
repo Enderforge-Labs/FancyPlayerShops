@@ -65,11 +65,7 @@ public class EditUi_GraphButton extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
-            player.displayClientMessage(new Txt("INFO").get(), false);
-        }
-        return r;
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        player.displayClientMessage(new Txt("INFO").get(), false);
     }
 }

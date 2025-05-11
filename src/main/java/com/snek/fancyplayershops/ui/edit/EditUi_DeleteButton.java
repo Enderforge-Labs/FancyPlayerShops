@@ -70,38 +70,34 @@ public class EditUi_DeleteButton extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
 
-            // Send feedback message
-            if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
-                .cat(new Txt("Your empty shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-            .get(), false);
-            else player.displayClientMessage(new Txt()
-                .cat("Your shop \"")
-                .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
-                .cat("\" has been deleted.")
-            .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+        // Send feedback message
+        if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
+            .cat(new Txt("Your empty shop has been deleted.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
+        .get(), false);
+        else player.displayClientMessage(new Txt()
+            .cat("Your shop \"")
+            .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
+            .cat("\" has been deleted.")
+        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
-            // Give the player a default shop item
-            final ItemStack defaultShopItem =  FancyPlayerShops.getShopItemCopy();
-            if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
-                StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
-                //! ^ saveStash() call is done by shop.stash()
-                player.displayClientMessage(new Txt()
-                    .cat("1x ")
-                    .cat(MinecraftUtils.getFancyItemName(defaultShopItem).getString())
-                    .cat(" has been sent to your stash.")
-                .lightGray().get(), false);
-            }
-
-
-            // Stash and delete the shop
-            shop.stash();
-            shop.delete();
+        // Give the player a default shop item
+        final ItemStack defaultShopItem =  FancyPlayerShops.getShopItemCopy();
+        if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
+            StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
+            //! ^ saveStash() call is done by shop.stash()
+            player.displayClientMessage(new Txt()
+                .cat("1x ")
+                .cat(MinecraftUtils.getFancyItemName(defaultShopItem).getString())
+                .cat(" has been sent to your stash.")
+            .lightGray().get(), false);
         }
-        return r;
+
+
+        // Stash and delete the shop
+        shop.stash();
+        shop.delete();
     }
 }

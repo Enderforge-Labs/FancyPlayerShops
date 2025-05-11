@@ -60,17 +60,13 @@ public abstract class TextInputElm extends ButtonElm {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
-            if(!inputState) {
-                enterInputState();
-                playButtonSound(player);
-            }
-            if(clickFeedbackMessage != null) player.displayClientMessage(clickFeedbackMessage, true);
-            ChatManager.setCallback(player, this::__internal_messageCallback);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        if(!inputState) {
+            enterInputState();
+            playButtonSound(player);
         }
-        return r;
+        if(clickFeedbackMessage != null) player.displayClientMessage(clickFeedbackMessage, true);
+        ChatManager.setCallback(player, this::__internal_messageCallback);
     }
 
 

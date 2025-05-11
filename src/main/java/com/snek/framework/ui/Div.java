@@ -214,7 +214,8 @@ public class Div {
      * @param clickType The type of click.
      */
     public void forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
-        if(this instanceof Clickable e && e.onClick(player, clickType)) {
+        if(this instanceof Clickable e && e.attemptClick(player, clickType)) {
+            e.onClick(player, clickType);
             return;
         }
         for(final Div elm : children) {

@@ -43,21 +43,17 @@ public class EditUi_ItemSelector extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r && player == shop.getuser()) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
 
-            final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
-            if(item != null && item.getItem() != Items.AIR) {
-                shop.changeItem(item);
-                //FIXME check blacklist before setting the item
-                //TODO add item blacklist
-                shop.getItemDisplay().updateDisplay();
-                ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
-                playButtonSound(player);
-            }
+        final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
+        if(item != null && item.getItem() != Items.AIR) {
+            shop.changeItem(item);
+            //FIXME check blacklist before setting the item
+            //TODO add item blacklist
+            shop.getItemDisplay().updateDisplay();
+            ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+            playButtonSound(player);
         }
-        return r;
     }
 }
 //TODO make this a subclass of item inspector

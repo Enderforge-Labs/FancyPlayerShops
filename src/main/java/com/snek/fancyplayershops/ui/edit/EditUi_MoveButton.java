@@ -68,30 +68,26 @@ public class EditUi_MoveButton extends ShopButton {
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean r = super.onClick(player, click);
-        if(r) {
-            final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
-            if(!giveResult) {
-                player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);
-            }
-            else {
-
-                // Send feedback message to the player
-                if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
-                    .cat(new Txt("Your empty shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
-                .get(), false);
-                else player.displayClientMessage(new Txt()
-                    .cat(new Txt("Your shop \""))
-                    .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
-                    .cat(new Txt("\" has been converted into an item."))
-                .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
-
-
-                // Delete shop
-                shop.delete();
-            }
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
+        if(!giveResult) {
+            player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);
         }
-        return r;
+        else {
+
+            // Send feedback message to the player
+            if(shop.getItem().getItem() == Items.AIR) player.displayClientMessage(new Txt()
+                .cat(new Txt("Your empty shop has been converted into an item.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR))
+            .get(), false);
+            else player.displayClientMessage(new Txt()
+                .cat(new Txt("Your shop \""))
+                .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
+                .cat(new Txt("\" has been converted into an item."))
+            .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+
+
+            // Delete shop
+            shop.delete();
+        }
     }
 }

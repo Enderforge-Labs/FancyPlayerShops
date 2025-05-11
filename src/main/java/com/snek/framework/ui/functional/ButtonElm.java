@@ -102,15 +102,12 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
 
 
     @Override
-    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+    public boolean attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(clickRateLimiter.attempt()) {
-            final boolean r = checkIntersection(player);
-            if(r) clickRateLimiter.renewCooldown(clickCooldown);
-            return r;
+            clickRateLimiter.renewCooldown(clickCooldown);
+            return checkIntersection(player);
         }
-        else {
-            return false;
-        }
+        else return false;
     }
 
 
