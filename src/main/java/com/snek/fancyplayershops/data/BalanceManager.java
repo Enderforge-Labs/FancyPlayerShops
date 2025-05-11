@@ -44,7 +44,7 @@ public abstract class BalanceManager {
 
 
     // Player balance data
-    private static final @NotNull Map<@NotNull UUID, Float> balances = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, Double> balances = new HashMap<>();
     private static boolean dataLoaded = false;
 
 
@@ -59,8 +59,8 @@ public abstract class BalanceManager {
      * @param playerUUID The UUID of the player.
      * @param count The amount of money to add.
      */
-    public static void addBalance(final @NotNull UUID playerUUID, final float amount) {
-        balances.merge(playerUUID, amount, Float::sum);
+    public static void addBalance(final @NotNull UUID playerUUID, final Double amount) {
+        balances.merge(playerUUID, amount, Double::sum);
     }
 
 
@@ -75,7 +75,7 @@ public abstract class BalanceManager {
      * @param playerUUID The UUID of the player.
      */
     public static void saveBalance(final @NotNull UUID playerUUID) {
-        final Float balance = balances.get(playerUUID);
+        final Double balance = balances.get(playerUUID);
         if(balance == null) return;
 
 
@@ -118,7 +118,7 @@ public abstract class BalanceManager {
             final String fileName = balanceStorageFile.getName();
             final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
             try(FileReader reader = new FileReader(balanceStorageFile)) {
-                final Float balance = new Gson().fromJson(reader, Float.class);
+                final Double balance = new Gson().fromJson(reader, Double.class);
                 addBalance(playerUUID, balance);
                 System.out.println("Added " + balance + " balance to " + playerUUID);
             } catch (IOException e) {
@@ -140,7 +140,7 @@ public abstract class BalanceManager {
      * @param player The player.
      */
     public static void claim(final @NotNull Player player) {
-        final Float balance = balances.put(player.getUUID(), 0f);
+        final Double balance = balances.put(player.getUUID(), 0d);
         saveBalance(player.getUUID());
 
         if(balance == null || balance < 0.005d) {

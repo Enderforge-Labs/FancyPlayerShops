@@ -499,8 +499,8 @@ public class Shop {
             buyer.displayClientMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            final float totPrice = (float)price * amount; //TODO
-            final long totPriceL = Math.round(totPrice * 100f);
+            final double totPrice = price * amount;
+            final long totPriceL = Math.round(totPrice * 100d);
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPriceL) {
                 stock -= amount;
                 ShopManager.saveShop(this);
