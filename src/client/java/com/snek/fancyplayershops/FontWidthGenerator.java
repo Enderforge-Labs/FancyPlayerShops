@@ -120,20 +120,16 @@ public abstract class FontWidthGenerator {
             );
 
 
-            //FIXME actually calculate the height
-            //FIXME new mappings have .height
             // Write string width function
             f.write("\n\n\n\n");
             f.write(
-                """
-                    /**
-                     * Returns the height a line would have when rendered.
-                     * <p> This does NOT include the space between lines.
-                     */
-                    public static float getHeight() {
-                        return 9f / TEXT_PIXEL_BLOCK_RATIO;
-                    }
-                """
+                "/**" +
+                " * Returns the height a line would have when rendered.\n" +
+                " * <p> This does NOT include the space between lines.\n" +
+                " */\n" +
+                "public static float getHeight() {\n" +
+                "    return " + renderer.lineHeight + "f / TEXT_PIXEL_BLOCK_RATIO;\n" +
+                "}\n"
             );
 
 
