@@ -33,9 +33,7 @@ import com.snek.framework.utils.Txt;
  * A UI that allows the owner of the shop to edit it.
  */
 public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
-    private final @NotNull Elm title;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull Elm getTitle() { return title; }
 
 
     // Temporary canvas data
@@ -66,7 +64,6 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setSizeY(ShopFancyTextElm.LINE_H);
         e.setAlignmentX(AlignmentX.CENTER);
-        title = (Elm)e;
 
 
         // Add player name input

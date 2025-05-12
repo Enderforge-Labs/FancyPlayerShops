@@ -13,6 +13,7 @@ import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 
@@ -78,9 +79,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add title
         e = bg.addChild(new EditUi_Title(_shop));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 1f);
-        e.setSizeY(ShopFancyTextElm.LINE_H);
-        e.setAlignmentX(AlignmentX.CENTER);
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (Elm)e;
 
 

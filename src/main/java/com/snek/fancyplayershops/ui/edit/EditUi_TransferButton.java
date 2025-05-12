@@ -17,7 +17,6 @@ import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
 import com.snek.framework.utils.SpaceUtils;
-import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

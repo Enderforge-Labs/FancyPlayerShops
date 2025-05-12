@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
@@ -10,6 +11,7 @@ import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
 
@@ -51,9 +53,8 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add title
         e = bg.addChild(new BuyUi_Title(_shop));
-        e.moveY(1f - ShopFancyTextElm.LINE_H * 1f);
-        e.setSizeY(ShopFancyTextElm.LINE_H);
-        e.setAlignmentX(AlignmentX.CENTER);
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (Elm)e;
 
         // Add item selector //FIXME replace with an "item inspector" element. make the selector it's subclass

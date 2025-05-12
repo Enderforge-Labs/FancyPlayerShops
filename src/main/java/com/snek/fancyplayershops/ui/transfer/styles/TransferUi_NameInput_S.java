@@ -8,7 +8,6 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Easings;
 
 

@@ -23,7 +23,6 @@ import com.snek.framework.utils.Txt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
-import net.minecraft.world.item.Items;
 
 
 
