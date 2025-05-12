@@ -18,6 +18,7 @@ import com.snek.framework.utils.Txt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.Items;
 
 
 
@@ -55,7 +56,7 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
 
 
     public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open buy menu", 1,  new EditUi_SquareButton_S(_shop));
+        super(_shop, null, "Open buy menu", 1, new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
@@ -72,6 +73,6 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.changeCanvas(new BuyUi(shop));
+        shop.openBuyUi(player);
     }
 }

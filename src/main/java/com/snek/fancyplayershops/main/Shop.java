@@ -19,7 +19,6 @@ import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.fancyplayershops.ui.buy.BuyUi;
 import com.snek.fancyplayershops.ui.details.DetailsUi;
 import com.snek.fancyplayershops.ui.edit.EditUi;
-import com.snek.fancyplayershops.ui.transfer.TransferUi;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -86,9 +85,9 @@ public class Shop {
 
 
     // Strings
-    public  static final Component EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
-    private static final Component SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
-    private static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
+    public static final Component EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
+    public static final Component SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
+    public static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
 
 
     // Color theme data
@@ -452,7 +451,7 @@ public class Shop {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.displayClientMessage(new Txt("This shop has no items in stock!").lightGray().get(), true);
+            owner.displayClientMessage(Shop.SHOP_STOCK_TEXT, true);
         }
         else {
             stock -= amount;
@@ -592,6 +591,9 @@ public class Shop {
     public void openBuyUi(final @NotNull Player player) {
         if(item.getItem() == Items.AIR) {
             player.displayClientMessage(SHOP_EMPTY_TEXT, true);
+        }
+        else if(stock < 1) {
+            player.displayClientMessage(SHOP_STOCK_TEXT, true);
         }
         else {
             changeCanvas(new BuyUi(this));
