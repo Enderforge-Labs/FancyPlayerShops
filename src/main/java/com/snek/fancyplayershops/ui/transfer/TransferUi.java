@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
+import com.snek.fancyplayershops.ui.edit.EditUiSub_BackButton;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -99,7 +100,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add back button
-        e = bg.addChild(new TransferUi_BackButton(_shop));
+        e = bg.addChild(new EditUiSub_BackButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(0);

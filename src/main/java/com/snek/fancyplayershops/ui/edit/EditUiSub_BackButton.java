@@ -1,11 +1,10 @@
-package com.snek.fancyplayershops.ui.transfer;
+package com.snek.fancyplayershops.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -25,29 +24,29 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class TransferUi_BackButton extends ShopButton {
+public class EditUiSub_BackButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.05f,
+            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
             new Vector2f(0.2f, 0.9f),
             new Vector2f(0.0f, 0.7f),
             new Vector2f(0.2f, 0.5f)
         ),
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.0f, 0.7f),
-            new Vector2f(1.0f, 0.7f),
-            new Vector2f(1.0f, 0.3f),
-            new Vector2f(0.4f, 0.3f)
+            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
+            new Vector2f(0.05f, 0.7f),
+            new Vector2f(1.0f,  0.7f),
+            new Vector2f(1.0f,  0.3f),
+            new Vector2f(0.6f,  0.3f)
         )
     };
 
 
 
 
-    public TransferUi_BackButton(final @NotNull Shop _shop){
+    public EditUiSub_BackButton(final @NotNull Shop _shop){
         super(_shop, null, "Go back", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
