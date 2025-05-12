@@ -2,18 +2,14 @@ package com.snek.fancyplayershops.ui.transfer.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.misc.styles.ShopButton_S;
+import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
-
-import net.minecraft.network.chat.Component;
 
 
 
@@ -22,24 +18,22 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class TransferUi_ConfirmButton_S extends ShopButton_S {
-    public static final Vector3i HOVER_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.8f));
+/**
+ * The style of the TransferUi_NameInput UI element.
+ */
+public class TransferUi_NameInput_S extends ShopTextInput_S {
 
-
-    public TransferUi_ConfirmButton_S(final @NotNull Shop _shop){
+    /**
+     * Creates a new TransferUi_NameInput_S.
+     */
+    public TransferUi_NameInput_S(final @NotNull Shop _shop) {
         super(_shop);
     }
 
 
     @Override
-    public @NotNull Component getDefaultText() {
-        return new Txt("Confirm").get();
-    }
-
-
-    @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
+        return shop.getThemeColor1();
     }
 
 
@@ -54,7 +48,7 @@ public class TransferUi_ConfirmButton_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(HOVER_COLOR)
+            .targetBgColor(getBgColor().add(20, 20, 20, new Vector3i()).min(new Vector3i(255)))
         );
     }
     @Override

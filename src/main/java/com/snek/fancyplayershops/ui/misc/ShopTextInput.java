@@ -33,17 +33,29 @@ public abstract class ShopTextInput extends TextInputElm {
 
 
     /**
-     * Creates a new ShopTextInput.
+     * Creates a new ShopTextInput using a custom style.
+     * @param _shop The target shop.
+     * @param _lmbActionName The name of the action associated with left clicks.
+     * @param _rmbActionName The name of the action associated with right clicks.
+     * @param _clickFeedbackMessage The message to show to the player when they click the element.
+     * @param _style The custom style.
+     */
+    protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage, final @NotNull ShopTextInput_S _style) {
+        super(_shop.getWorld(), _clickFeedbackMessage, _style);
+        shop = _shop;
+        lmbActionName = _lmbActionName;
+        rmbActionName = _rmbActionName;
+    }
+
+    /**
+     * Creates a new ShopTextInput using the default style.
      * @param _shop The target shop.
      * @param _lmbActionName The name of the action associated with left clicks.
      * @param _rmbActionName The name of the action associated with right clicks.
      * @param _clickFeedbackMessage The message to show to the player when they click the element.
      */
     protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage) {
-        super(_shop.getWorld(), _clickFeedbackMessage, new ShopTextInput_S(_shop));
-        shop = _shop;
-        lmbActionName = _lmbActionName;
-        rmbActionName = _rmbActionName;
+        this(_shop, _lmbActionName, _rmbActionName, _clickFeedbackMessage, new ShopTextInput_S(_shop));
     }
 
 

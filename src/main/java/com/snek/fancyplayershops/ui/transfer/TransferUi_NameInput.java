@@ -7,6 +7,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,12 @@ public class TransferUi_NameInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public TransferUi_NameInput(final @NotNull Shop _shop) {
-        super(_shop, null, "Choose new owner", new Txt("Send the name of the new owner in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
+        super(
+            _shop,
+            null, "Choose new owner",
+            new Txt("Send the name of the new owner in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(),
+            new TransferUi_NameInput_S(_shop)
+        );
         updateDisplay(null);
     }
 
@@ -38,20 +44,12 @@ public class TransferUi_NameInput extends ShopTextInput {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        if(shop.getActiveCanvas() instanceof TransferUi c) {
-            getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
-                .cat("New owner: ")
-                .cat(
-                    c.getNewOwnerUUID().equals(shop.getOwnerUuid()) ? "-" :
-                    FancyPlayerShops.getServer().getPlayerList().getPlayer(c.getNewOwnerUUID()).getName().getString()
-                )
-            .white().get());
-        }
-        else {
-            getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
-                .cat("New owner: -")
-            .white().get());
-        }
+        getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+            .cat(
+                shop.getActiveCanvas() instanceof TransferUi c && !c.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
+                FancyPlayerShops.getServer().getPlayerList().getPlayer(c.getNewOwnerUUID()).getName().getString() : "-"
+            )
+        .white().get());
         flushStyle();
     }
 
