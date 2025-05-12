@@ -5,7 +5,6 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
-import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -13,7 +12,11 @@ import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.elements.TextElm;
+import com.snek.framework.ui.elements.styles.TextElmStyle;
 
 
 
@@ -26,6 +29,10 @@ import com.snek.framework.ui.Div;
  * A UI that allows the user of a shop to view details about the item.
  */
 public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
+    public static final float DETAILS_W = 0.9f;                 // The total width of the main displays
+    public static final float NAMES_VALUES_WIDTH_RATIO = 0.35f; // The ration between the width of the names and the width of the values
+
+
     private final @NotNull DualInputIndicator inputIndicator;
 
 
@@ -44,7 +51,7 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
     public InspectUi(final @NotNull Shop _shop, final @NotNull Div _backButton) {
 
         // Call superconstructor
-        super(_shop, 1, ShopFancyTextElm.LINE_H, ShopCanvas.SQUARE_BUTTON_SIZE);
+        super(_shop, 1, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
         Div e;
 
 
@@ -52,6 +59,27 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e = bg.addChild(new InspectUi_Title(_shop));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
+
+
+        // Add details display
+        final Div details = bg.addChild(new Div());
+        {
+            // Add details display names
+            e = details.addChild(new InspectUi_Names(_shop));
+            e.setAlignmentX(AlignmentX.LEFT);
+            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
+            e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
+
+            // Add details display values
+            e = details.addChild(new InspectUi_Values(_shop));
+            e.setAlignmentX(AlignmentX.RIGHT);
+            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
+            e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
+        }
+        details.setSizeX(DETAILS_W);
+        details.setAbsSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));
+        details.setAlignmentX(AlignmentX.CENTER);
+        details.setPosY(1f - 0.1f * (1 + 2));
 
 
         // Add back button
@@ -63,7 +91,7 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(ShopUiBorder.DEFAULT_HEIGHT * 2);
+        e.setPosY(SQUARE_BUTTON_SIZE + ShopUiBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
     }

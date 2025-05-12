@@ -26,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_GraphButton extends ShopButton {
+public class EditUi_StatsButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
@@ -48,8 +48,8 @@ public class EditUi_GraphButton extends ShopButton {
 
 
 
-    public EditUi_GraphButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open details", 1,  new EditUi_SquareButton_S(_shop));
+    public EditUi_StatsButton(final @NotNull Shop _shop){
+        super(_shop, null, "Open statistics", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));

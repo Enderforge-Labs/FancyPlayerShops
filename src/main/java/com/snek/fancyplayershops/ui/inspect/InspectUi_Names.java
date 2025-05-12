@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.ui.details;
+package com.snek.fancyplayershops.ui.inspect;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,17 +15,17 @@ import com.snek.framework.utils.Txt;
 
 
 /**
- * Part of the main display of DetailsUi.
- * <p> It shows the names of informations about the shop.
+ * Part of the main display of InspectUi.
+ * <p> It shows the names of informations about the item.
  */
-public class DetailsUi_Names extends ShopTextElm {
+public class InspectUi_Names extends ShopTextElm {
 
 
     /**
-     * Creates a new DetailsUiDisplayNames.
+     * Creates a new InspectUi_Names.
      * @param _shop The target shop.
      */
-    public DetailsUi_Names(final @NotNull Shop _shop) {
+    public InspectUi_Names(final @NotNull Shop _shop) {
         super(_shop);
         updateDisplay();
     }
@@ -39,9 +39,8 @@ public class DetailsUi_Names extends ShopTextElm {
     public void updateDisplay() {
 
         getStyle(TextElmStyle.class).setText(new Txt()
-            .cat("Price:")
-            .cat("\nStock:")
-            .cat("\nOwner:")
+            .cat("ID:")
+            .cat("\nSource:")
         .lightGray().get());
 
         // Flush style

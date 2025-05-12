@@ -126,7 +126,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add buttons
         final Div[] buttons = new Div[] {
             new EditUi_MoveButton(_shop),
-            new EditUi_GraphButton(_shop),
+            new EditUi_StatsButton(_shop),
             new EditUi_OpenBuyMenuButton(_shop),
             new EditUi_TransferButton(_shop),
             new EditUi_DeleteButton(_shop),

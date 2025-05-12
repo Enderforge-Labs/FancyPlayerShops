@@ -399,12 +399,12 @@ public class Shop {
                     }
                 }
                 else {
-                    user = player;
                     if(player.getUUID().equals(ownerUUID)) {
                         openEditUi(player);
+                        user = player;
                     }
                     else {
-                        openBuyUi(player, true);
+                        if(openBuyUi(player, true)) user = player;
                     }
                 }
             }
@@ -585,20 +585,20 @@ public class Shop {
 
 
     /**
-     * Opens the buy item UI.
+     * Attempts to opens the buy item UI.
      * @param player The player.
      * @param adjustItemDisplay Wether to change the size and position of the item display from the standard focused transform to the "edit" transform.
+     * @return True if the edit UI was opened, false otherwise.
      */
-    public void openBuyUi(final @NotNull Player player, final boolean adjustItemDisplay) {
+    public boolean openBuyUi(final @NotNull Player player, final boolean adjustItemDisplay) {
         if(item.getItem() == Items.AIR) {
             player.displayClientMessage(SHOP_EMPTY_TEXT, true);
-        }
-        else if(stock < 1) {
-            player.displayClientMessage(SHOP_STOCK_TEXT, true);
+            return false;
         }
         else {
             changeCanvas(new BuyUi(this));
             if(adjustItemDisplay) getItemDisplay().enterEditState();
+            return true;
         }
     }
 

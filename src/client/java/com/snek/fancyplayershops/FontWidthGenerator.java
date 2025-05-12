@@ -123,13 +123,13 @@ public abstract class FontWidthGenerator {
             // Write string width function
             f.write("\n\n\n\n");
             f.write(
-                "/**" +
-                " * Returns the height a line would have when rendered.\n" +
-                " * <p> This does NOT include the space between lines.\n" +
-                " */\n" +
-                "public static float getHeight() {\n" +
-                "    return " + renderer.lineHeight + "f / TEXT_PIXEL_BLOCK_RATIO;\n" +
-                "}\n"
+                "    /**" +
+                "     * Returns the height a line would have when rendered.\n" +
+                "     * <p> This does NOT include the space between lines.\n" +
+                "     */\n" +
+                "    public static float getHeight() {\n" +
+                "        return " + renderer.lineHeight + "f / TEXT_PIXEL_BLOCK_RATIO;\n" +
+                "    }\n"
             );
 
 
