@@ -15,6 +15,7 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.elements.styles.TextElmStyle;
 
 
 
@@ -63,6 +64,18 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(EditUi.ITEM_SELECTOR_SIZE));
         e.setPosY(EditUi.ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
+
+
+        // Add amount and total price displays
+        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld()));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2);
+
+        e = bg.addChild(new BuyUi_PriceDisplay(_shop));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3);
 
 
         // Add input indicators

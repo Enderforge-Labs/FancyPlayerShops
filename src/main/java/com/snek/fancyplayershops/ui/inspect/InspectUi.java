@@ -61,25 +61,19 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
-        // Add details display
-        final Div details = bg.addChild(new Div());
-        {
-            // Add details display names
-            e = details.addChild(new InspectUi_Names(_shop));
-            e.setAlignmentX(AlignmentX.LEFT);
-            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
-            e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
+        // Add id display
+        e = bg.addChild(new InspectUi_IdDisplay(_shop));
+        e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 1));
+        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
-            // Add details display values
-            e = details.addChild(new InspectUi_Values(_shop));
-            e.setAlignmentX(AlignmentX.RIGHT);
-            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
-            e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
-        }
-        details.setSizeX(DETAILS_W);
-        details.setAbsSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));
-        details.setAlignmentX(AlignmentX.CENTER);
-        details.setPosY(1f - 0.1f * (1 + 2));
+        // Add mod display
+        e = bg.addChild(new InspectUi_ModDisplay(_shop));
+        e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 2));
+        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add back button

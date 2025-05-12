@@ -400,11 +400,12 @@ public class Shop {
                 }
                 else {
                     if(player.getUUID().equals(ownerUUID)) {
-                        openEditUi(player);
                         user = player;
+                        openEditUi(player);
                     }
                     else {
-                        if(openBuyUi(player, true)) user = player;
+                        if(canBuyUiBeOpened()) user = player;
+                        openBuyUi(player, true);
                     }
                 }
             }
@@ -584,14 +585,16 @@ public class Shop {
 
 
 
+    public boolean canBuyUiBeOpened(){
+        return item.getItem() != Items.AIR;
+    }
     /**
      * Attempts to opens the buy item UI.
      * @param player The player.
      * @param adjustItemDisplay Wether to change the size and position of the item display from the standard focused transform to the "edit" transform.
-     * @return True if the edit UI was opened, false otherwise.
      */
     public boolean openBuyUi(final @NotNull Player player, final boolean adjustItemDisplay) {
-        if(item.getItem() == Items.AIR) {
+        if(!canBuyUiBeOpened()) {
             player.displayClientMessage(SHOP_EMPTY_TEXT, true);
             return false;
         }
