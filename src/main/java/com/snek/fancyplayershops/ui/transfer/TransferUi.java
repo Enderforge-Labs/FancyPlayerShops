@@ -7,18 +7,12 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
-import com.snek.fancyplayershops.ui.edit.EditUi;
-import com.snek.fancyplayershops.ui.edit.EditUi_DeleteButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_GraphButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_MoveButton;
-import com.snek.fancyplayershops.ui.edit.EditUi_OpenBuyMenuButton;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
-import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
@@ -104,19 +98,11 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         inputIndicator = (DualInputIndicator)e;
 
 
-        // Add buttons
-        final Div[] buttons = new Div[] {
-            new EditUi_MoveButton(_shop),
-            new EditUi_GraphButton(_shop),
-            new EditUi_OpenBuyMenuButton(_shop),
-            new TransferUi_BackButton(_shop),
-            new EditUi_DeleteButton(_shop),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-            e.setPos(new Vector2f(EditUi.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)), 0));
-        }
+        // Add back button
+        e = bg.addChild(new TransferUi_BackButton(_shop));
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(0);
     }
 
 
