@@ -11,6 +11,7 @@ import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.misc.styles.CanvasBackground_S;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
+import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.FancyTextElm;
 import com.snek.framework.ui.elements.PanelElm;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
@@ -36,6 +37,7 @@ public class EditUi_ColorSelector extends ShopButton {
     // Instance data
     private final float hue;
     public float getHue() { return hue; }
+    private final @NotNull EditUi menu;
 
 
 
@@ -45,9 +47,10 @@ public class EditUi_ColorSelector extends ShopButton {
      * @param _shop The target shop.
      * @param hue The hue of the color theme.
      */
-    protected EditUi_ColorSelector(final @NotNull Shop _shop, final float _hue) {
+    protected EditUi_ColorSelector(final @NotNull Shop _shop, final float _hue, final @NotNull EditUi _menu) {
         super(_shop, null, "Change color theme", 1, new EditUi_ColorSelector_S(_shop));
         hue = _hue;
+        menu = _menu;
         getStyle(EditUi_ColorSelector_S.class).setBgColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
     }
 
@@ -67,10 +70,9 @@ public class EditUi_ColorSelector extends ShopButton {
 
 
         // Reset colored backgrounds of themed elements
-        final PanelElm bg = (PanelElm)shop.getActiveCanvas().getBg(); {
-            bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(CanvasBackground_S.class).getDefaultColor()));
-        }
-        for(Div c : shop.getActiveCanvas().getBg().getChildren()) {
+        final Elm bg = menu.getBg();
+        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(CanvasBackground_S.class).getDefaultColor()));
+        for(Div c : menu.getBg().getChildren()) {
             if(!(c instanceof EditUi_ColorSelector)) {
                 if(c instanceof FancyTextElm e) {
                     e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()));

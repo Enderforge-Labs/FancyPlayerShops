@@ -17,18 +17,20 @@ import net.minecraft.server.level.ServerLevel;
 
 
 public class BuyUi_AmountDisplay extends TextElm {
+    private final @NotNull BuyUi menu;
 
 
-    public BuyUi_AmountDisplay(final @NotNull ServerLevel _world) {
+    public BuyUi_AmountDisplay(final @NotNull ServerLevel _world, final @NotNull BuyUi _menu) {
         super(_world);
-        updateDisplay(1);
+        menu = _menu;
+        updateDisplay();
     }
 
 
-    public void updateDisplay(final int amount) {
+    public void updateDisplay() {
         getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Amount: ").lightGray())
-            .cat(new Txt(Utils.formatAmount(amount)).white())
+            .cat(new Txt(Utils.formatAmount(menu.getAmount())).white())
         .get());
     }
 }

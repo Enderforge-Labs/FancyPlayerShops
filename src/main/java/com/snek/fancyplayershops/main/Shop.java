@@ -88,6 +88,7 @@ public class Shop {
     public static final Component EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
     public static final Component SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
     public static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
+    public static final Component SHOP_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
 
 
     // Color theme data
@@ -452,7 +453,10 @@ public class Shop {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.displayClientMessage(Shop.SHOP_STOCK_TEXT, true);
+            owner.displayClientMessage(Shop.SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+        }
+        else if(stock < amount) {
+            owner.displayClientMessage(Shop.SHOP_AMOUNT_TEXT, true);
         }
         else {
             stock -= amount;
@@ -498,7 +502,7 @@ public class Shop {
             buyer.displayClientMessage(SHOP_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            buyer.displayClientMessage(SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            buyer.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             final double totPrice = price * amount;

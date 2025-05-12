@@ -34,6 +34,7 @@ import com.snek.framework.utils.Txt;
  * A UI that allows the owner of the shop to edit it.
  */
 public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
+    public static final float CONFIRM_BUTTON_Y = 0.25f;
     private final @NotNull DualInputIndicator inputIndicator;
 
 
@@ -75,7 +76,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
         ((Elm)e).getStyle(TextElmStyle.class).setText(new Txt("New owner:").get());
 
-        e = bg.addChild(new TransferUi_NameInput(_shop));
+        e = bg.addChild(new TransferUi_NameInput(_shop, this));
         e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -83,9 +84,9 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add confirm button
-        e = bg.addChild(new TransferUi_ConfirmButton(_shop));
+        e = bg.addChild(new TransferUi_ConfirmButton(_shop, this));
         e.setSize(new Vector2f(0.5f, ShopFancyTextElm.LINE_H));
-        e.setPosY(0.25f);
+        e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
 
 

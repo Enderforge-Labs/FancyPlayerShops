@@ -16,20 +16,22 @@ import com.snek.framework.utils.Utils;
 
 
 public class BuyUi_PriceDisplay extends ShopTextElm {
+    private final @NotNull BuyUi menu;
 
 
-    public BuyUi_PriceDisplay(final @NotNull Shop _shop) {
+    public BuyUi_PriceDisplay(final @NotNull Shop _shop, final @NotNull BuyUi _menu) {
         super(_shop);
-        updateDisplay(1);
+        menu = _menu;
+        updateDisplay();
     }
 
 
-    public void updateDisplay(final int amount) {
-        final Txt priceTxt = new Txt(Utils.formatPrice(shop.getPrice() * amount));
+    public void updateDisplay() {
+        final Txt priceTxt = new Txt(Utils.formatPrice(shop.getPrice() * menu.getAmount()));
 
         getStyle(TextElmStyle.class).setText(new Txt()
             .cat(new Txt("Total: ").lightGray())
-            .cat(shop.getuser().getUUID().equals(shop.getOwnerUuid()) ? priceTxt.lightGray().strikethrough() : priceTxt.white() )
+            .cat(shop.getuser().getUUID().equals(shop.getOwnerUuid()) ? priceTxt.lightGray().strikethrough().cat(new Txt(" 0").white().noStrikethrough()) : priceTxt.white() )
         .get());
     }
 }

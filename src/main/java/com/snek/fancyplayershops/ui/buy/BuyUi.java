@@ -31,9 +31,12 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
  * A UI that allows the user of a shop to buy items from it.
  */
 public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
-    private final @NotNull Elm title;
+    public static final float CONFIRM_BUTTON_Y = 0.25f;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull Elm getTitle() { return title; }
+
+
+    private int amount = 1;
+    public int getAmount() { return amount; }
 
 
 
@@ -57,7 +60,6 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e = bg.addChild(new BuyUi_Title(_shop));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (Elm)e;
 
         //Add item inspector
         e = bg.addChild(new BuyUi_ItemInspector(_shop, null, null, new BuyUiSub_BackButton(_shop)));
@@ -66,16 +68,23 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setAlignmentX(AlignmentX.CENTER);
 
 
-        // Add amount and total price displays
-        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld()));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        // Add confirm button
+        e = bg.addChild(new BuyUi_ConfirmButton(_shop, this));
+        e.setSize(new Vector2f(0.5f, ShopFancyTextElm.LINE_H));
+        e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2);
 
-        e = bg.addChild(new BuyUi_PriceDisplay(_shop));
+
+        // Add amount and total price displays
+        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld(), this));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3);
+        e.setPosY(CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H * 1);
+
+        e = bg.addChild(new BuyUi_PriceDisplay(_shop, this));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H * 2);
 
 
         // Add input indicators

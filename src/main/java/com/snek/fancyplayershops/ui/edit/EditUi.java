@@ -143,7 +143,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         final int[] hues = new int[] { 0, 25, 55, 95, 135, 180, 220, 260, 300 };
         for(int i = 0; i < hues.length; ++i) {
             final float h = (1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
-            e = bg.addChild(new EditUi_ColorSelector(_shop, hues[i]));
+            e = bg.addChild(new EditUi_ColorSelector(_shop, hues[i], this));
             e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
             e.setAlignmentX(AlignmentX.RIGHT);
             e.setPosY(1f - ShopFancyTextElm.LINE_H - h * (i + 1));

@@ -24,18 +24,23 @@ import net.minecraft.world.entity.player.Player;
  * A button that allows the owner of the shop to specify the new owner's name.
  */
 public class TransferUi_NameInput extends ShopTextInput {
+    private final @NotNull TransferUi menu;
+
+
+
 
     /**
      * Creates a new TransferUi_NameInput.
      * @param _shop The target shop.
      */
-    public TransferUi_NameInput(final @NotNull Shop _shop) {
+    public TransferUi_NameInput(final @NotNull Shop _shop, final @NotNull TransferUi _menu) {
         super(
             _shop,
             null, "Choose new owner",
             new Txt("Send the name of the new owner in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(),
             new TransferUi_NameInput_S(_shop)
         );
+        menu = _menu;
         updateDisplay(null);
     }
 
@@ -46,8 +51,8 @@ public class TransferUi_NameInput extends ShopTextInput {
     public void updateDisplay(final @Nullable Component textOverride) {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(
-                shop.getActiveCanvas() instanceof TransferUi c && !c.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
-                FancyPlayerShops.getServer().getPlayerList().getPlayer(c.getNewOwnerUUID()).getName().getString() : "-"
+                !menu.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
+                FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString() : "-"
             )
         .white().get());
         flushStyle();
@@ -74,7 +79,7 @@ public class TransferUi_NameInput extends ShopTextInput {
                 shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
             }
             else {
-                ((TransferUi)shop.getActiveCanvas()).setNewOwnerUUID(newOwner.getUUID());
+                menu.setNewOwnerUUID(newOwner.getUUID());
             }
         }
         return true;

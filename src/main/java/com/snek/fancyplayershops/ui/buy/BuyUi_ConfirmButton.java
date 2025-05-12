@@ -1,10 +1,11 @@
-package com.snek.fancyplayershops.ui.transfer;
+package com.snek.fancyplayershops.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_ConfirmButton_S;
 
@@ -19,19 +20,24 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class TransferUi_ConfirmButton extends ShopButton {
-    private final @NotNull TransferUi menu;
+public class BuyUi_ConfirmButton extends ShopButton {
+    private final @NotNull BuyUi menu;
 
 
-    protected TransferUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferUi _menu) {
-        super(_shop, null, "Confirm ownership transfer", 1, new TransferUi_ConfirmButton_S(_shop));
+    protected BuyUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull BuyUi _menu) {
+        super(_shop, null, "Confirm bulk buy", 10, new BuyUi_ConfirmButton_S(_shop));
         menu = _menu;
     }
 
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.changeOwner(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        if(player.getUUID().equals(shop.getOwnerUuid())) {
+            shop.retrieveItem(player, menu.getAmount());
+        }
+        else {
+            shop.buyItem(player, menu.getAmount());
+        }
     }
 
 
