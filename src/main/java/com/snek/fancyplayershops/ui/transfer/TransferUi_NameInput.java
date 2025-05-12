@@ -11,7 +11,6 @@ import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 
 
 
@@ -52,7 +51,8 @@ public class TransferUi_NameInput extends ShopTextInput {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(
                 !menu.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
-                FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString() : "-"
+                new Txt(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString()) :
+                new Txt("[Not specified]").gray().italic()
             )
         .white().get());
         flushStyle();
@@ -63,25 +63,7 @@ public class TransferUi_NameInput extends ShopTextInput {
 
     @Override
     protected boolean messageCallback(final @NotNull String s) {
-
-        // Check if the name is not a valid username
-        if(!s.matches("^\\w{3,16}$")) {
-            shop.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
-        }
-
-        // If it is, try to set the new owner and update the display in case of success
-        else {
-            final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
-            if(newOwner == null) {
-                shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
-            }
-            else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
-                shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
-            }
-            else {
-                menu.setNewOwnerUUID(newOwner.getUUID());
-            }
-        }
+        menu.attemptSetNewOwner(s);
         return true;
     }
 }

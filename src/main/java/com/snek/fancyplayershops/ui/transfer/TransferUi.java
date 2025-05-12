@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.edit.EditUiSub_BackButton;
@@ -23,6 +24,8 @@ import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
+import net.minecraft.world.entity.player.Player;
+
 
 
 
@@ -38,10 +41,11 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull DualInputIndicator inputIndicator;
 
 
-    // Temporary canvas data
+    // Instance data
+    private final @NotNull TransferUi_ConfirmButton confirmButton;
+    private final @NotNull Shop shop;
     private @NotNull UUID newOwnerUUID;
     public @NotNull UUID getNewOwnerUUID() { return newOwnerUUID; }
-    public void setNewOwnerUUID(final @NotNull UUID _newOwnerUUID) { newOwnerUUID = _newOwnerUUID; }
 
 
 
@@ -57,6 +61,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Call superconstructor
         super(_shop, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
+        shop = _shop;
         newOwnerUUID = _shop.getOwnerUuid();
         Div e;
 
@@ -88,6 +93,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(0.5f, ShopFancyTextElm.LINE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
+        confirmButton = (TransferUi_ConfirmButton)e;
 
 
         // Add input indicators
@@ -102,6 +108,44 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         e = bg.addChild(new EditUiSub_BackButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
+
+
+        // Force button color change
+        confirmButton.updateColor(false);
+    }
+
+
+
+
+    /**
+     * Tries to change the new owner.
+     * <p> Updates the confirmation button's color and sends feedback messages to the player.
+     * @param s The name of the new owner.
+     */
+    public void attemptSetNewOwner(final @NotNull String s) {
+
+        // Check if the name is not a valid username
+        if(!s.matches("^\\w{3,16}$")) {
+            shop.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
+            confirmButton.updateColor(false);
+        }
+
+        // If it is, try to set the new owner and update the display in case of success
+        else {
+            final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
+            if(newOwner == null) {
+                shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
+                confirmButton.updateColor(false);
+            }
+            else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
+                shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
+                confirmButton.updateColor(false);
+            }
+            else {
+                newOwnerUUID = newOwner.getUUID();
+                confirmButton.updateColor(true);
+            }
+        }
     }
 
 

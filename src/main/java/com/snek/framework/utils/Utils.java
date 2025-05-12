@@ -210,6 +210,15 @@ public abstract class Utils {
 
 
 
+    public static @NotNull Vector3i toBW(final @NotNull Vector3i rgb) {
+        return HSVtoRGB(toBW(RGBtoHSV(rgb)));
+    }
+    public static @NotNull Vector3f toBW(final @NotNull Vector3f hsv) {
+        return hsv.mul(1, 0, 1, new Vector3f());
+    }
+
+
+
 
     /**
      * Converts an RGB color to HSV.

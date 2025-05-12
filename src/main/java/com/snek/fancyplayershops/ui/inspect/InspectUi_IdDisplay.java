@@ -8,7 +8,6 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 
 

@@ -23,7 +23,6 @@ import net.minecraft.network.chat.Component;
 
 
 public class TransferUi_ConfirmButton_S extends ShopButton_S {
-    public static final Vector3i HOVER_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.8f));
 
 
     public TransferUi_ConfirmButton_S(final @NotNull Shop _shop){
@@ -54,7 +53,7 @@ public class TransferUi_ConfirmButton_S extends ShopButton_S {
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(HOVER_COLOR)
+            .targetBgColor(getBgColor().add(20, 20, 20, new Vector3i()).min(new Vector3i(255)))
         );
     }
     @Override
