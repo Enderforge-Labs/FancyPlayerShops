@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.ui.buy;
+package com.snek.fancyplayershops.ui.inspect;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
@@ -14,7 +14,6 @@ import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
 
 
 
@@ -22,17 +21,12 @@ import com.snek.framework.ui.elements.Elm;
 
 
 
-
-//TODO add left click functionality to the item selector that lets you open a 1-slot UI
-//TODO to read the item's name, lore and tags as if it were in a normal chest
 
 /**
- * A UI that allows the user of a shop to buy items from it.
+ * A UI that allows the user of a shop to view details about the item.
  */
-public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
-    private final @NotNull Elm title;
+public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull Elm getTitle() { return title; }
 
 
 
@@ -42,27 +36,28 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     /**
-     * Creates a new EditUi.
+     * Creates a new InspectUi.
      * @param _shop The target shop.
+     * @param _backButton The back button.
+     * <p> This defines which menu the player is brought to when going back.
      */
-    public BuyUi(final @NotNull Shop _shop) {
+    public InspectUi(final @NotNull Shop _shop, final @NotNull Div _backButton) {
 
         // Call superconstructor
-        super(_shop, 1, ShopFancyTextElm.LINE_H, ShopUiBorder.DEFAULT_HEIGHT);
+        super(_shop, 1, ShopFancyTextElm.LINE_H, ShopCanvas.SQUARE_BUTTON_SIZE);
         Div e;
 
 
         // Add title
-        e = bg.addChild(new BuyUi_Title(_shop));
+        e = bg.addChild(new InspectUi_Title(_shop));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (Elm)e;
 
-        //Add item inspector
-        e = bg.addChild(new BuyUi_ItemInspector(_shop, null, null, new BuyUiSub_BackButton(_shop)));
-        e.setSize(new Vector2f(EditUi.ITEM_SELECTOR_SIZE));
-        e.setPosY(EditUi.ITEM_SELECTOR_Y);
-        e.setAlignmentX(AlignmentX.CENTER);
+
+        // Add back button
+        e = bg.addChild(_backButton);
+        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
 
 
         // Add input indicators

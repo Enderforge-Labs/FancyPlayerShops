@@ -134,7 +134,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
             e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-            e.setPos(new Vector2f(BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)), 0));
+            e.setPosX(BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setAlignmentY(AlignmentY.BOTTOM);
         }
 
 

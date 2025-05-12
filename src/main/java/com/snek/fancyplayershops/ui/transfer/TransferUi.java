@@ -15,6 +15,7 @@ import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
 import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
@@ -99,8 +100,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add back button
         e = bg.addChild(new EditUiSub_BackButton(_shop));
         e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-        e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(0);
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
     }
 
 

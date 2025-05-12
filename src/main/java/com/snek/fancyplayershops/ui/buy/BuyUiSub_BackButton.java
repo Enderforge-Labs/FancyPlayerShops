@@ -1,10 +1,11 @@
-package com.snek.fancyplayershops.ui.edit;
+package com.snek.fancyplayershops.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.ui.AlignmentX;
@@ -24,36 +25,30 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_OpenBuyMenuButton extends ShopButton {
+public class BuyUiSub_BackButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(0.0f, 1.0f),
-            new Vector2f(1.0f, 1.0f),
-            new Vector2f(1.0f, 0.0f),
-            new Vector2f(0.0f, 0.0f)
+            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
+            new Vector2f(0.2f, 0.9f),
+            new Vector2f(0.0f, 0.7f),
+            new Vector2f(0.2f, 0.5f)
         ),
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
             EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-            new Vector2f(0.0f, 0.66f),
-            new Vector2f(1.0f, 0.66f)
-        ),
-        new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-            new Vector2f(0.5f, 0.76f),
-            new Vector2f(0.5f, 0.46f)
+            new Vector2f(0.05f, 0.7f),
+            new Vector2f(1.0f,  0.7f),
+            new Vector2f(1.0f,  0.3f),
+            new Vector2f(0.6f,  0.3f)
         )
     };
 
 
 
 
-    public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop){
-        super(_shop, null, "Open buy menu", 1, new EditUi_SquareButton_S(_shop));
+    public BuyUiSub_BackButton(final @NotNull Shop _shop){
+        super(_shop, null, "Go back", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
@@ -70,6 +65,6 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.openBuyUi(player, false);
+        shop.changeCanvas(new BuyUi(shop));
     }
 }

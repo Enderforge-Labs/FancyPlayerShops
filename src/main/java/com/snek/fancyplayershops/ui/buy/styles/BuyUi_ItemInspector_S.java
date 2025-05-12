@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.ui.edit.styles;
+package com.snek.fancyplayershops.ui.buy.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,13 +20,13 @@ import com.snek.framework.utils.Easings;
 /**
  * The style of the EditUi_ItemSelector UI element.
  */
-public class EditUi_ItemSelector_S extends ShopButton_S {
+public class BuyUi_ItemInspector_S extends ShopButton_S {
 
 
     /**
      * Creates a new EditUi_ItemSelector_S.
      */
-    public EditUi_ItemSelector_S(final @NotNull Shop _shop) {
+    public BuyUi_ItemInspector_S(final @NotNull Shop _shop) {
         super(_shop);
     }
 

@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.edit.styles.EditUi_ItemSelector_S;
-import com.snek.fancyplayershops.ui.misc.ShopButton;
+import com.snek.fancyplayershops.ui.buy.BuyUi_ItemInspector;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +23,7 @@ import net.minecraft.world.item.Items;
 /**
  * A button that allows the owner of the shop to change the item sold by it.
  */
-public class EditUi_ItemSelector extends ShopButton {
+public class EditUi_ItemSelector extends BuyUi_ItemInspector {
 
 
     /**
@@ -32,7 +31,7 @@ public class EditUi_ItemSelector extends ShopButton {
      * @param _shop The target shop.
      */
     public EditUi_ItemSelector(final @NotNull Shop _shop) {
-        super(_shop, "Inspect item", "Change item", 0, new EditUi_ItemSelector_S(_shop));
+        super(_shop, null, "Change item", new EditUiSub_BackButton(_shop));
     }
 
 
@@ -44,6 +43,10 @@ public class EditUi_ItemSelector extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        if(click != ClickAction.SECONDARY) {
+            super.onClick(player, click);
+            return;
+        }
 
         final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
         if(item != null && item.getItem() != Items.AIR) {
@@ -56,6 +59,3 @@ public class EditUi_ItemSelector extends ShopButton {
         }
     }
 }
-//TODO make this a subclass of item inspector
-//TODO     item inspectors show the price graph, the mod the item comes from, the name, the description
-//TODO     it also lets you open an inventory to see it as a real item
