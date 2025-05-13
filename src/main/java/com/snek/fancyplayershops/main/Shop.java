@@ -74,16 +74,20 @@ public class Shop {
     public static final int INTERACTION_BLOCKER_DESPAWN_DELAY = 10;
 
     // Limits
-    public static final long   DEFAULT_PRICE = 1_000l * 100l;
-    public static final int    DEFAULT_STOCK = 1_000;
-    public static final long   MAX_PRICE     = 100_000_000_000l * 100l;
-    public static final int    MAX_STOCK     = 1_000_000;
+    public static final long   DEFAULT_PRICE = 1_000l * 100l; // FIXME move to config file
+    public static final int    DEFAULT_STOCK = 1_000; // FIXME move to config file
+    public static final long   MAX_PRICE     = 10_000_000_000l * 100l; // FIXME move to config file
+    public static final int    MAX_STOCK     = 1_000_000; // FIXME move to config file
     static {
         final BigInteger price = BigInteger.valueOf(MAX_PRICE);
         final BigInteger stock = BigInteger.valueOf(MAX_STOCK);
         final BigInteger product = price.multiply(stock);
+        final int excess = product.toString().length() - Long.toString(Long.MAX_VALUE).length();
         if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-            throw new IllegalStateException("Maximum possible price is above the Long limit. Adjust MAX_PRICE and MAX_STOCK.");
+            throw new IllegalStateException(
+                "Maximum possible transaction price is above the Long limit by " +
+                excess + (excess == 1 ? " digit." : " digits.") +
+                " Adjust MAX_PRICE and MAX_STOCK."); //TODO change output to reflect the config file's fields
             //TODO ^ keep this exception when converting other exceptions to runtime errors
         }
     }

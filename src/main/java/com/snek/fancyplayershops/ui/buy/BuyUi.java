@@ -22,9 +22,6 @@ import com.snek.framework.ui.Div;
 
 
 
-//TODO add left click functionality to the item selector that lets you open a 1-slot UI
-//TODO to read the item's name, lore and tags as if it were in a normal chest
-
 /**
  * A UI that allows the user of a shop to buy items from it.
  */
