@@ -23,6 +23,12 @@ import net.minecraft.network.chat.Component;
 
 
 public class TransferUi_ConfirmButton_S extends ShopButton_S {
+    public static final @NotNull Vector3i BASE_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
+
+    private @NotNull Vector3i defaultBgColor = new Vector3i(BASE_COLOR);
+    public void setDefaultColor(final @NotNull Vector3i _color) { defaultBgColor.set(_color); }
+
+
 
 
     public TransferUi_ConfirmButton_S(final @NotNull Shop _shop){
@@ -38,29 +44,29 @@ public class TransferUi_ConfirmButton_S extends ShopButton_S {
 
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
+        return defaultBgColor;
     }
 
 
     @Override
-    public @Nullable Animation getDefaultHoverPrimerAnimation() {
+    public @Nullable Animation getHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgColor(getBgColor())
+            .targetBgColor(getDefaultBgColor())
         );
     }
     @Override
-    public @Nullable Animation getDefaultHoverEnterAnimation() {
+    public @Nullable Animation getHoverEnterAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(getBgColor().add(20, 20, 20, new Vector3i()).min(new Vector3i(255)))
+            .targetBgColor(getDefaultBgColor().add(20, 20, 20).min(new Vector3i(255)))
         );
     }
     @Override
-    public @Nullable Animation getDefaultHoverLeaveAnimation() {
+    public @Nullable Animation getHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(getBgColor())
+            .targetBgColor(getDefaultBgColor())
         );
     }
 }

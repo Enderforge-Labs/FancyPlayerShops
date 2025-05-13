@@ -92,6 +92,14 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
 
+    @Override
+    public void onStockChange() {
+        // Empty
+    }
+
+
+
+
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

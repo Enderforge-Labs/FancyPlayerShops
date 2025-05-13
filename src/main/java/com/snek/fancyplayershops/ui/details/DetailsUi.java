@@ -29,7 +29,6 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
  */
 public class DetailsUi extends ShopCanvas {
     private final @NotNull DetailsUi_Values values;
-    public  final @NotNull DetailsUi_Values getValues() { return values; }
 
 
     // Colors
@@ -103,5 +102,13 @@ public class DetailsUi extends ShopCanvas {
         e.setAlignmentX(AlignmentX.LEFT);
         e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE));
         e.setPosY(H0 - VERTICAL_PADDING);
+    }
+
+
+
+
+    @Override
+    public void onStockChange() {
+        values.updateDisplay();
     }
 }

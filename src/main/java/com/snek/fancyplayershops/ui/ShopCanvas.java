@@ -25,11 +25,11 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * A generic canvas class used to create shop menus.
+ * An abstract canvas class used to create shop menus.
  * <p> It creates and manages a background panel, a back side panel and a top and bottom borders,
  * <p> which are kept spawned and are inherited by future canvases until the targeted shop stops being focused.
  */
-public class ShopCanvas extends Div {
+public abstract class ShopCanvas extends Div {
 
     // Layout
     public static final int   SPAWN_SIZE_TIME    = 8;
@@ -76,7 +76,7 @@ public class ShopCanvas extends Div {
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    public ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
+    protected ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
         super();
         setSize(new Vector2f(1f, 1f));
         final ShopCanvas activeCanvas = _shop.getActiveCanvas();
@@ -188,4 +188,8 @@ public class ShopCanvas extends Div {
     public void despawn() {
         super.despawn();
     }
+
+
+
+    public abstract void onStockChange();
 }

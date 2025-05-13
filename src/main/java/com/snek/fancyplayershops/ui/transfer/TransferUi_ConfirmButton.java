@@ -2,13 +2,13 @@ package com.snek.fancyplayershops.ui.transfer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_ConfirmButton_S;
-import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
+import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
@@ -24,6 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class TransferUi_ConfirmButton extends ShopButton {
     private final @NotNull TransferUi menu;
+    private boolean active = true;
 
 
     protected TransferUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferUi _menu) {
@@ -38,15 +39,13 @@ public class TransferUi_ConfirmButton extends ShopButton {
     }
 
 
-    public void updateColor(final boolean active) {
-        final FancyTextElmStyle s = getStyle(FancyTextElmStyle.class);
-        if(active) {
-            s.resetBgColor();
-        }
-        else {
-            s.setBgColor(Utils.toBW(s.getDefaultBgColor()));
-        }
-        flushStyle();
+    public void updateColor(final boolean _active) {
+        if(active == _active) return;
+        active = _active;
+        final TransferUi_ConfirmButton_S s = getStyle(TransferUi_ConfirmButton_S.class);
+        s.setDefaultColor(active ? TransferUi_ConfirmButton_S.BASE_COLOR : Utils.toBW(TransferUi_ConfirmButton_S.BASE_COLOR));
+        applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()));
+        System.out.println("Applied animation [ " + s.getDefaultBgColor().x + ", " + s.getDefaultBgColor().y + ", " + s.getDefaultBgColor().z + "]    active: " + active);
     }
 
 

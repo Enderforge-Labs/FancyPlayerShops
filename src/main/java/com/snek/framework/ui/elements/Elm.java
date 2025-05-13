@@ -536,7 +536,10 @@ public abstract class Elm extends Div {
                 }
                 else {
                     if(getStyle() instanceof ButtonElmStyle s) {
-                        hoverRateLimiter.renewCooldown(s.getHoverLeaveAnimation().getTotalDuration());
+                        final Animation animation = s.getHoverLeaveAnimation();
+                        if(animation != null) {
+                            hoverRateLimiter.renewCooldown(animation.getTotalDuration());
+                        }
                     }
                     h.onHoverExit(player);
                 }

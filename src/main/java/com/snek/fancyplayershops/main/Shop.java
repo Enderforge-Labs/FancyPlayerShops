@@ -482,6 +482,12 @@ public class Shop {
                     .cat(" retrieved from your shop " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.")
                 .lightGray().get(), false);
             }
+
+
+            // Update active canvas
+            if(activeCanvas != null) {
+                activeCanvas.onStockChange();
+            }
         }
     }
 
@@ -536,9 +542,9 @@ public class Shop {
                 }
 
 
-                // Update stock amount displays
+                // Update active canvas
                 if(activeCanvas != null) {
-                    if(activeCanvas instanceof DetailsUi c) c.getValues().updateDisplay();
+                    activeCanvas.onStockChange();
                 }
             }
             else {
@@ -819,11 +825,13 @@ public class Shop {
         pullItems(new BlockPos(+1, 0, 0));
         pullItems(new BlockPos(-1, 0, 0));
 
-        // Save shop and update detatils display if needed
+        // Update stock and save the shop
         if(oldStock == stock) return;
         ShopManager.saveShop(this);
-        if(activeCanvas != null && activeCanvas instanceof DetailsUi c) {
-            c.getValues().updateDisplay();
+
+        // Update active canvas
+        if(activeCanvas != null) {
+            activeCanvas.onStockChange();
         }
     }
 
