@@ -36,7 +36,7 @@ public class TextInputElmStyle extends ButtonElmStyle {
         return new Animation(
             new Transition()
             .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
-            .additiveTransformFg(new Transform().moveX(UNHOVERED_W * 2))
+            .additiveTransformFg(new Transform().moveX(UNHOVERED_W * 1.2f))
         );
     }
     @Override

@@ -74,40 +74,42 @@ public class Txt {
 
 
 
-    public static final @NotNull Vector3i COLOR_BLACK     = new Vector3i(  0,   0,   0);
-    public static final @NotNull Vector3i COLOR_BLUE      = new Vector3i(  0,   0, 170);
-    public static final @NotNull Vector3i COLOR_GREEN     = new Vector3i(  0, 170,   0);
-    public static final @NotNull Vector3i COLOR_AQUA      = new Vector3i(  0, 170, 170);
-    public static final @NotNull Vector3i COLOR_DARKRED   = new Vector3i(170,   0,   0);
-    public static final @NotNull Vector3i COLOR_PURPLE    = new Vector3i(170,   0, 170);
-    public static final @NotNull Vector3i COLOR_GOLD      = new Vector3i(255, 170,   0);
-    public static final @NotNull Vector3i COLOR_LIGHTGRAY = new Vector3i(170, 170, 170);
-    public static final @NotNull Vector3i COLOR_GRAY      = new Vector3i( 85,  85,  85);
-    public static final @NotNull Vector3i COLOR_LIGHTBLUE = new Vector3i( 85,  85, 255);
-    public static final @NotNull Vector3i COLOR_LIME      = new Vector3i( 85, 255,  85);
-    public static final @NotNull Vector3i COLOR_CYAN      = new Vector3i( 85, 255, 255);
-    public static final @NotNull Vector3i COLOR_RED       = new Vector3i(255,  85,  85);
-    public static final @NotNull Vector3i COLOR_MAGENTA   = new Vector3i(255,  85, 255);
-    public static final @NotNull Vector3i COLOR_YELLOW    = new Vector3i(255, 255,  85);
-    public static final @NotNull Vector3i COLOR_WHITE     = new Vector3i(255, 255, 255);
+    public static final @NotNull Vector3i COLOR_BLACK      = new Vector3i(  0,   0,   0);
+    public static final @NotNull Vector3i COLOR_BLUE       = new Vector3i(  0,   0, 170);
+    public static final @NotNull Vector3i COLOR_GREEN      = new Vector3i(  0, 170,   0);
+    public static final @NotNull Vector3i COLOR_AQUA       = new Vector3i(  0, 170, 170);
+    public static final @NotNull Vector3i COLOR_DARKRED    = new Vector3i(170,   0,   0);
+    public static final @NotNull Vector3i COLOR_PURPLE     = new Vector3i(170,   0, 170);
+    public static final @NotNull Vector3i COLOR_GOLD       = new Vector3i(255, 170,   0);
+    public static final @NotNull Vector3i COLOR_LIGHTGRAY  = new Vector3i(170, 170, 170);
+    public static final @NotNull Vector3i COLOR_GRAY       = new Vector3i( 85,  85,  85);
+    public static final @NotNull Vector3i COLOR_LIGHTBLUE  = new Vector3i( 85,  85, 255);
+    public static final @NotNull Vector3i COLOR_LIME       = new Vector3i( 85, 255,  85);
+    public static final @NotNull Vector3i COLOR_CYAN       = new Vector3i( 85, 255, 255);
+    public static final @NotNull Vector3i COLOR_RED        = new Vector3i(255,  85,  85);
+    public static final @NotNull Vector3i COLOR_MAGENTA    = new Vector3i(255,  85, 255);
+    public static final @NotNull Vector3i COLOR_YELLOW     = new Vector3i(255, 255,  85);
+    public static final @NotNull Vector3i COLOR_WHITE      = new Vector3i(245, 245, 245);
+    public static final @NotNull Vector3i COLOR_PURE_WHITE = new Vector3i(255, 255, 255);
 
 
-    public @NotNull Txt black    () { return color(COLOR_BLACK    ); }
-    public @NotNull Txt blue     () { return color(COLOR_BLUE     ); }
-    public @NotNull Txt green    () { return color(COLOR_GREEN    ); }
-    public @NotNull Txt aqua     () { return color(COLOR_AQUA     ); }
-    public @NotNull Txt darkRed  () { return color(COLOR_DARKRED  ); }
-    public @NotNull Txt purple   () { return color(COLOR_PURPLE   ); }
-    public @NotNull Txt gold     () { return color(COLOR_GOLD     ); }
-    public @NotNull Txt lightGray() { return color(COLOR_LIGHTGRAY); }
-    public @NotNull Txt gray     () { return color(COLOR_GRAY     ); }
-    public @NotNull Txt lightBlue() { return color(COLOR_LIGHTBLUE); }
-    public @NotNull Txt lime     () { return color(COLOR_LIME     ); }
-    public @NotNull Txt cyan     () { return color(COLOR_CYAN     ); }
-    public @NotNull Txt red      () { return color(COLOR_RED      ); }
-    public @NotNull Txt magenta  () { return color(COLOR_MAGENTA  ); }
-    public @NotNull Txt yellow   () { return color(COLOR_YELLOW   ); }
-    public @NotNull Txt white    () { return color(COLOR_WHITE    ); }
+    public @NotNull Txt black    () { return color(COLOR_BLACK     ); }
+    public @NotNull Txt blue     () { return color(COLOR_BLUE      ); }
+    public @NotNull Txt green    () { return color(COLOR_GREEN     ); }
+    public @NotNull Txt aqua     () { return color(COLOR_AQUA      ); }
+    public @NotNull Txt darkRed  () { return color(COLOR_DARKRED   ); }
+    public @NotNull Txt purple   () { return color(COLOR_PURPLE    ); }
+    public @NotNull Txt gold     () { return color(COLOR_GOLD      ); }
+    public @NotNull Txt lightGray() { return color(COLOR_LIGHTGRAY ); }
+    public @NotNull Txt gray     () { return color(COLOR_GRAY      ); }
+    public @NotNull Txt lightBlue() { return color(COLOR_LIGHTBLUE ); }
+    public @NotNull Txt lime     () { return color(COLOR_LIME      ); }
+    public @NotNull Txt cyan     () { return color(COLOR_CYAN      ); }
+    public @NotNull Txt red      () { return color(COLOR_RED       ); }
+    public @NotNull Txt magenta  () { return color(COLOR_MAGENTA   ); }
+    public @NotNull Txt yellow   () { return color(COLOR_YELLOW    ); }
+    public @NotNull Txt white    () { return color(COLOR_PURE_WHITE); }
+    public @NotNull Txt pureWhite() { return color(COLOR_WHITE     ); }
 
 
 

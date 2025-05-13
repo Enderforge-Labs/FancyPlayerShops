@@ -467,10 +467,10 @@ public class Shop {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.displayClientMessage(Shop.SHOP_STOCK_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            owner.displayClientMessage(SHOP_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            owner.displayClientMessage(Shop.SHOP_AMOUNT_TEXT, true);
+            owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             stock -= amount;
