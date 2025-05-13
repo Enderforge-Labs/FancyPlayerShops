@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops.main;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,6 +78,15 @@ public class Shop {
     public static final int    DEFAULT_STOCK = 1_000;
     public static final long   MAX_PRICE     = 100_000_000_000l * 100l;
     public static final int    MAX_STOCK     = 1_000_000;
+    static {
+        final BigInteger price = BigInteger.valueOf(MAX_PRICE);
+        final BigInteger stock = BigInteger.valueOf(MAX_STOCK);
+        final BigInteger product = price.multiply(stock);
+        if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+            throw new IllegalStateException("Maximum possible price is above the Long limit. Adjust MAX_PRICE and MAX_STOCK.");
+            //TODO ^ keep this exception when converting other exceptions to runtime errors
+        }
+    }
 
 
     // Animation data
@@ -85,9 +95,9 @@ public class Shop {
 
 
     // Strings
-    public static final Component EMPTY_SHOP_NAME = new Txt("[Empty]").italic().lightGray().get();
-    public static final Component SHOP_EMPTY_TEXT = new Txt("This shop is empty!").lightGray().get();
-    public static final Component SHOP_STOCK_TEXT = new Txt("This shop has no items in stock!").lightGray().get();
+    public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
+    public static final Component SHOP_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();
+    public static final Component SHOP_STOCK_TEXT  = new Txt("This shop has no items in stock!").lightGray().get();
     public static final Component SHOP_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
 
 
