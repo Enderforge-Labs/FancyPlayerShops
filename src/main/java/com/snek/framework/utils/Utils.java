@@ -3,6 +3,7 @@ package com.snek.framework.utils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,8 +25,8 @@ public abstract class Utils {
     private Utils() {}
 
     // Formatters
-    private static final DecimalFormat formatterPrice  = new DecimalFormat("#,##0.##");
-    private static final DecimalFormat formatterAmount = new DecimalFormat("#,###");
+    private static final NumberFormat formatterPrice  = new DecimalFormat("#,##0");
+    private static final NumberFormat formatterAmount = new DecimalFormat("#,###");
 
 
 
@@ -90,41 +91,44 @@ public abstract class Utils {
 
     /**
      * Returns the value <price> expressed as a string and formatted using $ as currency symbol, abbreviating the number to 3 digits.
-     * @param price The price to format.
+     * @param price The price to format. This MUST be >= 0.
      * @return The formatted price.
      */
-    public static @NotNull String formatPriceShort(final double price) {
+    public static @NotNull String formatPriceShort(final long price) {
         return formatPriceShort(price, "$");
     }
 
 
     /**
      * Returns the value <price> expressed as a string and formatted as specified, abbreviating the number to 3 digits.
-     * @param price The price to format.
+     * @param price The price to format. This MUST be >= 0.
      * @param currency The currency symbol to use as prefix.
      * @return The formatted price.
      */
-    public static @NotNull String formatPriceShort(final double price, final @NotNull String currency) {
+    public static @NotNull String formatPriceShort(final long price, final @NotNull String currency) {
         final String[] suffixes = { "", "k", "m", "b", "t", "q" };
-        int exp = 0;
-        double scaled = price;
 
         // Calculate exponent
-        while(scaled >= 1000 && exp < suffixes.length - 1) {
-            scaled /= 1000;
+        int exp = 0;
+        long scaled = price;
+        while(scaled >= 1000l * 100l && exp < suffixes.length - 1) {
+            scaled /= 1000l;
             exp++;
         }
 
+        // Split the value into units and cents
+        final long units = scaled / 100l;
+        final long cents = scaled % 100l;
+
         // Find optimal formatting
-        String formatted;
-        if     (scaled < 10 ) formatted = String.format("%.2f", scaled);
-        else if(scaled < 100) formatted = String.format("%.1f", scaled);
-        else                  formatted = String.format("%.0f", scaled);
+        String formatted =
+            units < 10  ? String.format("%d.%02d", units, cents) :
+            units < 100 ? String.format("%d.%d",   units, cents / 10) :
+            Long.toString(units)
+        ;
 
         // Trim trailing .00 or .0
-        if (formatted.contains(".")) {
-            formatted = formatted.replaceAll("\\.?0+$", "");
-        }
+        formatted = formatted.replaceAll("\\.0+$", "");
 
         // Return the formatted price with prefix and suffix added
         return currency + formatted + suffixes[exp];
@@ -135,36 +139,33 @@ public abstract class Utils {
 
     /**
      * Returns the value <price> expressed as a string and formatted using $ as currency symbol and thousands separators.
-     * @param price The price to format.
+     * @param price The price to format. This MUST be >= 0.
      * @return The formatted price.
      */
-    public static @NotNull String formatPrice(final double price) {
+    public static @NotNull String formatPrice(final long price) {
         return formatPrice(price, "$", true);
     }
 
 
     /**
      * Returns the value <price> expressed as a string and formatted as specified.
-     * @param price The price to format.
+     * @param price The price to format. This MUST be >= 0.
      * @param currency The currency symbol to use as prefix.
-     * @param thousandsSeparator Whether to use a separator between thousands. [default: true]
+     * @param thousandsSeparator Whether to use a separator between thousands
      * @return The formatted price.
      */
-    public static @NotNull String formatPrice(final double price, final @NotNull String currency, final boolean thousandsSeparator) {
-        final String r;
+    public static @NotNull String formatPrice(final long price, final @NotNull String currency, final boolean thousandsSeparator) {
+        final long units = price / 100l;
+        final long cents = price % 100l;
 
-        // Separator
-        if(thousandsSeparator) {
-            r = currency + formatterPrice.format(price);
-        }
+        // Calculate formatted string with no currency symbol
+        final String r = thousandsSeparator?
+            formatterPrice.format(units) + "." + (cents < 10 ? "0" + cents : cents):
+            String.format("%d.%02d", units, cents)
+        ;
 
-        // No separator
-        else {
-            r = String.format("%s%.2f", currency, price);
-        }
-
-        // Add trailing 0 if there is only one decimal digit
-        return r.charAt(r.length() - 2) == '.' ? r + "0" : r;
+        // Add currency and return the string
+        return currency + r;
     }
 
 

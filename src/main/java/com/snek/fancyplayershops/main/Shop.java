@@ -73,9 +73,9 @@ public class Shop {
     public static final int INTERACTION_BLOCKER_DESPAWN_DELAY = 10;
 
     // Limits
-    public static final double DEFAULT_PRICE = 1_000d;
+    public static final long   DEFAULT_PRICE = 1_000l * 100l;
     public static final int    DEFAULT_STOCK = 1_000;
-    public static final double MAX_PRICE     = 100_000_000_000d;
+    public static final long   MAX_PRICE     = 100_000_000_000l * 100l;
     public static final int    MAX_STOCK     = 1_000_000;
 
 
@@ -115,7 +115,7 @@ public class Shop {
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
-    private                    double    price           = DEFAULT_PRICE;       // The configured price for each item
+    private                    long      price           = DEFAULT_PRICE;       // The configured price for each item
     private                    int       maxStock        = DEFAULT_STOCK;       // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
     private                    float     colorThemeHue   = COLOR_DEFAULT_HUE;   // The configured hue of the color theme
@@ -142,7 +142,7 @@ public class Shop {
     public @NotNull  ItemStack       getItem           () { return item;            }
     public @NotNull  ShopItemDisplay getItemDisplay    () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ShopCanvas      getActiveCanvas   () { return activeCanvas;    }
-    public           double          getPrice          () { return price;           }
+    public           long            getPrice          () { return price;           }
     public           int             getStock          () { return stock;           }
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
@@ -511,12 +511,12 @@ public class Shop {
             buyer.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            final double totPrice = price * amount;
-            final long totPriceL = Math.round(totPrice * 100d);
-            if(EconomyManager.getCurrency(buyer.getUUID()) >= totPriceL) {
+            final long totPrice = price * amount;
+
+            if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
                 stock -= amount;
                 ShopManager.saveShop(this);
-                EconomyManager.subtractCurrency(buyer.getUUID(), totPriceL);
+                EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 BalanceManager.addBalance(ownerUUID, totPrice);
                 BalanceManager.saveBalance(ownerUUID);
 
@@ -625,10 +625,15 @@ public class Shop {
      *     <p> Prices under 0.00001 are rounded to 0.
      *     <p> Negative values are considered invalid and return false without changing the price.
      *     <p> Values above MAX_PRICE are also considered invalid. //TODO add to config file
-     * @param newPrice The new price
+     * @param _newPrice The new price
      * @return Whether the new value could be set.
      */
-    public boolean setPrice(final double newPrice) {
+    public boolean setPrice(final double _newPrice) {
+
+        // Convert price input from double to long, avoiding precision errors
+        long newPrice = (long)_newPrice; newPrice = newPrice * 100l + Math.round((_newPrice - newPrice) * 100d);
+
+        // Check if the price is valid and proceed accordingly
         if(newPrice < 0) {
             if(user != null) user.displayClientMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
@@ -637,9 +642,9 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().bold().get(), true);
             return false;
         }
-        else if(newPrice < 0.00001) price = 0d;
-        else if(newPrice < 0.01000) price = 0.01;
-        else price = Math.round(newPrice * 100d) / 100d;
+        else if(newPrice < 0.00001) price = 0;
+        else if(newPrice < 0.01000) price = 1;
+        else price = newPrice;
         ShopManager.saveShop(this);
         return true;
     }

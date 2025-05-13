@@ -45,7 +45,6 @@ public class TransferUi_ConfirmButton extends ShopButton {
         final TransferUi_ConfirmButton_S s = getStyle(TransferUi_ConfirmButton_S.class);
         s.setDefaultColor(active ? TransferUi_ConfirmButton_S.BASE_COLOR : Utils.toBW(TransferUi_ConfirmButton_S.BASE_COLOR));
         applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()));
-        System.out.println("Applied animation [ " + s.getDefaultBgColor().x + ", " + s.getDefaultBgColor().y + ", " + s.getDefaultBgColor().z + "]    active: " + active);
     }
 
 

@@ -44,7 +44,7 @@ public abstract class BalanceManager {
 
 
     // Player balance data
-    private static final @NotNull Map<@NotNull UUID, Double> balances = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, Long> balances = new HashMap<>();
     private static boolean dataLoaded = false;
 
 
@@ -59,8 +59,8 @@ public abstract class BalanceManager {
      * @param playerUUID The UUID of the player.
      * @param count The amount of money to add.
      */
-    public static void addBalance(final @NotNull UUID playerUUID, final Double amount) {
-        balances.merge(playerUUID, amount, Double::sum);
+    public static void addBalance(final @NotNull UUID playerUUID, final long amount) {
+        balances.merge(playerUUID, amount, Long::sum);
     }
 
 
@@ -75,7 +75,7 @@ public abstract class BalanceManager {
      * @param playerUUID The UUID of the player.
      */
     public static void saveBalance(final @NotNull UUID playerUUID) {
-        final Double balance = balances.get(playerUUID);
+        final Long balance = balances.get(playerUUID);
         if(balance == null) return;
 
 
@@ -118,7 +118,7 @@ public abstract class BalanceManager {
             final String fileName = balanceStorageFile.getName();
             final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
             try(FileReader reader = new FileReader(balanceStorageFile)) {
-                final Double balance = new Gson().fromJson(reader, Double.class);
+                final Long balance = new Gson().fromJson(reader, Long.class);
                 addBalance(playerUUID, balance);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -139,14 +139,14 @@ public abstract class BalanceManager {
      * @param player The player.
      */
     public static void claim(final @NotNull Player player) {
-        final Double balance = balances.put(player.getUUID(), 0d);
+        final Long balance = balances.put(player.getUUID(), 0l);
         saveBalance(player.getUUID());
 
-        if(balance == null || balance < 0.005d) {
+        if(balance == null || balance == 0) {
             player.displayClientMessage(new Txt("Your shop balance is empty. There is nothing to claim right now.").lightGray().get(), false);
         }
         else {
-            EconomyManager.addCurrency(player.getUUID(), (long)(balance * 100d));
+            EconomyManager.addCurrency(player.getUUID(), balance);
             player.displayClientMessage(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get(), false);
         }
     }
