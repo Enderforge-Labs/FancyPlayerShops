@@ -22,6 +22,8 @@ import com.snek.framework.utils.Easings;
  * The style of EditUi's text input elements.
  */
 public class EditUi_Input_S extends ShopTextInput_S {
+    public static final float SHIFT_X  = EditUi.INPUT_W / 2f;
+    public static final float ADJUST_X = 1 - EditUi.INPUT_W;
 
 
     /**
@@ -34,23 +36,24 @@ public class EditUi_Input_S extends ShopTextInput_S {
 
     @Override
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
+        System.out.println("shift x: " + ADJUST_X);
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(EditUi.INPUT_W / 2))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X + ADJUST_X / 2))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-EditUi.INPUT_W / 2))
+            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-(SHIFT_X + ADJUST_X)))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(EditUi.INPUT_W / 2))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X + ADJUST_X))
         );
     }
 }

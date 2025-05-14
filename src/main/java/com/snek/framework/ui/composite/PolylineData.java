@@ -26,6 +26,7 @@ public class PolylineData {
     private final float width;
     private final float edge;
     private final @NotNull List<@NotNull Vector2f> points;
+    private final float totLen;
 
     // Getters
     public @NotNull Vector3i                getColor () { return color;  }
@@ -33,6 +34,7 @@ public class PolylineData {
     public float                            getWidth () { return width;  }
     public float                            getEdge  () { return edge;   }
     public @NotNull List<@NotNull Vector2f> getPoints() { return points; }
+    public float                            getTotLen() { return totLen; }
 
 
     /**
@@ -46,14 +48,24 @@ public class PolylineData {
      * @param _points The list of points that defines the line's segments (additional points, optional).
      */
     public PolylineData(final @NotNull Vector3i _color, final int _alpha, final float _width, final float _edge, final @NotNull Vector2f _point1, final @NotNull Vector2f _point2, final @NotNull Vector2f... _points) {
+
+        // Save basic data
         color = _color;
         alpha = _alpha;
         width = _width;
         edge = _edge;
 
+        // Save points
         points = new ArrayList<>(_points.length + 2);
         points.add(_point1);
         points.add(_point2);
         Collections.addAll(points, _points);
+
+        // Calculate total length
+        float _totLen = 0;
+        for(int i = 0; i < points.size() - 1; ++i) {
+            _totLen += points.get(i).distance(points.get(i + 1));
+        }
+        totLen = _totLen;
     }
 }

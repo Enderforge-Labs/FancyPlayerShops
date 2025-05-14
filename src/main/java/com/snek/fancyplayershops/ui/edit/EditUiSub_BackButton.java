@@ -36,10 +36,10 @@ public class EditUiSub_BackButton extends ShopButton {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
             EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-            new Vector2f(0.05f, 0.7f),
-            new Vector2f(1.0f,  0.7f),
+            new Vector2f(0.6f,  0.3f),
             new Vector2f(1.0f,  0.3f),
-            new Vector2f(0.6f,  0.3f)
+            new Vector2f(1.0f,  0.7f),
+            new Vector2f(0.05f, 0.7f)
         )
     };
 

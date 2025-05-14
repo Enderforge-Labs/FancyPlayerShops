@@ -9,7 +9,7 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.styles.ElmStyle;
+import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.Easings;
 
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +26,10 @@ import net.minecraft.server.level.ServerLevel;
  * <p> Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
  */
 public class PolylineSetElm extends Div {
-    public static final float LINE_SPAWNING_SCALE = 0.00001f;
+    public static final float LINE_SPAWNING_SCALE  = 0.00001f;
+    public static final int   SPAWN_ANIMATION_TIME = 10;
+
+
 
 
     /**
@@ -39,8 +42,12 @@ public class PolylineSetElm extends Div {
         // Create lines and add them to the children list
         for(final PolylineData l : _polylines) {
             final List<Vector2f> points = l.getPoints();
+            float totalLen = 0f;
             for(int i = 0; i < points.size() - 1; ++i) {
-                createLine(_world, l, points.get(i), points.get(i + 1));
+                final Vector2f a = points.get(i);
+                final Vector2f b = points.get(i + 1);
+                createLine(_world, l, a, b, totalLen);
+                totalLen += a.distance(b);
             }
         }
     }
@@ -54,8 +61,9 @@ public class PolylineSetElm extends Div {
      * @param l The polyline data that specifies color, opacity and width.
      * @param _a The first point of the line.
      * @param _b The second point of the line.
+     * @param previousLen The total length of the lines that precede this line.
      */
-    private void createLine(final @NotNull ServerLevel _world, final @NotNull PolylineData l, final @NotNull Vector2f _a, final @NotNull Vector2f _b) {
+    private void createLine(final @NotNull ServerLevel _world, final @NotNull PolylineData l, final @NotNull Vector2f _a, final @NotNull Vector2f _b, final float previousLen) {
 
         // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
         final Vector2f normal = _b.sub(_a, new Vector2f()).normalize(new Vector2f());
@@ -85,11 +93,14 @@ public class PolylineSetElm extends Div {
             new Transition()
             .targetBgColor(l.getColor())
             .targetBgAlpha(l.getAlpha())
-            .additiveTransform(new Transform().rotZ(angle).scaleX(0.00001f))
+            .additiveTransform(new Transform().rotZ(angle).scaleX(LINE_SPAWNING_SCALE))
         ));
+        final float waitTime      = SPAWN_ANIMATION_TIME / (l.getTotLen() / previousLen);
+        final float animationTime = SPAWN_ANIMATION_TIME / (l.getTotLen() / len);
         e.getStyle().setSpawnAnimation(new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
-            .additiveTransform(new Transform().scaleX(1f / 0.00001f))
+            new Transition(            (int)(waitTime     ),  Easings.linear),
+            new Transition(Math.max(1, (int)(animationTime)), Easings.sineOut)
+            .additiveTransform(new Transform().scaleX(1f / LINE_SPAWNING_SCALE))
         ));
     }
 }
