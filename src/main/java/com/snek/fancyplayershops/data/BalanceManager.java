@@ -15,11 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
+import com.herrkatze.solsticeEconomy.modules.economy.Notification;
+import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
 
 
@@ -138,7 +140,7 @@ public abstract class BalanceManager {
      * Sends a feedback message to the player indicating how much was claimed, or that the balance is empty in case there was nothing to claim.
      * @param player The player.
      */
-    public static void claim(final @NotNull Player player) {
+    public static void claim(final @NotNull ServerPlayer player) {
         final Long balance = balances.put(player.getUUID(), 0l);
         saveBalance(player.getUUID());
 
@@ -147,7 +149,11 @@ public abstract class BalanceManager {
         }
         else {
             EconomyManager.addCurrency(player.getUUID(), balance);
-            player.displayClientMessage(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get(), false);
+            NotificationManager.sendNotification(
+                new Notification(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get()),
+                player
+            );
+            // player.displayClientMessage(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get(), false);
         }
     }
 }

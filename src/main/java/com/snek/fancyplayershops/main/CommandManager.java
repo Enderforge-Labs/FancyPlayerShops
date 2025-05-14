@@ -11,7 +11,7 @@ import com.snek.framework.utils.Txt;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
 
 
@@ -46,7 +46,7 @@ public abstract class CommandManager {
                     // UI test
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("config_test")
                     .executes(context -> {
-                        final Player player = context.getSource().getPlayer();
+                        final ServerPlayer player = context.getSource().getPlayer();
                         try {
                             player.displayClientMessage(new Txt("Opening shop inventory...").get(), false);
                             player.openMenu(new ShopConfigUI_Factory());
@@ -61,7 +61,7 @@ public abstract class CommandManager {
                     // Item give command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
                     .executes(context -> {
-                        final Player player = context.getSource().getPlayer();
+                        final ServerPlayer player = context.getSource().getPlayer();
                         player.getInventory().add(FancyPlayerShops.getShopItemCopy());
                         return 1;
                     }))
@@ -71,7 +71,7 @@ public abstract class CommandManager {
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("purge")
                     .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
                     .executes(context -> {
-                        final Player player = context.getSource().getPlayer();
+                        final ServerPlayer player = context.getSource().getPlayer();
                         final float radius = FloatArgumentType.getFloat(context, "radius");
                         final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
                         player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
@@ -83,7 +83,7 @@ public abstract class CommandManager {
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
                     .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 4f))
                     .executes(context -> {
-                        final Player player = context.getSource().getPlayer();
+                        final ServerPlayer player = context.getSource().getPlayer();
                         final float radius = FloatArgumentType.getFloat(context, "radius");
                         final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
                         player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
@@ -95,7 +95,7 @@ public abstract class CommandManager {
                 // Balance claim
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
                 .executes(context -> {
-                    final Player player = context.getSource().getPlayer();
+                    final ServerPlayer player = context.getSource().getPlayer();
                     BalanceManager.claim(player);
                     return 1;
                 }))
@@ -104,7 +104,7 @@ public abstract class CommandManager {
                 // Shop statistics
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stats")
                 .executes(context -> {
-                    final Player player = context.getSource().getPlayer();
+                    final ServerPlayer player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt("opened stats //todo remove message").get(), false);
                     return 1;
                 }))
@@ -113,7 +113,7 @@ public abstract class CommandManager {
                 // Shop mod info
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
                 .executes(context -> {
-                    final Player player = context.getSource().getPlayer();
+                    final ServerPlayer player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt(
                         """
                         Craft an Item Shop in the crafting table and place it to get started!
