@@ -153,7 +153,6 @@ public abstract class BalanceManager {
                 new Notification(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get()),
                 player
             );
-            // player.displayClientMessage(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get(), false);
         }
     }
 }

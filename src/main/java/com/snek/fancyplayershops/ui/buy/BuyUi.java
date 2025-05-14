@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.buy;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.edit.EditUi;
@@ -14,6 +15,10 @@ import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
+import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
+
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -32,7 +37,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     // Instance data
     private final @NotNull Shop shop;
     private final @NotNull BuyUi_ConfirmButton confirmButton;
-    private final @NotNull BuyUi_AmountDisplay amountDisplay;
+    private final @NotNull BuyUi_AmountInputDisplay amountInputDisplay;
     private final @NotNull BuyUi_PriceDisplay priceDisplay;
 
     private int amount = 0;
@@ -63,18 +68,18 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
-        // Add amount and total price displays
+        // Add amount input and total price display
         e = bg.addChild(new BuyUi_PriceDisplay(_shop, this));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 2);
         priceDisplay = (BuyUi_PriceDisplay)e;
 
-        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld(), this));
+        e = bg.addChild(new BuyUi_AmountInputDisplay(_shop, this));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 3);
-        amountDisplay = (BuyUi_AmountDisplay)e;
+        amountInputDisplay = (BuyUi_AmountInputDisplay)e;
 
         //Add item inspector
         e = bg.addChild(new BuyUi_ItemInspector(_shop, null, null, new BuyUiSub_BackButton(_shop)));
@@ -108,9 +113,26 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
     public void changeAmount(final int newAmount) {
         amount = newAmount;
-        amountDisplay.updateDisplay();
+        amountInputDisplay.updateDisplay(null);
         priceDisplay.updateDisplay();
         confirmButton.updateColor(shop.getStock() >= amount);
+    }
+
+
+
+
+    public boolean attemptChangeAmount(final @NotNull Player user, final float _amount) {
+
+        if(_amount < 0.9999) {
+            if(user != null) user.displayClientMessage(new Txt("The amount must be at least 1").red().bold().get(), true);
+            return false;
+        }
+        if(_amount > Shop.MAX_STOCK) {
+            if(user != null) user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Shop.MAX_STOCK, false, true)).red().bold().get(), true);
+            return false;
+        }
+        else changeAmount(Math.round(_amount));
+        return true;
     }
 
 

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
@@ -26,6 +27,9 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class BuyUiSub_BackButton extends ShopButton {
+    private int amountCache = 1;
+    public void setAmountCache(final int _amountCache) { amountCache = _amountCache; }
+
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
@@ -65,6 +69,8 @@ public class BuyUiSub_BackButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.changeCanvas(new BuyUi(shop));
+        final BuyUi ui = new BuyUi(shop);
+        shop.changeCanvas(ui);
+        ui.changeAmount(amountCache);
     }
 }

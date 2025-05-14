@@ -54,10 +54,8 @@ public class BuyUi_ItemInspector extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        if(backButton instanceof BuyUiSub_BackButton b) b.setAmountCache(((BuyUi)shop.getActiveCanvas()).getAmount());
         shop.changeCanvas(new InspectUi(shop, backButton));
         playButtonSound(player);
     }
 }
-//TODO make this a subclass of item inspector
-//TODO     item inspectors show the price graph, the mod the item comes from, the name, the description
-//TODO     it also lets you open an inventory to see it as a real item
