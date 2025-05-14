@@ -1,12 +1,13 @@
-package com.snek.framework.ui.functional.styles;
+package com.snek.fancyplayershops.ui.transfer.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.utils.Easings;
 
 
@@ -17,17 +18,16 @@ import com.snek.framework.utils.Easings;
 
 
 /**
- * The style of the generic TextInputElm UI element.
+ * The style of TransferUi's text input elements.
  */
-public class TextInputElmStyle extends ButtonElmStyle {
-    public static final float UNHOVERED_W = 0.05f;
+public class TransferUi_Input_S extends ShopTextInput_S {
 
 
     /**
-     * Creates a new TextInputElmStyle.
+     * Creates a new TransferUi_Input_S.
      */
-    public TextInputElmStyle() {
-        super();
+    public TransferUi_Input_S(final @NotNull Shop _shop) {
+        super(_shop);
     }
 
 
@@ -35,21 +35,21 @@ public class TextInputElmStyle extends ButtonElmStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(0.5f))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-0.5f))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
+            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(0.5f))
         );
     }
 }

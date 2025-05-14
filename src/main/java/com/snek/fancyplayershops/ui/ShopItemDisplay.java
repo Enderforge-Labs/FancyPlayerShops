@@ -173,10 +173,9 @@ public class ShopItemDisplay extends ItemElm {
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
         if(_item.getItem() == Items.AIR) {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
-            noItem.setHoverName(Shop.EMPTY_SHOP_NAME);
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(MinecraftUtils.getFancyItemName(noItem));
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
@@ -207,7 +206,7 @@ public class ShopItemDisplay extends ItemElm {
             // Set the new name and adjust the element height
             if(i < fullName.length()) truncatedName.append("…");
             if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).get());
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).white().get());
                 name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }

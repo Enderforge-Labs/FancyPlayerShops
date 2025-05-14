@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.ui.edit.styles.EditUi_Input_S;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.utils.Txt;
@@ -29,7 +30,7 @@ public class EditUi_PriceInput extends ShopTextInput {
      * @param _shop The target shop.
      */
     public EditUi_PriceInput(final @NotNull Shop _shop) {
-        super(_shop, null, "Change price", new Txt("Send the new price in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get());
+        super(_shop, null, "Change price", new Txt("Send the new price in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), new EditUi_Input_S(_shop));
         updateDisplay(null);
     }
 
@@ -37,6 +38,7 @@ public class EditUi_PriceInput extends ShopTextInput {
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+            .cat(new Txt("Price: ").lightGray())
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).white())
         .get());
         flushStyle();

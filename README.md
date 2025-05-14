@@ -17,4 +17,7 @@ A server-side mod that allows players to create unobstructive, customizable, por
 
 ## Credits
 
-Made by UwU_Snek.
+Made by UwU_Snek.<br>
+Tested by SlurpMySlush.<br>
+<br>
+Economy mod by Herr Katze.

@@ -89,7 +89,7 @@ public class Txt {
     public static final @NotNull Vector3i COLOR_RED        = new Vector3i(255,  85,  85);
     public static final @NotNull Vector3i COLOR_MAGENTA    = new Vector3i(255,  85, 255);
     public static final @NotNull Vector3i COLOR_YELLOW     = new Vector3i(255, 255,  85);
-    public static final @NotNull Vector3i COLOR_WHITE      = new Vector3i(245, 245, 245);
+    public static final @NotNull Vector3i COLOR_WHITE      = new Vector3i(235, 235, 235);
     public static final @NotNull Vector3i COLOR_PURE_WHITE = new Vector3i(255, 255, 255);
 
 
@@ -108,8 +108,8 @@ public class Txt {
     public @NotNull Txt red      () { return color(COLOR_RED       ); }
     public @NotNull Txt magenta  () { return color(COLOR_MAGENTA   ); }
     public @NotNull Txt yellow   () { return color(COLOR_YELLOW    ); }
-    public @NotNull Txt white    () { return color(COLOR_PURE_WHITE); }
-    public @NotNull Txt pureWhite() { return color(COLOR_WHITE     ); }
+    public @NotNull Txt white    () { return color(COLOR_WHITE     ); }
+    public @NotNull Txt pureWhite() { return color(COLOR_PURE_WHITE); }
 
 
 

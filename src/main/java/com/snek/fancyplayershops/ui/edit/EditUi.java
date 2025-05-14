@@ -14,8 +14,10 @@ import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 
 
 
@@ -53,6 +55,8 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float COLOR_SELECTOR_W        = 0.2f;
     public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
 
+    public static final float INPUT_W = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
+
 
     // Functionalities
     public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
@@ -84,16 +88,16 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add price button
         e = bg.addChild(new EditUi_PriceInput(_shop));
-        e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(INPUT_W, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
-        e.setAlignmentX(AlignmentX.LEFT);
+        e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add stock limit button
         e = bg.addChild(new EditUi_StockLimitInput(_shop));
-        e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(INPUT_W, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 3f);
-        e.setAlignmentX(AlignmentX.LEFT);
+        e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add rotation buttons

@@ -3,6 +3,7 @@ package com.snek.framework.ui.composite;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.framework.ui.composite.styles.LinePanelStyle;
 import com.snek.framework.ui.elements.PanelElm;
 
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +20,7 @@ public final class LinePanel extends PanelElm {
 
 
     public LinePanel(final @NotNull ServerLevel _world) {
-        super(_world);
+        super(_world, new LinePanelStyle());
     }
 
 

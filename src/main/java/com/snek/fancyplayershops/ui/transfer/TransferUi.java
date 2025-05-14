@@ -14,7 +14,7 @@ import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.fancyplayershops.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
+import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
@@ -75,17 +75,16 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add player name input
         e = bg.addChild(new TextElm(_shop.getWorld()));
-        e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
-        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
         ((Elm)e).getStyle(TextElmStyle.class).setText(new Txt("New owner:").get());
 
         e = bg.addChild(new TransferUi_NameInput(_shop, this));
-        e.setSize(new Vector2f(0.75f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(1, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
-        ((Elm)e).getStyle(TransferUi_NameInput_S.class).setTextAlignment(TextAlignment.CENTER);
+        ((Elm)e).getStyle(TransferUi_Input_S.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add confirm button

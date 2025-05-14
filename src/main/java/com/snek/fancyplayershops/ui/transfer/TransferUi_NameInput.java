@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
 import com.snek.fancyplayershops.ui.misc.styles.ShopTextInput_S;
-import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_NameInput_S;
+import com.snek.fancyplayershops.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -37,7 +37,7 @@ public class TransferUi_NameInput extends ShopTextInput {
             _shop,
             null, "Choose new owner",
             new Txt("Send the name of the new owner in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(),
-            new TransferUi_NameInput_S(_shop)
+            new TransferUi_Input_S(_shop)
         );
         menu = _menu;
         updateDisplay(null);
@@ -52,7 +52,7 @@ public class TransferUi_NameInput extends ShopTextInput {
             .cat(
                 !menu.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
                 new Txt(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString()) :
-                new Txt("[Not specified]").gray().italic()
+                new Txt("[Not specified]").lightGray().italic()
             )
         .white().get());
         flushStyle();

@@ -62,6 +62,20 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
+
+        // Add amount and total price displays
+        e = bg.addChild(new BuyUi_PriceDisplay(_shop, this));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2);
+        priceDisplay = (BuyUi_PriceDisplay)e;
+
+        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld(), this));
+        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3);
+        amountDisplay = (BuyUi_AmountDisplay)e;
+
         //Add item inspector
         e = bg.addChild(new BuyUi_ItemInspector(_shop, null, null, new BuyUiSub_BackButton(_shop)));
         e.setSize(new Vector2f(EditUi.ITEM_SELECTOR_SIZE));
@@ -75,20 +89,6 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (BuyUi_ConfirmButton)e;
-
-
-        // Add amount and total price displays
-        e = bg.addChild(new BuyUi_AmountDisplay(_shop.getWorld(), this));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
-        e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H * 1);
-        amountDisplay = (BuyUi_AmountDisplay)e;
-
-        e = bg.addChild(new BuyUi_PriceDisplay(_shop, this));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
-        e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H * 2);
-        priceDisplay = (BuyUi_PriceDisplay)e;
 
 
         // Add input indicators
