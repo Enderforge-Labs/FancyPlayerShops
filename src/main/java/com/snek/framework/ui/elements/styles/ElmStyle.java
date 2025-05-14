@@ -61,7 +61,7 @@ public class ElmStyle {
 
     // Default value providers
     public @NotNull  Transform            getDefaultTransform       () { return new Transform(); }
-    public           float                getDefaultViewRange       () { return 0.3f; }
+    public           float                getDefaultViewRange       () { return 0.2f; }
     public @NotNull  BillboardConstraints getDefaultBillboardMode   () { return BillboardConstraints.FIXED; }
     public @Nullable Animation            getDefaultPrimerAnimation () { return null; }
     public @Nullable Animation            getDefaultSpawnAnimation  () { return null; }

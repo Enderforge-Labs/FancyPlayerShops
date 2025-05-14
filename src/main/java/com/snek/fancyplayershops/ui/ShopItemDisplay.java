@@ -176,7 +176,6 @@ public class ShopItemDisplay extends ItemElm {
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
-                name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
         }
@@ -207,7 +206,6 @@ public class ShopItemDisplay extends ItemElm {
             if(i < fullName.length()) truncatedName.append("…");
             if(name != null) {
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).white().get());
-                name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
                 name.flushStyle();
             }
         }
@@ -327,7 +325,8 @@ public class ShopItemDisplay extends ItemElm {
     public void spawnNameEntity(){
         if(name == null) {
             name = new FancyTextElm(world, new SimpleNameDisplay_S());
-            name.getStyle().setViewRange(0.2f);
+            name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
+            name.getStyle().setViewRange(0.1f);
             name.getStyle().setBillboardMode(BillboardConstraints.VERTICAL);
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
         }
