@@ -479,7 +479,7 @@ public class Shop {
 
 
             // Send feedback to the player
-            final ItemStack _item = item.copyWithCount(1);
+            final ItemStack _item = item.copyWithCount(amount);
             if(MinecraftUtils.attemptGive(owner, _item)) {
                 owner.displayClientMessage(new Txt()
                     .cat("You retrieved " + Utils.formatAmount(amount, true, true) + " ")

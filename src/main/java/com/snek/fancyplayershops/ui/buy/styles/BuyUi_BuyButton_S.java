@@ -1,16 +1,9 @@
 package com.snek.fancyplayershops.ui.buy.styles;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 

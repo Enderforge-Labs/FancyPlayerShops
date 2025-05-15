@@ -8,7 +8,6 @@ import com.snek.fancyplayershops.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +46,7 @@ public class BuyUi_ConfirmButton extends ShopButton {
         if(active == _active) return;
         active = _active;
         final BuyUi_ConfirmButton_S s = getStyle(BuyUi_ConfirmButton_S.class);
-        s.setDefaultColor(active ? BuyUi_ConfirmButton_S.BASE_COLOR : Utils.toBW(BuyUi_ConfirmButton_S.BASE_COLOR));
+        s.setDefaultColor(active ? BuyUi_ConfirmButton_S.BASE_COLOR : BuyUi_ConfirmButton_S.BASE_COLOR_INACTIVE);
         applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()));
     }
 

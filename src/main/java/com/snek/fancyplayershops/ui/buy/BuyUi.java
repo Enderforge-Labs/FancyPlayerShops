@@ -38,9 +38,12 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
     // Instance data
     private final @NotNull Shop shop;
-    private final @NotNull BuyUi_ConfirmButton confirmButton;
     private final @NotNull BuyUi_AmountInputDisplay amountInputDisplay;
     private final @NotNull BuyUi_PriceDisplay priceDisplay;
+    private final @NotNull BuyUi_ConfirmButton confirmButton;
+    private final @NotNull BuyUi_1xButton buy1xButton;
+    private final @NotNull BuyUi_1sButton buy1sButton;
+    private final @NotNull BuyUi_1iButton buy1iButton;
 
     private int amount = 0;
     public int getAmount() { return amount; }
@@ -102,14 +105,17 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         e = bg.addChild(new BuyUi_1xButton(_shop));
         e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
         e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        buy1xButton = (BuyUi_1xButton)e;
 
-        e = bg.addChild(new BuyUi_64xButton(_shop));
+        e = bg.addChild(new BuyUi_1sButton(_shop));
         e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
         e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        buy1sButton = (BuyUi_1sButton)e;
 
-        e = bg.addChild(new BuyUi_0xButton(_shop));
+        e = bg.addChild(new BuyUi_1iButton(_shop));
         e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
         e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        buy1iButton = (BuyUi_1iButton)e;
 
 
         // Add input indicators
@@ -122,6 +128,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Set default amount and force button color update
         changeAmount(1);
+        onStockChange();
     }
 
 
@@ -129,8 +136,8 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
     public void changeAmount(final int newAmount) {
         amount = newAmount;
-        amountInputDisplay.updateDisplay(null);
         priceDisplay.updateDisplay();
+        amountInputDisplay.updateDisplay(null);
         confirmButton.updateColor(shop.getStock() >= amount);
     }
 
@@ -156,8 +163,11 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
     @Override
     public void onStockChange() {
-        confirmButton.updateColor(shop.getStock() >= amount);
         amountInputDisplay.updateDisplay(null);
+        confirmButton.updateColor(shop.getStock() >= amount);
+        buy1xButton.updateColor(shop.getStock() >= 1);
+        buy1sButton.updateColor(shop.getStock() >= 64);
+        buy1iButton.updateColor(shop.getStock() > 0);
     }
 
 

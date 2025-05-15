@@ -41,13 +41,13 @@ public class PolylineSetElm extends Div {
 
         // Create lines and add them to the children list
         for(final PolylineData l : _polylines) {
+            float previousLen = 0f;
             final List<Vector2f> points = l.getPoints();
-            float totalLen = 0f;
             for(int i = 0; i < points.size() - 1; ++i) {
                 final Vector2f a = points.get(i);
                 final Vector2f b = points.get(i + 1);
-                createLine(_world, l, a, b, totalLen);
-                totalLen += a.distance(b);
+                createLine(_world, l, a, b, previousLen);
+                previousLen += a.distance(b);
             }
         }
     }

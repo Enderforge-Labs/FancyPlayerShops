@@ -6,15 +6,17 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.buy.styles.BuyUi_BuyButton_S;
+import com.snek.fancyplayershops.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
+import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
-import com.snek.framework.utils.SpaceUtils;
+import com.snek.framework.utils.Easings;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -27,29 +29,38 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class BuyUi_0xButton extends ShopButton {
+public class BuyUi_1iButton extends ShopButton {
+    private boolean active = true;
+
+
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.04f,
+            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
             new Vector2f(0.0f, 0.0f),
-            new Vector2f(0.3f, 0.4f),
-            new Vector2f(0.7f, 0.4f),
-            new Vector2f(1.0f, 0.9f).sub(0.02f, 0.05f)
+            new Vector2f(0.0f, 1.0f),
+            new Vector2f(1.0f, 1.0f),
+            new Vector2f(1.0f, 0.0f),
+            new Vector2f(0.0f, 0.0f)
         ),
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
             EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-            SpaceUtils.rotateVec2(new Vector2f(-0.2f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.2f), (float)Math.toRadians(15)).add(1, 0.9f)
+            new Vector2f(0.0f, 0.66f),
+            new Vector2f(1.0f, 0.66f)
+        ),
+        new PolylineData(
+            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
+            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
+            new Vector2f(0.5f, 0.76f),
+            new Vector2f(0.5f, 0.46f)
         )
     };
 
 
 
 
-    public BuyUi_0xButton(final @NotNull Shop _shop){
+    public BuyUi_1iButton(final @NotNull Shop _shop){
         super(_shop, null, "Fill inventory", 1,  new BuyUi_BuyButton_S(_shop));
 
         // Create design
@@ -62,6 +73,15 @@ public class BuyUi_0xButton extends ShopButton {
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
         // Empty
+    }
+
+
+    public void updateColor(final boolean _active) {
+        if(active == _active) return;
+        active = _active;
+        final BuyUi_BuyButton_S s = getStyle(BuyUi_BuyButton_S.class);
+        s.setDefaultColor(active ? BuyUi_ConfirmButton_S.BASE_COLOR : BuyUi_ConfirmButton_S.BASE_COLOR_INACTIVE);
+        applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()));
     }
 
 

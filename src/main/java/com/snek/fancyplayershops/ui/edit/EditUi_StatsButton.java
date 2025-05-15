@@ -39,9 +39,9 @@ public class EditUi_StatsButton extends ShopButton {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
             EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-            SpaceUtils.rotateVec2(new Vector2f(-0.2f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.0f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.0f, -0.2f), (float)Math.toRadians(15)).add(1, 0.9f)
+            SpaceUtils.rotateVec2(new Vector2f(-0.25f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
+            SpaceUtils.rotateVec2(new Vector2f(+0.00f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
+            SpaceUtils.rotateVec2(new Vector2f(+0.00f, -0.25f), (float)Math.toRadians(15)).add(1, 0.9f)
         )
     };
 
