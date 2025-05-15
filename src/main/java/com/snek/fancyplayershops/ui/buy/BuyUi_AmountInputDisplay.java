@@ -56,6 +56,7 @@ public class BuyUi_AmountInputDisplay extends ShopTextInput {
         getStyle(TextElmStyle.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt("Amount: ").lightGray())
             .cat(new Txt(Utils.formatAmount(menu.getAmount())).white())
+            .cat(new Txt(" / " + shop.getStock()).lightGray())
         .get());
         flushStyle();
     }

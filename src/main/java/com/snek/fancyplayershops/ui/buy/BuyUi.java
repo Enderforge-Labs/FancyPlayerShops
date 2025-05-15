@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.ui.buy;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.edit.EditUi;
@@ -32,6 +31,9 @@ import net.minecraft.world.entity.player.Player;
  */
 public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     public static final float CONFIRM_BUTTON_Y = 0.25f;
+    public static final float CONFIRM_BUTTON_W = 0.5f;
+    public static final float BUY_BUTTONS_SPACING = 0.025f;
+    public static final float BUY_BUTTONS_W = (CONFIRM_BUTTON_W - BUY_BUTTONS_SPACING * 2f) / 3f;
     private final @NotNull DualInputIndicator inputIndicator;
 
     // Instance data
@@ -90,10 +92,24 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add confirm button
         e = bg.addChild(new BuyUi_ConfirmButton(_shop, this));
-        e.setSize(new Vector2f(0.5f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(CONFIRM_BUTTON_W, ShopFancyTextElm.LINE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (BuyUi_ConfirmButton)e;
+
+
+        // Add quick buy buttons
+        e = bg.addChild(new BuyUi_1xButton(_shop));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
+        e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+
+        e = bg.addChild(new BuyUi_64xButton(_shop));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
+        e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+
+        e = bg.addChild(new BuyUi_0xButton(_shop));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
+        e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
 
 
         // Add input indicators
@@ -141,6 +157,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     @Override
     public void onStockChange() {
         confirmButton.updateColor(shop.getStock() >= amount);
+        amountInputDisplay.updateDisplay(null);
     }
 
 

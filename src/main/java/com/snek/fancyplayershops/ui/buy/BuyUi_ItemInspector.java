@@ -19,6 +19,8 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+//TODO add "open in inventory" button
+//TODO use the "external link" icon design
 
 /**
  * A button that allows the user of the shop to view details about the item.
