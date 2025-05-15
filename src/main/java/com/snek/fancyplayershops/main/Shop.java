@@ -49,6 +49,7 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -861,12 +862,13 @@ public class Shop {
      * @param rel The position of the inventory, relative to the shop.
      */
     public void pullItems(final @NotNull BlockPos rel){
-        if(stock >= maxStock) return;
-        final BlockPos targetPos = pos.offset(rel);
-        final ChunkPos chunkPos = new ChunkPos(pos);
-        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;
-        final BlockEntity be = world.getBlockEntity(targetPos);
-        if(be == null) return;
+        if(stock >= maxStock) return;                                           // Skip pull if shop is full
+        final BlockPos targetPos = pos.offset(rel);                             // Calculate inventory position
+        final ChunkPos chunkPos = new ChunkPos(pos);                            // Calculate inventory chunk position
+        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;                    // Skip pull if inventory is unloaded
+        final BlockEntity be = world.getBlockEntity(targetPos);                 // Get block entity data
+        if(be == null) return;                                                      // Skip pull if inventory is not a block entity
+        if(be instanceof BaseContainerBlockEntity cbe && cbe.isEmpty()) return;     // Skip pull if inventory is empty
 
 
         // Calculate side and find the storage block
