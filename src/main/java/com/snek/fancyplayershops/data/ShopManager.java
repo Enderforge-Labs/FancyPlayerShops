@@ -24,6 +24,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -55,6 +56,7 @@ public abstract class ShopManager {
     private ShopManager() {}
     private static final Random rnd = new Random();
     public static final int PULL_UPDATES_PER_TICK = 1;
+    public static final int PULL_UPDATES_CYCLE_DELAY = 5 * 20;
 
 
 
@@ -67,6 +69,7 @@ public abstract class ShopManager {
     // Async update list
     private static int updateIndex = 0;
     private static @NotNull List<@NotNull Shop> updateSnapshot = List.of();
+    private static final @NotNull RateLimiter updateCycleLimiter = new RateLimiter();
 
     // Keeps track of the amount of shops in each chunk
     private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
@@ -235,6 +238,8 @@ public abstract class ShopManager {
      * <p> Must be called each server tick.
      */
     public static void pullItems(){
+        if(!updateCycleLimiter.attempt()) return;
+
 
         // Refresh snapshot if needed
         if(updateIndex == 0) {
@@ -242,12 +247,19 @@ public abstract class ShopManager {
         }
 
         // Update shops
-        for(int i = 0; i < PULL_UPDATES_PER_TICK && updateIndex < updateSnapshot.size(); i++, updateIndex++) {
-            updateSnapshot.get(updateIndex).pullItems();
+        for(int i = 0; i < PULL_UPDATES_PER_TICK && updateIndex < updateSnapshot.size(); ++updateIndex) {
+
+            final Shop shop = updateSnapshot.get(updateIndex);
+            final ChunkPos chunkPos = new ChunkPos(shop.getPos());
+            if(shop.getWorld().hasChunk(chunkPos.x, chunkPos.z)) {
+                shop.pullItems();
+                ++i;
+            }
         }
 
         // Reset snapshop if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
+            updateCycleLimiter.renewCooldown(PULL_UPDATES_CYCLE_DELAY);
             updateIndex = 0;
         }
     }

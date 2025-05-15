@@ -832,17 +832,15 @@ public class Shop {
      */
     public void pullItems(){
         if(stock >= maxStock || item.getItem() == Items.AIR) return;
-        final ChunkPos chunkPos = new ChunkPos(pos);
-        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;
         final int oldStock = stock;
 
-        pullItems(new BlockPos(0, 0, 0));
-        pullItems(new BlockPos(0, 0, +1));
-        pullItems(new BlockPos(0, 0, -1));
-        pullItems(new BlockPos(0, +1, 0));
-        pullItems(new BlockPos(0, -1, 0));
-        pullItems(new BlockPos(+1, 0, 0));
-        pullItems(new BlockPos(-1, 0, 0));
+        pullItems(new BlockPos(+0, +0, +0));
+        pullItems(new BlockPos(+0, +0, +1));
+        pullItems(new BlockPos(+0, +0, -1));
+        pullItems(new BlockPos(+0, +1, +0));
+        pullItems(new BlockPos(+0, -1, +0));
+        pullItems(new BlockPos(+1, +0, +0));
+        pullItems(new BlockPos(-1, +0, +0));
 
         // Update stock and save the shop
         if(oldStock == stock) return;
