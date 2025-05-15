@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.buy.styles.BuyUi_BuyButton_S;
 import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
+import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
@@ -53,7 +54,7 @@ public class BuyUi_0xButton extends ShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
-        e.setSize(new Vector2f(BuyUi.BUY_BUTTONS_W / BuyUi.SQUARE_BUTTON_SIZE * EditUi.BOTTOM_ROW_CONTENT_SIZE, EditUi.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H / BuyUi.BUY_BUTTONS_W * EditUi.BOTTOM_ROW_CONTENT_SIZE, EditUi.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 
