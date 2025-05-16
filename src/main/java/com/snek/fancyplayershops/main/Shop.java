@@ -155,6 +155,7 @@ public class Shop {
     public @NotNull  String          getWorldId        () { return worldId;         }
     public @NotNull  BlockPos        getPos            () { return pos;             }
     public @NotNull  ItemStack       getItem           () { return item;            }
+    public @NotNull  String          getSerializedItem () { return serializedItem;  }
     public @NotNull  ShopItemDisplay getItemDisplay    () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ShopCanvas      getActiveCanvas   () { return activeCanvas;    }
     public           long            getPrice          () { return price;           }

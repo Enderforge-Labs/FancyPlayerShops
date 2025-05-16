@@ -39,9 +39,9 @@ public class EditUi_RotateButton extends ShopButton {
             new PolylineData(
                 EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
                 EditUi.TOOLBAR_FG_WIDTH, 0.06f,
-                new Vector2f(-0.15f * -1 + 0.5f, 0.8f),
+                new Vector2f(-0.15f * -1 + 0.5f, 0.2f),
                 new Vector2f(+0.15f * -1 + 0.5f, 0.5f),
-                new Vector2f(-0.15f * -1 + 0.5f, 0.2f)
+                new Vector2f(-0.15f * -1 + 0.5f, 0.8f)
             )
         },
         new PolylineData[] {

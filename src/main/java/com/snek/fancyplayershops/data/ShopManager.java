@@ -8,10 +8,14 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -25,12 +29,14 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -59,6 +65,12 @@ import net.minecraft.world.phys.Vec3;
  * A class that handles active shops and takes care of loading and saving their data.
  */
 public abstract class ShopManager {
+    private static final DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder()
+        .appendPattern("MMMM d, yyyy 'at' h:mm ")
+        .appendText(java.time.temporal.ChronoField.AMPM_OF_DAY,
+            java.util.Map.of(0L, "am", 1L, "pm"))
+        .toFormatter(Locale.ENGLISH)
+    ;
     private ShopManager() {}
     private static final Random rnd = new Random();
     public static final int PULL_UPDATES_PER_TICK = 1;
@@ -103,7 +115,7 @@ public abstract class ShopManager {
     // Shop item description
     private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
     private static final @NotNull Component[] SHOP_ITEM_DESCRITPION = {
-        new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
+        new Txt().cat(new Txt("Shops").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" allow you to sell items to other players.").white()).noItalic().get(),
         new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
         new Txt("").noItalic().get()
     };
@@ -410,6 +422,67 @@ public abstract class ShopManager {
      * @return The created shop item.
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
-        return shopItem.copy(); //FIXME actually copy the shop data
+        if(shop.getItem().getItem() == Items.AIR) return getShopItemCopy();
+
+        // Get NBTs
+        final ItemStack item = shopItem.copy();
+        final CompoundTag nbt = item.getOrCreateTag();
+        final CompoundTag display = nbt.getCompound("display");
+        final ListTag lore = display.getList("Lore", Tag.TAG_STRING);
+
+
+
+
+        // Create and add shop data NBT
+        final CompoundTag data = new CompoundTag();
+
+        data.putUUID  ("owner",    shop.getOwnerUuid      ());
+        data.putLong  ("price",    shop.getPrice          ());
+        data.putInt   ("stock",    shop.getStock          ());
+        data.putInt   ("maxStock", shop.getMaxStock       ());
+        data.putFloat ("rotation", shop.getDefaultRotation());
+        data.putFloat ("hue",      shop.getColorThemeHue  ());
+        data.putString("item",     shop.getSerializedItem ());
+
+        final Component[] extraDescriptionLines = {
+            new Txt()
+                .cat(new Txt("This ").white().noItalic())
+                .cat(new Txt("snapshot").color(SHOP_ITEM_DESCRITPION_COLOR).noItalic())
+                .cat(new Txt(" was captured on ").white().noItalic())
+                .cat(new Txt(LocalDateTime.now().format(timeFormatter)).color(SHOP_ITEM_DESCRITPION_COLOR).noItalic())
+                .cat(new Txt(".").white().noItalic())
+            .get(),
+            new Txt()
+                .cat(new Txt("It will automatically ").white().noItalic())
+                .cat(new Txt("restore").color(SHOP_ITEM_DESCRITPION_COLOR).noItalic())
+                .cat(new Txt(" its stock and settings when placed.").white().noItalic())
+            .get(),
+            new Txt().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice                ()))).white().noItalic().get(),
+            new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
+            new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
+            new Txt().cat(new Txt("Rotation: "   ).lightGray().noItalic()).cat(new Txt("" + shop.getDefaultRotation())).white().noItalic().get(),
+            new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("" + shop.getColorThemeHue  ())).white().noItalic().get(),
+            new Txt().get()
+        };
+        for(final Component line : extraDescriptionLines) {
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+        }
+
+        display.put("Lore", lore);
+        nbt.put("display", display);
+        nbt.put(FancyPlayerShops.MOD_ID, data);
+
+
+
+
+        // Set new NBTs and return the item
+        item.setTag(nbt);
+        item.setHoverName(new Txt()
+            .cat(new Txt("Shop snapshot").color(SHOP_ITEM_NAME_COLOR).bold().noItalic())
+            .cat(new Txt(" - " + MinecraftUtils.getFancyItemName(shop.getItem()).getString()).white().bold().noItalic())
+        .get());
+        return item;
     }
 }
