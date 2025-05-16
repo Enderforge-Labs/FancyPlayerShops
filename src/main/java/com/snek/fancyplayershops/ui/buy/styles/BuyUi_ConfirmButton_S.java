@@ -38,12 +38,6 @@ public class BuyUi_ConfirmButton_S extends ShopButton_S {
 
 
     @Override
-    public @NotNull Component getDefaultText() {
-        return new Txt("Buy").get();
-    }
-
-
-    @Override
     public @NotNull Vector3i getDefaultBgColor() {
         return new Vector3i(defaultBgColor);
     }

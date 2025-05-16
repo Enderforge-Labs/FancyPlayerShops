@@ -90,6 +90,16 @@ public abstract class Utils {
 
 
     /**
+     * Returns the value <amount> expressed as a string, abbreviating the number to 3 digits.
+     * @param amount The amount to format. This MUST be >= 0.
+     * @return The formatted amount.
+     */
+    public static @NotNull String formatAmountShort(final long amount) {
+        return formatPriceShort(amount * 100l, "");
+    }
+
+
+    /**
      * Returns the value <price> expressed as a string and formatted using $ as currency symbol, abbreviating the number to 3 digits.
      * @param price The price to format. This MUST be >= 0.
      * @return The formatted price.

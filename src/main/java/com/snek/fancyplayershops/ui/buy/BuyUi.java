@@ -139,6 +139,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         priceDisplay.updateDisplay();
         amountInputDisplay.updateDisplay(null);
         confirmButton.updateColor(shop.getStock() >= amount);
+        confirmButton.updateDisplay(null);
     }
 
 

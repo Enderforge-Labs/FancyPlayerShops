@@ -8,6 +8,8 @@ import com.snek.fancyplayershops.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;
+import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +30,7 @@ public class BuyUi_ConfirmButton extends ShopButton {
     protected BuyUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull BuyUi _menu) {
         super(_shop, null, "Confirm bulk buy", 10, new BuyUi_ConfirmButton_S(_shop));
         menu = _menu;
+        updateDisplay(null);
     }
 
 
@@ -54,7 +57,8 @@ public class BuyUi_ConfirmButton extends ShopButton {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
+        getStyle(BuyUi_ConfirmButton_S.class).setText(new Txt("Buy " + Utils.formatAmountShort(menu.getAmount())).white().get());
+        flushStyle();
     }
 
 }
