@@ -28,25 +28,13 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
-            new Vector2f(0.8f, 0.9f),
-            new Vector2f(0.2f, 0.9f),
-            new Vector2f(0.2f, 0.5f),
-            new Vector2f(0.8f, 0.5f),
-            new Vector2f(0.8f, 0.1f),
-            new Vector2f(0.2f, 0.1f)
-        ),
-        new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
-            new Vector2f(0.5f, 1.0f),
-            new Vector2f(0.5f, 0.9f)
-        ),
-        new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
-            new Vector2f(0.5f, 0.1f),
-            new Vector2f(0.5f, 0.0f)
+            EditUi.TOOLBAR_FG_WIDTH, 0.05f,
+            new Vector2f(1.0f, 0.6f),
+            new Vector2f(0.4f, 0.0f),
+            new Vector2f(0.0f, 0.0f),
+            new Vector2f(0.0f, 0.4f),
+            new Vector2f(0.6f, 1.0f),
+            new Vector2f(1.0f, 0.6f)
         )
     };
 

@@ -24,7 +24,7 @@ public class InspectUi_ModDisplay extends ShopTextElm {
 
 
     /**
-     * Creates a new InspectUi_Values.
+     * Creates a new InspectUi_ModDisplay.
      * @param _shop The target shop.
      */
     public InspectUi_ModDisplay(@NotNull Shop _shop) {
