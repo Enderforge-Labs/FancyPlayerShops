@@ -66,11 +66,13 @@ public abstract class StashManager {
 
     /**
      * Adds an item to the stash of the specified player.
+     * <p> Air is never stashed.
      * @param playerUUID The UUID of the player.
      * @param item The item to add.
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
+        if(item.getItem() == Items.AIR) return;
         final Map<UUID, StashEntry> stash = stashes.computeIfAbsent(playerUUID, k -> new HashMap<>());
         final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
         stashEntry.add(count);
