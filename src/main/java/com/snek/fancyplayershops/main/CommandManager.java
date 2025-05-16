@@ -62,7 +62,7 @@ public abstract class CommandManager {
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
-                        player.getInventory().add(FancyPlayerShops.getShopItemCopy());
+                        player.getInventory().add(ShopManager.getShopItemCopy());
                         return 1;
                     }))
 
@@ -119,7 +119,7 @@ public abstract class CommandManager {
                         Craft an Item Shop in the crafting table and place it to get started!
                         You can see details about your shops and sales history using the command /shop stats.
                         """
-                    ).color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+                    ).color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
                     return 1;
                 }))
             );

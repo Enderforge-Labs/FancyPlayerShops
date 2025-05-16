@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
@@ -74,11 +75,11 @@ public class EditUi_DeleteButton extends ShopButton {
         // Send feedback message
         player.displayClientMessage(new Txt()
             .cat("Your " + shop.getDecoratedName() + " has been deleted.")
-        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
         // Give the player a default shop item
-        final ItemStack defaultShopItem =  FancyPlayerShops.getShopItemCopy();
+        final ItemStack defaultShopItem =  ShopManager.getShopItemCopy();
         if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
             StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
             //! ^ saveStash() call is done by shop.stash()

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_SquareButton_S;
@@ -68,7 +69,7 @@ public class EditUi_MoveButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        final boolean giveResult = MinecraftUtils.attemptGive(player, FancyPlayerShops.createShopSnapshot(shop));
+        final boolean giveResult = MinecraftUtils.attemptGive(player, ShopManager.createShopSnapshot(shop));
         if(!giveResult) {
             player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);
         }
@@ -77,7 +78,7 @@ public class EditUi_MoveButton extends ShopButton {
             // Send feedback message to the player
             player.displayClientMessage(new Txt()
                 .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
-            .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+            .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
             // Delete shop

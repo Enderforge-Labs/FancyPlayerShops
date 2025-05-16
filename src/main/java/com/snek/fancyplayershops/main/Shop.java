@@ -938,7 +938,7 @@ public class Shop {
         oldOwner.displayClientMessage(new Txt()
             .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
             .cat("" + newOwner.getName().getString() + ".")
-        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
@@ -946,7 +946,7 @@ public class Shop {
             .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + world.dimension().location().toString())
-        .color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
         // Actually change the owner and save the shop, then force it to unfocus to prevent the previous owner from accessing the UI

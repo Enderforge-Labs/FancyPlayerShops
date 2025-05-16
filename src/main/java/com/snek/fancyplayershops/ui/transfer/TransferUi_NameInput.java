@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.transfer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.misc.ShopTextInput;
@@ -36,7 +37,7 @@ public class TransferUi_NameInput extends ShopTextInput {
         super(
             _shop,
             null, "Choose new owner",
-            new Txt("Send the name of the new owner in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the name of the new owner in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
             new TransferUi_Input_S(_shop)
         );
         menu = _menu;

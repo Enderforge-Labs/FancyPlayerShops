@@ -11,10 +11,6 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +30,6 @@ import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +39,6 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 
@@ -73,56 +67,6 @@ public class FancyPlayerShops implements ModInitializer {
     // Mod ID and console logger
     public static final @NotNull String MOD_ID = "fancyplayershops";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-
-
-
-    // Shop item data
-    //! Don't use the name or tooltip to check the item. Shops should work even when renamed in an anvil or modified by mods
-    private static final @NotNull ItemStack shopItem;
-    private static final @NotNull String SHOP_ITEM_NBT_KEY = MOD_ID + ".item.shop_item";
-
-    // Shop item texture
-    private static final @NotNull String SHOP_ITEM_TEXTURE =
-        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
-        "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
-    ;
-
-    // Shop item name
-    public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
-    public static final @NotNull Component SHOP_ITEM_NAME =
-        new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
-    .get();
-
-    // Shop item description
-    private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
-    private static final @NotNull Component[] SHOP_ITEM_DESCRITPION = {
-        new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
-        new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
-        new Txt("").noItalic().get()
-    };
-
-
-
-
-    // Initialize shop item stack
-    static {
-
-        // Create item and set custom name
-        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE);
-        shopItem.setHoverName(SHOP_ITEM_NAME);
-
-        // Set identification tag
-        final CompoundTag nbt = shopItem.getOrCreateTag();
-        nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
-
-        // Set lore
-        final ListTag lore = new ListTag();
-        for(final Component line : SHOP_ITEM_DESCRITPION) {
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
-        }
-        shopItem.getOrCreateTagElement("display").put("Lore", lore);
-    }
 
 
 
@@ -276,7 +220,7 @@ public class FancyPlayerShops implements ModInitializer {
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasTag() && stack.getTag().contains(SHOP_ITEM_NBT_KEY)) {
+        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasTag() && stack.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
@@ -288,7 +232,7 @@ public class FancyPlayerShops implements ModInitializer {
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 if(ShopManager.findShop(blockPos, world) == null) {
                     new Shop(serverWorld, blockPos, player);
-                    player.displayClientMessage(new Txt("New shop created! Right click it to configure.").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                    player.displayClientMessage(new Txt("New shop created! Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                 }
             }
 
@@ -297,32 +241,5 @@ public class FancyPlayerShops implements ModInitializer {
             return InteractionResult.FAIL;
         }
         return InteractionResult.PASS;
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Returns a copy if the default shop item.
-     * @return A copy of the shop item.
-     */
-    public static @NotNull ItemStack getShopItemCopy() {
-        return shopItem.copy();
-    }
-
-
-
-
-    /**
-     * Creates a shop item containing the informations required to fully restore the provided shop.
-     * @param shop The shop.
-     * @return The created shop item.
-     */
-    public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
-        return shopItem.copy(); //FIXME actually copy the shop data
     }
 }

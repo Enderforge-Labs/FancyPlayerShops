@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 
 import net.minecraft.resources.ResourceLocation;
@@ -63,7 +64,7 @@ public abstract class CraftingScreenHandlerMixin {
             if(r.matches((CraftingContainer)inventory, null)) { //! World parameter isn't actually used by the function
 
                 // Replace the output item
-                resultSlots.setItem(0, FancyPlayerShops.getShopItemCopy());
+                resultSlots.setItem(0, ShopManager.getShopItemCopy());
                 ((CraftingMenu)(Object)this).broadcastChanges();
             }
         }

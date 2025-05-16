@@ -18,6 +18,7 @@ import java.util.Random;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -27,8 +28,13 @@ import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -73,6 +79,56 @@ public abstract class ShopManager {
 
     // Keeps track of the amount of shops in each chunk
     private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
+
+
+
+
+    // Shop item data
+    //! Don't use the name or tooltip to check the item. Shops should work even when renamed in an anvil or modified by mods
+    public  static final @NotNull String SHOP_ITEM_NBT_KEY = FancyPlayerShops.MOD_ID + ".item.shop_item";
+    private static final @NotNull ItemStack shopItem;
+
+    // Shop item texture
+    private static final @NotNull String SHOP_ITEM_TEXTURE =
+        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
+        "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
+    ;
+
+    // Shop item name
+    public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
+    public static final @NotNull Component SHOP_ITEM_NAME =
+        new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
+    .get();
+
+    // Shop item description
+    private static final @NotNull Vector3i SHOP_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
+    private static final @NotNull Component[] SHOP_ITEM_DESCRITPION = {
+        new Txt().cat(new Txt("A ").white()).cat(new Txt("shop").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" that allows you to sell items to other players.").white()).noItalic().get(),
+        new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
+        new Txt("").noItalic().get()
+    };
+
+
+
+
+    // Initialize shop item stack
+    static {
+
+        // Create item and set custom name
+        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE);
+        shopItem.setHoverName(SHOP_ITEM_NAME);
+
+        // Set identification tag
+        final CompoundTag nbt = shopItem.getOrCreateTag();
+        nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
+
+        // Set lore
+        final ListTag lore = new ListTag();
+        for(final Component line : SHOP_ITEM_DESCRITPION) {
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+        }
+        shopItem.getOrCreateTagElement("display").put("Lore", lore);
+    }
 
 
 
@@ -328,5 +384,32 @@ public abstract class ShopManager {
             }
         }
         return r;
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Returns a copy if the default shop item.
+     * @return A copy of the shop item.
+     */
+    public static @NotNull ItemStack getShopItemCopy() {
+        return shopItem.copy();
+    }
+
+
+
+
+    /**
+     * Creates a shop item containing the informations required to fully restore the provided shop.
+     * @param shop The shop.
+     * @return The created shop item.
+     */
+    public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
+        return shopItem.copy(); //FIXME actually copy the shop data
     }
 }

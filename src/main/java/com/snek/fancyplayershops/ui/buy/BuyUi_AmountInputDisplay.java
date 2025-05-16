@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.buy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.buy.styles.BuyUi_Input_S;
@@ -25,7 +26,7 @@ public class BuyUi_AmountInputDisplay extends ShopTextInput {
 
 
     public BuyUi_AmountInputDisplay(final @NotNull Shop _shop, final @NotNull BuyUi _menu) {
-        super(_shop, null, "Specify buy amount", new Txt("Send the amount in chat!").color(FancyPlayerShops.SHOP_ITEM_NAME_COLOR).get(), new BuyUi_Input_S(_shop));
+        super(_shop, null, "Specify buy amount", new Txt("Send the amount in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), new BuyUi_Input_S(_shop));
         menu = _menu;
         updateDisplay(null);
     }
