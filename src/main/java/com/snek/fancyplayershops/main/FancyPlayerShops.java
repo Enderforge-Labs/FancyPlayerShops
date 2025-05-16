@@ -160,7 +160,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Create storage directories
-            for(String path : new String[] { "shops", "stash" }) {
+            for(String path : new String[] { "shops", "stash", "balance" }) {
                 try {
                     Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
                 } catch(IOException e) {
