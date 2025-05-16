@@ -36,6 +36,7 @@ public class TransferUi_ConfirmButton extends ShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         shop.changeOwner(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        if(active) playButtonSound(player);
     }
 
 

@@ -88,6 +88,7 @@ public class BuyUi_1iButton extends ShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
+        final int oldStock = shop.getStock();
 
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, amount, false);
@@ -95,5 +96,6 @@ public class BuyUi_1iButton extends ShopButton {
         else {
             shop.buyItem(player, amount, false);
         }
+        if(shop.getStock() != oldStock) playButtonSound(player);
     }
 }
