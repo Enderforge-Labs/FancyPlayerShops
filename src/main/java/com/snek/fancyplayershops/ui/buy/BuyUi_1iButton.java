@@ -87,13 +87,13 @@ public class BuyUi_1iButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
+
         if(player.getUUID().equals(shop.getOwnerUuid())) {
-            // shop.retrieveItem(player, 64);
-            //FIXME
+            shop.retrieveItem(player, amount, false);
         }
         else {
-            // shop.buyItem(player, 64);
-            //FIXME
+            shop.buyItem(player, amount, false);
         }
     }
 }

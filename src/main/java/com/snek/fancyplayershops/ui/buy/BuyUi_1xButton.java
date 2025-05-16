@@ -96,10 +96,10 @@ public class BuyUi_1xButton extends ShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(player.getUUID().equals(shop.getOwnerUuid())) {
-            shop.retrieveItem(player, 1);
+            shop.retrieveItem(player, 1, true);
         }
         else {
-            shop.buyItem(player, 1);
+            shop.buyItem(player, 1, true);
         }
     }
 }

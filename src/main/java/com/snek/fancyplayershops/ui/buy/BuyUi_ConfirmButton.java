@@ -34,10 +34,10 @@ public class BuyUi_ConfirmButton extends ShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(player.getUUID().equals(shop.getOwnerUuid())) {
-            shop.retrieveItem(player, menu.getAmount());
+            shop.retrieveItem(player, menu.getAmount(), true);
         }
         else {
-            shop.buyItem(player, menu.getAmount());
+            shop.buyItem(player, menu.getAmount(), true);
         }
     }
 

@@ -408,10 +408,10 @@ public class Shop {
             if(user == null) {
                 if(clickType == ClickAction.PRIMARY) {
                     if(player.getUUID().equals(ownerUUID)) {
-                        retrieveItem(player, 1);
+                        retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1);
+                        buyItem(player, 1, true);
                     }
                 }
                 else {
@@ -444,10 +444,10 @@ public class Shop {
                 }
                 else {
                     if(player.getUUID().equals(ownerUUID)) {
-                        retrieveItem(player, 1);
+                        retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1);
+                        buyItem(player, 1, true);
                     }
                 }
             }
@@ -462,8 +462,9 @@ public class Shop {
      * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
      * @param owner The owner of the shop.
      * @param amount The amount of items to retrieve.
+     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
-    public void retrieveItem(final @NotNull Player owner, final int amount) {
+    public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
         if(item.getItem() == Items.AIR) {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -474,28 +475,36 @@ public class Shop {
             owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            stock -= amount;
             ShopManager.saveShop(this);
 
 
             // Send feedback to the player
             final ItemStack _item = item.copyWithCount(amount);
-            if(MinecraftUtils.attemptGive(owner, _item)) {
-                owner.displayClientMessage(new Txt()
-                    .cat("You retrieved " + Utils.formatAmount(amount, true, true) + " ")
-                    .cat(MinecraftUtils.getFancyItemName(item).getString())
-                    .cat(" from your shop.")
-                .lightGray().get(), false);
-            }
+            MinecraftUtils.attemptGive(owner, _item);
             final int stashedAmount = _item.getCount();
-            if(stashedAmount > 0) {
+            final int retrievedAmount = amount - stashedAmount;
+
+            if(retrievedAmount > 0) {
+                owner.displayClientMessage(new Txt()
+                    .cat(new Txt("You retrieved ").lightGray())
+                    .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                    .cat(new Txt(" from your shop.").lightGray())
+                .get(), false);
+                stock -= retrievedAmount;
+            }
+            else if(!stashExcess) {
+                owner.displayClientMessage(new Txt("No item was retrieved. Your inventory is full.").lightGray().get(), false);
+            }
+
+            if(stashExcess && stashedAmount > 0) {
                 StashManager.stashItem(owner.getUUID(), _item, stashedAmount);
                 StashManager.saveStash(owner.getUUID());
                 owner.displayClientMessage(new Txt()
-                    .cat("" + Utils.formatAmount(stashedAmount, true, true) + " ")
-                    .cat(MinecraftUtils.getFancyItemName(item))
-                    .cat(" retrieved from your shop " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.")
-                .lightGray().get(), false);
+                    .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item)).white())
+                    .cat(new Txt(" retrieved from your shop " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                .get(), false);
+                stock -= stashedAmount;
             }
 
 
@@ -514,8 +523,9 @@ public class Shop {
      * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param buyer The player.
      * @param amount The amount of items to buy.
+     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
-    public void buyItem(final @NotNull Player buyer, final int amount) {
+    public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
         if(item.getItem() == Items.AIR) {
             buyer.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
@@ -529,7 +539,6 @@ public class Shop {
             final long totPrice = price * amount;
 
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                stock -= amount;
                 ShopManager.saveShop(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 BalanceManager.addBalance(ownerUUID, totPrice);
@@ -538,22 +547,31 @@ public class Shop {
 
                 // Send feedback to the player
                 final ItemStack _item = item.copyWithCount(amount);
-                if(MinecraftUtils.attemptGive(buyer, _item)) {
-                    buyer.displayClientMessage(new Txt()
-                        .cat("Bought " + Utils.formatAmount(amount, true, true) + " ")
-                        .cat(MinecraftUtils.getFancyItemName(item).getString())
-                        .cat(" for " + Utils.formatPrice(totPrice))
-                    .lightGray().get(), false);
-                }
+                MinecraftUtils.attemptGive(buyer, _item);
                 final int stashedAmount = _item.getCount();
-                if(stashedAmount > 0) {
+                final int retrievedAmount = amount - stashedAmount;
+
+                if(retrievedAmount > 0) {
+                    buyer.displayClientMessage(new Txt()
+                        .cat(new Txt("Bought ").lightGray())
+                        .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                        .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
+                    .get(), false);
+                    stock -= retrievedAmount;
+                }
+                else if(!stashExcess) {
+                    buyer.displayClientMessage(new Txt("No item was bought. Your inventory is full.").lightGray().get(), false);
+                }
+
+                if(stashExcess && stashedAmount > 0) {
                     StashManager.stashItem(buyer.getUUID(), _item, _item.getCount());
                     StashManager.saveStash(buyer.getUUID());
                     buyer.displayClientMessage(new Txt()
-                        .cat("" + Utils.formatAmount(stashedAmount, true, true) + " ")
-                        .cat(MinecraftUtils.getFancyItemName(item).getString())
-                        .cat(" bought for " + Utils.formatPrice(totPrice) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.")
-                    .lightGray().get(), false);
+                        .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
+                        .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .get(), false);
+                    stock -= stashedAmount;
                 }
 
 
