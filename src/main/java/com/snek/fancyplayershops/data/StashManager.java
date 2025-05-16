@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +23,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 
 
@@ -50,7 +50,10 @@ public abstract class StashManager {
     // Player stash data
     private static final @NotNull Map<
         @NotNull UUID,
-        @Nullable List<@NotNull StashEntry>
+        @Nullable Map<
+            @NotNull UUID,
+            @Nullable StashEntry
+        >
     > stashes = new HashMap<>();
     private static boolean dataLoaded = false;
 
@@ -67,8 +70,22 @@ public abstract class StashManager {
      * @param item The item to add.
      * @param count The amount of items to add.
      */
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
+        final Map<UUID, StashEntry> stash = stashes.computeIfAbsent(playerUUID, k -> new HashMap<>());
+        final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
+        stashEntry.add(count);
+    }
+    /**
+     * Adds an item with known UUID to the stash of the specified player.
+     * <p> Air is never stashed.
+     * @param playerUUID The UUID of the player.
+     * @param itemUUID The UUID of the item.
+     * @param item The item to add.
+     * @param count The amount of items to add.
+     */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
-        stashes.computeIfAbsent(playerUUID, k -> new ArrayList<>()).add(new StashEntry(item, count));
+        if(item.getItem() == Items.AIR) return;
+        stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
     }
 
 
@@ -83,7 +100,7 @@ public abstract class StashManager {
      * @param playerUUID The UUID of the player.
      */
     public static void saveStash(final @NotNull UUID playerUUID) {
-        final List<StashEntry> entries = stashes.get(playerUUID);
+        final Map<UUID, StashEntry> entries = stashes.get(playerUUID);
         if(entries == null) return;
 
 
@@ -98,10 +115,11 @@ public abstract class StashManager {
 
         // Create the JSON array that contains the player's stash entries
         final JsonArray jsonEntries = new JsonArray();
-        for (final StashEntry entry: entries) {
+        for (final Entry<UUID, StashEntry> entry: entries.entrySet()) {
             final JsonObject jsonEntry = new JsonObject();
-            jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.item));
-            jsonEntry.addProperty("count", entry.count);
+            jsonEntry.addProperty("uuid", entry.getKey().toString());
+            jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.getValue().item));
+            jsonEntry.addProperty("count", entry.getValue().getCount());
             jsonEntries.add(jsonEntry);
         }
 
@@ -143,6 +161,7 @@ public abstract class StashManager {
                 for (final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
                     stashItem(playerUID,
+                        UUID.fromString(jsonEntry.get("uuid").getAsString()),
                         MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
                         jsonEntry.get("count").getAsInt()
                     );

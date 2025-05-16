@@ -1,5 +1,10 @@
 package com.snek.framework.utils;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,6 +67,37 @@ public abstract class MinecraftUtils {
     private MinecraftUtils() {}
 
     public static final @NotNull UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+
+
+
+
+
+
+
+
+    /**
+     * Calculates the UUID of an ItemStack.
+     * <p> This can be used to identify item stacks that can merge. Mergeable stacks always have the same UUID,
+     *     while those that cannot be merged have a different one.
+     * @param stack The item stack.
+     * @return The UUID.
+     */
+    public static UUID calcItemUUID(ItemStack stack) {
+        final CompoundTag nbt = stack.getTag();
+
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            digest.update(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().getBytes(StandardCharsets.UTF_8));
+            if (nbt != null) {
+                digest.update(nbt.toString().getBytes(StandardCharsets.UTF_8));
+            }
+            final byte[] hash = digest.digest();
+            final ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(hash, 16));
+            return new UUID(buffer.getLong(), buffer.getLong());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 

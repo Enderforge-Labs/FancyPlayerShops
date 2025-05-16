@@ -13,10 +13,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class StashEntry {
     public final @NotNull ItemStack item;
-    public final int count;
+    private int count;
+    public int getCount() { return count; }
+    public void add(final int _count) { count += _count; }
 
-    StashEntry(final @NotNull ItemStack _item, final int _count) {
+
+    StashEntry(final @NotNull ItemStack _item) {
         item = _item;
-        count = _count;
+        count = 0;
     }
 }
