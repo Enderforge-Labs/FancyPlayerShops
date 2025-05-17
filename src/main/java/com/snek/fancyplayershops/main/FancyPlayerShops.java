@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -230,9 +231,22 @@ public class FancyPlayerShops implements ModInitializer {
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
+                final CompoundTag tag = stack.getTag();
                 if(ShopManager.findShop(blockPos, world) == null) {
-                    new Shop(serverWorld, blockPos, player);
-                    player.displayClientMessage(new Txt("New shop created! Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                    if(tag.contains("snapshot")) {
+                        final CompoundTag data = tag.getCompound(FancyPlayerShops.MOD_ID + ".shop_data");
+                        if(data.getUUID("owner").equals(player.getUUID())) {
+                            new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
+                            player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                        }
+                        else {
+                            player.displayClientMessage(new Txt("This shop belongs to " + data.getString("owner_name") + "! Only they can place it.").red().bold().get(), true);
+                        }
+                    }
+                    else {
+                        new Shop(serverWorld, blockPos, player);
+                        player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                    }
                 }
             }
 

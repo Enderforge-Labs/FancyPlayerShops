@@ -42,7 +42,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -200,11 +199,10 @@ public class Shop {
 
     /**
      * Tries find the ServerLevel the world identifier belongs to.
-     * @param server The server instance.
      * @throws RuntimeException if the world Identifier is invalid or the ServerLevel cannot be found.
      */
-    private void calcDeserializedWorldId(MinecraftServer server) throws RuntimeException {
-        for(final ServerLevel w : server.getAllLevels()) {
+    private void calcDeserializedWorldId() throws RuntimeException {
+        for(final ServerLevel w : FancyPlayerShops.getServer().getAllLevels()) {
             if(w.dimension().location().toString().equals(worldId)) {
                 world = w;
                 return;
@@ -256,7 +254,7 @@ public class Shop {
         cacheShopIdentifier();
         try {
             item = MinecraftUtils.deserializeItem(serializedItem);
-            calcDeserializedWorldId(FancyPlayerShops.getServer());
+            calcDeserializedWorldId();
             return true;
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -290,7 +288,7 @@ public class Shop {
         ownerUUID = owner.getUUID();
         pos = _pos;
 
-        // Get members from serialized data and calculate shop identifier
+        // Calculate serialized data and shop identifier
         serializedItem = MinecraftUtils.serializeItem(item);
         calcSerializedWorldId();
         cacheShopIdentifier();
@@ -303,6 +301,55 @@ public class Shop {
         ShopManager.saveShop(this);
         ShopManager.registerShop(this);
     }
+
+
+
+
+    /**
+     * Creates a new Shop and saves it in its own file.
+     * @param _world The world the shop has to be created in.
+     * @param _pos The position of the new shop.
+     * @param _ownerUUID The UUID of the player that places the shop.
+     * @param _price The price of the item.
+     * @param _stock The current stock.
+     * @param _maxStock The stock limit.
+     * @param _rotation The default rotation of the item display.
+     * @param _hue The hue of the color theme.
+     * @param _serializedIitem The item in serialized form.
+     */
+    public Shop(
+        final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
+        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
+    ) {
+        world = _world;
+        ownerUUID = _ownerUUID;
+        pos = _pos;
+        price = _price;
+        stock = _stock;
+        maxStock = _maxStock;
+        defaultRotation = _rotation;
+        colorThemeHue = _hue;
+
+        // Calculate serialized data
+        calcSerializedWorldId();
+        serializedItem = _serializedIitem;
+
+        // Get members from serialized data and calculate shop identifier
+        item = MinecraftUtils.deserializeItem(serializedItem);
+        cacheShopIdentifier();
+
+        // Create and spawn the Item Display entity
+        itemDisplay = new ShopItemDisplay(this);
+        itemDisplay.spawn(calcDisplayPos());
+
+        // Save the shop
+        ShopManager.saveShop(this);
+        ShopManager.registerShop(this);
+    }
+
+
+
+
 
 
 

@@ -436,13 +436,14 @@ public abstract class ShopManager {
         // Create and add shop data NBT
         final CompoundTag data = new CompoundTag();
 
-        data.putUUID  ("owner",    shop.getOwnerUuid      ());
-        data.putLong  ("price",    shop.getPrice          ());
-        data.putInt   ("stock",    shop.getStock          ());
-        data.putInt   ("maxStock", shop.getMaxStock       ());
-        data.putFloat ("rotation", shop.getDefaultRotation());
-        data.putFloat ("hue",      shop.getColorThemeHue  ());
-        data.putString("item",     shop.getSerializedItem ());
+        data.putUUID  ("owner",     shop.getOwnerUuid      ());
+        data.putLong  ("price",     shop.getPrice          ());
+        data.putInt   ("stock",     shop.getStock          ());
+        data.putInt   ("max_stock", shop.getMaxStock       ());
+        data.putFloat ("rotation",  shop.getDefaultRotation());
+        data.putFloat ("hue",       shop.getColorThemeHue  ());
+        data.putString("item",      shop.getSerializedItem ());
+        data.putString("owner_name", FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString());
 
         final Component[] extraDescriptionLines = {
             new Txt()
@@ -472,7 +473,8 @@ public abstract class ShopManager {
 
         display.put("Lore", lore);
         nbt.put("display", display);
-        nbt.put(FancyPlayerShops.MOD_ID, data);
+        nbt.put(FancyPlayerShops.MOD_ID + ".shop_data", data);
+        nbt.putBoolean("snapshot", true);
 
 
 
