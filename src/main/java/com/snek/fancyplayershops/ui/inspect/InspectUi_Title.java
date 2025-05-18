@@ -8,6 +8,8 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
+import net.minecraft.world.item.Items;
+
 
 
 
@@ -35,8 +37,11 @@ public class InspectUi_Title extends ShopTextElm {
      */
     public void updateDisplay() {
         getStyle(TextElmStyle.class).setText(new Txt()
-            .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
-        .get());
+            .cat(
+                shop.getItem().getItem() == Items.AIR ? new Txt("Empty shop").get() :
+                MinecraftUtils.getFancyItemName(shop.getItem())
+            ).get()
+        );
         flushStyle();
     }
 }

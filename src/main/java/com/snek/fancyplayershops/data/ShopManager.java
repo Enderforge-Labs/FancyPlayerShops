@@ -31,6 +31,7 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.RateLimiter;
+import com.snek.fancyplayershops.ui.edit.EditUi_ColorSelector;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -118,6 +119,18 @@ public abstract class ShopManager {
         new Txt().cat(new Txt("Shops").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" allow you to sell items to other players.").white()).noItalic().get(),
         new Txt().cat(new Txt("Place this anywhere and ").white()).cat(new Txt("right click").color(SHOP_ITEM_DESCRITPION_COLOR)).cat(new Txt(" it to get started!").white()).noItalic().get(),
         new Txt("").noItalic().get()
+    };
+
+    // Rotation names
+    private static final String[] ROTATION_NAMES = new String[] {
+        "North",
+        "Northwest",
+        "West",
+        "Southwest",
+        "South",
+        "Southeast",
+        "East",
+        "Northeast",
     };
 
 
@@ -425,8 +438,7 @@ public abstract class ShopManager {
         if(
             shop.getItem().getItem() == Items.AIR &&
             shop.getPrice() == Shop.DEFAULT_PRICE &&
-            shop.getMaxStock() == Shop.DEFAULT_STOCK &&
-            Utils.floatEquals(shop.getColorThemeHue(), Shop.COLOR_DEFAULT_HUE, 0.1f)
+            shop.getMaxStock() == Shop.DEFAULT_STOCK
         ) {
             return getShopItemCopy();
         }
@@ -467,11 +479,11 @@ public abstract class ShopManager {
             .get(),
             new Txt().get(),
             new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
-            new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice                ()))).white().noItalic().get(),
+            new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
-            new Txt().cat(new Txt("Rotation: "   ).lightGray().noItalic()).cat(new Txt("" + shop.getDefaultRotation())).white().noItalic().get(),
-            new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("" + shop.getColorThemeHue  ())).white().noItalic().get(),
+            new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ROTATION_NAMES[(int)Math.round(shop.getDefaultRotation() / Math.PI * 4) % 8])).white().noItalic().get(),
+            new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(shop.getColorThemeHue(), EditUi_ColorSelector.S, EditUi_ColorSelector.V))).noItalic().get(),
             new Txt().get()
         };
         for(final Component line : extraDescriptionLines) {
@@ -490,7 +502,7 @@ public abstract class ShopManager {
         item.setTag(nbt);
         item.setHoverName(new Txt()
             .cat(new Txt("Shop snapshot").color(SHOP_ITEM_NAME_COLOR).bold().noItalic())
-            .cat(new Txt(" - " + MinecraftUtils.getFancyItemName(shop.getItem()).getString()).white().bold().noItalic())
+            .cat(new Txt(" - " + (shop.getItem().getItem() == Items.AIR ? "Empty shop" : MinecraftUtils.getFancyItemName(shop.getItem()).getString())).white().bold().noItalic())
         .get());
         return item;
     }

@@ -51,7 +51,7 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         }
 
         final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if(item != null && item.getItem() != Items.AIR && !(item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains("snapshot"))) {
+        if(item != null && item.getItem() != Items.AIR && !(item.hasTag() && item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains("snapshot"))) {
             shop.changeItem(item);
             //FIXME check blacklist before setting the item
             //TODO add item blacklist

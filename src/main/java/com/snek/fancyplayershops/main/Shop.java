@@ -765,7 +765,7 @@ public class Shop {
     public void addDefaultRotation(final float _rotation) {
 
         // Add value to default rotation and save the shop
-        defaultRotation += _rotation;
+        defaultRotation = (float)((defaultRotation + _rotation) % (Math.PI * 2));
         ShopManager.saveShop(this);
     }
 
