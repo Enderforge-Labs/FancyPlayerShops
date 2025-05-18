@@ -422,7 +422,14 @@ public abstract class ShopManager {
      * @return The created shop item.
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
-        if(shop.getItem().getItem() == Items.AIR) return getShopItemCopy();
+        if(
+            shop.getItem().getItem() == Items.AIR &&
+            shop.getPrice() == Shop.DEFAULT_PRICE &&
+            shop.getMaxStock() == Shop.DEFAULT_STOCK &&
+            Utils.floatEquals(shop.getColorThemeHue(), Shop.COLOR_DEFAULT_HUE, 0.1f)
+        ) {
+            return getShopItemCopy();
+        }
 
         // Get NBTs
         final ItemStack item = shopItem.copy();

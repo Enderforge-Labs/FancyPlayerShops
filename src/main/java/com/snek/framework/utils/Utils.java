@@ -37,9 +37,22 @@ public abstract class Utils {
      * @param n The value to check
      * @param target The target value
      * @param threshold The threshold to use
-     * @return True if the value is withing the threshold, false otherwise
+     * @return True if the value is within the threshold, false otherwise
      */
     public static boolean doubleEquals(final double n, final double target, final double threshold) {
+        return !(n < target - threshold || n > target + threshold);
+    }
+
+
+    /**
+     * Checks if a float value is within a certain threshold from a target value.
+     * <p> This is used to avoid precision related problems when comparing float values.
+     * @param n The value to check
+     * @param target The target value
+     * @param threshold The threshold to use
+     * @return True if the value is within the threshold, false otherwise
+     */
+    public static boolean floatEquals(final float n, final float target, final float threshold) {
         return !(n < target - threshold || n > target + threshold);
     }
 
