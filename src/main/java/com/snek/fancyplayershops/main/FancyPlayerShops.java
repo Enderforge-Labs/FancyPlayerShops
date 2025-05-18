@@ -93,7 +93,9 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-    private boolean fatal = false;
+    private static boolean fatal = false;
+    public static void flagFatal() { fatal = true; }
+
     @Override
     public void onInitialize() {
 
