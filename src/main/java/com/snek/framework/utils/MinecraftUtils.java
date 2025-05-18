@@ -24,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -34,6 +35,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.LingeringPotionItem;
@@ -270,7 +272,7 @@ public abstract class MinecraftUtils {
      * @param pitch The sound's pitch.
      */
     public static void playSoundClient(final @NotNull Player player, final @NotNull SoundEvent sound, final float volume, final float pitch) {
-        ((ServerPlayer) player).connection.send(
+        ((ServerPlayer)player).connection.send(
             new ClientboundSoundPacket(
                 Holder.direct(sound),
                 SoundSource.BLOCKS,
@@ -279,6 +281,24 @@ public abstract class MinecraftUtils {
                 player.level().getRandom().nextLong()
             )
         );
+    }
+
+
+
+
+    /**
+     * Sends a slot update to the client of the specified player.
+     * @param player The player.
+     * @param slot The ID of the slot to update.
+     * @param stack The item stack to set.
+     */
+    public static void sendClientSlotUpdate(final @NotNull Player player, final int slot, final @NotNull ItemStack stack) {
+        ((ServerPlayer)player).connection.send(new ClientboundContainerSetSlotPacket(
+            InventoryMenu.CONTAINER_ID,
+            player.containerMenu.getStateId(),
+            slot,
+            stack
+        ));
     }
 
 

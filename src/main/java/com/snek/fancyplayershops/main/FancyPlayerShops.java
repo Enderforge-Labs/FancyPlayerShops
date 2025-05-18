@@ -43,6 +43,7 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.fancyplayershops.ui.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;
 
@@ -228,7 +229,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
-                int count = stack.getCount();
+                int newCount = stack.getCount();
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
@@ -241,7 +242,7 @@ public class FancyPlayerShops implements ModInitializer {
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
                             player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
-                            if(!player.getAbilities().instabuild) --count;
+                            if(!player.getAbilities().instabuild) --newCount;
                         }
                         else {
                             player.displayClientMessage(new Txt("This shop belongs to " + data.getString("owner_name") + "! Only they can place it.").red().bold().get(), true);
@@ -252,18 +253,14 @@ public class FancyPlayerShops implements ModInitializer {
                     else {
                         new Shop(serverWorld, blockPos, player);
                         player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
-                        if(!player.getAbilities().instabuild) --count;
+                        if(!player.getAbilities().instabuild) --newCount;
                     }
                 }
 
                 // Update the held item
-                player.setItemInHand(hand, stack.copyWithCount(count));
-                if(player instanceof ServerPlayer p) p.connection.send(new ClientboundContainerSetSlotPacket(
-                    InventoryMenu.CONTAINER_ID,
-                    player.containerMenu.getStateId(),
-                    player.getInventory().selected + 36,
-                    stack.copyWithCount(count)
-                ));
+                final ItemStack newStack = stack.copyWithCount(newCount);
+                player.setItemInHand(hand, newStack);
+                MinecraftUtils.sendClientSlotUpdate(player, player.getInventory().selected + 36, newStack);
             }
 
             // If not, send an error message to the player
