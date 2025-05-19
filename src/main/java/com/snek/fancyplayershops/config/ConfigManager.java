@@ -98,7 +98,7 @@ public abstract class ConfigManager {
         if(configPath.exists()) {
             try(JsonReader reader = new JsonReader(new FileReader(configPath))) {
                 reader.setLenient(false);
-                return new Gson().fromJson(reader, configClass);
+                return gson.fromJson(reader, configClass);
             } catch (IOException e) {
                 e.printStackTrace();
                 FancyPlayerShops.flagFatal();

@@ -15,6 +15,7 @@ import com.google.gson.JsonSerializationContext;
 
 
 
+//TODO make description multiline. use an array
 public class FreeConfigField<T> {
     private final @NotNull  T      defaultValue;
     private final @Nullable String description;

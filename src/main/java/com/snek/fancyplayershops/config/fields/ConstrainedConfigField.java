@@ -14,7 +14,7 @@ import com.google.gson.JsonSerializationContext;
 
 
 
-
+//TODO make description multiline. use an array
 public class ConstrainedConfigField<T> {
     private final @NotNull  T      min;
     private final @NotNull  T      defaultValue;
@@ -53,6 +53,7 @@ public class ConstrainedConfigField<T> {
         final T val = context.deserialize(obj.get("default"), classType);
         final T max = context.deserialize(obj.get("max"    ), classType);
         final String description = obj.has("description") ? obj.get("description").getAsString() : null;
+        System.out.println("TEST HERE");
         return new ConstrainedConfigField<>(description, min, val, max);
     }
 }
