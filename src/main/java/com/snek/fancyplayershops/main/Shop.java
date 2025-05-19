@@ -85,14 +85,6 @@ public class Shop {
     public static final Component SHOP_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
 
 
-    // Color theme data
-    public static final float COLOR1_S = 0.2f;
-    public static final float COLOR1_V = 0.75f;
-    public static final float COLOR2_S = 0.40f;
-    public static final float COLOR2_V = 0.3f;
-
-
-
 
     // Basic data
     private transient @NotNull  ServerLevel     world;                          // The world this shop was placed in
@@ -268,9 +260,9 @@ public class Shop {
         world = _world;
         ownerUUID = owner.getUUID();
         pos = _pos;
-        price         = Configs.shop.price    .getDefault();
-        maxStock      = Configs.shop.stock    .getDefault();
-        colorThemeHue = Configs.shop.theme_hue.getDefault();
+        price         = Configs.shop.price.getDefault();
+        maxStock      = Configs.shop.stockLimit.getDefault();
+        colorThemeHue = Configs.shop.theme_hues.getValue()[Configs.shop.theme.getDefault()];
 
         // Calculate serialized data and shop identifier
         serializedItem = MinecraftUtils.serializeItem(item);
@@ -732,8 +724,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.shop.stock.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.shop.stock.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > Configs.shop.stockLimit.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.shop.stockLimit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
@@ -1007,7 +999,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor1() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR1_S, COLOR1_V));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.shop.theme_saturation_main.getValue(), Configs.shop.theme_luminosity_main.getValue()));
     }
 
     /**
@@ -1015,7 +1007,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor2() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, COLOR2_S, COLOR2_V));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.shop.theme_saturation_secondary.getValue(), Configs.shop.theme_luminosity_secondary.getValue()));
     }
 
 

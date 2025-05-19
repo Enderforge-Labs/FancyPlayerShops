@@ -16,34 +16,34 @@ import com.google.gson.JsonSerializationContext;
 
 
 //TODO make description multiline. use an array
-public class FreeConfigField<T> {
-    private final @NotNull  T      defaultValue;
+public class ValueConfigField<T> {
+    private final @NotNull  T      value;
     private final @Nullable String description;
 
-    public @NotNull  T      getDefault    () { return defaultValue; }
+    public @NotNull  T      getValue      () { return value; }
     public @Nullable String getDescription() { return description; }
 
 
 
 
-    public FreeConfigField(final @Nullable String _description, final @NotNull T _defaul) {
+    public ValueConfigField(final @Nullable String _description, final @NotNull T _defaul) {
         description = _description;
-        defaultValue = _defaul;
+        value = _defaul;
     }
 
 
     public JsonElement serialize(final @NotNull JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
         obj.addProperty("description", description);
-        obj.add("default", context.serialize(defaultValue));
+        obj.add("value", context.serialize(value));
         return obj;
     }
 
 
-    public static <T> FreeConfigField<T> deserialize(final @NotNull JsonElement json, final @NotNull Class<T> classType, final @NotNull JsonDeserializationContext context) {
+    public static <T> ValueConfigField<T> deserialize(final @NotNull JsonElement json, final @NotNull Class<T> classType, final @NotNull JsonDeserializationContext context) {
         final JsonObject obj = json.getAsJsonObject();
-        final T val = context.deserialize(obj.get("default"), classType);
+        final T val = context.deserialize(obj.get("value"), classType);
         final String description = obj.has("description") ? obj.get("description").getAsString() : null;
-        return new FreeConfigField<>(description, val);
+        return new ValueConfigField<>(description, val);
     }
 }
