@@ -439,7 +439,7 @@ public abstract class ShopManager {
         if(
             shop.getItem().getItem() == Items.AIR &&
             shop.getPrice() == Configs.shop.price.getDefault() &&
-            shop.getMaxStock() == Configs.shop.stockLimit.getDefault()
+            shop.getMaxStock() == Configs.shop.stock_limit.getDefault()
         ) {
             return getShopItemCopy();
         }

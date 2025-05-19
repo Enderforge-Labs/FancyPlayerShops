@@ -152,8 +152,8 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
             user.displayClientMessage(new Txt("The amount must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(_amount > Configs.shop.stockLimit.getMax()) {
-            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.shop.stockLimit.getMax(), false, true)).red().bold().get(), true);
+        if(_amount > Configs.shop.stock_limit.getMax()) {
+            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.shop.stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else changeAmount(Math.round(_amount));

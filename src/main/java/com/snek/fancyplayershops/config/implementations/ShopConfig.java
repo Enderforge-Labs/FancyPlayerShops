@@ -16,41 +16,72 @@ import com.snek.fancyplayershops.config.fields.ValueConfigField;
 
 public class ShopConfig implements ConfigFile {
     public final ConstrainedConfigField<Long> price = new ConstrainedConfigField<>(
-        "The price players are allowed to set. [0 <= price.max * stock.max <= Long.MAX_VALUE]",
+        new String[] {
+            "The price players are allowed to set.",
+            "Must be >= 0.",
+            "(price.max * stock.max) must be between 0 and Long.MAX_VALUE."
+        },
         0l,
         1_000l * 100l,
         10_000_000_000l * 100l
     );
-    public final ConstrainedConfigField<Integer> stockLimit = new ConstrainedConfigField<>(
-        "The stock limit players are allowed to set. [0 <= price.max * stock.max <= Long.MAX_VALUE]",
+    public final ConstrainedConfigField<Integer> stock_limit = new ConstrainedConfigField<>(
+        new String[] {
+            "The stock limit players are allowed to set.",
+            "Must be >= 0.",
+            "(price.max * stock.max) must be between 0 and Long.MAX_VALUE."
+        },
         0,
         1_000,
         1_000_000
     );
     public final ValueConfigField<Float[]> theme_hues = new ValueConfigField<>(
-        "The hues of the color themes. Each element represents a new theme. Values must be between 0.0 and 360.0",
+        new String[] {
+            "The hues of the color themes. Each element represents a new theme.",
+            "At least 1 hue value is required.",
+            "Values must be between 0.0 and 360.0"
+        },
         new Float[] { 0f, 25f, 55f, 95f, 135f, 180f, 220f, 260f, 300f }
     );
     public final DefaultConfigField<Integer> theme = new DefaultConfigField<>(
-        "The index of the default color theme. Starts from 0",
+        new String[] {
+            "The index of the default color theme.",
+            "Starts from 0. Must be < theme_hues.length"
+        },
         7
     );
     public final ValueConfigField<Float> theme_saturation_main = new ValueConfigField<>(
-        "The saturation value of the main color of the themes. Must be between 0.0 and 1.0",
+        new String[] {
+            "The saturation value of the main color of themes.",
+            "Must be between 0.0 and 1.0"
+        },
         0.2f
     );
     public final ValueConfigField<Float> theme_luminosity_main = new ValueConfigField<>(
-        "The luminosity value of the main color of the themes. Must be between 0.0 and 1.0",
+        new String[] {
+            "The luminosity value of the main color of themes.",
+            "Must be between 0.0 and 1.0"
+        },
         0.75f
     );
     public final ValueConfigField<Float> theme_saturation_secondary = new ValueConfigField<>(
-        "The saturation value of the secondary color of the themes. Must be between 0.0 and 1.0",
+        new String[] {
+            "The saturation value of the secondary color of themes.",
+            "Must be between 0.0 and 1.0"
+        },
         0.4f
     );
     public final ValueConfigField<Float> theme_luminosity_secondary = new ValueConfigField<>(
-        "The luminosity value of the secondary color of the themes. Must be between 0.0 and 1.0",
+        new String[] {
+            "The luminosity value of the secondary color of themes.",
+            "Must be between 0.0 and 1.0"
+        },
         0.3f
     );
+
+
+
+
 
 
 
@@ -59,19 +90,19 @@ public class ShopConfig implements ConfigFile {
     public void validate(){
 
         // Check price
-        if(price.getMin()     < 0)              throw new IllegalStateException("Minimum price must be >= 0");
+        if(price.getMin    () < 0)              throw new IllegalStateException("Minimum price must be >= 0");
         if(price.getDefault() < 0)              throw new IllegalStateException("Default price must be >= 0");
-        if(price.getMax()     < 0)              throw new IllegalStateException("Maximum price must be >= 0");
+        if(price.getMax    () < 0)              throw new IllegalStateException("Maximum price must be >= 0");
         if(price.getDefault() < price.getMin()) throw new IllegalStateException("Default price must be >= price.min");
         if(price.getDefault() > price.getMax()) throw new IllegalStateException("Default price must be <= price.max");
 
 
         // Check stock limit
-        if(stockLimit.getMin    () < 0)                   throw new IllegalStateException("Minimum stock limit must be >= 0");
-        if(stockLimit.getDefault() < 0)                   throw new IllegalStateException("Default stock limit must be >= 0");
-        if(stockLimit.getMax    () < 0)                   throw new IllegalStateException("Maximum stock limit must be >= 0");
-        if(stockLimit.getDefault() < stockLimit.getMin()) throw new IllegalStateException("Default stock limit must be >= stock_limit.min");
-        if(stockLimit.getDefault() > stockLimit.getMax()) throw new IllegalStateException("Default stock limit must be <= stock_limit.max");
+        if(stock_limit.getMin    () < 0)                    throw new IllegalStateException("Minimum stock limit must be >= 0");
+        if(stock_limit.getDefault() < 0)                    throw new IllegalStateException("Default stock limit must be >= 0");
+        if(stock_limit.getMax    () < 0)                    throw new IllegalStateException("Maximum stock limit must be >= 0");
+        if(stock_limit.getDefault() < stock_limit.getMin()) throw new IllegalStateException("Default stock limit must be >= stock_limit.min");
+        if(stock_limit.getDefault() > stock_limit.getMax()) throw new IllegalStateException("Default stock limit must be <= stock_limit.max");
 
 
         // Check color theme index
@@ -98,7 +129,7 @@ public class ShopConfig implements ConfigFile {
 
         // Check maximum possible price
         final BigInteger _price = BigInteger.valueOf(price.getMax());
-        final BigInteger _stock = BigInteger.valueOf(stockLimit.getMax());
+        final BigInteger _stock = BigInteger.valueOf(stock_limit.getMax());
         final BigInteger product = _price.multiply(_stock);
         final int excess = product.toString().length() - Long.toString(Long.MAX_VALUE).length();
         if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {

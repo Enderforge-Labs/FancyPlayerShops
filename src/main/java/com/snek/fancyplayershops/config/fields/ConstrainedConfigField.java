@@ -14,22 +14,21 @@ import com.google.gson.JsonSerializationContext;
 
 
 
-//TODO make description multiline. use an array
 public class ConstrainedConfigField<T> {
     private final @NotNull  T      min;
     private final @NotNull  T      defaultValue;
     private final @NotNull  T      max;
-    private final @Nullable String description;
+    private final @Nullable String[] description;
 
-    public @NotNull  T      getMin        () { return min; }
-    public @NotNull  T      getDefault    () { return defaultValue; }
-    public @NotNull  T      getMax        () { return max; }
-    public @Nullable String getDescription() { return description; }
-
-
+    public @NotNull  T        getMin        () { return min; }
+    public @NotNull  T        getDefault    () { return defaultValue; }
+    public @NotNull  T        getMax        () { return max; }
+    public @Nullable String[] getDescription() { return description; }
 
 
-    public ConstrainedConfigField(final @Nullable String _description, final @NotNull T _min, final @NotNull T _default, final @NotNull T _max) {
+
+
+    public ConstrainedConfigField(final @Nullable String[] _description, final @NotNull T _min, final @NotNull T _default, final @NotNull T _max) {
         description = _description;
         min = _min;
         defaultValue = _default;
@@ -39,10 +38,10 @@ public class ConstrainedConfigField<T> {
 
     public JsonElement serialize(final @NotNull JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
-        obj.addProperty("description", description);
-        obj.add("default", context.serialize(defaultValue));
-        obj.add("min",     context.serialize(min));
-        obj.add("max",     context.serialize(max));
+        obj.add("description", context.serialize(description));
+        obj.add("default",     context.serialize(defaultValue));
+        obj.add("min",         context.serialize(min));
+        obj.add("max",         context.serialize(max));
         return obj;
     }
 
@@ -52,7 +51,7 @@ public class ConstrainedConfigField<T> {
         final T min = context.deserialize(obj.get("min"    ), classType);
         final T val = context.deserialize(obj.get("default"), classType);
         final T max = context.deserialize(obj.get("max"    ), classType);
-        final String description = obj.has("description") ? obj.get("description").getAsString() : null;
+        final String[] description = obj.has("description") ? context.deserialize(obj.get("description"), String[].class) : null;
         System.out.println("TEST HERE");
         return new ConstrainedConfigField<>(description, min, val, max);
     }

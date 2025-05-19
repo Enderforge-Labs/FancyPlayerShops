@@ -261,7 +261,7 @@ public class Shop {
         ownerUUID = owner.getUUID();
         pos = _pos;
         price         = Configs.shop.price.getDefault();
-        maxStock      = Configs.shop.stockLimit.getDefault();
+        maxStock      = Configs.shop.stock_limit.getDefault();
         colorThemeHue = Configs.shop.theme_hues.getValue()[Configs.shop.theme.getDefault()];
 
         // Calculate serialized data and shop identifier
@@ -724,8 +724,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.shop.stockLimit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.shop.stockLimit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > Configs.shop.stock_limit.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.shop.stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
