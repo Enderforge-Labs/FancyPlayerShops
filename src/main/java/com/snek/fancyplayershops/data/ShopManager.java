@@ -25,6 +25,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.google.gson.Gson;
+import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.MinecraftUtils;
@@ -437,8 +438,8 @@ public abstract class ShopManager {
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
             shop.getItem().getItem() == Items.AIR &&
-            shop.getPrice() == Shop.DEFAULT_PRICE &&
-            shop.getMaxStock() == Shop.DEFAULT_STOCK
+            shop.getPrice() == Configs.shop.price.getDefault() &&
+            shop.getMaxStock() == Configs.shop.stock.getDefault()
         ) {
             return getShopItemCopy();
         }

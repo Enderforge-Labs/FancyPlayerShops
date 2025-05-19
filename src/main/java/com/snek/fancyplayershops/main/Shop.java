@@ -1,6 +1,5 @@
 package com.snek.fancyplayershops.main;
 
-import java.math.BigInteger;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -73,25 +72,6 @@ import net.minecraft.world.phys.Vec3;
 public class Shop {
     public static final int INTERACTION_BLOCKER_DESPAWN_DELAY = 10;
 
-    // Limits
-    public static final long   DEFAULT_PRICE = 1_000l * 100l; // FIXME move to config file
-    public static final int    DEFAULT_STOCK = 1_000; // FIXME move to config file
-    public static final long   MAX_PRICE     = 10_000_000_000l * 100l; // FIXME move to config file
-    public static final int    MAX_STOCK     = 1_000_000; // FIXME move to config file
-    static {
-        final BigInteger price = BigInteger.valueOf(MAX_PRICE);
-        final BigInteger stock = BigInteger.valueOf(MAX_STOCK);
-        final BigInteger product = price.multiply(stock);
-        final int excess = product.toString().length() - Long.toString(Long.MAX_VALUE).length();
-        if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-            throw new IllegalStateException(
-                "Maximum possible transaction price is above the Long limit by " +
-                excess + (excess == 1 ? " digit." : " digits.") +
-                " Adjust MAX_PRICE and MAX_STOCK."); //TODO change output to reflect the config file's fields
-            //TODO ^ keep this exception when converting other exceptions to runtime errors
-        }
-    }
-
 
     // Animation data
     public static final int CANVAS_ANIMATION_DELAY = 5;
@@ -110,7 +90,6 @@ public class Shop {
     public static final float COLOR1_V = 0.75f;
     public static final float COLOR2_S = 0.40f;
     public static final float COLOR2_V = 0.3f;
-    public static final float COLOR_DEFAULT_HUE = 300f;
 
 
 
@@ -129,10 +108,10 @@ public class Shop {
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
-    private                    long      price           = DEFAULT_PRICE;       // The configured price for each item
-    private                    int       maxStock        = DEFAULT_STOCK;       // The configured maximum stock
+    private                    long      price           = 0l;       // The configured price for each item
+    private                    int       maxStock        = 0;       // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
-    private                    float     colorThemeHue   = COLOR_DEFAULT_HUE;   // The configured hue of the color theme
+    private                    float     colorThemeHue   = 0f;   // The configured hue of the color theme
 
 
     // Shop state
@@ -284,9 +263,14 @@ public class Shop {
      * @param owner The player that places the shop.
      */
     public Shop(final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull Player owner) {
+
+        // Set shop data
         world = _world;
         ownerUUID = owner.getUUID();
         pos = _pos;
+        price         = Configs.shop.price    .getDefault();
+        maxStock      = Configs.shop.stock    .getDefault();
+        colorThemeHue = Configs.shop.theme_hue.getDefault();
 
         // Calculate serialized data and shop identifier
         serializedItem = MinecraftUtils.serializeItem(item);
@@ -321,6 +305,8 @@ public class Shop {
         final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
         final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
     ) {
+
+        // Set shop data
         world = _world;
         ownerUUID = _ownerUUID;
         pos = _pos;
@@ -719,8 +705,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
         }
-        if(newPrice > MAX_PRICE) {
-            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(MAX_PRICE)).red().bold().get(), true);
+        if(newPrice > Configs.shop.price.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(Configs.shop.price.getMax())).red().bold().get(), true);
             return false;
         }
         else if(newPrice < 0.00001) price = 0;
@@ -746,8 +732,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > MAX_STOCK) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(MAX_STOCK, false, true)).red().bold().get(), true);
+        if(newStockLimit > Configs.shop.stock.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.shop.stock.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
