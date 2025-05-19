@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
+import com.snek.fancyplayershops.main.Configs;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
@@ -90,7 +91,7 @@ public class FancyTextElm extends Elm {
         return
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())
-            .moveZ((getZIndex() + 1) * 0.001f) //TODO move Z layer spacing to config file
+            .moveZ((getZIndex() + 1) * Configs.ui.z_layer_spacing.getValue())
             .scale(TextElmStyle.DEFAULT_TEXT_SCALE)
         ;
     }
@@ -293,7 +294,7 @@ public class FancyTextElm extends Elm {
     public boolean stepTransition() {
         final boolean r = super.stepTransition();
         getThisStyle().editTransform();
-        getFgEntity().setInterpolationDuration(TRANSITION_REFRESH_TIME);
+        getFgEntity().setInterpolationDuration(Configs.perf.animation_refresh_time.getValue());
         getFgEntity().setStartInterpolation();
         getFgEntity().tick();
         return r;

@@ -13,6 +13,7 @@ import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -34,16 +35,19 @@ public class BuyUi_AmountInputDisplay extends ShopTextInput {
 
     @Override
     protected boolean messageCallback(final @NotNull String s) {
+        final Player user = shop.getuser();
+        if(user == null) return false;
+
         try {
 
             // Try to set the new amount
-            return menu.attemptChangeAmount(shop.getuser(), Integer.parseInt(s));
+            return menu.attemptChangeAmount(user, Integer.parseInt(s));
 
         } catch(NumberFormatException e) {
             try {
 
                 // Try to set the new amount
-                return menu.attemptChangeAmount(shop.getuser(), Float.parseFloat(s));
+                return menu.attemptChangeAmount(user, Float.parseFloat(s));
 
             } catch(NumberFormatException e2) {
                 return false;

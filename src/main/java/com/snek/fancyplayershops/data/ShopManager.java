@@ -25,6 +25,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.google.gson.Gson;
+import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.MinecraftUtils;
@@ -74,8 +75,6 @@ public abstract class ShopManager {
     ;
     private ShopManager() {}
     private static final Random rnd = new Random();
-    public static final int PULL_UPDATES_PER_TICK = 1;
-    public static final int PULL_UPDATES_CYCLE_DELAY = 5 * 20;
 
 
 
@@ -110,7 +109,7 @@ public abstract class ShopManager {
     // Shop item name
     public static final @NotNull Vector3i SHOP_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
     public static final @NotNull Component SHOP_ITEM_NAME =
-        new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR) //FIXME specify sold item name in shop snapshots
+        new Txt("Item Shop").noItalic().bold().color(SHOP_ITEM_NAME_COLOR)
     .get();
 
     // Shop item description
@@ -328,7 +327,7 @@ public abstract class ShopManager {
         }
 
         // Update shops
-        for(int i = 0; i < PULL_UPDATES_PER_TICK && updateIndex < updateSnapshot.size(); ++updateIndex) {
+        for(int i = 0; i < Configs.perf.pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
 
             final Shop shop = updateSnapshot.get(updateIndex);
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
@@ -340,7 +339,7 @@ public abstract class ShopManager {
 
         // Reset snapshop if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
-            updateCycleLimiter.renewCooldown(PULL_UPDATES_CYCLE_DELAY);
+            updateCycleLimiter.renewCooldown(Configs.perf.pull_cycle_cooldown.getValue());
             updateIndex = 0;
         }
     }
@@ -437,8 +436,8 @@ public abstract class ShopManager {
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
             shop.getItem().getItem() == Items.AIR &&
-            shop.getPrice() == Shop.DEFAULT_PRICE &&
-            shop.getMaxStock() == Shop.DEFAULT_STOCK
+            shop.getPrice() == Configs.shop.price.getDefault() &&
+            shop.getMaxStock() == Configs.shop.stock_limit.getDefault()
         ) {
             return getShopItemCopy();
         }

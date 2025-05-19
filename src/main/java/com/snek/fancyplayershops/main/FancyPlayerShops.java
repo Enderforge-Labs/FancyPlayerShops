@@ -12,16 +12,13 @@ import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -93,7 +90,9 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-    private boolean fatal = false;
+    private static boolean fatal = false;
+    public static void flagFatal() { fatal = true; }
+
     @Override
     public void onInitialize() {
 
@@ -108,13 +107,18 @@ public class FancyPlayerShops implements ModInitializer {
             serverInstance = server;
 
 
+            // Read config files
+            Configs.loadConfigs();
+            if(fatal) return;
+
+
             // Create storage directories
             for(String path : new String[] { "shops", "stash", "balance" }) {
                 try {
                     Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
                 } catch(IOException e) {
                     e.printStackTrace();
-                    fatal = true;
+                    flagFatal();
                     return;
                 }
             }
@@ -133,7 +137,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
+            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), Elm::processUpdateQueue);
 
             // Schedule focus manager loop
             Scheduler.loop(0, 1, () -> HoverManager.tick(server.getAllLevels()));

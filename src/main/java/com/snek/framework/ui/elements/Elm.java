@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.InterpolatedData;
@@ -61,7 +62,6 @@ public abstract class Elm extends Div {
 
 
     // Animation handling
-    public    static final int TRANSITION_REFRESH_TIME = 2;                         // The time between transition updates. Measured in ticks
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
@@ -217,7 +217,7 @@ public abstract class Elm extends Div {
      */
     protected @NotNull Transform __calcTransform() {
         return style.getTransform().copy()
-            .move(getAbsPos().x, getAbsPos().y, getZIndex() * 0.001f) //TODO move Z layer spacing to config file
+            .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
         ;
     }
 
@@ -308,8 +308,9 @@ public abstract class Elm extends Div {
         final List<TransitionStep> animationSteps = new ArrayList<>();
         final int time = transition.getDuration();            // The duration of this transition
         final Easing e = transition.getEasing();
-        for(int i = 0; i == 0 || i < time; i += TRANSITION_REFRESH_TIME) {
-            final float factor = (float)e.compute(Math.min(1d, (double)(i + TRANSITION_REFRESH_TIME) / time));
+        final Integer refreshTime = Configs.perf.animation_refresh_time.getValue();
+        for(int i = 0; i == 0 || i < time; i += refreshTime) {
+            final float factor = (float)e.compute(Math.min(1d, (double)(i + refreshTime) / time));
             animationSteps.add(transition.createStep(factor));
         }
 
@@ -475,7 +476,7 @@ public abstract class Elm extends Div {
             __applyTransitionStep(futureDataQueue.removeFirst());
         }
         flushStyle();
-        entity.setInterpolationDuration(TRANSITION_REFRESH_TIME);
+        entity.setInterpolationDuration(Configs.perf.animation_refresh_time.getValue());
         entity.setStartInterpolation();
 
 
@@ -498,7 +499,7 @@ public abstract class Elm extends Div {
 
     /**
      * Processes the first step of the scheduled transitions of all the queued elements.
-     * <p> Must be called at the end of the tick every TRANSITION_REFRESH_TIME ticks.
+     * <p> Must be called at the end of the tick every Configs.perf.animation_refresh_time ticks.
      */
     public static void processUpdateQueue() {
 
