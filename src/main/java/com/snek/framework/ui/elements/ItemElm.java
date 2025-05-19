@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
@@ -42,7 +43,7 @@ public class ItemElm extends Elm {
     // Item transform exceptions
     private static final @NotNull Map<
         @NotNull String,
-        @NotNull Pair<
+        @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
         >
@@ -61,7 +62,7 @@ public class ItemElm extends Elm {
     // Tag transform exceptions
     private static final @NotNull Map<
         @NotNull TagKey<@NotNull Item>,
-        @NotNull Pair<
+        @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
         >

@@ -38,10 +38,6 @@ import net.minecraft.world.phys.Vec3;
 public abstract class HoverManager {
     private HoverManager() {}
 
-    // Ray tracing data
-    private static final double MAX_DISTANCE = 5;  // Maximum distance to check
-    private static final double STEP_SIZE = 0.2;
-
     // The list of shops that were targeted in the previous tick
     private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
 
@@ -60,9 +56,10 @@ public abstract class HoverManager {
         // Perform ray cast
         final Vec3 eyePos = player.getEyePosition();
         final Vec3 lookDirection = player.getViewVector(1.0F);
+        final Float reach = Configs.perf.reach_distance.getValue();
         final BlockHitResult result = world.clip(new ClipContext(
             eyePos,
-            eyePos.add(lookDirection.multiply(MAX_DISTANCE, MAX_DISTANCE, MAX_DISTANCE)),
+            eyePos.add(lookDirection.multiply(reach, reach, reach)),
             ClipContext.Block.OUTLINE,
             ClipContext.Fluid.NONE,
             player
@@ -85,7 +82,8 @@ public abstract class HoverManager {
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
         final Vec3 lookDirection = player.getViewVector(1f);
-        final Vec3 step = lookDirection.normalize().multiply(STEP_SIZE, STEP_SIZE, STEP_SIZE);
+        final Float stepSize = Configs.perf.ray_casting_step.getValue();
+        final Vec3 step = lookDirection.normalize().multiply(stepSize, stepSize, stepSize);
         Vec3 currentPos = player.getEyePosition();
         double distanceTraveled = 0;
 
@@ -102,7 +100,7 @@ public abstract class HoverManager {
 
             // Update current position and distance
             currentPos = currentPos.add(step);
-            distanceTraveled += STEP_SIZE;
+            distanceTraveled += stepSize;
         }
 
         return blockPositions;
@@ -125,7 +123,7 @@ public abstract class HoverManager {
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
         boolean check = ShopManager.chunkHasShops(playerChunk);
-        final int reach = (int)Math.round(MAX_DISTANCE);
+        final int reach = Math.round(Configs.perf.reach_distance.getValue());
         int minX = playerPos.getX() - reach;
         int maxX = playerPos.getX() + reach;
         int minZ = playerPos.getZ() - reach;
@@ -141,7 +139,7 @@ public abstract class HoverManager {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3 targetBlock = getTargetBlockPrecise(player);
-            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + STEP_SIZE * 1.2 : MAX_DISTANCE;
+            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.perf.ray_casting_step.getValue() * 1.2 : Configs.perf.reach_distance.getValue();
             final List<Vec3> collidingBlocks = getViewCollisisons(player, maxDistance);
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.distanceToSqr(playerEyePos)));
 

@@ -108,7 +108,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Read config files
-            Configs.readConfigs();
+            Configs.loadConfigs();
             if(fatal) return;
 
 
@@ -137,7 +137,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, Elm.TRANSITION_REFRESH_TIME, Elm::processUpdateQueue);
+            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), Elm::processUpdateQueue);
 
             // Schedule focus manager loop
             Scheduler.loop(0, 1, () -> HoverManager.tick(server.getAllLevels()));

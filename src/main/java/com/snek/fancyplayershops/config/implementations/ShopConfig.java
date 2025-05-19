@@ -39,42 +39,42 @@ public class ShopConfig implements ConfigFile {
         new String[] {
             "The hues of the color themes. Each element represents a new theme.",
             "At least 1 hue value is required.",
-            "Values must be between 0.0 and 360.0"
+            "Values must be between 0.0 and 360.0."
         },
         new Float[] { 0f, 25f, 55f, 95f, 135f, 180f, 220f, 260f, 300f }
     );
     public final DefaultConfigField<Integer> theme = new DefaultConfigField<>(
         new String[] {
             "The index of the default color theme.",
-            "Starts from 0. Must be < theme_hues.length"
+            "Starts from 0. Must be < theme_hues.length."
         },
         7
     );
     public final ValueConfigField<Float> theme_saturation_main = new ValueConfigField<>(
         new String[] {
             "The saturation value of the main color of themes.",
-            "Must be between 0.0 and 1.0"
+            "Must be between 0.0 and 1.0."
         },
         0.2f
     );
     public final ValueConfigField<Float> theme_luminosity_main = new ValueConfigField<>(
         new String[] {
             "The luminosity value of the main color of themes.",
-            "Must be between 0.0 and 1.0"
+            "Must be between 0.0 and 1.0."
         },
         0.75f
     );
     public final ValueConfigField<Float> theme_saturation_secondary = new ValueConfigField<>(
         new String[] {
             "The saturation value of the secondary color of themes.",
-            "Must be between 0.0 and 1.0"
+            "Must be between 0.0 and 1.0."
         },
         0.4f
     );
     public final ValueConfigField<Float> theme_luminosity_secondary = new ValueConfigField<>(
         new String[] {
             "The luminosity value of the secondary color of themes.",
-            "Must be between 0.0 and 1.0"
+            "Must be between 0.0 and 1.0."
         },
         0.3f
     );
@@ -111,8 +111,8 @@ public class ShopConfig implements ConfigFile {
         if(theme.getDefault() < 0) throw new IllegalStateException("The index of the default theme must be >= 0");
         if(theme.getDefault() >= h.length) throw new IllegalStateException("The index of the default theme must be < themeHues.length");
         for(int i = 0; i < h.length; ++i) {
-            if(h[i] < 0) throw new IllegalStateException("Hue value of color theme #" + i + " must be >= 0");
-            if(h[i] > 1) throw new IllegalStateException("Hue value of color theme #" + i + " must be <= 1");
+            if(h[i] < 0f)   throw new IllegalStateException("Hue value of color theme #" + i + " must be >= 0");
+            if(h[i] > 360f) throw new IllegalStateException("Hue value of color theme #" + i + " must be <= 360");
         }
 
 
