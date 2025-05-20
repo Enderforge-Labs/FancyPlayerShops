@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.inventories.ShopConfigUI_Factory;
 import com.snek.framework.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -22,8 +21,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-//TODO add admin only test commands that spawn thousands of shops
-//TODO add admin only test commands that remove all shops in a radius
 /**
  * A utility class that registers and handles in-game commands.
  */
@@ -42,20 +39,6 @@ public abstract class CommandManager {
                 // Operator commands
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("op")
                 .requires(source -> source.hasPermission(2))
-
-                    // UI test
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("config_test")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        try {
-                            player.displayClientMessage(new Txt("Opening shop inventory...").get(), false);
-                            player.openMenu(new ShopConfigUI_Factory());
-                        }
-                        catch(Exception e) {
-                            e.printStackTrace();
-                        }
-                        return 1;
-                    }))
 
 
                     // Item give command

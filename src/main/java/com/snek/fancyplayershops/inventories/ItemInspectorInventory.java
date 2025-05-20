@@ -1,5 +1,9 @@
 package com.snek.fancyplayershops.inventories;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.snek.fancyplayershops.main.Shop;
+
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,22 +16,26 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class ShopConfigUI extends AbstractContainerMenu {
-    private final SimpleContainer inventory;
+
+
+
+public class ItemInspectorInventory extends AbstractContainerMenu {
+    private final @NotNull SimpleContainer inventory;
 
 
 
 
-    public ShopConfigUI(int syncId, Inventory playerInventory) {
-        super(MenuType.GENERIC_9x6, syncId);
-        this.inventory = new SimpleContainer(54);
+    public ItemInspectorInventory(final int containerId, final @NotNull Inventory playerInventory, final @NotNull Shop _shop) {
+        super(MenuType.HOPPER, containerId);
+        inventory = new SimpleContainer(5);
 
-        // Add 54 storage slots
-        for(int i = 0; i < 6; i++) {
-            for(int j = 0; j < 9; j++) {
-                this.addSlot(new Slot(inventory, j + i * 9, 8 + j * 18, 18 + i * 18));
-            }
+        // Add 5 storage slots
+        for(int i = 0; i < 5; i++) {
+            this.addSlot(new ReadOnlySlot(inventory, i, i, 0));
         }
+        // Copy shop item to central slot
+        this.setItem(2, this.incrementStateId(), _shop.getItem().copy());
+
 
         // Add player inventory (27 slots)
         for(int i = 0; i < 3; i++) {
@@ -45,18 +53,15 @@ public class ShopConfigUI extends AbstractContainerMenu {
 
 
 
-    //FIXME
     @Override
-    public boolean stillValid(Player player) { //TODO check if this is correct
+    public boolean stillValid(Player player) {
         return true;
     }
 
 
-
-
-    //FIXME
     @Override
     public ItemStack quickMoveStack(Player player, int slot) {
-        throw new UnsupportedOperationException("Unimplemented method 'quickMove'");
+        // Disable shift click interactions
+        return ItemStack.EMPTY;
     }
 }

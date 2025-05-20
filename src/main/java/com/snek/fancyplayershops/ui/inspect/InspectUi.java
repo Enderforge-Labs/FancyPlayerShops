@@ -5,6 +5,9 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
+import com.snek.fancyplayershops.ui.buy.BuyUiSub_BackButton;
+import com.snek.fancyplayershops.ui.buy.BuyUi_ItemInspector;
+import com.snek.fancyplayershops.ui.edit.EditUi;
 import com.snek.fancyplayershops.ui.misc.DualInputIndicator;
 import com.snek.fancyplayershops.ui.misc.InputIndicator;
 import com.snek.fancyplayershops.ui.misc.ShopFancyTextElm;
@@ -67,12 +70,20 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 1));
         ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
+
         // Add mod display
         e = bg.addChild(new InspectUi_ModDisplay(_shop));
         e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 2));
         ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
+
+
+        //Add inventory view button
+        e = bg.addChild(new InspectUi_InventoryViewButton(_shop));
+        e.setSize(new Vector2f(EditUi.ITEM_SELECTOR_SIZE));
+        e.setPosY(EditUi.ITEM_SELECTOR_Y);
+        e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add back button

@@ -52,7 +52,6 @@ public class ConstrainedConfigField<T> {
         final T val = context.deserialize(obj.get("default"), classType);
         final T max = context.deserialize(obj.get("max"    ), classType);
         final String[] description = obj.has("description") ? context.deserialize(obj.get("description"), String[].class) : null;
-        System.out.println("TEST HERE");
         return new ConstrainedConfigField<>(description, min, val, max);
     }
 }

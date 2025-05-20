@@ -100,10 +100,10 @@ public class Shop {
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
-    private                    long      price           = 0l;       // The configured price for each item
-    private                    int       maxStock        = 0;       // The configured maximum stock
+    private                    long      price           = 0l;                  // The configured price for each item
+    private                    int       maxStock        = 0;                   // The configured maximum stock
     private                    float     defaultRotation = 0f;                  // The configured item rotation
-    private                    float     colorThemeHue   = 0f;   // The configured hue of the color theme
+    private                    float     colorThemeHue   = 0f;                  // The configured hue of the color theme
 
 
     // Shop state
