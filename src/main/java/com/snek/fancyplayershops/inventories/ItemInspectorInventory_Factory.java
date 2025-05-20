@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.inventories;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;

@@ -98,6 +98,7 @@ public abstract class ShopManager {
     // Shop item data
     //! Don't use the name or tooltip to check the item. Shops should work even when renamed in an anvil or modified by mods
     public  static final @NotNull String SHOP_ITEM_NBT_KEY = FancyPlayerShops.MOD_ID + ".item.shop_item";
+    public  static final @NotNull String SNAPSHOT_NBT_KEY  = SHOP_ITEM_NBT_KEY + ".snapshot";
     private static final @NotNull ItemStack shopItem;
 
     // Shop item texture
@@ -492,7 +493,7 @@ public abstract class ShopManager {
         display.put("Lore", lore);
         nbt.put("display", display);
         nbt.put(FancyPlayerShops.MOD_ID + ".shop_data", data);
-        nbt.putBoolean("snapshot", true);
+        nbt.putBoolean(SNAPSHOT_NBT_KEY, true);
 
 
 

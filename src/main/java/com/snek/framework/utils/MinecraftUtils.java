@@ -22,6 +22,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -69,6 +70,40 @@ public abstract class MinecraftUtils {
     private MinecraftUtils() {}
 
     public static final @NotNull UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+
+
+
+
+
+
+
+
+    /**
+     * Checks if any of the keys or string values of a Tag contain the provided substring, recursively.
+     * @param tag The tag to check.
+     * @param substring The substring to look for.
+     * @return True if tag contains the substring anywhere in its tree, false otherwise.
+     */
+    public static boolean nbtContainsSubstring(Tag tag, String substring) {
+        if(tag == null) return false;
+
+
+        if(tag instanceof CompoundTag c) {
+            for(String key : c.getAllKeys()) {
+                if(key.contains(substring)) return true;
+                if(nbtContainsSubstring(c.get(key), substring)) return true;
+            }
+        }
+        else if(tag instanceof ListTag l) {
+            for (Tag e : l) {
+                if(nbtContainsSubstring(e, substring)) return true;
+            }
+        }
+        else if(tag instanceof StringTag s) {
+            if(s.getAsString().contains(substring)) return true;
+        }
+        return false;
+    }
 
 
 

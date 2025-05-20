@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.buy.BuyUi_ItemInspector;
+import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -42,6 +44,12 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
     }
 
 
+
+
+
+
+
+
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(click != ClickAction.SECONDARY) {
@@ -49,14 +57,32 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
             return;
         }
 
+
+        // Return if item is null or air
         final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if(item != null && item.getItem() != Items.AIR && !(item.hasTag() && item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains("snapshot"))) {
-            shop.changeItem(item);
-            //FIXME check blacklist before setting the item
-            //TODO add item blacklist
-            shop.getItemDisplay().updateDisplay();
-            ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
-            playButtonSound(player);
+        if(item == null || item.getItem() == Items.AIR) return;
+
+
+        // Send a message to the player if item is a shop snapshot, then return
+        if(item.hasTag() && item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains(ShopManager.SNAPSHOT_NBT_KEY)) {
+            player.displayClientMessage(new Txt("Shop snapshots cannot be sold!").red().bold().get(), true);
+            return;
         }
+
+
+        // Send a message to the player if item contains a shop snapshopt, then return
+        if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ShopManager.SNAPSHOT_NBT_KEY)) {
+            player.displayClientMessage(new Txt("Items containing shop snapshots cannot be sold!").red().bold().get(), true);
+            return;
+        }
+
+
+        // Change item if all checks passed
+        shop.changeItem(item);
+        //FIXME check blacklist before setting the item
+        //TODO add item blacklist
+        shop.getItemDisplay().updateDisplay();
+        ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+        playButtonSound(player);
     }
 }

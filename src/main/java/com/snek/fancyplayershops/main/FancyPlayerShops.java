@@ -240,8 +240,8 @@ public class FancyPlayerShops implements ModInitializer {
                 final CompoundTag tag = stack.getTag();
                 if(ShopManager.findShop(blockPos, world) == null) {
 
-                    // Spawn snapshot if the item has the "snapshot" tag
-                    if(tag.contains("snapshot")) {
+                    // Spawn snapshot if the item has the snapshot tag
+                    if(tag.contains(ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(FancyPlayerShops.MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
