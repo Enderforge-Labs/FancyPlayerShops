@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.hud;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.hud.styles.CanvasBorder_S;
+import com.snek.fancyplayershops.hud.styles.HudCanvasBorder_S;
 import com.snek.framework.ui.elements.PanelElm;
 
 import net.minecraft.server.level.ServerLevel;
@@ -22,20 +22,20 @@ public class HudBorder extends PanelElm {
 
 
     /**
-     * Creates a new HudBorder of the specified height.
+     * Creates a new HudBorder using a custom style.
      * @param _shop The target shop.
+     * @param _style The style.
      */
-    public HudBorder(final @NotNull ServerLevel _world, final float h) {
-        super(_world, new CanvasBorder_S());
+    public HudBorder(final @NotNull ServerLevel _world, final @NotNull HudCanvasBorder_S _style) {
+        super(_world, _style);
     }
 
 
     /**
-     * Creates a new ShopUiBorder of default height.
+     * Creates a new HudBorder using the default style.
      * @param _shop The target shop.
-     * @param h The height of the line.
      */
     public HudBorder(final @NotNull ServerLevel _world) {
-        this(_world, DEFAULT_HEIGHT);
+        this(_world, new HudCanvasBorder_S());
     }
 }

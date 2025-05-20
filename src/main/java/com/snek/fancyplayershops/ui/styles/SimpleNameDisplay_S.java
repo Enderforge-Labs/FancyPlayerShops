@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.ui.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.hud.styles.CanvasBorder_S;
+import com.snek.fancyplayershops.hud.styles.HudCanvasBorder_S;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 
 
@@ -22,7 +22,7 @@ public class SimpleNameDisplay_S extends FancyTextElmStyle {
 
     @Override
     public @NotNull Vector3i getDefaultBgColor(){
-        return CanvasBorder_S.COLOR;
+        return HudCanvasBorder_S.COLOR;
     }
 
 

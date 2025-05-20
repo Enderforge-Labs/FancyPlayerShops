@@ -5,10 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud.misc.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.ui.misc.ShopButton;
+import com.snek.fancyplayershops.ui.misc.styles.UiCanvasBackground_S;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
@@ -71,7 +71,7 @@ public class EditUi_ColorSelector extends ShopButton {
 
         // Reset colored backgrounds of themed elements
         final Elm bg = menu.getBg();
-        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(HudCanvasBackground_S.class).getDefaultColor()));
+        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(UiCanvasBackground_S.class).getDefaultColor()));
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof EditUi_ColorSelector)) {
                 if(c instanceof FancyTextElm e) {
