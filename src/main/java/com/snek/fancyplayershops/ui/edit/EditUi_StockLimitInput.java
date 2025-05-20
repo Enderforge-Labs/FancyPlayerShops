@@ -68,4 +68,12 @@ public class EditUi_StockLimitInput extends ShopTextInput {
             }
         }
     }
+
+
+
+
+    @Override
+    public float getInteractionSizeRight() {
+        return getAbsSize().x / 2f - EditUi.COLOR_SELECTOR_W;
+    }
 }
