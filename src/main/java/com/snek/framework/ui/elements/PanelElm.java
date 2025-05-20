@@ -59,7 +59,7 @@ public class PanelElm extends Elm {
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected PanelElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
+    public PanelElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 

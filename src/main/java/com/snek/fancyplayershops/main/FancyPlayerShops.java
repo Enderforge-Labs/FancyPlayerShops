@@ -225,7 +225,7 @@ public class FancyPlayerShops implements ModInitializer {
      * @param player The player that clicked.
      * @param hand The hand used.
      * @param hitResult The hit result of the click action.
-     * @return SUCCESS if the player tried to place a shop, PASS otherwise.
+     * @return FAIL if the player tried to place a shop, PASS otherwise.
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);

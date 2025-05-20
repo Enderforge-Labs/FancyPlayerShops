@@ -12,11 +12,11 @@ import com.snek.fancyplayershops.main.Shop;
 
 
 
-public class CanvasBackground_S extends ShopPanelElm_S {
-    final Shop shop;
+public class UiCanvasBackground_S extends ShopPanelElm_S {
+    private final @NotNull Shop shop;
 
 
-    public CanvasBackground_S(final @NotNull Shop _shop){
+    public UiCanvasBackground_S(final @NotNull Shop _shop){
         super();
         shop = _shop;
     }

@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.hud.HudBorder;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.ShopCanvas;
 import com.snek.fancyplayershops.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.ui.misc.ShopPanelElm;
-import com.snek.fancyplayershops.ui.misc.ShopUiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
@@ -56,7 +56,7 @@ public class DetailsUi extends ShopCanvas {
     public DetailsUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, BACKGROUND_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT, ShopUiBorder.DEFAULT_HEIGHT);
+        super(_shop, BACKGROUND_HEIGHT, HudBorder.DEFAULT_HEIGHT, HudBorder.DEFAULT_HEIGHT);
         Div e;
 
 

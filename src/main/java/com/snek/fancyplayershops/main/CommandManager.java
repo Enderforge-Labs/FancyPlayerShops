@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.StashManager;
 import com.snek.framework.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -89,6 +90,15 @@ public abstract class CommandManager {
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
                     player.displayClientMessage(new Txt("opened stats //todo remove message").get(), false);
+                    return 1;
+                }))
+
+
+                // Shop statistics
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stash")
+                .executes(context -> {
+                    final ServerPlayer player = context.getSource().getPlayer();
+                    StashManager.openStashView(player);
                     return 1;
                 }))
 

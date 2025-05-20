@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.ui.misc.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
+import com.snek.fancyplayershops.hud.styles.CanvasBorder_S;
 
 
 
@@ -10,9 +11,10 @@ import org.joml.Vector3i;
 
 
 
-public class CanvasBack_S extends ShopPanelElm_S {
 
-    public CanvasBack_S(){
+public class UiCanvasBack_S extends ShopPanelElm_S {
+
+    public UiCanvasBack_S(){
         super();
     }
 
@@ -25,6 +27,6 @@ public class CanvasBack_S extends ShopPanelElm_S {
 
     @Override
     public @NotNull Vector3i getDefaultColor() {
-        return new Vector3i(ShopUiBorder_S.COLOR);
+        return new Vector3i(CanvasBorder_S.COLOR);
     }
 }
