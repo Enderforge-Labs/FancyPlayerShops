@@ -53,7 +53,7 @@ import com.snek.framework.utils.scheduler.Scheduler;
 
 /**
  * The main class of the mod FancyPlayerShops.
- * <p> This class defines the Shop item, caches the server instance and initializes all the event callbacks.
+ * <p> This class caches the server instance and initializes all the event callbacks.
  */
 public class FancyPlayerShops implements ModInitializer {
 
