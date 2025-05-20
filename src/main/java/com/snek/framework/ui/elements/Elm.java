@@ -536,12 +536,6 @@ public abstract class Elm extends Div {
                     h.onHoverEnter(player);
                 }
                 else {
-                    if(getStyle() instanceof ButtonElmStyle s) {
-                        final Animation animation = s.getHoverLeaveAnimation();
-                        if(animation != null) {
-                            hoverRateLimiter.renewCooldown(animation.getTotalDuration());
-                        }
-                    }
                     h.onHoverExit(player);
                 }
             }
@@ -581,21 +575,23 @@ public abstract class Elm extends Div {
         ;
 
 
-        // Calculate corner X position relative to the origin using the entity's local coordinate system
-        final Vector3f shiftX = new Vector3f(getAbsSize().x / 2, 0, 0);
-        shiftX.rotate(t.getRot()).rotate(t.getGlobalRot());
-
-
         // Check view intersection with the display's box
-        final Vector3f corner1 = new Vector3f(origin).sub(shiftX);
-        final Vector3f corner2 = new Vector3f(origin).add(shiftX);
-        final Vector3f corner3 = new Vector3f(origin).add(shiftX).add(0, getAbsSize().y, 0);
-        final Vector3f corner4 = new Vector3f(origin).sub(shiftX).add(0, getAbsSize().y, 0);
+        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
         return SpaceUtils.checkLineRectangleIntersection(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
             new Vector3f[]{ corner1, corner2, corner3, corner4 }
         );
+    }
+
+    public float getInteractionSizeLeft() {
+        return getAbsSize().x / 2f;
+    }
+    public float getInteractionSizeRight() {
+        return getAbsSize().x / 2f;
     }
 
 

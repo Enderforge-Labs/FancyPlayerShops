@@ -99,6 +99,7 @@ public abstract class ButtonElm extends FancyTextElm implements Hoverable, Click
         final Animation animation = getStyle(ButtonElmStyle.class).getHoverLeaveAnimation();
         if(animation != null) {
             applyAnimation(animation);
+            hoverRateLimiter.renewCooldown(animation.getTotalDuration());
         }
     }
 

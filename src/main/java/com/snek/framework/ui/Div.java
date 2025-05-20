@@ -212,16 +212,18 @@ public class Div {
      * <p> This method stops at the first clickable element that consumes a click.
      * @param player The player that clicked.
      * @param clickType The type of click.
+     * @return Whether the click was accepted by this element.
      */
-    public void forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+    public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
         if(this instanceof Clickable e && e.attemptClick(player, clickType)) {
             e.onClick(player, clickType);
-            return;
+            return true;
         }
         final List<Div> _children = new ArrayList<>(children);
         for(final Div elm : _children) {
-            elm.forwardClick(player, clickType);
+            if(elm.forwardClick(player, clickType)) return true;
         }
+        return false;
     }
 
 
