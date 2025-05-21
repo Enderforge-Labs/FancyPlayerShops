@@ -13,6 +13,7 @@ import com.snek.framework.utils.Utils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Display.BillboardConstraints;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.level.Level;
@@ -319,5 +320,24 @@ public abstract class CustomDisplay {
      */
     public float getMaxRenderHeight() {
         return (float)Utils.invokeSafe(method_getMaxRenderHeight, heldEntity);
+    }
+
+
+    /**
+     * Makes the display ride the specified entity.
+     * @param e The entity to ride.
+     * @return Whether the display could successfully ride the entity.
+     */
+    public boolean startRiding(final @NotNull Entity e) {
+        return heldEntity.startRiding(e, true);
+    }
+
+
+    /**
+     * Teleports the display to the specified position.
+     * @param pos The target position.
+     */
+    public void teleport(final @NotNull Vector3d pos) {
+        heldEntity.teleportTo(pos.x, pos.y, pos.z);
     }
 }

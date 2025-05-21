@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.hud.HudCanvas;
 import com.snek.fancyplayershops.ui.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
@@ -60,6 +61,10 @@ public abstract class ClickManager {
             limiter = new RateLimiter();
             clickLimiters.put(player.getUUID(), limiter);
         }
+
+
+        // Send click to HUD if one is present
+        HudCanvas.forwardClickStatic(player, clickType);
 
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events

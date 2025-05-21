@@ -345,9 +345,8 @@ public class Shop {
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
                 if(lastDirection != 0) {
-                    final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
-                    activeCanvas.applyAnimationNowRecursive(animations.getFirst());
-                    itemDisplay.applyAnimationNowRecursive(animations.getSecond());
+                    activeCanvas.applyAnimationNowRecursive(calcCanvasRotationAnimation(0, lastDirection));
+                    itemDisplay.applyAnimationNowRecursive(calcItemDisplayRotationAnimation(0, lastDirection));
                 }
                 activeCanvas.spawn(calcDisplayPos());
 
@@ -628,9 +627,9 @@ public class Shop {
 
         // Adjust rotation if needed
         if(lastDirection != 0) {
-            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(0, lastDirection);
+            final Animation animation = calcCanvasRotationAnimation(0, lastDirection);
             for(final Div c : canvas.getBg().getChildren()) {
-                c.applyAnimationNowRecursive(animations.getFirst());
+                c.applyAnimationNowRecursive(animation);
             }
         }
 
@@ -783,9 +782,8 @@ public class Shop {
 
         // Apply animations and update the current direction if needed
         if(targetDir != lastDirection) {
-            final Pair<Animation, Animation> animations = calcCanvasRotationAnimation(lastDirection, targetDir);
-            activeCanvas.applyAnimationRecursive(animations.getFirst());
-            getItemDisplay().applyAnimationRecursive(animations.getSecond());
+            activeCanvas.applyAnimationRecursive(calcCanvasRotationAnimation(lastDirection, targetDir));
+            getItemDisplay().applyAnimationRecursive(calcItemDisplayRotationAnimation(lastDirection, targetDir));
             lastDirection = targetDir;
             canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
         }
@@ -796,21 +794,28 @@ public class Shop {
 
     /**
      * Calculates the animations required to face from a specified direction to another one.
-     * @param from The starting direction.
-     * @param to The new direction to face.
-     * @return The canvas animation and the item display animation.
+     * @param from The starting direction. 0 to 7.
+     * @param to The new direction to face. 0 to 7.
+     * @return The canvas animation.
      */
-    public static @NotNull Pair<@NotNull Animation, @NotNull Animation> calcCanvasRotationAnimation(final int from, final int to) {
+    public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
         final float rotation = -Math.toRadians(to * 45f - from * 45f);
-        return Pair.from(
-            new Animation(
-                new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-                .additiveTransform(new Transform().rotGlobalY(rotation))
-            ),
-            new Animation(
-                new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-                .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
-            )
+        return new Animation(
+            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
+            .additiveTransform(new Transform().rotGlobalY(rotation))
+        );
+    }
+    /**
+     * Calculates the animations required to face from a specified direction to another one.
+     * @param from The starting direction. 0 to 7.
+     * @param to The new direction to face. 0 to 7.
+     * @return The item display animation.
+     */
+    public static @NotNull Animation calcItemDisplayRotationAnimation(final int from, final int to) {
+        final float rotation = -Math.toRadians(to * 45f - from * 45f);
+        return new Animation(
+            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
+            .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
         );
     }
 
