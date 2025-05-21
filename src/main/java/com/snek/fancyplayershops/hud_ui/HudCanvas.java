@@ -136,6 +136,11 @@ public class HudCanvas extends UiCanvas {
 
 
     @Override
+    public void despawn() {
+        super.despawn();
+        activeCanvases.remove(player.getUUID());
+    }
+    @Override
     public void despawnNow() {
         super.despawnNow();
         activeCanvases.remove(player.getUUID());
