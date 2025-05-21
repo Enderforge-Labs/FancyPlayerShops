@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.hud_ui.HudCanvas;
+import com.snek.fancyplayershops.main.Configs;
+import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
@@ -36,8 +38,8 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Utility class containing methods to detect shops players are looking at and handle hover events.
  */
-public abstract class HoverManager {
-    private HoverManager() {}
+public abstract class HoverReceiver {
+    private HoverReceiver() {}
 
     // The list of shops that were targeted in the previous tick
     private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
@@ -185,7 +187,7 @@ public abstract class HoverManager {
                 // Skip player if they are dead or in spectator mode or they have a HUD open or they aren't looking at any shop
                 if(player.isSpectator() || player.isDeadOrDying()) continue;
                 if(HudCanvas.hasOpenHud(player)) continue;
-                final Shop shop = HoverManager.getLookedAtShop(player, serverWorld);
+                final Shop shop = HoverReceiver.getLookedAtShop(player, serverWorld);
                 if(shop == null) continue;
 
                 // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true

@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.input;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +21,8 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A utility class that can detect player messages and execute callbacks based on the sender.
  */
-public abstract class ChatManager {
-    private ChatManager() {}
+public abstract class MessageReceiver {
+    private MessageReceiver() {}
     private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
 
 

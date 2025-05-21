@@ -38,6 +38,9 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.hud_ui.HudCanvas;
+import com.snek.fancyplayershops.input.ClickReceiver;
+import com.snek.fancyplayershops.input.HoverReceiver;
+import com.snek.fancyplayershops.input.MessageReceiver;
 import com.snek.fancyplayershops.shop_ui.elements.InteractionBlocker;
 import com.snek.fancyplayershops.shop_ui.elements.ShopItemDisplay;
 import com.snek.framework.ui.elements.Elm;
@@ -142,7 +145,7 @@ public class FancyPlayerShops implements ModInitializer {
             Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), HudCanvas::updateActiveCanvases);
 
             // Schedule hover manager loop
-            Scheduler.loop(0, 1, () -> HoverManager.tick(server.getAllLevels()));
+            Scheduler.loop(0, 1, () -> HoverReceiver.tick(server.getAllLevels()));
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);
@@ -155,11 +158,11 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create and register block click events (shop placement + prevents early clicks going through the shop)
             AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-                return ClickManager.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
             });
             UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
                 InteractionResult r;
-                r = ClickManager.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+                r = ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
                 if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
                 return r;
             });
@@ -169,10 +172,10 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create and register entity click events (interaction blocker clicks)
             AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickManager.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
+                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
             });
             UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickManager.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
+                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
             });
 
 
@@ -180,7 +183,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create and register item use events (prevents early clicks going through the shop)
             UseItemCallback.EVENT.register((player, world, hand) -> {
-                InteractionResult r = ClickManager.onUseItem(world, player, hand);
+                InteractionResult r = ClickReceiver.onUseItem(world, player, hand);
                 if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
                 /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
             });
@@ -208,7 +211,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Register chat input handler
             ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
-                return !ChatManager.onMessage(message, sender);
+                return !MessageReceiver.onMessage(message, sender);
             });
         });
     }

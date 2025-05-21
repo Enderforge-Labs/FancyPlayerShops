@@ -13,6 +13,7 @@ import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.input.MessageReceiver;
 import com.snek.fancyplayershops.shop_ui.elements.InteractionBlocker;
 import com.snek.fancyplayershops.shop_ui.elements.ShopCanvas;
 import com.snek.fancyplayershops.shop_ui.elements.ShopItemDisplay;
@@ -375,7 +376,7 @@ public class Shop {
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
-                if(user != null) ChatManager.removeCallback(user);
+                if(user != null) MessageReceiver.removeCallback(user);
                 user = null;
 
                 // Turn the item display's custom name back on

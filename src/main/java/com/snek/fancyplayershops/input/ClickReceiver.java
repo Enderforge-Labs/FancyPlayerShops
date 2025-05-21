@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.input;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.hud_ui.HudCanvas;
+import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.elements.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
@@ -33,9 +34,9 @@ import net.minecraft.world.level.Level;
 /**
  * A utility class that handles clicks from players.
  */
-public abstract class ClickManager {
+public abstract class ClickReceiver {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
-    private ClickManager() {}
+    private ClickReceiver() {}
 
 
 
@@ -71,7 +72,7 @@ public abstract class ClickManager {
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
         if(hand == InteractionHand.MAIN_HAND && world instanceof ServerLevel serverWorld) {
-            final Shop targetShop = HoverManager.getLookedAtShop(player, serverWorld);
+            final Shop targetShop = HoverReceiver.getLookedAtShop(player, serverWorld);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
