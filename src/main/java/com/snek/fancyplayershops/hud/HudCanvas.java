@@ -16,7 +16,6 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.utils.Easings;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -30,15 +29,18 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class HudCanvas extends Canvas {
-    public static final float POS_UPDATE_DISTANCE = 0.1f;
 
+    // UI
+    public static final float POS_UPDATE_DISTANCE = 0.1f;
+    public static final float HUD_DISTANCE = 1.3f;
+
+    // Canvas data
     protected final @NotNull Player player;
-    private @NotNull Vector3f lastPos;
+    private @NotNull Vector3f lastPos = new Vector3f();
     private int lastRotation = 0;
 
-
+    // Active canvas list
     private static final Map<UUID, HudCanvas> activeCanvases = new HashMap<>();
-    private final float HUD_DISTANCE = 1.2f; //TODO move to UI configs
 
 
 
