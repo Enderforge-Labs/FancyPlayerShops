@@ -15,13 +15,12 @@ import java.util.Map.Entry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.fancyplayershops.hud.stash.StashHud;
+import com.snek.fancyplayershops.hud_ui.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.utils.MinecraftUtils;
 

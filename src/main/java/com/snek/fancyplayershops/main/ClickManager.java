@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud.HudCanvas;
-import com.snek.fancyplayershops.ui.InteractionBlocker;
+import com.snek.fancyplayershops.hud_ui.HudCanvas;
+import com.snek.fancyplayershops.shop_ui.elements.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;

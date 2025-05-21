@@ -28,11 +28,11 @@ import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.shop_ui.edit.elements.EditUi_ColorSelector;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.RateLimiter;
-import com.snek.fancyplayershops.ui.edit.EditUi_ColorSelector;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
