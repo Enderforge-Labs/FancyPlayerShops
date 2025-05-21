@@ -137,8 +137,8 @@ public class Shop {
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
     public @Nullable Player          getuser           () { return user;            }
     public @Nullable Player          getViewer         () { return viewer;          }
-    public           void            setViewer         (final @Nullable Player  _viewer        ) { viewer         = _viewer;         }
-    public           void            setFocusStateNext (final           boolean _nextFocusState) { focusStateNext = _nextFocusState; }
+    public           void            setViewer         (final @Nullable Player _viewer) { viewer = _viewer; }
+    public           void            setFocusStateNext (final boolean _nextFocusState) { focusStateNext = _nextFocusState; }
     public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
     public           float           getColorThemeHue  () { return colorThemeHue; }

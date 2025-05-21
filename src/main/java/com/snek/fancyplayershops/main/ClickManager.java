@@ -63,8 +63,10 @@ public abstract class ClickManager {
         }
 
 
-        // Send click to HUD if one is present
-        HudCanvas.forwardClickStatic(player, clickType);
+        // Send click to HUD and return if one is present
+        if(HudCanvas.forwardClickStatic(player, clickType)) {
+            return InteractionResult.PASS;
+        }
 
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events

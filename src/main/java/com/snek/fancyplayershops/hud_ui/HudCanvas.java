@@ -52,6 +52,17 @@ public class HudCanvas extends UiCanvas {
     }
 
 
+    public static void closeHud(final @NotNull Player player) {
+        final HudCanvas hud = activeCanvases.get(player.getUUID());
+        if(hud != null) hud.despawn();
+    }
+
+
+    public static boolean hasOpenHud(final @NotNull Player player) {
+        return activeCanvases.containsKey(player.getUUID());
+    }
+
+
     public static void updateActiveCanvases(){
         for (HudCanvas c : activeCanvases.values()) {
             c.update();
@@ -95,9 +106,16 @@ public class HudCanvas extends UiCanvas {
     }
 
 
-    public static void forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action) {
+    /**
+     * Forwards a click event to the HUD of a player.
+     * @param _player The player.
+     * @param action The type of click.
+     * @return True if the player has an open HUD, false otherwise.
+     */
+    public static boolean forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action) {
         final HudCanvas c = activeCanvases.get(_player.getUUID());
         if(c != null) c.forwardClick(_player, action);
+        return c != null;
     }
 
 

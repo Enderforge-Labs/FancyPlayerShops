@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.hud_ui.HudCanvas;
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
 import com.snek.framework.utils.MinecraftUtils;
@@ -181,8 +182,9 @@ public abstract class HoverManager {
         for(final ServerLevel serverWorld : serverWorlds) {
             for(final Player player : serverWorld.players()) {
 
-                // Skip player if they are dead or in spectator mode or they aren't looking at any shop
+                // Skip player if they are dead or in spectator mode or they have a HUD open or they aren't looking at any shop
                 if(player.isSpectator() || player.isDeadOrDying()) continue;
+                if(HudCanvas.hasOpenHud(player)) continue;
                 final Shop shop = HoverManager.getLookedAtShop(player, serverWorld);
                 if(shop == null) continue;
 
