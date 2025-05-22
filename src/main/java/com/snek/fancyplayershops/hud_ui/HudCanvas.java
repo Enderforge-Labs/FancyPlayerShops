@@ -69,7 +69,8 @@ public class HudCanvas extends UiCanvas {
         }
     }
     public void update() {
-        forwardHover(player);
+        final Elm targetedElm = findTargetedElement(player);
+        if(targetedElm != null) targetedElm.updateHoverState(player); //FIXME OPTIMIZE
 
         // Update rotation
         final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;

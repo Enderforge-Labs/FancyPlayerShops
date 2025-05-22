@@ -3,9 +3,14 @@ package com.snek.fancyplayershops.input;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +21,7 @@ import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
+import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
@@ -41,8 +47,17 @@ import net.minecraft.world.phys.Vec3;
 public abstract class HoverReceiver {
     private HoverReceiver() {}
 
+
     // The list of shops that were targeted in the previous tick
     private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
+
+
+    // Optimization structures
+    private static @NotNull Map<@NotNull Player, @Nullable Elm> targetedElms = new HashMap<>();
+
+
+
+
 
 
 
@@ -180,15 +195,22 @@ public abstract class HoverReceiver {
 
 
         // Find currently focused shops and their viewers
-        final Set<Shop> targetedShops = new LinkedHashSet<>();
+        final Set<Shop> targetedShops        = new LinkedHashSet<>();
+        final Set<Shop> shopsWithTargetedElm = new LinkedHashSet<>();
         for(final ServerLevel serverWorld : serverWorlds) {
             for(final Player player : serverWorld.players()) {
 
-                // Skip player if they are dead or in spectator mode or they have a HUD open or they aren't looking at any shop
+                // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
                 if(player.isSpectator() || player.isDeadOrDying()) continue;
                 if(HudCanvas.hasOpenHud(player)) continue;
                 final Shop shop = HoverReceiver.getLookedAtShop(player, serverWorld);
                 if(shop == null) continue;
+
+
+                // Add shop to list of shops with looked at elements if the player is in the looked at elements key list
+                if(targetedElms.containsKey(player)) {
+                    shopsWithTargetedElm.add(shop);
+                }
 
                 // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
                 final boolean isShopNew = targetedShops.add(shop);
@@ -207,7 +229,7 @@ public abstract class HoverReceiver {
         }
 
 
-        // //! Debug window
+        //! Debug window
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().clear();
         }
@@ -220,6 +242,7 @@ public abstract class HoverReceiver {
                 shop.setViewer(null);
                 shop.updateFocusState();
             }
+            //FIXME it might be necessary to remove unfocused shops from the shops with elements set
         }
 
 
@@ -227,9 +250,14 @@ public abstract class HoverReceiver {
         for(final Shop shop : targetedShops) {
             if(!shop.isDeleted() && shop.getuser() != null) {
 
-                // Send hover events to focused shops
+                // If the shop doesnt have a targeted element, find the currently targeted element
                 if(shop.getActiveCanvas() != null) {
-                    shop.getActiveCanvas().forwardHover(shop.getuser());
+                    if(!shopsWithTargetedElm.contains(shop)) {
+                        final Elm targetedElm = shop.getActiveCanvas().findTargetedElement(shop.getuser());
+                        if(targetedElm != null) {
+                            targetedElms.put(shop.getuser(), targetedElm);
+                        }
+                    }
                 }
 
                 // If the user isn't looking at the shop anymore, unfocus it
@@ -241,6 +269,20 @@ public abstract class HoverReceiver {
             shop.updateCanvasRotation();
         }
         targetedShopsOld = targetedShops;
+
+
+        // Send hover events to the currently hovered elements
+        final List<Player> toRemove = new ArrayList<>();
+        for(final Entry<Player, Elm> entry : targetedElms.entrySet()) {
+            entry.getValue().updateHoverState(entry.getKey());
+            if(!entry.getValue().isHovered()) {
+                toRemove.add(entry.getKey());
+            }
+        }
+        // Remove elements that aren't being hovered on anymore and their parent shop from the maps
+        for(final Player player : toRemove) {
+            targetedElms.remove(player);
+        }
 
 
         //! Debug window update

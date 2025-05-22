@@ -230,17 +230,20 @@ public class Div {
 
 
     /**
-     * Forwards a hover event to this element and all of its children.
-     * @param player The player that clicked.
+     * Finds the element that the player is looking at.
+     * <p> This method skips non-Elm elements and elements that are both not hoverable and not clickable.
+     * @param player The player.
+     * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
-    public void forwardHover(final @NotNull Player player) {
-        if(this instanceof Hoverable hoverableElm && hoverableElm instanceof Elm e) {
-            e.updateHoverState(player);
+    public @Nullable Elm findTargetedElement(final @NotNull Player player) {
+        if((this instanceof Hoverable || this instanceof Clickable) && this instanceof Elm e) {
+            if(e.checkIntersection(player)) return e;
         }
-        final List<Div> _children = new ArrayList<>(children);
-        for(final Div elm : _children) {
-            elm.forwardHover(player);
+        for(final Div elm : children) {
+            final Elm r = elm.findTargetedElement(player);
+            if(r != null) return r;
         }
+        return null;
     }
 
 

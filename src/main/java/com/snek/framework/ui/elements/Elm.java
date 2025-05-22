@@ -547,7 +547,9 @@ public abstract class Elm extends Div {
             }
         }
     }
-
+    public boolean isHovered() {
+        return isHovered;
+    }
 
 
 
