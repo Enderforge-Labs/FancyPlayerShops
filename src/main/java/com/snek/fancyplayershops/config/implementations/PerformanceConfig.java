@@ -33,7 +33,7 @@ public class PerformanceConfig implements ConfigFile {
             "Must be >= 1",
             "Player ray casting checks are performed every tick, but they can be split into batches to improve performance.",
             "e.g. 1 batch means that every player is checked every tick. 2 batches means that half the players are checked every even tick, while the other half is checked every odd tick.",
-            "Higher values improve performance but increase shop hover detection delay by up to *ray_casting_batches* ticks."
+            "Higher values improve performance but increase shop hover detection delay by up to (ray_casting_batches + 1) ticks."
         },
         4
     );

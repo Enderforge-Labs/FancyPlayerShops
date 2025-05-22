@@ -147,7 +147,7 @@ public class FancyPlayerShops implements ModInitializer {
             });
 
             // Schedule hover manager loop
-            Scheduler.loop(0, 1, () -> HoverReceiver.tick(server.getAllLevels()));
+            Scheduler.loop(0, 1, () -> HoverReceiver.tick());
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);

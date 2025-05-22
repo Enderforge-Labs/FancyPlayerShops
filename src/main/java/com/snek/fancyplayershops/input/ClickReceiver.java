@@ -15,7 +15,6 @@ import com.snek.framework.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -71,8 +70,8 @@ public abstract class ClickReceiver {
 
 
         // Forward clicks to the shop if the limiter allows it. Ignore offhand events
-        if(hand == InteractionHand.MAIN_HAND && world instanceof ServerLevel serverWorld) {
-            final Shop targetShop = HoverReceiver.getLookedAtShop(player, serverWorld);
+        if(hand == InteractionHand.MAIN_HAND) {
+            final Shop targetShop = HoverReceiver.getLookedAtShop(player);
             if(targetShop != null) {
                 if(limiter.attempt()) {
                     limiter.renewCooldown(1);
