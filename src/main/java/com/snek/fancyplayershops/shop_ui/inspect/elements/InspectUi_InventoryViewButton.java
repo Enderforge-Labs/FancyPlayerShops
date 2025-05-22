@@ -11,6 +11,7 @@ import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.Items;
 
 
 
@@ -46,7 +47,9 @@ public class InspectUi_InventoryViewButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        player.openMenu(inventoryViewFactory);
-        playButtonSound(player);
+        if(shop.getItem().getItem() != Items.AIR) {
+            player.openMenu(inventoryViewFactory);
+            playButtonSound(player);
+        }
     }
 }
