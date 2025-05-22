@@ -47,6 +47,7 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -91,8 +92,8 @@ public class Shop {
     private           @NotNull  String          worldId;                        // The Identifier of the world
     private transient @Nullable ShopItemDisplay itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos        pos;                            // The position of the shop
-    private transient @NotNull  String          shopIdentifierCache;            // The cached shop identifier
-    private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, without including the world
+    private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, not including the world
+    private transient @NotNull  ShopKey         shopKeyCache;                   // The cached shop key
 
 
     // Shop data
@@ -140,7 +141,7 @@ public class Shop {
     public @Nullable Player          getViewer         () { return viewer;          }
     public           void            setViewer         (final @Nullable Player _viewer) { viewer = _viewer; }
     public           void            setFocusStateNext (final boolean _nextFocusState) { focusStateNext = _nextFocusState; }
-    public @NotNull  String          getIdentifier     () { return shopIdentifierCache; }
+    public @NotNull  ShopKey         getKey            () { return shopKeyCache; }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
     public           float           getColorThemeHue  () { return colorThemeHue; }
 
@@ -187,20 +188,16 @@ public class Shop {
      * Computes and caches the shop identifiers.
      */
     private void cacheShopIdentifier() {
-        shopIdentifierCache         = calcShopIdentifier(pos, worldId);
         shopIdentifierCache_noWorld = calcShopIdentifier(pos);
     }
-
-
     /**
-     * Calculates a shop identifier from a position and the world ID.
-     * @param _pos The position.
-     * @param worldId The world ID.
-     * @return The generated identifier.
+     * Computes and caches the shop key.
      */
-    public static String calcShopIdentifier(final @NotNull BlockPos _pos, final @NotNull String worldId) {
-        return calcShopIdentifier(_pos) + "," + worldId;
+    private void cacheShopKey() {
+        shopKeyCache = calcShopKey(pos, world);
     }
+
+
     /**
      * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
      * @param _pos The position.
@@ -208,6 +205,14 @@ public class Shop {
      */
     public static String calcShopIdentifier(final @NotNull BlockPos _pos) {
         return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
+    }
+    /**
+     * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
+     * @param _pos The position.
+     * @return The generated identifier.
+     */
+    public static ShopKey calcShopKey(final @NotNull BlockPos _pos, final @NotNull Level _world) {
+        return new ShopKey(_pos, _world);
     }
 
 
@@ -226,6 +231,7 @@ public class Shop {
         try {
             item = MinecraftUtils.deserializeItem(serializedItem);
             calcDeserializedWorldId();
+            cacheShopKey();
             return true;
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -268,6 +274,7 @@ public class Shop {
         serializedItem = MinecraftUtils.serializeItem(item);
         calcSerializedWorldId();
         cacheShopIdentifier();
+        cacheShopKey();
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
@@ -315,6 +322,7 @@ public class Shop {
         // Get members from serialized data and calculate shop identifier
         item = MinecraftUtils.deserializeItem(serializedItem);
         cacheShopIdentifier();
+        cacheShopKey();
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);

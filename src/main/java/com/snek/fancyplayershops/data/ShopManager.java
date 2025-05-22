@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ShopKey;
 import com.snek.fancyplayershops.shop_ui.edit.elements.EditUi_ColorSelector;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -80,8 +82,8 @@ public abstract class ShopManager {
 
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
-    private static final @NotNull Map<@NotNull String, @Nullable Shop> shopsByCoords = new HashMap<>();
-    private static final @NotNull Map<@NotNull String, @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
+    private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
 
     // Async update list
@@ -166,9 +168,9 @@ public abstract class ShopManager {
      * <p> Calling this method on a shop that's already registered will have no effect.
      */
     public static void registerShop(final @NotNull Shop shop) {
-        if(shopsByCoords.put(shop.getIdentifier(), shop) == null){
-            shopsByOwner.putIfAbsent(shop.getOwnerUuid().toString(), new HashSet<>());
-            shopsByOwner.get(shop.getOwnerUuid().toString()).add(shop);
+        if(shopsByCoords.put(shop.getKey(), shop) == null){
+            shopsByOwner.putIfAbsent(shop.getOwnerUuid(), new HashSet<>());
+            shopsByOwner.get(shop.getOwnerUuid()).add(shop);
 
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
             chunkShopNumber.putIfAbsent(chunkPos, 0);
@@ -181,8 +183,8 @@ public abstract class ShopManager {
      * <p> Calling this method on a shop that's already not registered will have no effect.
      */
     public static void unregisterShop(final @NotNull Shop shop) {
-        if(shopsByCoords.remove(shop.getIdentifier(), shop)) {
-            final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid().toString());
+        if(shopsByCoords.remove(shop.getKey(), shop)) {
+            final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid());
             if(set != null) set.remove(shop);
 
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
@@ -273,21 +275,11 @@ public abstract class ShopManager {
     /**
      * Returns the Shop instance present at a certain block position.
      * @param pos The block position.
-     * @param worldId The ID of the world the shop is in.
-     * @return The shop, or null if no shop is there.
-    */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull String worldId) {
-        return shopsByCoords.get(Shop.calcShopIdentifier(pos, worldId));
-    }
-
-    /**
-     * Returns the Shop instance present at a certain block position.
-     * @param pos The block position.
      * @param world The world the shop is in.
      * @return The shop, or null if no shop is there.
     */
     public static Shop findShop(final @NotNull BlockPos pos, final @NotNull Level world) {
-        return findShop(pos, world.dimension().location().toString());
+        return shopsByCoords.get(Shop.calcShopKey(pos, world));
     }
 
 
