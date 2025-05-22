@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -115,7 +116,7 @@ public abstract class HoverReceiver {
 
             // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            if(HudCanvas.hasOpenHud(player)) continue;
+            if(Hud.getOpenHud(player) != null) continue;
             final Shop shop = HoverReceiver.getLookedAtShop(player);
             if(shop == null) continue;
 

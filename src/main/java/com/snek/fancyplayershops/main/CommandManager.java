@@ -6,6 +6,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.framework.utils.Txt;
 
@@ -90,7 +91,7 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
-                    HudCanvas.closeHud(player);
+                    Hud.closeHud(player);
                     return 1;
                 }))
 
@@ -104,7 +105,7 @@ public abstract class CommandManager {
                 }))
 
 
-                // Shop statistics
+                // Shop stash view
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stash")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();

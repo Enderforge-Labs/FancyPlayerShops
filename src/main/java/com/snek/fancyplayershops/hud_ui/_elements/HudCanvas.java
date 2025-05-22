@@ -36,41 +36,24 @@ public class HudCanvas extends UiCanvas {
     public static final float HUD_DISTANCE = 1.3f;
 
     // Canvas data
-    protected final @NotNull Player player;
+    protected final @NotNull Hud hud;
     private @NotNull Vector3f lastPos = new Vector3f();
     private int lastRotation = 0;
-
-    // Active canvas list
-    private static final Map<UUID, HudCanvas> activeCanvases = new HashMap<>();
+    private boolean spawned = false;
 
 
 
 
-    public HudCanvas(final @NotNull Player _player, final @Nullable UiCanvas prevCanvas, final float height, final float heightTop, final float heightBottom) {
-        super(prevCanvas, (ServerLevel)_player.level(), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
-        player = _player;
+    public HudCanvas(final @NotNull Hud _hud, final float height, final float heightTop, final float heightBottom) {
+        super(_hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        hud = _hud;
     }
 
 
-    public static void closeHud(final @NotNull Player player) {
-        final HudCanvas hud = activeCanvases.get(player.getUUID());
-        if(hud != null) hud.despawn();
-    }
-
-
-    public static boolean hasOpenHud(final @NotNull Player player) {
-        return activeCanvases.containsKey(player.getUUID());
-    }
-
-
-    public static void updateActiveCanvases(){
-        for (HudCanvas c : activeCanvases.values()) {
-            c.update();
-        }
-    }
     public void update() {
+        final Player player = hud.getPlayer();
         final Elm targetedElm = findTargetedElement(player);
-        if(targetedElm != null) targetedElm.updateHoverState(player); //FIXME OPTIMIZE
+        if(targetedElm != null) targetedElm.updateHoverState(player); //TODO OPTIMIZE
 
         // Update rotation
         final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
@@ -107,43 +90,27 @@ public class HudCanvas extends UiCanvas {
     }
 
 
-    /**
-     * Forwards a click event to the HUD of a player.
-     * @param _player The player.
-     * @param action The type of click.
-     * @return True if the player has an open HUD, false otherwise.
-     */
-    public static boolean forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action) {
-        final HudCanvas c = activeCanvases.get(_player.getUUID());
-        if(c != null) c.forwardClick(_player, action);
-        return c != null;
-    }
-
-
 
     @Override
     public void spawn(Vector3d pos) {
-        super.spawn(pos);
-        lastPos = new Vector3f((float)pos.x, (float)pos.y, (float)pos.z);
-        activeCanvases.put(player.getUUID(), this);
+        if(!spawned) {
+            spawned = true;
+            super.spawn(pos);
+            lastPos = new Vector3f((float)pos.x, (float)pos.y, (float)pos.z);
 
-        // Move displays away from the player's center
-        final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
-        final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
-        final Vector3f shift = direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
-        applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(shift)));
+            // Move displays away from the player's center
+            final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
+            final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
+            final Vector3f shift = direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
+            applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(shift)));
+        }
     }
-
-
 
     @Override
     public void despawn() {
-        super.despawn();
-        activeCanvases.remove(player.getUUID());
-    }
-    @Override
-    public void despawnNow() {
-        super.despawnNow();
-        activeCanvases.remove(player.getUUID());
+        if(spawned) {
+            spawned = false;
+            super.despawn();
+        }
     }
 }

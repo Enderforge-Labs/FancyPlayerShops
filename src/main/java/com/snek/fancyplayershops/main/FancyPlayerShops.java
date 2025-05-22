@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
@@ -143,11 +144,11 @@ public class FancyPlayerShops implements ModInitializer {
             // Schedule UI element update loop
             Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
-                HudCanvas.updateActiveCanvases();
+                Hud.updateActiveHuds();
             });
 
             // Schedule hover manager loop
-            Scheduler.loop(0, 1, () -> HoverReceiver.tick());
+            Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);

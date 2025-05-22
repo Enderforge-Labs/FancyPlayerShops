@@ -7,7 +7,6 @@ import org.joml.Vector3d;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.Scheduler;
@@ -32,8 +31,8 @@ import net.minecraft.world.phys.Vec3;
 
 
 /**
- * A special interaction entity that is used by shops to block unwanted players interactions.
- * <p> This stops client-side clicks on blocks and entities behind the shop block
+ * A special interaction entity that is used to block unwanted players interactions.
+ * <p> This stops client-side clicks on blocks and entities behind the targeted UI
  * <p> and client-side item use events, preventing annoying UI flashes and visual artifacts.
  */
 public class InteractionBlocker {
@@ -65,18 +64,18 @@ public class InteractionBlocker {
 
     // In-world data
     private final @NotNull Interaction entity;
-    private final @NotNull Shop shop;
+    private final @NotNull Level world;
 
 
 
 
     /**
      * Creates a new InteractionBlocker.
-     * @param _shop The target shop.
+     * @param _world The world to create this interaction in.
      */
-    public InteractionBlocker(final @NotNull Shop _shop, final float w, final float h) {
-        shop = _shop;
-        entity = new Interaction(EntityType.INTERACTION, shop.getWorld());
+    public InteractionBlocker(final @NotNull Level _world, final float w, final float h) {
+        world = _world;
+        entity = new Interaction(EntityType.INTERACTION, world);
         Utils.invokeSafe(method_setWidth,  entity, w);
         Utils.invokeSafe(method_setHeight, entity, h);
     }
@@ -112,7 +111,7 @@ public class InteractionBlocker {
     public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity, move it to the specified coords and set a temporary name to allow the command to recognize it
-        shop.getWorld().addFreshEntity(entity);
+        world.addFreshEntity(entity);
         entity.setPos(pos.x, pos.y, pos.z);
         entity.setCustomNameVisible(false);
         entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME_UNINITIALIZED).get());
@@ -152,6 +151,17 @@ public class InteractionBlocker {
 
         // Replace the temporary name with the actual custom name. This name is the one that will be used to purge stray interactions
         entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
+    }
+
+
+
+
+    /**
+     * Teleports the interaction entity to the specified position.
+     * @param pos The position.
+     */
+    public void teleport(final @NotNull Vector3d pos) {
+        entity.teleportTo(pos.x, pos.y, pos.z);
     }
 
 

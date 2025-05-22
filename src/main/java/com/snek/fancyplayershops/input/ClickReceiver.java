@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
+import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
 import com.snek.framework.utils.scheduler.RateLimiter;
@@ -64,8 +64,8 @@ public abstract class ClickReceiver {
 
 
         // Send click to HUD and return if one is present
-        if(HudCanvas.forwardClickStatic(player, clickType)) {
-            return InteractionResult.PASS;
+        if(Hud.forwardClickStatic(player, clickType)) {
+            return InteractionResult.FAIL;
         }
 
 

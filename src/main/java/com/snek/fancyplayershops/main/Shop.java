@@ -358,7 +358,7 @@ public class Shop {
 
                 // Create or recreate interaction blocker
                 if(interactionBlocker != null) interactionBlocker.despawn();
-                interactionBlocker = new InteractionBlocker(this, 1.01f, 1.01f);
+                interactionBlocker = new InteractionBlocker(getWorld(), 1.01f, 1.01f);
                 interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 
                 // Start item animation and turn off the CustomName
