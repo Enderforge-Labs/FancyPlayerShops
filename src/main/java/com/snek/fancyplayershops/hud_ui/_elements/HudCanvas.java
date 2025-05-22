@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.hud_ui;
+package com.snek.fancyplayershops.hud_ui._elements;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.hud_ui.styles.HudCanvasBack_S;
-import com.snek.fancyplayershops.hud_ui.styles.HudCanvasBackground_S;
+import com.snek.fancyplayershops.hud_ui._styles.HudCanvasBack_S;
+import com.snek.fancyplayershops.hud_ui._styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui.elements.UiCanvas;
+import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;

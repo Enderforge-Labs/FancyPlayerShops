@@ -14,12 +14,12 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.input.MessageReceiver;
-import com.snek.fancyplayershops.shop_ui.elements.InteractionBlocker;
-import com.snek.fancyplayershops.shop_ui.elements.ShopCanvas;
-import com.snek.fancyplayershops.shop_ui.elements.ShopItemDisplay;
+import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
+import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -30,8 +30,6 @@ import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 import com.snek.framework.utils.scheduler.RateLimiter;
-import com.snek.framework.utils.scheduler.Scheduler;
-import com.snek.framework.utils.scheduler.TaskHandler;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -71,8 +69,6 @@ import net.minecraft.world.phys.Vec3;
  * This class manages a player shop that is placed somewhere in a world.
  */
 public class Shop {
-    public static final int INTERACTION_BLOCKER_DESPAWN_DELAY = 10;
-
 
     // Animation data
     public static final int CANVAS_ANIMATION_DELAY = 5;
@@ -118,7 +114,6 @@ public class Shop {
     private transient           int                     lastDirection = 0;      // The current cartinal or intercardinal direction of the canvas, 0 to 7
     private transient @NotNull  RateLimiter     canvasRotationLimiter = new RateLimiter();
     private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
-    private transient @Nullable TaskHandler interactionBlockerDeletionHandler;
     private transient boolean scheduledForSave = false;
 
 
@@ -361,12 +356,9 @@ public class Shop {
                 }
                 activeCanvas.spawn(calcDisplayPos());
 
-                // Create interaction blocker
-                //! Only spawning a new one if the deletion handler is present doesn't work as it can be left there from previous calls while being cancelled.
-                //! Cancelling it regardless and removing the entity to spawn a new one makes sure the interaction blocker is never null when it's needed
-                if(interactionBlockerDeletionHandler != null) interactionBlockerDeletionHandler.cancel();
+                // Create or recreate interaction blocker
                 if(interactionBlocker != null) interactionBlocker.despawn();
-                interactionBlocker = new InteractionBlocker(this);
+                interactionBlocker = new InteractionBlocker(this, 1.01f, 1.01f);
                 interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 
                 // Start item animation and turn off the CustomName
@@ -378,12 +370,9 @@ public class Shop {
                 activeCanvas.despawn();
                 activeCanvas = null;
 
-                // Despawn interaction blocker after despawn animations end
-                if(interactionBlockerDeletionHandler != null) interactionBlockerDeletionHandler.cancel();
-                interactionBlockerDeletionHandler = Scheduler.schedule(ShopItemDisplay.D_TIME, () -> {
-                    interactionBlocker.despawn();
-                    interactionBlocker = null;
-                });
+                // Despawn interaction blocker
+                interactionBlocker.despawn();
+                interactionBlocker = null;
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
@@ -877,7 +866,7 @@ public class Shop {
 
             // Despawn the entities
             if(activeCanvas != null) activeCanvas.despawn();
-            if(interactionBlocker != null) Scheduler.schedule(INTERACTION_BLOCKER_DESPAWN_DELAY, interactionBlocker::despawn);
+            if(interactionBlocker != null) interactionBlocker.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
 

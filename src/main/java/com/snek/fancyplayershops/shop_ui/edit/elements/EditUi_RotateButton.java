@@ -6,10 +6,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_RotateButtonRight_S;
-import com.snek.fancyplayershops.shop_ui.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;

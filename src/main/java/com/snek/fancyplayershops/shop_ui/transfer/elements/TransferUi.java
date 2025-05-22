@@ -7,14 +7,14 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.shop_ui.edit.elements.EditUiSub_BackButton;
-import com.snek.fancyplayershops.shop_ui.elements.ShopCanvas;
 import com.snek.fancyplayershops.shop_ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.shop_ui.transfer.styles.TransferUi_Input_S;
-import com.snek.fancyplayershops.ui.elements.UiBorder;
+import com.snek.fancyplayershops.ui._elements.UiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;

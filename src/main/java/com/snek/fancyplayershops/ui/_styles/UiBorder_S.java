@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.ui.styles;
+package com.snek.fancyplayershops.ui._styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;

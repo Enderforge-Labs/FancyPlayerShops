@@ -6,10 +6,10 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.shop_ui._styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
-import com.snek.fancyplayershops.shop_ui.styles.ShopCanvasBackground_S;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;

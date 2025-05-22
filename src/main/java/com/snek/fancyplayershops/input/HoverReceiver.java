@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud_ui.HudCanvas;
+import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
@@ -177,7 +177,6 @@ public abstract class HoverReceiver {
                 shop.setViewer(null);
                 shop.updateFocusState();
             }
-            //FIXME it might be necessary to remove unfocused shops from the shops with elements set
         }
 
 

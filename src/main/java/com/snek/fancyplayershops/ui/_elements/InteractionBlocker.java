@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.elements;
+package com.snek.fancyplayershops.ui._elements;
 
 import java.lang.reflect.Method;
 
@@ -10,6 +10,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
+import com.snek.framework.utils.scheduler.Scheduler;
 
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -36,6 +37,10 @@ import net.minecraft.world.phys.Vec3;
  * <p> and client-side item use events, preventing annoying UI flashes and visual artifacts.
  */
 public class InteractionBlocker {
+
+    // Despawn delay, avoids accidental clicks after the UI is removed
+    public static final int DESPAWN_DELAY = 10;
+
 
     // Private methods of InteractionEntity
     private static @NotNull Method method_setWidth;
@@ -69,11 +74,11 @@ public class InteractionBlocker {
      * Creates a new InteractionBlocker.
      * @param _shop The target shop.
      */
-    public InteractionBlocker(final @NotNull Shop _shop) {
+    public InteractionBlocker(final @NotNull Shop _shop, final float w, final float h) {
         shop = _shop;
         entity = new Interaction(EntityType.INTERACTION, shop.getWorld());
-        Utils.invokeSafe(method_setHeight, entity, 1.01f);
-        Utils.invokeSafe(method_setWidth,  entity, 1.01f);
+        Utils.invokeSafe(method_setWidth,  entity, w);
+        Utils.invokeSafe(method_setHeight, entity, h);
     }
 
 
@@ -156,6 +161,8 @@ public class InteractionBlocker {
      * Removes the interaction entity from the world
      */
     public void despawn() {
-        entity.remove(RemovalReason.KILLED);
+        Scheduler.schedule(DESPAWN_DELAY, () -> {
+            entity.remove(RemovalReason.KILLED);
+        });
     }
 }

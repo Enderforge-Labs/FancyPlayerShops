@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.hud_ui.styles;
+package com.snek.fancyplayershops.hud_ui._styles;
 
 import org.joml.Vector3i;
 
