@@ -119,6 +119,7 @@ public class Shop {
     private transient @NotNull  RateLimiter     canvasRotationLimiter = new RateLimiter();
     private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
     private transient @Nullable TaskHandler interactionBlockerDeletionHandler;
+    private transient boolean scheduledForSave = false;
 
 
     // Accessors
@@ -139,7 +140,9 @@ public class Shop {
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
     public @Nullable Player          getuser           () { return user;            }
     public @Nullable Player          getViewer         () { return viewer;          }
+    public           boolean         isScheduledForSave() { return scheduledForSave; }
     public           void            setViewer         (final @Nullable Player _viewer) { viewer = _viewer; }
+    public           void            setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
     public           void            setFocusStateNext (final boolean _nextFocusState) { focusStateNext = _nextFocusState; }
     public @NotNull  ShopKey         getKey            () { return shopKeyCache; }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
@@ -281,7 +284,7 @@ public class Shop {
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
         ShopManager.registerShop(this);
     }
 
@@ -329,7 +332,7 @@ public class Shop {
         itemDisplay.spawn(calcDisplayPos());
 
         // Save the shop
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
         ShopManager.registerShop(this);
     }
 
@@ -508,7 +511,7 @@ public class Shop {
             owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            ShopManager.saveShop(this);
+            ShopManager.scheduleShopSave(this);
 
 
             // Send feedback to the player
@@ -531,7 +534,7 @@ public class Shop {
 
             if(stashExcess && stashedAmount > 0) {
                 StashManager.stashItem(owner.getUUID(), _item, stashedAmount);
-                StashManager.saveStash(owner.getUUID());
+                StashManager.scheduleStashSave(owner.getUUID());
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
                     .cat(new Txt(MinecraftUtils.getFancyItemName(item)).white())
@@ -572,7 +575,7 @@ public class Shop {
             final long totPrice = price * amount;
 
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                ShopManager.saveShop(this);
+                ShopManager.scheduleShopSave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 BalanceManager.addBalance(ownerUUID, totPrice);
                 BalanceManager.saveBalance(ownerUUID);
@@ -598,7 +601,7 @@ public class Shop {
 
                 if(stashExcess && stashedAmount > 0) {
                     StashManager.stashItem(buyer.getUUID(), _item, _item.getCount());
-                    StashManager.saveStash(buyer.getUUID());
+                    StashManager.scheduleStashSave(buyer.getUUID());
                     buyer.displayClientMessage(new Txt()
                         .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
                         .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
@@ -711,7 +714,7 @@ public class Shop {
         else if(newPrice < 0.00001) price = 0;
         else if(newPrice < 0.01000) price = 1;
         else price = newPrice;
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
         return true;
     }
 
@@ -736,7 +739,7 @@ public class Shop {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
         return true;
     }
 
@@ -751,7 +754,7 @@ public class Shop {
 
         // Add value to default rotation and save the shop
         defaultRotation = (float)((defaultRotation + _rotation) % (Math.PI * 2));
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
     }
 
 
@@ -769,7 +772,7 @@ public class Shop {
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
         serializedItem = MinecraftUtils.serializeItem(item);
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
     }
 
 
@@ -835,11 +838,13 @@ public class Shop {
      * <p> This method also sets the shop's stock to 0.
      */
     public void stash(){
+        if(stock == 0) return;
+        if(item.getItem() == Items.AIR) return;
+
 
         // Stash items
         StashManager.stashItem(ownerUUID, item, stock);
-        StashManager.saveStash(ownerUUID);
-        // TODO ^ add /shop stash command
+        StashManager.scheduleStashSave(ownerUUID);
 
 
         // Send feedback to the player
@@ -855,7 +860,7 @@ public class Shop {
 
         // Reset stock
         stock = 0;
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
     }
 
 
@@ -902,7 +907,7 @@ public class Shop {
 
         // Update stock and save the shop
         if(oldStock == stock) return;
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
 
         // Update active canvas
         if(activeCanvas != null) {
@@ -992,7 +997,7 @@ public class Shop {
         focusStateNext = false;
         updateFocusState();
         ownerUUID = newOwner.getUUID();
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
     }
 
 
@@ -1004,7 +1009,7 @@ public class Shop {
      */
     public void setColorThemeHue(final float _hue) {
         colorThemeHue = _hue;
-        ShopManager.saveShop(this);
+        ShopManager.scheduleShopSave(this);
     }
 
     /**

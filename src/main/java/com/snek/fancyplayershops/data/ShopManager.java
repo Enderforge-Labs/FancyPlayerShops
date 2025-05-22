@@ -44,6 +44,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
@@ -93,6 +94,9 @@ public abstract class ShopManager {
 
     // Keeps track of the amount of shops in each chunk
     private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
+
+    // The list of shops scheduled for saving
+    private static @NotNull List<@NotNull Shop> scheduledForSaving = new ArrayList<>();
 
 
 
@@ -205,27 +209,46 @@ public abstract class ShopManager {
 
 
     /**
-     * Saves the data of the specified shop in its config file.
+     * Schedules a shop for data saving.
+     * Call saveScheduledShops() to save schedules shops.
      * @param shop The shop to save.
      */
-    public static void saveShop(final @NotNull Shop shop) {
-
-        // Create directory for the world
-        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
-        try {
-            Files.createDirectories(levelStorageDir);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void scheduleShopSave(final @NotNull Shop shop) {
+        if(!shop.isScheduledForSave()) {
+            scheduledForSaving.add(shop);
+            shop.setScheduledForSave(true);
         }
+    }
+
+    /**
+     * Saves the data of all the shops schedules for saving in their config files.
+     */
+    public static void saveScheduledShops() {
+
+        for(final Shop shop : scheduledForSaving) {
+
+            // Create directory for the world
+            final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
+            try {
+                Files.createDirectories(levelStorageDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
-        // Create this shop's config file if absent, then save the JSON in it
-        final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
-        try (final Writer writer = new FileWriter(shopStorageFile)) {
-            new Gson().toJson(shop, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Create this shop's config file if absent, then save the JSON in it
+            final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
+            try (final Writer writer = new FileWriter(shopStorageFile)) {
+                new Gson().toJson(shop, writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            // Flag the shop as not scheduled
+            shop.setScheduledForSave(false);
         }
+        scheduledForSaving = new ArrayList<>();
     }
 
 
@@ -332,7 +355,7 @@ public abstract class ShopManager {
 
         // Reset snapshop if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
-            updateCycleLimiter.renewCooldown(Configs.perf.pull_cycle_cooldown.getValue());
+            updateCycleLimiter.renewCooldown(Configs.perf.pull_cycle_frequency.getValue());
             updateIndex = 0;
         }
     }
@@ -385,14 +408,23 @@ public abstract class ShopManager {
      * @return The number of shops that were created.
      */
     public static int fill(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
+        final Item[] items = new Item[] {
+            Items.STONE,
+            Items.COBBLESTONE,
+            Items.SADDLE,
+            Items.DIAMOND_SWORD,
+            Items.TRIDENT,
+            Items.POLISHED_GRANITE_STAIRS,
+            Items.POLISHED_DIORITE_SLAB
+        };
         int r = 0;
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vec3(i, j, k)));
-                    if(world.getBlockState(blockPos).isAir()) {
+                    if(new Vector3f(i, j, k).distance(pos) <= radius && world.getBlockState(blockPos).isAir()) {
                         final Shop shop = new Shop(world, blockPos, owner);
-                        shop.changeItem(Items.STONE.getDefaultInstance());
+                        shop.changeItem(items[Math.abs(rnd.nextInt() % items.length)].getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.invalidateItemDisplay();
                         ++r;

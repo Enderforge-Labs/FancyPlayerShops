@@ -141,14 +141,23 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), Elm::processUpdateQueue);
-            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), HudCanvas::updateActiveCanvases);
+            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), () -> {
+                Elm.processUpdateQueue();
+                HudCanvas.updateActiveCanvases();
+            });
 
             // Schedule hover manager loop
             Scheduler.loop(0, 1, () -> HoverReceiver.tick(server.getAllLevels()));
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);
+
+            // Schedule data saves
+            Scheduler.loop(0, Configs.perf.data_save_frequency.getValue(), () -> {
+                ShopManager.saveScheduledShops();
+                StashManager.saveScheduledStashes();
+                BalanceManager.saveScheduledBalances();
+            });
 
             // Log initialization success
             LOGGER.info("FancyPlayerShops initialized. :3");

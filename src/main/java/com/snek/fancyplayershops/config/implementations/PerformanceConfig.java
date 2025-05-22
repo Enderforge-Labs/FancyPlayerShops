@@ -27,6 +27,16 @@ public class PerformanceConfig implements ConfigFile {
         },
         0.2f
     );
+    public final ValueConfigField<Integer> ray_casting_batches = new ValueConfigField<>(
+        new String[] {
+            "The amount of batches needed to complete a ray casting check cycle.",
+            "Must be >= 1",
+            "Player ray casting checks are performed every tick, but they can be split into batches to improve performance.",
+            "e.g. 1 batch means that every player is checked every tick. 2 batches means that half the players are checked every even tick, while the other half is checked every odd tick.",
+            "Higher values improve performance but increase shop hover detection delay by up to *ray_casting_batches* ticks."
+        },
+        4
+    );
     public final ValueConfigField<Integer> animation_refresh_time = new ValueConfigField<>(
         new String[] {
             "The time between transition updates. Measured in ticks.",
@@ -43,7 +53,7 @@ public class PerformanceConfig implements ConfigFile {
         },
         2
     );
-    public final ValueConfigField<Integer> pull_cycle_cooldown = new ValueConfigField<>(
+    public final ValueConfigField<Integer> pull_cycle_frequency = new ValueConfigField<>(
         new String[] {
             "The minimum time between item pull cycles. Measured in ticks.",
             "Must be >= 1.",
@@ -51,6 +61,15 @@ public class PerformanceConfig implements ConfigFile {
             "Values above 20 are generally safe."
         },
         5 * 20
+    );
+    public final ValueConfigField<Integer> data_save_frequency = new ValueConfigField<>(
+        new String[] {
+            "The time between shop and stash data saves. Measured in ticks.",
+            "Must be >= 1.",
+            "Only modified shops and stashes are saved to file, so this config has little inpact on performance.",
+            "Very high values can occasionally create lag spikes. Lower values improve safety and tps stability but slightly degrade performance.",
+        },
+        4
     );
 
 
@@ -68,13 +87,22 @@ public class PerformanceConfig implements ConfigFile {
         if(reach_distance.getValue() > 8)   throw new IllegalStateException("Reach distance must be <= 8");
 
 
-        // Check step size
+        // Check ray casting step size
         if(ray_casting_step.getValue() < 0.02) throw new IllegalStateException("Ray casting step size must be >= 0.02");
         if(ray_casting_step.getValue() > 0.5)  throw new IllegalStateException("Ray casting step size must be <= 0.5");
+
+
+        // Check ray casting batch size
+        if(ray_casting_batches.getValue() < 1) throw new IllegalStateException("Ray casting batches must be >= 1");
 
 
         // Check animation refresh time
         if(animation_refresh_time.getValue() < 1)  throw new IllegalStateException("Animation refresh time must be >= 1");
         if(animation_refresh_time.getValue() > 10) throw new IllegalStateException("Animation refresh time must be <= 10");
+
+
+        // Check data save frequency
+        if(data_save_frequency.getValue() < 1) throw new IllegalStateException("Data save frequency must be >= 1");
+        //TODO use custom invalid config file option exception
     }
 }

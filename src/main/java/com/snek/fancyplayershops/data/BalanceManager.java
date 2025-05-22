@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,6 +20,7 @@ import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.herrkatze.solsticeEconomy.modules.economy.Notification;
 import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
@@ -46,8 +49,11 @@ public abstract class BalanceManager {
 
 
     // Player balance data
-    private static final @NotNull Map<@NotNull UUID, Long> balances = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, PlayerShopBalance> balances = new HashMap<>();
     private static boolean dataLoaded = false;
+
+    // The list of balances scheduled for saving
+    private static @NotNull List<@NotNull Pair<@NotNull UUID, @NotNull PlayerShopBalance>> scheduledForSaving = new ArrayList<>();
 
 
 
@@ -62,7 +68,7 @@ public abstract class BalanceManager {
      * @param count The amount of money to add.
      */
     public static void addBalance(final @NotNull UUID playerUUID, final long amount) {
-        balances.merge(playerUUID, amount, Long::sum);
+        balances.merge(playerUUID, new PlayerShopBalance(amount), PlayerShopBalance::merge);
     }
 
 
@@ -73,15 +79,25 @@ public abstract class BalanceManager {
 
 
     /**
-     * Saves the balance of the specified player in its config file.
+     * Schedules a balance for data saving.
+     * Call saveScheduledBalances() to save schedules balances.
      * @param playerUUID The UUID of the player.
      */
     public static void saveBalance(final @NotNull UUID playerUUID) {
-        final Long balance = balances.get(playerUUID);
+        final PlayerShopBalance balance = balances.get(playerUUID);
         if(balance == null) return;
+        if(!balance.isScheduledForSave()) {
+            scheduledForSaving.add(Pair.from(playerUUID, balance));
+            balance.setScheduledForSave(true);
+        }
+    }
 
+    /**
+     * Saves the data of all the balances schedules for saving in their config files.
+     */
+    public static void saveScheduledBalances() {
 
-        // Create directory for the world
+        // Create directory for the balances
         final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("balance");
         try {
             Files.createDirectories(levelStorageDir);
@@ -90,13 +106,21 @@ public abstract class BalanceManager {
         }
 
 
-        // Create this player's config file if absent, then save the JSON in it
-        final File balanceStorageFile = new File(levelStorageDir + "/" + playerUUID.toString() + ".json");
-        try (final Writer writer = new FileWriter(balanceStorageFile)) {
-            new Gson().toJson(balance, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(final Pair<UUID, PlayerShopBalance> pair : scheduledForSaving) {
+
+            // Create this player's config file if absent, then save the JSON in it
+            final File balanceStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
+            try (final Writer writer = new FileWriter(balanceStorageFile)) {
+                new Gson().toJson(pair.getSecond().getValue(), writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            // Flag the balance as not shceduled
+            pair.getSecond().setScheduledForSave(false);
         }
+        scheduledForSaving = new ArrayList<>();
     }
 
 
@@ -141,16 +165,17 @@ public abstract class BalanceManager {
      * @param player The player.
      */
     public static void claim(final @NotNull ServerPlayer player) {
-        final Long balance = balances.put(player.getUUID(), 0l);
+        final PlayerShopBalance balance = balances.put(player.getUUID(), new PlayerShopBalance());
         saveBalance(player.getUUID());
 
-        if(balance == null || balance == 0) {
+
+        if(balance == null || balance.getValue() == 0) {
             player.displayClientMessage(new Txt("Your shop balance is empty. There is nothing to claim right now.").lightGray().get(), false);
         }
         else {
-            EconomyManager.addCurrency(player.getUUID(), balance);
+            EconomyManager.addCurrency(player.getUUID(), balance.getValue());
             NotificationManager.sendNotification(
-                new Notification(new Txt("You claimed " + Utils.formatPrice(balance) + " from your shop balance.").gold().get()),
+                new Notification(new Txt("You claimed " + Utils.formatPrice(balance.getValue()) + " from your shop balance.").gold().get()),
                 player
             );
         }

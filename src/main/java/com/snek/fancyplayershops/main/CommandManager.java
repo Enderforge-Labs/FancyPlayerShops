@@ -64,9 +64,9 @@ public abstract class CommandManager {
                     })))
 
 
-                    // Purge command
+                    // Fill command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
-                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 4f))
+                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
                         final float radius = FloatArgumentType.getFloat(context, "radius");

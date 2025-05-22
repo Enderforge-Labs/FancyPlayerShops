@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
@@ -22,6 +24,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.hud_ui.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -52,14 +55,12 @@ public abstract class StashManager {
 
 
     // Player stash data
-    private static final @NotNull Map<
-        @NotNull UUID,
-        @Nullable Map<
-            @NotNull UUID,
-            @Nullable StashEntry
-        >
-    > stashes = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, @Nullable PlayerStash> stashes = new HashMap<>();
     private static boolean dataLoaded = false;
+
+
+    // The list of stashes scheduled for saving
+    private static @NotNull List<@NotNull Pair<@NotNull UUID, @Nullable PlayerStash>> scheduledForSaving = new ArrayList<>();
 
 
 
@@ -77,7 +78,7 @@ public abstract class StashManager {
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
         if(item.getItem() == Items.AIR) return;
-        final Map<UUID, StashEntry> stash = stashes.computeIfAbsent(playerUUID, k -> new HashMap<>());
+        final PlayerStash stash = stashes.computeIfAbsent(playerUUID, k -> new PlayerStash());
         final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
         stashEntry.add(count);
     }
@@ -90,6 +91,7 @@ public abstract class StashManager {
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
+        if(count == 0) return;
         if(item.getItem() == Items.AIR) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
     }
@@ -102,15 +104,25 @@ public abstract class StashManager {
 
 
     /**
+     * Schedules the specified stash for saving.
+     * Call saveScheduledStashes to save all scheduled stashes.
+     * @param playerUUID The UUID of the player.
+     */
+    public static void scheduleStashSave(final @NotNull UUID playerUUID) {
+        final PlayerStash stash = stashes.get(playerUUID);
+        if(stash != null && !stash.isScheduledForSave()) {
+            scheduledForSaving.add(Pair.from(playerUUID, stash));
+            stash.setScheduledForSave(true);
+        }
+    }
+
+    /**
      * Saves the stash data of the specified player in its config file.
      * @param playerUUID The UUID of the player.
      */
-    public static void saveStash(final @NotNull UUID playerUUID) {
-        final Map<UUID, StashEntry> entries = stashes.get(playerUUID);
-        if(entries == null) return;
+    public static void saveScheduledStashes() {
 
-
-        // Create directory for the world
+        // Create directory for the stashes
         final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("stash");
         try {
             Files.createDirectories(levelStorageDir);
@@ -119,24 +131,32 @@ public abstract class StashManager {
         }
 
 
-        // Create the JSON array that contains the player's stash entries
-        final JsonArray jsonEntries = new JsonArray();
-        for (final Entry<UUID, StashEntry> entry: entries.entrySet()) {
-            final JsonObject jsonEntry = new JsonObject();
-            jsonEntry.addProperty("uuid", entry.getKey().toString());
-            jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.getValue().item));
-            jsonEntry.addProperty("count", entry.getValue().getCount());
-            jsonEntries.add(jsonEntry);
-        }
+        for(final Pair<UUID, PlayerStash> pair : scheduledForSaving) {
+
+            // Create the JSON array that contains the player's stash entries
+            final JsonArray jsonEntries = new JsonArray();
+            for (final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
+                final JsonObject jsonEntry = new JsonObject();
+                jsonEntry.addProperty("uuid", entry.getKey().toString());
+                jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.getValue().item));
+                jsonEntry.addProperty("count", entry.getValue().getCount());
+                jsonEntries.add(jsonEntry);
+            }
 
 
-        // Create this player's config file if absent, then save the JSON in it
-        final File stashStorageFile = new File(levelStorageDir + "/" + playerUUID.toString() + ".json");
-        try (final Writer writer = new FileWriter(stashStorageFile)) {
-            new Gson().toJson(jsonEntries, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Create this player's config file if absent, then save the JSON in it
+            final File stashStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
+            try (final Writer writer = new FileWriter(stashStorageFile)) {
+                new Gson().toJson(jsonEntries, writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            // Flag the stash as not scheduled
+            pair.getSecond().setScheduledForSave(false);
         }
+        scheduledForSaving = new ArrayList<>();
     }
 
 

@@ -67,7 +67,7 @@ public class EditUi_ColorSelector extends ShopButton {
 
         // Change theme hue
         shop.setColorThemeHue(hue);
-        ShopManager.saveShop(shop);
+        ShopManager.scheduleShopSave(shop);
 
 
         // Reset colored backgrounds of themed elements
