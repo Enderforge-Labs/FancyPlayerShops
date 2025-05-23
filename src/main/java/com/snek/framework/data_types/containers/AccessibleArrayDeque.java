@@ -66,8 +66,10 @@ import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -1253,7 +1255,7 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
             AccessibleArrayDeque<E> result = (AccessibleArrayDeque<E>) super.clone();
             result.elements = Arrays.copyOf(elements, elements.length);
             return result;
-        } catch (CloneNotSupportedException e) {
+        } catch(final CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }

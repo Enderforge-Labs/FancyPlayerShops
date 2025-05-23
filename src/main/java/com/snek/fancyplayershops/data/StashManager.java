@@ -127,7 +127,7 @@ public abstract class StashManager {
         final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("stash");
         try {
             Files.createDirectories(levelStorageDir);
-        } catch (IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
 
@@ -136,7 +136,7 @@ public abstract class StashManager {
 
             // Create the JSON array that contains the player's stash entries
             final JsonArray jsonEntries = new JsonArray();
-            for (final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
+            for(final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
                 final JsonObject jsonEntry = new JsonObject();
                 jsonEntry.addProperty("uuid", entry.getKey().toString());
                 jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.getValue().item));
@@ -149,7 +149,7 @@ public abstract class StashManager {
             final File stashStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
 
@@ -185,7 +185,7 @@ public abstract class StashManager {
                 jsonEntries = new Gson().fromJson(reader, JsonArray.class);
 
                 // Load the data into the runtime map
-                for (final JsonElement _jsonEntry : jsonEntries.asList()) {
+                for(final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
                     stashItem(playerUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),
@@ -193,7 +193,7 @@ public abstract class StashManager {
                         jsonEntry.get("count").getAsInt()
                     );
                 }
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
         }

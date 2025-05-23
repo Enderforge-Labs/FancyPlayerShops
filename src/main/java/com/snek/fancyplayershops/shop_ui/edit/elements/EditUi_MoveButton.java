@@ -49,7 +49,7 @@ public class EditUi_MoveButton extends ShopButton {
 
 
 
-    public EditUi_MoveButton(final @NotNull Shop _shop){
+    public EditUi_MoveButton(final @NotNull Shop _shop) {
         super(_shop, null, "Move shop", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design

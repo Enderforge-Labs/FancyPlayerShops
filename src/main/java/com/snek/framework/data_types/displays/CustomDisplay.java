@@ -64,7 +64,7 @@ public abstract class CustomDisplay {
             method_getMaxRenderWidth        = Display.class.getDeclaredMethod("getWidth");
             method_setMaxRenderHeight       = Display.class.getDeclaredMethod("setHeight",                              float.class);
             method_getMaxRenderHeight       = Display.class.getDeclaredMethod("getHeight");
-        } catch (NoSuchMethodException | SecurityException e) {
+        } catch(final NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         method_setTransformation.setAccessible(true);
@@ -82,7 +82,7 @@ public abstract class CustomDisplay {
         method_getMaxRenderHeight.setAccessible(true);
     }
 
-    public boolean isRemoved(){
+    public boolean isRemoved() {
         return heldEntity.isRemoved();
     }
 

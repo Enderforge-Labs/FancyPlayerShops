@@ -29,7 +29,7 @@ public abstract class Configs {
     /**
      * Loads the configuration files or creates new ones if they are missing.
      */
-    public static void loadConfigs(){
+    public static void loadConfigs() {
         shop = ConfigManager.loadConfig("ShopConfig",  ShopConfig.class);
         perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class);
         ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class);

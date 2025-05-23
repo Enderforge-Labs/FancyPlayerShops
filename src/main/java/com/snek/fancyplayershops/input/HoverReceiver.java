@@ -242,7 +242,7 @@ public abstract class HoverReceiver {
      *     <p> Owner:         Lower priority
      *     <p> Other players: Lowest priority
      */
-    public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull Player player){
+    public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull Player player) {
         if(player == shop.getuser()) return 0;
         if(player.getUUID() == shop.getOwnerUuid()) return -1;
         return -2;

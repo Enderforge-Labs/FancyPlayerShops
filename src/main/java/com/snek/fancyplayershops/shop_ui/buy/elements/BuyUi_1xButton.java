@@ -69,7 +69,7 @@ public class BuyUi_1xButton extends ShopButton {
 
 
 
-    public BuyUi_1xButton(final @NotNull Shop _shop){
+    public BuyUi_1xButton(final @NotNull Shop _shop) {
         super(_shop, null, "Buy 1 item", 1,  new BuyUi_BuyButton_S(_shop));
 
         // Create design

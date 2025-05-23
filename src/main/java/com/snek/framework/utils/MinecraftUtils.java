@@ -95,7 +95,7 @@ public abstract class MinecraftUtils {
             }
         }
         else if(tag instanceof ListTag l) {
-            for (Tag e : l) {
+            for(Tag e : l) {
                 if(nbtContainsSubstring(e, substring)) return true;
             }
         }
@@ -125,13 +125,13 @@ public abstract class MinecraftUtils {
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-256");
             digest.update(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().getBytes(StandardCharsets.UTF_8));
-            if (nbt != null) {
+            if(nbt != null) {
                 digest.update(nbt.toString().getBytes(StandardCharsets.UTF_8));
             }
             final byte[] hash = digest.digest();
             final ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(hash, 16));
             return new UUID(buffer.getLong(), buffer.getLong());
-        } catch (NoSuchAlgorithmException e) {
+        } catch(final NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }

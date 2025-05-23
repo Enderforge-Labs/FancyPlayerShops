@@ -35,7 +35,7 @@ public class CustomItemDisplay extends CustomDisplay {
             method_setItemStack   = ItemDisplay.class.getDeclaredMethod("setItemStack",              ItemStack.class);
             method_setDisplayType = ItemDisplay.class.getDeclaredMethod("setItemTransform", ItemDisplayContext.class);
             method_getDisplayType = ItemDisplay.class.getDeclaredMethod("getItemTransform");
-        } catch (NoSuchMethodException | SecurityException e) {
+        } catch(final NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         method_setItemStack.setAccessible(true);

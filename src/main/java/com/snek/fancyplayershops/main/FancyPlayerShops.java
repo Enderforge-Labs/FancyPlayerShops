@@ -117,13 +117,13 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create config and storage directories
             try {
-                for(String path : new String[] { "shops", "stash", "balance" }) {
+                for(final String path : new String[] { "shops", "stash", "balance" }) {
                     Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
                 }
-                for(String path : new String[] { "." }) {
+                for(final String path : new String[] { "." }) {
                     Files.createDirectories(FancyPlayerShops.getConfigDir().resolve(path));
                 }
-            }catch(IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
                 flagFatal();
                 return;

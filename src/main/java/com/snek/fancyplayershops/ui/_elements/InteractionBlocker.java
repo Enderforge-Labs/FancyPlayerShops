@@ -48,7 +48,7 @@ public class InteractionBlocker {
         try {
             method_setWidth  = Interaction.class.getDeclaredMethod("setWidth",  float.class);
             method_setHeight = Interaction.class.getDeclaredMethod("setHeight", float.class);
-        } catch (NoSuchMethodException | SecurityException e) {
+        } catch(final NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         method_setWidth.setAccessible(true);
@@ -142,7 +142,7 @@ public class InteractionBlocker {
         /*!  │  */        "run data modify entity @s Air set value 1000",                                                   //!
         /*!  │  */        source                                                                                            //!
         /*!  │  */    );                                                                                                    //!
-        /*!  │  */} catch (CommandSyntaxException e) {                                                                      //!
+        /*!  │  */} catch(final CommandSyntaxException e) {                                                                 //!
         /*!  │  */    e.printStackTrace();                                                                                  //!
         /*!  │  */}                                                                                                         //!
         //!  │                                                                                                              //!

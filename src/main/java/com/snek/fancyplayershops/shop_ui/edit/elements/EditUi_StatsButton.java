@@ -49,7 +49,7 @@ public class EditUi_StatsButton extends ShopButton {
 
 
 
-    public EditUi_StatsButton(final @NotNull Shop _shop){
+    public EditUi_StatsButton(final @NotNull Shop _shop) {
         super(_shop, null, "Open statistics", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design

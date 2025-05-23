@@ -22,7 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 
 public class StashHud extends HudCanvas {
 
-    public StashHud(final @NotNull Hud _hud){
+    public StashHud(final @NotNull Hud _hud) {
         super(_hud, 1f, ShopFancyTextElm.LINE_H, UiBorder.DEFAULT_HEIGHT);
         Div e;
 

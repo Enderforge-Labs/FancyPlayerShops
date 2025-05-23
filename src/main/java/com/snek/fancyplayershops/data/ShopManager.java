@@ -172,7 +172,7 @@ public abstract class ShopManager {
      * <p> Calling this method on a shop that's already registered will have no effect.
      */
     public static void registerShop(final @NotNull Shop shop) {
-        if(shopsByCoords.put(shop.getKey(), shop) == null){
+        if(shopsByCoords.put(shop.getKey(), shop) == null) {
             shopsByOwner.putIfAbsent(shop.getOwnerUuid(), new HashSet<>());
             shopsByOwner.get(shop.getOwnerUuid()).add(shop);
 
@@ -231,7 +231,7 @@ public abstract class ShopManager {
             final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
             try {
                 Files.createDirectories(levelStorageDir);
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
 
@@ -240,7 +240,7 @@ public abstract class ShopManager {
             final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
             try (final Writer writer = new FileWriter(shopStorageFile)) {
                 new Gson().toJson(shop, writer);
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
 
@@ -274,7 +274,7 @@ public abstract class ShopManager {
                 Shop retrievedShop = null;
                 try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
-                } catch (IOException e) {
+                } catch(final IOException e) {
                     e.printStackTrace();
                 }
 
@@ -333,7 +333,7 @@ public abstract class ShopManager {
      * Updates PULL_UPDATES_PER_TICK shops each call, making them pull items from nearby inventories.
      * <p> Must be called each server tick.
      */
-    public static void pullItems(){
+    public static void pullItems() {
         if(!updateCycleLimiter.attempt()) return;
 
 

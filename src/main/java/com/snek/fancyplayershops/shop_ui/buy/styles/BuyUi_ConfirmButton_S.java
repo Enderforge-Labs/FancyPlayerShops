@@ -29,7 +29,7 @@ public class BuyUi_ConfirmButton_S extends ShopButton_S {
 
 
 
-    public BuyUi_ConfirmButton_S(final @NotNull Shop _shop){
+    public BuyUi_ConfirmButton_S(final @NotNull Shop _shop) {
         super(_shop);
     }
 

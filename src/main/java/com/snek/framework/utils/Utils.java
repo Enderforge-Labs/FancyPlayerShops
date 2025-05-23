@@ -67,7 +67,7 @@ public abstract class Utils {
     public static @Nullable Object invokeSafe(final @NotNull Method method, final @NotNull Object target, final @Nullable Object... args) {
         try {
             return method.invoke(target, args);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch(final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
@@ -85,7 +85,7 @@ public abstract class Utils {
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
-            } catch (InterruptedException e1) {
+            } catch(final InterruptedException e1) {
                 e1.printStackTrace();
                 Thread.currentThread().interrupt();
             }

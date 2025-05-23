@@ -322,7 +322,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Spawns the name text display if needed.
      */
-    public void spawnNameEntity(){
+    public void spawnNameEntity() {
         if(name == null) {
             name = new FancyTextElm(world, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
@@ -338,7 +338,7 @@ public class ShopItemDisplay extends ItemElm {
     /**
      * Despawns the name text display if needed.
      */
-    public void despawnNameEntity(){
+    public void despawnNameEntity() {
         if(name != null) {
             name.despawnNow();
             name = null;

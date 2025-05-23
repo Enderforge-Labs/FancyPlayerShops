@@ -27,7 +27,7 @@ public class UiConfig implements ConfigFile {
 
 
     @Override
-    public void validate(){
+    public void validate() {
 
         // Check z layer spacing
         if(z_layer_spacing.getValue() < 0.0005f) throw new IllegalStateException("Z-Layer spacing must be >= 0.0005");

@@ -46,7 +46,7 @@ public abstract class FontWidthGenerator {
         final Font renderer = Minecraft.getInstance().font;
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH));
-        } catch (IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
 
@@ -134,7 +134,7 @@ public abstract class FontWidthGenerator {
 
 
             f.write("}");
-        } catch (IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
 

@@ -66,7 +66,7 @@ public class EditUi_TransferButton extends ShopButton {
 
 
 
-    public EditUi_TransferButton(final @NotNull Shop _shop){
+    public EditUi_TransferButton(final @NotNull Shop _shop) {
         super(_shop, null, "Transfer ownership", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design

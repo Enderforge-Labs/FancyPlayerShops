@@ -18,7 +18,7 @@ public abstract class ScrollReceiver {
      * Handles slot selection changes, aka scroll wheel inputs.
      * Must be called every time a player that's looking at a Scrollable UI element changes their selected hotbar slot.
      */
-    public void onSelectedSlotChange(final @NotNull Player player){
+    public void onSelectedSlotChange(final @NotNull Player player) {
         //player.getInventory().selected; //TODO
     }
 }

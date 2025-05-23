@@ -80,7 +80,7 @@ public class PerformanceConfig implements ConfigFile {
 
 
     @Override
-    public void validate(){
+    public void validate() {
 
         // Check reach distance
         if(reach_distance.getValue() < 0.5) throw new IllegalStateException("Reach distance must be >= 0.5");

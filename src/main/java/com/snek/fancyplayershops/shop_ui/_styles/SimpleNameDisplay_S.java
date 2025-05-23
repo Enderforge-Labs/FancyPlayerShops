@@ -21,13 +21,13 @@ public class SimpleNameDisplay_S extends FancyTextElmStyle {
 
 
     @Override
-    public @NotNull Vector3i getDefaultBgColor(){
+    public @NotNull Vector3i getDefaultBgColor() {
         return UiBorder_S.COLOR;
     }
 
 
     @Override
-    public int getDefaultBgAlpha(){
+    public int getDefaultBgAlpha() {
         return 180;
     }
 }

@@ -15,7 +15,7 @@ import com.snek.fancyplayershops.ui._styles.UiBorder_S;
 
 public class HudCanvasBack_S extends ShopPanelElm_S {
 
-    public HudCanvasBack_S(){
+    public HudCanvasBack_S() {
         super();
     }
 

@@ -51,7 +51,7 @@ public class BuyUiSub_BackButton extends ShopButton {
 
 
 
-    public BuyUiSub_BackButton(final @NotNull Shop _shop){
+    public BuyUiSub_BackButton(final @NotNull Shop _shop) {
         super(_shop, null, "Go back", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design

@@ -101,7 +101,7 @@ public abstract class BalanceManager {
         final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("balance");
         try {
             Files.createDirectories(levelStorageDir);
-        } catch (IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
 
@@ -112,7 +112,7 @@ public abstract class BalanceManager {
             final File balanceStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
             try (final Writer writer = new FileWriter(balanceStorageFile)) {
                 new Gson().toJson(pair.getSecond().getValue(), writer);
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
 
@@ -146,7 +146,7 @@ public abstract class BalanceManager {
             try(FileReader reader = new FileReader(balanceStorageFile)) {
                 final Long balance = new Gson().fromJson(reader, Long.class);
                 addBalance(playerUUID, balance);
-            } catch (IOException e) {
+            } catch(final IOException e) {
                 e.printStackTrace();
             }
         }

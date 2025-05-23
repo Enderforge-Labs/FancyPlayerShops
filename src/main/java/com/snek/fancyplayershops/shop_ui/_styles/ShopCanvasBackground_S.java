@@ -17,14 +17,14 @@ public class ShopCanvasBackground_S extends ShopPanelElm_S {
     private final @NotNull Shop shop;
 
 
-    public ShopCanvasBackground_S(final @NotNull Shop _shop){
+    public ShopCanvasBackground_S(final @NotNull Shop _shop) {
         super();
         shop = _shop;
     }
 
 
     @Override
-    public Vector3i getDefaultColor(){
+    public Vector3i getDefaultColor() {
         return shop.getThemeColor2();
     }
 

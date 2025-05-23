@@ -23,14 +23,14 @@ public class ShopButton_S extends ButtonElmStyle {
     /**
      * Creates a new ShopButton_S.
      */
-    public ShopButton_S(final @NotNull Shop _shop){
+    public ShopButton_S(final @NotNull Shop _shop) {
         super();
         shop = _shop;
     }
 
 
     @Override
-    public Vector3i getDefaultBgColor(){
+    public Vector3i getDefaultBgColor() {
         return shop.getThemeColor1();
     }
 }

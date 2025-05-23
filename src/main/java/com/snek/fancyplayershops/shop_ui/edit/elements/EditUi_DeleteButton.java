@@ -49,7 +49,7 @@ public class EditUi_DeleteButton extends ShopButton  {
 
 
 
-    public EditUi_DeleteButton(final @NotNull Shop _shop){
+    public EditUi_DeleteButton(final @NotNull Shop _shop) {
         super(_shop, null, "Delete shop", 1,  new EditUi_SquareButton_S(_shop));
 
         // Create design

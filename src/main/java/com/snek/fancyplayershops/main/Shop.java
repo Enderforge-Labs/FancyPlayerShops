@@ -219,7 +219,7 @@ public class Shop {
      * @return Whether the item and world id have been deserialized successfully.
      * <p> Shops whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
     */
-    public boolean reinitTransient(){
+    public boolean reinitTransient() {
         focusState            = false;
         focusStateNext        = false;
         lastDirection         = 0;
@@ -231,7 +231,7 @@ public class Shop {
             calcDeserializedWorldId();
             cacheShopKey();
             return true;
-        } catch (RuntimeException e) {
+        } catch(final RuntimeException e) {
             e.printStackTrace();
             return false;
         }
@@ -388,7 +388,7 @@ public class Shop {
 
 
 
-    public void invalidateItemDisplay(){
+    public void invalidateItemDisplay() {
         if(itemDisplay != null) {
             itemDisplay.despawnNow();
             itemDisplay = null;
@@ -653,7 +653,7 @@ public class Shop {
 
 
 
-    public boolean canBuyUiBeOpened(){
+    public boolean canBuyUiBeOpened() {
         return item.getItem() != Items.AIR;
     }
     /**
@@ -826,7 +826,7 @@ public class Shop {
      * Sends the items stored in this shop to the owner's stash.
      * <p> This method also sets the shop's stock to 0.
      */
-    public void stash(){
+    public void stash() {
         if(stock == 0) return;
         if(item.getItem() == Items.AIR) return;
 
@@ -882,7 +882,7 @@ public class Shop {
      * Tries to retrieve items from nearby inventories.
      * <p> This call has no effect if the shop is fully stocked.
      */
-    public void pullItems(){
+    public void pullItems() {
         if(stock >= maxStock || item.getItem() == Items.AIR) return;
         final int oldStock = stock;
 
@@ -912,7 +912,7 @@ public class Shop {
      * <p> This call has no effect if the shop is fully stocked.
      * @param rel The position of the inventory, relative to the shop.
      */
-    public void pullItems(final @NotNull BlockPos rel){
+    public void pullItems(final @NotNull BlockPos rel) {
         if(stock >= maxStock) return;                                           // Skip pull if shop is full
         final BlockPos targetPos = pos.offset(rel);                             // Calculate inventory position
         final ChunkPos chunkPos = new ChunkPos(pos);                            // Calculate inventory chunk position
@@ -1024,7 +1024,7 @@ public class Shop {
 
 
 
-    public @NotNull String getDecoratedName(){
+    public @NotNull String getDecoratedName() {
         return item.getItem() == Items.AIR ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
     }
 }

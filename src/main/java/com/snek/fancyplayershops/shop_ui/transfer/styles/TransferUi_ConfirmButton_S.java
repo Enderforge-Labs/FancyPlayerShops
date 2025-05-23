@@ -31,7 +31,7 @@ public class TransferUi_ConfirmButton_S extends ShopButton_S {
 
 
 
-    public TransferUi_ConfirmButton_S(final @NotNull Shop _shop){
+    public TransferUi_ConfirmButton_S(final @NotNull Shop _shop) {
         super(_shop);
     }
 

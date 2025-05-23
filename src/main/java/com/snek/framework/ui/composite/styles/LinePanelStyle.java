@@ -20,7 +20,7 @@ public class LinePanelStyle extends PanelElmStyle {
 
 
     @Override
-    public @NotNull Vector3i getDefaultColor(){
+    public @NotNull Vector3i getDefaultColor() {
         return new Vector3i(Txt.COLOR_WHITE);
     }
 }

@@ -47,46 +47,46 @@ public abstract class ConfigManager {
 
 
         // Register defaulted value adapters
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Long   >>(){}.getType(), new __DefaultConfigFieldAdapter<>(Long   .class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Integer>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Integer.class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Double >>(){}.getType(), new __DefaultConfigFieldAdapter<>(Double .class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Float  >>(){}.getType(), new __DefaultConfigFieldAdapter<>(Float  .class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Boolean>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Boolean.class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<String >>(){}.getType(), new __DefaultConfigFieldAdapter<>(String .class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Long   >>() {}.getType(), new __DefaultConfigFieldAdapter<>(Long   .class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Integer>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Integer.class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Double >>() {}.getType(), new __DefaultConfigFieldAdapter<>(Double .class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Float  >>() {}.getType(), new __DefaultConfigFieldAdapter<>(Float  .class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Boolean>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Boolean.class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<String >>() {}.getType(), new __DefaultConfigFieldAdapter<>(String .class))
 
 
         // Register defaulted value array adapters
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Long   []>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Long   [].class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Integer[]>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Integer[].class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Double []>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Double [].class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Float  []>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Float  [].class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<Boolean[]>>(){}.getType(), new __DefaultConfigFieldAdapter<>(Boolean[].class))
-        .registerTypeAdapter( new TypeToken<DefaultConfigField<String []>>(){}.getType(), new __DefaultConfigFieldAdapter<>(String [].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Long   []>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Long   [].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Integer[]>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Integer[].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Double []>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Double [].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Float  []>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Float  [].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<Boolean[]>>() {}.getType(), new __DefaultConfigFieldAdapter<>(Boolean[].class))
+        .registerTypeAdapter( new TypeToken<DefaultConfigField<String []>>() {}.getType(), new __DefaultConfigFieldAdapter<>(String [].class))
 
 
         // Register value adapters
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Long   >>(){}.getType(), new __ValueConfigFieldAdapter<>(Long   .class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Integer>>(){}.getType(), new __ValueConfigFieldAdapter<>(Integer.class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Double >>(){}.getType(), new __ValueConfigFieldAdapter<>(Double .class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Float  >>(){}.getType(), new __ValueConfigFieldAdapter<>(Float  .class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Boolean>>(){}.getType(), new __ValueConfigFieldAdapter<>(Boolean.class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<String >>(){}.getType(), new __ValueConfigFieldAdapter<>(String .class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Long   >>() {}.getType(), new __ValueConfigFieldAdapter<>(Long   .class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Integer>>() {}.getType(), new __ValueConfigFieldAdapter<>(Integer.class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Double >>() {}.getType(), new __ValueConfigFieldAdapter<>(Double .class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Float  >>() {}.getType(), new __ValueConfigFieldAdapter<>(Float  .class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Boolean>>() {}.getType(), new __ValueConfigFieldAdapter<>(Boolean.class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<String >>() {}.getType(), new __ValueConfigFieldAdapter<>(String .class))
 
 
         // Register value array adapters
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Long   []>>(){}.getType(), new __ValueConfigFieldAdapter<>(Long   [].class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Integer[]>>(){}.getType(), new __ValueConfigFieldAdapter<>(Integer[].class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Double []>>(){}.getType(), new __ValueConfigFieldAdapter<>(Double [].class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Float  []>>(){}.getType(), new __ValueConfigFieldAdapter<>(Float  [].class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<Boolean[]>>(){}.getType(), new __ValueConfigFieldAdapter<>(Boolean[].class))
-        .registerTypeAdapter( new TypeToken<ValueConfigField<String []>>(){}.getType(), new __ValueConfigFieldAdapter<>(String [].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Long   []>>() {}.getType(), new __ValueConfigFieldAdapter<>(Long   [].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Integer[]>>() {}.getType(), new __ValueConfigFieldAdapter<>(Integer[].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Double []>>() {}.getType(), new __ValueConfigFieldAdapter<>(Double [].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Float  []>>() {}.getType(), new __ValueConfigFieldAdapter<>(Float  [].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<Boolean[]>>() {}.getType(), new __ValueConfigFieldAdapter<>(Boolean[].class))
+        .registerTypeAdapter( new TypeToken<ValueConfigField<String []>>() {}.getType(), new __ValueConfigFieldAdapter<>(String [].class))
 
 
         // Register constrained adapters (Arrays, bools and defaulted values cannot be constrained)
-        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Long   >>(){}.getType(),new __ConstrainedConfigFieldAdapter<>(Long.   class))
-        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Integer>>(){}.getType(),new __ConstrainedConfigFieldAdapter<>(Integer.class))
-        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Double >>(){}.getType(),new __ConstrainedConfigFieldAdapter<>(Double. class))
-        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Float  >>(){}.getType(),new __ConstrainedConfigFieldAdapter<>(Float.  class))
+        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Long   >>() {}.getType(),new __ConstrainedConfigFieldAdapter<>(Long.   class))
+        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Integer>>() {}.getType(),new __ConstrainedConfigFieldAdapter<>(Integer.class))
+        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Double >>() {}.getType(),new __ConstrainedConfigFieldAdapter<>(Double. class))
+        .registerTypeAdapter(new TypeToken<ConstrainedConfigField<Float  >>() {}.getType(),new __ConstrainedConfigFieldAdapter<>(Float.  class))
     .create();
 
 
@@ -116,7 +116,7 @@ public abstract class ConfigManager {
                 final T r = gson.fromJson(reader, configClass);
                 r.validate();
                 return r;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
                 FancyPlayerShops.flagFatal();
             }

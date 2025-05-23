@@ -21,7 +21,7 @@ public class StashHud_Title extends TextElm {
         updateDisplay();
     }
 
-    public void updateDisplay(){
+    public void updateDisplay() {
         getStyle(TextElmStyle.class).setText(new Txt("Your stash").get());
         flushStyle();
     }

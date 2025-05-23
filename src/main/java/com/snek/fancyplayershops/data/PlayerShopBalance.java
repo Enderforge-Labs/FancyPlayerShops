@@ -19,10 +19,10 @@ public class PlayerShopBalance {
     public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
 
-    public PlayerShopBalance(final long _value){
+    public PlayerShopBalance(final long _value) {
         value = _value;
     }
-    public PlayerShopBalance(){
+    public PlayerShopBalance() {
         this(0);
     }
 

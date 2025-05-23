@@ -42,7 +42,7 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
 
 
 
-    public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop){
+    public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop) {
         super(_shop, null, "Open buy menu", 1, new EditUi_SquareButton_S(_shop));
 
         // Create design

@@ -92,7 +92,7 @@ public abstract class Easings {
     private static double _circIn   (final double x) { return 1 - Math.sqrt(1 - Math.pow(x,     2)); }
     private static double _circOut  (final double x) { return     Math.sqrt(1 - Math.pow(x - 1, 2)); }
     private static double _circInOut(final double x) {
-        if (x < 0.5) return (1 - Math.sqrt(1 - Math.pow(+2 * x,     2))    ) / 2;
+        if(x < 0.5) return (1 - Math.sqrt(1 - Math.pow(+2 * x,     2))    ) / 2;
         else         return (    Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
     }
 
@@ -186,7 +186,7 @@ public abstract class Easings {
     }
     private static double _backInOut(double x) {
         final double s = 1.70158;
-        if (x < 0.5)
+        if(x < 0.5)
             return (x * x * ((s * 1.525 + 1) * x - s * 1.525)) / 2;
         else {
             x -= 1;

@@ -63,7 +63,7 @@ public class Hud {
         }
     }
 
-    public void despawn(){
+    public void despawn() {
         if(spawned) {
             spawned = false;
             activeHuds.remove(player.getUUID());
@@ -123,7 +123,7 @@ public class Hud {
     }
 
 
-    public static void updateActiveHuds(){
+    public static void updateActiveHuds() {
         for(Hud h : activeHuds.values()) {
             h.update();
         }

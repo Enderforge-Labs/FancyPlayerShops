@@ -96,7 +96,7 @@ public class CustomTextDisplay extends CustomDisplay {
             method_setLineWidth     = TextDisplay.class.getDeclaredMethod("setLineWidth",       int.class);
             method_setTextOpacity   = TextDisplay.class.getDeclaredMethod("setTextOpacity",    byte.class);
             method_setBackground    = TextDisplay.class.getDeclaredMethod("setBackgroundColor", int.class);
-        } catch (NoSuchMethodException | SecurityException e) {
+        } catch(final NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         method_getText.setAccessible(true);

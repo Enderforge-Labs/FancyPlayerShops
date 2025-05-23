@@ -87,7 +87,7 @@ public class ShopConfig implements ConfigFile {
 
 
     @Override
-    public void validate(){
+    public void validate() {
 
         // Check price
         if(price.getMin    () < 0)              throw new IllegalStateException("Minimum price must be >= 0");
