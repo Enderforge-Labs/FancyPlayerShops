@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +39,6 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.fancyplayershops.input.MessageReceiver;
@@ -81,6 +81,9 @@ public class FancyPlayerShops implements ModInitializer {
     public static Path getStorageDir() {
         return getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
+    public static Path getConfigDir() {
+        return FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
+    }
 
 
 
@@ -112,21 +115,24 @@ public class FancyPlayerShops implements ModInitializer {
             serverInstance = server;
 
 
+            // Create config and storage directories
+            try {
+                for(String path : new String[] { "shops", "stash", "balance" }) {
+                    Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
+                }
+                for(String path : new String[] { "." }) {
+                    Files.createDirectories(FancyPlayerShops.getConfigDir().resolve(path));
+                }
+            }catch(IOException e) {
+                e.printStackTrace();
+                flagFatal();
+                return;
+            }
+
+
             // Read config files
             Configs.loadConfigs();
             if(fatal) return;
-
-
-            // Create storage directories
-            for(String path : new String[] { "shops", "stash", "balance" }) {
-                try {
-                    Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
-                } catch(IOException e) {
-                    e.printStackTrace();
-                    flagFatal();
-                    return;
-                }
-            }
         });
 
 
