@@ -1,11 +1,6 @@
 package com.snek.fancyplayershops.hud_ui._elements;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -20,7 +15,6 @@ import com.snek.framework.ui.elements.Elm;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
 
 
 

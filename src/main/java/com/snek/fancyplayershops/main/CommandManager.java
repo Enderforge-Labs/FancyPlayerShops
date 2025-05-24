@@ -7,7 +7,6 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.framework.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;

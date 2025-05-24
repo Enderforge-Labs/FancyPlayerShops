@@ -202,6 +202,13 @@ public abstract class StashManager {
 
 
 
+    public static PlayerStash getStash(final @NotNull ServerPlayer player) {
+        return stashes.get(player.getUUID());
+    }
+
+
+
+
     /**
      * Opens the stash view for the specified player.
      * @param player The player.

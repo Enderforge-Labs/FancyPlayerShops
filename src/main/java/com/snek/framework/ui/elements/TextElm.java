@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector4i;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.data_types.animations.InterpolatedData;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
@@ -14,9 +15,13 @@ import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Entity.RemovalReason;
 
 
 
@@ -30,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
  * This class has transparent background. For a text element with background color, use FancyTextElm.
  */
 public class TextElm extends Elm {
+    public static final @NotNull String ENTITY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.displayentity";
     private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
     private @NotNull TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
 
@@ -142,6 +148,10 @@ public class TextElm extends Elm {
     @Override
     public void spawn(final @NotNull Vector3d pos) {
         super.spawn(pos);
+
+        // Set tracking custom name
+        getThisEntity().setCustomNameVisible(false);
+        getThisEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
     }
 
 
@@ -219,5 +229,25 @@ public class TextElm extends Elm {
 
         // Calculate its length in blocks and return it
         return maxWidth * t.getScale().x;
+    }
+
+
+
+
+    /**
+     * Checks for stray displays and purges them.
+     * <p> Must be called on entity load event.
+     * @param entity The entity.
+     */
+    public static void onEntityLoad(final @NotNull Entity entity) {
+        if(entity instanceof Display) {
+            if(
+                entity.level() != null &&
+                entity.hasCustomName() &&
+                entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
+            ) {
+                entity.remove(RemovalReason.KILLED);
+            }
+        }
     }
 }

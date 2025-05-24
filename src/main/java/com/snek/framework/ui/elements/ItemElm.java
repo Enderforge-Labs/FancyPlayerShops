@@ -111,7 +111,7 @@ public class ItemElm extends Elm {
      * @param _world The world in which to place the element.
      */
     public ItemElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomTextDisplay(_world), new ItemElmStyle());
+        this(_world, new CustomItemDisplay(_world), new ItemElmStyle());
     }
 
 

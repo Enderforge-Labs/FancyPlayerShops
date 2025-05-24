@@ -266,7 +266,7 @@ public class FancyTextElm extends Elm {
 
         // Set tracking custom name
         getFgEntity().setCustomNameVisible(false);
-        getFgEntity().setCustomName(new Txt(Elm.ENTITY_CUSTOM_NAME).get());
+        getFgEntity().setCustomName(new Txt(TextElm.ENTITY_CUSTOM_NAME).get());
 
         // Call superclass spawn
         super.spawn(pos);

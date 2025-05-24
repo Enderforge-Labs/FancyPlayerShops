@@ -8,11 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.functional.ButtonElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -84,7 +80,7 @@ public class Hud {
     public void changeCanvas(final @NotNull HudCanvas canvas) {
         activeCanvas = canvas;
 
-        //TODO
+        //TODO new canvases might need something similar to this to update the rotation
         // // Adjust rotation if needed
         // if(lastDirection != 0) {
         //     final Animation animation = calcCanvasRotationAnimation(0, lastDirection);
