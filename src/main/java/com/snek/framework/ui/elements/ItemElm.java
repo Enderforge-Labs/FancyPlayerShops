@@ -12,6 +12,7 @@ import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
+import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.elements.styles.ElmStyle;
 import com.snek.framework.ui.elements.styles.ItemElmStyle;
 
@@ -119,7 +120,6 @@ public class ItemElm extends Elm {
 
     @Override
     public void flushStyle() {
-        super.flushStyle();
 
         // Apply item stack
         { final Flagged<ItemStack> f = getThisStyle().getFlaggedItem();
@@ -127,6 +127,22 @@ public class ItemElm extends Elm {
             getThisEntity().setItemStack(f.get());
             f.unflag();
         }}
+
+
+        // Handle transform calculations separately
+        {
+            final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
+            if(f.isFlagged()) {
+                final Transform t = __calcTransform();
+                t.moveY(t.getScale().y / 2f);
+                getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
+                f.unflag();
+            }
+        }
+
+
+        // Handle the other inherited values normally
+        super.flushStyle();
     }
 
 

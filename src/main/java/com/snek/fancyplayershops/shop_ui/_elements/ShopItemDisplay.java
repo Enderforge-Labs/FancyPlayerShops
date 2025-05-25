@@ -52,7 +52,6 @@ public class ShopItemDisplay extends ItemElm {
     private       @Nullable FancyTextElm name;
 
     // Layout
-    public static final float ENTITY_SHIFT_Y = 0.2f;
     public static final float NAME_SHIFT_Y = 0.4f;
     public static final float NAME_DISPLAY_WIDTH = 0.9f;
 
@@ -71,7 +70,7 @@ public class ShopItemDisplay extends ItemElm {
 
     // Edit animation scale and transition
     public static final @NotNull Vector3f EDIT_SCALE  = new Vector3f(0.4f);
-    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.15f, 0);
+    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.25f, 0);
 
 
 
@@ -300,7 +299,7 @@ public class ShopItemDisplay extends ItemElm {
     public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity and remove tracking custom name
-        super.spawn(new Vector3d(pos).add(0, ENTITY_SHIFT_Y, 0));
+        super.spawn(pos);
         getEntity().setCustomName(new Txt(ITEM_DISPLAY_CUSTOM_NAME).get());
         getEntity().setCustomNameVisible(false);
 

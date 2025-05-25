@@ -220,6 +220,9 @@ public abstract class Elm extends Div {
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
         ;
     }
+    protected @NotNull Transform __postCalcTransform() {
+        return __calcTransform();
+    }
 
 
 

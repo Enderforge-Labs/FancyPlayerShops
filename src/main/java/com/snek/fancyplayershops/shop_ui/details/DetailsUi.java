@@ -14,6 +14,7 @@ import com.snek.fancyplayershops.shop_ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopPanelElm;
 import com.snek.fancyplayershops.ui._elements.UiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
+import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.elements.Elm;
@@ -89,23 +90,23 @@ public class DetailsUi extends ShopCanvas {
             values = (DetailsUi_Values)e;
         }
         details.setSizeX(DETAILS_W);
-        details.setAbsSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));
+        details.setSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));
         details.setAlignmentX(AlignmentX.CENTER);
         details.setPosY(H0 + VERTICAL_PADDING);
 
 
         // Add owner's head's background
-        e = bg.addChild(new ShopPanelElm(_shop, new DetailsUi_OwnerHeadBg_S()));
-        e.setAbsSize(HEAD_BG_SIZE);
-        e.setPosY(H0 - HEAD_BG_SIZE.y);
-        e.setAlignmentX(AlignmentX.LEFT);
+        final Div headBg = bg.addChild(new ShopPanelElm(_shop, new DetailsUi_OwnerHeadBg_S()));
+        headBg.setSize(HEAD_BG_SIZE);
+        headBg.setPosY(H0 - HEAD_BG_SIZE.y);
+        headBg.setAlignmentX(AlignmentX.LEFT);
 
 
         // Add owner's head
-        e = bg.addChild(new DetailsUi_OwnerHead(_shop));
-        e.setAlignmentX(AlignmentX.LEFT);
-        e.setAbsSize(new Vector2f(HEAD_SIZE, HEAD_SIZE));
-        e.setPosY(H0 - VERTICAL_PADDING);
+        e = headBg.addChild(new DetailsUi_OwnerHead(_shop));
+        e.setSize(new Vector2f(1f));
+        e.setAlignmentX(AlignmentX.CENTER);
+        e.setPosY(0.03f);
     }
 
 
