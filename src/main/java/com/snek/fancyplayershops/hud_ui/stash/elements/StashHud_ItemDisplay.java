@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemDisplay_S;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.ui.elements.ItemElm;
 import com.snek.framework.ui.elements.styles.ItemElmStyle;
@@ -18,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 public class StashHud_ItemDisplay extends ItemElm {
-    final ItemStack item;
+    private final ItemStack item;
 
 
     /**
@@ -26,7 +27,7 @@ public class StashHud_ItemDisplay extends ItemElm {
      * @param _hud The parent HUD.
      */
     public StashHud_ItemDisplay(final @NotNull Hud _hud, final @NotNull ItemStack _item) {
-        super((ServerLevel)(_hud.getPlayer().level()));
+        super((ServerLevel)(_hud.getPlayer().level()), new StashHud_ItemDisplay_S());
         item = _item;
         updateDisplay();
     }
@@ -42,13 +43,5 @@ public class StashHud_ItemDisplay extends ItemElm {
 
         // Update the entity
         flushStyle();
-    }
-
-
-    @Override
-    protected @NotNull Transform __calcTransform() {
-        return super.__calcTransform()
-            .scale(0.075f)
-        ;
     }
 }

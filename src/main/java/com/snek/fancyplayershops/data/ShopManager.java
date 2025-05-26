@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -382,9 +383,7 @@ public abstract class ShopManager {
                 // Send feedback to affected player if they are online
                 final Player owner = FancyPlayerShops.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
                 if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your shop \"")).red()
-                    .cat(MinecraftUtils.getFancyItemName(shop.getItem()).getString())
-                    .cat(new Txt("\" has been deleted by an admin.").red())
+                    .cat(new Txt("Your shop " + shop.getDecoratedName() + " has been deleted by an admin.").red())
                 .get(), false);
 
                 // Stash and delete the shop, then increase the deleted shops counter
@@ -415,8 +414,36 @@ public abstract class ShopManager {
             Items.DIAMOND_SWORD,
             Items.TRIDENT,
             Items.POLISHED_GRANITE_STAIRS,
-            Items.POLISHED_DIORITE_SLAB
+            Items.POLISHED_DIORITE_SLAB,
+            Items.ACACIA_BOAT,
+            Items.BEEHIVE,
+            Items.CHISELED_BOOKSHELF,
+            Items.CHERRY_STAIRS,
+            Items.LEATHER,
+            Items.NOTE_BLOCK,
+            Items.WEEPING_VINES,
+            Items.WHITE_CANDLE,
+            Items.WAXED_WEATHERED_CUT_COPPER_STAIRS, //!  >:3
+            Items.ACACIA_HANGING_SIGN,
+            Items.BLACK_DYE,
+            Items.BLUE_GLAZED_TERRACOTTA,
+            Items.COOKIE,
+            Items.LIGHT_GRAY_BANNER,
+            Items.HEART_OF_THE_SEA,
+            Items.MUSIC_DISC_CAT,
+            Items.PINK_TULIP,
+            Items.ENDER_PEARL,
         };
+        Field field = null;
+        try {
+            field = Shop.class.getDeclaredField("stock");
+            field.setAccessible(true);
+        } catch (NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
+        if(field == null) return 0;
+
+
         int r = 0;
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {
@@ -426,6 +453,14 @@ public abstract class ShopManager {
                         final Shop shop = new Shop(world, blockPos, owner);
                         shop.changeItem(items[Math.abs(rnd.nextInt() % items.length)].getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
+                        shop.setStockLimit(1000_000f);
+
+                        try {
+                            field.set(shop, Math.abs(rnd.nextInt() % 1000_000));
+                        } catch (IllegalArgumentException | IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+
                         shop.invalidateItemDisplay();
                         ++r;
                     }

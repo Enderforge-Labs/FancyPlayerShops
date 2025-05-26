@@ -13,6 +13,7 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_EmptyText;
+import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_ItemCount;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_ItemDisplay;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_ItemName;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_Title;
@@ -24,6 +25,7 @@ import com.snek.framework.ui.Div;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Items;
 
 
 
@@ -74,13 +76,18 @@ public class StashHud extends HudCanvas {
 
                 // Add item display
                 e = c.addChild(new StashHud_ItemDisplay(_hud, entry.item));
-                e.setSize(new Vector2f(ITEM_NAME_RATIO - ITEM_NAME_SPACING, 1f));
-                e.setAlignmentX(AlignmentX.LEFT);
+                e.setSize(new Vector2f(ITEM_NAME_RATIO - ITEM_NAME_SPACING, 0.9f));
+                e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
 
                 // Add item name display
                 e = c.addChild(new StashHud_ItemName(_hud, entry.item));
-                e.setSize(new Vector2f(1f - ITEM_NAME_RATIO - ITEM_NAME_SPACING, 1f));
-                e.setAlignmentX(AlignmentX.RIGHT);
+                e.setSize(new Vector2f(1f - ITEM_NAME_RATIO - ITEM_NAME_SPACING, 0.5f));
+                e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
+
+                // Add item count display
+                e = c.addChild(new StashHud_ItemCount(_hud, entry.getCount()));
+                e.setSize(new Vector2f(1f - ITEM_NAME_RATIO - ITEM_NAME_SPACING, 0.5f));
+                e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
             }
         }
     }

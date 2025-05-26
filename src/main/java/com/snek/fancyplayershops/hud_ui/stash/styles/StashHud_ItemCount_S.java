@@ -13,8 +13,8 @@ import com.snek.framework.ui.elements.styles.TextElmStyle;
 
 
 
-public class StashHud_ItemName_S extends TextElmStyle {
-    public StashHud_ItemName_S() {
+public class StashHud_ItemCount_S extends TextElmStyle {
+    public StashHud_ItemCount_S() {
         super();
     }
 
@@ -23,7 +23,6 @@ public class StashHud_ItemName_S extends TextElmStyle {
     public @NotNull TextAlignment getDefaultTextAlignment(){
         return TextAlignment.LEFT;
     }
-
 
     @Override
     public @NotNull Transform getDefaultTransform(){

@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops.hud_ui._styles;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
@@ -12,6 +13,7 @@ import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
 
 
 public class HudCanvasBackground_S extends ShopPanelElm_S {
+    public static final @NotNull Vector3i COLOR = new Vector3i(3, 3, 7);
 
 
     public HudCanvasBackground_S() {
@@ -21,12 +23,12 @@ public class HudCanvasBackground_S extends ShopPanelElm_S {
 
     @Override
     public Vector3i getDefaultColor() {
-        return new Vector3i(0, 0, 0); //FIXME replace with shop color in shop canvas bg
+        return new Vector3i(COLOR);
     }
 
 
     @Override
     public int getDefaultAlpha() {
-        return 100;
+        return 180;
     }
 }

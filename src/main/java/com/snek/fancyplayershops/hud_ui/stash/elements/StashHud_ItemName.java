@@ -8,6 +8,7 @@ import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
+import com.snek.framework.utils.Utils;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 public class StashHud_ItemName extends TextElm {
-    final @NotNull ItemStack item;
+    private final @NotNull ItemStack item;
 
 
     public StashHud_ItemName(final @NotNull Hud _hud, final @NotNull ItemStack _item) {
