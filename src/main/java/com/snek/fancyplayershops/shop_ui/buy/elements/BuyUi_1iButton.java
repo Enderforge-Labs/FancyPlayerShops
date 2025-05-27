@@ -8,9 +8,9 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_BuyButton_S;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
-import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
+import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
@@ -36,8 +36,8 @@ public class BuyUi_1iButton extends ShopButton {
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.07f,
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.07f,
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.0f, 1.0f),
             new Vector2f(1.0f, 1.0f),
@@ -45,14 +45,14 @@ public class BuyUi_1iButton extends ShopButton {
             new Vector2f(0.0f, 0.0f)
         ),
         new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
             new Vector2f(0.0f, 0.66f),
             new Vector2f(1.0f, 0.66f)
         ),
         new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.06f,
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
             new Vector2f(0.5f, 0.76f),
             new Vector2f(0.5f, 0.46f)
         )
@@ -66,7 +66,7 @@ public class BuyUi_1iButton extends ShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
-        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H / BuyUi.BUY_BUTTONS_W * EditUi.BOTTOM_ROW_CONTENT_SIZE, EditUi.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H / BuyUi.BUY_BUTTONS_W * UiCanvas.BOTTOM_ROW_CONTENT_SIZE, UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemDisplay_S;
-import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.ui.elements.ItemElm;
 import com.snek.framework.ui.elements.styles.ItemElmStyle;
 

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -14,6 +15,7 @@ import com.snek.framework.ui.elements.Elm;
 import com.snek.framework.ui.elements.PanelElm;
 import com.snek.framework.ui.elements.styles.PanelElmStyle;
 import com.snek.framework.utils.Easings;
+import com.snek.framework.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -35,9 +37,18 @@ import net.minecraft.server.level.ServerLevel;
 
 public abstract class UiCanvas extends Div {
 
+    // Colors
+    public static final @NotNull Vector3i TOOLBAR_FG_COLOR = new Vector3i(Txt.COLOR_WHITE);
+    public static final          int      TOOLBAR_FG_ALPHA = 255;
+
     // Layout
     public static final int   SPAWN_SIZE_TIME    = 8;
     public static final float SQUARE_BUTTON_SIZE = 0.12f;
+
+    public static final float BOTTOM_ROW_SPACING      = 0.04f;
+    public static final float BOTTOM_ROW_SHIFT        = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
+    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f;
+    public static final float TOOLBAR_FG_WIDTH        = 0.15f;
 
 
 

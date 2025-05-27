@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.shop_ui.edit;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.Shop;
@@ -45,22 +44,12 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     public @NotNull Elm getTitle() { return title; }
 
 
-    // Colors
-    public static final @NotNull Vector3i TOOLBAR_FG_COLOR = new Vector3i(255, 255, 255);
-    public static final          int      TOOLBAR_FG_ALPHA = 255;
-
-
     // Layout
     public static final float ROTATE_BUTTON_Y            = 0.45f - SQUARE_BUTTON_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
     public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplay.FOCUS_HEIGHT;
-
-    public static final float BOTTOM_ROW_SPACING         = 0.04f;
-    public static final float BOTTOM_ROW_SHIFT           = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING;
-    public static final float BOTTOM_ROW_CONTENT_SIZE    = 0.6f;
-    public static final float TOOLBAR_FG_WIDTH           = 0.15f;
 
     public static final float COLOR_SELECTOR_W        = 0.2f;
     public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;

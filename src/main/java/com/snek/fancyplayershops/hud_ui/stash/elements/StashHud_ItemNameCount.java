@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemName_S;
+import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemNameCount_S;
 import com.snek.framework.ui.elements.TextElm;
 import com.snek.framework.ui.elements.styles.TextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
@@ -20,19 +20,24 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class StashHud_ItemName extends TextElm {
+public class StashHud_ItemNameCount extends TextElm {
     private final @NotNull ItemStack item;
+    private int count;
 
 
-    public StashHud_ItemName(final @NotNull Hud _hud, final @NotNull ItemStack _item) {
-        super((ServerLevel)(_hud.getPlayer().level()), new StashHud_ItemName_S());
+    public StashHud_ItemNameCount(final @NotNull Hud _hud, final @NotNull ItemStack _item, final int _count) {
+        super((ServerLevel)(_hud.getPlayer().level()), new StashHud_ItemNameCount_S());
         item = _item;
+        count = _count;
         updateDisplay();
     }
 
 
     public void updateDisplay() {
-        getStyle(TextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get());
+        getStyle(TextElmStyle.class).setText(new Txt()
+            .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
+            .cat(new Txt("\n" + Utils.formatAmount(count)).lightGray())
+        .get());
         flushStyle();
     }
 }

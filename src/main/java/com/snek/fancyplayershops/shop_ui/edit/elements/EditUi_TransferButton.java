@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
 import com.snek.fancyplayershops.shop_ui.transfer.elements.TransferUi;
+import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
@@ -39,8 +39,8 @@ public class EditUi_TransferButton extends ShopButton {
     }
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.03f,
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.03f,
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.0f, 0.2f),
             new Vector2f(0.2f, 0.4f),
@@ -49,8 +49,8 @@ public class EditUi_TransferButton extends ShopButton {
             new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(
-            EditUi.TOOLBAR_FG_COLOR, EditUi.TOOLBAR_FG_ALPHA,
-            EditUi.TOOLBAR_FG_WIDTH, 0.03f,
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.03f,
             design0.get(0),
             design0.get(1),
             design0.get(2),
@@ -71,7 +71,7 @@ public class EditUi_TransferButton extends ShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
-        e.setSize(new Vector2f(EditUi.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

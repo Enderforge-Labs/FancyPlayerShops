@@ -1,20 +1,26 @@
-package com.snek.fancyplayershops.shop_ui.edit.elements;
+package com.snek.fancyplayershops.hud_ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
+import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_BuyButton_S;
+import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
+import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
+import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.PolylineData;
 import com.snek.framework.ui.composite.PolylineSetElm;
+import com.snek.framework.ui.functional.ButtonElm;
+import com.snek.framework.utils.Easings;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -25,28 +31,32 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_OpenBuyMenuButton extends ShopButton {
+public class HudCloseButton extends ButtonElm {
+
+
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.03f,
-            new Vector2f(1.0f, 0.6f),
-            new Vector2f(0.4f, 0.0f),
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(0.0f, 0.4f),
-            new Vector2f(0.6f, 1.0f),
-            new Vector2f(1.0f, 0.6f)
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.05f,
+            new Vector2f(0.1f, 0.1f),
+            new Vector2f(0.9f, 0.9f)
+        ),
+        new PolylineData(
+            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
+            UiCanvas.TOOLBAR_FG_WIDTH, 0.05f,
+            new Vector2f(0.1f, 0.9f),
+            new Vector2f(0.9f, 0.1f)
         )
     };
 
 
 
 
-    public EditUi_OpenBuyMenuButton(final @NotNull Shop _shop) {
-        super(_shop, null, "Open buy menu", 1, new EditUi_SquareButton_S(_shop));
+    public HudCloseButton(final @NotNull ServerLevel _world) {
+        super(_world, 1); //TODO add input indicator
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
+        final Div e = addChild(new PolylineSetElm(world, design));
         e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -60,6 +70,6 @@ public class EditUi_OpenBuyMenuButton extends ShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.openBuyUi(player, false);
+        Hud.closeHud(player);
     }
 }
