@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopButton_S;
+import com.snek.fancyplayershops.shop_ui.misc.styles.SimpleShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -20,7 +20,7 @@ import com.snek.framework.utils.Easings;
 /**
  * The style of the EditUi_ItemSelector UI element.
  */
-public class BuyUi_ItemInspector_S extends ShopButton_S {
+public class BuyUi_ItemInspector_S extends SimpleShopButton_S {
 
 
     /**

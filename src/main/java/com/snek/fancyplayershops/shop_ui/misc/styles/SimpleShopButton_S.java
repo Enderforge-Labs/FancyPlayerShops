@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.ui.functional.styles.ButtonElmStyle;
+import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
 
 
 
@@ -14,23 +14,23 @@ import com.snek.framework.ui.functional.styles.ButtonElmStyle;
 
 
 /**
- * The style of the generic ShopButton UI element.
+ * The style of the generic SimpleShopButton UI element.
  */
-public class ShopButton_S extends ButtonElmStyle {
+public class SimpleShopButton_S extends SimpleButtonElmStyle {
     protected final @NotNull Shop shop;
 
 
     /**
-     * Creates a new ShopButton_S.
+     * Creates a new SimpleShopButton_S.
      */
-    public ShopButton_S(final @NotNull Shop _shop) {
+    public SimpleShopButton_S(final @NotNull Shop _shop) {
         super();
         shop = _shop;
     }
 
 
     @Override
-    public Vector3i getDefaultBgColor() {
+    public Vector3i getDefaultColor() {
         return shop.getThemeColor1();
     }
 }

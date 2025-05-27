@@ -20,7 +20,7 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class TextElmStyle extends ElmStyle {
+public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
 
     private @NotNull Flagged<@NotNull Component>     text          = null;
@@ -41,7 +41,7 @@ public class TextElmStyle extends ElmStyle {
     /**
      * Creates a new default TextElmStyle.
      */
-    public TextElmStyle() {
+    public SimpleTextElmStyle() {
         super();
     }
 

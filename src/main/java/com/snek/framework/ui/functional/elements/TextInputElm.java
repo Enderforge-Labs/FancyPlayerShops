@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A generic text input class that allows the user to enter a chat input after clicking the element.
  */
-public abstract class TextInputElm extends ButtonElm {
+public abstract class TextInputElm extends FancyButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
 
     private final @Nullable Component        clickFeedbackMessage;

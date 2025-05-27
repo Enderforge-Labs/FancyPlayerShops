@@ -24,7 +24,7 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.functional.elements.ButtonElm;
+import com.snek.framework.ui.functional.elements.FancyButtonElm;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -635,7 +635,7 @@ public class Shop {
 
         // Spawn canvas into the world and play a sound to the user
         canvas.spawn(calcDisplayPos());
-        if(user != null) ButtonElm.playButtonSound(user);
+        if(user != null) FancyButtonElm.playButtonSound(user);
     }
 
 

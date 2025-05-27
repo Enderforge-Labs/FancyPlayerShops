@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.shop_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.styles.InputIndicatorText_S;
@@ -16,7 +15,7 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.world.inventory.ClickAction;
@@ -73,7 +72,7 @@ public class InputIndicator extends ShopDiv {
         e = addChild(new ShopTextElm(shop, new InputIndicatorText_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
-        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
+        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         text = (ShopTextElm)e;
 
 
@@ -92,7 +91,7 @@ public class InputIndicator extends ShopDiv {
 
         // If the description is not null and the display is hidden, show it and update the text
         if(description != null) {
-            text.getStyle(TextElmStyle.class).setText(new Txt(description).lightGray().get());
+            text.getStyle(SimpleTextElmStyle.class).setText(new Txt(description).lightGray().get());
             if(!isVisible) {
                 applyAnimationNowRecursive(showAnimation);
                 isVisible = true;

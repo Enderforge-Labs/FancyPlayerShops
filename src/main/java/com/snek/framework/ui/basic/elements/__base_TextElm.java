@@ -7,7 +7,7 @@ import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.generated.FontSize;
 import com.snek.framework.ui.Elm;
 import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -39,7 +39,7 @@ public class __base_TextElm extends Elm {
     public void updateEntitySizeCacheX() {
 
         // Set cache to 0 if the text is empty.
-        final String string = getStyle(TextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
+        final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
         if(string.length() == 0) {
             entitySizeCacheX = 0f;
             return;
@@ -67,7 +67,7 @@ public class __base_TextElm extends Elm {
     public void updateEntitySizeCacheY() {
 
         // Set cache to 0 if the text is empty.
-        final String string = getStyle(TextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
+        final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
         if(string.length() == 0) {
             entitySizeCacheY = 0f;
             return;
@@ -106,7 +106,7 @@ public class __base_TextElm extends Elm {
 
         // If not, get the transform and calculate the visual height using it
         final Transform t;
-        /**/ if(this instanceof TextElm      e) { t =                     e.__calcTransform();  }
+        /**/ if(this instanceof SimpleTextElm      e) { t =                     e.__calcTransform();  }
         else if(this instanceof FancyTextElm e) { t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcEntityHeight used on incompatible Elm type: " + this.getClass().getName());
         return entitySizeCacheY * t.getScale().y;
@@ -130,7 +130,7 @@ public class __base_TextElm extends Elm {
 
         // If not, get the transform and calculate the visual width using it
         final Transform t;
-        /**/ if(this instanceof TextElm      e) { t =                     e.__calcTransform();  }
+        /**/ if(this instanceof SimpleTextElm      e) { t =                     e.__calcTransform();  }
         else if(this instanceof FancyTextElm e) { t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcEntityWidth used on incompatible Elm type: " + this.getClass().getName());
         return entitySizeCacheX * t.getScale().x;

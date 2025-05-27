@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.FancyShopButton;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Txt;
@@ -23,7 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class BuyUi_ConfirmButton extends ShopButton {
+public class BuyUi_ConfirmButton extends FancyShopButton {
     private final @NotNull BuyUi menu;
     private boolean active = true;
 

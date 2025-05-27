@@ -7,10 +7,9 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ItemInspector_S;
 import com.snek.fancyplayershops.shop_ui.inspect.InspectUi;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.framework.ui.Div;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -23,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the user of the shop to view details about the item.
  */
-public class BuyUi_ItemInspector extends ShopButton {
+public class BuyUi_ItemInspector extends SimpleShopButton {
     final Div backButton;
 
 
@@ -46,10 +45,6 @@ public class BuyUi_ItemInspector extends ShopButton {
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
-    }
 
 
     @Override

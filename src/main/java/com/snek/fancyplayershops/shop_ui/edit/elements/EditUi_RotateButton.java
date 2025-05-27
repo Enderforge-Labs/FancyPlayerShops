@@ -9,18 +9,17 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_RotateButtonRight_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineData;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.Easings;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -34,7 +33,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the owner of the shop to change the default rotation of the displayed object.
  */
-public class EditUi_RotateButton extends ShopButton {
+public class EditUi_RotateButton extends SimpleShopButton {
     private static final @NotNull PolylineData[][] designs = new PolylineData[][] {
         new PolylineData[] {
             new PolylineData(
@@ -81,14 +80,6 @@ public class EditUi_RotateButton extends ShopButton {
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), designs[_rotation > 0 ? 1 : 0]));
         e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-    }
-
-
-
-
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        //Empty
     }
 
 

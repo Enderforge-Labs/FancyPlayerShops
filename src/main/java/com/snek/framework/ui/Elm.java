@@ -20,7 +20,7 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.IndexedArrayDeque;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.ui.functional.elements.ButtonElm;
+import com.snek.framework.ui.functional.elements.FancyButtonElm;
 import com.snek.framework.ui.interfaces.Hoverable;
 import com.snek.framework.utils.Easing;
 import com.snek.framework.utils.SpaceUtils;
@@ -528,7 +528,7 @@ public abstract class Elm extends Div {
 
 
             // Update current state and run hover state change callbacks if needed
-            if(isHovered != hoverStateNext && (!(this instanceof ButtonElm) || hoverRateLimiter.attempt())) {
+            if(isHovered != hoverStateNext && (!(this instanceof FancyButtonElm) || hoverRateLimiter.attempt())) {
                 isHovered = hoverStateNext;
                 if(isHovered) {
                     h.onHoverEnter(player);

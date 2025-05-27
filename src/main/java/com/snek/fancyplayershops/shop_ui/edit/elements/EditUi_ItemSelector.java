@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.shop_ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
@@ -10,7 +9,6 @@ import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -36,12 +34,6 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
      */
     public EditUi_ItemSelector(final @NotNull Shop _shop) {
         super(_shop, null, "Change item", new EditUiSub_BackButton(_shop));
-    }
-
-
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
     }
 
 

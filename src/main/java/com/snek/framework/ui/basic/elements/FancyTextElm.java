@@ -15,7 +15,7 @@ import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.basic.styles.ElmStyle;
 import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -30,14 +30,14 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 
 
 /**
- * A TextElm that also has a configurable, animatable background color.
+ * A text element that also has a configurable, animatable background color.
  */
 public class FancyTextElm extends __base_TextElm {
 
     // In-world data
     private final @NotNull CustomDisplay text;
-    public  @NotNull CustomTextDisplay getFgEntity() { return (CustomTextDisplay)text; }
-    public  @NotNull CustomTextDisplay getBgEntity() { return getEntity(CustomTextDisplay.class); }
+    public  @NotNull CustomTextDisplay getFgEntity()  { return (CustomTextDisplay)text; }
+    public  @NotNull CustomTextDisplay getBgEntity()  { return getEntity(CustomTextDisplay.class); }
     private @NotNull FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
 
 
@@ -92,7 +92,7 @@ public class FancyTextElm extends __base_TextElm {
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())
             .moveZ((getZIndex() + 1) * Configs.ui.z_layer_spacing.getValue())
-            .scale(TextElmStyle.DEFAULT_TEXT_SCALE)
+            .scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE)
         ;
     }
 
@@ -271,7 +271,7 @@ public class FancyTextElm extends __base_TextElm {
 
         // Set tracking custom name
         getFgEntity().setCustomNameVisible(false);
-        getFgEntity().setCustomName(new Txt(TextElm.ENTITY_CUSTOM_NAME).get());
+        getFgEntity().setCustomName(new Txt(SimpleTextElm.ENTITY_CUSTOM_NAME).get());
 
         // Call superclass spawn
         super.spawn(pos);

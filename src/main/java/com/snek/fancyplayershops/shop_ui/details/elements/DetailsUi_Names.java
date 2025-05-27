@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 
@@ -38,7 +38,7 @@ public class DetailsUi_Names extends ShopTextElm {
      */
     public void updateDisplay() {
 
-        getStyle(TextElmStyle.class).setText(new Txt()
+        getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat("Price:")
             .cat("\nStock:")
             .cat("\nOwner:")

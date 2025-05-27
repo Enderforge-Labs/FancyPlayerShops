@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.shop_ui.misc.styles;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 
 
 
@@ -15,7 +15,7 @@ import com.snek.framework.ui.basic.styles.TextElmStyle;
 /**
  * The style of the InputIndicatorText UI element.
  */
-public class InputIndicatorText_S extends TextElmStyle {
+public class InputIndicatorText_S extends SimpleTextElmStyle {
     public static final float Y_ADJUSTMENT = -0.01f; //! Workaround for the height issues
 
 

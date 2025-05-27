@@ -4,22 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.fancyplayershops.shop_ui.transfer.elements.TransferUi;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineData;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.SpaceUtils;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -30,7 +28,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_TransferButton extends ShopButton {
+public class EditUi_TransferButton extends SimpleShopButton {
     private static final @NotNull List<@NotNull Vector2f> design0 = new ArrayList<>();
     static {
         for(int i = 0; i < 8; ++i) {
@@ -76,10 +74,6 @@ public class EditUi_TransferButton extends ShopButton {
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
-    }
 
 
     @Override

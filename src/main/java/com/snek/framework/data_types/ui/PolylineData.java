@@ -1,4 +1,4 @@
-package com.snek.framework.ui.composite.elements;
+package com.snek.framework.data_types.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;

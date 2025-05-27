@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
@@ -45,12 +45,12 @@ public class DetailsUi_Title extends ShopTextElm {
         // Empty shop case
         final ItemStack _item = shop.getItem();
         if(_item.getItem() == Items.AIR) {
-            getStyle(TextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).get());
+            getStyle(SimpleTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).get());
         }
 
         // Configured shop case
         else {
-            getStyle(TextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(_item)).bold().get());
+            getStyle(SimpleTextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(_item)).bold().get());
         }
 
         // Flush style

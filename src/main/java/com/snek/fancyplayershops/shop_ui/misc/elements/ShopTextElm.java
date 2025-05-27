@@ -3,9 +3,9 @@ package com.snek.fancyplayershops.shop_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.ui.basic.elements.TextElm;
+import com.snek.framework.ui.basic.elements.SimpleTextElm;
 import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 
 
 
@@ -17,7 +17,7 @@ import com.snek.framework.ui.basic.styles.TextElmStyle;
 /**
  * A generic TextElm with a target shop.
  */
-public class ShopTextElm extends TextElm {
+public class ShopTextElm extends SimpleTextElm {
     public static final float LINE_H = 0.1f;
     protected final @NotNull Shop shop;
 
@@ -38,6 +38,6 @@ public class ShopTextElm extends TextElm {
      * @param _shop The target shop.
      */
     public ShopTextElm(final @NotNull Shop _shop) {
-        this(_shop, new TextElmStyle());
+        this(_shop, new SimpleTextElmStyle());
     }
 }

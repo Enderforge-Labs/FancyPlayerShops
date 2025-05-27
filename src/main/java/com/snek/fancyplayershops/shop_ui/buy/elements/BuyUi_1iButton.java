@@ -8,14 +8,14 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_BuyButton_S;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineData;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.Easings;
 
@@ -30,7 +30,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class BuyUi_1iButton extends ShopButton {
+public class BuyUi_1iButton extends FancyShopButton {
     private boolean active = true;
 
 

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
@@ -36,10 +36,10 @@ public class EditUi_Title extends ShopTextElm {
      * Updates the displayed text, reading data from the target shop.
      */
     public void updateDisplay() {
-        if(shop.getItem().getItem() == Items.AIR) getStyle(TextElmStyle.class).setText(new Txt()
+        if(shop.getItem().getItem() == Items.AIR) getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Editing an empty shop").white())
         .get());
-        else getStyle(TextElmStyle.class).setText(new Txt()
+        else getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Editing: ").white())
             .cat(MinecraftUtils.getFancyItemName(shop.getItem()))
         .get());

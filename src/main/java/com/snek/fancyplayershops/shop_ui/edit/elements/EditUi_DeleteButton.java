@@ -1,24 +1,22 @@
 package com.snek.fancyplayershops.shop_ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineData;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +28,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class EditUi_DeleteButton extends ShopButton  {
+public class EditUi_DeleteButton extends SimpleShopButton  {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
@@ -56,14 +54,6 @@ public class EditUi_DeleteButton extends ShopButton  {
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
         e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-    }
-
-
-
-
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
     }
 
 

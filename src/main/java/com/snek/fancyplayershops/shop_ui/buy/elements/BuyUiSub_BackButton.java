@@ -1,21 +1,19 @@
 package com.snek.fancyplayershops.shop_ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
+import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineData;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -26,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class BuyUiSub_BackButton extends ShopButton {
+public class BuyUiSub_BackButton extends SimpleShopButton {
     private int amountCache = 1;
     public void setAmountCache(final int _amountCache) { amountCache = _amountCache; }
 
@@ -61,10 +59,6 @@ public class BuyUiSub_BackButton extends ShopButton {
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
-    }
 
 
     @Override

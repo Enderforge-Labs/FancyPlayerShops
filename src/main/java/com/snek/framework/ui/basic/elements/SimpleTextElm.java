@@ -12,7 +12,7 @@ import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -29,21 +29,21 @@ import net.minecraft.server.level.ServerLevel;
  * An element that can display text.
  * This class has transparent background. For a text element with background color, use FancyTextElm.
  */
-public class TextElm extends __base_TextElm {
+public class SimpleTextElm extends __base_TextElm {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.displayentity";
     private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private @NotNull TextElmStyle      getThisStyle () { return getStyle (TextElmStyle     .class); }
+    private @NotNull SimpleTextElmStyle      getThisStyle () { return getStyle (SimpleTextElmStyle     .class); }
 
 
 
 
     /**
-     * Creates a new TextElm using an existing entity and a custom style.
+     * Creates a new SimpleTextElm using an existing entity and a custom style.
      * @param _world The world in which to place the element.
      * @param _entity The display entity.
      * @param _style The custom style.
      */
-    protected TextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
+    protected SimpleTextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
@@ -51,21 +51,21 @@ public class TextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new TextElm using a custom style.
+     * Creates a new SimpleTextElm using a custom style.
      * @param _world The world in which to place the element.
      * @param _style The custom style.
      */
-    protected TextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
+    protected SimpleTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
         this(_world, new CustomTextDisplay(_world), _style);
     }
 
 
     /**
-     * Creates a new TextElm using the default style.
+     * Creates a new SimpleTextElm using the default style.
      * @param _world The world in which to place the element.
      */
-    public TextElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomTextDisplay(_world), new TextElmStyle());
+    public SimpleTextElm(final @NotNull ServerLevel _world) {
+        this(_world, new CustomTextDisplay(_world), new SimpleTextElmStyle());
     }
 
 

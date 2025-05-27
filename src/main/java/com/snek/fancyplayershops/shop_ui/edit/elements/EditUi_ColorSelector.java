@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.shop_ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
@@ -9,7 +8,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui._styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_ColorSelector_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.Elm;
@@ -20,7 +19,6 @@ import com.snek.framework.ui.basic.styles.PanelElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Utils;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -31,7 +29,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class EditUi_ColorSelector extends ShopButton {
+public class EditUi_ColorSelector extends SimpleShopButton {
     public static final float S = 0.4f;
     public static final float V = 0.8f;
 
@@ -52,14 +50,10 @@ public class EditUi_ColorSelector extends ShopButton {
         super(_shop, null, "Change color theme", 1, new EditUi_ColorSelector_S(_shop));
         hue = _hue;
         menu = _menu;
-        getStyle(EditUi_ColorSelector_S.class).setBgColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
+        getStyle(EditUi_ColorSelector_S.class).setColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        // Empty
-    }
 
 
     @Override

@@ -20,7 +20,7 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 
 
 
@@ -70,7 +70,7 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 1));
-        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
+        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add mod display
@@ -78,7 +78,7 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 2));
-        ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
+        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         //Add inventory view button

@@ -9,6 +9,7 @@ import com.snek.fancyplayershops.shop_ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
 import com.snek.framework.utils.Easings;
 
 
@@ -38,21 +39,21 @@ public class EditUi_Input_S extends ShopTextInput_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X + ADJUST_X / 2))
+            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W).moveX(SHIFT_X + ADJUST_X / 2))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-(SHIFT_X + ADJUST_X)))
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransformBg(new Transform().scaleX(1f / SimpleButtonElmStyle.HIDDEN_W).moveX(-(SHIFT_X + ADJUST_X)))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X + ADJUST_X))
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W).moveX(SHIFT_X + ADJUST_X))
         );
     }
 }

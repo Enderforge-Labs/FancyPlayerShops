@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_Input_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextInput;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
 
@@ -58,7 +58,7 @@ public class BuyUi_AmountInputDisplay extends ShopTextInput {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        getStyle(TextElmStyle.class).setText(textOverride != null ? textOverride : new Txt()
+        getStyle(SimpleTextElmStyle.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt("Amount: ").lightGray())
             .cat(new Txt(Utils.formatAmount(menu.getAmount())).white())
             .cat(new Txt(" / " + shop.getStock()).lightGray())

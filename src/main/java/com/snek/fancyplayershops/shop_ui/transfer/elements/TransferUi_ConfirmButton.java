@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
+import com.snek.fancyplayershops.shop_ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.shop_ui.transfer.styles.TransferUi_ConfirmButton_S;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.utils.Easings;
@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class TransferUi_ConfirmButton extends ShopButton {
+public class TransferUi_ConfirmButton extends FancyShopButton {
     private final @NotNull TransferUi menu;
     private boolean active = true;
 

@@ -21,11 +21,7 @@ import com.snek.framework.utils.Easings;
 /**
  * The style of the generic ButtonElm UI element.
  */
-public class ButtonElmStyle extends FancyTextElmStyle {
-    public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(220, 220, 220);
-    public static final          float    HIDDEN_W             = 0.00001f;
-    public static final          int      HOVER_ANIMATION_TIME = 10;
-
+public class FancyButtonElmStyle extends FancyTextElmStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
     private @Nullable Flagged<Animation> hoverLeaveAnimation  = null;
@@ -36,7 +32,7 @@ public class ButtonElmStyle extends FancyTextElmStyle {
     /**
      * Creates a new ButtonElmStyle.
      */
-    public ButtonElmStyle() {
+    public FancyButtonElmStyle() {
         super();
     }
 
@@ -56,7 +52,7 @@ public class ButtonElmStyle extends FancyTextElmStyle {
 
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(HOVER_COLOR);
+        return new Vector3i(SimpleButtonElmStyle.HOVER_COLOR);
     }
 
     @Override
@@ -70,19 +66,19 @@ public class ButtonElmStyle extends FancyTextElmStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
+            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W))
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransformBg(new Transform().scaleX(1f / SimpleButtonElmStyle.HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W))
         );
     }
 

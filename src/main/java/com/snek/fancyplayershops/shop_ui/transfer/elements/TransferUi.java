@@ -20,8 +20,8 @@ import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.elements.TextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.elements.SimpleTextElm;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -74,11 +74,11 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add player name input
-        e = bg.addChild(new TextElm(_shop.getWorld()));
+        e = bg.addChild(new SimpleTextElm(_shop.getWorld()));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
-        ((Elm)e).getStyle(TextElmStyle.class).setText(new Txt("New owner:").get());
+        ((Elm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("New owner:").get());
 
         e = bg.addChild(new TransferUi_NameInput(_shop, this));
         e.setSize(new Vector2f(1, ShopFancyTextElm.LINE_H));

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopButton_S;
+import com.snek.fancyplayershops.shop_ui.misc.styles.SimpleShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
@@ -21,7 +21,7 @@ import com.snek.framework.utils.Easings;
 /**
  * The style of the EditUi_ColorSelector UI element.
  */
-public class EditUi_ColorSelector_S extends ShopButton_S {
+public class EditUi_ColorSelector_S extends SimpleShopButton_S {
     public static final float SHIFT_X = EditUi.COLOR_SELECTOR_W * (1 - EditUi.COLOR_SELECTOR_HIDDEN_W);
 
 

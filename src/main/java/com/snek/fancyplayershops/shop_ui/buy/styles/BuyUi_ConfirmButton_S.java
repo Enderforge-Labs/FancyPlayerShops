@@ -6,9 +6,10 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopButton_S;
+import com.snek.fancyplayershops.shop_ui.misc.styles.FancyShopButton_S;
 import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transition;
+import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Utils;
 
@@ -19,7 +20,7 @@ import com.snek.framework.utils.Utils;
 
 
 
-public class BuyUi_ConfirmButton_S extends ShopButton_S {
+public class BuyUi_ConfirmButton_S extends FancyShopButton_S {
     public static final @NotNull Vector3i BASE_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
     public static final @NotNull Vector3i BASE_COLOR_INACTIVE = Utils.toBW(BASE_COLOR);
 
@@ -50,14 +51,14 @@ public class BuyUi_ConfirmButton_S extends ShopButton_S {
     @Override
     public @Nullable Animation getHoverEnterAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(getDefaultBgColor().add(20, 20, 20).min(new Vector3i(255)))
         );
     }
     @Override
     public @Nullable Animation getHoverLeaveAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(getDefaultBgColor())
         );
     }

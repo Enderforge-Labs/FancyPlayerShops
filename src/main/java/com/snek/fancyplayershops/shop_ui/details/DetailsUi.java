@@ -17,7 +17,7 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 
 
 
@@ -67,9 +67,8 @@ public class DetailsUi extends ShopCanvas {
         e = bg.addChild(new DetailsUi_Title(_shop));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(1f);
-        System.out.println("size: " + ((DetailsUi_Title)e).calcEntityHeight());
         e.setAbsSizeY(((DetailsUi_Title)e).calcEntityHeight());
-        e.setPosY(1 - e.getAbsSize().y - VERTICAL_PADDING - 0.04f); //! -0.04 is a workaround and should not be required
+        e.setPosY(1 - e.getAbsSize().y - UiBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 
         // Add details display
@@ -78,13 +77,13 @@ public class DetailsUi extends ShopCanvas {
             // Add details display names
             e = details.addChild(new DetailsUi_Names(_shop));
             e.setAlignmentX(AlignmentX.LEFT);
-            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
+            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
 
             // Add details display values
             e = details.addChild(new DetailsUi_Values(_shop));
             e.setAlignmentX(AlignmentX.RIGHT);
-            ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
+            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
             values = (DetailsUi_Values)e;
         }

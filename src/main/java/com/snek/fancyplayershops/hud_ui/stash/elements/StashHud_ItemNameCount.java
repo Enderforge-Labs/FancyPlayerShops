@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemNameCount_S;
-import com.snek.framework.ui.basic.elements.TextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.elements.SimpleTextElm;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.Utils;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class StashHud_ItemNameCount extends TextElm {
+public class StashHud_ItemNameCount extends SimpleTextElm {
     private final @NotNull ItemStack item;
     private int count;
 
@@ -34,7 +34,7 @@ public class StashHud_ItemNameCount extends TextElm {
 
 
     public void updateDisplay() {
-        getStyle(TextElmStyle.class).setText(new Txt()
+        getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
             .cat(new Txt("\n" + Utils.formatAmount(count)).lightGray())
         .get());

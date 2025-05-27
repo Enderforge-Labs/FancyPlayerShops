@@ -20,7 +20,7 @@ import com.snek.framework.ui.basic.elements.ItemElm;
 import com.snek.framework.ui.basic.styles.ElmStyle;
 import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
 import com.snek.framework.ui.basic.styles.ItemElmStyle;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -52,7 +52,7 @@ public class ShopItemDisplay extends ItemElm {
     private       @Nullable FancyTextElm name;
 
     // Layout
-    public static final float NAME_SHIFT_Y = 0.4f;
+    public static final float NAME_SHIFT_Y = 0.6f;
     public static final float NAME_DISPLAY_WIDTH = 0.9f;
 
     // Task handlers. Used to cancel animations and other visual changes
@@ -195,7 +195,7 @@ public class ShopItemDisplay extends ItemElm {
             for(i = 0; i < fullName.length(); ++i) {
                 final char c = fullName.charAt(i);
                 totLen += FontSize.getWidth(String.valueOf(c));
-                if((totLen + ellipsisLen) * TextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
+                if((totLen + ellipsisLen) * SimpleTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
                     break;
                 }
                 truncatedName.append(c);

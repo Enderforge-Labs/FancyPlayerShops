@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
-import com.snek.framework.ui.basic.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,7 +40,7 @@ public class InspectUi_IdDisplay extends ShopTextElm {
      */
     public void updateDisplay() {
 
-        getStyle(TextElmStyle.class).setText(new Txt()
+        getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("ID: ").lightGray())
             .cat(new Txt(
                 shop.getItem().getItem() == Items.AIR ? "-" :
