@@ -3,9 +3,9 @@ package com.snek.fancyplayershops.shop_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.ui.elements.TextElm;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.basic.elements.TextElm;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 
 
 

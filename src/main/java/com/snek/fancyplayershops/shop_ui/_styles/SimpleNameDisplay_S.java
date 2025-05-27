@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.ui._styles.UiBorder_S;
-import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
+import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
 
 
 

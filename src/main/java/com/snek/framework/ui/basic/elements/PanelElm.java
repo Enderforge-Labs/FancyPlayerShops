@@ -1,4 +1,4 @@
-package com.snek.framework.ui.elements;
+package com.snek.framework.ui.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
@@ -9,8 +9,9 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.elements.styles.PanelElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.basic.styles.PanelElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
@@ -138,7 +139,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    protected @NotNull Transform __calcTransform() {
+    public @NotNull Transform __calcTransform() {
         final Transform t = super.__calcTransform();
         return t.copy()
             .scaleX(ENTITY_BLOCK_RATIO_X * getAbsSize().x)

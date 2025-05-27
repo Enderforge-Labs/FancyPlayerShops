@@ -2,8 +2,8 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.framework.ui.elements.TextElm;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.basic.elements.TextElm;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;

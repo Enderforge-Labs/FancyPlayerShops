@@ -1,4 +1,4 @@
-package com.snek.framework.ui.elements;
+package com.snek.framework.ui.basic.elements;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,9 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.Pair;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
-import com.snek.framework.data_types.displays.CustomTextDisplay;
-import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.elements.styles.ItemElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.basic.styles.ItemElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
@@ -149,7 +148,7 @@ public class ItemElm extends Elm {
 
 
     @Override
-    protected @NotNull Transform __calcTransform() {
+    public @NotNull Transform __calcTransform() {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
         Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem().getDescriptionId());

@@ -1,11 +1,11 @@
-package com.snek.framework.ui.functional;
+package com.snek.framework.ui.functional.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.ui.elements.FancyTextElm;
+import com.snek.framework.ui.basic.elements.FancyTextElm;
 import com.snek.framework.ui.functional.styles.ButtonElmStyle;
 import com.snek.framework.ui.interfaces.Clickable;
 import com.snek.framework.ui.interfaces.Hoverable;

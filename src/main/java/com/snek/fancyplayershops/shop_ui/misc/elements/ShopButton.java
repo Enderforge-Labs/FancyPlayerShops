@@ -1,7 +1,5 @@
 package com.snek.fancyplayershops.shop_ui.misc.elements;
 
-import com.snek.framework.ui.functional.ButtonElm;
-
 import net.minecraft.world.entity.player.Player;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopButton_S;
+import com.snek.framework.ui.functional.elements.ButtonElm;
 
 
 

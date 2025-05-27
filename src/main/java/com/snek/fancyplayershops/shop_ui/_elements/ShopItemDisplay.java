@@ -15,12 +15,12 @@ import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.displays.CustomItemDisplay;
 import com.snek.framework.generated.FontSize;
-import com.snek.framework.ui.elements.FancyTextElm;
-import com.snek.framework.ui.elements.ItemElm;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
-import com.snek.framework.ui.elements.styles.ItemElmStyle;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.basic.elements.FancyTextElm;
+import com.snek.framework.ui.basic.elements.ItemElm;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
+import com.snek.framework.ui.basic.styles.ItemElmStyle;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
@@ -220,7 +220,7 @@ public class ShopItemDisplay extends ItemElm {
 
 
     @Override
-    protected @NotNull Transform __calcTransform() {
+    public @NotNull Transform __calcTransform() {
         return super.__calcTransform()
             .rotY(shop.getDefaultRotation())
             .scale(0.4f)

@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.Elm;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;

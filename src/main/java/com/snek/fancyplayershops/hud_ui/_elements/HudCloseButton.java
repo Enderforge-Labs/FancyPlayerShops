@@ -4,20 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
-import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_BuyButton_S;
-import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
-import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.PolylineData;
-import com.snek.framework.ui.composite.PolylineSetElm;
-import com.snek.framework.ui.functional.ButtonElm;
-import com.snek.framework.utils.Easings;
+import com.snek.framework.ui.composite.elements.PolylineData;
+import com.snek.framework.ui.composite.elements.PolylineSetElm;
+import com.snek.framework.ui.functional.elements.ButtonElm;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

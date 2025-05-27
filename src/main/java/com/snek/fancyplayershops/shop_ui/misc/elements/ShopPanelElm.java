@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
-import com.snek.framework.ui.elements.PanelElm;
+import com.snek.framework.ui.basic.elements.PanelElm;
 
 
 

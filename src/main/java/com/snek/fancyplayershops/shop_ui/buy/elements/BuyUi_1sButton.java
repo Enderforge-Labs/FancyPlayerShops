@@ -15,8 +15,8 @@ import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.PolylineData;
-import com.snek.framework.ui.composite.PolylineSetElm;
+import com.snek.framework.ui.composite.elements.PolylineData;
+import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.Easings;
 
 import net.minecraft.network.chat.Component;

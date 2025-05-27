@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.ui._elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.ui._styles.UiBorder_S;
-import com.snek.framework.ui.elements.PanelElm;
+import com.snek.framework.ui.basic.elements.PanelElm;
 
 import net.minecraft.server.level.ServerLevel;
 

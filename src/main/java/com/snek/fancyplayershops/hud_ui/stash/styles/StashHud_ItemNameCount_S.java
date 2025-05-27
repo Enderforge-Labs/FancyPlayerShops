@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 
 
 

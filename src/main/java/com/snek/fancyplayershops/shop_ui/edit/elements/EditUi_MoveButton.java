@@ -15,8 +15,8 @@ import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.PolylineData;
-import com.snek.framework.ui.composite.PolylineSetElm;
+import com.snek.framework.ui.composite.elements.PolylineData;
+import com.snek.framework.ui.composite.elements.PolylineSetElm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.SpaceUtils;
 import com.snek.framework.utils.Txt;
@@ -33,7 +33,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class EditUi_MoveButton extends ShopButton {
-    private static final @NotNull List<@NotNull PolylineData> design = new ArrayList<>();
+    private static final @NotNull List<com.snek.framework.ui.composite.elements.PolylineData> design = new ArrayList<>();
     static {
         for(int i = 0; i < 4; ++i) {
             design.add(new PolylineData(

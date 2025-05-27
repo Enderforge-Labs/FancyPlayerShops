@@ -12,11 +12,11 @@ import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopButton;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.elements.FancyTextElm;
-import com.snek.framework.ui.elements.PanelElm;
-import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
-import com.snek.framework.ui.elements.styles.PanelElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.elements.FancyTextElm;
+import com.snek.framework.ui.basic.elements.PanelElm;
+import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
+import com.snek.framework.ui.basic.styles.PanelElmStyle;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.Utils;
 

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.ui._styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.framework.ui.elements.styles.PanelElmStyle;
+import com.snek.framework.ui.basic.styles.PanelElmStyle;
 
 
 

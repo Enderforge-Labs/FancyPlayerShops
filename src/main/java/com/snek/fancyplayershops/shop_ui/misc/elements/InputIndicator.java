@@ -15,9 +15,8 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.elements.TextElm;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.world.inventory.ClickAction;
@@ -72,23 +71,14 @@ public class InputIndicator extends ShopDiv {
 
         // Add text element
         e = addChild(new ShopTextElm(shop, new InputIndicatorText_S()));
-        e.setSizeX(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING);
-        e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+        e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
+        e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         ((Elm)e).getStyle(TextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         text = (ShopTextElm)e;
 
 
         // Manually prime animation if necessary
         updateDisplay(null);
-    }
-
-
-
-
-    @Override
-    public void spawn(final @NotNull Vector3d pos) {
-        super.spawn(pos);
-        text.setAbsSizeY(TextElm.calcHeight(text));
     }
 
 

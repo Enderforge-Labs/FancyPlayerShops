@@ -20,7 +20,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.framework.debug.DebugCheck;
 import com.snek.framework.debug.UiDebugWindow;
-import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
@@ -67,7 +67,7 @@ public abstract class HoverReceiver {
 
 
     // Optimization structures
-    private static @NotNull Map<@NotNull Player, @Nullable Elm> targetedElms = new HashMap<>();
+    private static @NotNull Map<@NotNull Player, com.snek.framework.ui.Elm> targetedElms = new HashMap<>();
 
 
 

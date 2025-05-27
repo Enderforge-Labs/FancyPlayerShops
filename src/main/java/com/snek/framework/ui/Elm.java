@@ -1,4 +1,4 @@
-package com.snek.framework.ui.elements;
+package com.snek.framework.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,8 @@ import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.IndexedArrayDeque;
 import com.snek.framework.data_types.displays.CustomDisplay;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.functional.ButtonElm;
-import com.snek.framework.ui.functional.styles.ButtonElmStyle;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.functional.elements.ButtonElm;
 import com.snek.framework.ui.interfaces.Hoverable;
 import com.snek.framework.utils.Easing;
 import com.snek.framework.utils.SpaceUtils;
@@ -215,13 +213,10 @@ public abstract class Elm extends Div {
      * <p> This takes into account the element's position, alignment options, Z-index and visual transform.
      * @return The transform.
      */
-    protected @NotNull Transform __calcTransform() {
+    public @NotNull Transform __calcTransform() {
         return style.getTransform().copy()
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
         ;
-    }
-    protected @NotNull Transform __postCalcTransform() {
-        return __calcTransform();
     }
 
 

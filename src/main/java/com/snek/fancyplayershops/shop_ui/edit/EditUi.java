@@ -26,7 +26,7 @@ import com.snek.fancyplayershops.ui._elements.UiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.Elm;
 
 
 

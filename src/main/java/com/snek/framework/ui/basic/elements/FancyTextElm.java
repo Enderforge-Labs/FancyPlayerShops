@@ -1,4 +1,4 @@
-package com.snek.framework.ui.elements;
+package com.snek.framework.ui.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -13,9 +13,9 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.data_types.displays.CustomTextDisplay;
 import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.elements.styles.ElmStyle;
-import com.snek.framework.ui.elements.styles.FancyTextElmStyle;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.basic.styles.ElmStyle;
+import com.snek.framework.ui.basic.styles.FancyTextElmStyle;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -32,7 +32,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 /**
  * A TextElm that also has a configurable, animatable background color.
  */
-public class FancyTextElm extends Elm {
+public class FancyTextElm extends __base_TextElm {
 
     // In-world data
     private final @NotNull CustomDisplay text;
@@ -128,6 +128,16 @@ public class FancyTextElm extends Elm {
         final @NotNull CustomTextDisplay bg = getBgEntity();
 
 
+        // Handle text first (transform depends on it)
+        { final Flagged<Component> f = getThisStyle().getFlaggedText();
+        if(f.isFlagged()) {
+            fg.setText(f.get());
+            updateEntitySizeCacheX();
+            updateEntitySizeCacheY();
+            f.unflag();
+        }}
+
+
         // Handle transforms
         {
             final Flagged<Transform> f   = getThisStyle().getFlaggedTransform();
@@ -145,8 +155,8 @@ public class FancyTextElm extends Elm {
                 // Update foreground transform if necessary
                 if(fgNeedsUpdate) {
                     final Transform tFg = __calcTransformFg(t);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - TextElm.calcWidth(this)) / 2f);
+                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
+                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
                     fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
                 }
@@ -176,11 +186,6 @@ public class FancyTextElm extends Elm {
 
 
         // Handle TextElm values
-        { final Flagged<Component> f = getThisStyle().getFlaggedText();
-        if(f.isFlagged()) {
-            fg.setText(f.get());
-            f.unflag();
-        }}
         { final Flagged<Integer> f = getThisStyle().getFlaggedTextOpacity();
             //! Opacity is updated every time to keep the opacity cache moving
             fg.setTextOpacity(f.get());

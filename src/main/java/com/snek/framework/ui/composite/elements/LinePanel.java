@@ -1,10 +1,10 @@
-package com.snek.framework.ui.composite;
+package com.snek.framework.ui.composite.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.framework.ui.basic.elements.PanelElm;
 import com.snek.framework.ui.composite.styles.LinePanelStyle;
-import com.snek.framework.ui.elements.PanelElm;
 
 import net.minecraft.server.level.ServerLevel;
 

@@ -19,9 +19,9 @@ import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.elements.TextElm;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.elements.TextElm;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 import com.snek.framework.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;

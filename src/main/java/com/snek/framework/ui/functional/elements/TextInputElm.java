@@ -1,4 +1,4 @@
-package com.snek.framework.ui.functional;
+package com.snek.framework.ui.functional.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -24,7 +24,7 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.functional.ButtonElm;
+import com.snek.framework.ui.functional.elements.ButtonElm;
 import com.snek.framework.utils.Easings;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;

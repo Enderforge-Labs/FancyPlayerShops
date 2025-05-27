@@ -14,12 +14,10 @@ import com.snek.fancyplayershops.shop_ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopPanelElm;
 import com.snek.fancyplayershops.ui._elements.UiBorder;
 import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.TextAlignment;
 import com.snek.framework.ui.Div;
-import com.snek.framework.ui.elements.Elm;
-import com.snek.framework.ui.elements.TextElm;
-import com.snek.framework.ui.elements.styles.TextElmStyle;
+import com.snek.framework.ui.Elm;
+import com.snek.framework.ui.basic.styles.TextElmStyle;
 
 
 
@@ -69,7 +67,8 @@ public class DetailsUi extends ShopCanvas {
         e = bg.addChild(new DetailsUi_Title(_shop));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(1f);
-        e.setAbsSizeY(TextElm.calcHeight((Elm)e));
+        System.out.println("size: " + ((DetailsUi_Title)e).calcEntityHeight());
+        e.setAbsSizeY(((DetailsUi_Title)e).calcEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - VERTICAL_PADDING - 0.04f); //! -0.04 is a workaround and should not be required
 
 
@@ -90,7 +89,7 @@ public class DetailsUi extends ShopCanvas {
             values = (DetailsUi_Values)e;
         }
         details.setSizeX(DETAILS_W);
-        details.setSizeY(TextElm.calcHeight((TextElm)details.getChildren().get(0)));
+        details.setSizeY(((DetailsUi_Names)details.getChildren().get(0)).calcEntityHeight());
         details.setAlignmentX(AlignmentX.CENTER);
         details.setPosY(H0 + VERTICAL_PADDING);
 

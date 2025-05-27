@@ -44,7 +44,7 @@ import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.fancyplayershops.input.MessageReceiver;
 import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.ui.elements.Elm;
+import com.snek.framework.ui.Elm;
 import com.snek.framework.utils.MinecraftUtils;
 import com.snek.framework.utils.Txt;
 import com.snek.framework.utils.scheduler.Scheduler;

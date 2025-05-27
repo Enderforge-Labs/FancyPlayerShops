@@ -1,4 +1,4 @@
-package com.snek.framework.ui.elements.styles;
+package com.snek.framework.ui.basic.styles;
 
 import org.jetbrains.annotations.NotNull;
 
