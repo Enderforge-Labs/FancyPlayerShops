@@ -23,7 +23,7 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-public class HudCanvas extends UiCanvas {
+public class HudCanvas extends UiCanvas implements __HudElm {
 
     // UI
     public static final float POS_UPDATE_DISTANCE = 0.1f;

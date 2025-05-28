@@ -33,13 +33,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class StashHud extends HudCanvas {
-    public static final float ENTRY_WIDTH        = 0.9f;
+    public static final float LIST_WIDTH        = 0.9f;
     public static final float ITEM_NAME_RATIO    = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
     public static final float LIST_MARGIN_BOTTOM = 0.05f;
     public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE - LIST_MARGIN_BOTTOM;
-    public static final int   LIST_SIZE          = 6;
+    public static final int   LIST_SIZE          = 7;
 
     private Div list;
 
@@ -71,7 +71,7 @@ public class StashHud extends HudCanvas {
 
             // Create scrollable list
             list = bg.addChild(new StashHud_MaterialList());
-            list.setSize(new Vector2f(ENTRY_WIDTH, LIST_H));
+            list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.CENTER);
             list.setPosY(SQUARE_BUTTON_SIZE + LIST_MARGIN_BOTTOM);
 

@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
 import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemNameCount_S;
 import com.snek.framework.ui.basic.elements.SimpleTextElm;
 import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
@@ -20,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class StashHud_ItemNameCount extends SimpleTextElm {
+public class StashHud_ItemNameCount extends SimpleTextElm implements __HudElm {
     private final @NotNull ItemStack item;
     private int count;
 

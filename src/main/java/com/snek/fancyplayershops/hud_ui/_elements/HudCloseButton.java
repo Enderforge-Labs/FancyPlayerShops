@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class HudCloseButton extends SimpleButtonElm {
+public class HudCloseButton extends SimpleButtonElm implements __HudElm {
 
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {

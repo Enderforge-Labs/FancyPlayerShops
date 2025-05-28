@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
 import com.snek.fancyplayershops.hud_ui.stash.styles.StashHud_ItemDisplay_S;
 import com.snek.framework.ui.basic.elements.ItemElm;
 import com.snek.framework.ui.basic.styles.ItemElmStyle;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class StashHud_ItemDisplay extends ItemElm {
+public class StashHud_ItemDisplay extends ItemElm implements __HudElm {
     private final ItemStack item;
 
 

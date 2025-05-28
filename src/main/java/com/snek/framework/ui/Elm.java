@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.framework.data_types.animations.Animation;
@@ -569,7 +570,10 @@ public abstract class Elm extends Div {
 
         // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin =
-            new Vector3f(getAbsPos().x, getAbsPos().y, t.getPos().z)
+            (this instanceof __HudElm ?
+                new Vector3f(t.getPos()) :
+                new Vector3f(getAbsPos().x, getAbsPos().y, t.getPos().z)
+            )
             .rotate(t.getGlobalRot())
             .add(entity.getPosCopy())
         ;
