@@ -62,6 +62,6 @@ public class EditUi_PriceInput extends ShopTextInput {
 
     @Override
     public float getInteractionSizeRight() {
-        return getAbsSize().x / 2f - EditUi.COLOR_SELECTOR_W;
+        return super.getInteractionSizeRight() - EditUi.COLOR_SELECTOR_W;
     }
 }

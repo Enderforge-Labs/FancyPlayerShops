@@ -36,7 +36,7 @@ public abstract class SimpleButtonElm extends PanelElm implements __base_ButtonE
 
 
     /**
-     * Creates a new ButtonElm using a custom style.
+     * Creates a new SimpleButtonElm using a custom style.
      * @param _world The world in which to place the element.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
@@ -48,7 +48,7 @@ public abstract class SimpleButtonElm extends PanelElm implements __base_ButtonE
 
 
     /**
-     * Creates a new ButtonElm using the default style.
+     * Creates a new SimpleButtonElm using the default style.
      * @param _world The world in which to place the element.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */

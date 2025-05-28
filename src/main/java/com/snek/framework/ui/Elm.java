@@ -20,7 +20,7 @@ import com.snek.framework.data_types.containers.Flagged;
 import com.snek.framework.data_types.containers.IndexedArrayDeque;
 import com.snek.framework.data_types.displays.CustomDisplay;
 import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.ui.functional.elements.FancyButtonElm;
+import com.snek.framework.ui.functional.elements.__base_ButtonElm;
 import com.snek.framework.ui.interfaces.Hoverable;
 import com.snek.framework.utils.Easing;
 import com.snek.framework.utils.SpaceUtils;
@@ -528,7 +528,7 @@ public abstract class Elm extends Div {
 
 
             // Update current state and run hover state change callbacks if needed
-            if(isHovered != hoverStateNext && (!(this instanceof FancyButtonElm) || hoverRateLimiter.attempt())) {
+            if(isHovered != hoverStateNext && (!(this instanceof __base_ButtonElm) || hoverRateLimiter.attempt())) {
                 isHovered = hoverStateNext;
                 if(isHovered) {
                     h.onHoverEnter(player);
@@ -569,7 +569,7 @@ public abstract class Elm extends Div {
 
         // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin =
-            new Vector3f(t.getPos())
+            new Vector3f(getAbsPos().x, getAbsPos().y, t.getPos().z)
             .rotate(t.getGlobalRot())
             .add(entity.getPosCopy())
         ;

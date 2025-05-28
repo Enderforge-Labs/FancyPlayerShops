@@ -106,8 +106,8 @@ public class __base_TextElm extends Elm {
 
         // If not, get the transform and calculate the visual height using it
         final Transform t;
-        /**/ if(this instanceof SimpleTextElm      e) { t =                     e.__calcTransform();  }
-        else if(this instanceof FancyTextElm e) { t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(this instanceof SimpleTextElm e) { t =                     e.__calcTransform();  }
+        else if(this instanceof FancyTextElm  e) { t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcEntityHeight used on incompatible Elm type: " + this.getClass().getName());
         return entitySizeCacheY * t.getScale().y;
     }
@@ -130,8 +130,8 @@ public class __base_TextElm extends Elm {
 
         // If not, get the transform and calculate the visual width using it
         final Transform t;
-        /**/ if(this instanceof SimpleTextElm      e) { t =                     e.__calcTransform();  }
-        else if(this instanceof FancyTextElm e) { t = e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(this instanceof SimpleTextElm e) { t =                     e.__calcTransform();  }
+        else if(this instanceof FancyTextElm  e) { t = e.__calcTransformFg(e.__calcTransform()); }
         else throw new RuntimeException("calcEntityWidth used on incompatible Elm type: " + this.getClass().getName());
         return entitySizeCacheX * t.getScale().x;
     }

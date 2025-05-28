@@ -35,21 +35,21 @@ public class EditUi_SquareButton_S extends SimpleShopButton_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleY(HIDDEN_W))
+            .additiveTransform(new Transform().scaleY(HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(1f / HIDDEN_W))
+            .additiveTransform(new Transform().scaleY(1f / HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleY(HIDDEN_W))
+            .additiveTransform(new Transform().scaleY(HIDDEN_W))
         );
     }
 }

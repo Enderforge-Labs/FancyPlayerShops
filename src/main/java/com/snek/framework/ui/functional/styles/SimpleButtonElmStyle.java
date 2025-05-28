@@ -8,6 +8,7 @@ import com.snek.framework.data_types.animations.Animation;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.data_types.animations.Transition;
 import com.snek.framework.data_types.containers.Flagged;
+import com.snek.framework.ui.basic.styles.ElmStyle;
 import com.snek.framework.ui.basic.styles.PanelElmStyle;
 import com.snek.framework.utils.Easings;
 
@@ -70,21 +71,51 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
+            .additiveTransform(new Transform().scaleX(HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W))
+            .additiveTransform(new Transform().scaleX(1f / HIDDEN_W))
         );
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W))
+            .additiveTransform(new Transform().scaleX(HIDDEN_W))
         );
     }
+
+
+
+
+    @Override //TODO
+    public @Nullable Animation getDefaultPrimerAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+    @Override //TODO
+    public @Nullable Animation getDefaultSpawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            .targetBgAlpha(getDefaultAlpha())
+            .targetOpacity(255)
+        );
+    }
+    @Override //TODO
+    public @Nullable Animation getDefaultDespawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+
+
 
 
     // Reset functions

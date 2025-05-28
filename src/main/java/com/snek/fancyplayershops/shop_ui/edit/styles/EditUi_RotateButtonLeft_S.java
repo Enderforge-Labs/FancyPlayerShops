@@ -36,21 +36,21 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
+            .additiveTransform(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / HIDDEN_W).moveX(-SHIFT_X))
+            .additiveTransform(new Transform().scaleX(1f / HIDDEN_W).moveX(-SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
+            .additiveTransform(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
         );
     }
 }
