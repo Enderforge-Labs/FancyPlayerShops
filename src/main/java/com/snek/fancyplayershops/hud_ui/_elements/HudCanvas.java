@@ -46,8 +46,6 @@ public class HudCanvas extends UiCanvas implements __HudElm {
 
     public void update() {
         final Player player = hud.getPlayer();
-        final Elm targetedElm = findTargetedElement(player);
-        if(targetedElm != null) targetedElm.updateHoverState(player); //TODO OPTIMIZE
 
         // Update rotation
         final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
@@ -85,6 +83,7 @@ public class HudCanvas extends UiCanvas implements __HudElm {
 
 
 
+
     @Override
     public void spawn(Vector3d pos) {
         if(!spawned) {
@@ -93,12 +92,18 @@ public class HudCanvas extends UiCanvas implements __HudElm {
             lastPos = new Vector3f((float)pos.x, (float)pos.y, (float)pos.z);
 
             // Move displays away from the player's center
-            final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
-            final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
-            final Vector3f shift = direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
-            applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(shift)));
+            applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
         }
     }
+    public @NotNull Vector3f __calcVisualShift() {
+        final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
+        final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
+        final Vector3f shift = direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
+        return shift;
+    }
+
+
+
 
     @Override
     public void despawn() {

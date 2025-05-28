@@ -102,7 +102,7 @@ public class StashHud extends HudCanvas {
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new HudCloseButton((ServerLevel)(hud.getPlayer().level())),
+            new HudCloseButton(hud),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);

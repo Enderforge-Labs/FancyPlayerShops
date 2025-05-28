@@ -215,8 +215,16 @@ public abstract class Elm extends Div {
      * @return The transform.
      */
     public @NotNull Transform __calcTransform() {
-        return style.getTransform().copy()
+        return
+            style.getTransform().copy()
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
+        ;
+    }
+    public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform){
+        return
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
+            .rotate(_transform.getGlobalRot())
+            .add(entity.getPosCopy())
         ;
     }
 
@@ -569,14 +577,7 @@ public abstract class Elm extends Div {
 
 
         // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
-        final Vector3f origin =
-            (this instanceof __HudElm ?
-                new Vector3f(t.getPos()) :
-                new Vector3f(getAbsPos().x, getAbsPos().y, t.getPos().z)
-            )
-            .rotate(t.getGlobalRot())
-            .add(entity.getPosCopy())
-        ;
+        final Vector3f origin = __calcEntityVisualOrigin(t);
 
 
         // Check view intersection with the display's box

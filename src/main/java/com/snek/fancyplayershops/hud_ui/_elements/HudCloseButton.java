@@ -3,15 +3,14 @@ package com.snek.fancyplayershops.hud_ui._elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.hud_ui.misc.elements.HudSimpleButtonElm;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
 import com.snek.framework.data_types.ui.PolylineData;
 import com.snek.framework.ui.Div;
 import com.snek.framework.ui.composite.elements.PolylineSetElm;
-import com.snek.framework.ui.functional.elements.SimpleButtonElm;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -22,7 +21,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class HudCloseButton extends SimpleButtonElm implements __HudElm {
+public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
@@ -43,8 +42,8 @@ public class HudCloseButton extends SimpleButtonElm implements __HudElm {
 
 
 
-    public HudCloseButton(final @NotNull ServerLevel _world) {
-        super(_world, 1); //TODO add input indicator
+    public HudCloseButton(final @NotNull Hud _hud) {
+        super(_hud, 1); //TODO add input indicator
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));

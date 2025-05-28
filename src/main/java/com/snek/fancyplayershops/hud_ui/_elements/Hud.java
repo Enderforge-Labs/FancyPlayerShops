@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
+import com.snek.framework.ui.Elm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -140,5 +141,15 @@ public class Hud {
 
         canvas.forwardClick(_player, action);
         return true;
+    }
+
+    public static void forwardHoverStatic(final @NotNull Player _player) {
+        final Hud hud = activeHuds.get(_player.getUUID());
+        if(hud == null) return;
+        final HudCanvas canvas = hud.activeCanvas;
+        if(canvas == null) return;
+
+        final Elm targetedElm = canvas.findTargetedElement(_player); //TODO OPTIMIZE
+        if(targetedElm != null) targetedElm.updateHoverState(_player);
     }
 }
