@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.data.StashEntry;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.hud_ui._elements.HudCanvas;
-import com.snek.fancyplayershops.hud_ui._elements.HudCloseButton;
+import com.snek.fancyplayershops.hud_ui.misc.elements.HudCloseButton;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_EmptyText;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_ItemDisplay;
 import com.snek.fancyplayershops.hud_ui.stash.elements.StashHud_ItemNameCount;

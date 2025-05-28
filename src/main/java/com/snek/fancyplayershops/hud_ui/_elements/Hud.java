@@ -38,6 +38,9 @@ public class Hud {
     // Active canvas list
     private static final Map<UUID, Hud> activeHuds = new HashMap<>();
 
+    // Optimization structures
+    private @Nullable Elm targetedElm = null;
+
 
 
 
@@ -149,7 +152,13 @@ public class Hud {
         final HudCanvas canvas = hud.activeCanvas;
         if(canvas == null) return;
 
-        final Elm targetedElm = canvas.findTargetedElement(_player); //TODO OPTIMIZE
-        if(targetedElm != null) targetedElm.updateHoverState(_player);
+        if(hud.targetedElm != null) {
+            hud.targetedElm.updateHoverState(_player);
+            if(!hud.targetedElm.isHovered()) hud.targetedElm = null;
+        }
+        else {
+            hud.targetedElm = canvas.findTargetedElement(_player);
+            if(hud.targetedElm != null) hud.targetedElm.updateHoverState(_player);
+        }
     }
 }

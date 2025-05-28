@@ -7,6 +7,7 @@ import com.snek.fancyplayershops.hud_ui._elements.Hud;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.framework.data_types.animations.Transform;
 import com.snek.framework.ui.functional.elements.SimpleButtonElm;
+import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -21,9 +22,14 @@ public abstract class HudSimpleButtonElm extends SimpleButtonElm {
     final Hud hud;
 
 
-    protected HudSimpleButtonElm(@NotNull Hud _hud, int _clickCooldown) {
-        super((ServerLevel)(_hud.getPlayer().level()), _clickCooldown);
+    protected HudSimpleButtonElm(@NotNull Hud _hud, int _clickCooldown, final @NotNull SimpleButtonElmStyle _style) {
+        super((ServerLevel)(_hud.getPlayer().level()), _clickCooldown, _style);
         hud = _hud;
+    }
+
+
+    protected HudSimpleButtonElm(@NotNull Hud _hud, int _clickCooldown) {
+        this(_hud, _clickCooldown, new SimpleButtonElmStyle());
     }
 
 

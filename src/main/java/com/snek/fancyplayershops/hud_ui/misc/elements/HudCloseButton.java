@@ -1,9 +1,11 @@
-package com.snek.fancyplayershops.hud_ui._elements;
+package com.snek.fancyplayershops.hud_ui.misc.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.hud_ui.misc.elements.HudSimpleButtonElm;
+import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
+import com.snek.fancyplayershops.hud_ui.misc.styles.HudCloseButton_S;
 import com.snek.fancyplayershops.ui._elements.UiCanvas;
 import com.snek.framework.data_types.ui.AlignmentX;
 import com.snek.framework.data_types.ui.AlignmentY;
@@ -43,7 +45,7 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
 
     public HudCloseButton(final @NotNull Hud _hud) {
-        super(_hud, 1); //TODO add input indicator
+        super(_hud, 1, new HudCloseButton_S()); //TODO add input indicator
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));
