@@ -64,6 +64,7 @@ public abstract class HoverReceiver {
     private static @Nullable Set<Shop> targetedShops         = null;
     private static @Nullable Set<Shop> shopsWithTargetedElm  = null;
     private static int updateIndex = 0;
+    private static @Nullable List<Player> hudPlayers = null;
 
 
     // Optimization structures
@@ -88,6 +89,7 @@ public abstract class HoverReceiver {
 
             // Reset the lists
             playerListSnapshot   = new ArrayList<>();
+            hudPlayers           = new ArrayList<>();
             targetedShops        = new LinkedHashSet<>();
             shopsWithTargetedElm = new LinkedHashSet<>();
 
@@ -115,7 +117,10 @@ public abstract class HoverReceiver {
 
             // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            if(Hud.getOpenHud(player) != null) continue;
+            if(Hud.getOpenHud(player) != null) {
+                hudPlayers.add(player);
+                continue;
+            }
             final Shop shop = HoverReceiver.getLookedAtShop(player);
             if(shop == null) continue;
 
@@ -216,6 +221,12 @@ public abstract class HoverReceiver {
         // Remove elements that aren't being hovered on anymore and their parent shop from the maps
         for(final Player player : toRemove) {
             targetedElms.remove(player);
+        }
+
+
+        // Send hover updates to active HUDs
+        for(final Player player : hudPlayers) {
+            Hud.forwardHoverStatic(player);
         }
 
 
