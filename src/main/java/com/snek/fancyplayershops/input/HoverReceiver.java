@@ -14,14 +14,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
-import com.snek.fancyplayershops.main.Configs;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.old.debug.DebugCheck;
-import com.snek.framework.old.debug.UiDebugWindow;
-import com.snek.framework.old.ui.Elm;
-import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.DebugCheck;
+import com.snek.frameworklib.debug.UiDebugWindow;
+import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -68,7 +68,7 @@ public abstract class HoverReceiver {
 
 
     // Optimization structures
-    private static @NotNull Map<@NotNull Player, com.snek.framework.old.ui.Elm> targetedElms = new HashMap<>();
+    private static @NotNull Map<@NotNull Player, Elm> targetedElms = new HashMap<>();
 
 
 
@@ -94,7 +94,7 @@ public abstract class HoverReceiver {
             shopsWithTargetedElm = new LinkedHashSet<>();
 
             // Recalculate player list snapshot
-            for(final ServerLevel serverWorld : FancyPlayerShops.getServer().getAllLevels()) {
+            for(final ServerLevel serverWorld : FrameworkLib.getServer().getAllLevels()) {
                 for(final Player player : serverWorld.players()) {
                     playerListSnapshot.add(player);
                 }

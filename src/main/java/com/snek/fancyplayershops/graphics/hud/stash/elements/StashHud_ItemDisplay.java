@@ -2,8 +2,8 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
-import com.snek.fancyplayershops.graphics.hud._elements.old.__HudElm;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.StashHud_ItemDisplay_S;
 import com.snek.framework.old.ui.basic.elements.ItemElm;
 import com.snek.framework.old.ui.basic.styles.ItemElmStyle;

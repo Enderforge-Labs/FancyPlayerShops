@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.Configs;
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
@@ -22,7 +22,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.ui.old._elements.UiBorder;
+import com.snek.frameworklib.graphics.ui._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.ui.Div;

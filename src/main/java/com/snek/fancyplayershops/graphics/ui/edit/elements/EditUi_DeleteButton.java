@@ -8,14 +8,14 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
-import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.data_types.ui.PolylineData;
 import com.snek.framework.old.ui.Div;
 import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
-import com.snek.framework.old.utils.MinecraftUtils;
-import com.snek.framework.old.utils.Txt;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

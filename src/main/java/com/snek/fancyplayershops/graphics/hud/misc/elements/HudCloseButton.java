@@ -3,10 +3,10 @@ package com.snek.fancyplayershops.graphics.hud.misc.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
-import com.snek.fancyplayershops.graphics.hud._elements.old.__HudElm;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.HudCloseButton_S;
-import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.data_types.ui.PolylineData;

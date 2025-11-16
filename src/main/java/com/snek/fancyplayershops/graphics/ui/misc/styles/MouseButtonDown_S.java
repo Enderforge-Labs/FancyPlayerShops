@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.misc.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.framework.old.utils.Txt;
+import com.snek.frameworklib.utils.Txt;
 
 
 

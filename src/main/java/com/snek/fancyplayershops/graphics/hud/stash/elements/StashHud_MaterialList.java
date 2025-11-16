@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.graphics.hud._elements.old.__HudElm;
+import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.framework.old.ui.Div;
 import com.snek.framework.old.ui.interfaces.Scrollable;
 

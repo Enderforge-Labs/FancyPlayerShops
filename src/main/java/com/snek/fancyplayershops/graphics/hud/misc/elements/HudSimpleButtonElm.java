@@ -3,8 +3,8 @@ package com.snek.fancyplayershops.graphics.hud.misc.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
-import com.snek.fancyplayershops.main.Configs;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.framework.old.data_types.animations.Transform;
 import com.snek.framework.old.ui.functional.elements.SimpleButtonElm;
 import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;

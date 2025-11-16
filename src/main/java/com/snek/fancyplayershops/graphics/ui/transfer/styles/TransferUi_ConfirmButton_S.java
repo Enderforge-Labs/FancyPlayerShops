@@ -10,9 +10,9 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.framework.old.data_types.animations.Animation;
 import com.snek.framework.old.data_types.animations.Transition;
 import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
-import com.snek.framework.old.utils.Easings;
-import com.snek.framework.old.utils.Txt;
-import com.snek.framework.old.utils.Utils;
+import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 

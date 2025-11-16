@@ -16,8 +16,8 @@ import com.snek.framework.old.ui.basic.elements.FancyTextElm;
 import com.snek.framework.old.ui.basic.elements.PanelElm;
 import com.snek.framework.old.ui.basic.styles.FancyTextElmStyle;
 import com.snek.framework.old.ui.basic.styles.PanelElmStyle;
-import com.snek.framework.old.utils.Easings;
-import com.snek.framework.old.utils.Utils;
+import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

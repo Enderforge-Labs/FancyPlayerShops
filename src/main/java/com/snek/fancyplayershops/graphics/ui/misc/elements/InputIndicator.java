@@ -16,7 +16,7 @@ import com.snek.framework.old.data_types.ui.TextAlignment;
 import com.snek.framework.old.ui.Div;
 import com.snek.framework.old.ui.Elm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.old.utils.Txt;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.inventory.ClickAction;
 

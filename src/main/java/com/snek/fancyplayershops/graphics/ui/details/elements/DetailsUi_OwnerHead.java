@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHead_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopItemElm;
 import com.snek.framework.old.ui.basic.styles.ItemElmStyle;
-import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.world.item.ItemStack;
 

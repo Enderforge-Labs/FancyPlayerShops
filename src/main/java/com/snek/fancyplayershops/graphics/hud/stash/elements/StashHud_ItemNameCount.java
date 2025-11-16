@@ -2,14 +2,14 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
-import com.snek.fancyplayershops.graphics.hud._elements.old.__HudElm;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.StashHud_ItemNameCount_S;
 import com.snek.framework.old.ui.basic.elements.SimpleTextElm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.old.utils.MinecraftUtils;
-import com.snek.framework.old.utils.Txt;
-import com.snek.framework.old.utils.Utils;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;

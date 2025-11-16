@@ -8,10 +8,10 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.old.utils.Easings;
-import com.snek.framework.old.utils.MinecraftUtils;
-import com.snek.framework.old.utils.Txt;
-import com.snek.framework.old.utils.Utils;
+import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.world.item.Items;
 

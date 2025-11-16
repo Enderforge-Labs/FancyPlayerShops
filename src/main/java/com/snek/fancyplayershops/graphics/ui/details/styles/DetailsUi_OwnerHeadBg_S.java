@@ -10,7 +10,7 @@ import com.snek.framework.old.data_types.animations.Animation;
 import com.snek.framework.old.data_types.animations.Transform;
 import com.snek.framework.old.data_types.animations.Transition;
 import com.snek.framework.old.ui.basic.styles.ElmStyle;
-import com.snek.framework.old.utils.Easings;
+import com.snek.frameworklib.utils.Easings;
 
 
 

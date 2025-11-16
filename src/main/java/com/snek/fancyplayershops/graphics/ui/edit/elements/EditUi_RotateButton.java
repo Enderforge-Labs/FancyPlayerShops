@@ -10,7 +10,7 @@ import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_RotateButtonRight_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
-import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.framework.old.data_types.animations.Transform;
 import com.snek.framework.old.data_types.animations.Transition;
 import com.snek.framework.old.data_types.ui.AlignmentX;
@@ -18,7 +18,7 @@ import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.data_types.ui.PolylineData;
 import com.snek.framework.old.ui.Div;
 import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
-import com.snek.framework.old.utils.Easings;
+import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

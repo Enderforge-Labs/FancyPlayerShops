@@ -14,7 +14,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
-import com.snek.fancyplayershops.ui.old._elements.UiBorder;
+import com.snek.frameworklib.graphics.ui._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.data_types.ui.TextAlignment;
@@ -22,7 +22,7 @@ import com.snek.framework.old.ui.Div;
 import com.snek.framework.old.ui.Elm;
 import com.snek.framework.old.ui.basic.elements.SimpleTextElm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.old.utils.Txt;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 

@@ -21,12 +21,12 @@ import com.snek.framework.old.ui.basic.styles.ElmStyle;
 import com.snek.framework.old.ui.basic.styles.FancyTextElmStyle;
 import com.snek.framework.old.ui.basic.styles.ItemElmStyle;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.old.utils.Easings;
-import com.snek.framework.old.utils.MinecraftUtils;
-import com.snek.framework.old.utils.Txt;
-import com.snek.framework.old.utils.Utils;
-import com.snek.framework.old.utils.scheduler.Scheduler;
-import com.snek.framework.old.utils.scheduler.TaskHandler;
+import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
+import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Display.BillboardConstraints;

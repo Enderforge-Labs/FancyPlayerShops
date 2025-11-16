@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.buy.styles;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.old.utils.Txt;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
 

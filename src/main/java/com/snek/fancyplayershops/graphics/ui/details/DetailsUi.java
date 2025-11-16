@@ -12,7 +12,7 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
-import com.snek.fancyplayershops.ui.old._elements.UiBorder;
+import com.snek.frameworklib.graphics.ui._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.TextAlignment;
 import com.snek.framework.old.ui.Div;

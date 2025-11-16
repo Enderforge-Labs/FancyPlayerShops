@@ -38,16 +38,16 @@ import org.slf4j.LoggerFactory;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.fancyplayershops.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
-import com.snek.fancyplayershops.ui.old._elements.InteractionBlocker;
+import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
 import com.snek.framework.old.ui.Elm;
-import com.snek.framework.old.utils.MinecraftUtils;
-import com.snek.framework.old.utils.Txt;
-import com.snek.framework.old.utils.scheduler.Scheduler;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 
 
