@@ -6,8 +6,8 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.framework.utils.Txt;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.frameworklib.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;

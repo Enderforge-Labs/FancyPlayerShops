@@ -10,26 +10,26 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.input.MessageReceiver;
-import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
-import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
-import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
-import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.functional.elements.FancyButtonElm;
-import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
-import com.snek.framework.utils.scheduler.RateLimiter;
+import com.snek.frameworklib.input.MessageReceiver;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
+import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
+import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -72,7 +72,7 @@ public class Shop {
 
     // Animation data
     public static final int CANVAS_ANIMATION_DELAY = 5;
-    public static final int CANVAS_ROTATION_TIME = 8;
+    // public static final int CANVAS_ROTATION_TIME = 8;
 
 
     // Strings
@@ -172,7 +172,7 @@ public class Shop {
      * @throws RuntimeException if the world Identifier is invalid or the ServerLevel cannot be found.
      */
     private void calcDeserializedWorldId() throws RuntimeException {
-        for(final ServerLevel w : FancyPlayerShops.getServer().getAllLevels()) {
+        for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
             if(w.dimension().location().toString().equals(worldId)) {
                 world = w;
                 return;
@@ -351,8 +351,8 @@ public class Shop {
                 if(activeCanvas != null) activeCanvas.despawnNow();
                 activeCanvas = new DetailsUi(this);
                 if(lastDirection != 0) {
-                    activeCanvas.applyAnimationNowRecursive(calcCanvasRotationAnimation(0, lastDirection));
-                    itemDisplay.applyAnimationNowRecursive(calcItemDisplayRotationAnimation(0, lastDirection));
+                    activeCanvas.applyAnimationNowRecursive(UiCanvas.calcCanvasRotationAnimation(0, lastDirection));
+                    itemDisplay.applyAnimationNowRecursive(UiCanvas.calcItemDisplayRotationAnimation(0, lastDirection));
                 }
                 activeCanvas.spawn(calcDisplayPos());
 
@@ -627,7 +627,7 @@ public class Shop {
 
         // Adjust rotation if needed
         if(lastDirection != 0) {
-            final Animation animation = calcCanvasRotationAnimation(0, lastDirection);
+            final Animation animation = UiCanvas.calcCanvasRotationAnimation(0, lastDirection);
             for(final Div c : canvas.getBg().getChildren()) {
                 c.applyAnimationNowRecursive(animation);
             }
@@ -782,42 +782,43 @@ public class Shop {
 
         // Apply animations and update the current direction if needed
         if(targetDir != lastDirection) {
-            activeCanvas.applyAnimationRecursive(calcCanvasRotationAnimation(lastDirection, targetDir));
-            getItemDisplay().applyAnimationRecursive(calcItemDisplayRotationAnimation(lastDirection, targetDir));
+            activeCanvas.applyAnimationRecursive(UiCanvas.calcCanvasRotationAnimation(lastDirection, targetDir));
+            getItemDisplay().applyAnimationRecursive(UiCanvas.calcItemDisplayRotationAnimation(lastDirection, targetDir));
             lastDirection = targetDir;
-            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
+            canvasRotationLimiter.renewCooldown(UiCanvas.CANVAS_ROTATION_TIME);
         }
     }
 
 
 
+    //TODO REMOVE
+    // /**
+    //  * Calculates the animations required to face from a specified direction to another one.
+    //  * @param from The starting direction. 0 to 7.
+    //  * @param to The new direction to face. 0 to 7.
+    //  * @return The canvas animation.
+    //  */
+    // public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
+    //     final float rotation = -Math.toRadians(to * 45f - from * 45f);
+    //     return new Animation(
+    //         new Transition(UiCanvas.CANVAS_ROTATION_TIME, Easings.cubicOut)
+    //         .additiveTransform(new Transform().rotGlobalY(rotation))
+    //     );
+    // }
 
-    /**
-     * Calculates the animations required to face from a specified direction to another one.
-     * @param from The starting direction. 0 to 7.
-     * @param to The new direction to face. 0 to 7.
-     * @return The canvas animation.
-     */
-    public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
-        final float rotation = -Math.toRadians(to * 45f - from * 45f);
-        return new Animation(
-            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-            .additiveTransform(new Transform().rotGlobalY(rotation))
-        );
-    }
-    /**
-     * Calculates the animations required to face from a specified direction to another one.
-     * @param from The starting direction. 0 to 7.
-     * @param to The new direction to face. 0 to 7.
-     * @return The item display animation.
-     */
-    public static @NotNull Animation calcItemDisplayRotationAnimation(final int from, final int to) {
-        final float rotation = -Math.toRadians(to * 45f - from * 45f);
-        return new Animation(
-            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-            .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
-        );
-    }
+    // /**
+    //  * Calculates the animations required to face from a specified direction to another one.
+    //  * @param from The starting direction. 0 to 7.
+    //  * @param to The new direction to face. 0 to 7.
+    //  * @return The item display animation.
+    //  */
+    // public static @NotNull Animation calcItemDisplayRotationAnimation(final int from, final int to) {
+    //     final float rotation = -Math.toRadians(to * 45f - from * 45f);
+    //     return new Animation(
+    //         new Transition(UiCanvas.CANVAS_ROTATION_TIME, Easings.cubicOut)
+    //         .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
+    //     );
+    // }
 
 
 
@@ -837,7 +838,7 @@ public class Shop {
 
 
         // Send feedback to the player
-        final Player owner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
+        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
         if(owner != null && item.getItem() != Items.AIR && stock > 0) {
             owner.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ")
@@ -964,7 +965,7 @@ public class Shop {
      */
     public void changeOwner(final @NotNull Player newOwner) {
         if(ownerUUID.equals(newOwner.getUUID())) return;
-        final Player oldOwner = FancyPlayerShops.getServer().getPlayerList().getPlayer(ownerUUID);
+        final Player oldOwner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
 
 
         // Send feedback to old owner

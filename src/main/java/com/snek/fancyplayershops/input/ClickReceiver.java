@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.utils.scheduler.RateLimiter;
+import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
+import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -28,6 +28,25 @@ import net.minecraft.world.level.Level;
 
 
 
+
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
 
 
 /**

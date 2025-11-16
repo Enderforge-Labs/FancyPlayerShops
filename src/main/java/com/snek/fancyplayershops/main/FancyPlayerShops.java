@@ -9,11 +9,10 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,23 +30,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.fancyplayershops.input.MessageReceiver;
-import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
-import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.ui.Elm;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.scheduler.Scheduler;
+import com.snek.frameworkconfig.FrameworkConfig;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 
 
@@ -62,24 +62,16 @@ import com.snek.framework.utils.scheduler.Scheduler;
  */
 public class FancyPlayerShops implements ModInitializer {
 
-    // Server instance
-    private static @Nullable MinecraftServer serverInstance = null;
-    public  static @NotNull  MinecraftServer getServer() {
-        if(serverInstance == null) {
-            throw new NullPointerException("Server instance requested before initialization");
-        }
-        return serverInstance;
-    }
-
     // Mod ID and console logger
     public static final @NotNull String MOD_ID = "fancyplayershops";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final ResourceLocation INIT_PHASE_ID = new ResourceLocation(MOD_ID, "init");
 
 
 
 
     public static Path getStorageDir() {
-        return getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
+        return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
     public static Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
@@ -111,17 +103,29 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            serverInstance = server;
 
 
-            // Create config and storage directories
+        // Make sure Framework Lib and Framework Config are initialized before FancyPlayerShops
+        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
+            FrameworkConfig.INIT_PHASE_ID,
+            INIT_PHASE_ID
+        );
+        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
+            FrameworkLib.INIT_PHASE_ID,
+            INIT_PHASE_ID
+        );
+
+
+
+
+        // Register initialization
+        ServerLifecycleEvents.SERVER_STARTING.register(INIT_PHASE_ID, server -> {
+
+
+            // Create storage directories
             try {
                 for(final String path : new String[] { "shops", "stash", "balance" }) {
                     Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
-                }
-                for(final String path : new String[] { "." }) {
-                    Files.createDirectories(FancyPlayerShops.getConfigDir().resolve(path));
                 }
             } catch(final IOException e) {
                 e.printStackTrace();
@@ -131,7 +135,10 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Read config files
-            Configs.loadConfigs();
+            if(!Configs.loadConfigs()) fatal = true;
+
+
+            // Stop if errors occurred
             if(fatal) return;
         });
 
@@ -148,7 +155,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), () -> {
+            Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
                 Hud.updateActiveHuds();
             });
@@ -165,9 +172,6 @@ public class FancyPlayerShops implements ModInitializer {
                 StashManager.saveScheduledStashes();
                 BalanceManager.saveScheduledBalances();
             });
-
-            // Log initialization success
-            LOGGER.info("FancyPlayerShops initialized. :3");
 
 
 
@@ -225,10 +229,8 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            // Register chat input handler
-            ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
-                return !MessageReceiver.onMessage(message, sender);
-            });
+            // Log initialization
+            LOGGER.info("FancyPlayerShops initialized. :3");
         });
     }
 

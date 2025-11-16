@@ -22,11 +22,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.fancyplayershops.hud_ui.stash.StashHud;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.framework.data_types.containers.Pair;
-import com.snek.framework.utils.MinecraftUtils;
+import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;

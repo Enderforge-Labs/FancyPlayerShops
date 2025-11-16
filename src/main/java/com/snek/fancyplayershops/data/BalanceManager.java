@@ -20,9 +20,9 @@ import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.herrkatze.solsticeEconomy.modules.economy.Notification;
 import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.framework.data_types.containers.Pair;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
+import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.server.level.ServerPlayer;
 
