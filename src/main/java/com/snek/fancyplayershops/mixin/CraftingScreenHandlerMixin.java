@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.frameworklib.FrameworkLib;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -52,7 +53,7 @@ public abstract class CraftingScreenHandlerMixin {
 
 
         // Get recipe manager from the server and retrieve the shop's recipe
-        final RecipeManager recipeManager = FancyPlayerShops.getServer().getRecipeManager();
+        final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
         final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, "shop_item");
         final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
         if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the shop item could not be found: " + recipeId + ".");
