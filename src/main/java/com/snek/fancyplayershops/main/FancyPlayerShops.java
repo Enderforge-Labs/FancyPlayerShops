@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,20 +30,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.fancyplayershops.input.MessageReceiver;
+import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
 import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
-import com.snek.framework.old.ui.Elm;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -70,7 +70,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
     public static Path getStorageDir() {
-        return getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
+        return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
     public static Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
@@ -138,7 +138,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, Configs.perf.animation_refresh_time.getValue(), () -> {
+            Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
                 Hud.updateActiveHuds();
             });

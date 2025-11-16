@@ -29,6 +29,25 @@ import net.minecraft.world.level.Level;
 
 
 
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+//FIXME this click receiver should be part of the framework library, not the shops mod
+
 
 /**
  * A utility class that handles clicks from players.
