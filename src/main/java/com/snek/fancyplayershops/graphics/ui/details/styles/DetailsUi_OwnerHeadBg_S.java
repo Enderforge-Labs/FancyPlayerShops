@@ -1,11 +1,11 @@
-package com.snek.fancyplayershops.shop_ui.details.styles;
+package com.snek.fancyplayershops.graphics.ui.details.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
 import com.snek.framework.old.data_types.animations.Animation;
 import com.snek.framework.old.data_types.animations.Transform;
 import com.snek.framework.old.data_types.animations.Transition;

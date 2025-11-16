@@ -1,9 +1,9 @@
-package com.snek.fancyplayershops.shop_ui.inspect.elements;
+package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.old.utils.MinecraftUtils;
 import com.snek.framework.old.utils.Txt;

@@ -1,19 +1,19 @@
-package com.snek.fancyplayershops.shop_ui.inspect;
+package com.snek.fancyplayershops.graphics.ui.inspect;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.fancyplayershops.shop_ui.inspect.elements.InspectUi_IdDisplay;
-import com.snek.fancyplayershops.shop_ui.inspect.elements.InspectUi_InventoryViewButton;
-import com.snek.fancyplayershops.shop_ui.inspect.elements.InspectUi_ModDisplay;
-import com.snek.fancyplayershops.shop_ui.inspect.elements.InspectUi_Title;
-import com.snek.fancyplayershops.shop_ui.misc.elements.DualInputIndicator;
-import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
+import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_IdDisplay;
+import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_InventoryViewButton;
+import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_ModDisplay;
+import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_Title;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
+import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.ui.old._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;

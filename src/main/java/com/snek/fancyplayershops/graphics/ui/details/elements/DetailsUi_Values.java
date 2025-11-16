@@ -1,12 +1,12 @@
-package com.snek.fancyplayershops.shop_ui.details.elements;
+package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
 import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
 import com.snek.framework.old.utils.Easings;
 import com.snek.framework.old.utils.MinecraftUtils;

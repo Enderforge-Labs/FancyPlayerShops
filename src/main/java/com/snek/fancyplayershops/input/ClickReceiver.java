@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud_ui._elements.old.Hud;
+import com.snek.fancyplayershops.graphics.hud._elements.old.Hud;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.ui.old._elements.InteractionBlocker;
 import com.snek.framework.old.utils.scheduler.RateLimiter;

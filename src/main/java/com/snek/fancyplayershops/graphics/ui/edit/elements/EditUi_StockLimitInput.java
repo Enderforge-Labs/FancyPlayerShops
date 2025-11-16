@@ -1,14 +1,14 @@
-package com.snek.fancyplayershops.shop_ui.edit.elements;
+package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_Input_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextInput;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
+import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_Input_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextInput;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.framework.old.utils.Txt;
 import com.snek.framework.old.utils.Utils;
 

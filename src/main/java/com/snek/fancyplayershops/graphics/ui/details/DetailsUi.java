@@ -1,17 +1,17 @@
-package com.snek.fancyplayershops.shop_ui.details;
+package com.snek.fancyplayershops.graphics.ui.details;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_Names;
-import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_OwnerHead;
-import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_Title;
-import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_Values;
-import com.snek.fancyplayershops.shop_ui.details.styles.DetailsUi_OwnerHeadBg_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopPanelElm;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Names;
+import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_OwnerHead;
+import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
+import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
+import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
 import com.snek.fancyplayershops.ui.old._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.TextAlignment;

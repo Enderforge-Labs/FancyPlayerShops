@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.shop_ui.misc.elements;
+package com.snek.fancyplayershops.graphics.ui.misc.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;
 import com.snek.framework.old.ui.Div;

@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.hud_ui.stash.styles;
+package com.snek.fancyplayershops.graphics.hud.stash.styles;
 
 import org.jetbrains.annotations.NotNull;
 

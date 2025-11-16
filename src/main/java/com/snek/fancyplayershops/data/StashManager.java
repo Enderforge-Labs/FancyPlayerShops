@@ -23,7 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.snek.frameworklib.graphics.hud.Hud;
-import com.snek.fancyplayershops.hud_ui.stash.StashHud;
+import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;

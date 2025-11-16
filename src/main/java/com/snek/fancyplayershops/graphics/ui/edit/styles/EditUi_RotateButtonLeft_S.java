@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.edit.styles;
+package com.snek.fancyplayershops.graphics.ui.edit.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

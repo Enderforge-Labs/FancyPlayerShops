@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.transfer.elements;
+package com.snek.fancyplayershops.graphics.ui.transfer.elements;
 
 import java.util.UUID;
 
@@ -7,13 +7,13 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.shop_ui.edit.elements.EditUiSub_BackButton;
-import com.snek.fancyplayershops.shop_ui.misc.elements.DualInputIndicator;
-import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.shop_ui.transfer.styles.TransferUi_Input_S;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUiSub_BackButton;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
+import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.fancyplayershops.ui.old._elements.UiBorder;
 import com.snek.framework.old.data_types.ui.AlignmentX;
 import com.snek.framework.old.data_types.ui.AlignmentY;

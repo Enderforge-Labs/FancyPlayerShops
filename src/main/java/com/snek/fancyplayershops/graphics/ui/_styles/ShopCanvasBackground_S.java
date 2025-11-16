@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.shop_ui._styles;
+package com.snek.fancyplayershops.graphics.ui._styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
 
 
 

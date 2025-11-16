@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.shop_ui._elements;
+package com.snek.fancyplayershops.graphics.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui._styles.ShopCanvasBack_S;
-import com.snek.fancyplayershops.shop_ui._styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBack_S;
+import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
 
 

@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.shop_ui.misc.styles;
+package com.snek.fancyplayershops.graphics.ui.misc.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.shop_ui.misc.elements.DualInputIndicator;
-import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.framework.old.data_types.animations.Transform;
 
 

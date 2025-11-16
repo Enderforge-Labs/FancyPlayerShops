@@ -1,11 +1,11 @@
-package com.snek.fancyplayershops.shop_ui.inspect.elements;
+package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ItemInspector_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
+import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ItemInspector_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

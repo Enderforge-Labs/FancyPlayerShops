@@ -1,8 +1,8 @@
-package com.snek.fancyplayershops.shop_ui.misc.interfaces;
+package com.snek.fancyplayershops.graphics.ui.misc.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 
 
 

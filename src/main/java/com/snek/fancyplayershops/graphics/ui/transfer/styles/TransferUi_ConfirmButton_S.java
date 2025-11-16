@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.transfer.styles;
+package com.snek.fancyplayershops.graphics.ui.transfer.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.styles.FancyShopButton_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.framework.old.data_types.animations.Animation;
 import com.snek.framework.old.data_types.animations.Transition;
 import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;

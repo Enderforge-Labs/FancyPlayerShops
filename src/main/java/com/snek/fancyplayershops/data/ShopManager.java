@@ -31,7 +31,7 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.main.ShopKey;
-import com.snek.fancyplayershops.shop_ui.edit.elements.EditUi_ColorSelector;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;

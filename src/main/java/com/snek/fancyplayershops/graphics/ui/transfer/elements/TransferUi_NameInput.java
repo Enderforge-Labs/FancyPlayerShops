@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.transfer.elements;
+package com.snek.fancyplayershops.graphics.ui.transfer.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -6,9 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextInput;
-import com.snek.fancyplayershops.shop_ui.misc.styles.ShopTextInput_S;
-import com.snek.fancyplayershops.shop_ui.transfer.styles.TransferUi_Input_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextInput;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.framework.old.utils.Txt;
 
 import net.minecraft.network.chat.Component;

@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui.details.elements;
+package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -6,8 +6,8 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.details.styles.DetailsUi_OwnerHead_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.ShopItemElm;
+import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHead_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopItemElm;
 import com.snek.framework.old.ui.basic.styles.ItemElmStyle;
 import com.snek.framework.old.utils.MinecraftUtils;
 

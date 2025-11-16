@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.shop_ui._elements;
+package com.snek.fancyplayershops.graphics.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui._styles.SimpleNameDisplay_S;
+import com.snek.fancyplayershops.graphics.ui._styles.SimpleNameDisplay_S;
 import com.snek.framework.old.data_types.animations.Animation;
 import com.snek.framework.old.data_types.animations.Transform;
 import com.snek.framework.old.data_types.animations.Transition;

@@ -1,12 +1,12 @@
-package com.snek.fancyplayershops.shop_ui.buy.elements;
+package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
-import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ConfirmButton_S;
-import com.snek.fancyplayershops.shop_ui.misc.elements.FancyShopButton;
+import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
+import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.framework.old.data_types.animations.Transition;
 import com.snek.framework.old.utils.Easings;
 import com.snek.framework.old.utils.Txt;

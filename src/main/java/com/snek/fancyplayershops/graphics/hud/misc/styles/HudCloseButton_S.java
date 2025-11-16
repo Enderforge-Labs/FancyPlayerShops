@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.hud_ui.misc.styles;
+package com.snek.fancyplayershops.graphics.hud.misc.styles;
 
 import org.jetbrains.annotations.Nullable;
 
