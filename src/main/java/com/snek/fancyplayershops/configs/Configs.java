@@ -26,8 +26,9 @@ public abstract class Configs {
     /**
      * Loads the configuration files or creates new ones if they are missing.
      */
-    public static void loadConfigs() {
+    public static boolean loadConfigs() {
         shop = ConfigManager.loadConfig("ShopConfig",         ShopConfig.class,        FancyPlayerShops.MOD_ID);
         perf = ConfigManager.loadConfig("PerformanceConfig",  PerformanceConfig.class, FancyPlayerShops.MOD_ID);
+        return shop != null && perf != null;
     }
 }

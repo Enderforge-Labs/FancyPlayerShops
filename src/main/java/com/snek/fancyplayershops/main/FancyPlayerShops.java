@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -136,7 +135,10 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Read config files
-            Configs.loadConfigs();
+            if(!Configs.loadConfigs()) fatal = true;
+
+
+            // Stop if errors occurred
             if(fatal) return;
         });
 
