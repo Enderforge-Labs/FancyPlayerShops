@@ -1,11 +1,11 @@
-package com.snek.fancyplayershops.config.old.implementations;
+package com.snek.fancyplayershops.configs;
 
 import java.math.BigInteger;
 
-import com.snek.fancyplayershops.config.old.ConfigFile;
-import com.snek.fancyplayershops.config.old.fields.ConstrainedConfigField;
-import com.snek.fancyplayershops.config.old.fields.DefaultConfigField;
-import com.snek.fancyplayershops.config.old.fields.ValueConfigField;
+import com.snek.frameworkconfig.ConfigFile;
+import com.snek.frameworkconfig.fields.ConstrainedConfigField;
+import com.snek.frameworkconfig.fields.DefaultConfigField;
+import com.snek.frameworkconfig.fields.ValueConfigField;
 
 
 

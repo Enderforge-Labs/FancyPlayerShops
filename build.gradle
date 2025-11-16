@@ -22,6 +22,7 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    mavenLocal()
 }
 
 
@@ -35,7 +36,6 @@ loom {
             sourceSet sourceSets.client
         }
     }
-
 }
 
 
