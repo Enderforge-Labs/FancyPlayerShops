@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUiSub_BackButton;
@@ -15,13 +14,14 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.frameworklib.graphics.ui._elements.UiBorder;
-import com.snek.framework.old.data_types.ui.AlignmentX;
-import com.snek.framework.old.data_types.ui.AlignmentY;
-import com.snek.framework.old.data_types.ui.TextAlignment;
-import com.snek.framework.old.ui.Div;
-import com.snek.framework.old.ui.Elm;
-import com.snek.framework.old.ui.basic.elements.SimpleTextElm;
-import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.ui.AlignmentX;
+import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.data_types.ui.TextAlignment;
+import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -131,7 +131,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // If it is, try to set the new owner and update the display in case of success
         else {
-            final Player newOwner = FancyPlayerShops.getServer().getPlayerList().getPlayerByName(s);
+            final Player newOwner = FrameworkLib.getServer().getPlayerList().getPlayerByName(s);
             if(newOwner == null) {
                 shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
                 confirmButton.updateColor(false);

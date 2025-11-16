@@ -6,10 +6,10 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
-import com.snek.framework.old.data_types.animations.Animation;
-import com.snek.framework.old.data_types.animations.Transform;
-import com.snek.framework.old.data_types.animations.Transition;
-import com.snek.framework.old.ui.basic.styles.ElmStyle;
+import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
 

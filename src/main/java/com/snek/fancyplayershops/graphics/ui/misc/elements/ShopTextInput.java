@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
-import com.snek.framework.old.ui.functional.elements.TextInputElm;
+import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

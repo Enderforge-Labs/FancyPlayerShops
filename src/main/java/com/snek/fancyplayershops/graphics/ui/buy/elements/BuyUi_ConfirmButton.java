@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
-import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;

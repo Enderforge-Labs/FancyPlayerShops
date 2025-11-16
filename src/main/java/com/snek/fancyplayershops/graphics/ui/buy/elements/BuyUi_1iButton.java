@@ -11,12 +11,12 @@ import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
-import com.snek.framework.old.data_types.animations.Transition;
-import com.snek.framework.old.data_types.ui.AlignmentX;
-import com.snek.framework.old.data_types.ui.AlignmentY;
-import com.snek.framework.old.data_types.ui.PolylineData;
-import com.snek.framework.old.ui.Div;
-import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
+import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.data_types.ui.AlignmentX;
+import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.network.chat.Component;

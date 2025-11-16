@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 
 
 

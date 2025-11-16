@@ -5,7 +5,7 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
-import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transform;
 
 
 

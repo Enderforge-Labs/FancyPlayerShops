@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
-import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.core.registries.BuiltInRegistries;

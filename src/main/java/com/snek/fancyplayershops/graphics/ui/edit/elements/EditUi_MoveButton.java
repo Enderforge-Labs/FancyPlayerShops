@@ -11,11 +11,11 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
-import com.snek.framework.old.data_types.ui.AlignmentX;
-import com.snek.framework.old.data_types.ui.AlignmentY;
-import com.snek.framework.old.data_types.ui.PolylineData;
-import com.snek.framework.old.ui.Div;
-import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
+import com.snek.frameworklib.data_types.ui.AlignmentX;
+import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.SpaceUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -31,7 +31,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class EditUi_MoveButton extends SimpleShopButton {
-    private static final @NotNull List<com.snek.framework.old.data_types.ui.PolylineData> design = new ArrayList<>();
+    private static final @NotNull List<PolylineData> design = new ArrayList<>();
     static {
         for(int i = 0; i < 4; ++i) {
             design.add(new PolylineData(

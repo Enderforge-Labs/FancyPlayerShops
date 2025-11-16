@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHead_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopItemElm;
-import com.snek.framework.old.ui.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +43,7 @@ public class DetailsUi_OwnerHead extends ShopItemElm {
      * Updates the displayed head using the owner's uuid.
      */
     public void updateDisplay() {
-        final @Nullable ItemStack head = MinecraftUtils.getOfflinePlayerHead(shop.getOwnerUuid(), FancyPlayerShops.getServer());
+        final @Nullable ItemStack head = MinecraftUtils.getOfflinePlayerHead(shop.getOwnerUuid(), FrameworkLib.getServer());
         if(head == null) suppressSpawn = true; //! Prevent rendering the default skins in case of cached player data lookup issues
         else getStyle(ItemElmStyle.class).setItem(head);
     }

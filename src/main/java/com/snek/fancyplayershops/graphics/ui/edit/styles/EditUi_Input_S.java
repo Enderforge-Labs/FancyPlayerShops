@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
-import com.snek.framework.old.data_types.animations.Animation;
-import com.snek.framework.old.data_types.animations.Transform;
-import com.snek.framework.old.data_types.animations.Transition;
-import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
+import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
 

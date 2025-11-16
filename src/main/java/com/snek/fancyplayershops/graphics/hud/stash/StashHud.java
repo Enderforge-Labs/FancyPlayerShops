@@ -18,9 +18,9 @@ import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemNameCo
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_MaterialList;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_Title;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.framework.old.data_types.ui.AlignmentX;
-import com.snek.framework.old.data_types.ui.AlignmentY;
-import com.snek.framework.old.ui.Div;
+import com.snek.frameworklib.data_types.ui.AlignmentX;
+import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.graphics.Div;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

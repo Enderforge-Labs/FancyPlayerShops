@@ -7,9 +7,9 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
-import com.snek.framework.old.data_types.animations.Animation;
-import com.snek.framework.old.data_types.animations.Transition;
-import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
+import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
 

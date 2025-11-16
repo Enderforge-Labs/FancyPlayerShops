@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextInput;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -52,7 +52,7 @@ public class TransferUi_NameInput extends ShopTextInput {
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(
                 !menu.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?
-                new Txt(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString()) :
+                new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString()) :
                 new Txt("[Not specified]").lightGray().italic()
             )
         .white().get());

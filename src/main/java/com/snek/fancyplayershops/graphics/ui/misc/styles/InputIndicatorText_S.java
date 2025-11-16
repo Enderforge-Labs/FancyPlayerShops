@@ -2,8 +2,8 @@ package com.snek.fancyplayershops.graphics.ui.misc.styles;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.framework.old.data_types.animations.Transform;
-import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
 

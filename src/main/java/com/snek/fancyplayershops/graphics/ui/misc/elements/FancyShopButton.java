@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
-import com.snek.framework.old.ui.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 
 
 

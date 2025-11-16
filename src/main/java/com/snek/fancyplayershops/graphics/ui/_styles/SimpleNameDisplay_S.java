@@ -3,8 +3,8 @@ package com.snek.fancyplayershops.graphics.ui._styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.ui.old._styles.UiBorder_S;
-import com.snek.framework.old.ui.basic.styles.FancyTextElmStyle;
+import com.snek.frameworklib.graphics.ui._styles.UiBorder_S;
+import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 
 
 

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.old.ui.Div;
+import com.snek.frameworklib.graphics.Div;
 
 
 

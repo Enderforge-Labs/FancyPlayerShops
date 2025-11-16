@@ -5,9 +5,9 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.framework.old.data_types.ui.AlignmentX;
-import com.snek.framework.old.data_types.ui.AlignmentY;
-import com.snek.framework.old.ui.Div;
+import com.snek.frameworklib.data_types.ui.AlignmentX;
+import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.graphics.Div;
 
 import net.minecraft.world.inventory.ClickAction;
 

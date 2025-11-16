@@ -3,11 +3,11 @@ package com.snek.fancyplayershops.graphics.ui.details.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
-import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -36,7 +36,7 @@ public class DetailsUi_Values extends ShopTextElm {
      */
     public DetailsUi_Values(@NotNull Shop _shop) {
         super(_shop);
-        ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FancyPlayerShops.getServer());
+        ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FrameworkLib.getServer());
         updateDisplay();
     }
 

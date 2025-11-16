@@ -3,11 +3,11 @@ package com.snek.fancyplayershops.graphics.ui.transfer.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_ConfirmButton_S;
-import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
 
@@ -35,7 +35,7 @@ public class TransferUi_ConfirmButton extends FancyShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        shop.changeOwner(FancyPlayerShops.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
         if(active) playButtonSound(player);
     }
 
