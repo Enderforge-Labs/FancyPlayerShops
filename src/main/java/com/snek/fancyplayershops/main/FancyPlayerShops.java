@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +41,7 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.frameworklib.input.MessageReceiver;
+import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
 import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
 import com.snek.frameworklib.FrameworkLib;
@@ -65,6 +66,7 @@ public class FancyPlayerShops implements ModInitializer {
     // Mod ID and console logger
     public static final @NotNull String MOD_ID = "fancyplayershops";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final ResourceLocation INIT_PHASE_ID = new ResourceLocation(MOD_ID, "init");
 
 
 
@@ -96,130 +98,141 @@ public class FancyPlayerShops implements ModInitializer {
     public void onInitialize() {
 
 
-        // Register commands
-        CommandManager.register();
+        // // Register commands
+        // CommandManager.register();
 
 
 
 
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
 
 
-            // Create config and storage directories
-            try {
-                for(final String path : new String[] { "shops", "stash", "balance" }) {
-                    Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
-                }
-                for(final String path : new String[] { "." }) {
-                    Files.createDirectories(FancyPlayerShops.getConfigDir().resolve(path));
-                }
-            } catch(final IOException e) {
-                e.printStackTrace();
-                flagFatal();
-                return;
-            }
-
-
-            // Read config files
-            Configs.loadConfigs();
-            if(fatal) return;
-        });
+        // // Make sure Framework Lib and Framework Config are initialized before FancyPlayerShops
+        // ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
+        //     FrameworkConfig.INIT_PHASE_ID,
+        //     INIT_PHASE_ID
+        // );
+        // ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
+        //     FrameworkLib.INIT_PHASE_ID,
+        //     INIT_PHASE_ID
+        // );
 
 
 
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            if(fatal) return;
-
-            // Load persistent data
-            ShopManager.loadShops();
-            StashManager.loadStashes();
-            BalanceManager.loadBalances();
+        // // Register initialization
+        // ServerLifecycleEvents.SERVER_STARTING.register(INIT_PHASE_ID, server -> {
 
 
-            // Schedule UI element update loop
-            Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
-                Elm.processUpdateQueue();
-                Hud.updateActiveHuds();
-            });
+        //     // Create config and storage directories
+        //     try {
+        //         for(final String path : new String[] { "shops", "stash", "balance" }) {
+        //             Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
+        //         }
+        //         for(final String path : new String[] { "." }) {
+        //             Files.createDirectories(FancyPlayerShops.getConfigDir().resolve(path));
+        //         }
+        //     } catch(final IOException e) {
+        //         e.printStackTrace();
+        //         flagFatal();
+        //         return;
+        //     }
 
-            // Schedule hover manager loop
-            Scheduler.loop(0, 1, HoverReceiver::tick);
 
-            // Schedule shop pull updates
-            Scheduler.loop(0, 1, ShopManager::pullItems);
-
-            // Schedule data saves
-            Scheduler.loop(0, Configs.perf.data_save_frequency.getValue(), () -> {
-                ShopManager.saveScheduledShops();
-                StashManager.saveScheduledStashes();
-                BalanceManager.saveScheduledBalances();
-            });
-
-            // Log initialization success
-            LOGGER.info("FancyPlayerShops initialized. :3");
+        //     // Read config files
+        //     Configs.loadConfigs();
+        //     if(fatal) return;
+        // });
 
 
 
 
-            // Create and register block click events (shop placement + prevents early clicks going through the shop)
-            AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
-            });
-            UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-                InteractionResult r;
-                r = ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
-                if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
-                return r;
-            });
+        // ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+        //     if(fatal) return;
+
+        //     // Load persistent data
+        //     ShopManager.loadShops();
+        //     StashManager.loadStashes();
+        //     BalanceManager.loadBalances();
+
+
+        //     // Schedule UI element update loop
+        //     Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
+        //         Elm.processUpdateQueue();
+        //         Hud.updateActiveHuds();
+        //     });
+
+        //     // Schedule hover manager loop
+        //     Scheduler.loop(0, 1, HoverReceiver::tick);
+
+        //     // Schedule shop pull updates
+        //     Scheduler.loop(0, 1, ShopManager::pullItems);
+
+        //     // Schedule data saves
+        //     Scheduler.loop(0, Configs.perf.data_save_frequency.getValue(), () -> {
+        //         ShopManager.saveScheduledShops();
+        //         StashManager.saveScheduledStashes();
+        //         BalanceManager.saveScheduledBalances();
+        //     });
 
 
 
 
-            // Create and register entity click events (interaction blocker clicks)
-            AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
-            });
-            UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
-            });
+        //     // Create and register block click events (shop placement + prevents early clicks going through the shop)
+        //     AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
+        //         return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+        //     });
+        //     UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+        //         InteractionResult r;
+        //         r = ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+        //         if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
+        //         return r;
+        //     });
 
 
 
 
-            // Create and register item use events (prevents early clicks going through the shop)
-            UseItemCallback.EVENT.register((player, world, hand) -> {
-                InteractionResult r = ClickReceiver.onUseItem(world, player, hand);
-                if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
-                /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
-            });
+        //     // Create and register entity click events (interaction blocker clicks)
+        //     AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+        //         return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
+        //     });
+        //     UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+        //         return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
+        //     });
 
 
 
 
-            // Register scheduler
-            ServerTickEvents.END_SERVER_TICK.register(_server -> {
-                Scheduler.tick();
-            });
+        //     // Create and register item use events (prevents early clicks going through the shop)
+        //     UseItemCallback.EVENT.register((player, world, hand) -> {
+        //         InteractionResult r = ClickReceiver.onUseItem(world, player, hand);
+        //         if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
+        //         /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
+        //     });
 
 
 
 
-            // Register entity display purge
-            ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-                Elm.onEntityLoad(entity);
-                ShopItemDisplay.onEntityLoad(entity);
-                InteractionBlocker.onEntityLoad(entity);
-            });
+        //     // Register scheduler
+        //     ServerTickEvents.END_SERVER_TICK.register(_server -> {
+        //         Scheduler.tick();
+        //     });
 
 
 
 
-            // Register chat input handler
-            ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
-                return !MessageReceiver.onMessage(message, sender);
-            });
-        });
+        //     // Register entity display purge
+        //     ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+        //         Elm.onEntityLoad(entity);
+        //         ShopItemDisplay.onEntityLoad(entity);
+        //         InteractionBlocker.onEntityLoad(entity);
+        //     });
+
+
+
+
+        //     // Log initialization
+        //     LOGGER.info("FancyPlayerShops initialized. :3");
+        // });
     }
 
 
