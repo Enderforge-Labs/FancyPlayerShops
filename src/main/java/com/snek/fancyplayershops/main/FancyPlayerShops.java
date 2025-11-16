@@ -58,7 +58,7 @@ import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 /**
  * The main class of the mod FancyPlayerShops.
- * <p> This class caches the server instance and initializes all the event callbacks.
+ * <p> This class initializes all the event callbacks.
  */
 public class FancyPlayerShops implements ModInitializer {
 
@@ -74,7 +74,7 @@ public class FancyPlayerShops implements ModInitializer {
         return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
     public static Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir().resolve(FancyPlayerShops.MOD_ID);
+        return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
     }
 
 
@@ -125,7 +125,7 @@ public class FancyPlayerShops implements ModInitializer {
             // Create storage directories
             try {
                 for(final String path : new String[] { "shops", "stash", "balance" }) {
-                    Files.createDirectories(FancyPlayerShops.getStorageDir().resolve(path));
+                    Files.createDirectories(getStorageDir().resolve(path));
                 }
             } catch(final IOException e) {
                 e.printStackTrace();
@@ -154,12 +154,7 @@ public class FancyPlayerShops implements ModInitializer {
             BalanceManager.loadBalances();
 
 
-            // Schedule UI element update loop
-            Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
-                Elm.processUpdateQueue();
-                Hud.updateActiveHuds();
-            });
-
+            //FIXME this should prob be in the framework library, not in the mod implementation
             // Schedule hover manager loop
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
@@ -176,6 +171,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
+            //FIXME check if this should be in the framework library
             // Create and register block click events (shop placement + prevents early clicks going through the shop)
             AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
                 return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
@@ -190,17 +186,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            // Create and register entity click events (interaction blocker clicks)
-            AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
-            });
-            UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
-            });
-
-
-
-
+            //FIXME check if this should be in the framework library
             // Create and register item use events (prevents early clicks going through the shop)
             UseItemCallback.EVENT.register((player, world, hand) -> {
                 InteractionResult r = ClickReceiver.onUseItem(world, player, hand);
@@ -211,19 +197,9 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            // Register scheduler
-            ServerTickEvents.END_SERVER_TICK.register(_server -> {
-                Scheduler.tick();
-            });
-
-
-
-
-            // Register entity display purge
+            // Register item display fix
             ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-                Elm.onEntityLoad(entity);
-                ShopItemDisplay.onEntityLoad(entity);
-                InteractionBlocker.onEntityLoad(entity);
+                ShopItemDisplay.onEntityLoad_item(entity);
             });
 
 
@@ -265,7 +241,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn snapshot if the item has the snapshot tag
                     if(tag.contains(ShopManager.SNAPSHOT_NBT_KEY)) {
-                        final CompoundTag data = tag.getCompound(FancyPlayerShops.MOD_ID + ".shop_data");
+                        final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
                             player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);

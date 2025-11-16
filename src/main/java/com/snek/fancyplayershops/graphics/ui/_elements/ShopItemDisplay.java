@@ -352,7 +352,7 @@ public class ShopItemDisplay extends ItemElm {
      * <p> Must be called on entity load event.
      * @param entity The loaded entity.
      */
-    public static void onEntityLoad(final @NotNull Entity entity) {
+    public static void onEntityLoad_item(final @NotNull Entity entity) {
         if(entity instanceof ItemDisplay) {
             if(
                 entity.level() != null &&
