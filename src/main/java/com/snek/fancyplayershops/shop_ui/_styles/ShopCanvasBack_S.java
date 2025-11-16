@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
-import com.snek.fancyplayershops.ui._styles.UiBorder_S;
+import com.snek.fancyplayershops.ui.old._styles.UiBorder_S;
 
 
 

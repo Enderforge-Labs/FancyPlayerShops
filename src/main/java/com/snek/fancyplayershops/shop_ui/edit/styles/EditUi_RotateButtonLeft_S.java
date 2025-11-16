@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.ui._elements.UiCanvas;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.utils.Easings;
+import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.framework.old.data_types.animations.Animation;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.utils.Easings;
 
 
 

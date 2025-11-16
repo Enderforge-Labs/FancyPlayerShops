@@ -1,6 +1,6 @@
 package com.snek.fancyplayershops.shop_ui.misc.styles;
 
-import com.snek.framework.ui.basic.styles.PanelElmStyle;
+import com.snek.framework.old.ui.basic.styles.PanelElmStyle;
 
 
 

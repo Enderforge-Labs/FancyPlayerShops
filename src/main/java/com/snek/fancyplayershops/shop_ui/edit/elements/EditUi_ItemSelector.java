@@ -6,8 +6,8 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.buy.elements.BuyUi_ItemInspector;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.Txt;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;

@@ -7,11 +7,11 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextElm;
-import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
+import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.framework.old.utils.Easings;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.Txt;
+import com.snek.framework.old.utils.Utils;
 
 import net.minecraft.world.item.Items;
 

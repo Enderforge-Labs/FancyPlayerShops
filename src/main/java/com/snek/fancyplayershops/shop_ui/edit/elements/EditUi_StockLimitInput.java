@@ -9,8 +9,8 @@ import com.snek.fancyplayershops.shop_ui.edit.EditUi;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_Input_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopTextInput;
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopTextInput_S;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
+import com.snek.framework.old.utils.Txt;
+import com.snek.framework.old.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 

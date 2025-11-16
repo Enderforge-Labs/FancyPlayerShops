@@ -10,15 +10,15 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
-import com.snek.fancyplayershops.ui._elements.UiCanvas;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
-import com.snek.framework.data_types.ui.PolylineData;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineSetElm;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.SpaceUtils;
-import com.snek.framework.utils.Txt;
+import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.AlignmentY;
+import com.snek.framework.old.data_types.ui.PolylineData;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.SpaceUtils;
+import com.snek.framework.old.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -31,7 +31,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class EditUi_MoveButton extends SimpleShopButton {
-    private static final @NotNull List<com.snek.framework.data_types.ui.PolylineData> design = new ArrayList<>();
+    private static final @NotNull List<com.snek.framework.old.data_types.ui.PolylineData> design = new ArrayList<>();
     static {
         for(int i = 0; i < 4; ++i) {
             design.add(new PolylineData(

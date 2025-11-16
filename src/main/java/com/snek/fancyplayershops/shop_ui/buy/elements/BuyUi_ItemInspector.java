@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.buy.styles.BuyUi_ItemInspector_S;
 import com.snek.fancyplayershops.shop_ui.inspect.InspectUi;
 import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
-import com.snek.framework.ui.Div;
+import com.snek.framework.old.ui.Div;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

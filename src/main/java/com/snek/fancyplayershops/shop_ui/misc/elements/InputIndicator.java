@@ -8,15 +8,15 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.styles.InputIndicatorText_S;
 import com.snek.fancyplayershops.shop_ui.misc.styles.MouseButtonDown_S;
 import com.snek.fancyplayershops.shop_ui.misc.styles.MouseButtonUp_S;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
-import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
-import com.snek.framework.utils.Txt;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.AlignmentY;
+import com.snek.framework.old.data_types.ui.TextAlignment;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.Elm;
+import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.framework.old.utils.Txt;
 
 import net.minecraft.world.inventory.ClickAction;
 

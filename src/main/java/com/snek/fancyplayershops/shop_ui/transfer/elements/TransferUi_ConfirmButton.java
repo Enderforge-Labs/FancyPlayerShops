@@ -7,9 +7,9 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.shop_ui.transfer.styles.TransferUi_ConfirmButton_S;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.Utils;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.utils.Easings;
+import com.snek.framework.old.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

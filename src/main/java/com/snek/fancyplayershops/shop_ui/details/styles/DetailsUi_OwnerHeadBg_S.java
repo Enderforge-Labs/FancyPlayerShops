@@ -6,11 +6,11 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
 import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.ui.basic.styles.ElmStyle;
-import com.snek.framework.utils.Easings;
+import com.snek.framework.old.data_types.animations.Animation;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.ui.basic.styles.ElmStyle;
+import com.snek.framework.old.utils.Easings;
 
 
 

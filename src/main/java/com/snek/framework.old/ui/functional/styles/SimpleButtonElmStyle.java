@@ -1,0 +1,149 @@
+package com.snek.framework.old.ui.functional.styles;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3i;
+
+import com.snek.framework.old.data_types.animations.Animation;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.data_types.containers.Flagged;
+import com.snek.framework.old.ui.basic.styles.ElmStyle;
+import com.snek.framework.old.ui.basic.styles.PanelElmStyle;
+import com.snek.framework.old.utils.Easings;
+
+
+
+
+
+
+
+
+/**
+ * The style of the generic SimpleButtonElm UI element.
+ */
+public class SimpleButtonElmStyle extends PanelElmStyle {
+    public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(220, 220, 220);
+    public static final          float    HIDDEN_W             = 0.00001f;
+    public static final          int      HOVER_ANIMATION_TIME = 10;
+
+    private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
+    private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
+    private @Nullable Flagged<Animation> hoverLeaveAnimation  = null;
+
+
+
+
+    /**
+     * Creates a new SimpleButtonElmStyle.
+     */
+    public SimpleButtonElmStyle() {
+        super();
+    }
+
+
+
+
+    @Override
+    public void resetAll() {
+        super.resetAll();
+        resetHoverPrimerAnimation();
+        resetHoverEnterAnimation();
+        resetHoverLeaveAnimation();
+    }
+
+
+
+
+    @Override
+    public @NotNull Vector3i getDefaultColor() {
+        return new Vector3i(HOVER_COLOR);
+    }
+
+    @Override
+    public int getDefaultAlpha() {
+        return 255;
+    }
+
+
+
+    // Default value providers
+    public @Nullable Animation getDefaultHoverPrimerAnimation() {
+        return new Animation(
+            new Transition()
+            .additiveTransform(new Transform().scaleX(HIDDEN_W))
+        );
+    }
+    public @Nullable Animation getDefaultHoverEnterAnimation () {
+        return new Animation(
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleX(1f / HIDDEN_W))
+        );
+    }
+    public @Nullable Animation getDefaultHoverLeaveAnimation () {
+        return new Animation(
+            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleX(HIDDEN_W))
+        );
+    }
+
+
+
+
+    @Override //TODO
+    public @Nullable Animation getDefaultPrimerAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+    @Override //TODO
+    public @Nullable Animation getDefaultSpawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            .targetBgAlpha(getDefaultAlpha())
+            .targetOpacity(255)
+        );
+    }
+    @Override //TODO
+    public @Nullable Animation getDefaultDespawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+
+
+
+
+    // Reset functions
+    public void resetHoverPrimerAnimation() { hoverPrimerAnimation = Flagged.from(getDefaultHoverPrimerAnimation()); }
+    public void resetHoverEnterAnimation () { hoverEnterAnimation  = Flagged.from(getDefaultHoverEnterAnimation ()); }
+    public void resetHoverLeaveAnimation () { hoverLeaveAnimation  = Flagged.from(getDefaultHoverLeaveAnimation ()); }
+
+
+    // Setters
+    public void setHoverPrimerAnimation(final @Nullable Animation _hoverPrimerAnimation) { hoverPrimerAnimation.set(_hoverPrimerAnimation); }
+    public void setHoverEnterAnimation (final @Nullable Animation _hoverEnterAnimation ) { hoverEnterAnimation .set(_hoverEnterAnimation ); }
+    public void setHoverLeaveAnimation (final @Nullable Animation _hoverLeaveAnimation ) { hoverLeaveAnimation .set(_hoverLeaveAnimation ); }
+
+
+    // Flagged getters
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation() { return hoverPrimerAnimation;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation () { return hoverEnterAnimation ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation () { return hoverLeaveAnimation ;}
+
+
+    // Getters
+    public @Nullable Animation getHoverPrimerAnimation() { return hoverPrimerAnimation.get(); }
+    public @Nullable Animation getHoverEnterAnimation () { return hoverEnterAnimation .get(); }
+    public @Nullable Animation getHoverLeaveAnimation () { return hoverLeaveAnimation .get(); }
+
+
+    // Edit getters
+    public @Nullable Animation editHoverPrimerAnimation() { return hoverPrimerAnimation.edit(); }
+    public @Nullable Animation editHoverEnterAnimation () { return hoverEnterAnimation .edit(); }
+    public @Nullable Animation editHoverLeaveAnimation () { return hoverLeaveAnimation .edit(); }
+}

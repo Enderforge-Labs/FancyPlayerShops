@@ -2,9 +2,9 @@ package com.snek.fancyplayershops.hud_ui.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.interfaces.Scrollable;
+import com.snek.fancyplayershops.hud_ui._elements.old.__HudElm;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.interfaces.Scrollable;
 
 import net.minecraft.world.entity.player.Player;
 

@@ -6,12 +6,12 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.shop_ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.SimpleShopButton;
-import com.snek.fancyplayershops.ui._elements.UiCanvas;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
-import com.snek.framework.data_types.ui.PolylineData;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineSetElm;
+import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.AlignmentY;
+import com.snek.framework.old.data_types.ui.PolylineData;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

@@ -2,9 +2,9 @@ package com.snek.fancyplayershops.hud_ui.stash.styles;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.ui.TextAlignment;
+import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
 
 
 

@@ -38,16 +38,16 @@ import org.slf4j.LoggerFactory;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.old.Hud;
 import com.snek.fancyplayershops.input.ClickReceiver;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.fancyplayershops.input.MessageReceiver;
 import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
-import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.ui.Elm;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.scheduler.Scheduler;
+import com.snek.fancyplayershops.ui.old._elements.InteractionBlocker;
+import com.snek.framework.old.ui.Elm;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.Txt;
+import com.snek.framework.old.utils.scheduler.Scheduler;
 
 
 
@@ -61,15 +61,6 @@ import com.snek.framework.utils.scheduler.Scheduler;
  * <p> This class caches the server instance and initializes all the event callbacks.
  */
 public class FancyPlayerShops implements ModInitializer {
-
-    // Server instance
-    private static @Nullable MinecraftServer serverInstance = null;
-    public  static @NotNull  MinecraftServer getServer() {
-        if(serverInstance == null) {
-            throw new NullPointerException("Server instance requested before initialization");
-        }
-        return serverInstance;
-    }
 
     // Mod ID and console logger
     public static final @NotNull String MOD_ID = "fancyplayershops";
@@ -112,7 +103,6 @@ public class FancyPlayerShops implements ModInitializer {
 
 
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            serverInstance = server;
 
 
             // Create config and storage directories

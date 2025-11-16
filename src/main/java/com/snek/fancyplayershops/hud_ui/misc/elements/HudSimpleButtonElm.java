@@ -3,11 +3,11 @@ package com.snek.fancyplayershops.hud_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.old.Hud;
 import com.snek.fancyplayershops.main.Configs;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.ui.functional.elements.SimpleButtonElm;
-import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.ui.functional.elements.SimpleButtonElm;
+import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 

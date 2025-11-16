@@ -19,17 +19,17 @@ import com.snek.fancyplayershops.shop_ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.shop_ui.buy.BuyUi;
 import com.snek.fancyplayershops.shop_ui.details.DetailsUi;
 import com.snek.fancyplayershops.shop_ui.edit.EditUi;
-import com.snek.fancyplayershops.ui._elements.InteractionBlocker;
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.functional.elements.FancyButtonElm;
-import com.snek.framework.utils.Easings;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
-import com.snek.framework.utils.scheduler.RateLimiter;
+import com.snek.fancyplayershops.ui.old._elements.InteractionBlocker;
+import com.snek.framework.old.data_types.animations.Animation;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.functional.elements.FancyButtonElm;
+import com.snek.framework.old.utils.Easings;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.Txt;
+import com.snek.framework.old.utils.Utils;
+import com.snek.framework.old.utils.scheduler.RateLimiter;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -72,7 +72,7 @@ public class Shop {
 
     // Animation data
     public static final int CANVAS_ANIMATION_DELAY = 5;
-    public static final int CANVAS_ROTATION_TIME = 8;
+    // public static final int CANVAS_ROTATION_TIME = 8;
 
 
     // Strings

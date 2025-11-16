@@ -14,14 +14,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.old.Hud;
 import com.snek.fancyplayershops.main.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.debug.DebugCheck;
-import com.snek.framework.debug.UiDebugWindow;
-import com.snek.framework.ui.Elm;
-import com.snek.framework.utils.MinecraftUtils;
+import com.snek.framework.old.debug.DebugCheck;
+import com.snek.framework.old.debug.UiDebugWindow;
+import com.snek.framework.old.ui.Elm;
+import com.snek.framework.old.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -68,7 +68,7 @@ public abstract class HoverReceiver {
 
 
     // Optimization structures
-    private static @NotNull Map<@NotNull Player, com.snek.framework.ui.Elm> targetedElms = new HashMap<>();
+    private static @NotNull Map<@NotNull Player, com.snek.framework.old.ui.Elm> targetedElms = new HashMap<>();
 
 
 

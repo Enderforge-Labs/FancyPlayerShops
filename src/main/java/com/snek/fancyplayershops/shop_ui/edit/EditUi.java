@@ -22,11 +22,11 @@ import com.snek.fancyplayershops.shop_ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.shop_ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.shop_ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.ui._elements.UiBorder;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.Elm;
+import com.snek.fancyplayershops.ui.old._elements.UiBorder;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.AlignmentY;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.Elm;
 
 
 

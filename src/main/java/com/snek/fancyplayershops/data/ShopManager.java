@@ -32,10 +32,10 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.main.ShopKey;
 import com.snek.fancyplayershops.shop_ui.edit.elements.EditUi_ColorSelector;
-import com.snek.framework.utils.MinecraftUtils;
-import com.snek.framework.utils.Txt;
-import com.snek.framework.utils.Utils;
-import com.snek.framework.utils.scheduler.RateLimiter;
+import com.snek.framework.old.utils.MinecraftUtils;
+import com.snek.framework.old.utils.Txt;
+import com.snek.framework.old.utils.Utils;
+import com.snek.framework.old.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

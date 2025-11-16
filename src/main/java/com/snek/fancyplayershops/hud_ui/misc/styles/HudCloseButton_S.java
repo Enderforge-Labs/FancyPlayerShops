@@ -2,11 +2,11 @@ package com.snek.fancyplayershops.hud_ui.misc.styles;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.framework.data_types.animations.Animation;
-import com.snek.framework.data_types.animations.Transform;
-import com.snek.framework.data_types.animations.Transition;
-import com.snek.framework.ui.functional.styles.SimpleButtonElmStyle;
-import com.snek.framework.utils.Easings;
+import com.snek.framework.old.data_types.animations.Animation;
+import com.snek.framework.old.data_types.animations.Transform;
+import com.snek.framework.old.data_types.animations.Transition;
+import com.snek.framework.old.ui.functional.styles.SimpleButtonElmStyle;
+import com.snek.framework.old.utils.Easings;
 
 
 

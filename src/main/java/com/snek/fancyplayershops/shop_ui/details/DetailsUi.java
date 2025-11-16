@@ -12,12 +12,12 @@ import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.shop_ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.shop_ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.shop_ui.misc.elements.ShopPanelElm;
-import com.snek.fancyplayershops.ui._elements.UiBorder;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.TextAlignment;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.Elm;
-import com.snek.framework.ui.basic.styles.SimpleTextElmStyle;
+import com.snek.fancyplayershops.ui.old._elements.UiBorder;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.TextAlignment;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.Elm;
+import com.snek.framework.old.ui.basic.styles.SimpleTextElmStyle;
 
 
 

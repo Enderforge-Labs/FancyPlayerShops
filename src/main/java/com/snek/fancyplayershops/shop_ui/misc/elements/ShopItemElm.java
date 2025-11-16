@@ -3,8 +3,8 @@ package com.snek.fancyplayershops.shop_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.framework.ui.basic.elements.ItemElm;
-import com.snek.framework.ui.basic.styles.ItemElmStyle;
+import com.snek.framework.old.ui.basic.elements.ItemElm;
+import com.snek.framework.old.ui.basic.styles.ItemElmStyle;
 
 
 

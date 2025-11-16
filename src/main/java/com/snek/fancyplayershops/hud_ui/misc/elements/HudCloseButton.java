@@ -3,15 +3,15 @@ package com.snek.fancyplayershops.hud_ui.misc.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.hud_ui._elements.Hud;
-import com.snek.fancyplayershops.hud_ui._elements.__HudElm;
+import com.snek.fancyplayershops.hud_ui._elements.old.Hud;
+import com.snek.fancyplayershops.hud_ui._elements.old.__HudElm;
 import com.snek.fancyplayershops.hud_ui.misc.styles.HudCloseButton_S;
-import com.snek.fancyplayershops.ui._elements.UiCanvas;
-import com.snek.framework.data_types.ui.AlignmentX;
-import com.snek.framework.data_types.ui.AlignmentY;
-import com.snek.framework.data_types.ui.PolylineData;
-import com.snek.framework.ui.Div;
-import com.snek.framework.ui.composite.elements.PolylineSetElm;
+import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
+import com.snek.framework.old.data_types.ui.AlignmentX;
+import com.snek.framework.old.data_types.ui.AlignmentY;
+import com.snek.framework.old.data_types.ui.PolylineData;
+import com.snek.framework.old.ui.Div;
+import com.snek.framework.old.ui.composite.elements.PolylineSetElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
