@@ -40,7 +40,7 @@ import net.minecraft.world.item.Items;
 
 
 
-
+//TODO move to ui/misc/elements
 
 /**
  * An item display that shows the item currently being sold by a shop.

@@ -10,7 +10,7 @@ import com.snek.fancyplayershops.shop_ui.misc.styles.ShopPanelElm_S;
 
 
 
-
+//TODO move to ui/misc/styles
 
 
 public class ShopCanvasBackground_S extends ShopPanelElm_S {

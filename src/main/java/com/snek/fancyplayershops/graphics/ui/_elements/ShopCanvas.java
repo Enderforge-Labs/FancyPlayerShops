@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.shop_ui._styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.ui.old._elements.UiCanvas;
 
 
-
+//TODO move to ui/misc/elements
 
 
 
