@@ -18,6 +18,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 public abstract class Configs {
     private Configs() {}
     public static @NotNull ShopConfig shop = null;
+    public static @NotNull PerformanceConfig perf = null;
 
 
 
@@ -26,6 +27,7 @@ public abstract class Configs {
      * Loads the configuration files or creates new ones if they are missing.
      */
     public static void loadConfigs() {
-        shop = ConfigManager.loadConfig("ShopConfig",  ShopConfig.class, FancyPlayerShops.MOD_ID);
+        shop = ConfigManager.loadConfig("ShopConfig",         ShopConfig.class,        FancyPlayerShops.MOD_ID);
+        perf = ConfigManager.loadConfig("PerformanceConfig",  PerformanceConfig.class, FancyPlayerShops.MOD_ID);
     }
 }

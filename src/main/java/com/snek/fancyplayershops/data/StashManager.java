@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.frameworklib.graphics.hud.Hud;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
