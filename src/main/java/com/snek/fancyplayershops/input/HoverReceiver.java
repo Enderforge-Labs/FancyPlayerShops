@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
@@ -372,7 +373,7 @@ public abstract class HoverReceiver {
 
             // Find target shop block
             for(final Vec3 pos : collidingBlocks) {
-                final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
+                final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
                 final Shop shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
                 if(shop != null) return shop;
             }

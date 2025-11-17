@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -449,7 +450,7 @@ public abstract class ShopManager {
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
-                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vec3(i, j, k)));
+                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && world.getBlockState(blockPos).isAir()) {
                         final Shop shop = new Shop(world, blockPos, owner);
                         shop.changeItem(items[Math.abs(rnd.nextInt() % items.length)].getDefaultInstance());

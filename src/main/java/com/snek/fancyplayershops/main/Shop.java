@@ -362,7 +362,7 @@ public class Shop {
 
                 // Create details canvas
                 ui = new ShopUI(this, viewer);
-                ui.spawn(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+                ui.spawn(MinecraftUtils.blockSourceCoords(pos));
                 ui.changeCanvas(new DetailsUi(this));
                 // if(activeCanvas != null) activeCanvas.despawnNow();
                 // activeCanvas.spawn(calcDisplayPos());
