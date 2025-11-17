@@ -74,8 +74,7 @@ public abstract class SimpleShopButton extends SimpleButtonElm {
         super.onHoverTick(player);
 
         // Update input displays if present
-        final ShopCanvas activeCanvas = (ShopCanvas)(shop.getUi().getActiveCanvas());
-        if(activeCanvas != null && activeCanvas instanceof InputIndicatorCanvas c) {
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(lmbActionName);
             c.getRmbIndicator().updateDisplay(rmbActionName);
         }
@@ -90,8 +89,7 @@ public abstract class SimpleShopButton extends SimpleButtonElm {
         super.onHoverExit(player);
 
         // Update input displays if present
-        final ShopCanvas activeCanvas = (ShopCanvas)(shop.getUi().getActiveCanvas());
-        if(activeCanvas != null && activeCanvas instanceof InputIndicatorCanvas c) {
+        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }

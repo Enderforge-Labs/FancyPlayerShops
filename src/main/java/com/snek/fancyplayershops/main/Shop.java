@@ -155,6 +155,14 @@ public class Shop {
 
 
     /**
+     * Returns the active canvas of the shop's UI.
+     * @return The active canvas, or null if either the UI or the canvas is null.
+     */
+    public @Nullable ShopCanvas getActiveCanvas() {
+        if(ui == null) return null;
+        return (ShopCanvas)ui.getActiveCanvas();
+    }
+    /**
      * Calculates the position display entities should be spawned at.
      * @return The absolute position of display entities.
      */
@@ -353,8 +361,9 @@ public class Shop {
             if(focusState) {
 
                 // Create details canvas
-                final ShopCanvas activeCanvas = new DetailsUi(this);
-                ui.changeCanvas(activeCanvas);
+                ui = new ShopUI(this, viewer);
+                ui.spawn(new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+                ui.changeCanvas(new DetailsUi(this));
                 // if(activeCanvas != null) activeCanvas.despawnNow();
                 // activeCanvas.spawn(calcDisplayPos());
 
@@ -375,10 +384,9 @@ public class Shop {
                 getItemDisplay().enterFocusState();
             }
             else {
-                final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
 
                 // Despawn active canvas
-                activeCanvas.despawn();
+                getActiveCanvas().despawn();
                 // activeCanvas = null;
 
                 //FIXME idk if this is needed. it probably is

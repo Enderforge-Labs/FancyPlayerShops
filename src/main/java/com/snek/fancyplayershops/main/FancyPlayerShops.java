@@ -42,6 +42,7 @@ import com.snek.frameworklib.graphics.hud._elements.Hud;
 // import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -144,7 +145,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // //FIXME this should prob be in the framework library, not in the mod implementation
             // // Schedule hover manager loop
-            // Scheduler.loop(0, 1, HoverReceiver::tick);
+            Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);

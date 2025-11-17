@@ -35,7 +35,7 @@ public abstract class ShopCanvas extends UiCanvas {
      * @param heightBottom The height of the bottom border.
      */
     protected ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
-        super(_shop.getUi(), (UiCanvas)_shop.getUi().getActiveCanvas(), _shop.getWorld(), height, heightTop, heightBottom, new ShopCanvasBackground_S(_shop), new ShopCanvasBack_S());
+        super(_shop.getUi(), _shop.getActiveCanvas(), _shop.getWorld(), height, heightTop, heightBottom, new ShopCanvasBackground_S(_shop), new ShopCanvasBack_S());
         shop = _shop;
     }
 
