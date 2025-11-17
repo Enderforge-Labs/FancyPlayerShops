@@ -386,7 +386,8 @@ public class Shop {
             else {
 
                 // Despawn active canvas
-                getActiveCanvas().despawn();
+                // getActiveCanvas().despawn();
+                ui.despawn();
                 // activeCanvas = null;
 
                 //FIXME idk if this is needed. it probably is
