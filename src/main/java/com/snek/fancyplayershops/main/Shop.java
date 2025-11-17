@@ -15,15 +15,17 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworklib.input.MessageReceiver;
+import com.snek.fancyplayershops.graphics.ui.ShopUI;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
-import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
+// import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.InteractionBlocker;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -104,15 +106,16 @@ public class Shop {
 
 
     // Shop state
-    private transient @Nullable InteractionBlocker interactionBlocker = null;   // The interaction entity used to block client-side clicks
-    private transient @Nullable ShopCanvas               activeCanvas = null;   // The menu that is currently being displayed to the viewer
+    // private transient @Nullable InteractionBlocker interactionBlocker = null;   // The interaction entity used to block client-side clicks
+    // private transient @Nullable ShopCanvas               activeCanvas = null;   // The menu that is currently being displayed to the viewer
+    private transient @Nullable ShopUI                             ui = null;   // The UI context used for the display
     private transient @Nullable Player                           user = null;   // The current user of the shop (the player that first opened a menu)
     private transient @Nullable Player                         viewer = null;   // The prioritized viewer
     private transient           boolean                 deletionState = false;  // True if the shop has been deleted, false otherwise
     private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
     private transient           boolean                focusStateNext = false;  // The next focus state
-    private transient           int                     lastDirection = 0;      // The current cartinal or intercardinal direction of the canvas, 0 to 7
-    private transient @NotNull  RateLimiter     canvasRotationLimiter = new RateLimiter();
+    // private transient           int                     lastDirection = 0;      // The current cartinal or intercardinal direction of the canvas, 0 to 7
+    // private transient @NotNull  RateLimiter     canvasRotationLimiter = new RateLimiter();
     private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
     private transient boolean scheduledForSave = false;
 
@@ -124,12 +127,13 @@ public class Shop {
     public @NotNull  ItemStack       getItem           () { return item;            }
     public @NotNull  String          getSerializedItem () { return serializedItem;  }
     public @NotNull  ShopItemDisplay getItemDisplay    () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ShopCanvas      getActiveCanvas   () { return activeCanvas;    }
+    // public @Nullable ShopCanvas      getActiveCanvas   () { return activeCanvas;    }
+    public @Nullable ShopUI          getUi             () { return ui;              }
     public           long            getPrice          () { return price;           }
     public           int             getStock          () { return stock;           }
     public           int             getMaxStock       () { return maxStock;        }
     public           float           getDefaultRotation() { return defaultRotation; }
-    public           int             getCanvasDirection() { return lastDirection;   }
+    // public           int             getCanvasDirection() { return lastDirection;   }
     public           boolean         isFocused         () { return focusState;      }
     public           boolean         isDeleted         () { return deletionState;   }
     public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
@@ -222,8 +226,8 @@ public class Shop {
     public boolean reinitTransient() {
         focusState            = false;
         focusStateNext        = false;
-        lastDirection         = 0;
-        canvasRotationLimiter = new RateLimiter();
+        // lastDirection         = 0;
+        // canvasRotationLimiter = new RateLimiter(); //FIXME idk if this is okay
         menuOpenLimiter = new RateLimiter();
         cacheShopIdentifier();
         try {
@@ -345,34 +349,42 @@ public class Shop {
         if(!menuOpenLimiter.attempt()) return;
         if(focusState != focusStateNext) {
             focusState = focusStateNext;
+
             if(focusState) {
 
                 // Create details canvas
-                if(activeCanvas != null) activeCanvas.despawnNow();
-                activeCanvas = new DetailsUi(this);
-                if(lastDirection != 0) {
-                    activeCanvas.applyAnimationNowRecursive(UiCanvas.calcCanvasRotationAnimation(0, lastDirection));
-                    itemDisplay.applyAnimationNowRecursive(UiCanvas.calcItemDisplayRotationAnimation(0, lastDirection));
-                }
-                activeCanvas.spawn(calcDisplayPos());
+                final ShopCanvas activeCanvas = new DetailsUi(this);
+                ui.changeCanvas(activeCanvas);
+                // if(activeCanvas != null) activeCanvas.despawnNow();
+                // activeCanvas.spawn(calcDisplayPos());
 
-                // Create or recreate interaction blocker
-                if(interactionBlocker != null) interactionBlocker.despawn();
-                interactionBlocker = new InteractionBlocker(getWorld(), 1.01f, 1.01f);
-                interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
+                //FIXME add this if the canvas need a manual rotation update
+                // if(lastDirection != 0) {
+                    //     activeCanvas.applyAnimationNowRecursive(UiCanvas.calcCanvasRotationAnimation(0, lastDirection));
+                    //     itemDisplay.applyAnimationNowRecursive(UiCanvas.calcItemDisplayRotationAnimation(0, lastDirection));
+                // }
+
+
+                //FIXME idk if this is needed. it probably is
+                // // Create or recreate interaction blocker
+                // if(interactionBlocker != null) interactionBlocker.despawn();
+                // interactionBlocker = new InteractionBlocker(getWorld(), 1.01f, 1.01f);
+                // interactionBlocker.spawn(new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5));
 
                 // Start item animation and turn off the CustomName
                 getItemDisplay().enterFocusState();
             }
             else {
+                final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
 
                 // Despawn active canvas
                 activeCanvas.despawn();
-                activeCanvas = null;
+                // activeCanvas = null;
 
-                // Despawn interaction blocker
-                interactionBlocker.despawn();
-                interactionBlocker = null;
+                //FIXME idk if this is needed. it probably is
+                // // Despawn interaction blocker
+                // interactionBlocker.despawn();
+                // interactionBlocker = null;
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
@@ -416,12 +428,13 @@ public class Shop {
 
 
 
-    /**
+    //TODO update comment. it returns true if the player is allowed to click the UI
+    /** //TODO update comment. this is called by the custom shop canvas when it's clicked. the call originates from the framework lib
      * Handles a single click event on this shop block.
      * @param player The player that clicked the shop.
      * @param click The click type.
      */
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+    public boolean onClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
 
 
         // If the shop is currently focused
@@ -449,17 +462,22 @@ public class Shop {
                         openBuyUi(player, true);
                     }
                 }
+
+                //! The click succeeded, but there is no need to forward it to the current canvas as it will be replaced instantly
+                return false;
             }
 
 
             // If the player that clicked has already opened a menu, forward the click event to it
             else if(user == player) {
-                activeCanvas.forwardClick(player, clickType);
+                return true;
+                // activeCanvas.forwardClick(player, clickType);
             }
 
 
             // Send an error message to the player if someone else has already opened a menu in the same shop
             else {
+            // else if(user != player) {
                 if(clickType == ClickAction.SECONDARY) {
                     player.displayClientMessage(new Txt(
                         "Someone else is already using this shop! Left click to " +
@@ -475,8 +493,10 @@ public class Shop {
                         buyItem(player, 1, true);
                     }
                 }
+                return false;
             }
         }
+        return false;
     }
 
 
@@ -534,6 +554,7 @@ public class Shop {
 
 
             // Update active canvas
+            final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
             if(activeCanvas != null) {
                 activeCanvas.onStockChange();
             }
@@ -601,6 +622,7 @@ public class Shop {
 
 
                 // Update active canvas
+                final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
                 if(activeCanvas != null) {
                     activeCanvas.onStockChange();
                 }
@@ -623,15 +645,19 @@ public class Shop {
      * @param canvas The new canvas.
      */
     public void changeCanvas(final @NotNull ShopCanvas canvas) {
-        activeCanvas = canvas;
+        // activeCanvas = canvas;
 
         // Adjust rotation if needed
-        if(lastDirection != 0) {
-            final Animation animation = UiCanvas.calcCanvasRotationAnimation(0, lastDirection);
-            for(final Div c : canvas.getBg().getChildren()) {
-                c.applyAnimationNowRecursive(animation);
-            }
-        }
+        //FIXME this might be necessary if the canvas doesn't rotate on its own
+        //FIXME this might be necessary if the canvas doesn't rotate on its own
+        //FIXME this might be necessary if the canvas doesn't rotate on its own
+        //BUG check this
+        // if(lastDirection != 0) {
+        //     final Animation animation = UiCanvas.calcCanvasRotationAnimation(0, lastDirection);
+        //     for(final Div c : canvas.getBg().getChildren()) {
+        //         c.applyAnimationNowRecursive(animation);
+        //     }
+        // }
 
         // Spawn canvas into the world and play a sound to the user
         canvas.spawn(calcDisplayPos());
@@ -766,28 +792,28 @@ public class Shop {
 
 
 
+//FIXME fix references to updateCanvasRotation
+    // /**
+    //  * Updates the rotation of the active canvas to face the current viewer.
+    //  */
+    // public void updateCanvasRotation() {
+    //     if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
 
-    /**
-     * Updates the rotation of the active canvas to face the current viewer.
-     */
-    public void updateCanvasRotation() {
-        if(!canvasRotationLimiter.attempt() || activeCanvas == null) return;
+    //     // Calculate target direction
+    //     final Vec3 playerPos = viewer.getPosition(1f);                      // Get player position
+    //     final double dx = pos.getX() + 0.5d - playerPos.x;                  // Calculate X difference
+    //     final double dz = pos.getZ() + 0.5d - playerPos.z;                  // Calculate Z difference
+    //     final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
+    //     final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
 
-        // Calculate target direction
-        final Vec3 playerPos = viewer.getPosition(1f);                      // Get player position
-        final double dx = pos.getX() + 0.5d - playerPos.x;                  // Calculate X difference
-        final double dz = pos.getZ() + 0.5d - playerPos.z;                  // Calculate Z difference
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
-        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
-
-        // Apply animations and update the current direction if needed
-        if(targetDir != lastDirection) {
-            activeCanvas.applyAnimationRecursive(UiCanvas.calcCanvasRotationAnimation(lastDirection, targetDir));
-            getItemDisplay().applyAnimationRecursive(UiCanvas.calcItemDisplayRotationAnimation(lastDirection, targetDir));
-            lastDirection = targetDir;
-            canvasRotationLimiter.renewCooldown(UiCanvas.CANVAS_ROTATION_TIME);
-        }
-    }
+    //     // Apply animations and update the current direction if needed
+    //     if(targetDir != lastDirection) {
+    //         activeCanvas.applyAnimationRecursive(UiCanvas.calcCanvasRotationAnimation(lastDirection, targetDir));
+    //         getItemDisplay().applyAnimationRecursive(UiCanvas.calcItemDisplayRotationAnimation(lastDirection, targetDir));
+    //         lastDirection = targetDir;
+    //         canvasRotationLimiter.renewCooldown(UiCanvas.CANVAS_ROTATION_TIME);
+    //     }
+    // }
 
 
 
@@ -866,8 +892,9 @@ public class Shop {
             deletionState = true;
 
             // Despawn the entities
-            if(activeCanvas != null) activeCanvas.despawn();
-            if(interactionBlocker != null) interactionBlocker.despawn();
+            ui.despawn();
+            // if(activeCanvas != null) activeCanvas.despawn();
+            // if(interactionBlocker != null) interactionBlocker.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
 
@@ -900,6 +927,7 @@ public class Shop {
         ShopManager.scheduleShopSave(this);
 
         // Update active canvas
+        final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
         if(activeCanvas != null) {
             activeCanvas.onStockChange();
         }

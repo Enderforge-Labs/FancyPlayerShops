@@ -51,7 +51,7 @@ public class StashHud extends HudCanvas {
         Div e;
 
         // Add title
-        e = bg.addChild(new StashHud_Title((ServerLevel)(hud.getPlayer().level())));
+        e = bg.addChild(new StashHud_Title((ServerLevel)(context.getPlayer().level())));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -102,7 +102,7 @@ public class StashHud extends HudCanvas {
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new HudCloseButton(hud),
+            new HudCloseButton((Hud)context),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);

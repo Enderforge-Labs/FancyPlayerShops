@@ -10,6 +10,7 @@ import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 
@@ -58,6 +59,6 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        Hud.closeHud(player);
+        Context.closeContext(player);
     }
 }

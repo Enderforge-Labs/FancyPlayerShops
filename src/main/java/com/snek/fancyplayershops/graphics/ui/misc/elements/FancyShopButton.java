@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
@@ -73,7 +74,8 @@ public abstract class FancyShopButton extends FancyButtonElm {
         super.onHoverTick(player);
 
         // Update input displays if present
-        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+        final ShopCanvas activeCanvas = (ShopCanvas)(shop.getUi().getActiveCanvas());
+        if(activeCanvas != null && activeCanvas instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(lmbActionName);
             c.getRmbIndicator().updateDisplay(rmbActionName);
         }
@@ -88,7 +90,8 @@ public abstract class FancyShopButton extends FancyButtonElm {
         super.onHoverExit(player);
 
         // Update input displays if present
-        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+        final ShopCanvas activeCanvas = (ShopCanvas)(shop.getUi().getActiveCanvas());
+        if(activeCanvas != null && activeCanvas instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }

@@ -38,11 +38,10 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.fancyplayershops.input.ClickReceiver;
-import com.snek.fancyplayershops.input.HoverReceiver;
+// import com.snek.fancyplayershops.input.ClickReceiver;
+// import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
-import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -65,7 +64,7 @@ public class FancyPlayerShops implements ModInitializer {
     // Mod ID and console logger
     public static final @NotNull String MOD_ID = "fancyplayershops";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final ResourceLocation INIT_PHASE_ID = new ResourceLocation(MOD_ID, "init");
+    public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
 
 
@@ -105,21 +104,10 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-        // Make sure Framework Lib and Framework Config are initialized before FancyPlayerShops
-        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
-            FrameworkConfig.INIT_PHASE_ID,
-            INIT_PHASE_ID
-        );
-        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
-            FrameworkLib.INIT_PHASE_ID,
-            INIT_PHASE_ID
-        );
-
-
-
-
         // Register initialization
-        ServerLifecycleEvents.SERVER_STARTING.register(INIT_PHASE_ID, server -> {
+        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkConfig.PHASE_ID, PHASE_ID);
+        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
+        ServerLifecycleEvents.SERVER_STARTING.register(PHASE_ID, server -> {
 
 
             // Create storage directories
@@ -145,7 +133,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+        ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
             if(fatal) return;
 
             // Load persistent data
@@ -154,9 +142,9 @@ public class FancyPlayerShops implements ModInitializer {
             BalanceManager.loadBalances();
 
 
-            //FIXME this should prob be in the framework library, not in the mod implementation
-            // Schedule hover manager loop
-            Scheduler.loop(0, 1, HoverReceiver::tick);
+            // //FIXME this should prob be in the framework library, not in the mod implementation
+            // // Schedule hover manager loop
+            // Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);
@@ -171,34 +159,18 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            //FIXME check if this should be in the framework library
             // Create and register block click events (shop placement + prevents early clicks going through the shop)
-            AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
-            });
-            UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-                InteractionResult r;
-                r = ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
-                if(r == InteractionResult.PASS) r = onItemUse(world, player, hand, hitResult);
-                return r;
-            });
-
-
-
-
-            //FIXME check if this should be in the framework library
-            // Create and register item use events (prevents early clicks going through the shop)
-            UseItemCallback.EVENT.register((player, world, hand) -> {
-                InteractionResult r = ClickReceiver.onUseItem(world, player, hand);
-                if(r == InteractionResult.FAIL) return InteractionResultHolder.fail(player.getItemInHand(hand));
-                /**/                       else return InteractionResultHolder.pass(player.getItemInHand(hand));
+            UseBlockCallback.EVENT.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, hitResult) -> {
+                return onItemUse(world, player, hand, hitResult);
             });
 
 
 
 
             // Register item display fix
-            ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            ServerEntityEvents.ENTITY_LOAD.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
                 ShopItemDisplay.onEntityLoad_item(entity);
             });
 
