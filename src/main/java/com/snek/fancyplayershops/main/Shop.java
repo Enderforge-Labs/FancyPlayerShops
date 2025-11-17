@@ -660,7 +660,6 @@ public class Shop {
         //FIXME this might be necessary if the canvas doesn't rotate on its own
         //FIXME this might be necessary if the canvas doesn't rotate on its own
         //FIXME this might be necessary if the canvas doesn't rotate on its own
-        //BUG check this
         // if(lastDirection != 0) {
         //     final Animation animation = UiCanvas.calcCanvasRotationAnimation(0, lastDirection);
         //     for(final Div c : canvas.getBg().getChildren()) {

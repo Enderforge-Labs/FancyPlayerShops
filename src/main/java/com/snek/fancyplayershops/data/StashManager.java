@@ -219,7 +219,7 @@ public abstract class StashManager {
         final Vec3 pos = player.getPosition(1f);
         Context.closeContext(player);
         final Hud hud = Hud.getOpenHudOrCreate(player);
-        hud.changeCanvas(new StashHud(hud));
         hud.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        hud.changeCanvas(new StashHud(hud));
     }
 }
