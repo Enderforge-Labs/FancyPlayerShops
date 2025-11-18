@@ -42,11 +42,19 @@ public abstract class ShopCanvas extends UiCanvas {
     public abstract void onStockChange();
 
 
-
     @Override
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
         final boolean player_has_permission = shop.onClick(player, clickType); //TODO check if this is correct
         if(player_has_permission) return super.forwardClick(player, clickType); //TODO check if this is correct
         return true; //TODO check if this is correct
+    }
+
+
+    @Override
+    public void updateRot(final int newRot) {
+        if(lastRotation != newRot) {
+            shop.getItemDisplay().applyAnimationRecursive(calcItemDisplayRotationAnimation(lastRotation, newRot));
+        }
+        super.updateRot(newRot);
     }
 }
