@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.graphics.ui._elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.ShopUI;
 import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBack_S;
 import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;

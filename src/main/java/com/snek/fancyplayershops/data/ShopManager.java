@@ -346,7 +346,7 @@ public abstract class ShopManager {
         }
 
         // Update shops
-        for(int i = 0; i < Configs.perf.pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
+        for(int i = 0; i < Configs.getPerf().pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
 
             final Shop shop = updateSnapshot.get(updateIndex);
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
@@ -358,7 +358,7 @@ public abstract class ShopManager {
 
         // Reset snapshop if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
-            updateCycleLimiter.renewCooldown(Configs.perf.pull_cycle_frequency.getValue());
+            updateCycleLimiter.renewCooldown(Configs.getPerf().pull_cycle_frequency.getValue());
             updateIndex = 0;
         }
     }
@@ -498,8 +498,8 @@ public abstract class ShopManager {
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
             shop.getItem().getItem() == Items.AIR &&
-            shop.getPrice() == Configs.shop.price.getDefault() &&
-            shop.getMaxStock() == Configs.shop.stock_limit.getDefault()
+            shop.getPrice() == Configs.getShop().price.getDefault() &&
+            shop.getMaxStock() == Configs.getShop().stock_limit.getDefault()
         ) {
             return getShopItemCopy();
         }

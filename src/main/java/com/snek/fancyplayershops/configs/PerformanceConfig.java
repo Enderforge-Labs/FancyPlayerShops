@@ -20,10 +20,9 @@ public class PerformanceConfig implements ConfigFile {
         5f
     );
 
-    //FIXME only keep one of this config. Either remove this one or its copy in frameworklib
     public final ValueConfigField<Float> ray_casting_step = new ValueConfigField<>(
         new String[] {
-            "The distance between ray casting steps. Measured in Blocks.",
+            "The distance between ray casting steps for shop focus detection. Measured in Blocks.",
             "Must be between 0.02 and 0.5.",
             "Higher values provide higher accuracy and responsiveness but can easily degrade performance."
         },

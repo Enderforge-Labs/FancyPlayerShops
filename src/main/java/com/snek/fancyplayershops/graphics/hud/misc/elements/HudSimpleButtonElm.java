@@ -37,7 +37,7 @@ public abstract class HudSimpleButtonElm extends SimpleButtonElm {
     @Override
     public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform){
         return
-            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * com.snek.frameworklib.configs.Configs.ui.z_layer_spacing.getValue())
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * com.snek.frameworklib.configs.Configs.getUi().z_layer_spacing.getValue())
             .add(((HudCanvas)hud.getActiveCanvas()).__calcVisualShift())
             .add(getEntity().getPosCopy())
         ;

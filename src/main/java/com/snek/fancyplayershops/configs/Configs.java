@@ -16,9 +16,14 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
  * A utility class that contains configuration file data.
  */
 public abstract class Configs {
+
     private Configs() {}
-    public static @NotNull ShopConfig shop = null;
-    public static @NotNull PerformanceConfig perf = null;
+
+    private static @NotNull ShopConfig        shop = null;
+    private static @NotNull PerformanceConfig perf = null;
+
+    public static @NotNull ShopConfig        getShop() { return shop; }
+    public static @NotNull PerformanceConfig getPerf() { return perf; }
 
 
 

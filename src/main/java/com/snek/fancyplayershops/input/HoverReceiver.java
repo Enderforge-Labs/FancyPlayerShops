@@ -106,7 +106,7 @@ public abstract class HoverReceiver {
 
 
         // Find currently focused shops and their viewers
-        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.perf.ray_casting_batches.getValue());
+        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.getPerf().ray_casting_batches.getValue());
         for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
             final Player player = playerListSnapshot.get(updateIndex);
 
@@ -284,7 +284,7 @@ public abstract class HoverReceiver {
         // Perform ray cast
         final Vec3 eyePos = player.getEyePosition();
         final Vec3 lookDirection = player.getViewVector(1.0F);
-        final Float reach = Configs.perf.reach_distance.getValue();
+        final Float reach = Configs.getPerf().reach_distance.getValue();
         final BlockHitResult result = world.clip(new ClipContext(
             eyePos,
             eyePos.add(lookDirection.multiply(reach, reach, reach)),
@@ -310,7 +310,7 @@ public abstract class HoverReceiver {
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
         final Vec3 lookDirection = player.getViewVector(1f);
-        final Float stepSize = Configs.perf.ray_casting_step.getValue();
+        final Float stepSize = Configs.getPerf().ray_casting_step.getValue();
         final Vec3 step = lookDirection.normalize().multiply(stepSize, stepSize, stepSize);
         Vec3 currentPos = player.getEyePosition();
         double distanceTraveled = 0;
@@ -351,7 +351,7 @@ public abstract class HoverReceiver {
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
         boolean check = ShopManager.chunkHasShops(playerChunk);
-        final int reach = Math.round(Configs.perf.reach_distance.getValue());
+        final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
         int minX = playerPos.getX() - reach;
         int maxX = playerPos.getX() + reach;
         int minZ = playerPos.getZ() - reach;
@@ -367,7 +367,7 @@ public abstract class HoverReceiver {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3 targetBlock = getTargetBlockPrecise(player);
-            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.perf.ray_casting_step.getValue() * 1.2 : Configs.perf.reach_distance.getValue();
+            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.getPerf().ray_casting_step.getValue() * 1.2 : Configs.getPerf().reach_distance.getValue();
             final List<Vec3> collidingBlocks = getViewCollisisons(player, maxDistance);
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.distanceToSqr(playerEyePos)));
 
