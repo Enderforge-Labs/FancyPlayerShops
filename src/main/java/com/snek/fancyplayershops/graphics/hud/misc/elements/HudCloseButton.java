@@ -59,6 +59,7 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        Context.closeContext(player);
+        hud.despawn();
+        // Context.closeContext(player);
     }
 }

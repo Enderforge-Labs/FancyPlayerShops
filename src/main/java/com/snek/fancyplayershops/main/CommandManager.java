@@ -91,7 +91,7 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
-                    Context.closeContext(player);
+                    Context.closeContexts(player);
                     return 1;
                 }))
 
