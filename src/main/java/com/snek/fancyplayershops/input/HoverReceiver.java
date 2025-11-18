@@ -144,11 +144,22 @@ public abstract class HoverReceiver {
 
 
 
+        // //! Debug window
+        // if(DebugCheck.isDebug()) {
+        //     UiDebugWindow.getW().clear();
+        // }
+
         // If all the batches have been processed, reset update index and finalize tick operations
         if(updateIndex >= playerListSnapshot.size()) {
             updateIndex = 0;
             finalizeTick();
         }
+
+        // //! Debug window update
+        // if(DebugCheck.isDebug()) {
+        //     UiDebugWindow.getW().revalidate();
+        //     UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
+        // }
     }
 
 
@@ -163,13 +174,6 @@ public abstract class HoverReceiver {
      * Called after all the ray casting batches have been processed.
      */
     public static void finalizeTick() {
-
-
-        //! Debug window
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().clear();
-        }
-
 
         // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
         targetedShopsOld.removeAll(targetedShops);
@@ -226,13 +230,6 @@ public abstract class HoverReceiver {
         // for(final Player player : hudPlayers) {
         //     Hud.forwardHoverStatic(player);
         // }
-
-
-        //! Debug window update
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().revalidate();
-            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
-        }
     }
 
 
