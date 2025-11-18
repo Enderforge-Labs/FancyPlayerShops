@@ -668,7 +668,8 @@ public class Shop {
         // }
 
         // Spawn canvas into the world and play a sound to the user
-        canvas.spawn(calcDisplayPos());
+        ui.changeCanvas(canvas);
+        // canvas.spawn(calcDisplayPos());
         if(user != null) FancyButtonElm.playButtonSound(user);
     }
 
