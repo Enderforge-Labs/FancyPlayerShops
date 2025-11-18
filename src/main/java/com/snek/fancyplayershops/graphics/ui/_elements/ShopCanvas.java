@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBack_S;
 import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
+import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 
 import net.minecraft.world.entity.player.Player;
@@ -51,10 +52,11 @@ public abstract class ShopCanvas extends UiCanvas {
 
 
     @Override
-    public void updateRot(final int newRot) {
+    protected void __updateRot(final int newRot, final boolean instant) {
         if(lastRotation != newRot) {
-            shop.getItemDisplay().applyAnimationRecursive(calcItemDisplayRotationAnimation(lastRotation, newRot));
+            final Animation animation = calcItemDisplayRotationAnimation(lastRotation, newRot);
+            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation); else shop.getItemDisplay().applyAnimationRecursive(animation);
         }
-        super.updateRot(newRot);
+        super.__updateRot(newRot, instant);
     }
 }
