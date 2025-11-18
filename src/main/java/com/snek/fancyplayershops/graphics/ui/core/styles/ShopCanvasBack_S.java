@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.ui._styles;
+package com.snek.fancyplayershops.graphics.ui.core.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
@@ -8,7 +8,7 @@ import com.snek.frameworklib.graphics.ui._styles.UiBorder_S;
 
 
 
-//TODO move to ui/misc/styles
+
 
 
 

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUiSub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;

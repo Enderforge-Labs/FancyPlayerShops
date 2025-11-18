@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.graphics.hud._elements.HudCanvas;
-import com.snek.fancyplayershops.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;

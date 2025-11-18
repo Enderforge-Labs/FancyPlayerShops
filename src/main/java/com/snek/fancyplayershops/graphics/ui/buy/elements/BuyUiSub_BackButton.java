@@ -7,10 +7,10 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 
@@ -30,16 +30,16 @@ public class BuyUiSub_BackButton extends SimpleShopButton {
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.06f,
             new Vector2f(0.6f,  0.3f),
             new Vector2f(1.0f,  0.3f),
             new Vector2f(1.0f,  0.7f),
             new Vector2f(0.05f, 0.7f)
         ),
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.06f,
             new Vector2f(0.2f, 0.9f),
             new Vector2f(0.0f, 0.7f),
             new Vector2f(0.2f, 0.5f)
@@ -54,7 +54,7 @@ public class BuyUiSub_BackButton extends SimpleShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
-        e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

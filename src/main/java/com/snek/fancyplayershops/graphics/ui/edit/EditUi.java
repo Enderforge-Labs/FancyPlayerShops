@@ -5,8 +5,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ItemSelector;

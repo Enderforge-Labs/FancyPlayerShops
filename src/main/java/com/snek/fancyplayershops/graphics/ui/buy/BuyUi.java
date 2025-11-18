@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUiSub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_1iButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_1sButton;

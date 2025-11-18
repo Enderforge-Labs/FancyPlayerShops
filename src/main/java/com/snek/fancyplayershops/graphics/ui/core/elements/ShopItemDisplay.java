@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.ui._elements;
+package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._styles.SimpleNameDisplay_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -40,7 +40,7 @@ import net.minecraft.world.item.Items;
 
 
 
-//TODO move to ui/misc/elements
+
 
 /**
  * An item display that shows the item currently being sold by a shop.

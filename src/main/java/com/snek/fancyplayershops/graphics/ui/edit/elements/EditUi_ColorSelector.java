@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;

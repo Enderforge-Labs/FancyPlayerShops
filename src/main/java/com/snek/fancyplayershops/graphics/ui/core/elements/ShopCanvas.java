@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.graphics.ui._elements;
+package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBack_S;
-import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBack_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 
@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
 
-//TODO move to ui/misc/elements
+
 
 
 

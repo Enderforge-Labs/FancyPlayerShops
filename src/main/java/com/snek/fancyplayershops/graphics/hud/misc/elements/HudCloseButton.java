@@ -6,11 +6,10 @@ import org.joml.Vector2f;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.HudCloseButton_S;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
-import com.snek.frameworklib.graphics.Context;
+import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 
@@ -29,14 +28,14 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.05f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.05f,
             new Vector2f(0.1f, 0.1f),
             new Vector2f(0.9f, 0.9f)
         ),
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.05f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.05f,
             new Vector2f(0.1f, 0.9f),
             new Vector2f(0.9f, 0.1f)
         )
@@ -50,7 +49,7 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));
-        e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 
@@ -60,6 +59,5 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         hud.despawn();
-        // Context.closeContext(player);
     }
 }

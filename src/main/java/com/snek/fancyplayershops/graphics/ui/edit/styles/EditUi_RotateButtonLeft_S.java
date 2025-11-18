@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
+import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -21,7 +21,7 @@ import com.snek.frameworklib.utils.Easings;
  * The style of the EditUi_PriceButton UI element.
  */
 public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
-    public static final float SHIFT_X = UiCanvas.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
+    public static final float SHIFT_X = Canvas.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
 
 
     /**

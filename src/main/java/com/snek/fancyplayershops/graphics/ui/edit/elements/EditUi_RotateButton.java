@@ -6,16 +6,16 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_RotateButtonLeft_S;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_RotateButtonRight_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
@@ -37,8 +37,8 @@ public class EditUi_RotateButton extends SimpleShopButton {
     private static final @NotNull PolylineData[][] designs = new PolylineData[][] {
         new PolylineData[] {
             new PolylineData(
-                UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-                UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
+                Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+                Canvas.TOOLBAR_FG_WIDTH, 0.06f,
                 new Vector2f(-0.15f * -1 + 0.5f, 0.2f),
                 new Vector2f(+0.15f * -1 + 0.5f, 0.5f),
                 new Vector2f(-0.15f * -1 + 0.5f, 0.8f)
@@ -46,8 +46,8 @@ public class EditUi_RotateButton extends SimpleShopButton {
         },
         new PolylineData[] {
             new PolylineData(
-                UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-                UiCanvas.TOOLBAR_FG_WIDTH, 0.06f,
+                Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+                Canvas.TOOLBAR_FG_WIDTH, 0.06f,
                 new Vector2f(-0.15f * 1 + 0.5f, 0.8f),
                 new Vector2f(+0.15f * 1 + 0.5f, 0.5f),
                 new Vector2f(-0.15f * 1 + 0.5f, 0.2f)
@@ -78,7 +78,7 @@ public class EditUi_RotateButton extends SimpleShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), designs[_rotation > 0 ? 1 : 0]));
-        e.setSize(new Vector2f(UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 
