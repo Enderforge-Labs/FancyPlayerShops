@@ -3,12 +3,7 @@ package com.snek.fancyplayershops.main;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -16,9 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -37,14 +30,10 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-// import com.snek.fancyplayershops.input.ClickReceiver;
-// import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworkconfig.FrameworkConfig;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -143,15 +132,13 @@ public class FancyPlayerShops implements ModInitializer {
             BalanceManager.loadBalances();
 
 
-            // //FIXME this should prob be in the framework library, not in the mod implementation
-            // // Schedule hover manager loop
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule shop pull updates
             Scheduler.loop(0, 1, ShopManager::pullItems);
 
             // Schedule data saves
-            Scheduler.loop(0, Configs.perf.data_save_frequency.getValue(), () -> {
+            Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
                 ShopManager.saveScheduledShops();
                 StashManager.saveScheduledStashes();
                 BalanceManager.saveScheduledBalances();

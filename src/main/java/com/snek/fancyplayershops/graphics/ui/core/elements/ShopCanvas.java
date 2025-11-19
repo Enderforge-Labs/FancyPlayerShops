@@ -1,18 +1,18 @@
-package com.snek.fancyplayershops.graphics.ui._elements;
+package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.ShopUI;
-import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBack_S;
-import com.snek.fancyplayershops.graphics.ui._styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBack_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
+import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
 
-//TODO move to ui/misc/elements
+
 
 
 
@@ -43,11 +43,20 @@ public abstract class ShopCanvas extends UiCanvas {
     public abstract void onStockChange();
 
 
-
     @Override
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
         final boolean player_has_permission = shop.onClick(player, clickType); //TODO check if this is correct
         if(player_has_permission) return super.forwardClick(player, clickType); //TODO check if this is correct
         return true; //TODO check if this is correct
+    }
+
+
+    @Override
+    protected void __updateRot(final int newRot, final boolean instant) {
+        if(lastRotation != newRot) {
+            final Animation animation = calcItemDisplayRotationAnimation(lastRotation, newRot);
+            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation); else shop.getItemDisplay().applyAnimationRecursive(animation);
+        }
+        super.__updateRot(newRot, instant);
     }
 }

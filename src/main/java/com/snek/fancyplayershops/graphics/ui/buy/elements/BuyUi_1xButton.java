@@ -13,11 +13,11 @@ import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_BuyButton_S;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
@@ -46,8 +46,8 @@ public class BuyUi_1xButton extends FancyShopButton {
     }
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.03f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.03f,
             design0.get(0),
             design0.get(1),
             design0.get(2),
@@ -59,8 +59,8 @@ public class BuyUi_1xButton extends FancyShopButton {
             design0.get(0)
         ),
         new PolylineData(
-            UiCanvas.TOOLBAR_FG_COLOR, UiCanvas.TOOLBAR_FG_ALPHA,
-            UiCanvas.TOOLBAR_FG_WIDTH, 0.04f,
+            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
+            Canvas.TOOLBAR_FG_WIDTH, 0.04f,
             new Vector2f(0.5f, 0.7f),
             new Vector2f(0.5f, 0.3f)
         )
@@ -74,7 +74,7 @@ public class BuyUi_1xButton extends FancyShopButton {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
-        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H / BuyUi.BUY_BUTTONS_W * UiCanvas.BOTTOM_ROW_CONTENT_SIZE, UiCanvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H / BuyUi.BUY_BUTTONS_W * Canvas.BOTTOM_ROW_CONTENT_SIZE, Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

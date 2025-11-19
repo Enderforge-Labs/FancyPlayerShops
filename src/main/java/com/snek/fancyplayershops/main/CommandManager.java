@@ -7,7 +7,6 @@ import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -91,7 +90,7 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
-                    Context.closeContext(player);
+                    Context.closeContexts(player);
                     return 1;
                 }))
 

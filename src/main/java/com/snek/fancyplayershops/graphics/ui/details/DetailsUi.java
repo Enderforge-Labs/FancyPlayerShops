@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;

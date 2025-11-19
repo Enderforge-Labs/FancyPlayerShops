@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_IdDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_InventoryViewButton;

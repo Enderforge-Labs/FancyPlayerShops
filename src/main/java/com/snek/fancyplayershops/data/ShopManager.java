@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -51,7 +52,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 
 
@@ -345,7 +345,7 @@ public abstract class ShopManager {
         }
 
         // Update shops
-        for(int i = 0; i < Configs.perf.pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
+        for(int i = 0; i < Configs.getPerf().pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
 
             final Shop shop = updateSnapshot.get(updateIndex);
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
@@ -357,7 +357,7 @@ public abstract class ShopManager {
 
         // Reset snapshop if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
-            updateCycleLimiter.renewCooldown(Configs.perf.pull_cycle_frequency.getValue());
+            updateCycleLimiter.renewCooldown(Configs.getPerf().pull_cycle_frequency.getValue());
             updateIndex = 0;
         }
     }
@@ -449,7 +449,7 @@ public abstract class ShopManager {
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
-                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vec3(i, j, k)));
+                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && world.getBlockState(blockPos).isAir()) {
                         final Shop shop = new Shop(world, blockPos, owner);
                         shop.changeItem(items[Math.abs(rnd.nextInt() % items.length)].getDefaultInstance());
@@ -497,8 +497,8 @@ public abstract class ShopManager {
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
             shop.getItem().getItem() == Items.AIR &&
-            shop.getPrice() == Configs.shop.price.getDefault() &&
-            shop.getMaxStock() == Configs.shop.stock_limit.getDefault()
+            shop.getPrice() == Configs.getShop().price.getDefault() &&
+            shop.getMaxStock() == Configs.getShop().stock_limit.getDefault()
         ) {
             return getShopItemCopy();
         }

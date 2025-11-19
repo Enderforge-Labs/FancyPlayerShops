@@ -5,8 +5,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopCanvas;
-import com.snek.fancyplayershops.graphics.ui._elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ItemSelector;
@@ -141,7 +141,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add color selectors
-        final Float[] hues = Configs.shop.theme_hues.getValue();
+        final Float[] hues = Configs.getShop().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
             final float h = (1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
             e = bg.addChild(new EditUi_ColorSelector(_shop, hues[i], this));

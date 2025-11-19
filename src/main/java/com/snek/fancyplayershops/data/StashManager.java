@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -217,9 +216,8 @@ public abstract class StashManager {
     public static void openStashView(final @NotNull ServerPlayer player) {
 
         final Vec3 pos = player.getPosition(1f);
-        Context.closeContext(player);
-        final Hud hud = Hud.getOpenHudOrCreate(player);
-        hud.changeCanvas(new StashHud(hud));
+        final Hud hud = new Hud(player);
         hud.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        hud.changeCanvas(new StashHud(hud));
     }
 }

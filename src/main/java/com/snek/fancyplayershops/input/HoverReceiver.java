@@ -3,24 +3,18 @@ package com.snek.fancyplayershops.input;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.debug.DebugCheck;
-import com.snek.frameworklib.debug.UiDebugWindow;
-import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.core.BlockPos;
@@ -57,13 +51,7 @@ public abstract class HoverReceiver {
     // Partial ray casting batch data
     private static @Nullable List<Player> playerListSnapshot = null;
     private static @Nullable Set<Shop> targetedShops         = null;
-    // private static @Nullable Set<Shop> shopsWithTargetedElm  = null;
     private static int updateIndex = 0;
-    // private static @Nullable List<Player> hudPlayers = null;
-
-
-    // // Optimization structures
-    // private static @NotNull Map<@NotNull Player, Elm> targetedElms = new HashMap<>();
 
 
 
@@ -84,9 +72,7 @@ public abstract class HoverReceiver {
 
             // Reset the lists
             playerListSnapshot   = new ArrayList<>();
-            // hudPlayers           = new ArrayList<>();
             targetedShops        = new LinkedHashSet<>();
-            // shopsWithTargetedElm = new LinkedHashSet<>();
 
             // Recalculate player list snapshot
             for(final ServerLevel serverWorld : FrameworkLib.getServer().getAllLevels()) {
@@ -105,25 +91,16 @@ public abstract class HoverReceiver {
 
 
         // Find currently focused shops and their viewers
-        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.perf.ray_casting_batches.getValue());
+        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.getPerf().ray_casting_batches.getValue());
         for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
             final Player player = playerListSnapshot.get(updateIndex);
 
 
             // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            // if(Hud.getOpenHud(player) != null) {
-            //     hudPlayers.add(player);
-            //     continue;
-            // }
             final Shop shop = HoverReceiver.getLookedAtShop(player);
             if(shop == null) continue;
 
-
-            // // Add shop to list of shops with looked at elements if the player is in the looked at elements key list
-            // if(targetedElms.containsKey(player)) {
-            //     shopsWithTargetedElm.add(shop);
-            // }
 
             // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
             final boolean isShopNew = targetedShops.add(shop);
@@ -163,13 +140,6 @@ public abstract class HoverReceiver {
      */
     public static void finalizeTick() {
 
-
-        //! Debug window
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().clear();
-        }
-
-
         // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
         targetedShopsOld.removeAll(targetedShops);
         for(final Shop shop : targetedShopsOld) {
@@ -184,54 +154,14 @@ public abstract class HoverReceiver {
         for(final Shop shop : targetedShops) {
             if(!shop.isDeleted() && shop.getuser() != null) {
 
-                // // If the shop doesnt have a targeted element, find the currently targeted element
-                // if(shop.getActiveCanvas() != null) {
-                //     if(!shopsWithTargetedElm.contains(shop)) {
-                //         final Elm targetedElm = shop.getActiveCanvas().findTargetedElement(shop.getuser());
-                //         if(targetedElm != null) {
-                //             targetedElms.put(shop.getuser(), targetedElm);
-                //         }
-                //     }
-                // }
-
                 // If the user isn't looking at the shop anymore, unfocus it
                 if(shop.getViewer() != shop.getuser()) {
                     shop.setFocusStateNext(false);
                 }
             }
             shop.updateFocusState();
-
-            //FIXME this might be required if the canvas doesnt rotate on its own
-            // shop.updateCanvasRotation();
         }
         targetedShopsOld = targetedShops;
-
-
-        // // Send hover events to the currently hovered elements
-        // final List<Player> toRemove = new ArrayList<>();
-        // for(final Entry<Player, Elm> entry : targetedElms.entrySet()) {
-        //     entry.getValue().updateHoverState(entry.getKey());
-        //     if(!entry.getValue().isHovered()) {
-        //         toRemove.add(entry.getKey());
-        //     }
-        // }
-        // // Remove elements that aren't being hovered on anymore and their parent shop from the maps
-        // for(final Player player : toRemove) {
-        //     targetedElms.remove(player);
-        // }
-
-
-        // // Send hover updates to active HUDs
-        // for(final Player player : hudPlayers) {
-        //     Hud.forwardHoverStatic(player);
-        // }
-
-
-        //! Debug window update
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().revalidate();
-            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
-        }
     }
 
 
@@ -283,7 +213,7 @@ public abstract class HoverReceiver {
         // Perform ray cast
         final Vec3 eyePos = player.getEyePosition();
         final Vec3 lookDirection = player.getViewVector(1.0F);
-        final Float reach = Configs.perf.reach_distance.getValue();
+        final Float reach = Configs.getPerf().reach_distance.getValue();
         final BlockHitResult result = world.clip(new ClipContext(
             eyePos,
             eyePos.add(lookDirection.multiply(reach, reach, reach)),
@@ -309,7 +239,7 @@ public abstract class HoverReceiver {
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
         final Vec3 lookDirection = player.getViewVector(1f);
-        final Float stepSize = Configs.perf.ray_casting_step.getValue();
+        final Float stepSize = Configs.getPerf().ray_casting_step.getValue();
         final Vec3 step = lookDirection.normalize().multiply(stepSize, stepSize, stepSize);
         Vec3 currentPos = player.getEyePosition();
         double distanceTraveled = 0;
@@ -350,7 +280,7 @@ public abstract class HoverReceiver {
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
         boolean check = ShopManager.chunkHasShops(playerChunk);
-        final int reach = Math.round(Configs.perf.reach_distance.getValue());
+        final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
         int minX = playerPos.getX() - reach;
         int maxX = playerPos.getX() + reach;
         int minZ = playerPos.getZ() - reach;
@@ -366,13 +296,13 @@ public abstract class HoverReceiver {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3 targetBlock = getTargetBlockPrecise(player);
-            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.perf.ray_casting_step.getValue() * 1.2 : Configs.perf.reach_distance.getValue();
+            final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.getPerf().ray_casting_step.getValue() * 1.2 : Configs.getPerf().reach_distance.getValue();
             final List<Vec3> collidingBlocks = getViewCollisisons(player, maxDistance);
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.distanceToSqr(playerEyePos)));
 
             // Find target shop block
             for(final Vec3 pos : collidingBlocks) {
-                final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(pos);
+                final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
                 final Shop shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
                 if(shop != null) return shop;
             }
