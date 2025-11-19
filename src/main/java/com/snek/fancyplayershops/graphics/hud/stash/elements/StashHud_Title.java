@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
@@ -16,7 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
-public class StashHud_Title extends SimpleTextElm implements __HudElm {
+public class StashHud_Title extends SimpleTextElm {
 
 
     public StashHud_Title(final @NotNull ServerLevel _world) {

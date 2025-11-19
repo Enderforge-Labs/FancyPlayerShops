@@ -9,8 +9,8 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.PlayerStash;
 import com.snek.fancyplayershops.data.StashEntry;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.hud._elements.HudCanvas;
+import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
+import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.HudCloseButton;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_EmptyText;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemDisplay;
@@ -18,9 +18,11 @@ import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemNameCo
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_MaterialList;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_Title;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
+import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.graphics.Div;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,8 +48,8 @@ public class StashHud extends HudCanvas {
 
 
 
-    public StashHud(final @NotNull Hud _hud) {
-        super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
+    public StashHud(final @NotNull HudContext _hud) {
+        super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         Div e;
 
         // Add title

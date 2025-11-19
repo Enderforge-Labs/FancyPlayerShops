@@ -20,10 +20,10 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.frameworklib.graphics.ui._elements.UiBorder;
+import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
@@ -72,7 +72,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     public BuyUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1, ShopFancyTextElm.LINE_H, UiBorder.DEFAULT_HEIGHT);
+        super(_shop, 1, ShopFancyTextElm.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
         shop = _shop;
         Div e;
 
@@ -131,7 +131,7 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(UiBorder.DEFAULT_HEIGHT * 2);
+        e.setPosY(CanvasBorder.DEFAULT_HEIGHT * 2);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 

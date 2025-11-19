@@ -22,11 +22,11 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.frameworklib.graphics.ui._elements.UiBorder;
+import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.graphics.Div;
-import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.core.Elm;
 
 
 
@@ -119,7 +119,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(SQUARE_BUTTON_SIZE + UiBorder.DEFAULT_HEIGHT);
+        e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 

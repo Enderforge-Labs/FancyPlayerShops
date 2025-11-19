@@ -12,11 +12,11 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
-import com.snek.frameworklib.graphics.ui._elements.UiBorder;
+import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
-import com.snek.frameworklib.graphics.Div;
-import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.core.Elm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
@@ -59,7 +59,7 @@ public class DetailsUi extends ShopCanvas {
     public DetailsUi(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, BACKGROUND_HEIGHT, UiBorder.DEFAULT_HEIGHT, UiBorder.DEFAULT_HEIGHT);
+        super(_shop, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
         Div e;
 
 
@@ -68,7 +68,7 @@ public class DetailsUi extends ShopCanvas {
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(1f);
         e.setAbsSizeY(((DetailsUi_Title)e).calcEntityHeight());
-        e.setPosY(1 - e.getAbsSize().y - UiBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
+        e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 
         // Add details display

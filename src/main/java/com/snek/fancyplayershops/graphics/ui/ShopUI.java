@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.graphics.ui._elements.UI;
+import com.snek.frameworklib.graphics.core.UiContext;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * The UI context for shop displays
  */
-public class ShopUI extends UI {
+public class ShopUI extends UiContext {
     private final @NotNull Shop shop;
     public @NotNull Shop getShop() { return shop; }
 

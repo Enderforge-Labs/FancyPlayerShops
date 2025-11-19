@@ -10,8 +10,8 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;
-import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Div;
+import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 
 import net.minecraft.world.entity.player.Player;
