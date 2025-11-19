@@ -12,7 +12,9 @@ import com.snek.frameworklib.data_types.ui.PolylineData;
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -23,7 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
+public class HudCloseButton extends SimpleButtonElm implements __HudElm {
 
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
@@ -45,7 +47,7 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
 
     public HudCloseButton(final @NotNull Hud _hud) {
-        super(_hud, 1, new HudCloseButton_S()); //TODO add input indicator
+        super((ServerLevel)_hud.getPlayer().level(), 1, new HudCloseButton_S()); //TODO add input indicator
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));
@@ -58,6 +60,6 @@ public class HudCloseButton extends HudSimpleButtonElm implements __HudElm {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        hud.despawn();
+        canvas.getContext().despawn();
     }
 }
