@@ -117,7 +117,7 @@ public class EditUi_RotateButton extends SimpleShopButton {
             .targetTransform(
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
-                .rotY(shop.getActiveCanvas().getRotation() / 8f * (float)(2f * Math.PI)) //FIXME idk if this assumes the rotation is in eighths or other
+                .rotY(canvas.getRotation() / 8f * (float)(2f * Math.PI))
             )
         );
     }

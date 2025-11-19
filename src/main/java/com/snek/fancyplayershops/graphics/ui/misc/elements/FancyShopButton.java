@@ -73,7 +73,7 @@ public abstract class FancyShopButton extends FancyButtonElm {
         super.onHoverTick(player);
 
         // Update input displays if present
-        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+        if(canvas != null && canvas instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(lmbActionName);
             c.getRmbIndicator().updateDisplay(rmbActionName);
         }
@@ -88,7 +88,7 @@ public abstract class FancyShopButton extends FancyButtonElm {
         super.onHoverExit(player);
 
         // Update input displays if present
-        if(shop.getActiveCanvas() != null && shop.getActiveCanvas() instanceof InputIndicatorCanvas c) {
+        if(canvas != null && canvas instanceof InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }
