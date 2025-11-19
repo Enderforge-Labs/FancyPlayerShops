@@ -45,7 +45,7 @@ copy_lib() {
 
     # Copy the JAR
     cp "$SOURCE_JAR" "$DEST_DIR/"
-    echo "✓ Copied $LIB_NAME-$VERSION.jar to $DEST_DIR/"
+    echo "✓ Copied $SOURCE_JAR to $DEST_DIR/"
     return 0
 }
 
