@@ -11,8 +11,14 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_OwnerHea
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
+import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+
+import net.minecraft.world.entity.player.Player;
+
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.graphics.core.Div;
@@ -30,8 +36,9 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 /**
  * A UI that shows informations about the shop.
  */
-public class DetailsUi extends ShopCanvas {
+public class DetailsUi extends ShopCanvas/* implements InputIndicatorCanvas */{
     private final @NotNull DetailsUi_Values values;
+    // private final @NotNull DualInputIndicator inputIndicator;
 
 
     // Colors
@@ -105,6 +112,18 @@ public class DetailsUi extends ShopCanvas {
         e.setSize(new Vector2f(1f));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(0.03f);
+
+
+        // Add input indicators
+        e = bg.addChild(new DualInputIndicator(_shop));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e.setPos(new Vector2f(HEAD_BG_SIZE.x, H0 - (DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE.y + HEAD_BG_SIZE.y) / 2));
+        final DualInputIndicator inputIndicator = (DualInputIndicator)e;
+
+        // Set input indicator text
+        final Player player = canvas.getContext().getPlayer();
+        inputIndicator.getLmbIndicator().updateDisplay("Buy 1 item");
+        inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(_shop.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
     }
 
 
@@ -114,4 +133,10 @@ public class DetailsUi extends ShopCanvas {
     public void onStockChange() {
         values.updateDisplay();
     }
+
+
+
+
+    // @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    // @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

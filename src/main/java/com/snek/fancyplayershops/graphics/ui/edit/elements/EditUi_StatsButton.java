@@ -61,6 +61,6 @@ public class EditUi_StatsButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        player.displayClientMessage(new Txt("INFO").get(), false);
+        player.displayClientMessage(new Txt("Shop stats coming soon!").get(), false);
     }
 }
