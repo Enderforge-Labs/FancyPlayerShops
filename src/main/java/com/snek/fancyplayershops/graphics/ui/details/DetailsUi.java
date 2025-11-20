@@ -12,9 +12,7 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.world.entity.player.Player;
@@ -36,9 +34,8 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 /**
  * A UI that shows informations about the shop.
  */
-public class DetailsUi extends ShopCanvas/* implements InputIndicatorCanvas */{
+public class DetailsUi extends ShopCanvas {
     private final @NotNull DetailsUi_Values values;
-    // private final @NotNull DualInputIndicator inputIndicator;
 
 
     // Colors
@@ -133,10 +130,4 @@ public class DetailsUi extends ShopCanvas/* implements InputIndicatorCanvas */{
     public void onStockChange() {
         values.updateDisplay();
     }
-
-
-
-
-    // @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
-    // @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }
