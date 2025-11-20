@@ -113,7 +113,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Read config files
-            if(!Configs.loadConfigs()) fatal = true;
+            Configs.loadConfigs();
 
 
             // Stop if errors occurred

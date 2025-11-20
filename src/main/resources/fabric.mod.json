@@ -27,7 +27,7 @@
         "fabric-api": "*",
         "solstice-economy": ">=0.2.2",
         "frameworklib": ">=1.1.0",
-        "frameworkconfig": ">=1.0.0"
+        "frameworkconfig": ">=1.1.0"
     },
     "suggests":{}
 }
