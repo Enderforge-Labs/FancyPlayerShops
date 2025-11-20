@@ -23,6 +23,6 @@ public class StashHud_MaterialList extends Div implements Scrollable {
 
     @Override
     public void onScroll(final @NotNull Player player, final int amount) {
-        System.out.println("SCROLLED " + amount);
+        System.out.println("SCROLLED " + amount); //TODO REMOVE
     }
 }
