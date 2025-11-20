@@ -791,7 +791,7 @@ public class Shop {
             deletionState = true;
 
             // Despawn the ui context and the item display
-            ui.despawn();
+            if(ui != null) ui.despawn();
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn();
 
