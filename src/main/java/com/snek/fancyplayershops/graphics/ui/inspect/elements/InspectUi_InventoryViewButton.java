@@ -17,9 +17,6 @@ import net.minecraft.world.item.Items;
 
 
 
-//TODO add "open in inventory" button
-//TODO use the "external link" icon design
-
 /**
  * A button that allows the user of the shop to view the item as a stack in a vanilla inventory.
  */

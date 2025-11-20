@@ -29,7 +29,6 @@ public class PerformanceConfig implements ConfigFile {
         0.2f
     );
 
-    //FIXME only keep one of this config. Either remove this one or its copy in frameworklib
     public final ValueConfigField<Integer> ray_casting_batches = new ValueConfigField<>(
         new String[] {
             "The amount of batches needed to complete a ray casting check cycle.",
@@ -93,6 +92,5 @@ public class PerformanceConfig implements ConfigFile {
 
         // Check data save frequency
         if(data_save_frequency.getValue() < 1) throw new IllegalStateException("Data save frequency must be >= 1");
-        //TODO use custom invalid config file option exception
     }
 }

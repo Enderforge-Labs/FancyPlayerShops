@@ -663,7 +663,7 @@ public class Shop {
      *     <p> Prices under 0.01 are rounded to 0.01
      *     <p> Prices under 0.00001 are rounded to 0.
      *     <p> Negative values are considered invalid and return false without changing the price.
-     *     <p> Values above MAX_PRICE are also considered invalid. //TODO add to config file
+     *     <p> Values above MAX_PRICE are also considered invalid.
      * @param _newPrice The new price
      * @return Whether the new value could be set.
      */
