@@ -13,9 +13,7 @@
         "main":[
             "com.snek.fancyplayershops.main.FancyPlayerShops"
         ],
-        "client":[
-            "com.snek.fancyplayershops.FancyPlayerShopsClient"
-        ]
+        "client":[]
     },
     "mixins":[
         "fancyplayershops.mixins.json"

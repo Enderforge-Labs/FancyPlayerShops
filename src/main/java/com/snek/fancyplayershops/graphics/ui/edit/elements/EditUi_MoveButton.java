@@ -17,7 +17,7 @@ import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
-import com.snek.frameworklib.utils.SpaceUtils;
+import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -37,9 +37,9 @@ public class EditUi_MoveButton extends SimpleShopButton {
             design.add(new PolylineData(
                 Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
                 Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-                SpaceUtils.rotateVec2(new Vector2f(-0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.0f,  0.5f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
-                SpaceUtils.rotateVec2(new Vector2f(+0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f)
+                GeometryUtils.rotateVec2(new Vector2f(-0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
+                GeometryUtils.rotateVec2(new Vector2f(+0.0f,  0.5f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f),
+                GeometryUtils.rotateVec2(new Vector2f(+0.15f, 0.4f), (float)Math.toRadians(90) * i).add(0.5f, 0.5f)
             ));
         }
     }

@@ -16,7 +16,7 @@ import com.snek.frameworklib.data_types.ui.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.SpaceUtils;
+import com.snek.frameworklib.utils.GeometryUtils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -32,7 +32,7 @@ public class EditUi_TransferButton extends SimpleShopButton {
     private static final @NotNull List<@NotNull Vector2f> design0 = new ArrayList<>();
     static {
         for(int i = 0; i < 8; ++i) {
-            design0.add(SpaceUtils.rotateVec2(new Vector2f(0, 0.2f), (float)Math.toRadians(45) * (i + 0.5f)).add(0.5f, 0.85f));
+            design0.add(GeometryUtils.rotateVec2(new Vector2f(0, 0.2f), (float)Math.toRadians(45) * (i + 0.5f)).add(0.5f, 0.85f));
         }
     }
     private static final @NotNull PolylineData[] design = new PolylineData[] {

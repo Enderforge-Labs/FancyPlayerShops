@@ -191,10 +191,10 @@ public class ShopItemDisplay extends ItemElm {
             // Wrap the name and calculate the amount of lines
             int i;
             float totLen = 0;
-            final float ellipsisLen = FontSize.getWidth("…");
+            final float ellipsisLen = FontSize.getCharWidth('…');
             for(i = 0; i < fullName.length(); ++i) {
                 final char c = fullName.charAt(i);
-                totLen += FontSize.getWidth(String.valueOf(c));
+                totLen += FontSize.getCharWidth(c);
                 if((totLen + ellipsisLen) * SimpleTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
                     break;
                 }

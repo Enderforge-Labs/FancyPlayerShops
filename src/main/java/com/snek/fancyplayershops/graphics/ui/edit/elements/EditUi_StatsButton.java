@@ -12,7 +12,7 @@ import com.snek.frameworklib.data_types.ui.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.SpaceUtils;
+import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -38,9 +38,9 @@ public class EditUi_StatsButton extends SimpleShopButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-            SpaceUtils.rotateVec2(new Vector2f(-0.25f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.00f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
-            SpaceUtils.rotateVec2(new Vector2f(+0.00f, -0.25f), (float)Math.toRadians(15)).add(1, 0.9f)
+            GeometryUtils.rotateVec2(new Vector2f(-0.25f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
+            GeometryUtils.rotateVec2(new Vector2f(+0.00f, -0.00f), (float)Math.toRadians(15)).add(1, 0.9f),
+            GeometryUtils.rotateVec2(new Vector2f(+0.00f, -0.25f), (float)Math.toRadians(15)).add(1, 0.9f)
         )
     };
 
