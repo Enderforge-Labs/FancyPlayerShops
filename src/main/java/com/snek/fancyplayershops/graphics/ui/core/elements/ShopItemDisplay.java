@@ -182,11 +182,12 @@ public class ShopItemDisplay extends ItemElm {
         // If the shop is configured, display the current item and its name
         else {
             getStyle(ItemElmStyle.class).setItem(_item);
-            final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
-            name.getStyle(FancyTextElmStyle.class).setTextOverflowBehaviour(TextOverflowBehaviour.ELLIPSIS);
-            name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
-            name.flushStyle();
-
+            if(name != null) {
+                final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
+                name.getStyle(FancyTextElmStyle.class).setTextOverflowBehaviour(TextOverflowBehaviour.ELLIPSIS);
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
+                name.flushStyle();
+            }
             //TODO REMOVE
             //TODO REMOVE
             // final StringBuilder truncatedName = new StringBuilder();
