@@ -562,7 +562,7 @@ public abstract class ShopManager {
         item.setTag(nbt);
         item.setHoverName(new Txt()
             .cat(new Txt("Shop snapshot").color(SHOP_ITEM_NAME_COLOR).bold().noItalic())
-            .cat(new Txt(" - " + (shop.getItem().getItem() == Items.AIR ? "Empty shop" : MinecraftUtils.getFancyItemName(shop.getItem()).getString())).white().bold().noItalic())
+            .cat(new Txt(" - " + new Txt(shop.getStandaloneName()).white().bold().noItalic()))
         .get());
         return item;
     }

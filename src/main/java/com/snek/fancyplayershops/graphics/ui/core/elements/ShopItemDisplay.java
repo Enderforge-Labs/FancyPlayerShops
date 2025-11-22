@@ -14,21 +14,18 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
-import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.utils.Easings;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Display.BillboardConstraints;
 import net.minecraft.world.entity.Display.ItemDisplay;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.item.ItemStack;
@@ -183,36 +180,10 @@ public class ShopItemDisplay extends ItemElm {
         else {
             getStyle(ItemElmStyle.class).setItem(_item);
             if(name != null) {
-                final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
-                name.getStyle(FancyTextElmStyle.class).setTextOverflowBehaviour(TextOverflowBehaviour.ELLIPSIS);
+                final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + shop.getStandaloneName();
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
                 name.flushStyle();
             }
-            //TODO REMOVE
-            //TODO REMOVE
-            // final StringBuilder truncatedName = new StringBuilder();
-
-            // // Wrap the name and calculate the amount of lines
-            // int i;
-            // float totLen = 0;
-            // final float ellipsisLen = FontSize.getCharWidth('…');
-            // for(i = 0; i < fullName.length(); ++i) {
-            //     final char c = fullName.charAt(i);
-            //     totLen += FontSize.getCharWidth(c);
-            //     if((totLen + ellipsisLen) * SimpleTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
-            //         break;
-            //     }
-            //     truncatedName.append(c);
-            // }
-
-            // // Set the new name and adjust the element height
-            // if(i < fullName.length()) truncatedName.append("…");
-            // if(name != null) {
-                // name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).white().get());
-                // name.flushStyle();
-            // }
-            //TODO REMOVE
-            //TODO REMOVE
         }
 
 
@@ -331,8 +302,6 @@ public class ShopItemDisplay extends ItemElm {
         if(name == null) {
             name = new FancyTextElm(world, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
-            name.getStyle().setViewRange(0.1f);
-            name.getStyle().setBillboardMode(BillboardConstraints.VERTICAL);
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
         }
     }

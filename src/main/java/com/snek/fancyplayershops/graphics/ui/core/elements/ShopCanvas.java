@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p> which are kept spawned and are inherited by future canvases until the targeted shop stops being focused.
  */
 public abstract class ShopCanvas extends UiCanvas {
-    private final @NotNull Shop shop;
+    protected final @NotNull Shop shop;
 
 
     /**

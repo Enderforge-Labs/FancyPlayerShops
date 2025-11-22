@@ -5,17 +5,19 @@ import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_OwnerHead;
-import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Title;
 import com.snek.fancyplayershops.graphics.ui.details.elements.DetailsUi_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.DetailsUi_OwnerHeadBg_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
@@ -68,10 +70,10 @@ public class DetailsUi extends ShopCanvas {
 
 
         // Add title
-        e = bg.addChild(new DetailsUi_Title(_shop));
+        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(1f);
-        e.setAbsSizeY(((DetailsUi_Title)e).calcEntityHeight());
+        e.setAbsSizeY(((TitleElm)e).calcEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 
@@ -121,6 +123,12 @@ public class DetailsUi extends ShopCanvas {
         final Player player = canvas.getContext().getPlayer();
         inputIndicator.getLmbIndicator().updateDisplay("Buy 1 item");
         inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(_shop.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
+    }
+
+
+
+    public @NotNull Component recalculateTitle() {
+        return shop.getItem().getItem() == Items.AIR ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
     }
 
 

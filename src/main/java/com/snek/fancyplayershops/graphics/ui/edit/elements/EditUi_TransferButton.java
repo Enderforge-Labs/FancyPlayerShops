@@ -9,7 +9,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
-import com.snek.fancyplayershops.graphics.ui.transfer.elements.TransferUi;
+import com.snek.fancyplayershops.graphics.ui.transfer.TransferUi;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.PolylineData;

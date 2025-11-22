@@ -16,9 +16,10 @@ import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_EmptyText;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemDisplay;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemNameCount;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_MaterialList;
-import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_Title;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
@@ -53,7 +54,7 @@ public class StashHud extends HudCanvas {
         Div e;
 
         // Add title
-        e = bg.addChild(new StashHud_Title((ServerLevel)(context.getPlayer().level())));
+        e = bg.addChild(new TitleElm(((ServerLevel)context.getPlayer().level()), new Txt("Your stash").white().bold().get()));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 

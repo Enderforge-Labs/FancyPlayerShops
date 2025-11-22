@@ -7,6 +7,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextInput;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.graphics.ui.transfer.TransferUi;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.Txt;

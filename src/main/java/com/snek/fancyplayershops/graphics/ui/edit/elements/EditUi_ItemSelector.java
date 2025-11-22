@@ -75,7 +75,7 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         //FIXME check blacklist before setting the item
         //TODO add item blacklist
         shop.getItemDisplay().updateDisplay();
-        ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
+        ((EditUi)canvas).updateTitle();
         playButtonSound(player);
     }
 }

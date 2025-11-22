@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUiSub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_1iButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_1sButton;
@@ -14,7 +15,6 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_AmountInputDispl
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_PriceDisplay;
-import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_Title;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
@@ -27,6 +27,7 @@ import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 
@@ -47,7 +48,6 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull DualInputIndicator inputIndicator;
 
     // Instance data
-    private final @NotNull Shop shop;
     private final @NotNull BuyUi_AmountInputDisplay amountInputDisplay;
     private final @NotNull BuyUi_PriceDisplay priceDisplay;
     private final @NotNull BuyUi_ConfirmButton confirmButton;
@@ -73,12 +73,11 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Call superconstructor
         super(_shop, 1, ShopFancyTextElm.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
-        shop = _shop;
         Div e;
 
 
         // Add title
-        e = bg.addChild(new BuyUi_Title(_shop));
+        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -141,6 +140,12 @@ public class BuyUi extends ShopCanvas implements InputIndicatorCanvas {
         onStockChange();
     }
 
+
+
+
+    public @NotNull Component recalculateTitle() {
+        return new Txt("Buying: " + shop.getStandaloneName()).white().get();
+    }
 
 
 

@@ -950,7 +950,24 @@ public class Shop {
 
 
 
+    /**
+     * Computes the name of the shop.
+     * This is meant for use in sentences.
+     * The name is not capitalized and the shop name is prefixed with "shop " and enclosed in double quotes.
+     * @return The name of the shop, or "empty shop" if unconfigured.
+     */
     public @NotNull String getDecoratedName() {
         return item.getItem() == Items.AIR ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
+    }
+
+
+    /**
+     * Computes the name of the shop.
+     * This is meant for use in stand-alone text elements such as titles.
+     * The name is capitalized and doesn't contain any additional text.
+     * @return The name of the shop, or "Empty shop" if unconfigured.
+     */
+    public @NotNull String getStandaloneName() {
+        return item.getItem() == Items.AIR ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
     }
 }

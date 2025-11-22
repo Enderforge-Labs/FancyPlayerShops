@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
+import com.snek.fancyplayershops.graphics.ui.transfer.TransferUi;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_ConfirmButton_S;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -27,7 +28,7 @@ public class TransferUi_ConfirmButton extends FancyShopButton {
     private boolean active = true;
 
 
-    protected TransferUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferUi _menu) {
+    public TransferUi_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferUi _menu) {
         super(_shop, null, "Confirm ownership transfer", 1, new TransferUi_ConfirmButton_S(_shop));
         menu = _menu;
     }

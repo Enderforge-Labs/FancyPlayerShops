@@ -27,7 +27,7 @@ public class ItemInspectorInventory_Factory implements MenuProvider {
     @Override
     public Component getDisplayName() {
         return new Txt()
-            .cat(new Txt(MinecraftUtils.getFancyItemName(shop.getItem()).getString()).gray().noBold().noItalic())
+            .cat(new Txt(shop.getStandaloneName()).gray().noBold().noItalic())
         .get();
     }
 

@@ -4,17 +4,18 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_IdDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_InventoryViewButton;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_ModDisplay;
-import com.snek.fancyplayershops.graphics.ui.inspect.elements.InspectUi_Title;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
@@ -60,7 +61,7 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add title
-        e = bg.addChild(new InspectUi_Title(_shop));
+        e = bg.addChild(new TitleElm(_shop.getWorld(), shop.getStandaloneName()));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -101,7 +102,6 @@ public class InspectUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
     }
-
 
 
 

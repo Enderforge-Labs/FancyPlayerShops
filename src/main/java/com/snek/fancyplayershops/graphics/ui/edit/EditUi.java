@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
@@ -16,17 +17,21 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_PriceInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_RotateButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_StatsButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_StockLimitInput;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_Title;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_TransferButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
+
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.graphics.core.Div;
-import com.snek.frameworklib.graphics.core.Elm;
 
 
 
@@ -39,9 +44,9 @@ import com.snek.frameworklib.graphics.core.Elm;
  * A UI that allows the owner of the shop to edit it.
  */
 public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
-    private final @NotNull Elm title;
+    private final @NotNull TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull Elm getTitle() { return title; }
+    public @NotNull TitleElm getTitle() { return title; }
 
 
     // Layout
@@ -79,10 +84,10 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
         // Add title
-        e = bg.addChild(new EditUi_Title(_shop));
+        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (Elm)e;
+        title = (TitleElm)e;
 
 
         // Add price button
@@ -149,6 +154,24 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
             e.setAlignmentX(AlignmentX.RIGHT);
             e.setPosY(1f - ShopFancyTextElm.LINE_H - h * (i + 1));
         }
+    }
+
+
+    public @NotNull Component recalculateTitle() {
+        if(shop.getItem().getItem() == Items.AIR) {
+            return new Txt()
+                .cat(new Txt("Editing an empty shop").white())
+            .get();
+        }
+        else {
+            return new Txt()
+                .cat(new Txt("Editing: ").white())
+                .cat(shop.getStandaloneName())
+            .get();
+        }
+    }
+    public void updateTitle() {
+        title.updateDisplay(recalculateTitle());
     }
 
 

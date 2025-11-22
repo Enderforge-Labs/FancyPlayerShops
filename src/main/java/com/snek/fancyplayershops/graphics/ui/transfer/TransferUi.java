@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.ui.transfer.elements;
+package com.snek.fancyplayershops.graphics.ui.transfer;
 
 import java.util.UUID;
 
@@ -6,12 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUiSub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.fancyplayershops.graphics.ui.transfer.elements.TransferUi_ConfirmButton;
+import com.snek.fancyplayershops.graphics.ui.transfer.elements.TransferUi_NameInput;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_Input_S;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.FrameworkLib;
@@ -24,7 +27,9 @@ import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 
 
 
@@ -43,7 +48,6 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
     // Instance data
     private final @NotNull TransferUi_ConfirmButton confirmButton;
-    private final @NotNull Shop shop;
     private @NotNull UUID newOwnerUUID;
     public @NotNull UUID getNewOwnerUUID() { return newOwnerUUID; }
 
@@ -61,13 +65,12 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Call superconstructor
         super(_shop, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
-        shop = _shop;
         newOwnerUUID = _shop.getOwnerUuid();
         Div e;
 
 
         // Add title
-        e = bg.addChild(new TransferUi_Title(_shop));
+        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 1f);
         e.setSizeY(ShopFancyTextElm.LINE_H);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -153,6 +156,20 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
     @Override
     public void onStockChange() {
         // Empty
+    }
+
+
+
+    public @NotNull Component recalculateTitle() {
+        if(shop.getItem().getItem() == Items.AIR) {
+            return new Txt("Transferring an empty shop").white().get();
+        }
+        else {
+            return new Txt()
+                .cat(new Txt("Transferring: ").white())
+                .cat(shop.getStandaloneName())
+            .get();
+        }
     }
 
 
