@@ -183,30 +183,36 @@ public class ShopItemDisplay extends ItemElm {
         // If the shop is configured, display the current item and its name
         else {
             getStyle(ItemElmStyle.class).setItem(_item);
-
-            // Get item name as a string
             final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + MinecraftUtils.getFancyItemName(getStyle(ItemElmStyle.class).getItem()).getString();
-            final StringBuilder truncatedName = new StringBuilder();
+            name.getStyle(FancyTextElmStyle.class).setTextOverflowBehaviour(TextOverflowBehaviour.ELLIPSIS);
+            name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
+            name.flushStyle();
 
-            // Wrap the name and calculate the amount of lines
-            int i;
-            float totLen = 0;
-            final float ellipsisLen = FontSize.getCharWidth('…');
-            for(i = 0; i < fullName.length(); ++i) {
-                final char c = fullName.charAt(i);
-                totLen += FontSize.getCharWidth(c);
-                if((totLen + ellipsisLen) * SimpleTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
-                    break;
-                }
-                truncatedName.append(c);
-            }
+            //TODO REMOVE
+            //TODO REMOVE
+            // final StringBuilder truncatedName = new StringBuilder();
 
-            // Set the new name and adjust the element height
-            if(i < fullName.length()) truncatedName.append("…");
-            if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).white().get());
-                name.flushStyle();
-            }
+            // // Wrap the name and calculate the amount of lines
+            // int i;
+            // float totLen = 0;
+            // final float ellipsisLen = FontSize.getCharWidth('…');
+            // for(i = 0; i < fullName.length(); ++i) {
+            //     final char c = fullName.charAt(i);
+            //     totLen += FontSize.getCharWidth(c);
+            //     if((totLen + ellipsisLen) * SimpleTextElmStyle.DEFAULT_TEXT_SCALE > NAME_DISPLAY_WIDTH - 0.1f) {
+            //         break;
+            //     }
+            //     truncatedName.append(c);
+            // }
+
+            // // Set the new name and adjust the element height
+            // if(i < fullName.length()) truncatedName.append("…");
+            // if(name != null) {
+                // name.getStyle(FancyTextElmStyle.class).setText(new Txt(truncatedName.toString()).white().get());
+                // name.flushStyle();
+            // }
+            //TODO REMOVE
+            //TODO REMOVE
         }
 
 
