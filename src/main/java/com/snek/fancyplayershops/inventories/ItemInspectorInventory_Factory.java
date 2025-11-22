@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.inventories;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;

@@ -72,7 +72,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setPosY(1f - ShopFancyTextElm.LINE_H * 1f);
-        e.setSizeY(ShopFancyTextElm.LINE_H);
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
 
 

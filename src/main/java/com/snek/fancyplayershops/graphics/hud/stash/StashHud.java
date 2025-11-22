@@ -55,7 +55,7 @@ public class StashHud extends HudCanvas {
 
         // Add title
         e = bg.addChild(new TitleElm(((ServerLevel)context.getPlayer().level()), new Txt("Your stash").white().bold().get()));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 

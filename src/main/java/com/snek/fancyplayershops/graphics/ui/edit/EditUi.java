@@ -85,7 +85,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
 

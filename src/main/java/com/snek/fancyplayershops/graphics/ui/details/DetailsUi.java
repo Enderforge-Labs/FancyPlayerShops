@@ -72,7 +72,7 @@ public class DetailsUi extends ShopCanvas {
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setSizeX(1f);
+        e.setSizeX(TitleElm.DEFAULT_W);
         e.setAbsSizeY(((TitleElm)e).calcEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 

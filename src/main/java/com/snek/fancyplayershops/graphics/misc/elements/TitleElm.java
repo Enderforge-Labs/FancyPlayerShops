@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 
 
 public class TitleElm extends SimpleTextElm {
+    public static final float DEFAULT_W = 0.9f;
 
 
     /**
