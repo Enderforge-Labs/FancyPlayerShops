@@ -13,7 +13,7 @@ public class TitleElm_S extends SimpleTextElmStyle {
 
 
     @Override
-    public TextOverflowBehaviour getDefaultTextOverflowBehaviour(){
+    public TextOverflowBehaviour getDefaultTextOverflowBehaviour() {
         return TextOverflowBehaviour.SCROLL;
     }
 }

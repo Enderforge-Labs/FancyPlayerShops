@@ -20,13 +20,13 @@ public class StashHud_ItemNameCount_S extends SimpleTextElmStyle {
 
 
     @Override
-    public @NotNull TextAlignment getDefaultTextAlignment(){
+    public @NotNull TextAlignment getDefaultTextAlignment() {
         return TextAlignment.LEFT;
     }
 
 
     @Override
-    public @NotNull Transform getDefaultTransform(){
+    public @NotNull Transform getDefaultTransform() {
         return super.getDefaultTransform().scale(0.5f);
     }
 }
