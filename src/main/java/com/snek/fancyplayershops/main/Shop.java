@@ -356,7 +356,7 @@ public class Shop {
             else {
 
                 // Despawn active UI
-                ui.despawn();
+                ui.despawn(true);
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
                 menuOpenLimiter.renewCooldown(ShopItemDisplay.D_TIME);
@@ -374,7 +374,7 @@ public class Shop {
 
     public void invalidateItemDisplay() {
         if(itemDisplay != null) {
-            itemDisplay.despawnNow();
+            itemDisplay.despawn(false);
             itemDisplay = null;
         }
         getItemDisplay();
@@ -791,9 +791,9 @@ public class Shop {
             deletionState = true;
 
             // Despawn the ui context and the item display
-            if(ui != null) ui.despawn();
+            if(ui != null) ui.despawn(true);
             getItemDisplay().stopLoopAnimation();
-            getItemDisplay().despawn();
+            getItemDisplay().despawn(true);
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);

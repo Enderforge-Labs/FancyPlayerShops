@@ -59,6 +59,6 @@ public class HudCloseButton extends SimpleButtonElm {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        canvas.getContext().despawn();
+        canvas.getContext().despawn(true);
     }
 }

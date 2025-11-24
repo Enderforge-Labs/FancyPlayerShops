@@ -287,9 +287,9 @@ public class ShopItemDisplay extends ItemElm {
 
 
     @Override
-    public void despawn() {
-        super.despawn();
-        if(name != null) name.despawnNow();
+    public void despawn(final boolean animate) {
+        super.despawn(animate);
+        if(name != null) name.despawn(false);
     }
 
 
@@ -314,7 +314,7 @@ public class ShopItemDisplay extends ItemElm {
      */
     public void despawnNameEntity() {
         if(name != null) {
-            name.despawnNow();
+            name.despawn(false);
             name = null;
         }
     }
