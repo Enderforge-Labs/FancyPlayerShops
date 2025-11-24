@@ -61,6 +61,7 @@ public class EditUi_MoveButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         final boolean giveResult = MinecraftUtils.attemptGive(player, ShopManager.createShopSnapshot(shop));
         if(!giveResult) {
             player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);

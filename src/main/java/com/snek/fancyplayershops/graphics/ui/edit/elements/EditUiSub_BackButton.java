@@ -60,6 +60,7 @@ public class EditUiSub_BackButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         shop.changeCanvas(new EditUi(shop));
     }
 }

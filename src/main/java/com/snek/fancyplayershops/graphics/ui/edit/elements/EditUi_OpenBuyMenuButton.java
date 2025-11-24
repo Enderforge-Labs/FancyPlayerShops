@@ -54,6 +54,7 @@ public class EditUi_OpenBuyMenuButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         shop.openBuyUi(player, false);
     }
 }

@@ -97,6 +97,7 @@ public class BuyUi_1sButton extends FancyShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         if(active) playButtonSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, 64, true);

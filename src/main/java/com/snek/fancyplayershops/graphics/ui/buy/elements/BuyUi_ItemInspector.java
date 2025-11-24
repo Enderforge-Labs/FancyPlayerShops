@@ -49,6 +49,7 @@ public class BuyUi_ItemInspector extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         if(backButton instanceof BuyUiSub_BackButton b) b.setAmountCache(((BuyUi)canvas).getAmount());
         shop.changeCanvas(new InspectUi(shop, backButton));
         playButtonSound(player);

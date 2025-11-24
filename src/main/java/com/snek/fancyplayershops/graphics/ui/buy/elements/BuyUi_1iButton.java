@@ -88,6 +88,7 @@ public class BuyUi_1iButton extends FancyShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
         final int oldStock = shop.getStock();
 

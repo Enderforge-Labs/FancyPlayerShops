@@ -87,6 +87,7 @@ public class EditUi_RotateButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         shop.addDefaultRotation(rotation);
 
         // Animate the item display to show the new rotation

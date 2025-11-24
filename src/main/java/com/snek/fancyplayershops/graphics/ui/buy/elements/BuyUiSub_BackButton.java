@@ -63,6 +63,7 @@ public class BuyUiSub_BackButton extends SimpleShopButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         final BuyUi ui = new BuyUi(shop);
         shop.changeCanvas(ui);
         ui.changeAmount(amountCache);

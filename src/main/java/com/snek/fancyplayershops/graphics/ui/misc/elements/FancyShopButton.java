@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.misc.elements;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -92,5 +93,13 @@ public abstract class FancyShopButton extends FancyButtonElm {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }
+    }
+
+
+
+
+    @Override
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
     }
 }
