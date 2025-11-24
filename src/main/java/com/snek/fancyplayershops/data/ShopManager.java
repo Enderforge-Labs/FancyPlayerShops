@@ -238,6 +238,12 @@ public abstract class ShopManager {
             }
 
 
+            // Skip deleted shops
+            if(shop.isDeleted()) {
+                continue;
+            }
+
+
             // Create this shop's config file if absent, then save the JSON in it
             final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
             try (final Writer writer = new FileWriter(shopStorageFile)) {
@@ -384,7 +390,7 @@ public abstract class ShopManager {
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
                 if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your shop " + shop.getDecoratedName() + " has been deleted by an admin.").red())
+                    .cat(new Txt("Your " + shop.getDecoratedName() + " has been deleted by an admin.").red())
                 .get(), false);
 
                 // Stash and delete the shop, then increase the deleted shops counter

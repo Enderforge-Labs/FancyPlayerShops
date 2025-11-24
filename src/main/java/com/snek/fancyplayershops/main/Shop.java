@@ -110,29 +110,29 @@ public class Shop {
 
 
     // Accessors
-    public @NotNull  ServerLevel     getWorld          () { return world;           }
-    public @NotNull  String          getWorldId        () { return worldId;         }
-    public @NotNull  BlockPos        getPos            () { return pos;             }
-    public @NotNull  ItemStack       getItem           () { return item;            }
-    public @NotNull  String          getSerializedItem () { return serializedItem;  }
-    public @NotNull  ShopItemDisplay getItemDisplay    () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ShopUI          getUi             () { return ui;              }
-    public           long            getPrice          () { return price;           }
-    public           int             getStock          () { return stock;           }
-    public           int             getMaxStock       () { return maxStock;        }
-    public           float           getDefaultRotation() { return defaultRotation; }
-    public           boolean         isFocused         () { return focusState;      }
-    public           boolean         isDeleted         () { return deletionState;   }
-    public @NotNull  UUID            getOwnerUuid      () { return ownerUUID;       }
-    public @Nullable Player          getuser           () { return user;            }
-    public @Nullable Player          getViewer         () { return viewer;          }
-    public           boolean         isScheduledForSave() { return scheduledForSave; }
-    public           void            setViewer         (final @Nullable Player _viewer) { viewer = _viewer; }
-    public           void            setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
-    public           void            setFocusStateNext (final boolean _nextFocusState) { focusStateNext = _nextFocusState; }
-    public @NotNull  ShopKey         getKey            () { return shopKeyCache; }
-    public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld; }
-    public           float           getColorThemeHue  () { return colorThemeHue; }
+    public @NotNull  ServerLevel     getWorld            () { return world;                           }
+    public @NotNull  String          getWorldId          () { return worldId;                         }
+    public @NotNull  BlockPos        getPos              () { return pos;                             }
+    public @NotNull  ItemStack       getItem             () { return item;                            }
+    public @NotNull  String          getSerializedItem   () { return serializedItem;                  }
+    public @NotNull  ShopItemDisplay getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
+    public @Nullable ShopUI          getUi               () { return ui;                              }
+    public           long            getPrice            () { return price;                           }
+    public           int             getStock            () { return stock;                           }
+    public           int             getMaxStock         () { return maxStock;                        }
+    public           float           getDefaultRotation  () { return defaultRotation;                 }
+    public           boolean         isFocused           () { return focusState;                      }
+    public           boolean         isDeleted           () { return deletionState;                   }
+    public @NotNull  UUID            getOwnerUuid        () { return ownerUUID;                       }
+    public @Nullable Player          getuser             () { return user;                            }
+    public @Nullable Player          getViewer           () { return viewer;                          }
+    public           boolean         isScheduledForSave  () { return scheduledForSave;                }
+    public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
+    public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld;     }
+    public           float           getColorThemeHue    () { return colorThemeHue;                   }
+    public           void            setViewer           (final @Nullable Player  _viewer        ) { viewer           = _viewer;         }
+    public           void            setScheduledForSave (final           boolean scheduled      ) { scheduledForSave = scheduled;       }
+    public           void            setFocusStateNext   (final           boolean _nextFocusState) { focusStateNext   = _nextFocusState; }
 
 
 

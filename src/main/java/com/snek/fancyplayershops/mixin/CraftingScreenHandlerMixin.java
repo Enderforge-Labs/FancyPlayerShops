@@ -28,6 +28,8 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 
 
+//TODO move to framework lib
+//TODO add a custom recipe list that allows nbts or something
 
 /**
  * A mixin that detects shop crafting recipes and replaces the default steve head in the output slot with a shop item.
