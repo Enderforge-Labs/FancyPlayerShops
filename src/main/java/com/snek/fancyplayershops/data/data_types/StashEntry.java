@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.data_types;
 
 import org.jetbrains.annotations.NotNull;
 

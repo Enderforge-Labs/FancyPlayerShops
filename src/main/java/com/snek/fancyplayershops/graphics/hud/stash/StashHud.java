@@ -6,9 +6,9 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.PlayerStash;
-import com.snek.fancyplayershops.data.StashEntry;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.data_types.PlayerStash;
+import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.HudCloseButton;

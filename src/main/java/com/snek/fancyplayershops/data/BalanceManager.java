@@ -19,6 +19,8 @@ import com.google.gson.Gson;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.herrkatze.solsticeEconomy.modules.economy.Notification;
 import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
+import com.snek.fancyplayershops.data.data_types.PlayerShopBalance;
+import com.snek.fancyplayershops.data.data_types.null;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.Txt;
