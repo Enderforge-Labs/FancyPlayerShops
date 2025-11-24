@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,8 @@ import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -414,33 +417,16 @@ public abstract class ShopManager {
      * @return The number of shops that were created.
      */
     public static int fill(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
-        final Item[] items = new Item[] {
-            Items.STONE,
-            Items.COBBLESTONE,
-            Items.SADDLE,
-            Items.DIAMOND_SWORD,
-            Items.TRIDENT,
-            Items.POLISHED_GRANITE_STAIRS,
-            Items.POLISHED_DIORITE_SLAB,
-            Items.ACACIA_BOAT,
-            Items.BEEHIVE,
-            Items.CHISELED_BOOKSHELF,
-            Items.CHERRY_STAIRS,
-            Items.LEATHER,
-            Items.NOTE_BLOCK,
-            Items.WEEPING_VINES,
-            Items.WHITE_CANDLE,
-            Items.WAXED_WEATHERED_CUT_COPPER_STAIRS, //!  >:3
-            Items.ACACIA_HANGING_SIGN,
-            Items.BLACK_DYE,
-            Items.BLUE_GLAZED_TERRACOTTA,
-            Items.COOKIE,
-            Items.LIGHT_GRAY_BANNER,
-            Items.HEART_OF_THE_SEA,
-            Items.MUSIC_DISC_CAT,
-            Items.PINK_TULIP,
-            Items.ENDER_PEARL,
-        };
+
+        // Get a list of all registered items
+        Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
+        final List<Item> itemList = new ArrayList<>();
+        for(Item item : itemRegistry) {
+            itemList.add(item);
+        }
+
+
+        // Use reflection to change shop stock externally
         Field field = null;
         try {
             field = Shop.class.getDeclaredField("stock");
@@ -458,7 +444,7 @@ public abstract class ShopManager {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && world.getBlockState(blockPos).isAir()) {
                         final Shop shop = new Shop(world, blockPos, owner);
-                        shop.changeItem(items[Math.abs(rnd.nextInt() % items.length)].getDefaultInstance());
+                        shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1000_000f);
 
