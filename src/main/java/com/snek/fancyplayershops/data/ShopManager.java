@@ -36,6 +36,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
@@ -73,7 +74,7 @@ import net.minecraft.world.level.Level;
 /**
  * A class that handles active shops and takes care of loading and saving their data.
  */
-public abstract class ShopManager {
+public final class ShopManager extends UtilityClassBase {
     private static final DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder()
         .appendPattern("MMMM d, yyyy 'at' h:mm ")
         .appendText(java.time.temporal.ChronoField.AMPM_OF_DAY,
@@ -506,13 +507,14 @@ public abstract class ShopManager {
         // Create and add shop data NBT
         final CompoundTag data = new CompoundTag();
 
-        data.putUUID  ("owner",     shop.getOwnerUuid      ());
-        data.putLong  ("price",     shop.getPrice          ());
-        data.putInt   ("stock",     shop.getStock          ());
-        data.putInt   ("max_stock", shop.getMaxStock       ());
-        data.putFloat ("rotation",  shop.getDefaultRotation());
-        data.putFloat ("hue",       shop.getColorThemeHue  ());
-        data.putString("item",      shop.getSerializedItem ());
+        data.putUUID  ("owner",      shop.getOwnerUuid      ());
+        data.putLong  ("price",      shop.getPrice          ());
+        data.putInt   ("stock",      shop.getStock          ());
+        data.putInt   ("max_stock",  shop.getMaxStock       ());
+        data.putFloat ("rotation",   shop.getDefaultRotation());
+        data.putFloat ("hue",        shop.getColorThemeHue  ());
+        data.putString("item",       shop.getSerializedItem ());
+        data.putUUID  ("group_uuid", shop.getShopGroupUUID  ());
         data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString());
 
         final Component[] extraDescriptionLines = {
@@ -529,7 +531,8 @@ public abstract class ShopManager {
                 .cat(new Txt(" its stock and settings when placed.").white().noItalic())
             .get(),
             new Txt().get(),
-            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Group: "      ).lightGray().noItalic()).cat(new Txt(shop.getShopGroup().getDisplayName())).white().noItalic().get(), //TODO use colored text for shop names? maybe? idk. might have to change the group data too
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),

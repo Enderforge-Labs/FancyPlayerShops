@@ -25,11 +25,11 @@ import com.google.gson.JsonObject;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
-import com.snek.fancyplayershops.data.data_types.null;
 import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +54,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A class that handles player stashes.
  */
-public abstract class StashManager {
+public final class StashManager extends UtilityClassBase {
     private StashManager() {}
 
 
@@ -121,8 +121,7 @@ public abstract class StashManager {
     }
 
     /**
-     * Saves the stash data of the specified player in its config file.
-     * @param playerUUID The UUID of the player.
+     * Saves the scheduled stashes in their config files.
      */
     public static void saveScheduledStashes() {
 
@@ -211,7 +210,8 @@ public abstract class StashManager {
 
 
 
-
+    //TODO this prob shouldn't be in "stash manager" class
+    //TODO this prob shouldn't be in "stash manager" class
     /**
      * Opens the stash view for the specified player.
      * @param player The player.

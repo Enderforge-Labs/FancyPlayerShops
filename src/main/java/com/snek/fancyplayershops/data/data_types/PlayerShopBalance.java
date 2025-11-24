@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 
 
+//FIXME make subclasses and move the generic code to framework lib. automate data saving
+//FIXME - PersistentData
+//FIXME - PersistentDataManager
 public class PlayerShopBalance {
     private long value;
     public long getValue() { return value; }

@@ -12,8 +12,10 @@ import org.joml.Vector3i;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
+import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui.ShopUI;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
@@ -85,6 +87,8 @@ public class Shop {
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, not including the world
     private transient @NotNull  ShopKey         shopKeyCache;                   // The cached shop key
+    private           @NotNull  UUID            groupUUID;                      // The UUID of the group this shop has been assigned to
+    private transient @NotNull  ShopGroup       shopGroup;                      // The group this shop has been assigned to
 
 
     // Shop data
@@ -99,14 +103,14 @@ public class Shop {
 
 
     // Shop state
-    private transient @Nullable ShopUI                             ui = null;   // The UI context used for the display
-    private transient @Nullable Player                           user = null;   // The current user of the shop (the player that first opened a menu)
-    private transient @Nullable Player                         viewer = null;   // The prioritized viewer
-    private transient           boolean                 deletionState = false;  // True if the shop has been deleted, false otherwise
-    private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
-    private transient           boolean                focusStateNext = false;  // The next focus state
-    private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
-    private transient boolean scheduledForSave = false;
+    private transient @Nullable ShopUI      ui               = null;   // The UI context used for the display
+    private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
+    private transient @Nullable Player      viewer           = null;   // The prioritized viewer
+    private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
+    private transient           boolean     focusState       = false;  // True if the shop is currently being looked at by at least one player, false otherwise
+    private transient           boolean     focusStateNext   = false;  // The next focus state
+    private transient @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
+    private transient           boolean     scheduledForSave = false;
 
 
     // Accessors
@@ -130,6 +134,8 @@ public class Shop {
     public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld;     }
     public           float           getColorThemeHue    () { return colorThemeHue;                   }
+    public @NotNull  UUID            getShopGroupUUID    () { return groupUUID;                       }
+    public @NotNull  ShopGroup       getShopGroup        () { return shopGroup;                       }
     public           void            setViewer           (final @Nullable Player  _viewer        ) { viewer           = _viewer;         }
     public           void            setScheduledForSave (final           boolean scheduled      ) { scheduledForSave = scheduled;       }
     public           void            setFocusStateNext   (final           boolean _nextFocusState) { focusStateNext   = _nextFocusState; }
@@ -227,6 +233,7 @@ public class Shop {
             item = MinecraftUtils.deserializeItem(serializedItem);
             calcDeserializedWorldId();
             cacheShopKey();
+            shopGroup = ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
             return true;
         } catch(final RuntimeException e) {
             e.printStackTrace();
@@ -270,6 +277,7 @@ public class Shop {
         calcSerializedWorldId();
         cacheShopIdentifier();
         cacheShopKey();
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, ShopGroupManager.DEFAULT_GROUP_UUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
@@ -297,7 +305,8 @@ public class Shop {
      */
     public Shop(
         final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
-        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
+        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem,
+        final UUID _shopGroupUUID
     ) {
 
         // Set shop data
@@ -318,6 +327,7 @@ public class Shop {
         item = MinecraftUtils.deserializeItem(serializedItem);
         cacheShopIdentifier();
         cacheShopKey();
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
@@ -559,6 +569,7 @@ public class Shop {
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 BalanceManager.addBalance(ownerUUID, totPrice);
                 BalanceManager.saveBalance(ownerUUID);
+                shopGroup.addBalance(totPrice);
 
 
                 // Send feedback to the player

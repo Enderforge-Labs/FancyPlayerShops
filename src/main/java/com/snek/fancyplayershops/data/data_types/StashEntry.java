@@ -24,7 +24,7 @@ public class StashEntry {
      * Creates a new StashEntry.
      * @param _item The stashed item.
      */
-    StashEntry(final @NotNull ItemStack _item) {
+    public StashEntry(final @NotNull ItemStack _item) {
         item = _item;
         count = 0;
     }

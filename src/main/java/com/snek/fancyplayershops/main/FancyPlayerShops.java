@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
+import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -127,6 +128,7 @@ public class FancyPlayerShops implements ModInitializer {
             if(fatal) return;
 
             // Load persistent data
+            ShopGroupManager.loadGroups(); //! Must be loaded before shops
             ShopManager.loadShops();
             StashManager.loadStashes();
             BalanceManager.loadBalances();
@@ -203,7 +205,11 @@ public class FancyPlayerShops implements ModInitializer {
                     if(tag.contains(ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
+                            new Shop(
+                                serverWorld, blockPos, player.getUUID(),
+                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"),
+                                data.getUUID("group_uuid")
+                            );
                             player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }

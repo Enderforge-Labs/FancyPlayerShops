@@ -20,10 +20,10 @@ import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.herrkatze.solsticeEconomy.modules.economy.Notification;
 import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
 import com.snek.fancyplayershops.data.data_types.PlayerShopBalance;
-import com.snek.fancyplayershops.data.data_types.null;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -43,10 +43,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
+//FIXME make subclasses and move the generic code to framework lib. automate data saving
+//FIXME - PersistentData
+//FIXME - PersistentDataManager
 /**
  * A class that handles player balances.
  */
-public abstract class BalanceManager {
+public final class BalanceManager extends UtilityClassBase {
     private BalanceManager() {}
 
 
