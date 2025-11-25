@@ -151,7 +151,7 @@ public final class ShopManager extends UtilityClassBase {
     static {
 
         // Create item and set custom name
-        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE, true);
+        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE, false);
         shopItem.setHoverName(SHOP_ITEM_NAME);
 
         // Set identification tag
