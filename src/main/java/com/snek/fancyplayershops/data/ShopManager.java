@@ -437,6 +437,11 @@ public final class ShopManager extends UtilityClassBase {
         if(field == null) return 0;
 
 
+        // TODO generate randomly named groups
+        // TODO test store A0B5
+        // TODO test store 120B etc
+
+
         int r = 0;
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {

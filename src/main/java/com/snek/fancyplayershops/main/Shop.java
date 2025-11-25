@@ -277,6 +277,7 @@ public class Shop {
         calcSerializedWorldId();
         cacheShopIdentifier();
         cacheShopKey();
+        groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
         shopGroup = ShopGroupManager.registerShop(this, ownerUUID, ShopGroupManager.DEFAULT_GROUP_UUID);
 
         // Create and spawn the Item Display entity
@@ -327,6 +328,7 @@ public class Shop {
         item = MinecraftUtils.deserializeItem(serializedItem);
         cacheShopIdentifier();
         cacheShopKey();
+        groupUUID = _shopGroupUUID;
         shopGroup = ShopGroupManager.registerShop(this, ownerUUID, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
