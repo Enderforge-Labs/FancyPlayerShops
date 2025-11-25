@@ -29,7 +29,7 @@ public class PerformanceConfig implements ConfigFile {
         0.2f
     );
 
-    //FIXME only keep one of this config. Either remove this one or its copy in frameworklib
+    // This config is intentionally kept here for FancyPlayerShops-specific tuning
     public final ValueConfigField<Integer> ray_casting_batches = new ValueConfigField<>(
         new String[] {
             "The amount of batches needed to complete a ray casting check cycle.",

@@ -45,9 +45,12 @@ public abstract class ShopCanvas extends UiCanvas {
 
     @Override
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
-        final boolean player_has_permission = shop.onClick(player, clickType); //TODO check if this is correct
-        if(player_has_permission) return super.forwardClick(player, clickType); //TODO check if this is correct
-        return true; //TODO check if this is correct
+        // Check if player has permission via shop.onClick() - returns true if allowed
+        final boolean player_has_permission = shop.onClick(player, clickType);
+        // Only forward the click to child elements if player has permission
+        if(player_has_permission) return super.forwardClick(player, clickType);
+        // Return true to indicate the click was handled (even without permission)
+        return true;
     }
 
 

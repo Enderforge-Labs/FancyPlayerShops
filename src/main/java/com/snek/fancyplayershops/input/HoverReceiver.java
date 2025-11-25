@@ -235,7 +235,8 @@ public abstract class HoverReceiver {
      * @return A list of coordinates, one for each full block the ray collides with. Not sorted.
      */
     private static @NotNull List<@NotNull Vec3> getViewCollisisons(final @NotNull Player player, final double maxDistance) {
-        final List<Vec3> blockPositions = new ArrayList<>();
+        final int estimatedSize = (int)(maxDistance / Configs.getPerf().ray_casting_step.getValue()) + 1;
+        final List<Vec3> blockPositions = new ArrayList<>(estimatedSize);
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
         final Vec3 lookDirection = player.getViewVector(1f);

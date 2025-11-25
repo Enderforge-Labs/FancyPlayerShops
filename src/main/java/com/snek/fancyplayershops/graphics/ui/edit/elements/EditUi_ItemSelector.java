@@ -14,6 +14,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
+import com.snek.fancyplayershops.configs.Configs;
 
 
 
@@ -70,10 +73,19 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         }
 
 
+        // Check if item is blacklisted
+        final ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item.getItem());
+        final String[] blacklist = Configs.getShop().item_blacklist.getValue();
+        for(final String blacklistedId : blacklist) {
+            if(itemId.toString().equals(blacklistedId)) {
+                player.displayClientMessage(new Txt("This item cannot be sold in shops!").red().bold().get(), true);
+                return;
+            }
+        }
+
+
         // Change item if all checks passed
         shop.changeItem(item);
-        //FIXME check blacklist before setting the item
-        //TODO add item blacklist
         shop.getItemDisplay().updateDisplay();
         ((EditUi_Title)((EditUi)(parent.getParent())).getTitle()).updateDisplay();
         playButtonSound(player);

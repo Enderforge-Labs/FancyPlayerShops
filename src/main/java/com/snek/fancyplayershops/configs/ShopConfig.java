@@ -78,6 +78,14 @@ public class ShopConfig implements ConfigFile {
         },
         0.3f
     );
+    public final ValueConfigField<String[]> item_blacklist = new ValueConfigField<>(
+        new String[] {
+            "List of item IDs that cannot be sold in shops.",
+            "Use Minecraft item IDs (e.g., \"minecraft:bedrock\", \"minecraft:command_block\").",
+            "Empty array means no items are blacklisted."
+        },
+        new String[] {}
+    );
 
 
 
