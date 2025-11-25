@@ -63,7 +63,7 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         }
 
 
-        // Send a message to the player if item contains a shop snapshopt, then return
+        // Send a message to the player if item contains a shop snapshot, then return
         if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ShopManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Items containing shop snapshots cannot be sold!").red().bold().get(), true);
             return;

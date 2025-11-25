@@ -52,6 +52,5 @@ public class BuyUi_ItemInspector extends SimpleShopButton {
         super.onClick(player, click);
         if(backButton instanceof BuyUiSub_BackButton b) b.setAmountCache(((BuyUi)canvas).getAmount());
         shop.changeCanvas(new InspectUi(shop, backButton));
-        playButtonSound(player);
     }
 }
