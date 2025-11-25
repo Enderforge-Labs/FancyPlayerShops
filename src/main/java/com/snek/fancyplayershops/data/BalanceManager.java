@@ -8,10 +8,11 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,12 +49,12 @@ public abstract class BalanceManager {
     private BalanceManager() {}
 
 
-    // Player balance data
-    private static final @NotNull Map<@NotNull UUID, PlayerShopBalance> balances = new HashMap<>();
+    // Player balance data - using ConcurrentHashMap for thread safety
+    private static final @NotNull Map<@NotNull UUID, PlayerShopBalance> balances = new ConcurrentHashMap<>();
     private static boolean dataLoaded = false;
 
-    // The list of balances scheduled for saving
-    private static @NotNull List<@NotNull Pair<@NotNull UUID, @NotNull PlayerShopBalance>> scheduledForSaving = new ArrayList<>();
+    // The list of balances scheduled for saving - using CopyOnWriteArrayList for thread safety
+    private static @NotNull List<@NotNull Pair<@NotNull UUID, @NotNull PlayerShopBalance>> scheduledForSaving = new CopyOnWriteArrayList<>();
 
 
 
@@ -102,25 +103,25 @@ public abstract class BalanceManager {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to create balance storage directory: {}", e.getMessage(), e);
         }
 
 
         for(final Pair<UUID, PlayerShopBalance> pair : scheduledForSaving) {
 
             // Create this player's config file if absent, then save the JSON in it
-            final File balanceStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
+            final File balanceStorageFile = levelStorageDir.resolve(pair.getFirst().toString() + ".json").toFile();
             try (final Writer writer = new FileWriter(balanceStorageFile)) {
                 new Gson().toJson(pair.getSecond().getValue(), writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to save balance data for player {}: {}", pair.getFirst(), e.getMessage(), e);
             }
 
 
             // Flag the balance as not shceduled
             pair.getSecond().setScheduledForSave(false);
         }
-        scheduledForSaving = new ArrayList<>();
+        scheduledForSaving = new CopyOnWriteArrayList<>();
     }
 
 
@@ -147,7 +148,7 @@ public abstract class BalanceManager {
                 final Long balance = new Gson().fromJson(reader, Long.class);
                 addBalance(playerUUID, balance);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to load balance data from {}: {}", balanceStorageFile.getName(), e.getMessage(), e);
             }
         }
     }

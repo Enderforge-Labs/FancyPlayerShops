@@ -6,12 +6,19 @@
 name: build
 on: [pull_request, push]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - name: validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v4
       - name: setup jdk
@@ -19,12 +26,46 @@ jobs:
         with:
           java-version: '17'
           distribution: 'microsoft'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
+      - name: Cache Fabric Loom
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches/fabric-loom
+            .gradle/loom-cache
+          key: loom-${{ hashFiles('gradle.properties', 'build.gradle') }}
+          restore-keys: |
+            loom-
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/com/snek
+          key: snek-deps-${{ hashFiles('gradle.properties') }}
+          restore-keys: |
+            snek-deps-
+      - name: Build FrameworkConfig dependency
+        run: |
+          git clone --depth 1 https://github.com/Enderforge-Labs/FrameworkConfig.git /tmp/FrameworkConfig
+          cd /tmp/FrameworkConfig
+          chmod +x gradlew
+          ./gradlew publishToMavenLocal --no-daemon
+      - name: Build FrameworkLib dependency
+        run: |
+          git clone --depth 1 https://github.com/Enderforge-Labs/FrameworkLib.git /tmp/FrameworkLib
+          cd /tmp/FrameworkLib
+          chmod +x gradlew
+          ./gradlew publishToMavenLocal --no-daemon
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
-        run: ./gradlew build
+        run: ./gradlew build --build-cache --no-daemon
       - name: capture build artifacts
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
+          name: FancyPlayerShops-${{ github.sha }}
           path: build/libs/
+          retention-days: 30

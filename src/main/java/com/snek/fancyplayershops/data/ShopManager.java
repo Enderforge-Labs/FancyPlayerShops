@@ -20,6 +20,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -85,8 +87,9 @@ public abstract class ShopManager {
 
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
-    private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
-    private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
+    // Using ConcurrentHashMap for thread safety
+    private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new ConcurrentHashMap<>();
+    private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new ConcurrentHashMap<>();
     private static boolean dataLoaded = false;
 
     // Async update list
@@ -95,10 +98,10 @@ public abstract class ShopManager {
     private static final @NotNull RateLimiter updateCycleLimiter = new RateLimiter();
 
     // Keeps track of the amount of shops in each chunk
-    private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
+    private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new ConcurrentHashMap<>();
 
-    // The list of shops scheduled for saving
-    private static @NotNull List<@NotNull Shop> scheduledForSaving = new ArrayList<>();
+    // The list of shops scheduled for saving - using CopyOnWriteArrayList for thread safety
+    private static @NotNull List<@NotNull Shop> scheduledForSaving = new CopyOnWriteArrayList<>();
 
 
 
@@ -234,23 +237,23 @@ public abstract class ShopManager {
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to create shop storage directory for world {}: {}", shop.getWorldId(), e.getMessage(), e);
             }
 
 
             // Create this shop's config file if absent, then save the JSON in it
-            final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
+            final File shopStorageFile = levelStorageDir.resolve(shop.getIdentifierNoWorld() + ".json").toFile();
             try (final Writer writer = new FileWriter(shopStorageFile)) {
                 new Gson().toJson(shop, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to save shop data for {}: {}", shop.getIdentifierNoWorld(), e.getMessage(), e);
             }
 
 
             // Flag the shop as not scheduled
             shop.setScheduledForSave(false);
         }
-        scheduledForSaving = new ArrayList<>();
+        scheduledForSaving = new CopyOnWriteArrayList<>();
     }
 
 
@@ -277,7 +280,7 @@ public abstract class ShopManager {
                 try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
                 } catch(final IOException e) {
-                    e.printStackTrace();
+                    FancyPlayerShops.LOGGER.error("Failed to load shop data from {}: {}", shopStorageFile.getName(), e.getMessage(), e);
                 }
 
                 // Recalculate transient members and update shop maps
@@ -440,7 +443,7 @@ public abstract class ShopManager {
             field = Shop.class.getDeclaredField("stock");
             field.setAccessible(true);
         } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to access stock field via reflection: {}", e.getMessage(), e);
         }
         if(field == null) return 0;
 
@@ -459,7 +462,7 @@ public abstract class ShopManager {
                         try {
                             field.set(shop, Math.abs(rnd.nextInt() % 1000_000));
                         } catch (IllegalArgumentException | IllegalAccessException e) {
-                            e.printStackTrace();
+                            FancyPlayerShops.LOGGER.error("Failed to set stock via reflection: {}", e.getMessage(), e);
                         }
 
                         shop.invalidateItemDisplay();

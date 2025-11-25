@@ -99,7 +99,7 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stats")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
-                    player.displayClientMessage(new Txt("opened stats //todo remove message").get(), false);
+                    player.displayClientMessage(new Txt("Shop statistics are not yet implemented.").lightGray().get(), false);
                     return 1;
                 }))
 

@@ -229,7 +229,7 @@ public class Shop {
             cacheShopKey();
             return true;
         } catch(final RuntimeException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to reinitialize shop transient data: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -552,6 +552,11 @@ public class Shop {
             buyer.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
+            // Check for integer overflow before multiplication
+            if(amount > 0 && price > Long.MAX_VALUE / amount) {
+                buyer.displayClientMessage(new Txt("Transaction amount too large!").red().bold().get(), true);
+                return;
+            }
             final long totPrice = price * amount;
 
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {

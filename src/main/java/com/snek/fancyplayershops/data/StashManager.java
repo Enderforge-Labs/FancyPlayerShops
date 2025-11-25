@@ -8,11 +8,12 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,13 +56,13 @@ public abstract class StashManager {
     private StashManager() {}
 
 
-    // Player stash data
-    private static final @NotNull Map<@NotNull UUID, @Nullable PlayerStash> stashes = new HashMap<>();
+    // Player stash data - using ConcurrentHashMap for thread safety
+    private static final @NotNull Map<@NotNull UUID, @Nullable PlayerStash> stashes = new ConcurrentHashMap<>();
     private static boolean dataLoaded = false;
 
 
-    // The list of stashes scheduled for saving
-    private static @NotNull List<@NotNull Pair<@NotNull UUID, @Nullable PlayerStash>> scheduledForSaving = new ArrayList<>();
+    // The list of stashes scheduled for saving - using CopyOnWriteArrayList for thread safety
+    private static @NotNull List<@NotNull Pair<@NotNull UUID, @Nullable PlayerStash>> scheduledForSaving = new CopyOnWriteArrayList<>();
 
 
 
@@ -128,7 +129,7 @@ public abstract class StashManager {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to create stash storage directory: {}", e.getMessage(), e);
         }
 
 
@@ -146,18 +147,18 @@ public abstract class StashManager {
 
 
             // Create this player's config file if absent, then save the JSON in it
-            final File stashStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
+            final File stashStorageFile = levelStorageDir.resolve(pair.getFirst().toString() + ".json").toFile();
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to save stash data for player {}: {}", pair.getFirst(), e.getMessage(), e);
             }
 
 
             // Flag the stash as not scheduled
             pair.getSecond().setScheduledForSave(false);
         }
-        scheduledForSaving = new ArrayList<>();
+        scheduledForSaving = new CopyOnWriteArrayList<>();
     }
 
 
@@ -194,7 +195,7 @@ public abstract class StashManager {
                     );
                 }
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Failed to load stash data from {}: {}", stashStorageFile.getName(), e.getMessage(), e);
             }
         }
     }

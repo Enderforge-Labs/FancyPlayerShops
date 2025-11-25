@@ -24,6 +24,6 @@ public class StashHud_MaterialList extends Div implements Scrollable, __HudElm {
 
     @Override
     public void onScroll(final @NotNull Player player, final int amount) {
-        System.out.println("SCROLLED " + amount);
+        // Scroll handling - implementation pending
     }
 }
