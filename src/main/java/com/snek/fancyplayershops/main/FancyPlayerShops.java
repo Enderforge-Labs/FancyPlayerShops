@@ -191,7 +191,7 @@ public class FancyPlayerShops implements ModInitializer {
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasTag() && stack.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY)) {
+        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ShopManager.SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
@@ -203,7 +203,7 @@ public class FancyPlayerShops implements ModInitializer {
                 if(ShopManager.findShop(blockPos, world) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
-                    if(tag.contains(ShopManager.SNAPSHOT_NBT_KEY)) {
+                    if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(

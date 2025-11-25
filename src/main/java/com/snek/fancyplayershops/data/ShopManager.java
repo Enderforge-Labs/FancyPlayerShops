@@ -155,8 +155,7 @@ public final class ShopManager extends UtilityClassBase {
         shopItem.setHoverName(SHOP_ITEM_NAME);
 
         // Set identification tag
-        final CompoundTag nbt = shopItem.getOrCreateTag();
-        nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
+        MinecraftUtils.addTag(shopItem, SHOP_ITEM_NBT_KEY);
 
         // Set lore
         final ListTag lore = new ListTag();
@@ -392,7 +391,7 @@ public final class ShopManager extends UtilityClassBase {
 
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
-                if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
+                if(owner != null && !shop.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
                     .cat(new Txt("Your " + shop.getDecoratedName() + " has been deleted by an admin.").red())
                 .get(), false);
 
@@ -493,7 +492,7 @@ public final class ShopManager extends UtilityClassBase {
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
-            shop.getItem().getItem() == Items.AIR &&
+            shop.getItem().is(Items.AIR) &&
             shop.getPrice() == Configs.getShop().price.getDefault() &&
             shop.getMaxStock() == Configs.getShop().stock_limit.getDefault()
         ) {
@@ -552,7 +551,6 @@ public final class ShopManager extends UtilityClassBase {
         display.put("Lore", lore);
         nbt.put("display", display);
         nbt.put(FancyPlayerShops.MOD_ID + ".shop_data", data);
-        nbt.putBoolean(SNAPSHOT_NBT_KEY, true);
 
 
 
@@ -564,6 +562,7 @@ public final class ShopManager extends UtilityClassBase {
             .cat(" - ")
             .cat(new Txt(shop.getStandaloneName()).white().bold().noItalic())
         .get());
+        MinecraftUtils.addTag(item, SNAPSHOT_NBT_KEY);
         return item;
     }
 }

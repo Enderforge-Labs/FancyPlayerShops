@@ -43,7 +43,7 @@ public class InspectUi_ModDisplay extends ShopTextElm {
         getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(
-                shop.getItem().getItem() == Items.AIR ? "-" :
+                shop.getItem().is(Items.AIR) ? "-" :
                 BuiltInRegistries.ITEM.getKey(shop.getItem().getItem()).getNamespace()
             ).white())
         .get());

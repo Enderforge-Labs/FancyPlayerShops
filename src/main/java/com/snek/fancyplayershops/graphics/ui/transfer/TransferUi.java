@@ -161,7 +161,7 @@ public class TransferUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        if(shop.getItem().getItem() == Items.AIR) {
+        if(shop.getItem().is(Items.AIR)) {
             return new Txt("Transferring an empty shop").white().get();
         }
         else {

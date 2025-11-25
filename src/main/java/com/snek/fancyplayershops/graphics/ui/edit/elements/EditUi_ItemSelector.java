@@ -53,11 +53,11 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
 
         // Return if item is null or air
         final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if(item == null || item.getItem() == Items.AIR) return;
+        if(item == null || item.is(Items.AIR)) return;
 
 
         // Send a message to the player if item is a shop snapshot, then return
-        if(item.hasTag() && item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains(ShopManager.SNAPSHOT_NBT_KEY)) {
+        if(MinecraftUtils.hasTag(item, ShopManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Shop snapshots cannot be sold!").red().bold().get(), true);
             return;
         }

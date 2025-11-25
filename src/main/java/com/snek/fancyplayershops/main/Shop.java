@@ -492,7 +492,7 @@ public class Shop {
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
-        if(item.getItem() == Items.AIR) {
+        if(item.is(Items.AIR)) {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
@@ -554,7 +554,7 @@ public class Shop {
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
     public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
-        if(item.getItem() == Items.AIR) {
+        if(item.is(Items.AIR)) {
             buyer.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
@@ -647,7 +647,7 @@ public class Shop {
 
 
     public boolean canBuyUiBeOpened() {
-        return item.getItem() != Items.AIR;
+        return !item.is(Items.AIR);
     }
 
     /**
@@ -767,7 +767,7 @@ public class Shop {
      */
     public void stash() {
         if(stock == 0) return;
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
 
 
         // Stash items
@@ -777,7 +777,7 @@ public class Shop {
 
         // Send feedback to the player
         final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
-        if(owner != null && item.getItem() != Items.AIR && stock > 0) {
+        if(owner != null && !item.is(Items.AIR) && stock > 0) {
             owner.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ")
                 .cat(MinecraftUtils.getFancyItemName(item).getString())
@@ -821,7 +821,7 @@ public class Shop {
      * <p> This call has no effect if the shop is fully stocked.
      */
     public void pullItems() {
-        if(stock >= maxStock || item.getItem() == Items.AIR) return;
+        if(stock >= maxStock || item.is(Items.AIR)) return;
         final int oldStock = stock;
 
         pullItems(new BlockPos(+0, +0, +0));
@@ -970,7 +970,7 @@ public class Shop {
      * @return The name of the shop, or "empty shop" if unconfigured.
      */
     public @NotNull String getDecoratedName() {
-        return item.getItem() == Items.AIR ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
+        return item.is(Items.AIR) ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
     }
 
 
@@ -981,6 +981,6 @@ public class Shop {
      * @return The name of the shop, or "Empty shop" if unconfigured.
      */
     public @NotNull String getStandaloneName() {
-        return item.getItem() == Items.AIR ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
+        return item.is(Items.AIR) ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
     }
 }

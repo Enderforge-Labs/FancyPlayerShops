@@ -157,7 +157,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        if(shop.getItem().getItem() == Items.AIR) {
+        if(shop.getItem().is(Items.AIR)) {
             return new Txt()
                 .cat(new Txt("Editing an empty shop").white())
             .get();

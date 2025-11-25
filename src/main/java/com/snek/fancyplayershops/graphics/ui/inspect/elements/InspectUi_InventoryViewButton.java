@@ -37,7 +37,7 @@ public class InspectUi_InventoryViewButton extends SimpleShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        if(shop.getItem().getItem() != Items.AIR) {
+        if(!shop.getItem().is(Items.AIR)) {
             player.openMenu(inventoryViewFactory);
             playButtonSound(player);
         }

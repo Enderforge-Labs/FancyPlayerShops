@@ -128,7 +128,7 @@ public class DetailsUi extends ShopCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        return shop.getItem().getItem() == Items.AIR ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
+        return shop.getItem().is(Items.AIR) ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
     }
 
 

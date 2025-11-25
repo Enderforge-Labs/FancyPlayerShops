@@ -81,7 +81,7 @@ public final class StashManager extends UtilityClassBase {
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
         final PlayerStash stash = stashes.computeIfAbsent(playerUUID, k -> new PlayerStash());
         final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
         stashEntry.add(count);
@@ -96,7 +96,7 @@ public final class StashManager extends UtilityClassBase {
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
         if(count == 0) return;
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
     }
 

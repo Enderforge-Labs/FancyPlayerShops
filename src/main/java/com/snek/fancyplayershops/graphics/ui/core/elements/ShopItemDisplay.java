@@ -166,7 +166,7 @@ public class ShopItemDisplay extends ItemElm {
 
 
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
-        if(_item.getItem() == Items.AIR) {
+        if(_item.is(Items.AIR)) {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
