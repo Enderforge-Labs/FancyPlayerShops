@@ -141,6 +141,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Schedule data saves
             Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
+                ShopGroupManager.saveScheduledGroups();
                 ShopManager.saveScheduledShops();
                 StashManager.saveScheduledStashes();
                 BalanceManager.saveScheduledBalances();

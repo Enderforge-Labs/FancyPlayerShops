@@ -46,7 +46,7 @@ import net.minecraft.server.level.ServerPlayer;
  * A class that handles player shop groups.
  */
 public class ShopGroupManager extends UtilityClassBase {
-    public static final UUID DEFAULT_GROUP_UUID = UUID.fromString("test"); //BUG use a proper UUID //FIXME use a proper UUID
+    public static final UUID DEFAULT_GROUP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
     private ShopGroupManager() {}
 
 
@@ -74,16 +74,32 @@ public class ShopGroupManager extends UtilityClassBase {
         final List<ShopGroup> groups = groupsList.computeIfAbsent(playerUUID, uuid -> new ArrayList<>());
         groups.add(group);
     }
+
+
+
+
     public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+
+        // Create default group if needed //! This special group is not stored to file or loaded
+        if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
+            addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID)); //TODO use italic gray once colors are implemented
+        }
+
+        // Find group list
         final List<ShopGroup> groups = groupsList.get(ownerUUID);
+
+        // Find group
         if(groups != null) {
             final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+
+            // Add shop to the group
             if(groupOpt.isPresent()) {
                 final ShopGroup group = groupOpt.get();
                 group.addShop(shop);
                 return group;
             }
         }
+
         //TODO add error detection and logging
         return null;
     }
@@ -96,7 +112,9 @@ public class ShopGroupManager extends UtilityClassBase {
 
     /**
      * Schedules the specified group for saving.
-     * Call saveScheduledGroups to save all scheduled groups.
+     * <p> Call {@link #saveScheduledGroups} to save all scheduled groups.
+     * <p> Notice: The default group (with UUID {@link #DEFAULT_GROUP_UUID}) cannot be saved to file.
+     *     This special group is recreated whenever needed.
      * @param playerUUID The UUID of the player.
      * @param group The shop group to save.
      */
@@ -106,6 +124,9 @@ public class ShopGroupManager extends UtilityClassBase {
             group.setScheduledForSave(true);
         }
     }
+
+
+
 
     /**
      * Saves the scheduled groups in their config files.
@@ -150,16 +171,20 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
+
+
+
+
     /**
-     * Loads all the shop groups into the runtime map if needed.
-     * <p> Must be called on server started event (After the worlds are loaded!).
-     * <p> If the data has already been loaded, the call will have no effect.
+     * Loads all the shop groups into the runtime map, if needed.
+     * <p>
+     * Must be called on server started event (After the worlds are loaded!).
+     * <p>
+     * If the data has already been loaded, the call will have no effect.
      */
-    //FIXME actually call this function
     public static void loadGroups() {
         if(dataLoaded) return;
         dataLoaded = true;
-
 
         // For each group storage file
         final File[] groupStorageFiles = FancyPlayerShops.getStorageDir().resolve("shop groups").toFile().listFiles();
@@ -181,6 +206,10 @@ public class ShopGroupManager extends UtilityClassBase {
             }
         }
     }
+
+
+
+
 
 
 
