@@ -6,6 +6,8 @@ import java.nio.file.Files;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
+
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -47,7 +49,7 @@ public abstract class FontWidthGenerator {
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH));
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to create generated package directory", e);
         }
 
 
@@ -135,11 +137,11 @@ public abstract class FontWidthGenerator {
 
             f.write("}");
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Failed to write font size file", e);
         }
 
 
         // Print output notice
-        System.out.println("Character dimensions written to \"config/" + FILE_PATH + "\"");
+        FancyPlayerShops.LOGGER.info("Character dimensions written to \"config/" + FILE_PATH + "\"");
     }
 }

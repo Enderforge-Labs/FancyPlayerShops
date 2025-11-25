@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.configs;
 
 import com.snek.frameworkconfig.ConfigFile;
 import com.snek.frameworkconfig.fields.ValueConfigField;
+import com.snek.fancyplayershops.configs.exceptions.InvalidConfigException;
 
 
 
@@ -78,21 +79,20 @@ public class PerformanceConfig implements ConfigFile {
     public void validate() {
 
         // Check reach distance
-        if(reach_distance.getValue() < 0.5) throw new IllegalStateException("Reach distance must be >= 0.5");
-        if(reach_distance.getValue() > 8)   throw new IllegalStateException("Reach distance must be <= 8");
+        if(reach_distance.getValue() < 0.5) throw new InvalidConfigException("reach_distance", "must be >= 0.5");
+        if(reach_distance.getValue() > 8)   throw new InvalidConfigException("reach_distance", "must be <= 8");
 
 
         // Check ray casting step size
-        if(ray_casting_step.getValue() < 0.02) throw new IllegalStateException("Ray casting step size must be >= 0.02");
-        if(ray_casting_step.getValue() > 0.5)  throw new IllegalStateException("Ray casting step size must be <= 0.5");
+        if(ray_casting_step.getValue() < 0.02) throw new InvalidConfigException("ray_casting_step", "must be >= 0.02");
+        if(ray_casting_step.getValue() > 0.5)  throw new InvalidConfigException("ray_casting_step", "must be <= 0.5");
 
 
         // Check ray casting batch size
-        if(ray_casting_batches.getValue() < 1) throw new IllegalStateException("Ray casting batches must be >= 1");
+        if(ray_casting_batches.getValue() < 1) throw new InvalidConfigException("ray_casting_batches", "must be >= 1");
 
 
         // Check data save frequency
-        if(data_save_frequency.getValue() < 1) throw new IllegalStateException("Data save frequency must be >= 1");
-        //TODO use custom invalid config file option exception
+        if(data_save_frequency.getValue() < 1) throw new InvalidConfigException("data_save_frequency", "must be >= 1");
     }
 }

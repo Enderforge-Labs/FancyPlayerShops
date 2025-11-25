@@ -524,7 +524,7 @@ public class Shop {
 
 
             // Update active canvas
-            final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
+            final ShopCanvas activeCanvas = getActiveCanvas();
             if(activeCanvas != null) {
                 activeCanvas.onStockChange();
             }
@@ -597,7 +597,7 @@ public class Shop {
 
 
                 // Update active canvas
-                final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
+                final ShopCanvas activeCanvas = getActiveCanvas();
                 if(activeCanvas != null) {
                     activeCanvas.onStockChange();
                 }
@@ -829,7 +829,7 @@ public class Shop {
         ShopManager.scheduleShopSave(this);
 
         // Update active canvas
-        final ShopCanvas activeCanvas = (ShopCanvas)ui.getActiveCanvas();
+        final ShopCanvas activeCanvas = getActiveCanvas();
         if(activeCanvas != null) {
             activeCanvas.onStockChange();
         }

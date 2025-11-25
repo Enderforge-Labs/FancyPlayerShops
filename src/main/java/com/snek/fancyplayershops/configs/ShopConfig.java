@@ -6,6 +6,7 @@ import com.snek.frameworkconfig.ConfigFile;
 import com.snek.frameworkconfig.fields.ConstrainedConfigField;
 import com.snek.frameworkconfig.fields.DefaultConfigField;
 import com.snek.frameworkconfig.fields.ValueConfigField;
+import com.snek.fancyplayershops.configs.exceptions.InvalidConfigException;
 
 
 
@@ -98,41 +99,41 @@ public class ShopConfig implements ConfigFile {
     public void validate() {
 
         // Check price
-        if(price.getMin    () < 0)              throw new IllegalStateException("Minimum price must be >= 0");
-        if(price.getDefault() < 0)              throw new IllegalStateException("Default price must be >= 0");
-        if(price.getMax    () < 0)              throw new IllegalStateException("Maximum price must be >= 0");
-        if(price.getDefault() < price.getMin()) throw new IllegalStateException("Default price must be >= price.min");
-        if(price.getDefault() > price.getMax()) throw new IllegalStateException("Default price must be <= price.max");
+        if(price.getMin    () < 0)              throw new InvalidConfigException("price.min", "must be >= 0");
+        if(price.getDefault() < 0)              throw new InvalidConfigException("price.default", "must be >= 0");
+        if(price.getMax    () < 0)              throw new InvalidConfigException("price.max", "must be >= 0");
+        if(price.getDefault() < price.getMin()) throw new InvalidConfigException("price.default", "must be >= price.min");
+        if(price.getDefault() > price.getMax()) throw new InvalidConfigException("price.default", "must be <= price.max");
 
 
         // Check stock limit
-        if(stock_limit.getMin    () < 0)                    throw new IllegalStateException("Minimum stock limit must be >= 0");
-        if(stock_limit.getDefault() < 0)                    throw new IllegalStateException("Default stock limit must be >= 0");
-        if(stock_limit.getMax    () < 0)                    throw new IllegalStateException("Maximum stock limit must be >= 0");
-        if(stock_limit.getDefault() < stock_limit.getMin()) throw new IllegalStateException("Default stock limit must be >= stock_limit.min");
-        if(stock_limit.getDefault() > stock_limit.getMax()) throw new IllegalStateException("Default stock limit must be <= stock_limit.max");
+        if(stock_limit.getMin    () < 0)                    throw new InvalidConfigException("stock_limit.min", "must be >= 0");
+        if(stock_limit.getDefault() < 0)                    throw new InvalidConfigException("stock_limit.default", "must be >= 0");
+        if(stock_limit.getMax    () < 0)                    throw new InvalidConfigException("stock_limit.max", "must be >= 0");
+        if(stock_limit.getDefault() < stock_limit.getMin()) throw new InvalidConfigException("stock_limit.default", "must be >= stock_limit.min");
+        if(stock_limit.getDefault() > stock_limit.getMax()) throw new InvalidConfigException("stock_limit.default", "must be <= stock_limit.max");
 
 
         // Check color theme index
         final Float[] h = theme_hues.getValue();
-        if(h.length < 1) throw new IllegalStateException("The list of theme hues must contain at least 1 element");
-        if(theme.getDefault() < 0) throw new IllegalStateException("The index of the default theme must be >= 0");
-        if(theme.getDefault() >= h.length) throw new IllegalStateException("The index of the default theme must be < themeHues.length");
+        if(h.length < 1) throw new InvalidConfigException("theme_hues", "must contain at least 1 element");
+        if(theme.getDefault() < 0) throw new InvalidConfigException("theme", "index must be >= 0");
+        if(theme.getDefault() >= h.length) throw new InvalidConfigException("theme", "index must be < theme_hues.length");
         for(int i = 0; i < h.length; ++i) {
-            if(h[i] < 0f)   throw new IllegalStateException("Hue value of color theme #" + i + " must be >= 0");
-            if(h[i] > 360f) throw new IllegalStateException("Hue value of color theme #" + i + " must be <= 360");
+            if(h[i] < 0f)   throw new InvalidConfigException("theme_hues[" + i + "]", "must be >= 0");
+            if(h[i] > 360f) throw new InvalidConfigException("theme_hues[" + i + "]", "must be <= 360");
         }
 
 
         // Check color theme saturation and value
-        if(theme_saturation_main     .getValue() < 0f) throw new IllegalStateException("Saturation of main theme color must be >= 0");
-        if(theme_saturation_main     .getValue() > 1f) throw new IllegalStateException("Saturation of main theme color must be <= 1");
-        if(theme_luminosity_main     .getValue() < 0f) throw new IllegalStateException("Luminosity of main theme color must be >= 0");
-        if(theme_luminosity_main     .getValue() > 1f) throw new IllegalStateException("Luminosity of main theme color must be <= 1");
-        if(theme_saturation_secondary.getValue() < 0f) throw new IllegalStateException("Saturation of secondary theme color must be >= 0");
-        if(theme_saturation_secondary.getValue() > 1f) throw new IllegalStateException("Saturation of secondary theme color must be <= 1");
-        if(theme_luminosity_secondary.getValue() < 0f) throw new IllegalStateException("Luminosity of secondary theme color must be >= 0");
-        if(theme_luminosity_secondary.getValue() > 1f) throw new IllegalStateException("Luminosity of secondary theme color must be <= 1");
+        if(theme_saturation_main     .getValue() < 0f) throw new InvalidConfigException("theme_saturation_main", "must be >= 0");
+        if(theme_saturation_main     .getValue() > 1f) throw new InvalidConfigException("theme_saturation_main", "must be <= 1");
+        if(theme_luminosity_main     .getValue() < 0f) throw new InvalidConfigException("theme_luminosity_main", "must be >= 0");
+        if(theme_luminosity_main     .getValue() > 1f) throw new InvalidConfigException("theme_luminosity_main", "must be <= 1");
+        if(theme_saturation_secondary.getValue() < 0f) throw new InvalidConfigException("theme_saturation_secondary", "must be >= 0");
+        if(theme_saturation_secondary.getValue() > 1f) throw new InvalidConfigException("theme_saturation_secondary", "must be <= 1");
+        if(theme_luminosity_secondary.getValue() < 0f) throw new InvalidConfigException("theme_luminosity_secondary", "must be >= 0");
+        if(theme_luminosity_secondary.getValue() > 1f) throw new InvalidConfigException("theme_luminosity_secondary", "must be <= 1");
 
 
         // Check maximum possible price
@@ -141,10 +142,11 @@ public class ShopConfig implements ConfigFile {
         final BigInteger product = _price.multiply(_stock);
         final int excess = product.toString().length() - Long.toString(Long.MAX_VALUE).length();
         if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-            throw new IllegalStateException(
-                "Maximum possible transaction price is above the Long limit by " + excess + (excess == 1 ? " digit." : " digits.") +
-                " Adjust the price.max and stock.max config values.")
-            ;
+            throw new InvalidConfigException(
+                "price.max * stock_limit.max",
+                "exceeds Long.MAX_VALUE by " + excess + (excess == 1 ? " digit." : " digits.") +
+                " Adjust the price.max and stock_limit.max config values."
+            );
         }
     }
 }

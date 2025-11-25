@@ -57,6 +57,13 @@ dependencies {
     modImplementation "maven.modrinth:solstice-economy:${project.solstice_economy_version}"
     modImplementation "com.snek:frameworklib:${project.frameworklib_version}"
     modImplementation "com.snek:frameworkconfig:${project.frameworkconfig_version}"
+
+
+    // Test dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 
@@ -76,6 +83,10 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
     it.options.encoding = "UTF-8"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
 
 

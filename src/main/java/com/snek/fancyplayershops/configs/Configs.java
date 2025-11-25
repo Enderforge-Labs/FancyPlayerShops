@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.configs;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworkconfig.ConfigManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -19,11 +20,22 @@ public abstract class Configs {
 
     private Configs() {}
 
-    private static @NotNull ShopConfig        shop = null;
-    private static @NotNull PerformanceConfig perf = null;
+    private static @Nullable ShopConfig        shop = null;
+    private static @Nullable PerformanceConfig perf = null;
 
-    public static @NotNull ShopConfig        getShop() { return shop; }
-    public static @NotNull PerformanceConfig getPerf() { return perf; }
+    public static @NotNull ShopConfig getShop() {
+        if (shop == null) {
+            throw new IllegalStateException("ShopConfig not initialized. Call loadConfigs() first.");
+        }
+        return shop;
+    }
+
+    public static @NotNull PerformanceConfig getPerf() {
+        if (perf == null) {
+            throw new IllegalStateException("PerformanceConfig not initialized. Call loadConfigs() first.");
+        }
+        return perf;
+    }
 
 
 

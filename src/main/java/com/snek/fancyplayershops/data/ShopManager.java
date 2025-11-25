@@ -525,7 +525,9 @@ public abstract class ShopManager {
         data.putFloat ("rotation",  shop.getDefaultRotation());
         data.putFloat ("hue",       shop.getColorThemeHue  ());
         data.putString("item",      shop.getSerializedItem ());
-        data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString());
+
+        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
+        data.putString("owner_name", owner != null ? owner.getName().getString() : "Unknown");
 
         final Component[] extraDescriptionLines = {
             new Txt()
@@ -541,7 +543,7 @@ public abstract class ShopManager {
                 .cat(new Txt(" its stock and settings when placed.").white().noItalic())
             .get(),
             new Txt().get(),
-            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + (owner != null ? owner.getName().getString() : "Unknown"))).white().noItalic().get(),
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
