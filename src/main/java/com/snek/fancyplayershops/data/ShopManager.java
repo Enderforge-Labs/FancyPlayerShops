@@ -561,7 +561,8 @@ public final class ShopManager extends UtilityClassBase {
         item.setTag(nbt);
         item.setHoverName(new Txt()
             .cat(new Txt("Shop snapshot").color(SHOP_ITEM_NAME_COLOR).bold().noItalic())
-            .cat(new Txt(" - " + new Txt(shop.getStandaloneName()).white().bold().noItalic()))
+            .cat(" - ")
+            .cat(new Txt(shop.getStandaloneName()).white().bold().noItalic())
         .get());
         return item;
     }
