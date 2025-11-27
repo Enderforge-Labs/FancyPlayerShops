@@ -236,7 +236,7 @@ public final class ShopManager extends UtilityClassBase {
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the shop data of the world \"{}\"",shop.getWorldId(), e);
             }
 
 
@@ -251,7 +251,7 @@ public final class ShopManager extends UtilityClassBase {
             try (final Writer writer = new FileWriter(shopStorageFile)) {
                 new Gson().toJson(shop, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the shop \"{}\"", shop.getIdentifierNoWorld(), e);
             }
 
 
@@ -285,7 +285,7 @@ public final class ShopManager extends UtilityClassBase {
                 try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
                 } catch(final IOException e) {
-                    e.printStackTrace();
+                    FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the shop \"{}\"", shopStorageFile.getName(), e);
                 }
 
                 // Recalculate transient members and update shop maps
@@ -424,18 +424,6 @@ public final class ShopManager extends UtilityClassBase {
             itemList.add(item);
         }
 
-
-        // Use reflection to change shop stock externally
-        Field field = null;
-        try {
-            field = Shop.class.getDeclaredField("stock");
-            field.setAccessible(true);
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        if(field == null) return 0;
-
-
         // TODO generate randomly named groups
         // TODO test store A0B5
         // TODO test store 120B etc
@@ -451,13 +439,7 @@ public final class ShopManager extends UtilityClassBase {
                         shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1000_000f);
-
-                        try {
-                            field.set(shop, Math.abs(rnd.nextInt() % 1000_000));
-                        } catch (IllegalArgumentException | IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-
+                        shop.changeStock(Math.abs(rnd.nextInt() % 1000_000));
                         shop.invalidateItemDisplay();
                         ++r;
                     }

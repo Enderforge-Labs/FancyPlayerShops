@@ -107,7 +107,7 @@ public class FancyPlayerShops implements ModInitializer {
                     Files.createDirectories(getStorageDir().resolve(path));
                 }
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
                 flagFatal();
                 return;
             }

@@ -229,16 +229,19 @@ public class Shop {
         focusStateNext        = false;
         menuOpenLimiter = new RateLimiter();
         cacheShopIdentifier();
+
+
+        item = MinecraftUtils.deserializeItem(serializedItem);
         try {
-            item = MinecraftUtils.deserializeItem(serializedItem);
             calcDeserializedWorldId();
-            cacheShopKey();
-            shopGroup = ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
-            return true;
         } catch(final RuntimeException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't deserialize world ID \"{}\"", worldId, e);
             return false;
         }
+
+        cacheShopKey();
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
+        return true;
     }
 
 
@@ -756,6 +759,16 @@ public class Shop {
         item = _item.copyWithCount(1);
         serializedItem = MinecraftUtils.serializeItem(item);
         ShopManager.scheduleShopSave(this);
+    }
+
+
+
+
+    /**
+     * Forcefully changes the stock of this shops.
+     */
+    public void changeStock(final int stock) {
+        this.stock = stock;
     }
 
 

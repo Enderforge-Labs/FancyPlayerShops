@@ -130,7 +130,7 @@ public final class StashManager extends UtilityClassBase {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player stashes", e);
         }
 
 
@@ -152,7 +152,7 @@ public final class StashManager extends UtilityClassBase {
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst().toString(), e);
             }
 
 
@@ -181,7 +181,7 @@ public final class StashManager extends UtilityClassBase {
 
             // Read the file
             final String fileName = stashStorageFile.getName();
-            final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+            final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
             final JsonArray jsonEntries;
             try(FileReader reader = new FileReader(stashStorageFile)) {
                 jsonEntries = new Gson().fromJson(reader, JsonArray.class);
@@ -189,14 +189,14 @@ public final class StashManager extends UtilityClassBase {
                 // Load the data into the runtime map
                 for(final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
-                    stashItem(playerUID,
+                    stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),
                         MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
                         jsonEntry.get("count").getAsInt()
                     );
                 }
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID.toString(), e);
             }
         }
     }

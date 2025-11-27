@@ -107,7 +107,7 @@ public final class BalanceManager extends UtilityClassBase {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player balances", e);
         }
 
 
@@ -118,7 +118,7 @@ public final class BalanceManager extends UtilityClassBase {
             try (final Writer writer = new FileWriter(balanceStorageFile)) {
                 new Gson().toJson(pair.getSecond().getValue(), writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the balance of the player {}", pair.getFirst().toString(), e);
             }
 
 
@@ -152,7 +152,7 @@ public final class BalanceManager extends UtilityClassBase {
                 final Long balance = new Gson().fromJson(reader, Long.class);
                 addBalance(playerUUID, balance);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the balance of the player {}", playerUUID.toString(), e);
             }
         }
     }

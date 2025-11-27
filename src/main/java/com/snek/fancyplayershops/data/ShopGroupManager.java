@@ -138,7 +138,7 @@ public class ShopGroupManager extends UtilityClassBase {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player shop groups", e);
         }
 
 
@@ -158,7 +158,7 @@ public class ShopGroupManager extends UtilityClassBase {
             try(final Writer writer = new FileWriter(groupStorageFile)) {
                 new Gson().toJson(jsonObject, writer);
             } catch(final IOException e) {
-                e.printStackTrace(); //TODO replace with proper logging
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", pair.getSecond().getDisplayName(), e);
             }
 
 
@@ -202,7 +202,7 @@ public class ShopGroupManager extends UtilityClassBase {
                     groupUUID
                 ));
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the shop group {}", groupStorageFile.getName(), e);
             }
         }
     }
