@@ -24,7 +24,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -631,7 +631,7 @@ public class Shop {
      */
     public void changeCanvas(final @NotNull ShopCanvas canvas) {
         ui.changeCanvas(canvas);
-        if(user != null) FancyButtonElm.playButtonSound(user);
+        if(user != null) __base_ButtonElm.playButtonSound(user);
     }
 
 

@@ -6,6 +6,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -76,6 +77,6 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         //TODO add item blacklist
         shop.getItemDisplay().updateDisplay();
         ((EditUi)canvas).updateTitle();
-        playButtonSound(player);
+        __base_ButtonElm.playButtonSound(player);
     }
 }

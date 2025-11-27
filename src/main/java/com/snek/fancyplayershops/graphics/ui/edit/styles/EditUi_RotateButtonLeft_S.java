@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -21,7 +22,7 @@ import com.snek.frameworklib.utils.Easings;
  * The style of the EditUi_PriceButton UI element.
  */
 public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
-    public static final float SHIFT_X = Canvas.SQUARE_BUTTON_SIZE * (1 - HIDDEN_W);
+    public static final float SHIFT_X = Canvas.SQUARE_BUTTON_SIZE * (1 - __base_ButtonElmStyle.HIDDEN_W);
 
 
     /**
@@ -36,21 +37,21 @@ public class EditUi_RotateButtonLeft_S extends EditUi_RotateButtonRight_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransform(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
+            .additiveTransform(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W).moveX(SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleX(1f / HIDDEN_W).moveX(-SHIFT_X))
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleX(1f / __base_ButtonElmStyle.HIDDEN_W).moveX(-SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleX(HIDDEN_W).moveX(SHIFT_X))
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W).moveX(SHIFT_X))
         );
     }
 }

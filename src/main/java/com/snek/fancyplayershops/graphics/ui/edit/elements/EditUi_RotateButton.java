@@ -12,11 +12,12 @@ import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_RotateButtonRigh
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 
@@ -100,7 +101,7 @@ public class EditUi_RotateButton extends SimpleShopButton {
             .additiveTransform(new Transform().rotY(rotation))
         );
 
-        playButtonSound(player);
+        __base_ButtonElm.playButtonSound(player);
     }
 
 

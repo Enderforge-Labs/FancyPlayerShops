@@ -28,8 +28,8 @@ import com.snek.frameworklib.utils.Txt;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.Div;
 
 

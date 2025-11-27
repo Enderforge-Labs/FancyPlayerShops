@@ -14,11 +14,12 @@ import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.GeometryUtils;
@@ -97,7 +98,7 @@ public class BuyUi_1xButton extends FancyShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        if(active) playButtonSound(player);
+        if(active) __base_ButtonElm.playButtonSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, 1, true);
         }

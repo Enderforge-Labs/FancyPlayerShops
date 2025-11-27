@@ -16,7 +16,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.utils.Easings;

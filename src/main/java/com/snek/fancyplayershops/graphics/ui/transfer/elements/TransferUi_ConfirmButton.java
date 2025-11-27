@@ -9,6 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.transfer.TransferUi;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.TransferUi_ConfirmButton_S;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
 
@@ -38,7 +39,7 @@ public class TransferUi_ConfirmButton extends FancyShopButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
         shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
-        if(active) playButtonSound(player);
+        if(active) __base_ButtonElm.playButtonSound(player);
     }
 
 

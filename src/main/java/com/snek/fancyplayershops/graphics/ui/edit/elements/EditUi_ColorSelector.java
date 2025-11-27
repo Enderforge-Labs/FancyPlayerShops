@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.styles.EditUi_ColorSelector_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.core.Div;
-import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;

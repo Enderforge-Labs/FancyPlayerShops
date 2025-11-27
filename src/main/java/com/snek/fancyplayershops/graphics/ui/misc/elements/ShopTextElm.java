@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 

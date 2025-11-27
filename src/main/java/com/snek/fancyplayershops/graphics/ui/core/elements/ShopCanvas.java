@@ -29,14 +29,14 @@ public abstract class ShopCanvas extends UiCanvas {
 
     /**
      * Creates a new ShopCanvas.
-     * @param _shop The target shop.
+     * @param shop The target shop.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
-        super(_shop.getUi(), _shop.getActiveCanvas(), _shop.getWorld(), height, heightTop, heightBottom, new ShopCanvasBackground_S(_shop), new ShopCanvasBack_S());
-        shop = _shop;
+    protected ShopCanvas(final @NotNull Shop shop, final float height, final float heightTop, final float heightBottom) {
+        super(shop.getUi(), height, heightTop, heightBottom, new ShopCanvasBackground_S(shop), new ShopCanvasBack_S());
+        this.shop = shop;
     }
 
 

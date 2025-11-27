@@ -5,9 +5,9 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.HudCloseButton_S;
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;

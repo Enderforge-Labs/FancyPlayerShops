@@ -1,6 +1,6 @@
 package com.snek.fancyplayershops.graphics.misc.styles;
 
-import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
