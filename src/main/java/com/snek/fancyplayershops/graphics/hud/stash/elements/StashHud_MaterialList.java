@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.world.entity.player.Player;

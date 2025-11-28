@@ -21,7 +21,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.core.HudCanvas;
-import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 
