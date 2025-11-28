@@ -23,7 +23,7 @@
         "minecraft": "~1.20.1",
         "fabricloader": ">=0.16.10",
         "fabric-api": "*",
-        "solstice-economy": ">=0.2.2",
+        "solstice-economy": ">=0.2.3",
         "frameworklib": ">=1.1.0",
         "frameworkconfig": ">=1.1.0"
     },
