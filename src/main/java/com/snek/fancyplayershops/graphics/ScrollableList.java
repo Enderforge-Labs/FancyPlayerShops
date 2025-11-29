@@ -13,13 +13,18 @@ import org.joml.Vector3d;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
 // FIXME move to framework lib
 
 import com.snek.frameworklib.input.ScrollReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
+import com.snek.frameworklib.graphics.basic.elements.PanelElm;
+import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 
 
@@ -36,7 +41,7 @@ import com.snek.frameworklib.graphics.core.HudCanvas;
  * <p>
  * Notice: The position of child elements on the alignment axis is also ignored, as it's recaculated automatically every time the list is updated.
 */
-public class ScrollableList extends Div implements Scrollable {
+public class ScrollableList extends PanelElm implements Scrollable {
 
     // List data
     private final float elmSize;
@@ -47,9 +52,12 @@ public class ScrollableList extends Div implements Scrollable {
 
 
 
-    public ScrollableList(final float elmSize) {
-        super();
+    public ScrollableList(final @NotNull ServerLevel world, final @NotNull ElmStyle style, final float elmSize) {
+        super(world, style);
         this.elmSize = elmSize;
+    }
+    public ScrollableList(final @NotNull ServerLevel world, final float elmSize) {
+        this(world, new PanelElmStyle(), elmSize);
     }
 
 

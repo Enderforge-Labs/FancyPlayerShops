@@ -74,7 +74,7 @@ public class StashHud extends HudCanvas {
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
-            list = bg.addChild(new ScrollableList(list_elm_h));
+            list = bg.addChild(new ScrollableList((ServerLevel)_hud.getPlayer().level(), list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.CENTER);
             list.setPosY(SQUARE_BUTTON_SIZE + LIST_MARGIN_BOTTOM);
