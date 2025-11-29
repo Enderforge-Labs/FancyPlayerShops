@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 // FIXME move to framework lib
 
 import com.snek.frameworklib.input.ScrollReceiver;
+import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.graphics.core.HudCanvas;
 
 

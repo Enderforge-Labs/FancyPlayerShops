@@ -9,13 +9,13 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
+import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.HudCloseButton;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_EmptyText;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemDisplay;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_ItemNameCount;
-import com.snek.fancyplayershops.graphics.hud.stash.elements.StashHud_MaterialList;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -73,22 +73,24 @@ public class StashHud extends HudCanvas {
         else {
 
             // Create scrollable list
-            list = bg.addChild(new StashHud_MaterialList());
+            final float list_elm_h = 1f / LIST_SIZE;
+            list = bg.addChild(new ScrollableList(list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.CENTER);
             list.setPosY(SQUARE_BUTTON_SIZE + LIST_MARGIN_BOTTOM);
 
+            //FIXME update stash view when the stash is changed
             // For each material
-            final float list_elm_h = 1f / LIST_SIZE;
             final List<StashEntry> entries = new ArrayList<>(stash.values());
-            for(int i = 0; i < entries.size() && i < LIST_SIZE; ++i) {
+            // for(int i = 0; i < entries.size() && i < LIST_SIZE; ++i) {
+            for(int i = 0; i < entries.size(); ++i) {
                 final StashEntry entry = entries.get(i);
 
                 // Add container for the stash entry
                 final Div c = list.addChild(new Div());
-                c.setSize(new Vector2f(1f, list_elm_h));
+                // c.setSize(new Vector2f(1f, list_elm_h));
                 c.setAlignmentX(AlignmentX.CENTER);
-                c.setPosY(LIST_H - LIST_H * list_elm_h * (i + 1));
+                // c.setPosY(LIST_H - LIST_H * list_elm_h * (i + 1));
 
                 // Add item display
                 e = c.addChild(new StashHud_ItemDisplay(_hud, entry.item));

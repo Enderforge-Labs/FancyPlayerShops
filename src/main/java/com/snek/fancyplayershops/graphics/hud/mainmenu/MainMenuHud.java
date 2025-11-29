@@ -12,12 +12,15 @@
 // import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 // import com.snek.frameworklib.data_types.graphics.AlignmentX;
 // import com.snek.frameworklib.data_types.graphics.AlignmentY;
-// import com.snek.frameworklib.graphics.core.Div;
+// import com.snek.frameworklib.graphics.layout.Div;
 // import com.snek.frameworklib.graphics.core.HudCanvas;
 // import com.snek.frameworklib.graphics.core.HudContext;
 // import com.snek.frameworklib.utils.Txt;
 
 // import net.minecraft.server.level.ServerLevel;
+
+
+
 
 
 
@@ -37,8 +40,8 @@
 
 
 
-//     public MainMenuHud(final @NotNull HudContext _hud) {
-//         super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+//     public MainMenuHud(final @NotNull HudContext hud) {
+//         super(hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
 //         Div e;
 
 //         // Add title
@@ -48,7 +51,7 @@
 
 
 //         // Add "no shpos" text if the player doesn't own any shop
-//         final List<ShopGroup> groups = ShopGroupsManager.getGroups(_hud.getPlayer());
+//         final List<ShopGroup> groups = ShopGroupsManager.getGroups(hud.getPlayer());
 //         // if(stash == null) {
 //         //     e = bg.addChild(new StashHud_EmptyText(_hud));
 //         //     e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
