@@ -20,9 +20,13 @@ import net.minecraft.world.entity.player.Player;
 
 import com.snek.frameworklib.input.ScrollReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.UiCanvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
@@ -63,13 +67,12 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    @Override
-    public Div addChild(final @NotNull Div elm) {
-        return addChildAt(elm, listChildren.size());
+    public Div addElm(final @NotNull Div elm) {
+        return addElmAt(elm, listChildren.size());
     }
-    public Div addChildAt(final @NotNull Div elm, final int index) {
+    public Div addElmAt(final @NotNull Div elm, final int index) {
         listChildren.add(index, elm);
-        elm.setPosY(elmSize * index); //FIXME y pos starts from the bottom? i think?
+        elm.setPosY(getAbsSize().y - (elmSize * (index + 1)));
         elm.setSize(new Vector2f(1f, elmSize));
         refreshViewSides();
         return elm;
@@ -78,14 +81,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    @Override
-    public Div removeChild(final @NotNull Div elm) {
+    public Div removeElm(final @NotNull Div elm) {
         //TODO unify code?
         listChildren.remove(elm);
         refreshViewSides();
         return elm;
     }
-    public Div removeChildAt(final int index) {
+    public Div removeElmAt(final int index) {
         //TODO unify code?
         final Div elm = listChildren.remove(index);
         refreshViewSides();
@@ -123,8 +125,17 @@ public class ScrollableList extends PanelElm implements Scrollable {
             final int firstVisible = Math.max(0, (int)Math.floor((scroll - 0.5f) / elmSize));
             final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((scroll + 0.5f) / elmSize));
             for(int i = firstVisible; i <= lastVisible; i++) {
-                final Div elm = super.addChild(listChildren.get(i));
+                // final Div elm = super.addChild(listChildren.get(i));
+                final Div elm = addChild(listChildren.get(i));
                 elm.spawn(canvas.getContext().getSpawnPos());
+
+                //FIXME move to frameworklib:
+                //FIXME     calculate shift if spawned in huds
+                //FIXME     calculate rotation everywhere
+                // if(canvas instanceof HudCanvas hud) {
+                //     elm.applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
+                // }
+                // elm.applyAnimationNowRecursive(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
             }
 
 

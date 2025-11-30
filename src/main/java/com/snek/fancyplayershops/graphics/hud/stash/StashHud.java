@@ -44,7 +44,7 @@ public class StashHud extends HudCanvas {
     public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE - LIST_MARGIN_BOTTOM;
     public static final int   LIST_SIZE          = 7;
 
-    private Div list;
+    private ScrollableList list;
 
 
 
@@ -74,7 +74,7 @@ public class StashHud extends HudCanvas {
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
-            list = bg.addChild(new ScrollableList((ServerLevel)_hud.getPlayer().level(), list_elm_h));
+            list = (ScrollableList)bg.addChild(new ScrollableList((ServerLevel)_hud.getPlayer().level(), list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.CENTER);
             list.setPosY(SQUARE_BUTTON_SIZE + LIST_MARGIN_BOTTOM);
@@ -87,7 +87,7 @@ public class StashHud extends HudCanvas {
                 final StashEntry entry = entries.get(i);
 
                 // Add container for the stash entry
-                final Div c = list.addChild(new Div());
+                final Div c = list.addElm(new Div());
                 // c.setSize(new Vector2f(1f, list_elm_h));
                 c.setAlignmentX(AlignmentX.CENTER);
                 // c.setPosY(LIST_H - LIST_H * list_elm_h * (i + 1));
