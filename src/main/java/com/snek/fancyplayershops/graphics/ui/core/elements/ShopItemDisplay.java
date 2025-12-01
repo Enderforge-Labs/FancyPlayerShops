@@ -105,18 +105,13 @@ public class ShopItemDisplay extends ItemElm {
 
 
 
-
-
-
-
     /**
      * Creates a new ShopItemDisplay.
-     * @param _shop The target shop.
-     * @param _display A CustomItemDisplay to use to display the item.
+     * @param _targetShop The target shop.
      */
-    public ShopItemDisplay(final @NotNull Shop _shop, final @NotNull CustomItemDisplay _display) {
-        super(_shop.getWorld(), _display, new ItemElmStyle());
-        shop = _shop;
+    public ShopItemDisplay(final @NotNull Shop _targetShop) {
+        super(_targetShop.getWorld(), new ItemElmStyle());
+        shop = _targetShop;
         //! updateDisplay call is in spawn()
 
 
@@ -125,29 +120,6 @@ public class ShopItemDisplay extends ItemElm {
             new Transition(D_TIME, Easings.sineOut)
             .targetTransform(getStyle().getTransform())
         );
-    }
-
-
-
-
-    /**
-     * Creates a new ShopItemDisplay using existing display entities.
-     * @param _targetShop The target shop.
-     * @param _rawDisplay A vanilla ItemDisplayEntity to use to display the item.
-     * @param _rawName1 One of the TextDisplay entities that make up the name of the item.
-     * @param _rawName2 One of the TextDisplay entities that make up the name of the item.
-     */
-    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplay _rawDisplay) {
-        this(_targetShop, new CustomItemDisplay(_rawDisplay));
-    }
-
-
-    /**
-     * Creates a new ShopItemDisplay.
-     * @param _targetShop The target shop.
-     */
-    public ShopItemDisplay(final @NotNull Shop _targetShop) {
-        this(_targetShop, new CustomItemDisplay(_targetShop.getWorld()));
     }
 
 
