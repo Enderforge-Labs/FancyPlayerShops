@@ -220,7 +220,7 @@ public final class StashManager extends UtilityClassBase {
 
         final Vec3 pos = player.getPosition(1f);
         final HudContext hud = new HudContext(player);
-        hud.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
         hud.changeCanvas(new StashHud(hud));
     }
 }

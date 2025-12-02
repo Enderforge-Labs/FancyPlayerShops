@@ -25,6 +25,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.UiCanvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -122,27 +123,14 @@ public class ScrollableList extends PanelElm implements Scrollable {
             for(final Div elm : children) elm.despawn(false);
             clearChildren();
 
-            final float clampedScroll = getClampedScroll();
+            final float clampedScroll = getClampedScroll(scroll);
             final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize));
             final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + 0.5f) / elmSize));
             for(int i = firstVisible; i <= lastVisible; i++) {
-                // final Div elm = super.addChild(listChildren.get(i));
                 final Div elm = addChild(listChildren.get(i));
                 elm.setPosY(getAbsSize().y - (elmSize * (i - firstVisible + 1)));
-                elm.spawn(canvas.getContext().getSpawnPos());
-
-                //FIXME move to frameworklib:
-                //FIXME     calculate shift if spawned in huds
-                //FIXME     calculate rotation everywhere
-                // if(canvas instanceof HudCanvas hud) {
-                //     elm.applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
-                // }
-                elm.applyAnimationNowRecursive(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
+                elm.spawn(canvas.getContext().getSpawnPos(), true);
             }
-
-
-            // // Update child and return
-            // elm.updateAbsPos();
         }
     }
 
@@ -152,24 +140,33 @@ public class ScrollableList extends PanelElm implements Scrollable {
     //TODO this function might need a more complex logic once refreshViewSides() gets updated
     @Override
     public void onScroll(final @NotNull Player player, final float amount) {
-        scroll += amount;
-        scroll = getClampedScroll();
-        System.out.println(scroll);
+
+        // Add the received scroll to the current value, then clamp it
+        scroll = getClampedScroll(scroll + amount);
+
+        // Refresh view
         refreshViewSides();
     }
 
 
-    public float getClampedScroll() {
+    /**
+     * Calculates the scroll value and clamps it so it always stays between half of the list's size and the total length of the list minus half of the list's size.
+     * <p>
+     * This allows the returned value to be used as a position directly.
+     * @param rawScroll The unconstrianed scroll value.
+     * @return The clamped scroll value.
+     */
+    public float getClampedScroll(final float rawScroll) {
         final float halfHeight = getAbsSize().y / 2;
-        return Math.max(halfHeight, Math.min(scroll, listChildren.size() * elmSize - halfHeight));
+        return Math.max(halfHeight, Math.min(rawScroll, listChildren.size() * elmSize - halfHeight));
     }
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
-            super.spawn(pos);
-            scroll = getClampedScroll();
+            super.spawn(pos, animate);
+            scroll = getClampedScroll(scroll);
             refreshViewSides();
         }
     }

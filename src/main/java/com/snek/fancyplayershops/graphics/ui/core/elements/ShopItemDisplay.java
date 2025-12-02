@@ -245,10 +245,10 @@ public class ShopItemDisplay extends ItemElm {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
         // Spawn the entity and remove tracking custom name
-        super.spawn(pos);
+        super.spawn(pos, animate);
         getEntity().setCustomName(new Txt(ITEM_DISPLAY_CUSTOM_NAME).get());
         getEntity().setCustomNameVisible(false);
 
@@ -274,7 +274,7 @@ public class ShopItemDisplay extends ItemElm {
         if(name == null) {
             name = new FancyTextElm(world, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
-            name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
+            name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0), true);
         }
     }
 

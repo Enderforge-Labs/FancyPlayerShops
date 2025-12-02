@@ -285,7 +285,7 @@ public class Shop {
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        itemDisplay.spawn(calcDisplayPos());
+        itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
         ShopManager.scheduleShopSave(this);
@@ -336,7 +336,7 @@ public class Shop {
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        itemDisplay.spawn(calcDisplayPos());
+        itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
         ShopManager.scheduleShopSave(this);
@@ -362,7 +362,7 @@ public class Shop {
 
                 // Create details canvas
                 ui = new ShopUI(this, viewer);
-                ui.spawn(MinecraftUtils.blockSourceCoords(pos));
+                ui.spawn(MinecraftUtils.blockSourceCoords(pos), true);
                 ui.changeCanvas(new DetailsUi(this));
 
                 // Start item animation and turn off the CustomName
@@ -407,7 +407,7 @@ public class Shop {
 
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
             itemDisplay = new ShopItemDisplay(this);
-            itemDisplay.spawn(calcDisplayPos());
+            itemDisplay.spawn(calcDisplayPos(), true);
         }
         return itemDisplay;
     }
