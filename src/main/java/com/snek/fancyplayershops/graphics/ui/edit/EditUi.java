@@ -24,6 +24,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
@@ -170,7 +171,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         }
     }
     public void updateTitle() {
-        title.updateDisplay(recalculateTitle());
+        if(title != null) title.updateDisplay(recalculateTitle());
     }
 
 

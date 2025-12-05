@@ -51,12 +51,21 @@ public abstract class ShopCanvas extends UiCanvas {
     }
 
 
+
+
     @Override
-    protected void __updateRot(final int newRot, final boolean instant) {
-        if(lastRotation != newRot) {
-            final Animation animation = calcItemDisplayRotationAnimation(lastRotation, newRot);
-            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation); else shop.getItemDisplay().applyAnimationRecursive(animation);
+    protected void updateRot(final boolean instant) {
+        updateItemDisplayRot(lastRotation, instant);
+        super.updateRot(instant);
+    }
+
+
+    protected void updateItemDisplayRot(final int initialRotation, final boolean instant) {
+        final int newRot = calcRot();
+        if(initialRotation != newRot) {
+            final Animation animation = calcItemDisplayRotationAnimation(initialRotation, newRot);
+            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation);
+            else        shop.getItemDisplay().applyAnimationRecursive(animation);
         }
-        super.__updateRot(newRot, instant);
     }
 }

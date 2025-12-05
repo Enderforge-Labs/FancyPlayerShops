@@ -38,6 +38,6 @@ public class StashHud_ItemNameCount extends SimpleTextElm {
             .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
             .cat(new Txt("\n" + Utils.formatAmount(count)).lightGray())
         .get());
-        flushStyle();
+        flushStyle(false);
     }
 }

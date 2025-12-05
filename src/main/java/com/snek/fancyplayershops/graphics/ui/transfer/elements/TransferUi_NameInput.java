@@ -57,7 +57,7 @@ public class TransferUi_NameInput extends ShopTextInput {
                 new Txt("[Not specified]").lightGray().italic()
             )
         .white().get());
-        flushStyle();
+        flushStyle(false);
     }
 
 

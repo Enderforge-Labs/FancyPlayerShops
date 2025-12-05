@@ -49,6 +49,6 @@ public class InspectUi_IdDisplay extends ShopTextElm {
         .get());
 
         // Flush style
-        flushStyle();
+        flushStyle(false);
     }
 }

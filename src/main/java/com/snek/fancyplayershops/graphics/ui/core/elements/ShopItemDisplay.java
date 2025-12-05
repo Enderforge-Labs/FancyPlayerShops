@@ -13,9 +13,9 @@ import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
@@ -93,7 +93,7 @@ public class ShopItemDisplay extends ItemElm {
     // Setup edit animiations
     //! leaveEditAnimation not needed as the unfocus animation uses a target transform
     private static final @NotNull Animation enterEditAnimation = new Animation(
-        new Transition(Shop.CANVAS_ANIMATION_DELAY, Easings.sineOut)
+        new Transition(Canvas.CANVAS_ROTATION_TIME, Easings.cubicOut)
         .additiveTransform(
             new Transform()
             .scale(EDIT_SCALE)
@@ -143,7 +143,7 @@ public class ShopItemDisplay extends ItemElm {
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
-                name.flushStyle();
+                name.flushStyle(false);
             }
         }
 
@@ -154,7 +154,7 @@ public class ShopItemDisplay extends ItemElm {
             if(name != null) {
                 final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + shop.getStandaloneName();
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
-                name.flushStyle();
+                name.flushStyle(false);
             }
         }
 
@@ -162,7 +162,7 @@ public class ShopItemDisplay extends ItemElm {
         // Update the entity
         //! Flag the transform to make sure items with different base transforms are recalculated without waiting for animations
         getStyle().editTransform();
-        flushStyle();
+        flushStyle(false);
     }
 
 
@@ -188,8 +188,8 @@ public class ShopItemDisplay extends ItemElm {
         updateDisplay();
 
         // Start animations
-        applyAnimation(focusAnimation);
-        startLoopAnimation();
+        applyAnimation(focusAnimation);                         // Height change
+        startLoopAnimation();                                   // Loop movement
     }
     /**
      * Starts the loop animation.
@@ -228,7 +228,8 @@ public class ShopItemDisplay extends ItemElm {
      * Enters the edit state
      */
     public void enterEditState() {
-        applyAnimation(enterEditAnimation);
+        shop.getActiveCanvas().updateItemDisplayRot(0, true);       // Adjust global rotation
+        applyAnimation(enterEditAnimation);                         // Local position shift
     }
 
 

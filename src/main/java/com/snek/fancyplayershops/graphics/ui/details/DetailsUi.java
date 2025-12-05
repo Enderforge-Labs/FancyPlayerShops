@@ -138,4 +138,13 @@ public class DetailsUi extends ShopCanvas {
     public void onStockChange() {
         values.updateDisplay();
     }
+
+
+
+
+    @Override
+    protected void updateItemDisplayRot(int initialRotation, boolean instant) {
+        //! Empty. This stops the item display from changing global rotation when the details UI rotates.
+    }
+
 }

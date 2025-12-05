@@ -61,7 +61,7 @@ public class BuyUi_ConfirmButton extends FancyShopButton {
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
         getStyle(BuyUi_ConfirmButton_S.class).setText(new Txt("Buy " + Utils.formatAmountShort(menu.getAmount())).white().get());
-        flushStyle();
+        flushStyle(false);
     }
 
 }

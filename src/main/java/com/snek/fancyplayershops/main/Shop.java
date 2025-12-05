@@ -68,10 +68,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public class Shop {
 
-    // Animation data
-    public static final int CANVAS_ANIMATION_DELAY = 5;
-
-
     // Strings
     public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
     public static final Component SHOP_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();

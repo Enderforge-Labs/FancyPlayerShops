@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 // FIXME move to framework lib
 
 import com.snek.frameworklib.input.ScrollReceiver;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -30,7 +31,6 @@ import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.UiCanvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
-
 
 
 
@@ -123,14 +123,17 @@ public class ScrollableList extends PanelElm implements Scrollable {
             for(final Div elm : children) elm.despawn(false);
             clearChildren();
 
-            final float clampedScroll = getClampedScroll(scroll);
-            final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize));
-            final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + 0.5f) / elmSize));
-            for(int i = firstVisible; i <= lastVisible; i++) {
-                final Div elm = addChild(listChildren.get(i));
-                elm.setPosY(getAbsSize().y - (elmSize * (i - firstVisible + 1)));
-                elm.spawn(canvas.getContext().getSpawnPos(), true);
-            }
+            //BUG Delayed by 1 tick to allow items to despawn properly // it didn't work
+            // Scheduler.schedule(10, () -> {
+                final float clampedScroll = getClampedScroll(scroll);
+                final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize));
+                final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + 0.5f) / elmSize));
+                for(int i = firstVisible; i <= lastVisible; i++) {
+                    final Div elm = addChild(listChildren.get(i));
+                    elm.setPosY(getAbsSize().y - (elmSize * (i - firstVisible + 1)));
+                    elm.spawn(canvas.getContext().getSpawnPos(), false);
+                }
+            // });
         }
     }
 

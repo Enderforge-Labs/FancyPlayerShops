@@ -41,6 +41,6 @@ public class StashHud_ItemDisplay extends ItemElm {
         getStyle(ItemElmStyle.class).setItem(item);
 
         // Update the entity
-        flushStyle();
+        flushStyle(false);
     }
 }

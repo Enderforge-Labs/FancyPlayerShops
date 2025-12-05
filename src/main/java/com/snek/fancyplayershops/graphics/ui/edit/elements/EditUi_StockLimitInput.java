@@ -42,7 +42,7 @@ public class EditUi_StockLimitInput extends ShopTextInput {
             .cat(new Txt("Stock limit: ").lightGray())
             .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).white())
         .get());
-        flushStyle();
+        flushStyle(false);
     }
 
 
