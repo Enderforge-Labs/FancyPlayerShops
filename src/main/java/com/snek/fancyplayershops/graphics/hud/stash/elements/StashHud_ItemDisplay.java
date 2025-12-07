@@ -20,8 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-//FIXME make not clickable. this was only used for testing
-public class StashHud_ItemDisplay extends ItemElm implements Clickable {
+public class StashHud_ItemDisplay extends ItemElm {
     private final ItemStack item;
 
 
@@ -46,16 +45,5 @@ public class StashHud_ItemDisplay extends ItemElm implements Clickable {
 
         // Update the entity
         flushStyle(false);
-    }
-
-
-    @Override
-    public boolean attemptClick(@NotNull Player player, @NotNull ClickAction click) {
-        return true;
-    }
-
-
-    @Override
-    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
     }
 }

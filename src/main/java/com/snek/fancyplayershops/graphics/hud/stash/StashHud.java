@@ -36,7 +36,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class StashHud extends HudCanvas {
-    public static final float LIST_WIDTH        = 0.9f;
+    public static final float LIST_WIDTH         = 0.9f;
     public static final float ITEM_NAME_RATIO    = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
@@ -87,7 +87,7 @@ public class StashHud extends HudCanvas {
                 final StashEntry entry = entries.get(i);
 
                 // Add container for the stash entry
-                final Div c = list.storeElm(new tmp_div((ServerLevel)_hud.getPlayer().level()));
+                final Div c = list.storeElm(new Div());
                 e.setSize(new Vector2f(1f, list_elm_h));
                 c.setAlignmentX(AlignmentX.CENTER);
 

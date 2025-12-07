@@ -22,8 +22,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-//FIXME make not clickable. this was only used for testing
-public class StashHud_ItemNameCount extends SimpleTextElm implements Clickable {
+public class StashHud_ItemNameCount extends SimpleTextElm {
     private final @NotNull ItemStack item;
     private int count;
 
@@ -42,16 +41,5 @@ public class StashHud_ItemNameCount extends SimpleTextElm implements Clickable {
             .cat(new Txt("\n" + Utils.formatAmount(count)).lightGray())
         .get());
         flushStyle(false);
-    }
-
-
-    @Override
-    public boolean attemptClick(@NotNull Player player, @NotNull ClickAction click) {
-        return true;
-    }
-
-
-    @Override
-    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
     }
 }
