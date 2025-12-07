@@ -22,6 +22,8 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -46,7 +48,7 @@ import com.snek.frameworklib.graphics.layout.Div;
 public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull TitleElm getTitle() { return title; }
+    public @NotNull SimpleTextElm getTitle() { return title; }
 
 
     // Layout
@@ -88,6 +90,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
+        updateTitle();
 
 
         // Add price button

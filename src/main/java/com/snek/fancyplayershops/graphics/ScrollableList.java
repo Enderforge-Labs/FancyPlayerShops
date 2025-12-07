@@ -68,13 +68,11 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    public Div addElm(final @NotNull Div elm) {
+    public Div storeElm(final @NotNull Div elm) {
         return addElmAt(elm, listChildren.size());
     }
     public Div addElmAt(final @NotNull Div elm, final int index) {
         listChildren.add(index, elm);
-        // elm.setPosY(getAbsSize().y - (elmSize * (index + 1)));
-        elm.setSize(new Vector2f(1f, elmSize));
         refreshViewSides();
         return elm;
     }
@@ -126,11 +124,14 @@ public class ScrollableList extends PanelElm implements Scrollable {
             //BUG Delayed by 1 tick to allow items to despawn properly // it didn't work
             // Scheduler.schedule(10, () -> {
                 final float clampedScroll = getClampedScroll(scroll);
-                final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize));
-                final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + 0.5f) / elmSize));
+                final float halfHeight = getAbsSize().y / 2;
+                final float _elmSize = getAbsSize().y * elmSize;
+                final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - halfHeight) / _elmSize));
+                final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + halfHeight) / _elmSize));
                 for(int i = firstVisible; i <= lastVisible; i++) {
                     final Div elm = addChild(listChildren.get(i));
-                    elm.setPosY(getAbsSize().y - (elmSize * (i - firstVisible + 1)));
+                    elm.setPosY(getAbsSize().y - (_elmSize * (i - firstVisible + 1)));
+                    elm.setSize(new Vector2f(getAbsSize().x, _elmSize));
                     elm.spawn(canvas.getContext().getSpawnPos(), false);
                 }
             // });
