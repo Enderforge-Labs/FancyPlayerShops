@@ -90,6 +90,7 @@ public final class ShopManager extends UtilityClassBase {
     private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
+    public static @Nullable HashSet<@NotNull Shop> getShopsOfPlayer(final @NotNull Player player) { return shopsByOwner.get(player.getUUID()); }
 
     // Async update list
     private static int updateIndex = 0;
