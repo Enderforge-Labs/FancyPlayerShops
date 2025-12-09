@@ -9,6 +9,7 @@ import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -80,5 +81,12 @@ public class HudSimpleButton extends SimpleButtonElm {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }
+    }
+
+
+    public void onClick(net.minecraft.client.multiplayer.chat.LoggedChatMessage.@NotNull Player player,
+            @NotNull ClickAction click) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onClick'");
     }
 }
