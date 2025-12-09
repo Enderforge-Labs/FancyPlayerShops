@@ -63,7 +63,7 @@ public class PerformanceConfig implements ConfigFile {
             "Only modified shops and stashes are saved to file, so this config has little inpact on performance.",
             "Very high values can occasionally create lag spikes. Lower values improve safety and tps stability but slightly degrade performance.",
         },
-        4
+        1
     );
 
 

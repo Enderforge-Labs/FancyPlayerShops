@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
+import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -106,7 +107,7 @@ public class FancyPlayerShops implements ModInitializer {
                     Files.createDirectories(getStorageDir().resolve(path));
                 }
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
                 flagFatal();
                 return;
             }
@@ -127,6 +128,7 @@ public class FancyPlayerShops implements ModInitializer {
             if(fatal) return;
 
             // Load persistent data
+            ShopGroupManager.loadGroups(); //! Must be loaded before shops
             ShopManager.loadShops();
             StashManager.loadStashes();
             BalanceManager.loadBalances();
@@ -139,6 +141,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Schedule data saves
             Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
+                ShopGroupManager.saveScheduledGroups();
                 ShopManager.saveScheduledShops();
                 StashManager.saveScheduledStashes();
                 BalanceManager.saveScheduledBalances();
@@ -188,7 +191,7 @@ public class FancyPlayerShops implements ModInitializer {
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.getItem() == Items.PLAYER_HEAD && stack.hasTag() && stack.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY)) {
+        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ShopManager.SHOP_ITEM_NBT_KEY)) {
 
             // If the world is a server world and the player is allowed to modify the world
             if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
@@ -200,10 +203,14 @@ public class FancyPlayerShops implements ModInitializer {
                 if(ShopManager.findShop(blockPos, world) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
-                    if(tag.contains(ShopManager.SNAPSHOT_NBT_KEY)) {
+                    if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            new Shop(serverWorld, blockPos, player.getUUID(), data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"));
+                            new Shop(
+                                serverWorld, blockPos, player.getUUID(),
+                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"),
+                                data.getUUID("group_uuid")
+                            );
                             player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }

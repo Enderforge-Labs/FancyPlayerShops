@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-
 public class StashHud_ItemNameCount extends SimpleTextElm {
     private final @NotNull ItemStack item;
     private int count;

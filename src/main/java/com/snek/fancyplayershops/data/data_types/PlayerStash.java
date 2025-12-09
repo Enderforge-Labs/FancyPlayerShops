@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.data_types;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -6,6 +6,9 @@ import java.util.UUID;
 
 
 
+//FIXME make subclasses and move the generic code to framework lib. automate data saving
+//FIXME - PersistentData
+//FIXME - PersistentDataManager
 public class PlayerStash extends HashMap<UUID, StashEntry> {
     private boolean scheduledForSave = false;
     public boolean isScheduledForSave() { return scheduledForSave; }

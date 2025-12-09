@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.BuyUi_ConfirmButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -38,7 +39,7 @@ public class BuyUi_ConfirmButton extends FancyShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        if(active) playButtonSound(player);
+        if(active) __base_ButtonElm.playButtonSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, menu.getAmount(), true);
         }

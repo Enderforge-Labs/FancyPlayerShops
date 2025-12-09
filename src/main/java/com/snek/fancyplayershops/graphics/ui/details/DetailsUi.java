@@ -19,10 +19,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.TextAlignment;
-import com.snek.frameworklib.graphics.core.Div;
-import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
@@ -94,7 +94,7 @@ public class DetailsUi extends ShopCanvas {
             values = (DetailsUi_Values)e;
         }
         details.setSizeX(DETAILS_W);
-        details.setSizeY(((DetailsUi_Names)details.getChildren().get(0)).calcEntityHeight());
+        details.setSizeY(0.25f);
         details.setAlignmentX(AlignmentX.CENTER);
         details.setPosY(H0 + VERTICAL_PADDING);
 
@@ -128,7 +128,7 @@ public class DetailsUi extends ShopCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        return shop.getItem().getItem() == Items.AIR ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
+        return shop.getItem().is(Items.AIR) ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
     }
 
 
@@ -138,4 +138,13 @@ public class DetailsUi extends ShopCanvas {
     public void onStockChange() {
         values.updateDisplay();
     }
+
+
+
+
+    @Override
+    protected void updateItemDisplayRot(int initialRotation, boolean instant) {
+        //! Empty. This stops the item display from changing global rotation when the details UI rotates.
+    }
+
 }

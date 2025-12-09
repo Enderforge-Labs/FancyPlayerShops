@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
 

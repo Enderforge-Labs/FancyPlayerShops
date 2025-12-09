@@ -29,14 +29,14 @@ public abstract class ShopCanvas extends UiCanvas {
 
     /**
      * Creates a new ShopCanvas.
-     * @param _shop The target shop.
+     * @param shop The target shop.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected ShopCanvas(final @NotNull Shop _shop, final float height, final float heightTop, final float heightBottom) {
-        super(_shop.getUi(), _shop.getActiveCanvas(), _shop.getWorld(), height, heightTop, heightBottom, new ShopCanvasBackground_S(_shop), new ShopCanvasBack_S());
-        shop = _shop;
+    protected ShopCanvas(final @NotNull Shop shop, final float height, final float heightTop, final float heightBottom) {
+        super(shop.getUi(), height, heightTop, heightBottom, new ShopCanvasBackground_S(shop), new ShopCanvasBack_S());
+        this.shop = shop;
     }
 
 
@@ -51,12 +51,21 @@ public abstract class ShopCanvas extends UiCanvas {
     }
 
 
+
+
     @Override
-    protected void __updateRot(final int newRot, final boolean instant) {
-        if(lastRotation != newRot) {
-            final Animation animation = calcItemDisplayRotationAnimation(lastRotation, newRot);
-            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation); else shop.getItemDisplay().applyAnimationRecursive(animation);
+    protected void updateRot(final boolean instant) {
+        updateItemDisplayRot(lastRotation, instant);
+        super.updateRot(instant);
+    }
+
+
+    protected void updateItemDisplayRot(final int initialRotation, final boolean instant) {
+        final int newRot = calcRot();
+        if(initialRotation != newRot) {
+            final Animation animation = calcItemDisplayRotationAnimation(initialRotation, newRot);
+            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation);
+            else        shop.getItemDisplay().applyAnimationRecursive(animation);
         }
-        super.__updateRot(newRot, instant);
     }
 }

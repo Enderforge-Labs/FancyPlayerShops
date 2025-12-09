@@ -6,6 +6,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.BuyUi_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -53,17 +54,17 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
 
         // Return if item is null or air
         final ItemStack item = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if(item == null || item.getItem() == Items.AIR) return;
+        if(item == null || item.is(Items.AIR)) return;
 
 
         // Send a message to the player if item is a shop snapshot, then return
-        if(item.hasTag() && item.getTag().contains(ShopManager.SHOP_ITEM_NBT_KEY) && item.getTag().contains(ShopManager.SNAPSHOT_NBT_KEY)) {
+        if(MinecraftUtils.hasTag(item, ShopManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Shop snapshots cannot be sold!").red().bold().get(), true);
             return;
         }
 
 
-        // Send a message to the player if item contains a shop snapshopt, then return
+        // Send a message to the player if item contains a shop snapshot, then return
         if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ShopManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Items containing shop snapshots cannot be sold!").red().bold().get(), true);
             return;
@@ -76,6 +77,6 @@ public class EditUi_ItemSelector extends BuyUi_ItemInspector {
         //TODO add item blacklist
         shop.getItemDisplay().updateDisplay();
         ((EditUi)canvas).updateTitle();
-        playButtonSound(player);
+        __base_ButtonElm.playButtonSound(player);
     }
 }

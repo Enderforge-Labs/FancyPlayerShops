@@ -9,6 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.SimpleShopButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -43,14 +44,14 @@ public class EditUi_ColorSelector_S extends SimpleShopButton_S {
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(new Transform().scaleX(1f / EditUi.COLOR_SELECTOR_HIDDEN_W).moveX(-SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(new Transform().scaleX(EditUi.COLOR_SELECTOR_HIDDEN_W).moveX(SHIFT_X))
         );
     }

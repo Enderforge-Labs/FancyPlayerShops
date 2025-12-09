@@ -53,7 +53,7 @@ public class DetailsUi_Values extends ShopTextElm {
         final Vector3i col = Utils.interpolateRGB(DetailsUi.C_HSV_STOCK_LOW, DetailsUi.C_HSV_STOCK_HIGH, (float)Easings.quadOut.compute(factor));
 
         // Empty shop case
-        if(shop.getItem().getItem() == Items.AIR) {
+        if(shop.getItem().is(Items.AIR)) {
             getStyle(SimpleTextElmStyle.class).setText(new Txt()
                 .cat(new Txt("-").lightGray())
                 .cat(new Txt("\n-").lightGray())

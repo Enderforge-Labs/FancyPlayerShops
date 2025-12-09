@@ -23,10 +23,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.fancyplayershops.data.data_types.PlayerStash;
+import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +54,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A class that handles player stashes.
  */
-public abstract class StashManager {
+public final class StashManager extends UtilityClassBase {
     private StashManager() {}
 
 
@@ -78,7 +81,7 @@ public abstract class StashManager {
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
         final PlayerStash stash = stashes.computeIfAbsent(playerUUID, k -> new PlayerStash());
         final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
         stashEntry.add(count);
@@ -93,7 +96,7 @@ public abstract class StashManager {
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
         if(count == 0) return;
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
     }
 
@@ -118,8 +121,7 @@ public abstract class StashManager {
     }
 
     /**
-     * Saves the stash data of the specified player in its config file.
-     * @param playerUUID The UUID of the player.
+     * Saves the scheduled stashes in their config files.
      */
     public static void saveScheduledStashes() {
 
@@ -128,7 +130,7 @@ public abstract class StashManager {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player stashes", e);
         }
 
 
@@ -150,7 +152,7 @@ public abstract class StashManager {
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst().toString(), e);
             }
 
 
@@ -179,7 +181,7 @@ public abstract class StashManager {
 
             // Read the file
             final String fileName = stashStorageFile.getName();
-            final UUID playerUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+            final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
             final JsonArray jsonEntries;
             try(FileReader reader = new FileReader(stashStorageFile)) {
                 jsonEntries = new Gson().fromJson(reader, JsonArray.class);
@@ -187,14 +189,14 @@ public abstract class StashManager {
                 // Load the data into the runtime map
                 for(final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
-                    stashItem(playerUID,
+                    stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),
                         MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
                         jsonEntry.get("count").getAsInt()
                     );
                 }
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID.toString(), e);
             }
         }
     }
@@ -208,7 +210,8 @@ public abstract class StashManager {
 
 
 
-
+    //TODO this prob shouldn't be in "stash manager" class
+    //TODO this prob shouldn't be in "stash manager" class
     /**
      * Opens the stash view for the specified player.
      * @param player The player.
@@ -217,7 +220,7 @@ public abstract class StashManager {
 
         final Vec3 pos = player.getPosition(1f);
         final HudContext hud = new HudContext(player);
-        hud.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
         hud.changeCanvas(new StashHud(hud));
     }
 }

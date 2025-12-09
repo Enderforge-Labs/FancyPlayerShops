@@ -12,8 +12,10 @@ import org.joml.Vector3i;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.BalanceManager;
+import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui.ShopUI;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvas;
@@ -22,7 +24,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyUi;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsUi;
 import com.snek.fancyplayershops.graphics.ui.edit.EditUi;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -66,10 +68,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public class Shop {
 
-    // Animation data
-    public static final int CANVAS_ANIMATION_DELAY = 5;
-
-
     // Strings
     public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
     public static final Component SHOP_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();
@@ -85,6 +83,8 @@ public class Shop {
     private           @NotNull  BlockPos        pos;                            // The position of the shop
     private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, not including the world
     private transient @NotNull  ShopKey         shopKeyCache;                   // The cached shop key
+    private           @NotNull  UUID            groupUUID;                      // The UUID of the group this shop has been assigned to
+    private transient @NotNull  ShopGroup       shopGroup;                      // The group this shop has been assigned to
 
 
     // Shop data
@@ -99,14 +99,14 @@ public class Shop {
 
 
     // Shop state
-    private transient @Nullable ShopUI                             ui = null;   // The UI context used for the display
-    private transient @Nullable Player                           user = null;   // The current user of the shop (the player that first opened a menu)
-    private transient @Nullable Player                         viewer = null;   // The prioritized viewer
-    private transient           boolean                 deletionState = false;  // True if the shop has been deleted, false otherwise
-    private transient           boolean                    focusState = false;  // True if the shop is currently being looked at by at least one player, false otherwise
-    private transient           boolean                focusStateNext = false;  // The next focus state
-    private transient @NotNull  RateLimiter           menuOpenLimiter = new RateLimiter();
-    private transient boolean scheduledForSave = false;
+    private transient @Nullable ShopUI      ui               = null;   // The UI context used for the display
+    private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
+    private transient @Nullable Player      viewer           = null;   // The prioritized viewer
+    private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
+    private transient           boolean     focusState       = false;  // True if the shop is currently being looked at by at least one player, false otherwise
+    private transient           boolean     focusStateNext   = false;  // The next focus state
+    private transient @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
+    private transient           boolean     scheduledForSave = false;
 
 
     // Accessors
@@ -130,6 +130,8 @@ public class Shop {
     public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
     public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld;     }
     public           float           getColorThemeHue    () { return colorThemeHue;                   }
+    public @NotNull  UUID            getShopGroupUUID    () { return groupUUID;                       }
+    public @NotNull  ShopGroup       getShopGroup        () { return shopGroup;                       }
     public           void            setViewer           (final @Nullable Player  _viewer        ) { viewer           = _viewer;         }
     public           void            setScheduledForSave (final           boolean scheduled      ) { scheduledForSave = scheduled;       }
     public           void            setFocusStateNext   (final           boolean _nextFocusState) { focusStateNext   = _nextFocusState; }
@@ -223,15 +225,19 @@ public class Shop {
         focusStateNext        = false;
         menuOpenLimiter = new RateLimiter();
         cacheShopIdentifier();
+
+
+        item = MinecraftUtils.deserializeItem(serializedItem);
         try {
-            item = MinecraftUtils.deserializeItem(serializedItem);
             calcDeserializedWorldId();
-            cacheShopKey();
-            return true;
         } catch(final RuntimeException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't deserialize world ID \"{}\"", worldId, e);
             return false;
         }
+
+        cacheShopKey();
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
+        return true;
     }
 
 
@@ -270,10 +276,12 @@ public class Shop {
         calcSerializedWorldId();
         cacheShopIdentifier();
         cacheShopKey();
+        groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, ShopGroupManager.DEFAULT_GROUP_UUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        itemDisplay.spawn(calcDisplayPos());
+        itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
         ShopManager.scheduleShopSave(this);
@@ -297,7 +305,8 @@ public class Shop {
      */
     public Shop(
         final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
-        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
+        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem,
+        final UUID _shopGroupUUID
     ) {
 
         // Set shop data
@@ -318,10 +327,12 @@ public class Shop {
         item = MinecraftUtils.deserializeItem(serializedItem);
         cacheShopIdentifier();
         cacheShopKey();
+        groupUUID = _shopGroupUUID;
+        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplay(this);
-        itemDisplay.spawn(calcDisplayPos());
+        itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
         ShopManager.scheduleShopSave(this);
@@ -347,7 +358,7 @@ public class Shop {
 
                 // Create details canvas
                 ui = new ShopUI(this, viewer);
-                ui.spawn(MinecraftUtils.blockSourceCoords(pos));
+                ui.spawn(MinecraftUtils.blockSourceCoords(pos), true);
                 ui.changeCanvas(new DetailsUi(this));
 
                 // Start item animation and turn off the CustomName
@@ -392,7 +403,7 @@ public class Shop {
 
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
             itemDisplay = new ShopItemDisplay(this);
-            itemDisplay.spawn(calcDisplayPos());
+            itemDisplay.spawn(calcDisplayPos(), true);
         }
         return itemDisplay;
     }
@@ -480,7 +491,7 @@ public class Shop {
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
-        if(item.getItem() == Items.AIR) {
+        if(item.is(Items.AIR)) {
             owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
@@ -542,7 +553,7 @@ public class Shop {
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
      */
     public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
-        if(item.getItem() == Items.AIR) {
+        if(item.is(Items.AIR)) {
             buyer.displayClientMessage(SHOP_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
@@ -559,6 +570,7 @@ public class Shop {
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 BalanceManager.addBalance(ownerUUID, totPrice);
                 BalanceManager.saveBalance(ownerUUID);
+                shopGroup.addBalance(totPrice);
 
 
                 // Send feedback to the player
@@ -615,7 +627,7 @@ public class Shop {
      */
     public void changeCanvas(final @NotNull ShopCanvas canvas) {
         ui.changeCanvas(canvas);
-        if(user != null) FancyButtonElm.playButtonSound(user);
+        if(user != null) __base_ButtonElm.playButtonSound(user);
     }
 
 
@@ -634,7 +646,7 @@ public class Shop {
 
 
     public boolean canBuyUiBeOpened() {
-        return item.getItem() != Items.AIR;
+        return !item.is(Items.AIR);
     }
 
     /**
@@ -749,12 +761,22 @@ public class Shop {
 
 
     /**
+     * Forcefully changes the stock of this shops.
+     */
+    public void changeStock(final int stock) {
+        this.stock = stock;
+    }
+
+
+
+
+    /**
      * Sends the items stored in this shop to the owner's stash.
      * <p> This method also sets the shop's stock to 0.
      */
     public void stash() {
         if(stock == 0) return;
-        if(item.getItem() == Items.AIR) return;
+        if(item.is(Items.AIR)) return;
 
 
         // Stash items
@@ -764,7 +786,7 @@ public class Shop {
 
         // Send feedback to the player
         final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
-        if(owner != null && item.getItem() != Items.AIR && stock > 0) {
+        if(owner != null && !item.is(Items.AIR) && stock > 0) {
             owner.displayClientMessage(new Txt()
                 .cat("" + Utils.formatAmount(stock, true, true) + " ")
                 .cat(MinecraftUtils.getFancyItemName(item).getString())
@@ -808,7 +830,7 @@ public class Shop {
      * <p> This call has no effect if the shop is fully stocked.
      */
     public void pullItems() {
-        if(stock >= maxStock || item.getItem() == Items.AIR) return;
+        if(stock >= maxStock || item.is(Items.AIR)) return;
         final int oldStock = stock;
 
         pullItems(new BlockPos(+0, +0, +0));
@@ -957,7 +979,7 @@ public class Shop {
      * @return The name of the shop, or "empty shop" if unconfigured.
      */
     public @NotNull String getDecoratedName() {
-        return item.getItem() == Items.AIR ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
+        return item.is(Items.AIR) ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
     }
 
 
@@ -968,6 +990,6 @@ public class Shop {
      * @return The name of the shop, or "Empty shop" if unconfigured.
      */
     public @NotNull String getStandaloneName() {
-        return item.getItem() == Items.AIR ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
+        return item.is(Items.AIR) ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
     }
 }

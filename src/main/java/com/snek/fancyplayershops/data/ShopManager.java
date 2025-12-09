@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -20,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +35,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
@@ -74,7 +73,7 @@ import net.minecraft.world.level.Level;
 /**
  * A class that handles active shops and takes care of loading and saving their data.
  */
-public abstract class ShopManager {
+public final class ShopManager extends UtilityClassBase {
     private static final DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder()
         .appendPattern("MMMM d, yyyy 'at' h:mm ")
         .appendText(java.time.temporal.ChronoField.AMPM_OF_DAY,
@@ -91,6 +90,7 @@ public abstract class ShopManager {
     private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
+    public static @Nullable HashSet<@NotNull Shop> getShopsOfPlayer(final @NotNull Player player) { return shopsByOwner.get(player.getUUID()); }
 
     // Async update list
     private static int updateIndex = 0;
@@ -151,12 +151,11 @@ public abstract class ShopManager {
     static {
 
         // Create item and set custom name
-        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE);
+        shopItem = MinecraftUtils.createCustomHead(SHOP_ITEM_TEXTURE, false);
         shopItem.setHoverName(SHOP_ITEM_NAME);
 
         // Set identification tag
-        final CompoundTag nbt = shopItem.getOrCreateTag();
-        nbt.putBoolean(SHOP_ITEM_NBT_KEY, true);
+        MinecraftUtils.addTag(shopItem, SHOP_ITEM_NBT_KEY);
 
         // Set lore
         final ListTag lore = new ListTag();
@@ -237,7 +236,7 @@ public abstract class ShopManager {
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the shop data of the world \"{}\"",shop.getWorldId(), e);
             }
 
 
@@ -252,7 +251,7 @@ public abstract class ShopManager {
             try (final Writer writer = new FileWriter(shopStorageFile)) {
                 new Gson().toJson(shop, writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the shop \"{}\"", shop.getIdentifierNoWorld(), e);
             }
 
 
@@ -286,7 +285,7 @@ public abstract class ShopManager {
                 try (final Reader reader = new FileReader(shopStorageFile)) {
                     retrievedShop = new Gson().fromJson(reader, Shop.class);
                 } catch(final IOException e) {
-                    e.printStackTrace();
+                    FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the shop \"{}\"", shopStorageFile.getName(), e);
                 }
 
                 // Recalculate transient members and update shop maps
@@ -392,7 +391,7 @@ public abstract class ShopManager {
 
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
-                if(owner != null && shop.getItem().getItem() != Items.AIR) owner.displayClientMessage(new Txt()
+                if(owner != null && !shop.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
                     .cat(new Txt("Your " + shop.getDecoratedName() + " has been deleted by an admin.").red())
                 .get(), false);
 
@@ -425,16 +424,9 @@ public abstract class ShopManager {
             itemList.add(item);
         }
 
-
-        // Use reflection to change shop stock externally
-        Field field = null;
-        try {
-            field = Shop.class.getDeclaredField("stock");
-            field.setAccessible(true);
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        if(field == null) return 0;
+        // TODO generate randomly named groups
+        // TODO test store A0B5
+        // TODO test store 120B etc
 
 
         int r = 0;
@@ -447,13 +439,7 @@ public abstract class ShopManager {
                         shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1000_000f);
-
-                        try {
-                            field.set(shop, Math.abs(rnd.nextInt() % 1000_000));
-                        } catch (IllegalArgumentException | IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-
+                        shop.changeStock(Math.abs(rnd.nextInt() % 1000_000));
                         shop.invalidateItemDisplay();
                         ++r;
                     }
@@ -488,7 +474,7 @@ public abstract class ShopManager {
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
         if(
-            shop.getItem().getItem() == Items.AIR &&
+            shop.getItem().is(Items.AIR) &&
             shop.getPrice() == Configs.getShop().price.getDefault() &&
             shop.getMaxStock() == Configs.getShop().stock_limit.getDefault()
         ) {
@@ -507,13 +493,14 @@ public abstract class ShopManager {
         // Create and add shop data NBT
         final CompoundTag data = new CompoundTag();
 
-        data.putUUID  ("owner",     shop.getOwnerUuid      ());
-        data.putLong  ("price",     shop.getPrice          ());
-        data.putInt   ("stock",     shop.getStock          ());
-        data.putInt   ("max_stock", shop.getMaxStock       ());
-        data.putFloat ("rotation",  shop.getDefaultRotation());
-        data.putFloat ("hue",       shop.getColorThemeHue  ());
-        data.putString("item",      shop.getSerializedItem ());
+        data.putUUID  ("owner",      shop.getOwnerUuid      ());
+        data.putLong  ("price",      shop.getPrice          ());
+        data.putInt   ("stock",      shop.getStock          ());
+        data.putInt   ("max_stock",  shop.getMaxStock       ());
+        data.putFloat ("rotation",   shop.getDefaultRotation());
+        data.putFloat ("hue",        shop.getColorThemeHue  ());
+        data.putString("item",       shop.getSerializedItem ());
+        data.putUUID  ("group_uuid", shop.getShopGroupUUID  ());
         data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString());
 
         final Component[] extraDescriptionLines = {
@@ -530,7 +517,8 @@ public abstract class ShopManager {
                 .cat(new Txt(" its stock and settings when placed.").white().noItalic())
             .get(),
             new Txt().get(),
-            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt("" + FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Group: "      ).lightGray().noItalic()).cat(new Txt(shop.getShopGroup().getDisplayName())).white().noItalic().get(), //TODO use colored text for shop names? maybe? idk. might have to change the group data too
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
@@ -545,7 +533,6 @@ public abstract class ShopManager {
         display.put("Lore", lore);
         nbt.put("display", display);
         nbt.put(FancyPlayerShops.MOD_ID + ".shop_data", data);
-        nbt.putBoolean(SNAPSHOT_NBT_KEY, true);
 
 
 
@@ -554,8 +541,10 @@ public abstract class ShopManager {
         item.setTag(nbt);
         item.setHoverName(new Txt()
             .cat(new Txt("Shop snapshot").color(SHOP_ITEM_NAME_COLOR).bold().noItalic())
-            .cat(new Txt(" - " + new Txt(shop.getStandaloneName()).white().bold().noItalic()))
+            .cat(" - ")
+            .cat(new Txt(shop.getStandaloneName()).white().bold().noItalic())
         .get());
+        MinecraftUtils.addTag(item, SNAPSHOT_NBT_KEY);
         return item;
     }
 }

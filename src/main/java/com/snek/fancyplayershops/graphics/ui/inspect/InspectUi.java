@@ -16,11 +16,11 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.data_types.ui.TextAlignment;
-import com.snek.frameworklib.graphics.core.Div;
-import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 

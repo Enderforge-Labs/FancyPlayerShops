@@ -19,9 +19,11 @@ import com.google.gson.Gson;
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.herrkatze.solsticeEconomy.modules.economy.Notification;
 import com.herrkatze.solsticeEconomy.modules.economy.NotificationManager;
+import com.snek.fancyplayershops.data.data_types.PlayerShopBalance;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -41,10 +43,13 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
+//FIXME make subclasses and move the generic code to framework lib. automate data saving
+//FIXME - PersistentData
+//FIXME - PersistentDataManager
 /**
  * A class that handles player balances.
  */
-public abstract class BalanceManager {
+public final class BalanceManager extends UtilityClassBase {
     private BalanceManager() {}
 
 
@@ -102,7 +107,7 @@ public abstract class BalanceManager {
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player balances", e);
         }
 
 
@@ -113,7 +118,7 @@ public abstract class BalanceManager {
             try (final Writer writer = new FileWriter(balanceStorageFile)) {
                 new Gson().toJson(pair.getSecond().getValue(), writer);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the balance of the player {}", pair.getFirst().toString(), e);
             }
 
 
@@ -147,7 +152,7 @@ public abstract class BalanceManager {
                 final Long balance = new Gson().fromJson(reader, Long.class);
                 addBalance(playerUUID, balance);
             } catch(final IOException e) {
-                e.printStackTrace();
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the balance of the player {}", playerUUID.toString(), e);
             }
         }
     }

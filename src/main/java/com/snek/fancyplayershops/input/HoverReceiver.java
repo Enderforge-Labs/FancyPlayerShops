@@ -182,7 +182,7 @@ public abstract class HoverReceiver {
      */
     public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull Player player) {
         if(player == shop.getuser()) return 0;
-        if(player.getUUID() == shop.getOwnerUuid()) return -1;
+        if(player.getUUID().equals(shop.getOwnerUuid())) return -1;
         return -2;
     }
 
@@ -250,7 +250,7 @@ public abstract class HoverReceiver {
 
             // Add block to list if not present
             final Vec3i currentPosInt = new Vec3i((int)currentPos.x, (int)currentPos.y, (int)currentPos.z);
-            if(lastBlockPosition != currentPosInt) {
+            if(!lastBlockPosition.equals(currentPosInt)) {
                 lastBlockPosition = currentPosInt;
                 blockPositions.add(currentPos);
             }

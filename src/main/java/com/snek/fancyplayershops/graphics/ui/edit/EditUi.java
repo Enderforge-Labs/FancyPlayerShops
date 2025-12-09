@@ -22,15 +22,18 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.graphics.layout.Div;
 
 
 
@@ -45,7 +48,7 @@ import com.snek.frameworklib.graphics.core.Div;
 public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
     private final @NotNull TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull TitleElm getTitle() { return title; }
+    public @NotNull SimpleTextElm getTitle() { return title; }
 
 
     // Layout
@@ -87,6 +90,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
+        updateTitle();
 
 
         // Add price button
@@ -157,7 +161,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        if(shop.getItem().getItem() == Items.AIR) {
+        if(shop.getItem().is(Items.AIR)) {
             return new Txt()
                 .cat(new Txt("Editing an empty shop").white())
             .get();
@@ -170,7 +174,7 @@ public class EditUi extends ShopCanvas implements InputIndicatorCanvas {
         }
     }
     public void updateTitle() {
-        title.updateDisplay(recalculateTitle());
+        if(title != null) title.updateDisplay(recalculateTitle());
     }
 
 

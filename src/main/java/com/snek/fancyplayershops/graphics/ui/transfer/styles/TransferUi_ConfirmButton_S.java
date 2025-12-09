@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -59,14 +59,14 @@ public class TransferUi_ConfirmButton_S extends FancyShopButton_S {
     @Override
     public @Nullable Animation getHoverEnterAnimation() {
         return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(getDefaultBgColor().add(20, 20, 20).min(new Vector3i(255)))
         );
     }
     @Override
     public @Nullable Animation getHoverLeaveAnimation() {
         return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(getDefaultBgColor())
         );
     }

@@ -7,7 +7,7 @@ import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 
 import net.minecraft.world.entity.Display.BillboardConstraints;
 
-import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 
 

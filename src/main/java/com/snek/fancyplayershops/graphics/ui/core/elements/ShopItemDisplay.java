@@ -13,10 +13,10 @@ import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -93,7 +93,7 @@ public class ShopItemDisplay extends ItemElm {
     // Setup edit animiations
     //! leaveEditAnimation not needed as the unfocus animation uses a target transform
     private static final @NotNull Animation enterEditAnimation = new Animation(
-        new Transition(Shop.CANVAS_ANIMATION_DELAY, Easings.sineOut)
+        new Transition(Canvas.CANVAS_ROTATION_TIME, Easings.cubicOut)
         .additiveTransform(
             new Transform()
             .scale(EDIT_SCALE)
@@ -105,18 +105,13 @@ public class ShopItemDisplay extends ItemElm {
 
 
 
-
-
-
-
     /**
      * Creates a new ShopItemDisplay.
-     * @param _shop The target shop.
-     * @param _display A CustomItemDisplay to use to display the item.
+     * @param _targetShop The target shop.
      */
-    public ShopItemDisplay(final @NotNull Shop _shop, final @NotNull CustomItemDisplay _display) {
-        super(_shop.getWorld(), _display, new ItemElmStyle());
-        shop = _shop;
+    public ShopItemDisplay(final @NotNull Shop _targetShop) {
+        super(_targetShop.getWorld(), new ItemElmStyle());
+        shop = _targetShop;
         //! updateDisplay call is in spawn()
 
 
@@ -125,29 +120,6 @@ public class ShopItemDisplay extends ItemElm {
             new Transition(D_TIME, Easings.sineOut)
             .targetTransform(getStyle().getTransform())
         );
-    }
-
-
-
-
-    /**
-     * Creates a new ShopItemDisplay using existing display entities.
-     * @param _targetShop The target shop.
-     * @param _rawDisplay A vanilla ItemDisplayEntity to use to display the item.
-     * @param _rawName1 One of the TextDisplay entities that make up the name of the item.
-     * @param _rawName2 One of the TextDisplay entities that make up the name of the item.
-     */
-    public ShopItemDisplay(final @NotNull Shop _targetShop, final @NotNull ItemDisplay _rawDisplay) {
-        this(_targetShop, new CustomItemDisplay(_rawDisplay));
-    }
-
-
-    /**
-     * Creates a new ShopItemDisplay.
-     * @param _targetShop The target shop.
-     */
-    public ShopItemDisplay(final @NotNull Shop _targetShop) {
-        this(_targetShop, new CustomItemDisplay(_targetShop.getWorld()));
     }
 
 
@@ -166,7 +138,7 @@ public class ShopItemDisplay extends ItemElm {
 
 
         // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
-        if(_item.getItem() == Items.AIR) {
+        if(_item.is(Items.AIR)) {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
@@ -216,8 +188,8 @@ public class ShopItemDisplay extends ItemElm {
         updateDisplay();
 
         // Start animations
-        applyAnimation(focusAnimation);
-        startLoopAnimation();
+        applyAnimation(focusAnimation);                         // Height change
+        startLoopAnimation();                                   // Loop movement
     }
     /**
      * Starts the loop animation.
@@ -256,7 +228,8 @@ public class ShopItemDisplay extends ItemElm {
      * Enters the edit state
      */
     public void enterEditState() {
-        applyAnimation(enterEditAnimation);
+        shop.getActiveCanvas().updateItemDisplayRot(0, true);       // Adjust global rotation
+        applyAnimation(enterEditAnimation);                         // Local position shift
     }
 
 
@@ -273,10 +246,10 @@ public class ShopItemDisplay extends ItemElm {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
         // Spawn the entity and remove tracking custom name
-        super.spawn(pos);
+        super.spawn(pos, animate);
         getEntity().setCustomName(new Txt(ITEM_DISPLAY_CUSTOM_NAME).get());
         getEntity().setCustomNameVisible(false);
 
@@ -302,7 +275,7 @@ public class ShopItemDisplay extends ItemElm {
         if(name == null) {
             name = new FancyTextElm(world, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
-            name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0));
+            name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0), true);
         }
     }
 
