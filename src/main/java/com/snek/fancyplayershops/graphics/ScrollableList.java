@@ -1,10 +1,7 @@
 package com.snek.fancyplayershops.graphics;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
@@ -16,24 +13,18 @@ import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
-// FIXME move to framework lib
-
-import com.snek.frameworklib.input.ScrollReceiver;
-import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.input.HoverReceiver;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.graphics.core.elements.Elm;
-import com.snek.frameworklib.graphics.core.HudCanvas;
-import com.snek.frameworklib.graphics.core.UiCanvas;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 
 
+
+
+
+
+
+// FIXME move to framework lib
 
 
 //TODO add axis methods and member
@@ -118,23 +109,23 @@ public class ScrollableList extends PanelElm implements Scrollable {
     public void refreshViewSides() {
         //FIXME actually change them dynamically instead of replacing the whole thing
         if(isSpawned) {
+
+            // Despawn current elements
             for(final Div elm : children) elm.despawn(false);
             clearChildren();
 
-            //BUG Delayed by 1 tick to allow items to despawn properly // it didn't work
-            // Scheduler.schedule(10, () -> {
-                final float clampedScroll = getClampedScroll(scroll);
-                final float halfHeight = getAbsSize().y / 2;
-                final float _elmSize = getAbsSize().y * elmSize;
-                final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - halfHeight) / _elmSize));
-                final int lastVisible = Math.min(listChildren.size() - 1, (int)Math.ceil((clampedScroll + halfHeight) / _elmSize));
-                for(int i = firstVisible; i <= lastVisible; i++) {
-                    final Div elm = addChild(listChildren.get(i));
-                    elm.setPosY(getAbsSize().y - (_elmSize * (i - firstVisible + 1)));
-                    elm.setSize(new Vector2f(getAbsSize().x, _elmSize));
-                    elm.spawn(canvas.getContext().getSpawnPos(), false);
-                }
-            // });
+            // Calculate clamped scroll value and element range
+            final float clampedScroll = getClampedScroll(scroll);
+            final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize)); //FIXME cache and compare, only despawned needed
+            final int lastVisible = Math.min(listChildren.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
+
+            // Spawn visible elements
+            for(int i = firstVisible; i <= lastVisible; i++) {
+                final Div elm = addChild(listChildren.get(i));
+                elm.setSize(new Vector2f(1, elmSize));
+                elm.setPosY((1 - (elmSize * (i - firstVisible + 1))) * getAbsSize().y);
+                elm.spawn(canvas.getContext().getSpawnPos(), false);
+            }
         }
     }
 
@@ -154,15 +145,14 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
     /**
-     * Calculates the scroll value and clamps it so it always stays between half of the list's size and the total length of the list minus half of the list's size.
+     * Calculates the scroll value and clamps it so it always stays between 0.5 and the total length of the list minus 0.5.
      * <p>
      * This allows the returned value to be used as a position directly.
      * @param rawScroll The unconstrianed scroll value.
      * @return The clamped scroll value.
      */
     public float getClampedScroll(final float rawScroll) {
-        final float halfHeight = getAbsSize().y / 2;
-        return Math.max(halfHeight, Math.min(rawScroll, listChildren.size() * elmSize - halfHeight));
+        return Math.max(0.5f, Math.min(rawScroll, listChildren.size() * elmSize - 0.5f));
     }
 
 
