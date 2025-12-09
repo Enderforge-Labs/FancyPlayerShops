@@ -1,16 +1,14 @@
-package com.snek.fancyplayershops.graphics.ui.misc.elements;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
+package com.snek.fancyplayershops.graphics.hud.misc.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.graphics.hud.misc.styles.HudSimpleButton_S;
 import com.snek.fancyplayershops.graphics.ui.misc.interfaces.InputIndicatorCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.SimpleShopButton_S;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -18,13 +16,12 @@ import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 
 
 
-//FIXME this should prob be a generic button type used by both HUDs and UIs, merge them or something
+
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
  * <p> It also specifies action names for the input indicators to display.
  */
-public abstract class SimpleShopButton extends SimpleButtonElm {
-    protected final @NotNull Shop shop;
+public class HudSimpleButton extends SimpleButtonElm {
     private   final @Nullable String lmbActionName;
     private   final @Nullable String rmbActionName;
 
@@ -32,39 +29,29 @@ public abstract class SimpleShopButton extends SimpleButtonElm {
 
 
     /**
-     * Creates a new ShopButton using a custom style.
-     * @param _shop The target shop.
+     * Creates a new HudSimpleButton using a custom style.
+     * @param world The world to spawn this button in.
      * @param _lmbActionName The name of the action associated with left clicks.
      * @param _rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param _style The custom style.
      */
-    protected SimpleShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown, final SimpleShopButton_S _style) {
-        super(_shop.getWorld(), _clickCooldown, _style);
-        shop = _shop;
+    protected HudSimpleButton(final @NotNull ServerLevel world, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown, final HudSimpleButton_S _style) {
+        super(world, _clickCooldown, _style);
         lmbActionName = _lmbActionName;
         rmbActionName = _rmbActionName;
     }
 
 
     /**
-     * Creates a new ShopButton using the default style.
-     * @param _shop The target shop.
+     * Creates a new HudSimpleButton using the default style.
+     * @param world The world to spawn this button in.
      * @param _lmbActionName The name of the action associated with left clicks.
      * @param _rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected SimpleShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown) {
-        this(_shop, _lmbActionName, _rmbActionName, _clickCooldown, new SimpleShopButton_S(_shop));
-    }
-
-
-
-
-    @Override
-    public void onHoverEnter(final @NotNull Player player) {
-        if(player != shop.getuser()) return;
-        super.onHoverEnter(player);
+    protected HudSimpleButton(final @NotNull ServerLevel world, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown) {
+        this(world, _lmbActionName, _rmbActionName, _clickCooldown, new HudSimpleButton_S());
     }
 
 
@@ -86,7 +73,6 @@ public abstract class SimpleShopButton extends SimpleButtonElm {
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        if(player != shop.getuser()) return;
         super.onHoverExit(player);
 
         // Update input displays if present
@@ -94,13 +80,5 @@ public abstract class SimpleShopButton extends SimpleButtonElm {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }
-    }
-
-
-
-
-    @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
     }
 }
