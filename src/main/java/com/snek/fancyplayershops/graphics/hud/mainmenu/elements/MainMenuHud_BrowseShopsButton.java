@@ -1,5 +1,8 @@
 package com.snek.fancyplayershops.graphics.hud.mainmenu.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
@@ -12,8 +15,9 @@ import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.GeometryUtils;
 
-import net.minecraft.client.multiplayer.chat.LoggedChatMessage.Player;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -24,29 +28,48 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class MainMenuHud_ClaimAll extends HudSimpleButton {
-
-
+public class MainMenuHud_BrowseShopsButton extends HudSimpleButton {
+    private static final @NotNull List<@NotNull Vector2f> design0 = new ArrayList<>();
+    public static final float design0_shift = 0.3f;
+    static {
+        for(int i = 0; i < 8; ++i) {
+            design0.add(
+                GeometryUtils.rotateVec2(
+                    new Vector2f(0, 0.4f),
+                    (float)Math.toRadians(45) * (i + 0.5f)
+                ).add(
+                    design0_shift,
+                    1 - design0_shift
+                )
+            );
+        }
+    }
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.1f, 0.1f),
-            new Vector2f(0.9f, 0.9f)
+            new Vector2f(0.6f, 0.4f),
+            new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-            Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.1f, 0.9f),
-            new Vector2f(0.9f, 0.1f)
+            Canvas.TOOLBAR_FG_WIDTH, 0.03f,
+            design0.get(0),
+            design0.get(1),
+            design0.get(2),
+            design0.get(3),
+            design0.get(4),
+            design0.get(5),
+            design0.get(6),
+            design0.get(7),
+            design0.get(0)
         )
     };
 
 
 
-
-    public MainMenuHud_ClaimAll(final @NotNull HudContext _hud) {
-        super((ServerLevel)_hud.getPlayer().level(), null, "Close", 1, new HudSquareButton_S());
+    public MainMenuHud_BrowseShopsButton(final @NotNull HudContext _hud) {
+        super((ServerLevel)_hud.getPlayer().level(), null, "Browse shops", 1, new HudSquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));

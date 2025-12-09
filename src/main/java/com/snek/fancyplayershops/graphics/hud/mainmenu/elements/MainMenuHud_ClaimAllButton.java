@@ -13,7 +13,7 @@ import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.layout.Div;
 
-import net.minecraft.client.multiplayer.chat.LoggedChatMessage.Player;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -24,10 +24,15 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class MainMenuHud_Info extends HudSimpleButton {
+public class MainMenuHud_ClaimAllButton extends HudSimpleButton {
 
 
     private static final @NotNull PolylineData[] design = new PolylineData[] {
+        //FIXME
+        //FIXME
+        //FIXME
+        //FIXME
+        //FIXME
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
@@ -45,8 +50,8 @@ public class MainMenuHud_Info extends HudSimpleButton {
 
 
 
-    public MainMenuHud_Info(final @NotNull HudContext _hud) {
-        super((ServerLevel)_hud.getPlayer().level(), null, "Close", 1, new HudSquareButton_S());
+    public MainMenuHud_ClaimAllButton(final @NotNull HudContext _hud) {
+        super((ServerLevel)_hud.getPlayer().level(), null, "Claim all", 1, new HudSquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(world, design));

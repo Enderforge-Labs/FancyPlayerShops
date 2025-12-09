@@ -84,9 +84,10 @@ public class HudSimpleButton extends SimpleButtonElm {
     }
 
 
-    public void onClick(net.minecraft.client.multiplayer.chat.LoggedChatMessage.@NotNull Player player,
-            @NotNull ClickAction click) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onClick'");
+
+
+    @Override
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
     }
 }

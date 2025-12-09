@@ -1,13 +1,10 @@
 package com.snek.fancyplayershops.graphics.hud.misc.styles;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 

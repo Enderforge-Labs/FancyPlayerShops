@@ -10,6 +10,12 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_BrowseShopsButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_ClaimAllButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_InfoButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_OpenStashButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_PreferencesButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenuHud_StatsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenuHud_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.HudCloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
@@ -102,9 +108,20 @@ public class MainMenuHud extends HudCanvas {
         }
 
 
-        // Add buttons
+        // Add info button
+        e = bg.addChild(new MainMenuHud_InfoButton(_hud));
+        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H));
+        e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
+
+
+        // Add bottom bar buttons
         final Div[] buttons = new Div[] {
+            // new MainMenuHud_ClaimAllButton(_hud), //FIXME move to top bar
+            new MainMenuHud_BrowseShopsButton(_hud),
+            new MainMenuHud_OpenStashButton(_hud),
             new HudCloseButton(_hud),
+            new MainMenuHud_StatsButton(_hud),
+            new MainMenuHud_PreferencesButton(_hud)
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
