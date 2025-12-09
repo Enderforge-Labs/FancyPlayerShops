@@ -207,20 +207,4 @@ public final class StashManager extends UtilityClassBase {
     public static PlayerStash getStash(final @NotNull ServerPlayer player) {
         return stashes.get(player.getUUID());
     }
-
-
-
-    //TODO this prob shouldn't be in "stash manager" class
-    //TODO this prob shouldn't be in "stash manager" class
-    /**
-     * Opens the stash view for the specified player.
-     * @param player The player.
-     */
-    public static void openStashView(final @NotNull ServerPlayer player) {
-
-        final Vec3 pos = player.getPosition(1f);
-        final HudContext hud = new HudContext(player);
-        hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-        hud.changeCanvas(new StashHud(hud));
-    }
 }

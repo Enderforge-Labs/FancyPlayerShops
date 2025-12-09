@@ -1,18 +1,24 @@
 package com.snek.fancyplayershops.main;
 
+import org.joml.Vector3d;
+
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuHud;
+import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -104,11 +110,25 @@ public abstract class CommandManager {
                 }))
 
 
+                // Shop main menu
+                .executes(context -> {
+                    final ServerPlayer player = context.getSource().getPlayer();
+                    final Vec3 pos = player.getPosition(1f);
+                    final HudContext hud = new HudContext(player);
+                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
+                    hud.changeCanvas(new MainMenuHud(hud));
+                    return 1;
+                })
+
+
                 // Shop stash view
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stash")
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
-                    StashManager.openStashView(player);
+                    final Vec3 pos = player.getPosition(1f);
+                    final HudContext hud = new HudContext(player);
+                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
+                    hud.changeCanvas(new StashHud(hud));
                     return 1;
                 }))
 
