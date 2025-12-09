@@ -32,6 +32,14 @@ public class ScrollableListStyle extends PanelElmStyle {
 
 
     @Override
+    public int getDefaultAlpha() {
+        return 0;
+    }
+
+
+
+
+    @Override
     public void resetAll() {
         super.resetAll();
         resetTrackStyle();
