@@ -7,7 +7,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 
-
+//FIXME move to framework lib
 /**
  * The default style of the thumb element of {@link ScrollableList}.
  * <p>
