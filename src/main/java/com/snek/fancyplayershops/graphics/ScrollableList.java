@@ -13,6 +13,10 @@ import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -38,32 +42,55 @@ import com.snek.frameworklib.graphics.core.styles.ElmStyle;
  * Notice: The position of child elements on the alignment axis is also ignored, as it's recaculated automatically every time the list is updated.
 */
 public class ScrollableList extends PanelElm implements Scrollable {
+    public @NotNull ScrollableListStyle getThisStyle() {
+        return getStyle(ScrollableListStyle.class);
+    }
+
+    // Bar elements
+    private final @NotNull PanelElm barThumb;
+    private final @NotNull PanelElm barTrack;
 
     // List data
+    private final @NotNull Div elmContainer;
     private final float elmSize;
-    private final List<Div> listChildren = new ArrayList<>();
-    // private int centralElmIndex = 0;
-    // private float centralElmProgress = 0;
+    private final List<Div> elmList = new ArrayList<>();
     private float scroll = 0;
 
 
 
-    public ScrollableList(final @NotNull ServerLevel world, final @NotNull ElmStyle style, final float elmSize) {
+    final float tmp_bar_width = 0.05f;
+    public ScrollableList(final @NotNull ServerLevel world, final @NotNull ScrollableListStyle style, final float elmSize) {
         super(world, style);
         this.elmSize = elmSize;
+
+        // Add element container
+        elmContainer = addChild(new Div());
+        elmContainer.setSize(new Vector2f(1 - tmp_bar_width, 1));
+        elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
+
+        // Add bar track
+        barTrack = (PanelElm)addChild(new PanelElm(world, getThisStyle().getTrackStyle()));
+        barTrack.setSize(new Vector2f(tmp_bar_width, 1)); //FIXME make width customizable
+        barTrack.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
+
+        // Add bar thumb
+        barThumb = (PanelElm)barTrack.addChild(new PanelElm(world, getThisStyle().getThumbStyle()));
+        barThumb.setSizeX(1); //! Height is set dynamically
+        barThumb.setAlignmentX(AlignmentX.CENTER);
+
     }
     public ScrollableList(final @NotNull ServerLevel world, final float elmSize) {
-        this(world, new PanelElmStyle(), elmSize);
+        this(world, new ScrollableListStyle(), elmSize);
     }
 
 
 
 
     public Div storeElm(final @NotNull Div elm) {
-        return addElmAt(elm, listChildren.size());
+        return addElmAt(elm, elmList.size());
     }
     public Div addElmAt(final @NotNull Div elm, final int index) {
-        listChildren.add(index, elm);
+        elmList.add(index, elm);
         refreshViewSides();
         return elm;
     }
@@ -73,13 +100,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
     public Div removeElm(final @NotNull Div elm) {
         //TODO unify code?
-        listChildren.remove(elm);
+        elmList.remove(elm);
         refreshViewSides();
         return elm;
     }
     public Div removeElmAt(final int index) {
         //TODO unify code?
-        final Div elm = listChildren.remove(index);
+        final Div elm = elmList.remove(index);
         refreshViewSides();
         return elm;
     }
@@ -111,17 +138,17 @@ public class ScrollableList extends PanelElm implements Scrollable {
         if(isSpawned) {
 
             // Despawn current elements
-            for(final Div elm : children) elm.despawn(false);
-            clearChildren();
+            for(final Div elm : elmContainer.getChildren()) elm.despawn(false);
+            elmContainer.clearChildren();
 
             // Calculate clamped scroll value and element range
             final float clampedScroll = getClampedScroll(scroll);
             final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize)); //FIXME cache and compare, only despawned needed
-            final int lastVisible = Math.min(listChildren.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
+            final int lastVisible = Math.min(elmList.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
 
             // Spawn visible elements
             for(int i = firstVisible; i <= lastVisible; i++) {
-                final Div elm = addChild(listChildren.get(i));
+                final Div elm = elmContainer.addChild(elmList.get(i));
                 elm.setSize(new Vector2f(1, elmSize));
                 elm.setPosY((1 - (elmSize * (i - firstVisible + 1))) * getAbsSize().y);
                 elm.spawn(canvas.getContext().getSpawnPos(), false);
@@ -152,7 +179,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
      * @return The clamped scroll value.
      */
     public float getClampedScroll(final float rawScroll) {
-        return Math.max(0.5f, Math.min(rawScroll, listChildren.size() * elmSize - 0.5f));
+        return Math.max(0.5f, Math.min(rawScroll, elmList.size() * elmSize - 0.5f));
     }
 
 
@@ -163,5 +190,33 @@ public class ScrollableList extends PanelElm implements Scrollable {
             scroll = getClampedScroll(scroll);
             refreshViewSides();
         }
+    }
+
+
+
+
+    @Override
+    public void flushStyle() {
+        super.flushStyle();
+
+
+        // Set bar styles
+        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedThumbStyle();
+        if(f.isFlagged()) {
+            barThumb.setStyle(f.get());
+            barThumb.getStyle().flagAll();
+            f.unflag();
+        }}
+        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedTrackStyle();
+        if(f.isFlagged()) {
+            barTrack.setStyle(f.get());
+            barTrack.getStyle().flagAll();
+            f.unflag();
+        }}
+
+
+        // Flush bar styles
+        barThumb.flushStyle();
+        barTrack.flushStyle();
     }
 }
