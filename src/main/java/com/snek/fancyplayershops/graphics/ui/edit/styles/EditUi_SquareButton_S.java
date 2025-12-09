@@ -17,7 +17,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 
-
+//TODO move to misc? only if other canvases use this style
 /**
  * The style of the buttons in the toolbar.
  */
@@ -32,6 +32,7 @@ public class EditUi_SquareButton_S extends SimpleShopButton_S {
     }
 
 
+    //FIXME merge with HudSquareButton_S
     @Override
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(

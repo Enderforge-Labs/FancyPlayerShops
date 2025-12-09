@@ -28,7 +28,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class EditUi_DeleteButton extends SimpleShopButton  {
+public class EditUi_DeleteButton extends SimpleShopButton {
     private static final @NotNull PolylineData[] design = new PolylineData[] {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
