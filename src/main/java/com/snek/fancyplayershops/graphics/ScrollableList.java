@@ -13,13 +13,11 @@ import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 
 
@@ -134,7 +132,9 @@ public class ScrollableList extends PanelElm implements Scrollable {
      * Recalculates the visible elements and, if needed, spawns/despawns elements near the sides of the list.
      */
     public void refreshViewSides() {
+
         //FIXME actually change them dynamically instead of replacing the whole thing
+
         if(isSpawned) {
 
             // Despawn current elements
@@ -145,6 +145,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
             final float clampedScroll = getClampedScroll(scroll);
             final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize)); //FIXME cache and compare, only despawned needed
             final int lastVisible = Math.min(elmList.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
+            //FIXME                                        account for elements added or removed within the ranges   ^^^
 
             // Spawn visible elements
             for(int i = firstVisible; i <= lastVisible; i++) {
