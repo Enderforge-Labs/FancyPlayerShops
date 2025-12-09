@@ -45,6 +45,6 @@ public class DetailsUi_Names extends ShopTextElm {
         .lightGray().get());
 
         // Flush style
-        flushStyle(false);
+        flushStyle();
     }
 }

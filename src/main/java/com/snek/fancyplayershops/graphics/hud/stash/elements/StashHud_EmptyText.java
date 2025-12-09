@@ -26,6 +26,6 @@ public class StashHud_EmptyText extends SimpleTextElm {
 
     public void updateDisplay() {
         getStyle(SimpleTextElmStyle.class).setText(new Txt("[Empty]").white().italic().get());
-        flushStyle(false);
+        flushStyle();
     }
 }

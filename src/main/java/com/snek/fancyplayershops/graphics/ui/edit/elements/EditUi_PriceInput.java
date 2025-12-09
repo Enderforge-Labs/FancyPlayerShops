@@ -42,7 +42,7 @@ public class EditUi_PriceInput extends ShopTextInput {
             .cat(new Txt("Price: ").lightGray())
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).white())
         .get());
-        flushStyle(false);
+        flushStyle();
     }
 
 

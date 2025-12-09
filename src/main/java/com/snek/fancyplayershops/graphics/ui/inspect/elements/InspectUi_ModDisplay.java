@@ -49,6 +49,6 @@ public class InspectUi_ModDisplay extends ShopTextElm {
         .get());
 
         // Flush style
-        flushStyle(false);
+        flushStyle();
     }
 }

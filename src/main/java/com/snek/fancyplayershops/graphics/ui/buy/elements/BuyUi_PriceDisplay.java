@@ -34,6 +34,6 @@ public class BuyUi_PriceDisplay extends ShopTextElm {
             .cat(new Txt("Total: ").lightGray())
             .cat(shop.getuser().getUUID().equals(shop.getOwnerUuid()) ? priceTxt.lightGray().strikethrough().cat(new Txt(" 0").white().noStrikethrough()) : priceTxt.white() )
         .get());
-        flushStyle(false);
+        flushStyle();
     }
 }

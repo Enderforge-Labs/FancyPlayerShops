@@ -143,7 +143,7 @@ public class ShopItemDisplay extends ItemElm {
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
-                name.flushStyle(false);
+                name.flushStyle();
             }
         }
 
@@ -154,7 +154,7 @@ public class ShopItemDisplay extends ItemElm {
             if(name != null) {
                 final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + shop.getStandaloneName();
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
-                name.flushStyle(false);
+                name.flushStyle();
             }
         }
 
@@ -162,7 +162,7 @@ public class ShopItemDisplay extends ItemElm {
         // Update the entity
         //! Flag the transform to make sure items with different base transforms are recalculated without waiting for animations
         getStyle().editTransform();
-        flushStyle(false);
+        flushStyle();
     }
 
 

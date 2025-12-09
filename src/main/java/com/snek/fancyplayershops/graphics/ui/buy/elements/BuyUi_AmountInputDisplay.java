@@ -63,6 +63,6 @@ public class BuyUi_AmountInputDisplay extends ShopTextInput {
             .cat(new Txt(Utils.formatAmount(menu.getAmount())).white())
             .cat(new Txt(" / " + shop.getStock()).lightGray())
         .get());
-        flushStyle(false);
+        flushStyle();
     }
 }

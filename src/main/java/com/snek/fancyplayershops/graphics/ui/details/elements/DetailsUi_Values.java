@@ -72,6 +72,6 @@ public class DetailsUi_Values extends ShopTextElm {
         }
 
         // Flush style
-        flushStyle(false);
+        flushStyle();
     }
 }

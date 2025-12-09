@@ -47,6 +47,6 @@ public class TitleElm extends SimpleTextElm {
      */
     public void updateDisplay(final @NotNull Component text) {
         getStyle(SimpleTextElmStyle.class).setText(text);
-        flushStyle(false);
+        flushStyle();
     }
 }
