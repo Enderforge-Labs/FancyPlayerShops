@@ -27,6 +27,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -51,16 +52,17 @@ public class StashHud extends HudCanvas {
 
     public StashHud(final @NotNull HudContext _hud) {
         super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         Div e;
 
         // Add title
-        e = bg.addChild(new TitleElm(((ServerLevel)context.getPlayer().level()), new Txt("Your stash").white().bold().get()));
+        e = bg.addChild(new TitleElm(((ServerLevel)player.level()), new Txt("Your stash").white().bold().get()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add "empty stash" text if the stash is empty
-        final PlayerStash stash = StashManager.getStash((ServerPlayer)(_hud.getPlayer()));
+        final PlayerStash stash = StashManager.getStash(player);
         if(stash == null) {
             e = bg.addChild(new StashHud_EmptyText(_hud));
             e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
@@ -88,7 +90,7 @@ public class StashHud extends HudCanvas {
 
                 // Add container for the stash entry
                 final Div c = list.storeElm(new Div());
-                e.setSize(new Vector2f(1f, list_elm_h));
+                c.setSize(new Vector2f(1f, list_elm_h));
                 c.setAlignmentX(AlignmentX.CENTER);
 
                 // Add item display
