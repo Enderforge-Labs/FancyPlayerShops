@@ -94,7 +94,7 @@ public class DetailsUi extends ShopCanvas {
             values = (DetailsUi_Values)e;
         }
         details.setSizeX(DETAILS_W);
-        details.setSizeY(((DetailsUi_Names)details.getChildren().get(0)).calcEntityHeight());
+        details.setSizeY(0.25f);
         details.setAlignmentX(AlignmentX.CENTER);
         details.setPosY(H0 + VERTICAL_PADDING);
 
