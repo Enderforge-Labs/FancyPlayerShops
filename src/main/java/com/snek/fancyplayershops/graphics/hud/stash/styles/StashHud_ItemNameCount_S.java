@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
@@ -28,5 +29,10 @@ public class StashHud_ItemNameCount_S extends SimpleTextElmStyle {
     @Override
     public @NotNull Transform getDefaultTransform() {
         return super.getDefaultTransform().scale(0.5f);
+    }
+
+    @Override
+    public @NotNull TextOverflowBehaviour getDefaultTextOverflowBehaviour() {
+        return TextOverflowBehaviour.SCROLL;
     }
 }
