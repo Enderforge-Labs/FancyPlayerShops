@@ -56,7 +56,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    final float tmp_bar_width = 0.05f;
+    final float tmp_bar_width = 0.01f;
     public ScrollableList(final @NotNull ServerLevel world, final @NotNull ScrollableListStyle style, final float elmSize) {
         super(world, style);
         this.elmSize = elmSize;
@@ -67,13 +67,15 @@ public class ScrollableList extends PanelElm implements Scrollable {
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
         // Add bar track
-        barTrack = (PanelElm)addChild(new PanelElm(world, getThisStyle().getTrackStyle()));
+        barTrack = (PanelElm)addChild(new PanelElm(world, getThisStyle().getTrackStyleReference()));
         barTrack.setSize(new Vector2f(tmp_bar_width, 1)); //FIXME make width customizable
         barTrack.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
 
         // Add bar thumb
-        barThumb = (PanelElm)barTrack.addChild(new PanelElm(world, getThisStyle().getThumbStyle()));
-        barThumb.setSizeX(1); //! Height is set dynamically
+        barThumb = (PanelElm)barTrack.addChild(new PanelElm(world, getThisStyle().getThumbStyleReference()));
+        barThumb.setSizeX(1);
+        barThumb.setSizeY(0.4f);    //! Actual height is set dynamically
+        barThumb.setPosY(0);        //! Actual y position is set dynamically
         barThumb.setAlignmentX(AlignmentX.CENTER);
 
     }

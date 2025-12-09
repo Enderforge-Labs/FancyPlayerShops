@@ -21,6 +21,15 @@ public class __default_ScrollableListTrackStyle extends PanelElmStyle {
     public __default_ScrollableListTrackStyle() {
         super();
     }
-    public @NotNull Vector3i getDefaultColor() { return new Vector3i(0, 255, 0); } //TODO choose default colors
-    public          int      getDefaultAlpha() { return 255; } //TODO choose default colors
+
+
+    @Override
+    public @NotNull Vector3i getDefaultColor() {
+        return new Vector3i(0, 255, 0);
+    } //TODO choose default colors
+
+    @Override
+    public int getDefaultAlpha() {
+        return 255;
+    } //TODO choose default colors
 }
