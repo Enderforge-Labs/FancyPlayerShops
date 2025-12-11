@@ -50,9 +50,9 @@ public class StashHud extends HudCanvas {
 
 
 
-    public StashHud(final @NotNull HudContext _hud) {
-        super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
-        final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
+    public StashHud(final @NotNull HudContext context) {
+        super(context, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  world  = (ServerLevel)player.level();
         Div e;
 
@@ -95,12 +95,12 @@ public class StashHud extends HudCanvas {
                 c.setAlignmentX(AlignmentX.CENTER);
 
                 // Add item display
-                e = c.addChild(new StashHud_ItemDisplay(_hud, entry.item));
+                e = c.addChild(new StashHud_ItemDisplay(context, entry.item));
                 e.setSize(new Vector2f(ITEM_NAME_RATIO - ITEM_NAME_SPACING, 0.9f));
                 e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
 
                 // Add item name and count display
-                e = c.addChild(new StashHud_ItemNameCount(_hud, entry.item, entry.getCount()));
+                e = c.addChild(new StashHud_ItemNameCount(context, entry.item, entry.getCount()));
                 e.setSize(new Vector2f(1f - ITEM_NAME_RATIO - ITEM_NAME_SPACING, 1f));
                 e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
             }
@@ -109,7 +109,7 @@ public class StashHud extends HudCanvas {
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new HudCloseButton(_hud),
+            new HudCloseButton(context),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);

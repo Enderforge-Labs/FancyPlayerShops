@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud.misc.elements.HudSimpleButton;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.HudSquareButton_S;
+import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
@@ -70,6 +71,7 @@ public class MainMenuHud_OpenStashButton extends HudSimpleButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        //TODO
+        final @NotNull HudContext context = (HudContext)canvas.getContext();
+        context.changeCanvas(new StashHud(context));
     }
 }
