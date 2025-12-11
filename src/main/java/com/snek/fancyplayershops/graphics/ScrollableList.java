@@ -74,7 +74,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
         // Add bar thumb
         barThumb = (PanelElm)barTrack.addChild(new PanelElm(world, getThisStyle().getThumbStyleReference()));
         barThumb.setSizeX(3);
-        barThumb.setSizeY(0.05f);    //! Actual height is set dynamically
+        barThumb.setSizeY(0.05f);   //! Actual height is set dynamically
         barThumb.setPosY(0);        //! Actual y position is set dynamically
         barThumb.setAlignmentX(AlignmentX.CENTER);
 

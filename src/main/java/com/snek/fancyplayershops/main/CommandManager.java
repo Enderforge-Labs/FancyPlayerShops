@@ -119,32 +119,6 @@ public abstract class CommandManager {
                     hud.changeCanvas(new MainMenuHud(hud));
                     return 1;
                 })
-
-
-                // Shop stash view
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("stash")
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    final Vec3 pos = player.getPosition(1f);
-                    final HudContext hud = new HudContext(player);
-                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-                    hud.changeCanvas(new StashHud(hud));
-                    return 1;
-                }))
-
-
-                // Shop mod info
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    player.displayClientMessage(new Txt(
-                        """
-                        Craft an Item Shop in the crafting table and place it to get started!
-                        You can see details about your shops and sales history using the command /shop stats.
-                        """
-                    ).color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
-                    return 1;
-                }))
             );
         });
     }
