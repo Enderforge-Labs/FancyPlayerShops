@@ -228,8 +228,13 @@ public class ShopItemDisplayElm extends ItemElm {
      * Enters the edit state
      */
     public void enterEditState() {
-        shop.getActiveCanvas().updateItemDisplayRot(0, true);       // Adjust global rotation
-        applyAnimation(enterEditAnimation);                         // Local position shift
+
+        // Adjust global rotation
+        final @NotNull ShopCanvasBase activeCanvas = shop.getActiveCanvas();
+        activeCanvas.updateItemDisplayRot(0, activeCanvas.getContext().getRotation(), true);
+
+        // Local position shift
+        applyAnimation(enterEditAnimation);
     }
 
 

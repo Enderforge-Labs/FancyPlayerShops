@@ -20,8 +20,8 @@ import net.minecraft.world.inventory.ClickAction;
 
 /**
  * An abstract canvas class used to create shop menus.
- * <p> It creates and manages a background panel, a back side panel and a top and bottom borders,
- * <p> which are kept spawned and are inherited by future canvases until the targeted shop stops being focused.
+ * <p>
+ * It stores a reference to the shop and handles the item display.
  */
 public abstract class ShopCanvasBase extends UiCanvas {
     protected final @NotNull Shop shop;
@@ -54,18 +54,15 @@ public abstract class ShopCanvasBase extends UiCanvas {
 
 
     @Override
-    protected void updateRot(final boolean instant) {
-        updateItemDisplayRot(lastRotation, instant);
-        super.updateRot(instant);
+    protected void rotate(final int from, final int to, final boolean instant) {
+        updateItemDisplayRot(from, to, instant);
+        super.rotate(from, to, instant);
     }
 
 
-    protected void updateItemDisplayRot(final int initialRotation, final boolean instant) {
-        final int newRot = calcRot();
-        if(initialRotation != newRot) {
-            final Animation animation = calcItemDisplayRotationAnimation(initialRotation, newRot);
-            if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation);
-            else        shop.getItemDisplay().applyAnimationRecursive(animation);
-        }
+    protected void updateItemDisplayRot(final int from, final int to, final boolean instant) {
+        final Animation animation = calcItemDisplayRotationAnimation(from, to);
+        if(instant) shop.getItemDisplay().applyAnimationNowRecursive(animation);
+        else        shop.getItemDisplay().applyAnimationRecursive(animation);
     }
 }

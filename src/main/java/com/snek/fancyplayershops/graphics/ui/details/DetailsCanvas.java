@@ -143,7 +143,7 @@ public class DetailsCanvas extends ShopCanvasBase {
 
 
     @Override
-    protected void updateItemDisplayRot(int initialRotation, boolean instant) {
+    protected void updateItemDisplayRot(final int from, final int to, boolean instant) {
         //! Empty. This stops the item display from changing global rotation when the details UI rotates.
     }
 

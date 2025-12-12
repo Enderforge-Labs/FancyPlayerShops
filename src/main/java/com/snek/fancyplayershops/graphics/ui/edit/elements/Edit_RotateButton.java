@@ -119,7 +119,7 @@ public class Edit_RotateButton extends SimpleShopButton {
             .targetTransform(
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
-                .rotY(canvas.getRotation() / 8f * (float)(2f * Math.PI))
+                .rotY(canvas.getContext().getRotation() / 8f * (float)(2f * Math.PI))
             )
         );
     }
