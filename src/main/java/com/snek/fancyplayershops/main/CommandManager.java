@@ -7,9 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
-import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
@@ -42,6 +40,37 @@ public abstract class CommandManager {
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("shop")
+
+
+                // Shop main menu
+                .executes(context -> {
+                    final ServerPlayer player = context.getSource().getPlayer();
+                    final Vec3 pos = player.getPosition(1f);
+                    final HudContext hud = new HudContext(player);
+                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
+                    hud.changeCanvas(new MainMenuCanvas(hud));
+                    return 1;
+                })
+
+
+                // Balance claim
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        BalanceManager.claim(player);
+                        return 1;
+                    })
+                )
+
+
+                // Force close HUD
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        Context.closeContexts(player);
+                        return 1;
+                    })
+                )
 
 
                 // Operator commands
@@ -79,37 +108,8 @@ public abstract class CommandManager {
                         final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
                         player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
                         return 1;
-                    })))
-                )
-
-
-                // Balance claim
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    BalanceManager.claim(player);
-                    return 1;
-                }))
-
-
-                // Force close HUD
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    Context.closeContexts(player);
-                    return 1;
-                }))
-
-
-                // Shop main menu
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    final Vec3 pos = player.getPosition(1f);
-                    final HudContext hud = new HudContext(player);
-                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-                    hud.changeCanvas(new MainMenuCanvas(hud));
-                    return 1;
-                })
+                    }))
+                ))
             );
         });
     }
