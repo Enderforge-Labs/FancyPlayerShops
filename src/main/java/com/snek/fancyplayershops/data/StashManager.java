@@ -27,11 +27,15 @@ import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
@@ -98,6 +102,16 @@ public final class StashManager extends UtilityClassBase {
         if(count == 0) return;
         if(item.is(Items.AIR)) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
+
+        // Send feedback to player
+        final @Nullable Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
+        if(player != null) {
+            player.displayClientMessage(new Txt()
+                .cat(Utils.formatAmount(count, false, true) + "x ")
+                .cat(MinecraftUtils.getFancyItemName(item).getString())
+                .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash.")
+            .lightGray().get(), false);
+        }
     }
 
 

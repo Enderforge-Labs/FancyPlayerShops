@@ -786,17 +786,6 @@ public class Shop {
         StashManager.scheduleStashSave(ownerUUID);
 
 
-        // Send feedback to the player
-        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
-        if(owner != null && !item.is(Items.AIR) && stock > 0) {
-            owner.displayClientMessage(new Txt()
-                .cat("" + Utils.formatAmount(stock, true, true) + " ")
-                .cat(MinecraftUtils.getFancyItemName(item).getString())
-                .cat(" " + (stock > 1 ? "have" : "has") + " been sent to your stash.")
-            .lightGray().get(), false);
-        }
-
-
         // Reset stock
         stock = 0;
         ShopManager.scheduleShopSave(this);

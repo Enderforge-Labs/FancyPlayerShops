@@ -63,15 +63,16 @@ public class Edit_MoveButton extends SimpleShopButton {
         super.onClick(player, click);
 
 
-        // Pick up and delete shop
-        shop.pickUp(true);
-        shop.delete();
-
-
         // Send feedback message to the player
+        //! This has to be executed before shop.pickUp as the message needs to appear before the "set to stash" message
         player.displayClientMessage(new Txt()
             .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
             .color(ShopManager.SHOP_ITEM_NAME_COLOR)
         .get(), false);
+
+
+        // Pick up and delete shop
+        shop.pickUp(true);
+        shop.delete();
     }
 }

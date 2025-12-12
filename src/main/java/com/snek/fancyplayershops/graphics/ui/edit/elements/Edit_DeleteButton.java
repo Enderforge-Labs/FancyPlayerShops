@@ -74,11 +74,6 @@ public class Edit_DeleteButton extends SimpleShopButton {
         if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
             StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
             //! ^ saveStash() call is done by shop.stash()
-            player.displayClientMessage(new Txt()
-                .cat("1x ")
-                .cat(MinecraftUtils.getFancyItemName(defaultShopItem).getString())
-                .cat(" has been sent to your stash.")
-            .lightGray().get(), false);
         }
 
 
