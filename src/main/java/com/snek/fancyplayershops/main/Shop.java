@@ -730,12 +730,14 @@ public class Shop {
 
     /**
      * Adds a specified rotation to the default rotation of the item display and saves the shop to its file.
-     * @param _rotation The rotation to add.
+     * @param _rotation The rotation to add. Negative values are allowed and are converted to their positive equivalent.
      */
     public void addDefaultRotation(final float _rotation) {
 
         // Add value to default rotation and save the shop
-        defaultRotation = (float)((defaultRotation + _rotation) % (Math.PI * 2));
+        //! Reduce range to [-2pi, 2pi], then add 2pi to wrap negative values and reduce to [-2pi, 2pi] again
+        final double r = Math.PI * 2d;
+        defaultRotation = (float)(((defaultRotation + _rotation) % r + r) % r);
         ShopManager.scheduleShopSave(this);
     }
 
