@@ -53,17 +53,17 @@ public abstract class CommandManager {
         .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
-                .cat(new Txt("/shop bulk fill").bold().italic().lightGray())
+                .cat(new Txt("/shop bulk fill <radius>").bold().italic().lightGray())
                 .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
-                .cat(new Txt("/shop bulk purge").bold().italic().lightGray())
+                .cat(new Txt("/shop bulk purge <radius>").bold().italic().lightGray())
                 .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
-                .cat(new Txt("/shop bulk displace").bold().italic().lightGray())
+                .cat(new Txt("/shop bulk displace <radius>").bold().italic().lightGray())
                 .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().lightGray())
             .get();
         ;
@@ -241,4 +241,44 @@ public abstract class CommandManager {
             );
         });
     }
+
+    //TODO add /shop op view stash <playerName|playerUUID>
+    //TODO add /shop op view balance <playerName|playerUUID>
+    //! ^ HUD can't delete or edit the items. use /shop op void to delete stuff
+
+    //TODO add /shop op void balance <playerName|playerUUID>
+    //TODO add /shop op void stash <playerName|playerUUID>
+    //TODO add /shop op void shops <playerName|playerUUID>
+    //TODO add /shop op void group <playerName|playerUUID>  <groupName>
+    //! ^ force /shop op confirm
+    //FIXME LOG ALL OF THESE ACTIONS. THE OWNER SHOULD BE ABLE TO SEE THIS FROM MAIN-MENU > RECENT ACTIONS
+
+    //TODO add /shop op collect balance <playerName|playerUUID>
+    //TODO add /shop op collect stash <playerName|playerUUID>
+    //TODO add /shop op collect shops <playerName|playerUUID>
+    //TODO add /shop op collect group <playerName|playerUUID>
+
+
+    //FIXME add suggestions for all of the completable commands
+    //FIXME add "@Nullable Player operator" parameter to shop manager / shop methods
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //TODO add a likes/score system to shop groups
+    //TODO maybe rename "groups" to "shops" and shop items to something else?
 }
