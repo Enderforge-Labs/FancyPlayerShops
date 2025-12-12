@@ -34,31 +34,50 @@ import net.minecraft.world.phys.Vec3;
 public abstract class CommandManager {
     private CommandManager() {}
 
+
+
+
     public static final Component HELP_TEXT_SHOP = new Txt()
         .cat(new Txt("/shop").bold().italic().gray())
         .cat(new Txt(": Open the main menu of player shops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
     .get();
 
-    public static final Component HELP_TEXT_SHOP_OP = new Txt()
-        .cat(new Txt("/shop op").bold().italic().gray())
-        .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().gray())
-    .get();
+        public static final Component HELP_TEXT_SHOP_OP = new Txt()
+            .cat(new Txt("/shop op").bold().italic().gray())
+            .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().gray())
+        .get();
 
-    public static final Component HELP_TEXT_SHOP_BULK = new Txt()
-        .cat(new Txt("/shop bulk").bold().italic().gray())
-        .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().gray())
-    .get();
+        public static final Component HELP_TEXT_SHOP_BULK = new Txt()
+            .cat(new Txt("/shop bulk").bold().italic().gray())
+            .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().gray())
+        .get();
 
-    public static final Component HELP_TEXT_SHOP_CLOSEHUD = new Txt()
-        .cat(new Txt("/shop close-hud").bold().italic().gray())
-        .cat(new Txt(": Forcibly close any currently open HUD.").italic().gray())
-    .get();
+            public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
+                .cat(new Txt("/shop bulk fill").bold().italic().gray())
+                .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().gray())
+            .get();
 
-    public static final Component HELP_TEXT_SHOP_CLAIM = new Txt()
-        .cat(new Txt("/shop claim").bold().italic().gray())
-        .cat(new Txt(": Claim all of your shops' balances.").italic().gray())
-    .get();
+            public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
+                .cat(new Txt("/shop bulk purge").bold().italic().gray())
+                .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().gray())
+            .get();
 
+            public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
+                .cat(new Txt("/shop bulk displace").bold().italic().gray())
+                .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().gray())
+            .get();
+        ;
+
+        public static final Component HELP_TEXT_SHOP_CLOSEHUD = new Txt()
+            .cat(new Txt("/shop close-hud").bold().italic().gray())
+            .cat(new Txt(": Forcibly close any currently open HUD.").italic().gray())
+        .get();
+
+        public static final Component HELP_TEXT_SHOP_CLAIM = new Txt()
+            .cat(new Txt("/shop claim").bold().italic().gray())
+            .cat(new Txt(": Claim all of your shops' balances.").italic().gray())
+        .get();
+    ;
 
 
 
@@ -71,8 +90,16 @@ public abstract class CommandManager {
      */
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+
+
+            // Shop main menu
             dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("shop")
-                // Shop main menu
+                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                .executes(context -> {
+                    final ServerPlayer player = context.getSource().getPlayer();
+                    player.displayClientMessage(HELP_TEXT_SHOP, false);
+                    return 1;
+                }))
                 .executes(context -> {
                     final ServerPlayer player = context.getSource().getPlayer();
                     final Vec3 pos = player.getPosition(1f);
@@ -81,31 +108,23 @@ public abstract class CommandManager {
                     hud.changeCanvas(new MainMenuCanvas(hud));
                     return 1;
                 })
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        player.displayClientMessage(HELP_TEXT_SHOP, false);
-                        return 1;
-                    })
-                )
 
 
 
 
                 // Balance claim
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        player.displayClientMessage(HELP_TEXT_SHOP_CLAIM, false);
+                        return 1;
+                    }))
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
                         BalanceManager.claim(player);
                         return 1;
                     })
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_CLAIM, false);
-                            return 1;
-                        })
-                    )
                 )
 
 
@@ -113,18 +132,17 @@ public abstract class CommandManager {
 
                 // Force close HUD
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        player.displayClientMessage(HELP_TEXT_SHOP_CLOSEHUD, false);
+                        return 1;
+                    }))
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
                         Context.closeContexts(player);
                         return 1;
                     })
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_CLOSEHUD, false);
-                            return 1;
-                        })
-                    )
                 )
 
 
@@ -134,12 +152,11 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("op")
                 .requires(source -> source.hasPermission(2))
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_OP, false);
-                            return 1;
-                        })
-                    )
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        player.displayClientMessage(HELP_TEXT_SHOP_OP, false);
+                        return 1;
+                    }))
 
 
                     // Item give command
@@ -158,48 +175,68 @@ public abstract class CommandManager {
                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("bulk")
                 .requires(source -> source.hasPermission(2))
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_BULK, false);
-                            return 1;
-                        })
-                    )
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        player.displayClientMessage(HELP_TEXT_SHOP_BULK, false);
+                        return 1;
+                    }))
 
 
                     // Purge command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("purge")
-                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        final float radius = FloatArgumentType.getFloat(context, "radius");
-                        final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                        player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
-                        return 1;
-                    })))
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_PURGE, false);
+                            return 1;
+                        }))
+                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            final float radius = FloatArgumentType.getFloat(context, "radius");
+                            final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
+                            return 1;
+                        }))
+                    )
 
 
                     // Displace command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("displace")
-                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        final float radius = FloatArgumentType.getFloat(context, "radius");
-                        final int n = ShopManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                        player.displayClientMessage(new Txt("Displaced " + n + " shops.").get(), false);
-                        return 1;
-                    })))
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_DISPLACE, false);
+                            return 1;
+                        }))
+                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            final float radius = FloatArgumentType.getFloat(context, "radius");
+                            final int n = ShopManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            player.displayClientMessage(new Txt("Converted " + n + " shops into items.").get(), false);
+                            return 1;
+                        }))
+                    )
 
 
                     // Fill command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
-                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        final float radius = FloatArgumentType.getFloat(context, "radius");
-                        final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
-                        player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
-                        return 1;
-                    }))
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_FILL, false);
+                            return 1;
+                        }))
+                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            final float radius = FloatArgumentType.getFloat(context, "radius");
+                            final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+                            player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
+                            return 1;
+                        })
+                    )
                 ))
             );
         });
