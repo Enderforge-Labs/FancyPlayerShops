@@ -99,6 +99,18 @@ public abstract class CommandManager {
                     })))
 
 
+                    // Displace command
+                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("displace")
+                    .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
+                    .executes(context -> {
+                        final ServerPlayer player = context.getSource().getPlayer();
+                        final float radius = FloatArgumentType.getFloat(context, "radius");
+                        final int n = ShopManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                        player.displayClientMessage(new Txt("Displaced " + n + " shops.").get(), false);
+                        return 1;
+                    })))
+
+
                     // Fill command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
                     .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 10f))

@@ -392,11 +392,42 @@ public final class ShopManager extends UtilityClassBase {
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
                 if(owner != null && !shop.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + shop.getDecoratedName() + " has been deleted by an admin.").red())
+                    .cat(new Txt("Your " + shop.getDecoratedName() + " has been removed by an admin.").red())
                 .get(), false);
 
-                // Stash and delete the shop, then increase the deleted shops counter
+                // Stash and delete the shop, then increase the purged shops counter
                 shop.stash();
+                shop.delete();
+                ++r;
+            }
+        }
+        return r;
+    }
+
+
+
+
+    /**
+     * Forces the owners to pick up any of their shops near the specified position, sending the snapshots to their stashes.
+     * @param world The target world.
+     * @param pos The center of the displacement radius.
+     * @param radius The maximum distance from pos shops can have in order to be displaced.
+     * @return The number of shops that were displaced.
+     */
+    public static int displace(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius) {
+        int r = 0;
+        final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
+        for(final Shop shop : shops) {
+            if(shop.getWorld() == world && shop.calcDisplayPos().sub(pos).length() <= radius) {
+
+                // Send feedback to affected player if they are online
+                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
+                if(owner != null && !shop.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
+                    .cat(new Txt("Your " + shop.getDecoratedName() + " was displaced by an admin.").red())
+                .get(), false);
+
+                // Stash and delete the shop, then increase the displaced shops counter
+                shop.pickUp(false);
                 shop.delete();
                 ++r;
             }

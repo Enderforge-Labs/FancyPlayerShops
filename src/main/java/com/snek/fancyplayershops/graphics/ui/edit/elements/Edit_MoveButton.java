@@ -16,7 +16,6 @@ import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -62,20 +61,17 @@ public class Edit_MoveButton extends SimpleShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        final boolean giveResult = MinecraftUtils.attemptGive(player, ShopManager.createShopSnapshot(shop));
-        if(!giveResult) {
-            player.displayClientMessage(new Txt("Cannot move the shop! Your inventory is full.").red().bold().get(), false);
-        }
-        else {
-
-            // Send feedback message to the player
-            player.displayClientMessage(new Txt()
-                .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
-            .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 
-            // Delete shop
-            shop.delete();
-        }
+        // Pick up and delete shop
+        shop.pickUp(true);
+        shop.delete();
+
+
+        // Send feedback message to the player
+        player.displayClientMessage(new Txt()
+            .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
+            .color(ShopManager.SHOP_ITEM_NAME_COLOR)
+        .get(), false);
     }
 }

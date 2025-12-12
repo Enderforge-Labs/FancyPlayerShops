@@ -826,6 +826,35 @@ public class Shop {
 
 
     /**
+     * Converts this shop into a snapshot and sends it to the owner's inventory or stash.
+     * <p>
+     * Notice: This method does NOT delete the shop. Call {@link #delete()} to avoid item duplications.
+     * @param tryInventory Whether to try placing the item in the owner's inventory.
+     *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
+     */
+    public void pickUp(final boolean tryInventory) {
+        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
+
+
+        // Create the snapshot and try to send it to the owner's inventory
+        final @NotNull ItemStack snapshot = ShopManager.createShopSnapshot(this);
+        boolean giveResult = false;
+        if(tryInventory) {
+            giveResult = MinecraftUtils.attemptGive(owner, snapshot);
+        }
+
+
+        // If the inventory was full, send it to the stash
+        if(!giveResult) {
+            StashManager.stashItem(ownerUUID, snapshot, 1);
+            StashManager.scheduleStashSave(ownerUUID);
+        }
+    }
+
+
+
+
+    /**
      * Tries to retrieve items from nearby inventories.
      * <p> This call has no effect if the shop is fully stocked.
      */
