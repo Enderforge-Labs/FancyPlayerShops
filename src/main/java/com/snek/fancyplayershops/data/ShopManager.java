@@ -31,7 +31,7 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.main.ShopKey;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.EditUi_ColorSelector;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -523,7 +523,7 @@ public final class ShopManager extends UtilityClassBase {
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ROTATION_NAMES[(int)Math.round(shop.getDefaultRotation() / Math.PI * 4) % 8])).white().noItalic().get(),
-            new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(shop.getColorThemeHue(), EditUi_ColorSelector.S, EditUi_ColorSelector.V))).noItalic().get(),
+            new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(shop.getColorThemeHue(), Edit_ColorSelector.S, Edit_ColorSelector.V))).noItalic().get(),
             new Txt().get()
         };
         for(final Component line : extraDescriptionLines) {

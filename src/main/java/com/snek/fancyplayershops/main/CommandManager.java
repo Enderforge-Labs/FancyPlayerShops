@@ -8,8 +8,8 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuHud;
-import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
+import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
@@ -116,7 +116,7 @@ public abstract class CommandManager {
                     final Vec3 pos = player.getPosition(1f);
                     final HudContext hud = new HudContext(player);
                     hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-                    hud.changeCanvas(new MainMenuHud(hud));
+                    hud.changeCanvas(new MainMenuCanvas(hud));
                     return 1;
                 })
             );

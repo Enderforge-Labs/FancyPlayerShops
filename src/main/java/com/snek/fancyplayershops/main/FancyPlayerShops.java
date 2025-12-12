@@ -32,7 +32,7 @@ import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworkconfig.FrameworkConfig;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -162,7 +162,7 @@ public class FancyPlayerShops implements ModInitializer {
             // Register item display fix
             ServerEntityEvents.ENTITY_LOAD.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
             ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
-                ShopItemDisplay.onEntityLoad_item(entity);
+                ShopItemDisplayElm.onEntityLoad_item(entity);
             });
 
 

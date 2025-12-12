@@ -25,7 +25,7 @@ import com.google.gson.JsonObject;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
-import com.snek.fancyplayershops.graphics.hud.stash.StashHud;
+import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;
