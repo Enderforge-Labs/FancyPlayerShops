@@ -38,44 +38,44 @@ public abstract class CommandManager {
 
 
     public static final Component HELP_TEXT_SHOP = new Txt()
-        .cat(new Txt("/shop").bold().italic().gray())
+        .cat(new Txt("/shop").bold().italic().lightGray())
         .cat(new Txt(": Open the main menu of player shops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
     .get();
 
         public static final Component HELP_TEXT_SHOP_OP = new Txt()
-            .cat(new Txt("/shop op").bold().italic().gray())
-            .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().gray())
+            .cat(new Txt("/shop op").bold().italic().lightGray())
+            .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().lightGray())
         .get();
 
         public static final Component HELP_TEXT_SHOP_BULK = new Txt()
-            .cat(new Txt("/shop bulk").bold().italic().gray())
-            .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().gray())
+            .cat(new Txt("/shop bulk").bold().italic().lightGray())
+            .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().lightGray())
         .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
-                .cat(new Txt("/shop bulk fill").bold().italic().gray())
-                .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().gray())
+                .cat(new Txt("/shop bulk fill").bold().italic().lightGray())
+                .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
-                .cat(new Txt("/shop bulk purge").bold().italic().gray())
-                .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().gray())
+                .cat(new Txt("/shop bulk purge").bold().italic().lightGray())
+                .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
-                .cat(new Txt("/shop bulk displace").bold().italic().gray())
-                .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().gray())
+                .cat(new Txt("/shop bulk displace").bold().italic().lightGray())
+                .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().lightGray())
             .get();
         ;
 
         public static final Component HELP_TEXT_SHOP_CLOSEHUD = new Txt()
-            .cat(new Txt("/shop close-hud").bold().italic().gray())
-            .cat(new Txt(": Forcibly close any currently open HUD.").italic().gray())
+            .cat(new Txt("/shop close-hud").bold().italic().lightGray())
+            .cat(new Txt(": Forcibly close any currently open HUD.").italic().lightGray())
         .get();
 
         public static final Component HELP_TEXT_SHOP_CLAIM = new Txt()
-            .cat(new Txt("/shop claim").bold().italic().gray())
-            .cat(new Txt(": Claim all of your shops' balances.").italic().gray())
+            .cat(new Txt("/shop claim").bold().italic().lightGray())
+            .cat(new Txt(": Claim all of your shops' balances.").italic().lightGray())
         .get();
     ;
 
