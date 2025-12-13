@@ -30,14 +30,14 @@ public class Hud_CloseButton extends Hud_SimpleButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.1f, 0.1f),
-            new Vector2f(0.9f, 0.9f)
+            new Vector2f(0.2f, 0.2f),
+            new Vector2f(0.8f, 0.8f)
         ),
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.1f, 0.9f),
-            new Vector2f(0.9f, 0.1f)
+            new Vector2f(0.2f, 0.8f),
+            new Vector2f(0.8f, 0.2f)
         )
     };
 

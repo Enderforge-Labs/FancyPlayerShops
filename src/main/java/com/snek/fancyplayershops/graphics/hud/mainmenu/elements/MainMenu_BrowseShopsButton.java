@@ -30,7 +30,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class MainMenu_BrowseShopsButton extends Hud_SimpleButton {
     private static final @NotNull List<@NotNull Vector2f> design0 = new ArrayList<>();
-    public static final float design0_shift = 0.3f;
+    public static final float design0_shift = 0.4f;
     static {
         for(int i = 0; i < 8; ++i) {
             design0.add(
@@ -48,7 +48,7 @@ public class MainMenu_BrowseShopsButton extends Hud_SimpleButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.6f, 0.4f),
+            new Vector2f(0.7f, 0.3f),
             new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(
