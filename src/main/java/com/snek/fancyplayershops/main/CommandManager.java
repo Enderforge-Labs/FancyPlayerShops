@@ -251,6 +251,7 @@ public abstract class CommandManager {
     //TODO add /shop op void shops <playerName|playerUUID>
     //TODO add /shop op void group <playerName|playerUUID>  <groupName>
     //! ^ force /shop op confirm
+    //! ^ "are you sure you want to delete 37,482 shops? This action cannot be undone. Use /shop op confirm to confirm"
     //FIXME LOG ALL OF THESE ACTIONS. THE OWNER SHOULD BE ABLE TO SEE THIS FROM MAIN-MENU > RECENT ACTIONS
 
     //TODO add /shop op collect balance <playerName|playerUUID>

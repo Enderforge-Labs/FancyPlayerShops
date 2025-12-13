@@ -12,9 +12,9 @@ import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
-import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemDisplay;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemNameCount;
+import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
@@ -109,7 +109,7 @@ public class StashCanvas extends HudCanvas {
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new Hud_CloseButton(context),
+            new Stash_Sub_BackButton(context),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
