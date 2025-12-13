@@ -108,6 +108,11 @@ public class MainMenuCanvas extends HudCanvas {
         }
 
 
+        // Add close button
+        e = bg.addChild(new Hud_CloseButton(_hud));
+        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H));
+        e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
+
         // Add info button
         e = bg.addChild(new MainMenu_InfoButton(_hud));
         e.setSize(new Vector2f(ShopFancyTextElm.LINE_H));
@@ -118,8 +123,8 @@ public class MainMenuCanvas extends HudCanvas {
         final Div[] buttons = new Div[] {
             // new MainMenuHud_ClaimAllButton(_hud), //FIXME move to top bar
             new MainMenu_BrowseShopsButton(_hud),
+            // new Hud_CloseButton(_hud),
             new MainMenu_OpenStashButton(_hud),
-            new Hud_CloseButton(_hud),
             new MainMenu_StatsButton(_hud),
             new MainMenu_PreferencesButton(_hud)
         };
