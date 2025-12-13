@@ -29,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 public class Edit_DeleteButton extends SimpleShopButton {
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,

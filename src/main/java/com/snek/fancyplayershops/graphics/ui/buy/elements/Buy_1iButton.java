@@ -35,7 +35,7 @@ public class Buy_1iButton extends FancyShopButton {
     private boolean active = true;
 
 
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.07f,

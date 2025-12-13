@@ -28,7 +28,7 @@ public class Buy_Sub_BackButton extends SimpleShopButton {
     private int amountCache = 1;
     public void setAmountCache(final int _amountCache) { amountCache = _amountCache; }
 
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.06f,

@@ -45,7 +45,7 @@ public class Buy_1xButton extends FancyShopButton {
             design0.add(GeometryUtils.rotateVec2(new Vector2f(0, 0.5f), (float)Math.toRadians(45) * (i + 0.5f)).add(0.5f, 0.5f));
         }
     }
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.03f,

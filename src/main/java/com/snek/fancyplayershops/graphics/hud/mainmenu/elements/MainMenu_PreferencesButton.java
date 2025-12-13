@@ -27,7 +27,7 @@ import net.minecraft.world.inventory.ClickAction;
 public class MainMenu_PreferencesButton extends Hud_SimpleButton {
 
 
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
@@ -49,8 +49,8 @@ public class MainMenu_PreferencesButton extends Hud_SimpleButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.7f, 0.4f),
-            new Vector2f(0.7f, 0.0f)
+            new Vector2f(0.7f, 0.0f),
+            new Vector2f(0.7f, 0.4f)
         )
     };
 

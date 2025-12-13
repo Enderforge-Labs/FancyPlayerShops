@@ -28,7 +28,7 @@ import net.minecraft.world.inventory.ClickAction;
 public class MainMenu_StatsButton extends Hud_SimpleButton {
 
 
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         //TODO this design is used like twice, make it a public catalogue in FrameworkLib
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA, //FIXME this is used literally everywhere. it should be a standard method or something

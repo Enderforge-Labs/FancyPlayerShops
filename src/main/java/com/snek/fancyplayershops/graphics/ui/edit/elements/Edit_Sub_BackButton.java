@@ -26,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class Edit_Sub_BackButton extends SimpleShopButton {
     //FIXME make common designs public in frameworklib
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.06f,

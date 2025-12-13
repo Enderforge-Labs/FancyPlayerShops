@@ -27,7 +27,7 @@ import net.minecraft.world.inventory.ClickAction;
 public class MainMenu_ClaimAllButton extends Hud_SimpleButton {
 
 
-    private static final @NotNull PolylineData[] design = new PolylineData[] {
+    private static final @NotNull PolylineData[] design = {
         //FIXME
         //FIXME
         //FIXME
