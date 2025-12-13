@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
+import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 
@@ -13,7 +13,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
 
 
 
-public class ShopCanvasBackground_S extends ShopPanelElm_S {
+public class ShopCanvasBackground_S extends PanelElmStyle {
     private final @NotNull Shop shop;
 
 

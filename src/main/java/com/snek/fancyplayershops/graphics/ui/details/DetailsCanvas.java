@@ -11,7 +11,6 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -22,6 +21,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
@@ -100,7 +100,7 @@ public class DetailsCanvas extends ShopCanvasBase {
 
 
         // Add owner's head's background
-        final Div headBg = bg.addChild(new ShopPanelElm(_shop, new Details_OwnerHeadBg_S()));
+        final Div headBg = bg.addChild(new PanelElm(_shop.getWorld(), new Details_OwnerHeadBg_S()));
         headBg.setSize(HEAD_BG_SIZE);
         headBg.setPosY(H0 - HEAD_BG_SIZE.y);
         headBg.setAlignmentX(AlignmentX.LEFT);

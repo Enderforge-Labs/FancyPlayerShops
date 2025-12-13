@@ -5,10 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopPanelElm_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
@@ -22,7 +22,7 @@ import com.snek.frameworklib.utils.Easings;
 /**
  * The style of the DetailsUi_OwnerHeadBg UI element.
  */
-public class Details_OwnerHeadBg_S extends ShopPanelElm_S {
+public class Details_OwnerHeadBg_S extends PanelElmStyle {
     public static final float PRIMER_H = 0.001f;
 
 
