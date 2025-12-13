@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -19,7 +19,7 @@ import com.snek.frameworklib.utils.Txt;
  * Part of the main display of DetailsUi.
  * <p> It shows the names of informations about the shop.
  */
-public class Details_Names extends ShopTextElm {
+public class Details_Names extends SimpleTextElm {
 
 
     /**
@@ -27,7 +27,7 @@ public class Details_Names extends ShopTextElm {
      * @param _shop The target shop.
      */
     public Details_Names(final @NotNull Shop _shop) {
-        super(_shop);
+        super(_shop.getWorld());
     }
 
 

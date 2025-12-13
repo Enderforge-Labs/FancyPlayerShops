@@ -4,8 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -17,12 +18,12 @@ import com.snek.frameworklib.utils.Utils;
 
 
 
-public class Buy_PriceDisplay extends ShopTextElm {
+public class Buy_PriceDisplay extends SimpleTextElm {
     private final @NotNull BuyCanvas menu;
 
 
     public Buy_PriceDisplay(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop);
+        super(_shop.getWorld());
         menu = _menu;
     }
 
@@ -35,6 +36,7 @@ public class Buy_PriceDisplay extends ShopTextElm {
 
 
     public void updateDisplay() {
+        final Shop shop = GetShop.get(this);
         final Txt priceTxt = new Txt(Utils.formatPrice(shop.getPrice() * menu.getAmount()));
 
         getStyle(SimpleTextElmStyle.class).setText(new Txt()

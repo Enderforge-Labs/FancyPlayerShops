@@ -2,8 +2,9 @@ package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -20,7 +21,7 @@ import net.minecraft.world.item.Items;
 /**
  * A UI element that shows the mod of the item.
  */
-public class Inspect_ModDisplay extends ShopTextElm {
+public class Inspect_ModDisplay extends SimpleTextElm {
 
 
     /**
@@ -28,7 +29,7 @@ public class Inspect_ModDisplay extends ShopTextElm {
      * @param _shop The target shop.
      */
     public Inspect_ModDisplay(@NotNull Shop _shop) {
-        super(_shop);
+        super(_shop.getWorld());
         updateDisplay();
     }
 
@@ -40,6 +41,7 @@ public class Inspect_ModDisplay extends ShopTextElm {
      */
     public void updateDisplay() {
 
+        final Shop shop = GetShop.get(this);
         getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(

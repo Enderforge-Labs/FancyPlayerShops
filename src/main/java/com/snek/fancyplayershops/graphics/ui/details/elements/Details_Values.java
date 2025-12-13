@@ -5,9 +5,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -27,7 +28,7 @@ import net.minecraft.world.item.Items;
  * Part of the main display of DetailsUi.
  * <p> It shows the values of informations about the shop.
  */
-public class Details_Values extends ShopTextElm {
+public class Details_Values extends SimpleTextElm {
     final @NotNull String ownerName;
 
 
@@ -36,8 +37,8 @@ public class Details_Values extends ShopTextElm {
      * @param _shop The target shop.
      */
     public Details_Values(@NotNull Shop _shop) {
-        super(_shop);
-        ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FrameworkLib.getServer());
+        super(_shop.getWorld());
+        ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid(), FrameworkLib.getServer());
     }
 
 
@@ -54,6 +55,7 @@ public class Details_Values extends ShopTextElm {
      * Updates the displayed values using the current item name, price and stock.
      */
     public void updateDisplay() {
+        final Shop shop = GetShop.get(this);
 
         // Calculate the color of the stock amount and retrieve the owner's name
         final float factor = Math.min(1.0f, (float)shop.getStock() / shop.getMaxStock());
