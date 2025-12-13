@@ -1,12 +1,9 @@
 package com.snek.fancyplayershops.graphics;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 
 
 

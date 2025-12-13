@@ -170,7 +170,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
                 final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
                 final float adjustY = finalHeight - trueHeight;
                 final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
-                final float finalPosY = (truePosY - adjustY) * getAbsSize().y;       //! 0 to list height
+                final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
                 barThumb.setSizeY(finalHeight);
                 barThumb.setPosY(finalPosY);
                 barThumb.flushStyle();

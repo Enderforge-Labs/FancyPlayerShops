@@ -45,9 +45,9 @@ public class MainMenu_RecentActionsButton extends Hud_SimpleButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.5f, 1.0f),
-            new Vector2f(0.3f, 0.8f),
-            new Vector2f(0.5f, 0.6f)
+            new Vector2f(0.5f, 1.0f- 0.025f),
+            new Vector2f(0.3f, 0.8f- 0.025f),
+            new Vector2f(0.5f, 0.6f- 0.025f)
         ),
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
