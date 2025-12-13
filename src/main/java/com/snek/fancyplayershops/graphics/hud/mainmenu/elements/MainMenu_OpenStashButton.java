@@ -71,6 +71,8 @@ public class MainMenu_OpenStashButton extends Hud_SimpleButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
+
         final @NotNull HudContext context = (HudContext)canvas.getContext();
         context.changeCanvas(new StashCanvas(context));
     }

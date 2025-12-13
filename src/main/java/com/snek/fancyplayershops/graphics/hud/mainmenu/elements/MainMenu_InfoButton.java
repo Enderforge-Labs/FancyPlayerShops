@@ -66,6 +66,7 @@ public class MainMenu_InfoButton extends Hud_SimpleButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         //TODO
     }
 }

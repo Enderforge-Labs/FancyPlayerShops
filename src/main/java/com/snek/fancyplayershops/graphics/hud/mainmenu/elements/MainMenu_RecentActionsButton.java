@@ -16,6 +16,7 @@ import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.GeometryUtils;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerLevel;
@@ -78,6 +79,7 @@ public class MainMenu_RecentActionsButton extends Hud_SimpleButton {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        //TODO
+        super.onClick(player, click);
+        player.displayClientMessage(new Txt("Recent actions coming soon!").get(), false);
     }
 }
