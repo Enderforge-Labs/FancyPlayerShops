@@ -11,7 +11,6 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_DualInputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopPanelElm;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
@@ -24,6 +23,7 @@ import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
 
 
@@ -114,12 +114,12 @@ public class DetailsCanvas extends ShopCanvasBase {
 
 
         // Add input indicators
-        e = bg.addChild(new Any_DualInputIndicator(_shop));
-        e.setSize(Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPos(new Vector2f(HEAD_BG_SIZE.x, H0 - (Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE.y + HEAD_BG_SIZE.y) / 2));
-        final Any_DualInputIndicator inputIndicator = (Any_DualInputIndicator)e;
+        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e.setPos(new Vector2f(HEAD_BG_SIZE.x, H0 - (DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE.y + HEAD_BG_SIZE.y) / 2));
+        final DualInputIndicator inputIndicator = (DualInputIndicator)e;
 
-        // Set input indicator text
+        // Force indicator text //! Details canvas doesn't have any buttons. Instead, it respons to click events directly
         final Player player = canvas.getContext().getPlayer();
         inputIndicator.getLmbIndicator().updateDisplay("Buy 1 item");
         inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(_shop.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");

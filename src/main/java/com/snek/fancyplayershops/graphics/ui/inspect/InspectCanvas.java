@@ -10,10 +10,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_IdDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_InventoryViewButton;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_ModDisplay;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_DualInputIndicator;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -21,7 +18,10 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
+import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 
 
 
@@ -33,12 +33,12 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 /**
  * A UI that allows the user of a shop to view details about the item.
  */
-public class InspectCanvas extends ShopCanvasBase implements Any_InputIndicatorCanvas {
+public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public static final float DETAILS_W = 0.9f;                 // The total width of the main displays
     public static final float NAMES_VALUES_WIDTH_RATIO = 0.35f; // The ration between the width of the names and the width of the values
 
 
-    private final @NotNull Any_DualInputIndicator inputIndicator;
+    private final @NotNull DualInputIndicator inputIndicator;
 
 
 
@@ -96,11 +96,11 @@ public class InspectCanvas extends ShopCanvasBase implements Any_InputIndicatorC
 
 
         // Add input indicators
-        e = bg.addChild(new Any_DualInputIndicator(_shop));
-        e.setSize(Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
-        inputIndicator = (Any_DualInputIndicator)e;
+        inputIndicator = (DualInputIndicator)e;
     }
 
 
@@ -113,6 +113,6 @@ public class InspectCanvas extends ShopCanvasBase implements Any_InputIndicatorC
 
 
 
-    @Override public @NotNull Any_InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
-    @Override public @NotNull Any_InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

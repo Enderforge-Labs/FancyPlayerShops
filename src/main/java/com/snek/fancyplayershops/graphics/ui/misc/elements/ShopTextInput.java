@@ -4,12 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 
 
 
@@ -23,11 +21,7 @@ import net.minecraft.world.entity.player.Player;
  */
 public abstract class ShopTextInput extends TextInputElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
-
-
     protected final @NotNull Shop shop;
-    private   final @Nullable String lmbActionName;
-    private   final @Nullable String rmbActionName;
 
 
 
@@ -41,10 +35,8 @@ public abstract class ShopTextInput extends TextInputElm {
      * @param _style The custom style.
      */
     protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage, final @NotNull ShopTextInput_S _style) {
-        super(_shop.getWorld(), _clickFeedbackMessage, _style);
+        super(_shop.getWorld(), _lmbActionName, _rmbActionName, _clickFeedbackMessage, _style);
         shop = _shop;
-        lmbActionName = _lmbActionName;
-        rmbActionName = _rmbActionName;
     }
 
     /**
@@ -56,43 +48,5 @@ public abstract class ShopTextInput extends TextInputElm {
      */
     protected ShopTextInput(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final @Nullable Component _clickFeedbackMessage) {
         this(_shop, _lmbActionName, _rmbActionName, _clickFeedbackMessage, new ShopTextInput_S(_shop));
-    }
-
-
-
-
-    @Override
-    public void onHoverEnter(final @NotNull Player player) {
-        if(player != shop.getuser()) return;
-        super.onHoverEnter(player);
-    }
-
-
-
-
-    @Override
-    public void onHoverTick(final @NotNull Player player) {
-        super.onHoverTick(player);
-
-        // Update input displays if present
-        if(canvas != null && canvas instanceof Any_InputIndicatorCanvas c) {
-            c.getLmbIndicator().updateDisplay(lmbActionName);
-            c.getRmbIndicator().updateDisplay(rmbActionName);
-        }
-    }
-
-
-
-
-    @Override
-    public void onHoverExit(final @Nullable Player player) {
-        if(player != shop.getuser()) return;
-        super.onHoverExit(player);
-
-        // Update input displays if present
-        if(canvas != null && canvas instanceof Any_InputIndicatorCanvas c) {
-            c.getLmbIndicator().updateDisplay(null);
-            c.getRmbIndicator().updateDisplay(null);
-        }
     }
 }

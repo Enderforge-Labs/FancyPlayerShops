@@ -16,11 +16,11 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_DualInputIndicator;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
+import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
+import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -40,12 +40,12 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A UI that allows the user of a shop to buy items from it.
  */
-public class BuyCanvas extends ShopCanvasBase implements Any_InputIndicatorCanvas {
+public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public static final float CONFIRM_BUTTON_Y = 0.25f;
     public static final float CONFIRM_BUTTON_W = 0.5f;
     public static final float BUY_BUTTONS_SPACING = 0.025f;
     public static final float BUY_BUTTONS_W = (CONFIRM_BUTTON_W - BUY_BUTTONS_SPACING * 2f) / 3f;
-    private final @NotNull Any_DualInputIndicator inputIndicator;
+    private final @NotNull DualInputIndicator inputIndicator;
 
     // Instance data
     private final @NotNull Buy_AmountInputDisplay amountInputDisplay;
@@ -128,11 +128,11 @@ public class BuyCanvas extends ShopCanvasBase implements Any_InputIndicatorCanva
 
 
         // Add input indicators
-        e = bg.addChild(new Any_DualInputIndicator(_shop));
-        e.setSize(Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(CanvasBorder.DEFAULT_HEIGHT * 2);
         e.setAlignmentX(AlignmentX.CENTER);
-        inputIndicator = (Any_DualInputIndicator)e;
+        inputIndicator = (DualInputIndicator)e;
 
 
         // Set default amount and force button color update
@@ -189,6 +189,6 @@ public class BuyCanvas extends ShopCanvasBase implements Any_InputIndicatorCanva
 
 
 
-    @Override public @NotNull Any_InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
-    @Override public @NotNull Any_InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

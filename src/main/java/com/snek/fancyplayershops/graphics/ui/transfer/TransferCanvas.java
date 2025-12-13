@@ -9,10 +9,7 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_DualInputIndicator;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_Input_S;
@@ -23,8 +20,11 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
+import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -41,9 +41,9 @@ import net.minecraft.world.item.Items;
 /**
  * A UI that allows the owner of the shop to edit it.
  */
-public class TransferCanvas extends ShopCanvasBase implements Any_InputIndicatorCanvas {
+public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public static final float CONFIRM_BUTTON_Y = 0.25f;
-    private final @NotNull Any_DualInputIndicator inputIndicator;
+    private final @NotNull DualInputIndicator inputIndicator;
 
 
     // Instance data
@@ -99,11 +99,11 @@ public class TransferCanvas extends ShopCanvasBase implements Any_InputIndicator
 
 
         // Add input indicators
-        e = bg.addChild(new Any_DualInputIndicator(_shop));
-        e.setSize(Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
-        inputIndicator = (Any_DualInputIndicator)e;
+        inputIndicator = (DualInputIndicator)e;
 
 
         // Add back button
@@ -175,6 +175,6 @@ public class TransferCanvas extends ShopCanvasBase implements Any_InputIndicator
 
 
 
-    @Override public @NotNull Any_InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
-    @Override public @NotNull Any_InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }

@@ -1,13 +1,9 @@
 package com.snek.fancyplayershops.graphics.ui.misc.elements;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 
@@ -24,8 +20,6 @@ import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
  */
 public abstract class FancyShopButton extends FancyButtonElm {
     protected final @NotNull Shop shop;
-    private   final @Nullable String lmbActionName;
-    private   final @Nullable String rmbActionName;
 
 
 
@@ -39,10 +33,8 @@ public abstract class FancyShopButton extends FancyButtonElm {
      * @param _style The custom style.
      */
     protected FancyShopButton(final @NotNull Shop _shop, final @Nullable String _lmbActionName, final @Nullable String _rmbActionName, final int _clickCooldown, final FancyShopButton_S _style) {
-        super(_shop.getWorld(), _clickCooldown, _style);
+        super(_shop.getWorld(), _lmbActionName, _rmbActionName, _clickCooldown, _style);
         shop = _shop;
-        lmbActionName = _lmbActionName;
-        rmbActionName = _rmbActionName;
     }
 
 
@@ -59,47 +51,4 @@ public abstract class FancyShopButton extends FancyButtonElm {
 
 
 
-
-    @Override
-    public void onHoverEnter(final @NotNull Player player) {
-        if(player != shop.getuser()) return;
-        super.onHoverEnter(player);
-    }
-
-
-
-
-    @Override
-    public void onHoverTick(final @NotNull Player player) {
-        super.onHoverTick(player);
-
-        // Update input displays if present
-        if(canvas != null && canvas instanceof Any_InputIndicatorCanvas c) {
-            c.getLmbIndicator().updateDisplay(lmbActionName);
-            c.getRmbIndicator().updateDisplay(rmbActionName);
-        }
-    }
-
-
-
-
-    @Override
-    public void onHoverExit(final @Nullable Player player) {
-        if(player != shop.getuser()) return;
-        super.onHoverExit(player);
-
-        // Update input displays if present
-        if(canvas != null && canvas instanceof Any_InputIndicatorCanvas c) {
-            c.getLmbIndicator().updateDisplay(null);
-            c.getRmbIndicator().updateDisplay(null);
-        }
-    }
-
-
-
-
-    @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
-    }
 }

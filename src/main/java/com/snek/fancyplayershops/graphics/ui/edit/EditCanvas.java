@@ -18,12 +18,12 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StatsButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_DualInputIndicator;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.Any_InputIndicator;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
-import com.snek.fancyplayershops.graphics.ui.misc.interfaces.Any_InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
+import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -43,9 +43,9 @@ import com.snek.frameworklib.graphics.layout.Div;
 /**
  * A UI that allows the owner of the shop to edit it.
  */
-public class EditCanvas extends ShopCanvasBase implements Any_InputIndicatorCanvas {
+public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     private final @NotNull TitleElm title;
-    private final @NotNull Any_DualInputIndicator inputIndicator;
+    private final @NotNull DualInputIndicator inputIndicator;
     public @NotNull SimpleTextElm getTitle() { return title; }
 
 
@@ -123,11 +123,11 @@ public class EditCanvas extends ShopCanvasBase implements Any_InputIndicatorCanv
 
 
         // Add input indicators
-        e = bg.addChild(new Any_DualInputIndicator(_shop));
-        e.setSize(Any_DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
+        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
-        inputIndicator = (Any_DualInputIndicator)e;
+        inputIndicator = (DualInputIndicator)e;
 
 
         // Add buttons
@@ -186,6 +186,6 @@ public class EditCanvas extends ShopCanvasBase implements Any_InputIndicatorCanv
 
 
 
-    @Override public @NotNull Any_InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
-    @Override public @NotNull Any_InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
+    @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
 }
