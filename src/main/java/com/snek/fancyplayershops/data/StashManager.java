@@ -16,16 +16,13 @@ import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
-import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Pair;
@@ -38,7 +35,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.Vec3;
 
 
 

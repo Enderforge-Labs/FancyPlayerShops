@@ -90,8 +90,6 @@ public class StashCanvas extends HudCanvas {
 
                 // Add container for the stash entry
                 final Div c = list.storeElm(new Div());
-                c.setSize(new Vector2f(1f, list_elm_h));
-                c.setAlignmentX(AlignmentX.CENTER);
 
                 // Add item display
                 e = c.addChild(new Stash_ItemDisplay(context, entry.item));
@@ -123,3 +121,7 @@ public class StashCanvas extends HudCanvas {
 //TODO add "drop all" button - drops all of the items on the ground, as if you just pressed Q on them
 //TODO add "fill inventory" button - fills your inventory with whatever item fits
 //TODO add "clear stash" button - deletes all the items in your stash
+
+
+//TODO add header, like the one in the main menu
+//TODO maybe add the header as a special type of list with header? idk. might not be necessary

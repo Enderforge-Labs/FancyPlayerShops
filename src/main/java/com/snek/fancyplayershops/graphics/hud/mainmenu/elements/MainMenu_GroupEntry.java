@@ -1,0 +1,64 @@
+package com.snek.fancyplayershops.graphics.hud.mainmenu.elements;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
+
+import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_SimpleButton;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+
+
+
+
+//TODO don't use an entity instead of making it invisible. To improve performance
+public class MainMenu_GroupEntry extends Hud_SimpleButton {
+
+    public static final float BALANCE_WIDTH = 0.2f;
+    public static final float NAME_WIDTH = 1f - BALANCE_WIDTH;
+
+    protected final @Nullable ShopGroup groupInstance;
+
+
+
+
+    //TODO update balance dynamically?
+    public MainMenu_GroupEntry(final @NotNull HudContext context, final @Nullable ShopGroup groupInstance) {
+        super((ServerLevel)context.getPlayer().level(), "Claim balance", "Edit group", 2);
+        this.groupInstance = groupInstance;
+        Div e;
+
+
+        // Add shop group name header
+        e = addChild(new SimpleTextElm(world, new Txt(groupInstance.getDisplayName()).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        e.setSize(new Vector2f(NAME_WIDTH, 1));
+        e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
+
+
+        // Add shop group balance header
+        e = addChild(new SimpleTextElm(world, new Txt(Utils.formatPriceShort(groupInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        e.setSize(new Vector2f(BALANCE_WIDTH, 1));
+        e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+    }
+
+
+
+
+    @Override
+    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
+        super.onClick(player, click);
+        //TODO
+    }
+}

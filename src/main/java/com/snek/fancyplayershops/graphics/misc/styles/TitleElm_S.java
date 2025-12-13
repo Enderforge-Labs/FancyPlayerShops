@@ -17,3 +17,4 @@ public class TitleElm_S extends SimpleTextElmStyle {
         return TextOverflowBehaviour.SCROLL;
     }
 }
+//TODO replace with configurable style constructor call

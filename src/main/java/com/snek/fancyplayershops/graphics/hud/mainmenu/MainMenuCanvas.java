@@ -1,17 +1,21 @@
 package com.snek.fancyplayershops.graphics.hud.mainmenu;
 
 import java.util.HashSet;
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_BrowseShopsButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ClaimAllButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_GroupEntry;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_GroupHeader;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_InfoButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_OpenStashButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_PreferencesButton;
@@ -45,7 +49,8 @@ public class MainMenuCanvas extends HudCanvas {
     public static final float ICON_NAME_RATIO    = 0.1f;
     public static final float ICON_NAME_SPACING  = 0.02f;
 
-    public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE;
+    public static final float HEADER_H           = 0.05f;
+    public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - HEADER_H - SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -75,8 +80,15 @@ public class MainMenuCanvas extends HudCanvas {
         }
 
 
-        // If materials are present
+        // If groups are present
         else {
+
+            // Add shop group header
+            final List<ShopGroup> shopGroups = ShopGroupManager.getShopGroups(player);
+            e = bg.addChild(new MainMenu_GroupHeader(_hud, shopGroups));
+            e.setSize(new Vector2f(LIST_WIDTH, HEADER_H));
+            e.setAlignmentX(AlignmentX.RIGHT);
+            e.setPosY(1f - ShopFancyTextElm.LINE_H - HEADER_H);
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
@@ -86,26 +98,10 @@ public class MainMenuCanvas extends HudCanvas {
             list.setPosY(SQUARE_BUTTON_SIZE);
 
 
-            // // For each shop group
-            // final List<StashEntry> entries = new ArrayList<>(stash.values());
-            // for(int i = 0; i < entries.size(); ++i) {
-            //     final StashEntry entry = entries.get(i);
-
-            //     // Add container for the stash entry
-            //     final Div c = list.storeElm(new Div());
-            //     c.setSize(new Vector2f(1f, list_elm_h));
-            //     c.setAlignmentX(AlignmentX.CENTER);
-
-            //     // Add item display
-            //     e = c.addChild(new StashHud_ItemDisplay(_hud, entry.item));
-            //     e.setSize(new Vector2f(ICON_NAME_RATIO - ICON_NAME_SPACING, 0.9f));
-            //     e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
-
-            //     // Add item name and count display
-            //     e = c.addChild(new StashHud_ItemNameCount(_hud, entry.item, entry.getCount()));
-            //     e.setSize(new Vector2f(1f - ICON_NAME_RATIO - ICON_NAME_SPACING, 1f));
-            //     e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
-            // }
+            // Add shop group entry displays
+            for(int i = 0; i < shopGroups.size(); ++i) {
+               list.storeElm(new MainMenu_GroupEntry(_hud, shopGroups.get(i)));
+            }
         }
 
 
@@ -122,7 +118,6 @@ public class MainMenuCanvas extends HudCanvas {
 
         // Add bottom bar buttons
         final Div[] buttons = new Div[] {
-            // new MainMenuHud_ClaimAllButton(_hud), //FIXME move to top bar
             new MainMenu_BrowseShopsButton(_hud),
             new MainMenu_RecentActionsButton(_hud),
             new MainMenu_OpenStashButton(_hud),

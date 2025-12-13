@@ -23,6 +23,9 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 
+//TODO don't use an entity instead of making it invisible. To improve performance
+
+
 
 
 
@@ -156,6 +159,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
                 final int lastVisible = Math.min(elmList.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
                 //FIXME                                        account for elements added or removed within the ranges   ^^^
 
+
                 // Spawn visible elements
                 for(int i = firstVisible; i <= lastVisible; i++) {
                     final Div elm = elmContainer.addChild(elmList.get(i));
@@ -164,22 +168,28 @@ public class ScrollableList extends PanelElm implements Scrollable {
                     elm.spawn(canvas.getContext().getSpawnPos(), false);
                 }
 
-                // Update scrollbar
-                final float elmAmount = (float)elmList.size();
-                final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
-                final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
-                final float adjustY = finalHeight - trueHeight;
-                final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
-                final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
-                barThumb.setSizeY(finalHeight);
-                barThumb.setPosY(finalPosY);
-                barThumb.flushStyle();
-                //TODO maybe animate this? idk. setSize and setPos and similar might need an "animate" parameter.
-                barTrack.spawn(canvas.getContext().getSpawnPos(), !instant);
-            }
-            else {
 
                 // Update scrollbar
+                if(lastVisible - firstVisible == elmList.size() - 1) {
+                    final float elmAmount = (float)elmList.size();
+                    final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
+                    final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
+                    final float adjustY = finalHeight - trueHeight;
+                    final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
+                    final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
+                    barThumb.setSizeY(finalHeight);
+                    barThumb.setPosY(finalPosY);
+                    barThumb.flushStyle();
+                    //TODO maybe animate this? idk. setSize and setPos and similar might need an "animate" parameter.
+                    barTrack.spawn(canvas.getContext().getSpawnPos(), !instant);
+                }
+                else {
+                    barTrack.despawn(!instant);
+                }
+            }
+
+            // If it's empty, hide the scrollbar
+            else {
                 barTrack.despawn(!instant);
             }
         }
