@@ -37,8 +37,8 @@ public class MainMenu_PreferencesButton extends Hud_SimpleButton {
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
             Canvas.TOOLBAR_FG_WIDTH, 0.05f,
-            new Vector2f(0.0f, 0.8f),
-            new Vector2f(1.0f, 0.8f)
+            new Vector2f(1.0f, 0.8f),
+            new Vector2f(0.0f, 0.8f)
         ),
         new PolylineData(
             Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
