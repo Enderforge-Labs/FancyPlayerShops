@@ -15,6 +15,7 @@ import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ClaimAl
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_InfoButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_OpenStashButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_PreferencesButton;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_RecentActionsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_StatsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
@@ -123,7 +124,7 @@ public class MainMenuCanvas extends HudCanvas {
         final Div[] buttons = new Div[] {
             // new MainMenuHud_ClaimAllButton(_hud), //FIXME move to top bar
             new MainMenu_BrowseShopsButton(_hud),
-            // new Hud_CloseButton(_hud),
+            new MainMenu_RecentActionsButton(_hud),
             new MainMenu_OpenStashButton(_hud),
             new MainMenu_StatsButton(_hud),
             new MainMenu_PreferencesButton(_hud)
