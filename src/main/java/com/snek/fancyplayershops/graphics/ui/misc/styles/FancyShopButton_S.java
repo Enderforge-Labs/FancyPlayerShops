@@ -14,7 +14,7 @@ import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 
 
 /**
- * The style of the generic ShopButton UI element.
+ * The style of shop fancy button elements.
  */
 public class FancyShopButton_S extends FancyButtonElmStyle {
     protected final @NotNull Shop shop;
