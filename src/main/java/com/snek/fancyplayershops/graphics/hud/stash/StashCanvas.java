@@ -118,3 +118,8 @@ public class StashCanvas extends HudCanvas {
         }
     }
 }
+
+
+//TODO add "drop all" button - drops all of the items on the ground, as if you just pressed Q on them
+//TODO add "fill inventory" button - fills your inventory with whatever item fits
+//TODO add "clear stash" button - deletes all the items in your stash

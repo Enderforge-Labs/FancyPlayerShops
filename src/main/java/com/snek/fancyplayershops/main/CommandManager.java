@@ -267,6 +267,13 @@ public abstract class CommandManager {
 
 
 
+    //TODO add /shop op save-all
+    //! ^ Saves all of the data instantly, skipping configured save cooldowns
+
+
+
+
+
 
 
 
