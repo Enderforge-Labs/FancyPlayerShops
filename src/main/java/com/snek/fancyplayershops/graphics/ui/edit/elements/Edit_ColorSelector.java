@@ -3,15 +3,16 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_ColorSelector_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
@@ -29,7 +30,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_ColorSelector extends SimpleShopButton {
+public class Edit_ColorSelector extends SimpleButtonElm {
     public static final float S = 0.4f;
     public static final float V = 0.8f;
 
@@ -47,7 +48,7 @@ public class Edit_ColorSelector extends SimpleShopButton {
      * @param hue The hue of the color theme.
      */
     public Edit_ColorSelector(final @NotNull Shop _shop, final float _hue, final @NotNull EditCanvas _menu) {
-        super(_shop, null, "Change color theme", 1, new Edit_ColorSelector_S(_shop));
+        super(_shop.getWorld(), null, "Change color theme", 1, new Edit_ColorSelector_S(_shop));
         hue = _hue;
         menu = _menu;
         getStyle(Edit_ColorSelector_S.class).setColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
@@ -61,6 +62,7 @@ public class Edit_ColorSelector extends SimpleShopButton {
         super.onClick(player, click);
 
         // Change theme hue
+        final Shop shop = GetShop.get(this);
         shop.setColorThemeHue(hue);
         ShopManager.scheduleShopSave(shop);
 

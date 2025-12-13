@@ -4,10 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 import com.snek.fancyplayershops.graphics.ui.inspect.InspectCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the user of the shop to view details about the item.
  */
-public class Buy_ItemInspector extends SimpleShopButton {
+public class Buy_ItemInspector extends SimpleButtonElm {
     final Div backButton;
 
 
@@ -35,7 +36,7 @@ public class Buy_ItemInspector extends SimpleShopButton {
      */
     public Buy_ItemInspector(final @NotNull Shop _shop, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
         super(
-            _shop,
+            _shop.getWorld(),
             _lmbActionNameOverride != null ? _lmbActionNameOverride : (_rmbActionNameOverride != null ? "Inspect item" : null),
             _rmbActionNameOverride != null ? _rmbActionNameOverride : "Inspect item",
             0,
@@ -50,7 +51,14 @@ public class Buy_ItemInspector extends SimpleShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        if(backButton instanceof Buy_Sub_BackButton b) b.setAmountCache(((BuyCanvas)canvas).getAmount());
+
+        // Save amount cache
+        if(backButton instanceof Buy_Sub_BackButton b) {
+            b.setAmountCache(((BuyCanvas)canvas).getAmount());
+        }
+
+        // Change canvas
+        final Shop shop = GetShop.get(this);
         shop.changeCanvas(new InspectCanvas(shop, backButton));
     }
 }

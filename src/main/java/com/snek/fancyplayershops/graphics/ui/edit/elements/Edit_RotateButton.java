@@ -6,10 +6,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonRight_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -17,6 +17,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
@@ -34,7 +35,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the owner of the shop to change the default rotation of the displayed object.
  */
-public class Edit_RotateButton extends SimpleShopButton {
+public class Edit_RotateButton extends SimpleButtonElm {
     private static final @NotNull PolylineData[][] designs = new PolylineData[][] {
         new PolylineData[] {
             new PolylineData(
@@ -68,7 +69,7 @@ public class Edit_RotateButton extends SimpleShopButton {
      */
     public Edit_RotateButton(final @NotNull Shop _shop, final float _rotation) {
         super(
-            _shop,
+            _shop.getWorld(),
             "Rotate once",
             "Rotate quickly",
             2,
@@ -89,6 +90,7 @@ public class Edit_RotateButton extends SimpleShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
+        final Shop shop = GetShop.get(this);
         shop.addDefaultRotation(rotation);
 
         // Animate the item display to show the new rotation
@@ -112,6 +114,7 @@ public class Edit_RotateButton extends SimpleShopButton {
         super.onHoverEnter(player);
 
         // Handle item display animations
+        final Shop shop = GetShop.get(this);
         final ShopItemDisplayElm itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
@@ -132,6 +135,7 @@ public class Edit_RotateButton extends SimpleShopButton {
         super.onHoverExit(player);
 
         // Handle item display animations
+        final Shop shop = GetShop.get(this);
         shop.getItemDisplay().startLoopAnimation();
     }
 }
