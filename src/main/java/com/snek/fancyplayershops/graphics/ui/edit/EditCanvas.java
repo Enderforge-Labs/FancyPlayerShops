@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
@@ -18,7 +19,6 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StatsButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
@@ -79,13 +79,13 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public EditCanvas(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
         Div e;
 
 
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
         updateTitle();
@@ -93,15 +93,15 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
         // Add price button
         e = bg.addChild(new Edit_PriceInput(_shop));
-        e.setSize(new Vector2f(INPUT_W, ShopFancyTextElm.LINE_H));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
+        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add stock limit button
         e = bg.addChild(new Edit_StockLimitInput(_shop));
-        e.setSize(new Vector2f(INPUT_W, ShopFancyTextElm.LINE_H));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3f);
+        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
@@ -149,11 +149,11 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         // Add color selectors
         final Float[] hues = Configs.getShop().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
-            final float h = (1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
+            final float h = (1f - FancyPlayerShops.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
             e = bg.addChild(new Edit_ColorSelector(_shop, hues[i], this));
             e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
             e.setAlignmentX(AlignmentX.RIGHT);
-            e.setPosY(1f - ShopFancyTextElm.LINE_H - h * (i + 1));
+            e.setPosY(1f - FancyPlayerShops.LINE_H - h * (i + 1));
         }
     }
 

@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.inspect;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
@@ -10,7 +11,6 @@ import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_IdDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_InventoryViewButton;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_ModDisplay;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -56,29 +56,29 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
     public InspectCanvas(final @NotNull Shop _shop, final @NotNull Div _backButton) {
 
         // Call superconstructor
-        super(_shop, 1, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
         Div e;
 
 
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), shop.getStandaloneName()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add id display
         e = bg.addChild(new Inspect_IdDisplay(_shop));
-        e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 1));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 1));
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add mod display
         e = bg.addChild(new Inspect_ModDisplay(_shop));
-        e.setSize(new Vector2f(DETAILS_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * (1 + 2));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 2));
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 

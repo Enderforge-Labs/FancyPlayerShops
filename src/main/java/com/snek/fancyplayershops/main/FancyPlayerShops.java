@@ -57,6 +57,9 @@ public class FancyPlayerShops implements ModInitializer {
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
+    // Graphics data
+    public static final float LINE_H = 0.1f;
+
 
 
 

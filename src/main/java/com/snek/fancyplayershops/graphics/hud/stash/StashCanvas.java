@@ -17,7 +17,7 @@ import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemNameCount
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
@@ -41,7 +41,7 @@ public class StashCanvas extends HudCanvas {
     public static final float ITEM_NAME_RATIO    = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
-    public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - SQUARE_BUTTON_SIZE;
+    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -50,14 +50,14 @@ public class StashCanvas extends HudCanvas {
 
 
     public StashCanvas(final @NotNull HudContext context) {
-        super(context, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(context, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  world  = (ServerLevel)player.level();
         Div e;
 
         // Add title
         e = bg.addChild(new TitleElm(world, new Txt("Your stash").white().bold().get()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
@@ -65,9 +65,9 @@ public class StashCanvas extends HudCanvas {
         final PlayerStash stash = StashManager.getStash(player);
         if(stash == null) {
             e = bg.addChild(new SimpleTextElm(world, new Stash_EmptyText_S()));
-            e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+            e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignmentX(AlignmentX.CENTER);
-            e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
+            e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         }
 
 

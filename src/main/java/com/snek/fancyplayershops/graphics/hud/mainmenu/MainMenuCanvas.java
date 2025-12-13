@@ -24,7 +24,7 @@ import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_StatsBu
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -50,7 +50,7 @@ public class MainMenuCanvas extends HudCanvas {
     public static final float ICON_NAME_SPACING  = 0.02f;
 
     public static final float HEADER_H           = 0.05f;
-    public static final float LIST_H             = 1f - ShopFancyTextElm.LINE_H - HEADER_H - SQUARE_BUTTON_SIZE;
+    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - HEADER_H - SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -59,14 +59,14 @@ public class MainMenuCanvas extends HudCanvas {
 
 
     public MainMenuCanvas(final @NotNull HudContext _hud) {
-        super(_hud, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(_hud, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         final ServerLevel  world  = (ServerLevel)player.level();
         Div e;
 
         // Add title
         e = bg.addChild(new TitleElm(world, new Txt("Your shops").white().bold().get()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
@@ -74,9 +74,9 @@ public class MainMenuCanvas extends HudCanvas {
         final @Nullable HashSet<@NotNull Shop> shops = ShopManager.getShopsOfPlayer(player);
         if(shops == null || shops.isEmpty()) {
             e = bg.addChild(new SimpleTextElm(world, new MainMenu_EmptyText_S()));
-            e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+            e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignmentX(AlignmentX.CENTER);
-            e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
+            e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         }
 
 
@@ -88,7 +88,7 @@ public class MainMenuCanvas extends HudCanvas {
             e = bg.addChild(new MainMenu_GroupHeader(_hud, shopGroups));
             e.setSize(new Vector2f(LIST_WIDTH, HEADER_H));
             e.setAlignmentX(AlignmentX.RIGHT);
-            e.setPosY(1f - ShopFancyTextElm.LINE_H - HEADER_H);
+            e.setPosY(1f - FancyPlayerShops.LINE_H - HEADER_H);
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
@@ -107,12 +107,12 @@ public class MainMenuCanvas extends HudCanvas {
 
         // Add close button
         e = bg.addChild(new Hud_CloseButton(_hud));
-        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
 
         // Add info button
         e = bg.addChild(new MainMenu_InfoButton(_hud));
-        e.setSize(new Vector2f(ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
 

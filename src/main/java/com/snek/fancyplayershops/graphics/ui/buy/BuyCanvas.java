@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
@@ -16,7 +17,6 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -72,27 +72,27 @@ public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public BuyCanvas(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1, ShopFancyTextElm.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
+        super(_shop, 1, FancyPlayerShops.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
         Div e;
 
 
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add amount input and total price display
         e = bg.addChild(new Buy_PriceDisplay(_shop, this));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2);
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 2);
         priceDisplay = (Buy_PriceDisplay)e;
 
         e = bg.addChild(new Buy_AmountInputDisplay(_shop, this));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3);
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 3);
         amountInputDisplay = (Buy_AmountInputDisplay)e;
 
         //Add item inspector
@@ -104,7 +104,7 @@ public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
         // Add confirm button
         e = bg.addChild(new Buy_ConfirmButton(_shop, this));
-        e.setSize(new Vector2f(CONFIRM_BUTTON_W, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(CONFIRM_BUTTON_W, FancyPlayerShops.LINE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (Buy_ConfirmButton)e;
@@ -112,18 +112,18 @@ public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
         // Add quick buy buttons
         e = bg.addChild(new Buy_1xButton(_shop));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
-        e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
+        e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1xButton = (Buy_1xButton)e;
 
         e = bg.addChild(new Buy_1sButton(_shop));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
-        e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
+        e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1sButton = (Buy_1sButton)e;
 
         e = bg.addChild(new Buy_1iButton(_shop));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, ShopFancyTextElm.LINE_H));
-        e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - ShopFancyTextElm.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
+        e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1iButton = (Buy_1iButton)e;
 
 

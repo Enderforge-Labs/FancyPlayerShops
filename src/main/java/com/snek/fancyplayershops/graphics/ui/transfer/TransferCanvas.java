@@ -5,11 +5,11 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_Input_S;
@@ -64,35 +64,35 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
     public TransferCanvas(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1f, ShopFancyTextElm.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
         newOwnerUUID = _shop.getOwnerUuid();
         Div e;
 
 
         // Add title
         e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 1f);
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, ShopFancyTextElm.LINE_H));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 1f);
+        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add player name input
         e = bg.addChild(new SimpleTextElm(_shop.getWorld()));
-        e.setSize(new Vector2f(1f, ShopFancyTextElm.LINE_H));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 2f);
+        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("New owner:").get());
 
         e = bg.addChild(new Transfer_NameInput(_shop, this));
-        e.setSize(new Vector2f(1, ShopFancyTextElm.LINE_H));
-        e.setPosY(1f - ShopFancyTextElm.LINE_H * 3f);
+        e.setSize(new Vector2f(1, FancyPlayerShops.LINE_H));
+        e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
         ((Elm)e).getStyle(Transfer_Input_S.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add confirm button
         e = bg.addChild(new Transfer_ConfirmButton(_shop, this));
-        e.setSize(new Vector2f(0.5f, ShopFancyTextElm.LINE_H));
+        e.setSize(new Vector2f(0.5f, FancyPlayerShops.LINE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (Transfer_ConfirmButton)e;
