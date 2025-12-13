@@ -4,11 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_ConfirmButton_S;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
@@ -24,13 +25,13 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Transfer_ConfirmButton extends FancyShopButton {
+public class Transfer_ConfirmButton extends FancyButtonElm {
     private final @NotNull TransferCanvas menu;
     private boolean active = true;
 
 
     public Transfer_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferCanvas _menu) {
-        super(_shop, null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
+        super(_shop.getWorld(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
         menu = _menu;
     }
 
@@ -38,6 +39,9 @@ public class Transfer_ConfirmButton extends FancyShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
+
+        // Change owner
+        final Shop shop = GetShop.get(this);
         shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
         if(active) __base_ButtonElm.playButtonSound(player);
     }

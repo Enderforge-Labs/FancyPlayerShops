@@ -5,10 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_BuyButton_S;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ConfirmButton_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopFancyTextElm;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -16,6 +16,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
@@ -31,7 +32,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Buy_1iButton extends FancyShopButton {
+public class Buy_1iButton extends FancyButtonElm {
     private boolean active = true;
 
 
@@ -63,7 +64,7 @@ public class Buy_1iButton extends FancyShopButton {
 
 
     public Buy_1iButton(final @NotNull Shop _shop) {
-        super(_shop, null, "Fill inventory", 1,  new Buy_BuyButton_S(_shop));
+        super(_shop.getWorld(), null, "Fill inventory", 1,  new Buy_BuyButton_S(_shop));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
@@ -90,6 +91,7 @@ public class Buy_1iButton extends FancyShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
+        final Shop shop = GetShop.get(this);
         final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
         final int oldStock = shop.getStock();
 

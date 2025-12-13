@@ -4,10 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ConfirmButton_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.FancyShopButton;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
@@ -24,13 +25,13 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Buy_ConfirmButton extends FancyShopButton {
+public class Buy_ConfirmButton extends FancyButtonElm {
     private final @NotNull BuyCanvas menu;
     private boolean active = true;
 
 
     public Buy_ConfirmButton(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop, null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
+        super(_shop.getWorld(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
         menu = _menu;
         updateDisplay(null);
     }
@@ -39,6 +40,9 @@ public class Buy_ConfirmButton extends FancyShopButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
+
+        // Play sound and buy items
+        final Shop shop = GetShop.get(this);
         if(active) __base_ButtonElm.playButtonSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, menu.getAmount(), true);
