@@ -5,13 +5,13 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
-import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_SimpleButton;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 //TODO don't use an entity instead of making it invisible. To improve performance
-public class MainMenu_GroupEntry extends Hud_SimpleButton {
+public class MainMenu_GroupEntry extends SimpleButtonElm {
 
     public static final float BALANCE_WIDTH = 0.2f;
     public static final float NAME_WIDTH = 1f - BALANCE_WIDTH;

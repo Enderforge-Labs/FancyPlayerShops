@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.graphics.hud.mainmenu.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_SimpleButton;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -11,6 +10,7 @@ import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 
@@ -25,7 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class MainMenu_PreferencesButton extends Hud_SimpleButton {
+public class MainMenu_PreferencesButton extends SimpleButtonElm {
 
 
     private static final @NotNull PolylineData[] design = {

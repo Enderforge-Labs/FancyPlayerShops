@@ -7,7 +7,6 @@ import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.SimpleShopButton;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;

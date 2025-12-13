@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -23,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Hud_CloseButton extends Hud_SimpleButton {
+public class Hud_CloseButton extends SimpleButtonElm {
 
 
     private static final @NotNull PolylineData[] design = {

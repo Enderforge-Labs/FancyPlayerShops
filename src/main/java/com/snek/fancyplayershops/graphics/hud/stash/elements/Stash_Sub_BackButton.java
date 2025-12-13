@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
-import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_SimpleButton;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Stash_Sub_BackButton extends Hud_SimpleButton {
+public class Stash_Sub_BackButton extends SimpleButtonElm {
     //FIXME make common designs public in frameworklib
     private static final @NotNull PolylineData[] design = {
         new PolylineData(
