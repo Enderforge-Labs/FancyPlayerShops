@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
@@ -37,7 +38,13 @@ public class Details_Values extends ShopTextElm {
     public Details_Values(@NotNull Shop _shop) {
         super(_shop);
         ownerName = MinecraftUtils.getOfflinePlayerName(shop.getOwnerUuid(), FrameworkLib.getServer());
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         updateDisplay();
+        super.spawn(pos, animate);
     }
 
 

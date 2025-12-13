@@ -34,7 +34,6 @@ public class Details_OwnerHead extends ItemElm {
      */
     public Details_OwnerHead(final @NotNull Shop _shop) {
         super(_shop.getWorld(), new Details_OwnerHead_S());
-        updateDisplay();
     }
 
 
@@ -55,6 +54,7 @@ public class Details_OwnerHead extends ItemElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        updateDisplay();
         if(!suppressSpawn) super.spawn(pos, animate);
     }
 }

@@ -14,13 +14,18 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 public final class GetShop extends UtilityClassBase {
     public static @NotNull Shop get(final @NotNull Div _this) {
-        final Context context = _this.getCanvas().getContext();
-        if(context instanceof ShopContext) {
-            return ((ShopContext)context).getShop();
+
+        if(_this.getCanvas() == null) {
+            FancyPlayerShops.LOGGER.error("GetShop.get() used orphan element", new RuntimeException());
+            return null;
         }
-        else {
+
+        final Context context = _this.getCanvas().getContext();
+        if(!(context instanceof ShopContext)) {
             FancyPlayerShops.LOGGER.error("GetShop.get() used from non-shop graphic element", new RuntimeException());
             return null;
         }
+
+        return ((ShopContext)context).getShop();
     }
 }

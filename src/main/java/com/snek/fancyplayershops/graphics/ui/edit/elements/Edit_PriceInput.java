@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
@@ -33,7 +34,13 @@ public class Edit_PriceInput extends TextInputElm {
      */
     public Edit_PriceInput(final @NotNull Shop _shop) {
         super(_shop.getWorld(), null, "Change price", new Txt("Send the new price in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), new Edit_Input_S(_shop));
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         updateDisplay(null);
+        super.spawn(pos, animate);
     }
 
 

@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ShopTextElm;
@@ -27,7 +28,13 @@ public class Details_Names extends ShopTextElm {
      */
     public Details_Names(final @NotNull Shop _shop) {
         super(_shop);
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         updateDisplay();
+        super.spawn(pos, animate);
     }
 
 

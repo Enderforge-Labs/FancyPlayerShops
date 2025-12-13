@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
@@ -33,7 +34,13 @@ public class Buy_ConfirmButton extends FancyButtonElm {
     public Buy_ConfirmButton(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
         super(_shop.getWorld(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
         menu = _menu;
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         updateDisplay(null);
+        super.spawn(pos, animate);
     }
 
 

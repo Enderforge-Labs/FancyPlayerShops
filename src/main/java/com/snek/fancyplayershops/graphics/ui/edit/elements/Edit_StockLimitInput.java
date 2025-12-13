@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
@@ -32,7 +33,17 @@ public class Edit_StockLimitInput extends TextInputElm {
      * @param _shop The target shop.
      */
     public Edit_StockLimitInput(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), new Edit_Input_S(_shop));
+        super(
+            _shop.getWorld(),
+            null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
+            new Edit_Input_S(_shop)
+        );
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        super.spawn(pos, animate);
         updateDisplay(null);
     }
 
