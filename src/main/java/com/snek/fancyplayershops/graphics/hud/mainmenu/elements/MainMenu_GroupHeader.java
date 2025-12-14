@@ -19,7 +19,6 @@ import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -49,7 +48,7 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
         return r;
     }
     public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<ShopGroup> groups) {
-        super((ServerLevel)context.getPlayer().level(), null, "Claim everything", 2);
+        super(context.getLevel(), null, "Claim everything", 2);
         Div e;
 
 

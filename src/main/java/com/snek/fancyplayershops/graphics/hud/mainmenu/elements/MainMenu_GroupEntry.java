@@ -18,7 +18,6 @@ import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -38,7 +37,7 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
     //TODO update balance dynamically?
     public MainMenu_GroupEntry(final @NotNull HudContext context, final @Nullable ShopGroup groupInstance) {
-        super((ServerLevel)context.getPlayer().level(), "Claim balance", "Edit group", 2);
+        super(context.getLevel(), "Claim balance", "Edit group", 2);
         this.groupInstance = groupInstance;
         Div e;
 

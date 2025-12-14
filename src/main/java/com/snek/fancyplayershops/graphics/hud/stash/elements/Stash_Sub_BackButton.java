@@ -13,7 +13,6 @@ import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -48,10 +47,10 @@ public class Stash_Sub_BackButton extends SimpleButtonElm {
 
 
     public Stash_Sub_BackButton(final @NotNull HudContext context) {
-        super((ServerLevel)context.getPlayer().level(), null, "Go back", 1);
+        super(context.getLevel(), null, "Go back", 1);
 
         // Create design
-        final Div e = addChild(new PolylineSetElm((ServerLevel)context.getPlayer().level(), design));
+        final Div e = addChild(new PolylineSetElm(context.getLevel(), design));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

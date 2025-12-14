@@ -13,7 +13,6 @@ import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -46,7 +45,7 @@ public class Hud_CloseButton extends SimpleButtonElm {
 
 
     public Hud_CloseButton(final @NotNull HudContext _hud) {
-        super((ServerLevel)_hud.getPlayer().level(), null, "Close", 1, new Hud_SquareButton_S());
+        super(_hud.getLevel(), null, "Close", 1, new Hud_SquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, design));

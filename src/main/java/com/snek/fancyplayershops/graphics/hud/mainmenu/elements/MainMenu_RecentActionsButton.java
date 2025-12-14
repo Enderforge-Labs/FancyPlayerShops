@@ -19,7 +19,6 @@ import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ClickAction;
 
 
@@ -66,7 +65,7 @@ public class MainMenu_RecentActionsButton extends SimpleButtonElm {
 
 
     public MainMenu_RecentActionsButton(final @NotNull HudContext _hud) {
-        super((ServerLevel)_hud.getPlayer().level(), null, "Recent actions", 1, new Hud_SquareButton_S());
+        super(_hud.getLevel(), null, "Recent actions", 1, new Hud_SquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, design));

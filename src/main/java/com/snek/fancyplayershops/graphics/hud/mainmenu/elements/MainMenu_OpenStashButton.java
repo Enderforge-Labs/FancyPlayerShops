@@ -15,7 +15,6 @@ import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ClickAction;
 
 
@@ -58,7 +57,7 @@ public class MainMenu_OpenStashButton extends SimpleButtonElm {
 
 
     public MainMenu_OpenStashButton(final @NotNull HudContext _hud) {
-        super((ServerLevel)_hud.getPlayer().level(), null, "Open stash", 1, new Hud_SquareButton_S());
+        super(_hud.getLevel(), null, "Open stash", 1, new Hud_SquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, design));

@@ -10,7 +10,6 @@ import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
 
@@ -25,7 +24,7 @@ public class Stash_ItemNameCount extends SimpleTextElm {
 
 
     public Stash_ItemNameCount(final @NotNull HudContext _hud, final @NotNull ItemStack _item, final int _count) {
-        super((ServerLevel)(_hud.getPlayer().level()), new Stash_ItemNameCount_S());
+        super(_hud.getLevel(), new Stash_ItemNameCount_S());
         item = _item;
         count = _count;
         updateDisplay();
