@@ -67,11 +67,21 @@ public class ShopGroupManager extends UtilityClassBase {
 
     /**
      * Adds a new shop group and associates it with the specified player.
+     * <p>
+     * Groups with duplicate UUIDs are not added.
      * @param playerUUID The UUID of the player.
      * @param group The group to add.
      */
     public static void addGroup(final @NotNull UUID playerUUID, final @NotNull ShopGroup group) {
+
+        // Get the list of groups
         final List<ShopGroup> groups = groupsList.computeIfAbsent(playerUUID, uuid -> new ArrayList<>());
+
+
+        // Return if UUID exists, add group otherwise
+        for(final ShopGroup g : groups) {
+            if(g.getUuid().equals(group.getUuid())) return;
+        }
         groups.add(group);
     }
 
@@ -82,17 +92,17 @@ public class ShopGroupManager extends UtilityClassBase {
 
         // Create default group if needed //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
-            addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID)); //TODO use italic gray once colors are implemented
+            addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID));
+            //TODO use italic gray once colors are implemented
         }
 
-        // Find group list
-        final List<ShopGroup> groups = groupsList.get(ownerUUID);
 
         // Find group
+        final List<ShopGroup> groups = groupsList.get(ownerUUID);
         if(groups != null) {
-            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+            Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
 
-            // Add shop to the group
+            // Add shop to the group if it exists
             if(groupOpt.isPresent()) {
                 final ShopGroup group = groupOpt.get();
                 group.addShop(shop);
