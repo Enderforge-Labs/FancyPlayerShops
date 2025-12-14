@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
@@ -12,6 +13,7 @@ import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -24,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 //TODO don't use an entity instead of making it invisible. To improve performance
-public class MainMenu_GroupEntry extends SimpleButtonElm {
+public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
     public static final float BALANCE_WIDTH = 0.2f;
     public static final float NAME_WIDTH = 1f - BALANCE_WIDTH;
@@ -57,8 +59,16 @@ public class MainMenu_GroupEntry extends SimpleButtonElm {
 
 
     @Override
-    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
         //TODO
+    }
+
+
+
+
+    @Override
+    public void onScroll(final @NotNull Player player, final float amount) {
+        ((ScrollableList)getParent().getParent()).onScroll(player, amount);
     }
 }
