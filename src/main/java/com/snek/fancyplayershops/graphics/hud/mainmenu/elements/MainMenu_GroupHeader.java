@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -48,7 +49,7 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
         return r;
     }
     public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<ShopGroup> groups) {
-        super(context.getLevel(), null, "Claim everything", 2);
+        super(context.getLevel(), null, "Claim everything", 2, new MainMenu_GroupEntry_S());
         Div e;
 
 

@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.fancyplayershops.graphics.ScrollableList;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
@@ -37,7 +38,7 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
     //TODO update balance dynamically?
     public MainMenu_GroupEntry(final @NotNull HudContext context, final @Nullable ShopGroup groupInstance) {
-        super(context.getLevel(), "Claim balance", "Edit group", 2);
+        super(context.getLevel(), "Claim balance", "Edit group", 2, new MainMenu_GroupEntry_S());
         this.groupInstance = groupInstance;
         Div e;
 

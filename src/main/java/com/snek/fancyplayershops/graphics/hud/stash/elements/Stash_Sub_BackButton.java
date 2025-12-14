@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
+import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
@@ -47,7 +48,7 @@ public class Stash_Sub_BackButton extends SimpleButtonElm {
 
 
     public Stash_Sub_BackButton(final @NotNull HudContext context) {
-        super(context.getLevel(), null, "Go back", 1);
+        super(context.getLevel(), null, "Go back", 1, new Hud_SquareButton_S());
 
         // Create design
         final Div e = addChild(new PolylineSetElm(context.getLevel(), design));
