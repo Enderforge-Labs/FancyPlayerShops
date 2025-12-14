@@ -168,7 +168,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
                 // Update scrollbar
-                if(lastVisible - firstVisible == elmList.size() - 1) {
+                if(lastVisible - firstVisible != elmList.size() - 1) {
                     final float elmAmount = (float)elmList.size();
                     final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
                     final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
