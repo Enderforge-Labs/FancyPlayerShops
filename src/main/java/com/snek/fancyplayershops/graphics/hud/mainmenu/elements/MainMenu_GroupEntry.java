@@ -7,11 +7,13 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
@@ -43,16 +45,23 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
         Div e;
 
 
-        // Add shop group name header
-        e = addChild(new SimpleTextElm(level, new Txt(groupInstance.getDisplayName()).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        // Add shop group name
+        e = addChild(new SimpleTextElm(
+            level,
+            new Txt(groupInstance.getDisplayName()).cat("\n★★★☆☆").get(),
+            TextAlignment.LEFT,
+            TextOverflowBehaviour.SCROLL)
+        );
         e.setSize(new Vector2f(NAME_WIDTH, 1));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
 
 
-        // Add shop group balance header
+        // Add shop group balance
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(groupInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
     }
 
 

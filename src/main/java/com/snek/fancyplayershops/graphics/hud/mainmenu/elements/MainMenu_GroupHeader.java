@@ -53,18 +53,18 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
         Div e;
 
 
-        // Add shop group name
+        // Add shop group name header
         e = addChild(new SimpleTextElm(level, new Txt("Selling " + calcTotalItems(groups) + " items").get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
         e.setSize(new Vector2f(MainMenu_GroupEntry.NAME_WIDTH, 1));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f));
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
 
 
-        // Add shop group balance
+        // Add shop group balance header
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance(groups))).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(MainMenu_GroupEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f));
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
     }
 
 

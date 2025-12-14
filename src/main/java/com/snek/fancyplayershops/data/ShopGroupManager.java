@@ -90,10 +90,12 @@ public class ShopGroupManager extends UtilityClassBase {
 
     public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
 
-        // Create default group if needed //! This special group is not stored to file or loaded
+        // Create default group if needed
+        //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
             addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID));
-            //TODO use italic gray once colors are implemented
+            //TODO use italic grey once colors are implemented
+            //TODO allow players to use &[0-9a-gulomkr]
         }
 
 
@@ -154,21 +156,22 @@ public class ShopGroupManager extends UtilityClassBase {
 
         for(final Pair<UUID, ShopGroup> pair : scheduledForSaving) {
             //FIXME CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
-            //BUG   CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
+            if(!pair.getFirst().equals(DEFAULT_GROUP_UUID)) {
 
-            // Create the JSON objects that contains the group data
-            final JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("ownerUUID",   pair.getFirst ().toString());
-            jsonObject.addProperty("uuid",        pair.getSecond().getUuid().toString());
-            jsonObject.addProperty("displayName", pair.getSecond().getDisplayName());
+                // Create the JSON objects that contains the group data
+                final JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("ownerUUID",   pair.getFirst ().toString());
+                jsonObject.addProperty("uuid",        pair.getSecond().getUuid().toString());
+                jsonObject.addProperty("displayName", pair.getSecond().getDisplayName());
 
 
-            // Create this group's config file if absent, then save the JSON in it
-            final File groupStorageFile = new File(levelStorageDir + "/" + pair.getSecond().getUuid().toString() + ".json");
-            try(final Writer writer = new FileWriter(groupStorageFile)) {
-                new Gson().toJson(jsonObject, writer);
-            } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", pair.getSecond().getDisplayName(), e);
+                // Create this group's config file if absent, then save the JSON in it
+                final File groupStorageFile = new File(levelStorageDir + "/" + pair.getSecond().getUuid().toString() + ".json");
+                try(final Writer writer = new FileWriter(groupStorageFile)) {
+                    new Gson().toJson(jsonObject, writer);
+                } catch(final IOException e) {
+                    FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", pair.getSecond().getDisplayName(), e);
+                }
             }
 
 

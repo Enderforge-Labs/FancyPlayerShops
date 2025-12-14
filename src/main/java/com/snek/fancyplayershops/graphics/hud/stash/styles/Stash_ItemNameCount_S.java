@@ -27,6 +27,6 @@ public class Stash_ItemNameCount_S extends SimpleTextElmStyle {
 
     @Override
     public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(0.5f);
+        return super.getDefaultTransform().scale(0.5f); //FIXME move to confiurable style's font size or something
     }
 }

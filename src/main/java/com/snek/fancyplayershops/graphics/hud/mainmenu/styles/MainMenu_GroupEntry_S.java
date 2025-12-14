@@ -16,14 +16,11 @@ import com.snek.frameworklib.utils.Easings;
 
 
 
-/**
- * The style of the buttons in the toolbar.
- */
 public class MainMenu_GroupEntry_S extends Hud_SimpleButton_S {
 
 
     /**
-     * Creates a new EditUi_SquareButton_S.
+     * Creates a new MainMenu_GroupEntry_S.
      */
     public MainMenu_GroupEntry_S() {
         super();
