@@ -37,7 +37,7 @@ public class Details_Values extends SimpleTextElm {
      * @param _shop The target shop.
      */
     public Details_Values(@NotNull Shop _shop) {
-        super(_shop.getWorld());
+        super(_shop.getLevel());
         ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid(), FrameworkLib.getServer());
     }
 

@@ -38,7 +38,7 @@ public class Transfer_NameInput extends TextInputElm {
      */
     public Transfer_NameInput(final @NotNull Shop _shop, final @NotNull TransferCanvas _menu) {
         super(
-            _shop.getWorld(),
+            _shop.getLevel(),
             null, "Choose new owner",
             new Txt("Send the name of the new owner in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
             new Transfer_Input_S(_shop)

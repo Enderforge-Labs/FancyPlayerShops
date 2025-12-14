@@ -31,7 +31,7 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
      * @param _shop The target shop.
      */
     public Inspect_InventoryViewButton(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "View item in inventory", 0, new Buy_ItemInspector_S(_shop));
+        super(_shop.getLevel(), null, "View item in inventory", 0, new Buy_ItemInspector_S(_shop));
         inventoryViewFactory = new ItemInspectorInventory_Factory(_shop);
     }
 

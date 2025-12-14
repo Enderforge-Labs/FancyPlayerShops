@@ -56,7 +56,7 @@ public class MainMenu_InfoButton extends SimpleButtonElm {
         super((ServerLevel)_hud.getPlayer().level(), null, "Info", 1, new Hud_SquareButton_S());
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(world, design));
+        final Div e = addChild(new PolylineSetElm(level, design));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

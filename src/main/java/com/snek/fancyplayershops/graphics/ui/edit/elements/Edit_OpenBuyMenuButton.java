@@ -42,10 +42,10 @@ public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
 
 
     public Edit_OpenBuyMenuButton(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "Open buy menu", 1, new Edit_SquareButton_S(_shop));
+        super(_shop.getLevel(), null, "Open buy menu", 1, new Edit_SquareButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), design));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

@@ -33,7 +33,7 @@ public class Edit_PriceInput extends TextInputElm {
      * @param _shop The target shop.
      */
     public Edit_PriceInput(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "Change price", new Txt("Send the new price in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), new Edit_Input_S(_shop));
+        super(_shop.getLevel(), null, "Change price", new Txt("Send the new price in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), new Edit_Input_S(_shop));
     }
 
 

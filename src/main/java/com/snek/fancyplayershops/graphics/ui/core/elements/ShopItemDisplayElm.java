@@ -110,7 +110,7 @@ public class ShopItemDisplayElm extends ItemElm {
      * @param _targetShop The target shop.
      */
     public ShopItemDisplayElm(final @NotNull Shop _targetShop) {
-        super(_targetShop.getWorld(), new ItemElmStyle());
+        super(_targetShop.getLevel(), new ItemElmStyle());
         shop = _targetShop;
         //! updateDisplay call is in spawn()
 
@@ -278,7 +278,7 @@ public class ShopItemDisplayElm extends ItemElm {
      */
     public void spawnNameEntity() {
         if(name == null) {
-            name = new FancyTextElm(world, new SimpleNameDisplay_S());
+            name = new FancyTextElm(level, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0), true);
         }
@@ -301,7 +301,7 @@ public class ShopItemDisplayElm extends ItemElm {
 
 
     /**
-     * Forcibly sets the item display of a loaded shop when the display entity is loaded into the world.
+     * Forcibly sets the item display of a loaded shop when the display entity is loaded into the level.
      * <p> Must be called on entity load event.
      * @param entity The loaded entity.
      */

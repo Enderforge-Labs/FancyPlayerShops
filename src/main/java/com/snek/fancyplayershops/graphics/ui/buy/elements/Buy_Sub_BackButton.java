@@ -51,10 +51,10 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
 
 
     public Buy_Sub_BackButton(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "Go back", 1,  new Edit_SquareButton_S(_shop));
+        super(_shop.getLevel(), null, "Go back", 1,  new Edit_SquareButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), design));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

@@ -44,13 +44,13 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
 
         // Add shop group name header
-        e = addChild(new SimpleTextElm(world, new Txt(groupInstance.getDisplayName()).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        e = addChild(new SimpleTextElm(level, new Txt(groupInstance.getDisplayName()).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
         e.setSize(new Vector2f(NAME_WIDTH, 1));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
 
 
         // Add shop group balance header
-        e = addChild(new SimpleTextElm(world, new Txt(Utils.formatPriceShort(groupInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(groupInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
     }

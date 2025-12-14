@@ -84,7 +84,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
+        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
@@ -123,7 +123,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);

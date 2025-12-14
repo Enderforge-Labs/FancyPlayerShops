@@ -36,7 +36,7 @@ public class Buy_ItemInspector extends SimpleButtonElm {
      */
     public Buy_ItemInspector(final @NotNull Shop _shop, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
         super(
-            _shop.getWorld(),
+            _shop.getLevel(),
             _lmbActionNameOverride != null ? _lmbActionNameOverride : (_rmbActionNameOverride != null ? "Inspect item" : null),
             _rmbActionNameOverride != null ? _rmbActionNameOverride : "Inspect item",
             0,

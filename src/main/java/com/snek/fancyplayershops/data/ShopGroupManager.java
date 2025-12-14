@@ -178,7 +178,7 @@ public class ShopGroupManager extends UtilityClassBase {
     /**
      * Loads all the shop groups into the runtime map, if needed.
      * <p>
-     * Must be called on server started event (After the worlds are loaded!).
+     * Must be called on server started event (After the levels are loaded!).
      * <p>
      * If the data has already been loaded, the call will have no effect.
      */

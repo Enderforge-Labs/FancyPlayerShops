@@ -52,11 +52,11 @@ public class StashCanvas extends HudCanvas {
     public StashCanvas(final @NotNull HudContext context) {
         super(context, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
-        final ServerLevel  world  = (ServerLevel)player.level();
+        final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
 
         // Add title
-        e = bg.addChild(new TitleElm(world, new Txt("Your stash").white().bold().get()));
+        e = bg.addChild(new TitleElm(level, new Txt("Your stash").white().bold().get()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -64,7 +64,7 @@ public class StashCanvas extends HudCanvas {
         // Add "empty stash" text if the stash is empty
         final PlayerStash stash = StashManager.getStash(player);
         if(stash == null) {
-            e = bg.addChild(new SimpleTextElm(world, new Stash_EmptyText_S()));
+            e = bg.addChild(new SimpleTextElm(level, new Stash_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignmentX(AlignmentX.CENTER);
             e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
@@ -76,7 +76,7 @@ public class StashCanvas extends HudCanvas {
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
-            list = (ScrollableList)bg.addChild(new ScrollableList(world, list_elm_h));
+            list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
             list.setPosY(SQUARE_BUTTON_SIZE);

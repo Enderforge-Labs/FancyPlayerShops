@@ -62,7 +62,6 @@ public abstract class HoverReceiver {
 
     /**
      * Tick operations. This function spawns and removes the focus displays depending on what players are currently looking at.
-     * @param serverWorlds The list of worlds to process. Only shops in these worlds are updated.
      */
     public static void tick() {
 
@@ -75,8 +74,8 @@ public abstract class HoverReceiver {
             targetedShops        = new LinkedHashSet<>();
 
             // Recalculate player list snapshot
-            for(final ServerLevel serverWorld : FrameworkLib.getServer().getAllLevels()) {
-                for(final Player player : serverWorld.players()) {
+            for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
+                for(final Player player : level.players()) {
                     playerListSnapshot.add(player);
                 }
             }
@@ -208,13 +207,13 @@ public abstract class HoverReceiver {
      * @return The position of the targeted block, or null if no block is found.
      */
     private static @Nullable Vec3 getTargetBlockPrecise(final @NotNull Player player) {
-        final Level world = player.level();
+        final Level level = player.level();
 
         // Perform ray cast
         final Vec3 eyePos = player.getEyePosition();
         final Vec3 lookDirection = player.getViewVector(1.0F);
         final Float reach = Configs.getPerf().reach_distance.getValue();
-        final BlockHitResult result = world.clip(new ClipContext(
+        final BlockHitResult result = level.clip(new ClipContext(
             eyePos,
             eyePos.add(lookDirection.multiply(reach, reach, reach)),
             ClipContext.Block.OUTLINE,

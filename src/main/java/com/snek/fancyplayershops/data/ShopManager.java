@@ -86,7 +86,7 @@ public final class ShopManager extends UtilityClassBase {
 
 
 
-    // Stores the shops of players, identifying them by their owner's UUID and their coordinates and world in the format "x,y,z,worldId"
+    // Stores the shops of players, identifying them by their owner's UUID and their coordinates and level in the format "x,y,z,levelId"
     private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
     private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
@@ -231,12 +231,12 @@ public final class ShopManager extends UtilityClassBase {
 
         for(final Shop shop : scheduledForSaving) {
 
-            // Create directory for the world
-            final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId());
+            // Create directory for the level
+            final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getLevelId());
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the shop data of the world \"{}\"",shop.getWorldId(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the shop data of the level \"{}\"",shop.getLevelId(), e);
             }
 
 
@@ -247,11 +247,11 @@ public final class ShopManager extends UtilityClassBase {
 
 
             // Create this shop's config file if absent, then save the JSON in it
-            final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoWorld() + ".json");
+            final File shopStorageFile = new File(levelStorageDir + "/" + shop.getIdentifierNoLevel() + ".json");
             try (final Writer writer = new FileWriter(shopStorageFile)) {
                 new Gson().toJson(shop, writer);
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the shop \"{}\"", shop.getIdentifierNoWorld(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the shop \"{}\"", shop.getIdentifierNoLevel(), e);
             }
 
 
@@ -266,7 +266,7 @@ public final class ShopManager extends UtilityClassBase {
 
     /**
      * Loads all the player shops into the runtime map if needed.
-     * <p> Must be called on server started event (After the worlds are loaded!).
+     * <p> Must be called on server started event (After the levels are loaded!).
      * <p> If the data has already been loaded, the call will have no effect.
      */
     public static void loadShops() {
@@ -308,11 +308,11 @@ public final class ShopManager extends UtilityClassBase {
     /**
      * Returns the Shop instance present at a certain block position.
      * @param pos The block position.
-     * @param world The world the shop is in.
+     * @param level The level the shop is in.
      * @return The shop, or null if no shop is there.
     */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull Level world) {
-        return shopsByCoords.get(Shop.calcShopKey(pos, world));
+    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull Level level) {
+        return shopsByCoords.get(Shop.calcShopKey(pos, level));
     }
 
 
@@ -328,7 +328,7 @@ public final class ShopManager extends UtilityClassBase {
         unregisterShop(shop);
 
         // Delete the config file
-        final File shopStorageFile = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getWorldId() + "/" + shop.getIdentifierNoWorld() + ".json").toFile();
+        final File shopStorageFile = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getLevelId() + "/" + shop.getIdentifierNoLevel() + ".json").toFile();
         shopStorageFile.delete();
     }
 
@@ -357,7 +357,7 @@ public final class ShopManager extends UtilityClassBase {
 
             final Shop shop = updateSnapshot.get(updateIndex);
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
-            if(shop.getWorld().hasChunk(chunkPos.x, chunkPos.z)) {
+            if(shop.getLevel().hasChunk(chunkPos.x, chunkPos.z)) {
                 shop.pullItems();
                 ++i;
             }
@@ -378,16 +378,16 @@ public final class ShopManager extends UtilityClassBase {
 
     /**
      * Removes all shops near the specified position, sending all the items to their owner's stash.
-     * @param world The target world.
+     * @param level The target level.
      * @param pos The center of the purge radius.
      * @param radius The maximum distance from pos shops can have in order to be purged.
      * @return The number of shops that were removed.
      */
-    public static int purge(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius) {
+    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
         final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
         for(final Shop shop : shops) {
-            if(shop.getWorld() == world && shop.calcDisplayPos().sub(pos).length() <= radius) {
+            if(shop.getLevel() == level && shop.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
@@ -409,16 +409,16 @@ public final class ShopManager extends UtilityClassBase {
 
     /**
      * Forces the owners to pick up any of their shops near the specified position, sending the snapshots to their stashes.
-     * @param world The target world.
+     * @param level The target level.
      * @param pos The center of the radius.
      * @param radius The maximum distance from pos shops can have in order to be picked up.
      * @return The number of shops that were picked up.
      */
-    public static int displace(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius) {
+    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
         final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
         for(final Shop shop : shops) {
-            if(shop.getWorld() == world && shop.calcDisplayPos().sub(pos).length() <= radius) {
+            if(shop.getLevel() == level && shop.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
                 final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid());
@@ -440,13 +440,13 @@ public final class ShopManager extends UtilityClassBase {
 
     /**
      * Fill an area around the specified position with shop blocks.
-     * @param world The target world.
+     * @param level The target level.
      * @param pos The center of the fill area.
      * @param radius The maximum distance to reach on each cardinal direction.
      * @param owner The owner of the newly created shops.
      * @return The number of shops that were created.
      */
-    public static int fill(final @NotNull ServerLevel world, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
+    public static int fill(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
 
         // Get a list of all registered items
         Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
@@ -465,8 +465,8 @@ public final class ShopManager extends UtilityClassBase {
             for(float j = pos.y - radius; j < pos.y + radius; ++j) {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
-                    if(new Vector3f(i, j, k).distance(pos) <= radius && world.getBlockState(blockPos).isAir()) {
-                        final Shop shop = new Shop(world, blockPos, owner);
+                    if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
+                        final Shop shop = new Shop(level, blockPos, owner);
                         shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1000_000f);

@@ -29,7 +29,7 @@ public class Inspect_IdDisplay extends SimpleTextElm {
      * @param _shop The target shop.
      */
     public Inspect_IdDisplay(@NotNull Shop _shop) {
-        super(_shop.getWorld());
+        super(_shop.getLevel());
         updateDisplay();
     }
 

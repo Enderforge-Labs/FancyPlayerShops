@@ -33,7 +33,7 @@ public class Details_OwnerHead extends ItemElm {
      * @param _shop The target shop.
      */
     public Details_OwnerHead(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), new Details_OwnerHead_S());
+        super(_shop.getLevel(), new Details_OwnerHead_S());
     }
 
 

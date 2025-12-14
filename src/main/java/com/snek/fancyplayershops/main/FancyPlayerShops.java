@@ -155,8 +155,8 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create and register block click events (shop placement + prevents early clicks going through the shop)
             UseBlockCallback.EVENT.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            UseBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, hitResult) -> {
-                return onItemUse(world, player, hand, hitResult);
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) -> {
+                return onItemUse(level, player, hand, hitResult);
             });
 
 
@@ -164,7 +164,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Register item display fix
             ServerEntityEvents.ENTITY_LOAD.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) -> {
                 ShopItemDisplayElm.onEntityLoad_item(entity);
             });
 
@@ -186,31 +186,31 @@ public class FancyPlayerShops implements ModInitializer {
     /**
      * Callback for item use events.
      * <p> Checks if the held item is a shop item. If it is, it spawns a new shop at the targeted location.
-     * @param world The world.
+     * @param level The level.
      * @param player The player that clicked.
      * @param hand The hand used.
      * @param hitResult The hit result of the click action.
      * @return FAIL if the player tried to place a shop, PASS otherwise.
      */
-    public static @NotNull InteractionResult onItemUse(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
+    public static @NotNull InteractionResult onItemUse(final @NotNull Level level, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
         if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ShopManager.SHOP_ITEM_NBT_KEY)) {
 
-            // If the world is a server world and the player is allowed to modify the world
-            if(world instanceof ServerLevel serverWorld && player.getAbilities().mayBuild) {
+            // If the level is a server level and the player is allowed to modify the level
+            if(level instanceof ServerLevel serverLevel && player.getAbilities().mayBuild) {
                 int newCount = stack.getCount();
 
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 final CompoundTag tag = stack.getTag();
-                if(ShopManager.findShop(blockPos, world) == null) {
+                if(ShopManager.findShop(blockPos, level) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
                     if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(
-                                serverWorld, blockPos, player.getUUID(),
+                                serverLevel, blockPos, player.getUUID(),
                                 data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"),
                                 data.getUUID("group_uuid")
                             );
@@ -224,7 +224,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty shop otherwise
                     else {
-                        new Shop(serverWorld, blockPos, player);
+                        new Shop(serverLevel, blockPos, player);
                         player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
                     }

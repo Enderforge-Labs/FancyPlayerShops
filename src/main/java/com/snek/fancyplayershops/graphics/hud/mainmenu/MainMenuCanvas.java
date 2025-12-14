@@ -61,11 +61,11 @@ public class MainMenuCanvas extends HudCanvas {
     public MainMenuCanvas(final @NotNull HudContext _hud) {
         super(_hud, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
-        final ServerLevel  world  = (ServerLevel)player.level();
+        final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
 
         // Add title
-        e = bg.addChild(new TitleElm(world, new Txt("Your shops").white().bold().get()));
+        e = bg.addChild(new TitleElm(level, new Txt("Your shops").white().bold().get()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -73,7 +73,7 @@ public class MainMenuCanvas extends HudCanvas {
         // Add "no shops yet" text if the player doesn't own any shop
         final @Nullable HashSet<@NotNull Shop> shops = ShopManager.getShopsOfPlayer(player);
         if(shops == null || shops.isEmpty()) {
-            e = bg.addChild(new SimpleTextElm(world, new MainMenu_EmptyText_S()));
+            e = bg.addChild(new SimpleTextElm(level, new MainMenu_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignmentX(AlignmentX.CENTER);
             e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
@@ -92,7 +92,7 @@ public class MainMenuCanvas extends HudCanvas {
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
-            list = (ScrollableList)bg.addChild(new ScrollableList(world, list_elm_h));
+            list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
             list.setPosY(SQUARE_BUTTON_SIZE);

@@ -31,7 +31,7 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
 
 
     public Transfer_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferCanvas _menu) {
-        super(_shop.getWorld(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
+        super(_shop.getLevel(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
         menu = _menu;
     }
 

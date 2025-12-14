@@ -54,14 +54,14 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
 
 
         // Add shop group name
-        e = addChild(new SimpleTextElm(world, new Txt("Selling " + calcTotalItems(groups) + " items").get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        e = addChild(new SimpleTextElm(level, new Txt("Selling " + calcTotalItems(groups) + " items").get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
         e.setSize(new Vector2f(MainMenu_GroupEntry.NAME_WIDTH, 1));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f));
 
 
         // Add shop group balance
-        e = addChild(new SimpleTextElm(world, new Txt(Utils.formatPriceShort(calcTotalBalance(groups))).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance(groups))).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(MainMenu_GroupEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f));

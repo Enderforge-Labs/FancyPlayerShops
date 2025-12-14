@@ -29,7 +29,7 @@ public class Buy_AmountInputDisplay extends TextInputElm {
 
 
     public Buy_AmountInputDisplay(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getWorld(), null, "Specify buy amount", new Txt("Send the amount in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), new Buy_Input_S(_shop));
+        super(_shop.getLevel(), null, "Specify buy amount", new Txt("Send the amount in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), new Buy_Input_S(_shop));
         menu = _menu;
     }
 

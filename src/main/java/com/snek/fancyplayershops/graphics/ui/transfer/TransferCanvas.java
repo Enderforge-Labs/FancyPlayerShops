@@ -70,14 +70,14 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getWorld(), recalculateTitle()));
+        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 1f);
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add player name input
-        e = bg.addChild(new SimpleTextElm(_shop.getWorld()));
+        e = bg.addChild(new SimpleTextElm(_shop.getLevel()));
         e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -99,7 +99,7 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);

@@ -72,10 +72,10 @@ public class Buy_1xButton extends FancyButtonElm {
 
 
     public Buy_1xButton(final @NotNull Shop _shop) {
-        super(_shop.getWorld(), null, "Buy 1 item", 1,  new Buy_BuyButton_S(_shop));
+        super(_shop.getLevel(), null, "Buy 1 item", 1,  new Buy_BuyButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getWorld(), design));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), design));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * Canvas.BOTTOM_ROW_CONTENT_SIZE, Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

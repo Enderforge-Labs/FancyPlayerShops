@@ -61,7 +61,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getWorld(), shop.getStandaloneName()));
+        e = bg.addChild(new TitleElm(_shop.getLevel(), shop.getStandaloneName()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
@@ -96,7 +96,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getWorld()));
+        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);

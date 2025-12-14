@@ -32,7 +32,7 @@ public class Buy_ConfirmButton extends FancyButtonElm {
 
 
     public Buy_ConfirmButton(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getWorld(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
+        super(_shop.getLevel(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
         menu = _menu;
     }
 

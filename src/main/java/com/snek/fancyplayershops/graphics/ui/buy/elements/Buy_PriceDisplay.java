@@ -23,7 +23,7 @@ public class Buy_PriceDisplay extends SimpleTextElm {
 
 
     public Buy_PriceDisplay(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getWorld());
+        super(_shop.getLevel());
         menu = _menu;
     }
 

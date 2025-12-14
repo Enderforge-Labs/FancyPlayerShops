@@ -23,21 +23,21 @@ public class TitleElm extends SimpleTextElm {
 
     /**
      * Creates a new TitleElm.
-     * @param _world The world to create this element in.
+     * @param level The level to create this element in.
      * @param defaultText The initial text to display when the element is created.
      */
-    public TitleElm(final @NotNull ServerLevel _world, final @NotNull Component defaultText) {
-        super(_world, defaultText, TextAlignment.CENTER, TextOverflowBehaviour.SCROLL);
+    public TitleElm(final @NotNull ServerLevel level, final @NotNull Component defaultText) {
+        super(level, defaultText, TextAlignment.CENTER, TextOverflowBehaviour.SCROLL);
     }
 
 
     /**
      * Creates a new TitleElm.
-     * @param _world The world to create this element in.
+     * @param level The level to create this element in.
      * @param defaultText The initial text to display when the element is created.
      */
-    public TitleElm(final @NotNull ServerLevel _world, final @NotNull String defaultText) {
-        this(_world, Component.literal(defaultText));
+    public TitleElm(final @NotNull ServerLevel level, final @NotNull String defaultText) {
+        this(level, Component.literal(defaultText));
     }
 
 

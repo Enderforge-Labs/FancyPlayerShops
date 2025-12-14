@@ -133,7 +133,7 @@ public final class BalanceManager extends UtilityClassBase {
 
     /**
      * Loads all the player balances into the runtime map if needed.
-     * <p> Must be called on server started event (After the worlds are loaded!).
+     * <p> Must be called on server started event (After the levels are loaded!).
      * <p> If the data has already been loaded, the call will have no effect.
      */
     public static void loadBalances() {

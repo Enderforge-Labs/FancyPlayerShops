@@ -64,7 +64,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 
 /**
- * This class manages a player shop that is placed somewhere in a world.
+ * This class manages a player shop that is placed somewhere in a level.
  */
 public class Shop {
 
@@ -77,11 +77,11 @@ public class Shop {
 
 
     // Basic data
-    private transient @NotNull  ServerLevel     world;                          // The world this shop was placed in
-    private           @NotNull  String          worldId;                        // The Identifier of the world
+    private transient @NotNull  ServerLevel     level;                          // The level this shop was placed in
+    private           @NotNull  String          levelId;                        // The Identifier of the level
     private transient @Nullable ShopItemDisplayElm itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos        pos;                            // The position of the shop
-    private transient @NotNull  String          shopIdentifierCache_noWorld;    // The cached shop identifier, not including the world
+    private transient @NotNull  String          shopIdentifierCache_noLevel;    // The cached shop identifier, not including the level
     private transient @NotNull  ShopKey         shopKeyCache;                   // The cached shop key
     private           @NotNull  UUID            groupUUID;                      // The UUID of the group this shop has been assigned to
     private transient @NotNull  ShopGroup       shopGroup;                      // The group this shop has been assigned to
@@ -110,13 +110,13 @@ public class Shop {
 
 
     // Accessors
-    public @NotNull  ServerLevel     getWorld            () { return world;                           }
-    public @NotNull  String          getWorldId          () { return worldId;                         }
+    public @NotNull  ServerLevel     getLevel            () { return level;                           }
+    public @NotNull  String          getLevelId          () { return levelId;                         }
     public @NotNull  BlockPos        getPos              () { return pos;                             }
     public @NotNull  ItemStack       getItem             () { return item;                            }
     public @NotNull  String          getSerializedItem   () { return serializedItem;                  }
-    public @NotNull  ShopItemDisplayElm getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ShopContext          getUi               () { return ui;                              }
+    public @NotNull  ShopItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
+    public @Nullable ShopContext     getUi               () { return ui;                              }
     public           long            getPrice            () { return price;                           }
     public           int             getStock            () { return stock;                           }
     public           int             getMaxStock         () { return maxStock;                        }
@@ -128,7 +128,7 @@ public class Shop {
     public @Nullable Player          getViewer           () { return viewer;                          }
     public           boolean         isScheduledForSave  () { return scheduledForSave;                }
     public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
-    public @NotNull  String          getIdentifierNoWorld() { return shopIdentifierCache_noWorld;     }
+    public @NotNull  String          getIdentifierNoLevel() { return shopIdentifierCache_noLevel;     }
     public           float           getColorThemeHue    () { return colorThemeHue;                   }
     public @NotNull  UUID            getShopGroupUUID    () { return groupUUID;                       }
     public @NotNull  ShopGroup       getShopGroup        () { return shopGroup;                       }
@@ -161,25 +161,25 @@ public class Shop {
 
 
     /**
-     * Computes the Identifier of the world.
+     * Computes the Identifier of the level.
      */
-    private void calcSerializedWorldId() {
-        worldId = world.dimension().location().toString();
+    private void calcSerializedLevelId() {
+        levelId = level.dimension().location().toString();
     }
 
 
     /**
-     * Tries find the ServerLevel the world identifier belongs to.
-     * @throws RuntimeException if the world Identifier is invalid or the ServerLevel cannot be found.
+     * Tries find the ServerLevel the level identifier belongs to.
+     * @throws RuntimeException if the level Identifier is invalid or the ServerLevel cannot be found.
      */
-    private void calcDeserializedWorldId() throws RuntimeException {
+    private void calcDeserializedLevelId() throws RuntimeException {
         for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
-            if(w.dimension().location().toString().equals(worldId)) {
-                world = w;
+            if(w.dimension().location().toString().equals(levelId)) {
+                level = w;
                 return;
             }
         }
-        throw new RuntimeException("Invalid shop data: Specified world \"" + worldId + "\" was not found");
+        throw new RuntimeException("Invalid shop data: Specified level \"" + levelId + "\" was not found");
     }
 
 
@@ -187,18 +187,18 @@ public class Shop {
      * Computes and caches the shop identifiers.
      */
     private void cacheShopIdentifier() {
-        shopIdentifierCache_noWorld = calcShopIdentifier(pos);
+        shopIdentifierCache_noLevel = calcShopIdentifier(pos);
     }
     /**
      * Computes and caches the shop key.
      */
     private void cacheShopKey() {
-        shopKeyCache = calcShopKey(pos, world);
+        shopKeyCache = calcShopKey(pos, level);
     }
 
 
     /**
-     * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
+     * Calculates a shop identifier from the position. This identifier doesn't include the level ID.
      * @param _pos The position.
      * @return The generated identifier.
      */
@@ -206,18 +206,18 @@ public class Shop {
         return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
     }
     /**
-     * Calculates a shop identifier from the position. This identifier doesn't include the world ID.
+     * Calculates a shop identifier from the position. This identifier doesn't include the level ID.
      * @param _pos The position.
      * @return The generated identifier.
      */
-    public static ShopKey calcShopKey(final @NotNull BlockPos _pos, final @NotNull Level _world) {
-        return new ShopKey(_pos, _world);
+    public static ShopKey calcShopKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
+        return new ShopKey(_pos, level);
     }
 
 
     /**
      * Reinitializes the transient members.
-     * @return Whether the item and world id have been deserialized successfully.
+     * @return Whether the item and level id have been deserialized successfully.
      * <p> Shops whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
     */
     public boolean reinitTransient() {
@@ -229,9 +229,9 @@ public class Shop {
 
         item = MinecraftUtils.deserializeItem(serializedItem);
         try {
-            calcDeserializedWorldId();
+            calcDeserializedLevelId();
         } catch(final RuntimeException e) {
-            FancyPlayerShops.LOGGER.error("Couldn't deserialize world ID \"{}\"", worldId, e);
+            FancyPlayerShops.LOGGER.error("Couldn't deserialize level ID \"{}\"", levelId, e);
             return false;
         }
 
@@ -257,14 +257,14 @@ public class Shop {
 
     /**
      * Creates a new Shop and saves it in its own file.
-     * @param world The world the shop has to be created in.
+     * @param level The level the shop has to be created in.
      * @param _pos The position of the new shop.
      * @param owner The player that places the shop.
      */
-    public Shop(final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull Player owner) {
+    public Shop(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
 
         // Set shop data
-        world = _world;
+        this.level = level;
         ownerUUID = owner.getUUID();
         pos = _pos;
         price         = Configs.getShop().price.getDefault();
@@ -273,7 +273,7 @@ public class Shop {
 
         // Calculate serialized data and shop identifier
         serializedItem = MinecraftUtils.serializeItem(item);
-        calcSerializedWorldId();
+        calcSerializedLevelId();
         cacheShopIdentifier();
         cacheShopKey();
         groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
@@ -293,7 +293,7 @@ public class Shop {
 
     /**
      * Creates a new Shop and saves it in its own file.
-     * @param _world The world the shop has to be created in.
+     * @param level The level the shop has to be created in.
      * @param _pos The position of the new shop.
      * @param _ownerUUID The UUID of the player that places the shop.
      * @param _price The price of the item.
@@ -304,13 +304,13 @@ public class Shop {
      * @param _serializedIitem The item in serialized form.
      */
     public Shop(
-        final @NotNull ServerLevel _world, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
+        final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
         final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem,
         final UUID _shopGroupUUID
     ) {
 
         // Set shop data
-        world = _world;
+        this.level = level;
         ownerUUID = _ownerUUID;
         pos = _pos;
         price = _price;
@@ -320,7 +320,7 @@ public class Shop {
         colorThemeHue = _hue;
 
         // Calculate serialized data
-        calcSerializedWorldId();
+        calcSerializedLevelId();
         serializedItem = _serializedIitem;
 
         // Get members from serialized data and calculate shop identifier
@@ -884,15 +884,15 @@ public class Shop {
         if(stock >= maxStock) return;                                           // Skip pull if shop is full
         final BlockPos targetPos = pos.offset(rel);                             // Calculate inventory position
         final ChunkPos chunkPos = new ChunkPos(pos);                            // Calculate inventory chunk position
-        if(!getWorld().hasChunk(chunkPos.x, chunkPos.z)) return;                    // Skip pull if inventory is unloaded
-        final BlockEntity be = world.getBlockEntity(targetPos);                 // Get block entity data
-        if(be == null) return;                                                      // Skip pull if inventory is not a block entity
-        if(be instanceof BaseContainerBlockEntity cbe && cbe.isEmpty()) return;     // Skip pull if inventory is empty
+        if(!getLevel().hasChunk(chunkPos.x, chunkPos.z)) return;                // Skip pull if inventory is unloaded
+        final BlockEntity be = level.getBlockEntity(targetPos);                 // Get block entity data
+        if(be == null) return;                                                  // Skip pull if inventory is not a block entity
+        if(be instanceof BaseContainerBlockEntity cbe && cbe.isEmpty()) return; // Skip pull if inventory is empty
 
 
         // Calculate side and find the storage block
         final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
-        final Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, targetPos, direction);
+        final Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, targetPos, direction);
 
 
         // If a storage block is found, loop through its slots
@@ -946,7 +946,7 @@ public class Shop {
         newOwner.displayClientMessage(new Txt()
             .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
-            .cat(" in the dimension " + world.dimension().location().toString())
+            .cat(" in the dimension " + level.dimension().location().toString())
         .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
 
 

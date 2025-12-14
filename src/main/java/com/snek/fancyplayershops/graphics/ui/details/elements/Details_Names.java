@@ -27,7 +27,7 @@ public class Details_Names extends SimpleTextElm {
      * @param _shop The target shop.
      */
     public Details_Names(final @NotNull Shop _shop) {
-        super(_shop.getWorld());
+        super(_shop.getLevel());
     }
 
 
