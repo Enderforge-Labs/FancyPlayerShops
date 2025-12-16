@@ -50,7 +50,7 @@ public class MainMenuCanvas extends HudCanvas {
     public static final float ICON_NAME_SPACING  = 0.02f;
 
     public static final float HEADER_H           = 0.05f;
-    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - HEADER_H - SQUARE_BUTTON_SIZE;
+    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - HEADER_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -59,7 +59,7 @@ public class MainMenuCanvas extends HudCanvas {
 
 
     public MainMenuCanvas(final @NotNull HudContext _hud) {
-        super(_hud, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(_hud, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
@@ -95,7 +95,7 @@ public class MainMenuCanvas extends HudCanvas {
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
-            list.setPosY(SQUARE_BUTTON_SIZE);
+            list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
 
             // Add shop group entry displays
@@ -126,8 +126,8 @@ public class MainMenuCanvas extends HudCanvas {
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-            e.setPosX(BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
             e.setAlignmentY(AlignmentY.BOTTOM);
         }
         //TODO ^ merge duplicate code. this is used in many UIs and HUDs, it should prob be a method or something

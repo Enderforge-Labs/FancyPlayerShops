@@ -59,6 +59,10 @@ public class FancyPlayerShops implements ModInitializer {
 
     // Graphics data
     public static final float LINE_H = 0.1f;
+    public static final float SQUARE_BUTTON_SIZE = 0.12f; //TODO move back to shops mod
+    public static final float BOTTOM_ROW_SPACING      = 0.04f; //TODO move back to shops mod
+    public static final float BOTTOM_ROW_SHIFT        = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING; //TODO move back to shops mod
+    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f; //TODO move back to shops mod
 
 
 

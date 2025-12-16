@@ -56,7 +56,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
     public InspectCanvas(final @NotNull Shop _shop, final @NotNull Div _backButton) {
 
         // Call superconstructor
-        super(_shop, 1, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         Div e;
 
 
@@ -91,14 +91,14 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
         // Add back button
         e = bg.addChild(_backButton);
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
 
 
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
     }

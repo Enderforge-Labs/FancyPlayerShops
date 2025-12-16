@@ -64,7 +64,7 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
     public TransferCanvas(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         newOwnerUUID = _shop.getOwnerUuid();
         Div e;
 
@@ -101,14 +101,14 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
 
         // Add back button
         e = bg.addChild(new Edit_Sub_BackButton(_shop));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
 
 

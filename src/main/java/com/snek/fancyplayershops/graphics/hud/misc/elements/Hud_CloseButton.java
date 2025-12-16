@@ -7,6 +7,7 @@ import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.Canvas;
@@ -29,7 +30,7 @@ public class Hud_CloseButton extends SimpleButtonElm {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, SymbolDesigns.DiagonalCrossSmall));
-        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

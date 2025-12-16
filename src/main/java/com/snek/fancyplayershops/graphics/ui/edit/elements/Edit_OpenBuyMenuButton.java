@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
@@ -30,7 +31,7 @@ public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.PriceTag));
-        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

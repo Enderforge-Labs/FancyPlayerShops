@@ -50,7 +50,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = 0.45f - SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
+    public static final float ROTATE_BUTTON_Y            = 0.45f - FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
@@ -79,7 +79,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
     public EditCanvas(final @NotNull Shop _shop) {
 
         // Call superconstructor
-        super(_shop, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE);
+        super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         Div e;
 
 
@@ -107,11 +107,11 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
         // Add rotation buttons
         e = bg.addChild(new Edit_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
         e = bg.addChild(new Edit_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT));
-        e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
 
@@ -125,7 +125,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
@@ -140,8 +140,8 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-            e.setPosX(BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
             e.setAlignmentY(AlignmentY.BOTTOM);
         }
 
@@ -149,7 +149,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         // Add color selectors
         final Float[] hues = Configs.getShop().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
-            final float h = (1f - FancyPlayerShops.LINE_H - SQUARE_BUTTON_SIZE) / hues.length;
+            final float h = (1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE) / hues.length;
             e = bg.addChild(new Edit_ColorSelector(_shop, hues[i], this));
             e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
             e.setAlignmentX(AlignmentX.RIGHT);

@@ -41,7 +41,7 @@ public class StashCanvas extends HudCanvas {
     public static final float ITEM_NAME_RATIO    = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
-    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - SQUARE_BUTTON_SIZE;
+    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -50,7 +50,7 @@ public class StashCanvas extends HudCanvas {
 
 
     public StashCanvas(final @NotNull HudContext context) {
-        super(context, 1f, FancyPlayerShops.LINE_H, SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
@@ -79,7 +79,7 @@ public class StashCanvas extends HudCanvas {
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
-            list.setPosY(SQUARE_BUTTON_SIZE);
+            list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
 
             //FIXME update stash view when the stash is changed
@@ -110,8 +110,8 @@ public class StashCanvas extends HudCanvas {
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(SQUARE_BUTTON_SIZE));
-            e.setPosX(BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
             e.setAlignmentY(AlignmentY.BOTTOM);
         }
     }

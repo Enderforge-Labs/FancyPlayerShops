@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
@@ -29,7 +30,7 @@ public class MainMenu_InfoButton extends SimpleButtonElm {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, SymbolDesigns.Info));
-        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

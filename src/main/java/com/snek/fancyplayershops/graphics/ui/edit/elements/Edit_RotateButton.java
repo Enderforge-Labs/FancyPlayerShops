@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
@@ -63,7 +64,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
             _shop.getLevel(),
             _rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight
         ));
-        e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
+        e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 
