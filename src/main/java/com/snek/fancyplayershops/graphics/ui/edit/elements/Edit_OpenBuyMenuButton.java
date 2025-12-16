@@ -8,8 +8,8 @@ import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.designs.ObjectDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
@@ -25,27 +25,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
-    private static final @NotNull PolylineData[] design = {
-        new PolylineData(
-            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-            Canvas.TOOLBAR_FG_WIDTH, 0.03f,
-            new Vector2f(1.0f, 0.6f),
-            new Vector2f(0.4f, 0.0f),
-            new Vector2f(0.0f, 0.0f),
-            new Vector2f(0.0f, 0.4f),
-            new Vector2f(0.6f, 1.0f),
-            new Vector2f(1.0f, 0.6f)
-        )
-    };
-
-
-
-
     public Edit_OpenBuyMenuButton(final @NotNull Shop _shop) {
         super(_shop.getLevel(), null, "Open buy menu", 1, new Edit_SquareButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), design));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ObjectDesigns.PriceTag));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

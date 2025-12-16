@@ -14,8 +14,8 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
@@ -36,26 +36,6 @@ import net.minecraft.world.inventory.ClickAction;
  * A button that allows the owner of the shop to change the default rotation of the displayed object.
  */
 public class Edit_RotateButton extends SimpleButtonElm {
-    private static final @NotNull PolylineData[][] designs = new PolylineData[][] {
-        new PolylineData[] {
-            new PolylineData(
-                Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-                Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-                new Vector2f(-0.15f * -1 + 0.5f, 0.2f),
-                new Vector2f(+0.15f * -1 + 0.5f, 0.5f),
-                new Vector2f(-0.15f * -1 + 0.5f, 0.8f)
-            )
-        },
-        new PolylineData[] {
-            new PolylineData(
-                Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-                Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-                new Vector2f(-0.15f * 1 + 0.5f, 0.8f),
-                new Vector2f(+0.15f * 1 + 0.5f, 0.5f),
-                new Vector2f(-0.15f * 1 + 0.5f, 0.2f)
-            )
-        }
-    };
     public static final int ROTATION_ANIMATION_TIME = 8;
     private final float rotation;
 
@@ -79,7 +59,10 @@ public class Edit_RotateButton extends SimpleButtonElm {
 
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), designs[_rotation > 0 ? 1 : 0]));
+        final Div e = addChild(new PolylineSetElm(
+            _shop.getLevel(),
+            _rotation > 0 ? SymbolDesigns.ArrowHeadPointingRight : SymbolDesigns.ArrowHeadPointingLeft
+        ));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

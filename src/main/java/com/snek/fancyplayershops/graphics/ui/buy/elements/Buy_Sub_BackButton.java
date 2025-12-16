@@ -9,8 +9,8 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
@@ -29,24 +29,6 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
     private int amountCache = 1;
     public void setAmountCache(final int _amountCache) { amountCache = _amountCache; }
 
-    private static final @NotNull PolylineData[] design = {
-        new PolylineData(
-            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-            Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-            new Vector2f(0.6f,  0.3f),
-            new Vector2f(1.0f,  0.3f),
-            new Vector2f(1.0f,  0.7f),
-            new Vector2f(0.05f, 0.7f)
-        ),
-        new PolylineData(
-            Canvas.TOOLBAR_FG_COLOR, Canvas.TOOLBAR_FG_ALPHA,
-            Canvas.TOOLBAR_FG_WIDTH, 0.06f,
-            new Vector2f(0.2f, 0.9f),
-            new Vector2f(0.0f, 0.7f),
-            new Vector2f(0.2f, 0.5f)
-        )
-    };
-
 
 
 
@@ -54,7 +36,7 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
         super(_shop.getLevel(), null, "Go back", 1,  new Edit_SquareButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), design));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), SymbolDesigns.CurvedArrowPointingLeft));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
