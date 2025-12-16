@@ -61,7 +61,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         // Create design
         final Div e = addChild(new PolylineSetElm(
             _shop.getLevel(),
-            _rotation > 0 ? SymbolDesigns.ArrowHeadPointingRight : SymbolDesigns.ArrowHeadPointingLeft
+            _rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight
         ));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
