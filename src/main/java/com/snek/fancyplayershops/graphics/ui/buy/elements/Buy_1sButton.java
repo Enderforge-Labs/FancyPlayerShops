@@ -14,7 +14,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.graphics.designs.ObjectDesigns;
+import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
@@ -40,7 +40,7 @@ public class Buy_1sButton extends FancyButtonElm {
         super(_shop.getLevel(), null, "Buy 64 items", 1,  new Buy_BuyButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ObjectDesigns.CoinPile));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.CoinPile));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * Canvas.BOTTOM_ROW_CONTENT_SIZE, Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

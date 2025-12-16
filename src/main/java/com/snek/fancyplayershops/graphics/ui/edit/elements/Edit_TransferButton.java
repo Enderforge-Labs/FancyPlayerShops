@@ -10,7 +10,7 @@ import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.graphics.designs.ObjectDesigns;
+import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
@@ -30,7 +30,7 @@ public class Edit_TransferButton extends SimpleButtonElm {
         super(_shop.getLevel(), null, "Transfer ownership", 1,  new Edit_SquareButton_S(_shop));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ObjectDesigns.UserIcon));
+        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.UserIcon));
         e.setSize(new Vector2f(Canvas.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
