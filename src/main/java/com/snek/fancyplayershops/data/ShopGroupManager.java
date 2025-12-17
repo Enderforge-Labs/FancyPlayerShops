@@ -46,7 +46,8 @@ import net.minecraft.server.level.ServerPlayer;
  * A class that handles player shop groups.
  */
 public class ShopGroupManager extends UtilityClassBase {
-    public static final UUID DEFAULT_GROUP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
+    public static final UUID   DEFAULT_GROUP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
+    public static final String DEFAULT_GROUP_NAME = "Uncategorized";
     private ShopGroupManager() {}
 
 
@@ -93,7 +94,7 @@ public class ShopGroupManager extends UtilityClassBase {
         // Create default group if needed
         //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
-            addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID));
+            addGroup(ownerUUID, new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID));
             //TODO use italic grey once colors are implemented
             //TODO allow players to use &[0-9a-gulomkr]
         }
