@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;

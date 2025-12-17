@@ -261,7 +261,9 @@ public abstract class CommandManager {
 
 
     //FIXME add suggestions for all of the completable commands
+
     //FIXME add "@Nullable Player operator" parameter to shop manager / shop methods
+    //FIXME This is for operators that opened a player's stash or other view. it should stop them from modifying it, or add specific buttons for that
 
 
 
