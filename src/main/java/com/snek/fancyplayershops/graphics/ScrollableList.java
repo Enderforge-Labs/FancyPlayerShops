@@ -8,9 +8,11 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 import com.snek.frameworklib.data_types.containers.Flagged;
@@ -203,8 +205,9 @@ public class ScrollableList extends PanelElm implements Scrollable {
         // Add the received scroll to the current value, then clamp it
         scroll = getClampedScroll(scroll + amount);
 
-        // Refresh view
+        // Refresh view and play sound
         refreshViewSides(false);
+        playSound(player);
     }
 
 
@@ -255,5 +258,11 @@ public class ScrollableList extends PanelElm implements Scrollable {
         // Flush bar styles
         barThumb.flushStyle();
         barTrack.flushStyle();
+    }
+
+
+
+    public static void playSound(final @NotNull Player player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.STONE_BUTTON_CLICK_ON, 1, 1.5f);
     }
 }

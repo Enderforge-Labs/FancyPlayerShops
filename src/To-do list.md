@@ -9,7 +9,9 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
-- add scroll sounds - a lower volume, longer sound
+- add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
+- add shop setting to send everything to the stash, skipping the inventory
+  - replace hand written inventory checks and calls with a generic give() method that checks for this option and also adds extra items to the stash
 
 - add an undo command & chat message click command to undo item buy actions
   - add undos for shop deletion too. moving a shop doesn't need undos
@@ -66,9 +68,12 @@
   - Show a nicer name when the player looks at shop item displays
     - use the overridable method that returns a name for jade
 
-- add a system to preorder items 
+- add a system to preorder items
   - you can buy in advance and your items will be sent to the stash as soon as they are available in the shop block
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
+
+
+
 
 
 
