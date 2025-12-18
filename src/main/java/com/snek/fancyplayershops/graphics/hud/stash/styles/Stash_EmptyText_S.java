@@ -21,7 +21,8 @@ public class Stash_EmptyText_S extends SimpleTextElmStyle {
     public @NotNull Component getDefaultText() {
         return new Txt(
             "Your stash is empty :3\n" +
-            "Items you buy or claim that don't fit in your inventory will appear here."
+            "Items you buy or claim that don't fit\n" +
+            "in your inventory will appear here."
         ).white().italic().get();
     }
 

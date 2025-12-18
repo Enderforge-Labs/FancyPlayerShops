@@ -21,7 +21,8 @@ public class MainMenu_EmptyText_S extends SimpleTextElmStyle {
     public @NotNull Component getDefaultText() {
         return new Txt(
             "You don't own any shop!\n" +
-            "Shops you place will appear here, organized by group.\n" +
+            "Shops you place will appear here,\n" +
+            "organized by group.\n" +
             "Click on the Info button to learn more."
         ).white().italic().get();
     }

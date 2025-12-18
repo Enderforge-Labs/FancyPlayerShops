@@ -61,8 +61,7 @@ public class StashCanvas extends HudCanvas {
         if(stash == null) {
             e = bg.addChild(new SimpleTextElm(level, new Stash_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
-            e.setAlignmentX(AlignmentX.CENTER);
-            e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
+            e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
 
 
