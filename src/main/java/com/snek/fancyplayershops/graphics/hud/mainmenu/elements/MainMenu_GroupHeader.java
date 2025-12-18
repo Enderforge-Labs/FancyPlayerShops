@@ -42,10 +42,9 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
     }
     private static int calcTotalItems(final @NotNull List<ShopGroup> groups) {
         int r = 0;
-        //FIXME actually calculate it
-        // for(final ShopGroup g : groups) {
-        //     r += g.get;
-        // }
+        for(final ShopGroup g : groups) {
+            r += g.getShops().size();
+        }
         return r;
     }
     public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<ShopGroup> groups) {
