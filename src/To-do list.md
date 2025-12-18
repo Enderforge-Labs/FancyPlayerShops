@@ -7,6 +7,10 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
+- fix HUDs not having click sounds
+
+- add scroll sounds - a lower volume, longer sound
+
 - add an undo command & chat message click command to undo item buy actions
   - add undos for shop deletion too. moving a shop doesn't need undos
   - add undos for shop transfer
@@ -32,6 +36,8 @@
   - add a disclaimer for buyers or an icon that clearly shows you can get any NBT
     - "..., which might include energy, item variations, custom names, and other data. Buy at your own risk!"
 
+- add shop group display/input in the edit UI
+
 - cache text and fancytext value width and height.
 - update them on Text change
 
@@ -53,6 +59,13 @@
 
 - allow players to transfer entire shop groups
 
+- add Jade mod compatibility
+  - Show a nicer name when the player looks at UI elements
+    - add an overridable method that returns a name for jade
+  - Show a nicer name when the player looks at shop item displays
+    - use the overridable method that returns a name for jade
+
+- ADD A 1 TICK DELAY BETWEEN DESPAWN->RESPAWN CYCLES. store handler and cancel in case of early despawns (and don't queue/spawn again)
 
 
 

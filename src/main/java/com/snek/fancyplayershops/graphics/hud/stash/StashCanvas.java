@@ -12,8 +12,7 @@ import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
-import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemDisplay;
-import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemNameCount;
+import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ItemEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
@@ -37,12 +36,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class StashCanvas extends HudCanvas {
-    public static final float LIST_WIDTH         = 0.95f;
-    public static final float ITEM_NAME_RATIO    = 0.1f;
-    public static final float ITEM_NAME_SPACING  = 0.02f;
-
-    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
-    public static final int   LIST_SIZE          = 7;
+    public static final float LIST_H    = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
+    public static final int   LIST_SIZE = 7;
 
     private ScrollableList list;
 
@@ -77,7 +72,7 @@ public class StashCanvas extends HudCanvas {
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
-            list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
+            list.setSize(new Vector2f(1f, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
             list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
@@ -87,19 +82,7 @@ public class StashCanvas extends HudCanvas {
             final List<StashEntry> entries = new ArrayList<>(stash.values());
             for(int i = 0; i < entries.size(); ++i) {
                 final StashEntry entry = entries.get(i);
-
-                // Add container for the stash entry
-                final Div c = list.storeElm(new Div());
-
-                // Add item display
-                e = c.addChild(new Stash_ItemDisplay(context, entry.item));
-                e.setSize(new Vector2f(ITEM_NAME_RATIO - ITEM_NAME_SPACING, 0.9f));
-                e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
-
-                // Add item name and count display
-                e = c.addChild(new Stash_ItemNameCount(context, entry.item, entry.getCount()));
-                e.setSize(new Vector2f(1f - ITEM_NAME_RATIO - ITEM_NAME_SPACING, 1f));
-                e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+                e = list.storeElm(new Stash_ItemEntry(context, entry.item, entry.getCount()));
             }
         }
 
