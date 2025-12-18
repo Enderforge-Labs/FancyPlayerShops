@@ -73,7 +73,7 @@ public class DetailsCanvas extends ShopCanvasBase {
         e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(TitleElm.DEFAULT_W);
-        e.setAbsSizeY(((TitleElm)e).calcEntityHeight());
+        e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 

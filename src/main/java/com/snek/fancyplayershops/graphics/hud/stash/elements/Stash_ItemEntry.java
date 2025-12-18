@@ -4,14 +4,21 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ScrollableList;
+import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_Count_S;
+import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_Name_S;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -43,10 +50,23 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
         e.setPosX(-0.5f + ITEM_WIDTH / 2 + MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
 
-        // Add item name and count display
-        e = addChild(new Stash_ItemNameCount(context, item, count));
-        e.setSize(new Vector2f(1f - ITEM_WIDTH - ITEM_NAME_SPACING - MARGIN_LEFT, 1f));
-        e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+
+        final Div c = addChild(new Div());
+        c.setSize(new Vector2f(1f - ITEM_WIDTH - ITEM_NAME_SPACING - MARGIN_LEFT, 1f));
+        c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
+
+        // Add item name display
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ItemEntry_Name_S()));
+        e.setSize(new Vector2f(1f, 0.5f));
+        e.setAlignmentY(AlignmentY.TOP);
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get());
+
+
+        // Add item count display
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ItemEntry_Count_S()));
+        e.setSize(new Vector2f(1f, 0.5f));
+        e.setAlignmentY(AlignmentY.BOTTOM);
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("\n" + Utils.formatAmount(count)).lightGray().get());
     }
 
 
