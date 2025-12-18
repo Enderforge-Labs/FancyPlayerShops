@@ -72,9 +72,10 @@ public class Details_Values extends SimpleTextElm {
 
         // Configured shop case
         else {
-            long price = shop.getPrice();
+            final long price = shop.getPrice();
+            final String priceStr = price == 0 ? "Free" : (price >= 100_000_00 ? Utils.formatPriceShort(price) : Utils.formatPrice(price));
             getStyle(SimpleTextElmStyle.class).setText(new Txt()
-                .cat(new Txt(price == 0 ? "Free" : Utils.formatPrice(price)).color(DetailsCanvas.C_RGB_PRICE))
+                .cat(new Txt(priceStr).color(DetailsCanvas.C_RGB_PRICE))
                 .cat("\n").cat(new Txt(Utils.formatAmount(shop.getStock())).color(col))
                 .cat("\n" + ownerName)
             .get());

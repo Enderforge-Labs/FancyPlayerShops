@@ -65,6 +65,9 @@
 
 - ADD A 1 TICK DELAY BETWEEN DESPAWN->RESPAWN CYCLES. store handler and cancel in case of early despawns (and don't queue/spawn again)
 
+- add a system to preorder items 
+  - you can buy in advance and your items will be sent to the stash as soon as they are available in the shop block
+  - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
 
 
