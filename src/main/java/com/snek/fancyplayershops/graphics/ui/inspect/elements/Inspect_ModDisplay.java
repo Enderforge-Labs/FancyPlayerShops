@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.main.Shop;
@@ -30,10 +31,14 @@ public class Inspect_ModDisplay extends SimpleTextElm {
      */
     public Inspect_ModDisplay(@NotNull Shop _shop) {
         super(_shop.getLevel());
-        updateDisplay();
     }
 
 
+    @Override
+    public void spawn(@NotNull Vector3d pos, boolean animate) {
+        updateDisplay();
+        super.spawn(pos, animate);
+    }
 
 
     /**
