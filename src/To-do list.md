@@ -2,6 +2,8 @@
 
 - ADD A 1 TICK DELAY BETWEEN DESPAWN->RESPAWN CYCLES. store handler and cancel in case of early despawns (and don't queue/spawn again)
 
+- use spawn animations in list elements, actually animate scrolling with y scale changes
+
 - fix FrameworkLib (or fancyplayershops? i have no idea) stopping block replacement actions (creative-only. the left+right click)
 
 - Add options to FrameworkLib to make HUDs clien-side only (server-side elements, client-side display entities)

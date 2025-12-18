@@ -52,7 +52,7 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
 
 
         final Div c = addChild(new Div());
-        c.setSize(new Vector2f(1f - ITEM_WIDTH - ITEM_NAME_SPACING - MARGIN_LEFT, 1f));
+        c.setSize(new Vector2f(1f - ITEM_WIDTH - ITEM_NAME_SPACING - MARGIN_LEFT, 0.8f));
         c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
 
         // Add item name display
