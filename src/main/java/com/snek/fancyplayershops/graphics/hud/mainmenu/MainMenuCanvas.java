@@ -45,7 +45,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class MainMenuCanvas extends HudCanvas {
-    public static final float LIST_WIDTH         = 0.95f;
     public static final float ICON_NAME_RATIO    = 0.1f;
     public static final float ICON_NAME_SPACING  = 0.02f;
 
@@ -86,15 +85,15 @@ public class MainMenuCanvas extends HudCanvas {
             // Add shop group header
             final List<ShopGroup> shopGroups = ShopGroupManager.getShopGroups(player);
             e = bg.addChild(new MainMenu_GroupHeader(_hud, shopGroups));
-            e.setSize(new Vector2f(LIST_WIDTH, HEADER_H));
-            e.setAlignmentX(AlignmentX.RIGHT);
+            e.setSize(new Vector2f(1f, HEADER_H));
+            e.setAlignmentX(AlignmentX.LEFT);
             e.setPosY(1f - FancyPlayerShops.LINE_H - HEADER_H);
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
-            list.setSize(new Vector2f(LIST_WIDTH, LIST_H));
-            list.setAlignmentX(AlignmentX.RIGHT);
+            list.setSize(new Vector2f(1f, LIST_H));
+            list.setAlignmentX(AlignmentX.LEFT);
             list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
 

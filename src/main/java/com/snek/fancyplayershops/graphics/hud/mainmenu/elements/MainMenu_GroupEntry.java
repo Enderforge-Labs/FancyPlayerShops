@@ -30,8 +30,9 @@ import net.minecraft.world.inventory.ClickAction;
 //TODO don't use an entity instead of making it invisible. To improve performance
 public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
+    public static final float MARGIN_LEFT = 0.05f;
     public static final float BALANCE_WIDTH = 0.2f;
-    public static final float NAME_WIDTH = 1f - BALANCE_WIDTH;
+    public static final float NAME_WIDTH = 1f - MARGIN_LEFT - BALANCE_WIDTH;
 
     protected final @Nullable ShopGroup groupInstance;
 
@@ -52,16 +53,17 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
             TextAlignment.LEFT,
             TextOverflowBehaviour.SCROLL)
         );
-        e.setSize(new Vector2f(NAME_WIDTH, 1));
-        e.setAlignment(AlignmentX.LEFT, AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
+        e.setSize(new Vector2f(NAME_WIDTH, 1));
+        e.setPosX(-0.5f + NAME_WIDTH / 2 + MARGIN_LEFT);
+        e.setAlignmentY(AlignmentY.CENTER);
 
 
         // Add shop group balance
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(groupInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
         e.setSize(new Vector2f(BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
     }
 
 
@@ -78,6 +80,6 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
     @Override
     public void onScroll(final @NotNull Player player, final float amount) {
-        ((ScrollableList)getParent().getParent()).onScroll(player, amount);
+        ((ScrollableList)(getParent().getParent())).onScroll(player, amount);
     }
 }
