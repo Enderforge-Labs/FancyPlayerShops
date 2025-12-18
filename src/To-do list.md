@@ -51,6 +51,7 @@
 
 - add performance options to skip unimportant animations and hide item displays when the TPS goes below certain thresholds
 
+- allow players to transfer entire shop groups
 
 
 

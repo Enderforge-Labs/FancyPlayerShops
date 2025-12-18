@@ -11,7 +11,6 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
@@ -77,19 +76,20 @@ public class Shop {
 
 
     // Basic data
-    private transient @NotNull  ServerLevel     level;                          // The level this shop was placed in
-    private           @NotNull  String          levelId;                        // The Identifier of the level
-    private transient @Nullable ShopItemDisplayElm itemDisplay = null;             // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           @NotNull  BlockPos        pos;                            // The position of the shop
-    private transient @NotNull  String          shopIdentifierCache_noLevel;    // The cached shop identifier, not including the level
-    private transient @NotNull  ShopKey         shopKeyCache;                   // The cached shop key
-    private           @NotNull  UUID            groupUUID;                      // The UUID of the group this shop has been assigned to
-    private transient @NotNull  ShopGroup       shopGroup;                      // The group this shop has been assigned to
+    private transient @NotNull  ServerLevel        level;                       // The level this shop was placed in
+    private           @NotNull  String             levelId;                     // The Identifier of the level
+    private transient @Nullable ShopItemDisplayElm itemDisplay = null;          // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
+    private           @NotNull  BlockPos           pos;                         // The position of the shop
+    private transient @NotNull  String             shopIdentifierCache_noLevel; // The cached shop identifier, not including the level
+    private transient @NotNull  ShopKey            shopKeyCache;                // The cached shop key
+    private           @NotNull  UUID               groupUUID;                   // The UUID of the group this shop has been assigned to
+    private transient @NotNull  ShopGroup          shopGroup;                   // The group this shop has been assigned to
 
 
     // Shop data
     private transient @NotNull ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
+    private                    long      balance         = 0;                   // The balance collected by the shop since it was last claimed
     private           @NotNull String    serializedItem;                        // The item in serialized form
     private                    int       stock           = 0;                   // The current stock
     private                    long      price           = 0l;                  // The configured price for each item
@@ -99,7 +99,7 @@ public class Shop {
 
 
     // Shop state
-    private transient @Nullable ShopContext      ui               = null;   // The UI context used for the display
+    private transient @Nullable ShopContext ui               = null;   // The UI context used for the display
     private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
     private transient @Nullable Player      viewer           = null;   // The prioritized viewer
     private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
@@ -118,6 +118,7 @@ public class Shop {
     public @NotNull  ShopItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ShopContext     getUi               () { return ui;                              }
     public           long            getPrice            () { return price;                           }
+    public           long            getBalance          () { return balance;                         }
     public           int             getStock            () { return stock;                           }
     public           int             getMaxStock         () { return maxStock;                        }
     public           float           getDefaultRotation  () { return defaultRotation;                 }
@@ -304,14 +305,15 @@ public class Shop {
      * @param _serializedIitem The item in serialized form.
      */
     public Shop(
-        final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull UUID _ownerUUID,
-        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem,
-        final UUID _shopGroupUUID
+        final @NotNull ServerLevel level, final @NotNull BlockPos _pos,
+        final @NotNull UUID _ownerUUID, final UUID _shopGroupUUID, final long _balance,
+        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
     ) {
 
         // Set shop data
         this.level = level;
         ownerUUID = _ownerUUID;
+        balance = _balance;
         pos = _pos;
         price = _price;
         stock = _stock;
@@ -568,9 +570,7 @@ public class Shop {
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
                 ShopManager.scheduleShopSave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
-                BalanceManager.addBalance(ownerUUID, totPrice);
-                BalanceManager.saveBalance(ownerUUID);
-                shopGroup.addBalance(totPrice);
+                addBalance(totPrice);
 
 
                 // Send feedback to the player
@@ -616,6 +616,40 @@ public class Shop {
 
         //TODO show undo button in transaction history to let players undo accidental purchases
         //TODO no need for retrieval undo as the owner can simply put the item back in
+    }
+
+
+
+    /**
+     * Adds the specified amount to this shop's balance and its group's balance.
+     * @param amount The amount to add. Must be >= 0
+     */
+    public void addBalance(final long amount) {
+        this.balance += amount;
+        shopGroup.addBalance(amount);
+    }
+
+
+    /**
+     * Sets the balance back to 0, without sending it to the owner's balance.
+     * <p>
+     * This also updates the shop's group's balance.
+     */
+    public void clearBalance() {
+        shopGroup.subBalance(getBalance());
+        balance = 0;
+    }
+
+
+    //TODO call this from somewhere
+    /**
+     * Claims the current balance, sending it to the owner's balance.
+     * <p>
+     * This also updates the shop's group's balance.
+     */
+    public void claimBalance() {
+        EconomyManager.addCurrency(ownerUUID, balance);
+        clearBalance();
     }
 
 

@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
@@ -138,7 +137,6 @@ public class FancyPlayerShops implements ModInitializer {
             ShopGroupManager.loadGroups(); //! Must be loaded before shops
             ShopManager.loadShops();
             StashManager.loadStashes();
-            BalanceManager.loadBalances();
 
 
             Scheduler.loop(0, 1, HoverReceiver::tick);
@@ -151,7 +149,6 @@ public class FancyPlayerShops implements ModInitializer {
                 ShopGroupManager.saveScheduledGroups();
                 ShopManager.saveScheduledShops();
                 StashManager.saveScheduledStashes();
-                BalanceManager.saveScheduledBalances();
             });
 
 
@@ -214,9 +211,9 @@ public class FancyPlayerShops implements ModInitializer {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new Shop(
-                                serverLevel, blockPos, player.getUUID(),
-                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item"),
-                                data.getUUID("group_uuid")
+                                serverLevel, blockPos,
+                                player.getUUID(), data.getUUID("group_uuid"), data.getLong("balance"),
+                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item")
                             );
                             player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;

@@ -5,7 +5,6 @@ import org.joml.Vector3d;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.snek.fancyplayershops.data.BalanceManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
@@ -122,7 +121,8 @@ public abstract class CommandManager {
                     }))
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
-                        BalanceManager.claim(player);
+                        // BalanceManager.claim(player);
+                        //FIXME claim all the groups
                         return 1;
                     })
                 )

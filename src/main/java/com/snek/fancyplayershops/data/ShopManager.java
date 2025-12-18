@@ -469,8 +469,10 @@ public final class ShopManager extends UtilityClassBase {
                         final Shop shop = new Shop(level, blockPos, owner);
                         shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
-                        shop.setStockLimit(1000_000f);
-                        shop.changeStock(Math.abs(rnd.nextInt() % 1000_000));
+                        shop.setStockLimit(1_000_000f);
+                        shop.changeStock(Math.abs(rnd.nextInt() % 1_000_000));
+                        shop.setPrice(rnd.nextLong() % 100_000);
+                        shop.addBalance(rnd.nextLong() % 100);
                         shop.invalidateItemDisplay();
                         ++r;
                     }
@@ -525,13 +527,14 @@ public final class ShopManager extends UtilityClassBase {
         final CompoundTag data = new CompoundTag();
 
         data.putUUID  ("owner",      shop.getOwnerUuid      ());
+        data.putUUID  ("group_uuid", shop.getShopGroupUUID  ());
         data.putLong  ("price",      shop.getPrice          ());
         data.putInt   ("stock",      shop.getStock          ());
         data.putInt   ("max_stock",  shop.getMaxStock       ());
         data.putFloat ("rotation",   shop.getDefaultRotation());
         data.putFloat ("hue",        shop.getColorThemeHue  ());
+        data.putLong  ("balance",    shop.getBalance        ());
         data.putString("item",       shop.getSerializedItem ());
-        data.putUUID  ("group_uuid", shop.getShopGroupUUID  ());
         data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString());
 
         final Component[] extraDescriptionLines = {
@@ -550,6 +553,7 @@ public final class ShopManager extends UtilityClassBase {
             new Txt().get(),
             new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
             new Txt().cat(new Txt("Group: "      ).lightGray().noItalic()).cat(new Txt(shop.getShopGroup().getDisplayName())).white().noItalic().get(), //TODO use colored text for shop names? maybe? idk. might have to change the group data too
+            new Txt().cat(new Txt("Balance: "    ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice(shop.getBalance()))).gold().noItalic().get(),
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (shop.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(shop.getMaxStock(), false, true))).white().noItalic().get(),
