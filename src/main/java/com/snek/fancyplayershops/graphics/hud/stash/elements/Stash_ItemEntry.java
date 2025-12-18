@@ -66,7 +66,7 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
         e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ItemEntry_Count_S()));
         e.setSize(new Vector2f(1f, 0.5f));
         e.setAlignmentY(AlignmentY.BOTTOM);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("\n" + Utils.formatAmount(count)).lightGray().get());
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(Utils.formatAmount(count)).lightGray().get());
     }
 
 
