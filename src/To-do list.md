@@ -7,8 +7,6 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
-- fix HUDs not having click sounds
-
 - add scroll sounds - a lower volume, longer sound
 
 - add an undo command & chat message click command to undo item buy actions

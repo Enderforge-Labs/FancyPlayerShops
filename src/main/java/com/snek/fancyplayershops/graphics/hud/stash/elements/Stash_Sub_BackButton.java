@@ -12,6 +12,7 @@ import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +41,7 @@ public class Stash_Sub_BackButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
+        __base_ButtonElm.playButtonSound(player);
         canvas.getContext().changeCanvas(new MainMenuCanvas((HudContext)canvas.getContext()));
     }
 }
