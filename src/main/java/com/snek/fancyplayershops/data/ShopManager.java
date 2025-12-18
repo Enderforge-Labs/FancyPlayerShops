@@ -472,8 +472,8 @@ public final class ShopManager extends UtilityClassBase {
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1_000_000f);
                         shop.changeStock(Math.abs(rnd.nextInt() % 1_000_000));
-                        shop.setPrice(rnd.nextLong() % 100_000);
-                        shop.addBalance(rnd.nextLong() % 100);
+                        shop.setPrice(Math.abs(rnd.nextLong() % 100_000));
+                        shop.addBalance(Math.abs(rnd.nextLong() % 100));
                         shop.invalidateItemDisplay();
                         ++r;
                     }

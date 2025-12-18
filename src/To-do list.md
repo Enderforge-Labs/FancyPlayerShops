@@ -1,4 +1,6 @@
-# Stuff to fix
+# Stuff to fix / add
+
+- ADD A 1 TICK DELAY BETWEEN DESPAWN->RESPAWN CYCLES. store handler and cancel in case of early despawns (and don't queue/spawn again)
 
 - fix FrameworkLib (or fancyplayershops? i have no idea) stopping block replacement actions (creative-only. the left+right click)
 
@@ -48,8 +50,9 @@
   - smithing template [Custom behaviour, vanilla doesn't show the name]
 
 - "top shops" list that shows the shops that made the most money in the specified timeframe
-
+  - This is separate from the list of groups in the main menu. you access this from the stats
 - "best customers" list that shows the players that spent the most money in the specified timeframe
+  - This is separate from the list of groups in the main menu. you access this from the stats
 
 - add a bar at the left of HUDs that shows how long is left until they despawns
 
@@ -62,8 +65,6 @@
     - add an overridable method that returns a name for jade
   - Show a nicer name when the player looks at shop item displays
     - use the overridable method that returns a name for jade
-
-- ADD A 1 TICK DELAY BETWEEN DESPAWN->RESPAWN CYCLES. store handler and cancel in case of early despawns (and don't queue/spawn again)
 
 - add a system to preorder items 
   - you can buy in advance and your items will be sent to the stash as soon as they are available in the shop block
