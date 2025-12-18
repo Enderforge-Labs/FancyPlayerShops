@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.hud.mainmenu.styles;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -19,11 +19,16 @@ public class MainMenu_EmptyText_S extends SimpleTextElmStyle {
 
     @Override
     public @NotNull Component getDefaultText() {
-        return new Txt("You don't own any shop! Click on the Info button to learn more.").white().italic().get();
+        return new Txt(
+            "You don't own any shop!\n" +
+            "Shops you place will appear here, organized by group.\n" +
+            "Click on the Info button to learn more."
+        ).white().italic().get();
     }
 
-    @Override
-    public @NotNull TextOverflowBehaviour getDefaultTextOverflowBehaviour() {
-        return TextOverflowBehaviour.SCROLL;
+
+    @Override //TODO replace with font size override
+    public @NotNull Transform getDefaultTransform() {
+        return super.getDefaultTransform().scale(0.5f);
     }
 }

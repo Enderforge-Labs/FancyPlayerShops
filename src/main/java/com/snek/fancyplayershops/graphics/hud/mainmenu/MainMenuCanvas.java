@@ -69,7 +69,7 @@ public class MainMenuCanvas extends HudCanvas {
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
-        // Add "no shops yet" text if the player doesn't own any shop
+        // Add no shops text if the player doesn't own any shop
         final @Nullable HashSet<@NotNull Shop> shops = ShopManager.getShopsOfPlayer(player);
         if(shops == null || shops.isEmpty()) {
             e = bg.addChild(new SimpleTextElm(level, new MainMenu_EmptyText_S()));
