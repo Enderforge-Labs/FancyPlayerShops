@@ -63,8 +63,9 @@ public class Edit_DeleteButton extends SimpleButtonElm {
         }
 
 
-        // Stash and delete the shop
+        // Stash, claim and delete the shop
         shop.stash();
+        shop.claimBalance();
         shop.delete();
     }
 }

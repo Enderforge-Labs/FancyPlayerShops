@@ -831,7 +831,8 @@ public class Shop {
     /**
      * Deletes this shop without stashing the items or giving the player an unconfigured shop.
      * <p> Any item left in the shop is fully deleted and cannot be recovered.
-     * <p> The save file of this shop is also deleted.
+     * <p> The balance is also deleted and cannot be recovered.
+     * <p> The save file of this shop is deleted as well.
      */
     public void delete() {
         if(!deletionState) {

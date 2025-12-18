@@ -395,8 +395,9 @@ public final class ShopManager extends UtilityClassBase {
                     .cat(new Txt("Your " + shop.getDecoratedName() + " has been removed by an admin.").red())
                 .get(), false);
 
-                // Stash and delete the shop, then increase the purged shops counter
+                // Stash, claim and delete the shop, then increase the purged shops counter
                 shop.stash();
+                shop.claimBalance();
                 shop.delete();
                 ++r;
             }
