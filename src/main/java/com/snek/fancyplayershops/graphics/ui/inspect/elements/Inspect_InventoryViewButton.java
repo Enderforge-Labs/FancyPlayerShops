@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 
@@ -44,7 +44,7 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
         final Shop shop = GetShop.get(this);
         if(!shop.getItem().is(Items.AIR)) {
             player.openMenu(inventoryViewFactory);
-            __base_ButtonElm.playButtonSound(player);
+            Clickable.playSound(player);
         }
     }
 }

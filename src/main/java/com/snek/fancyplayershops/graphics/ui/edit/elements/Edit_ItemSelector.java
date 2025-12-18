@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -79,6 +79,6 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
         //TODO add item blacklist
         shop.getItemDisplay().updateDisplay();
         ((EditCanvas)canvas).updateTitle();
-        __base_ButtonElm.playButtonSound(player);
+        Clickable.playSound(player);
     }
 }

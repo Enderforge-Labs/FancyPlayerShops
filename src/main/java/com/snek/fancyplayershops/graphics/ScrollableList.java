@@ -207,7 +207,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
         // Refresh view and play sound
         refreshViewSides(false);
-        playSound(player);
+        Scrollable.playSound(player);
     }
 
 
@@ -258,11 +258,5 @@ public class ScrollableList extends PanelElm implements Scrollable {
         // Flush bar styles
         barThumb.flushStyle();
         barTrack.flushStyle();
-    }
-
-
-
-    public static void playSound(final @NotNull Player player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.STONE_BUTTON_CLICK_ON, 1, 1.5f);
     }
 }

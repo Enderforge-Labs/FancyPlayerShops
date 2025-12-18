@@ -9,7 +9,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 
@@ -55,7 +55,7 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         super.onClick(player, click);
-        __base_ButtonElm.playButtonSound(player);
+        Clickable.playSound(player);
         //TODO
     }
 

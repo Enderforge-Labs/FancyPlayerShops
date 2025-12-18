@@ -16,7 +16,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 
@@ -73,6 +73,6 @@ public class Buy_1iButton extends FancyButtonElm {
         else {
             shop.buyItem(player, amount, false);
         }
-        if(shop.getStock() != oldStock) __base_ButtonElm.playButtonSound(player);
+        if(shop.getStock() != oldStock) Clickable.playSound(player);
     }
 }

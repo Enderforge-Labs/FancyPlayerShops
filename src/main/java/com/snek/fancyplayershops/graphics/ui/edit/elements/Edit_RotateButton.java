@@ -18,7 +18,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 
@@ -86,7 +86,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
             .additiveTransform(new Transform().rotY(rotation))
         );
 
-        __base_ButtonElm.playButtonSound(player);
+        Clickable.playSound(player);
     }
 
 

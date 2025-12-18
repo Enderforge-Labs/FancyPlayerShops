@@ -16,7 +16,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
-import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 
@@ -66,7 +66,7 @@ public class Buy_1sButton extends FancyButtonElm {
 
         // Play sound and buy items
         final Shop shop = GetShop.get(this);
-        if(active) __base_ButtonElm.playButtonSound(player);
+        if(active) Clickable.playSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, 64, true);
         }
