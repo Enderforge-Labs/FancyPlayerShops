@@ -48,7 +48,7 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
         // Add shop group name
         e = addChild(new SimpleTextElm(
             level,
-            new Txt(groupInstance.getDisplayName()).cat("\n★★★☆☆").get(),
+            new Txt(groupInstance.getDisplayName()).cat("\n★★★☆☆ | " + groupInstance.getShops().size() + " items").get(), //TODO make this dynamic and real
             TextAlignment.LEFT,
             TextOverflowBehaviour.SCROLL)
         );

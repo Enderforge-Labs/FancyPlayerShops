@@ -23,18 +23,19 @@ public class ShopGroup {
     public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
     // Group data
-    private UUID   uuid;
-    private String displayName;
+    private @NotNull UUID   uuid;
+    private @NotNull String displayName;
     //TODO add icon - 8x pixel art
 
     // Runtime data
     private long balance;
-    private List<Shop> shops;
+    private @NotNull List<@NotNull Shop> shops;
 
     // Getters
-    public @NotNull UUID   getUuid       () { return uuid;        }
-    public @NotNull String getDisplayName() { return displayName; }
-    public          long   getBalance    () { return balance;     }
+    public @NotNull UUID                getUuid       () { return uuid;        }
+    public @NotNull String              getDisplayName() { return displayName; }
+    public          long                getBalance    () { return balance;     }
+    public @NotNull List<@NotNull Shop> getShops      () { return shops;       }
 
     // Setters
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
