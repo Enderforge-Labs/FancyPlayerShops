@@ -221,8 +221,8 @@ public class Shop {
      * <p> Shops whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
     */
     public boolean reinitTransient() {
-        focusState            = false;
-        focusStateNext        = false;
+        focusState      = false;
+        focusStateNext  = false;
         menuOpenLimiter = new RateLimiter();
         cacheShopIdentifier();
 
@@ -810,6 +810,7 @@ public class Shop {
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);
+            ShopGroupManager.unregisterShop(this, ownerUUID, groupUUID);
         }
     }
 

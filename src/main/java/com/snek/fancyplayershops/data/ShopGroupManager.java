@@ -103,7 +103,7 @@ public class ShopGroupManager extends UtilityClassBase {
         // Find group
         final List<ShopGroup> groups = groupsList.get(ownerUUID);
         if(groups != null) {
-            Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
 
             // Add shop to the group if it exists
             if(groupOpt.isPresent()) {
@@ -115,6 +115,24 @@ public class ShopGroupManager extends UtilityClassBase {
 
         //TODO add error detection and logging
         return null;
+    }
+
+
+
+
+    public static void unregisterShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+
+        // Find group
+        final List<ShopGroup> groups = groupsList.get(ownerUUID);
+        if(groups != null) {
+            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+
+            // Add shop to the group if it exists
+            if(groupOpt.isPresent()) {
+                final ShopGroup group = groupOpt.get();
+                group.removeShop(shop);
+            }
+        }
     }
 
 

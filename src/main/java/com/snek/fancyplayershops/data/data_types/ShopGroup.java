@@ -40,8 +40,20 @@ public class ShopGroup {
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
     public void addBalance(final long amount) { balance += amount; }
     public void subBalance(final long amount) { balance -= amount; }
-    public void addShop   (final @NotNull Shop shop) { shops.add   (shop); }
-    public void removeShop(final @NotNull Shop shop) { shops.remove(shop); }
+
+
+    public void addShop   (final @NotNull Shop shop) {
+        shops.add(shop);
+        //TODO update shop list UIs
+        //TODO also update the list of items in any buyer's HUD
+    }
+
+
+    public void removeShop(final @NotNull Shop shop) {
+        shops.remove(shop);
+        //TODO update shop list UIs
+        //TODO also update the list of items in any buyer's HUD
+    }
 
 
 
