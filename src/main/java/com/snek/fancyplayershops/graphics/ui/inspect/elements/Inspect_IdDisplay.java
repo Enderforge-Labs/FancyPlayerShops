@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_IdDisplay_S;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -30,7 +31,7 @@ public class Inspect_IdDisplay extends SimpleTextElm {
      * @param _shop The target shop.
      */
     public Inspect_IdDisplay(@NotNull Shop _shop) {
-        super(_shop.getLevel());
+        super(_shop.getLevel(), new Inspect_IdDisplay_S());
     }
 
 
