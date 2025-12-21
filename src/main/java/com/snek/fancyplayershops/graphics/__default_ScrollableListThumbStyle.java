@@ -25,11 +25,11 @@ public class __default_ScrollableListThumbStyle extends PanelElmStyle {
 
     @Override
     public @NotNull Vector3i getDefaultColor() {
-        return new Vector3i(255, 0, 0);
-    } //TODO choose default colors
+        return new Vector3i(180);
+    }
 
     @Override
     public int getDefaultAlpha() {
         return 255;
-    } //TODO choose default colors
+    }
 }

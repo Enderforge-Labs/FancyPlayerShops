@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -46,7 +45,8 @@ import net.minecraft.server.level.ServerPlayer;
  * A class that handles player shop groups.
  */
 public class ShopGroupManager extends UtilityClassBase {
-    public static final UUID DEFAULT_GROUP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
+    public static final UUID   DEFAULT_GROUP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
+    public static final String DEFAULT_GROUP_NAME = "Uncategorized";
     private ShopGroupManager() {}
 
 
@@ -56,7 +56,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
     // The list of groups scheduled for saving
-    private static @NotNull List<@NotNull Pair<@NotNull UUID, @NotNull ShopGroup>> scheduledForSaving = new ArrayList<>();
+    private static @NotNull List<@NotNull ShopGroup> scheduledForSaving = new ArrayList<>();
 
 
 
@@ -67,11 +67,21 @@ public class ShopGroupManager extends UtilityClassBase {
 
     /**
      * Adds a new shop group and associates it with the specified player.
+     * <p>
+     * Groups with duplicate UUIDs are not added.
      * @param playerUUID The UUID of the player.
      * @param group The group to add.
      */
     public static void addGroup(final @NotNull UUID playerUUID, final @NotNull ShopGroup group) {
+
+        // Get the list of groups
         final List<ShopGroup> groups = groupsList.computeIfAbsent(playerUUID, uuid -> new ArrayList<>());
+
+
+        // Return if UUID exists, add group otherwise
+        for(final ShopGroup g : groups) {
+            if(g.getUuid().equals(group.getUuid())) return;
+        }
         groups.add(group);
     }
 
@@ -80,21 +90,24 @@ public class ShopGroupManager extends UtilityClassBase {
 
     public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
 
-        // Create default group if needed //! This special group is not stored to file or loaded
+        // Create default group if needed
+        //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
-            addGroup(ownerUUID, new ShopGroup("Unassigned", DEFAULT_GROUP_UUID)); //TODO use italic gray once colors are implemented
+            addGroup(ownerUUID, new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID, ownerUUID));
+            //TODO use italic grey once colors are implemented
+            //TODO allow players to use &[0-9a-gulomkr]
         }
 
-        // Find group list
-        final List<ShopGroup> groups = groupsList.get(ownerUUID);
 
         // Find group
+        final List<ShopGroup> groups = groupsList.get(ownerUUID);
         if(groups != null) {
             final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
 
-            // Add shop to the group
+            // Add shop to the group if it exists
             if(groupOpt.isPresent()) {
                 final ShopGroup group = groupOpt.get();
+                group.addBalance(shop.getBalance());
                 group.addShop(shop);
                 return group;
             }
@@ -102,6 +115,25 @@ public class ShopGroupManager extends UtilityClassBase {
 
         //TODO add error detection and logging
         return null;
+    }
+
+
+
+
+    public static void unregisterShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+
+        // Find group
+        final List<ShopGroup> groups = groupsList.get(ownerUUID);
+        if(groups != null) {
+            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+
+            // Add shop to the group if it exists
+            if(groupOpt.isPresent()) {
+                final ShopGroup group = groupOpt.get();
+                group.subBalance(shop.getBalance());
+                group.removeShop(shop);
+            }
+        }
     }
 
 
@@ -118,9 +150,9 @@ public class ShopGroupManager extends UtilityClassBase {
      * @param playerUUID The UUID of the player.
      * @param group The shop group to save.
      */
-    public static void scheduleGroupSave(final @NotNull UUID playerUUID, final @NotNull ShopGroup group) {
+    public static void scheduleGroupSave(final @NotNull ShopGroup group) {
         if(!group.isScheduledForSave()) {
-            scheduledForSaving.add(Pair.from(playerUUID, group));
+            scheduledForSaving.add(group);
             group.setScheduledForSave(true);
         }
     }
@@ -142,28 +174,29 @@ public class ShopGroupManager extends UtilityClassBase {
         }
 
 
-        for(final Pair<UUID, ShopGroup> pair : scheduledForSaving) {
+        for(final ShopGroup g : scheduledForSaving) {
             //FIXME CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
-            //BUG   CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
+            if(!g.getUuid().equals(DEFAULT_GROUP_UUID)) {
 
-            // Create the JSON objects that contains the group data
-            final JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("ownerUUID",   pair.getFirst ().toString());
-            jsonObject.addProperty("uuid",        pair.getSecond().getUuid().toString());
-            jsonObject.addProperty("displayName", pair.getSecond().getDisplayName());
+                // Create the JSON objects that contains the group data
+                final JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("ownerUUID",   g.getOwnerUuid().toString());
+                jsonObject.addProperty("uuid",        g.getUuid().toString());
+                jsonObject.addProperty("displayName", g.getDisplayName());
 
 
-            // Create this group's config file if absent, then save the JSON in it
-            final File groupStorageFile = new File(levelStorageDir + "/" + pair.getSecond().getUuid().toString() + ".json");
-            try(final Writer writer = new FileWriter(groupStorageFile)) {
-                new Gson().toJson(jsonObject, writer);
-            } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", pair.getSecond().getDisplayName(), e);
+                // Create this group's config file if absent, then save the JSON in it
+                final File groupStorageFile = new File(levelStorageDir + "/" + g.getUuid().toString() + ".json");
+                try(final Writer writer = new FileWriter(groupStorageFile)) {
+                    new Gson().toJson(jsonObject, writer);
+                } catch(final IOException e) {
+                    FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", g.getDisplayName(), e);
+                }
             }
 
 
             // Flag the groups as not scheduled
-            pair.getSecond().setScheduledForSave(false);
+            g.setScheduledForSave(false);
         }
         scheduledForSaving = new ArrayList<>();
     }
@@ -178,7 +211,7 @@ public class ShopGroupManager extends UtilityClassBase {
     /**
      * Loads all the shop groups into the runtime map, if needed.
      * <p>
-     * Must be called on server started event (After the worlds are loaded!).
+     * Must be called on server started event (After the levels are loaded!).
      * <p>
      * If the data has already been loaded, the call will have no effect.
      */
@@ -199,7 +232,8 @@ public class ShopGroupManager extends UtilityClassBase {
                 final JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
                 addGroup(UUID.fromString(jsonObject.get("ownerUUID").getAsString()), new ShopGroup(
                     jsonObject.get("displayName").getAsString(),
-                    groupUUID
+                    groupUUID,
+                    UUID.fromString(jsonObject.get("ownerUUID").getAsString())
                 ));
             } catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the shop group {}", groupStorageFile.getName(), e);

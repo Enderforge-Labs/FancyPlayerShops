@@ -14,7 +14,7 @@ import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 
 
 /**
- * The style of the generic SimpleShopButton UI element.
+ * The style of shop simple button elements.
  */
 public class SimpleShopButton_S extends SimpleButtonElmStyle {
     protected final @NotNull Shop shop;

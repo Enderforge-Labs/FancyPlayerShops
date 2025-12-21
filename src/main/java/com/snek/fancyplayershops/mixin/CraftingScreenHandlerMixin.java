@@ -64,7 +64,7 @@ public abstract class CraftingScreenHandlerMixin {
 
         // Check if the grid matches the recipe
         if(recipe instanceof ShapedRecipe r) {
-            if(r.matches((CraftingContainer)inventory, null)) { //! World parameter isn't actually used by the function
+            if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
 
                 // Replace the output item
                 resultSlots.setItem(0, ShopManager.getShopItemCopy());

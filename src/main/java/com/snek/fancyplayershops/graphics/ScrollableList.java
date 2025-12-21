@@ -8,9 +8,11 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 import com.snek.frameworklib.data_types.containers.Flagged;
@@ -19,6 +21,9 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
+
+
+//TODO don't use an entity instead of making it invisible. To improve performance
 
 
 
@@ -45,6 +50,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
     }
 
     // Bar elements
+    public static final float THUMB_MIN_HEIGHT = 0.05f;
     private final @NotNull PanelElm barThumb;
     private final @NotNull PanelElm barTrack;
 
@@ -57,8 +63,8 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
     final float tmp_bar_width = 0.01f;
-    public ScrollableList(final @NotNull ServerLevel world, final @NotNull ScrollableListStyle style, final float elmSize) {
-        super(world, style);
+    public ScrollableList(final @NotNull ServerLevel level, final @NotNull ScrollableListStyle style, final float elmSize) {
+        super(level, style);
         this.elmSize = elmSize;
 
         // Add element container
@@ -67,20 +73,20 @@ public class ScrollableList extends PanelElm implements Scrollable {
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
         // Add bar track
-        barTrack = (PanelElm)addChild(new PanelElm(world, getThisStyle().getTrackStyleReference()));
+        barTrack = (PanelElm)addChild(new PanelElm(level, getThisStyle().getTrackStyleReference()));
         barTrack.setSize(new Vector2f(tmp_bar_width, 1)); //FIXME make width customizable
         barTrack.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
 
         // Add bar thumb
-        barThumb = (PanelElm)barTrack.addChild(new PanelElm(world, getThisStyle().getThumbStyleReference()));
-        barThumb.setSizeX(1);
-        barThumb.setSizeY(0.4f);    //! Actual height is set dynamically
+        barThumb = (PanelElm)barTrack.addChild(new PanelElm(level, getThisStyle().getThumbStyleReference()));
+        barThumb.setSizeX(3);
+        barThumb.setSizeY(0.05f);   //! Actual height is set dynamically
         barThumb.setPosY(0);        //! Actual y position is set dynamically
         barThumb.setAlignmentX(AlignmentX.CENTER);
 
     }
-    public ScrollableList(final @NotNull ServerLevel world, final float elmSize) {
-        this(world, new ScrollableListStyle(), elmSize);
+    public ScrollableList(final @NotNull ServerLevel level, final float elmSize) {
+        this(level, new ScrollableListStyle(), elmSize);
     }
 
 
@@ -91,7 +97,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
     }
     public Div addElmAt(final @NotNull Div elm, final int index) {
         elmList.add(index, elm);
-        refreshViewSides();
+        refreshViewSides(false);
         return elm;
     }
 
@@ -101,13 +107,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
     public Div removeElm(final @NotNull Div elm) {
         //TODO unify code?
         elmList.remove(elm);
-        refreshViewSides();
+        refreshViewSides(false);
         return elm;
     }
     public Div removeElmAt(final int index) {
         //TODO unify code?
         final Div elm = elmList.remove(index);
-        refreshViewSides();
+        refreshViewSides(false);
         return elm;
     }
 
@@ -133,7 +139,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
     /**
      * Recalculates the visible elements and, if needed, spawns/despawns elements near the sides of the list.
      */
-    public void refreshViewSides() {
+    public void refreshViewSides(final boolean instant) {
 
         //FIXME actually change them dynamically instead of replacing the whole thing
 
@@ -143,18 +149,48 @@ public class ScrollableList extends PanelElm implements Scrollable {
             for(final Div elm : elmContainer.getChildren()) elm.despawn(false);
             elmContainer.clearChildren();
 
-            // Calculate clamped scroll value and element range
-            final float clampedScroll = getClampedScroll(scroll);
-            final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize)); //FIXME cache and compare, only despawned needed
-            final int lastVisible = Math.min(elmList.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
-            //FIXME                                        account for elements added or removed within the ranges   ^^^
 
-            // Spawn visible elements
-            for(int i = firstVisible; i <= lastVisible; i++) {
-                final Div elm = elmContainer.addChild(elmList.get(i));
-                elm.setSize(new Vector2f(1, elmSize));
-                elm.setPosY((1 - (elmSize * (i - firstVisible + 1))) * getAbsSize().y);
-                elm.spawn(canvas.getContext().getSpawnPos(), false);
+            // If the stash is not empty
+            if(!elmList.isEmpty()) { //FIXME remove this if we are removing elements dynamically. not needed if we aren't respawning everything
+
+                // Calculate clamped scroll value and element range
+                final float clampedScroll = getClampedScroll(scroll);
+                final int firstVisible = Math.max(0, (int)Math.floor((clampedScroll - 0.5f) / elmSize)); //FIXME cache and compare, only despawned needed
+                final int lastVisible = Math.min(elmList.size() - 1, firstVisible + Math.round(1 / elmSize) - 1); //FIXME cache and compare, only despawned needed
+                //FIXME                                        account for elements added or removed within the ranges   ^^^
+
+
+                // Spawn visible elements
+                for(int i = firstVisible; i <= lastVisible; i++) {
+                    final Div elm = elmContainer.addChild(elmList.get(i));
+                    elm.setSize(new Vector2f(1, elmSize));
+                    elm.setPosY((1 - (elmSize * (i - firstVisible + 1))) * getAbsSize().y);
+                    elm.spawn(canvas.getContext().getSpawnPos(), false);
+                }
+
+
+                // Update scrollbar
+                if(lastVisible - firstVisible != elmList.size() - 1) {
+                    final float elmAmount = (float)elmList.size();
+                    final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
+                    final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
+                    final float adjustY = finalHeight - trueHeight;
+                    final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
+                    final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
+                    barThumb.setSizeY(finalHeight);
+                    barThumb.setPosY(finalPosY);
+                    barThumb.flushStyle();
+                    //TODO maybe animate this? idk. setSize and setPos and similar might need an "animate" parameter.
+                    barTrack.spawn(canvas.getContext().getSpawnPos(), !instant);
+                }
+                else {
+                    barTrack.despawn(!instant);
+                }
+            }
+
+            // If it's empty, hide the scrollbar
+            else {
+                barTrack.despawn(!instant);
             }
         }
     }
@@ -169,8 +205,9 @@ public class ScrollableList extends PanelElm implements Scrollable {
         // Add the received scroll to the current value, then clamp it
         scroll = getClampedScroll(scroll + amount);
 
-        // Refresh view
-        refreshViewSides();
+        // Refresh view and play sound
+        refreshViewSides(false);
+        Scrollable.playSound(player);
     }
 
 
@@ -191,7 +228,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
         if(!isSpawned) {
             super.spawn(pos, animate);
             scroll = getClampedScroll(scroll);
-            refreshViewSides();
+            refreshViewSides(true);
         }
     }
 

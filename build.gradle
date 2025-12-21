@@ -35,6 +35,14 @@ loom {
             sourceSet sourceSets.main
         }
     }
+    runs {
+        client {
+            vmArg "-ea"
+        }
+        server {
+            vmArg "-ea"
+        }
+    }
 }
 
 

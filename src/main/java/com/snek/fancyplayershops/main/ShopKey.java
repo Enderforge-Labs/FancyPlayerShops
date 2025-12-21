@@ -16,14 +16,14 @@ public class ShopKey {
     private final int x;
     private final int y;
     private final int z;
-    private final @NotNull Level world;
+    private final @NotNull Level level;
 
 
-    public ShopKey(final @NotNull BlockPos _pos, final @NotNull Level _world) {
+    public ShopKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
         x = _pos.getX();
         y = _pos.getY();
         z = _pos.getZ();
-        world = _world;
+        this.level = level;
     }
 
 
@@ -36,7 +36,7 @@ public class ShopKey {
                 x == other.x &&
                 y == other.y &&
                 z == other.z &&
-                world.equals(other.world)
+                level.equals(other.level)
             ;
         }
         return false;
@@ -48,7 +48,7 @@ public class ShopKey {
         int result = Integer.hashCode(x);
         result = 31 * result + Integer.hashCode(y);
         result = 31 * result + Integer.hashCode(z);
-        result = 31 * result + world.hashCode();
+        result = 31 * result + level.hashCode();
         return result;
     }
 }
