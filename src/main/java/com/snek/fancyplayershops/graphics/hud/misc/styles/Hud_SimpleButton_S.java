@@ -27,6 +27,6 @@ public class Hud_SimpleButton_S extends SimpleButtonElmStyle {
 
     @Override
     public Vector3i getDefaultColor() {
-        return new Vector3i(1128, 128, 128);
+        return new Vector3i(128, 128, 128);
     }
 }
