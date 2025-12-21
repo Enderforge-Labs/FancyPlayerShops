@@ -549,7 +549,7 @@ public final class ShopManager extends UtilityClassBase {
             new Txt()
                 .cat(new Txt("It will automatically ").white().noItalic())
                 .cat(new Txt("restore").color(SHOP_ITEM_DESCRITPION_COLOR).noItalic())
-                .cat(new Txt(" its stock and settings when placed.").white().noItalic())
+                .cat(new Txt(" its stock and settings once placed.").white().noItalic())
             .get(),
             new Txt().get(),
             new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(shop.getOwnerUuid()).getName().getString())).white().noItalic().get(),
