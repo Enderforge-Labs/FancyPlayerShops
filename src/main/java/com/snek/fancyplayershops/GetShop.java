@@ -16,7 +16,7 @@ public final class GetShop extends UtilityClassBase {
     public static @NotNull Shop get(final @NotNull Div _this) {
         assert Require.nonNull(_this, "element");
 
-        assert Require.condition(_this.getCanvas() == null, "GetShop.get() used on orphan element");
+        assert Require.condition(_this.getCanvas() != null, "GetShop.get() used on orphan element");
         final Context context = _this.getCanvas().getContext();
 
         assert Require.instanceOf(context, ShopContext.class, "element's context");
