@@ -11,6 +11,7 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
+- add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
 - add shop setting to send everything to the stash, skipping the inventory
   - replace hand written inventory checks and calls with a generic give() method that checks for this option and also adds extra items to the stash

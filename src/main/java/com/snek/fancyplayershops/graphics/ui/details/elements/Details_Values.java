@@ -7,7 +7,6 @@ import org.joml.Vector3i;
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -38,7 +37,7 @@ public class Details_Values extends SimpleTextElm {
      */
     public Details_Values(@NotNull Shop _shop) {
         super(_shop.getLevel());
-        ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid(), FrameworkLib.getServer());
+        ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid());
     }
 
 
