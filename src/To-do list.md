@@ -11,6 +11,12 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
+- add ae2 compatibility
+  - let players craft higher tiers of shop that can contain more stock
+  - shops don't pull any item by default but require manual restocking.
+    - Crafting them with an interface and a controller allows them to pull items from nearby inventories, or something annoying like that
+  - each tier can become wireless by crafting it with a wireless transmitter
+
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
 - add shop setting to send everything to the stash, skipping the inventory
