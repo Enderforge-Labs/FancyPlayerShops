@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.Shop;
@@ -45,8 +46,8 @@ public class Buy_ConfirmButton extends FancyButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Play sound and buy items
         final Shop shop = GetShop.get(this);

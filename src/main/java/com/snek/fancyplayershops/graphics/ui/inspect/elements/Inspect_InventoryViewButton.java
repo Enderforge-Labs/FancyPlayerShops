@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
 import com.snek.fancyplayershops.main.Shop;
@@ -37,8 +38,8 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Open menu if the shop is configured
         final Shop shop = GetShop.get(this);

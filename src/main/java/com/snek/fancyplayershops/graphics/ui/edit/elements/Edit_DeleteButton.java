@@ -43,8 +43,8 @@ public class Edit_DeleteButton extends SimpleButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
         final Shop shop = GetShop.get(this);
 
 

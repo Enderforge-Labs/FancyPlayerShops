@@ -73,8 +73,8 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
         Clickable.playSound(player);
         //TODO
     }

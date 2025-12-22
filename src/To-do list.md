@@ -81,11 +81,6 @@
   - you can buy in advance and your items will be sent to the stash as soon as they are available in the shop block
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
-
-
-
-
-
 Cleanup:
     - add @NotNull and @Null to everything
     - Check and/or add documentation comments to all methods and classes. use <p> to separate paragraphs (have it be on its own line)

@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.transfer.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.Shop;
 import com.snek.fancyplayershops.GetShop;
@@ -37,8 +38,8 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Change owner
         final Shop shop = GetShop.get(this);

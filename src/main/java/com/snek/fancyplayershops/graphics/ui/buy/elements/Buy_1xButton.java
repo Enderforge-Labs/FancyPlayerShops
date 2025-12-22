@@ -61,8 +61,8 @@ public class Buy_1xButton extends FancyButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Play sound and buy items
         final Shop shop = GetShop.get(this);

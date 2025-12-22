@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
@@ -46,9 +47,9 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         if(click != ClickAction.SECONDARY) {
-            super.onClick(player, click);
+            super.onClick(player, click, coords);
             return;
         }
 

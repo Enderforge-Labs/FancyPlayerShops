@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.GetShop;
@@ -58,8 +59,8 @@ public class Edit_ColorSelector extends SimpleButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Change theme hue
         final Shop shop = GetShop.get(this);
