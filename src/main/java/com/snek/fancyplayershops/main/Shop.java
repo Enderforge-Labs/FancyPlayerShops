@@ -238,7 +238,7 @@ public class Shop {
         }
 
         cacheShopKey();
-        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
+        shopGroup = ShopGroupManager.registerShop(this, groupUUID);
         return true;
     }
 
@@ -279,7 +279,7 @@ public class Shop {
         cacheShopIdentifier();
         cacheShopKey();
         groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
-        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, ShopGroupManager.DEFAULT_GROUP_UUID);
+        shopGroup = ShopGroupManager.registerShop(this, ShopGroupManager.DEFAULT_GROUP_UUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplayElm(this);
@@ -331,7 +331,7 @@ public class Shop {
         cacheShopIdentifier();
         cacheShopKey();
         groupUUID = _shopGroupUUID;
-        shopGroup = ShopGroupManager.registerShop(this, ownerUUID, _shopGroupUUID);
+        shopGroup = ShopGroupManager.registerShop(this, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplayElm(this);
@@ -846,7 +846,7 @@ public class Shop {
 
             // Delete the data associated with this shop
             ShopManager.deleteShop(this);
-            ShopGroupManager.unregisterShop(this, ownerUUID, groupUUID);
+            ShopGroupManager.unregisterShop(this);
         }
     }
 
@@ -1075,14 +1075,14 @@ public class Shop {
         // Create a new group if one with the specified display name doesn't already exist
         if(group == null) {
             group = new ShopGroup(name, ownerUUID);
-            ShopGroupManager.addGroup(ownerUUID, group);
+            ShopGroupManager.addGroup(group);
         }
 
 
         // Change group and update group references
-        ShopGroupManager.unregisterShop(this, ownerUUID, groupUUID);
+        ShopGroupManager.unregisterShop(this);
         shopGroup = group;
         groupUUID = group.getUuid();
-        ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
+        ShopGroupManager.registerShop(this, groupUUID);
     }
 }

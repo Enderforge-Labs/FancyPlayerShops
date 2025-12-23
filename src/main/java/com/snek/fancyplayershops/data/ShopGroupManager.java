@@ -69,13 +69,12 @@ public class ShopGroupManager extends UtilityClassBase {
      * Adds a new shop group and associates it with the specified player.
      * <p>
      * Groups with duplicate UUIDs are not added.
-     * @param playerUUID The UUID of the player.
      * @param group The group to add.
      */
-    public static void addGroup(final @NotNull UUID playerUUID, final @NotNull ShopGroup group) {
+    public static void addGroup(final @NotNull ShopGroup group) {
 
         // Get the list of groups
-        final List<ShopGroup> groups = groupsList.computeIfAbsent(playerUUID, uuid -> new ArrayList<>());
+        final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
 
 
         // Return if UUID exists, add group otherwise
@@ -88,14 +87,38 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
-    public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+    // /**
+    //  * Deletes a shop group and its associated data file.
+    //  * @param group The group to delete.
+    //  */
+    // public static void deleteGroup(final @NotNull ShopGroup group) {
+
+    //     // Get the list of groups
+    //     final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
+
+    //     // Remove group from the map, then dissolve it
+
+
+    //     // Return if UUID exists, add group otherwise
+    //     for(final ShopGroup g : groups) {
+    //         if(g.getUuid().equals(group.getUuid())) return;
+    //     }
+    //     groups.add(group);
+    // }
+
+
+
+
+    public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID groupUUID) {
+        final UUID ownerUUID = shop.getOwnerUuid();
+
 
         // Create default group if needed
         //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
-            addGroup(ownerUUID, new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID, ownerUUID));
+            addGroup(new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID, ownerUUID));
             //TODO use italic grey once colors are implemented
-            //TODO allow players to use &[0-9a-gulomkr]
+            //TODO allow players to use &[0-9a-gulomkr&]
         }
 
 
@@ -120,12 +143,12 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
-    public static void unregisterShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+    public static void unregisterShop(final @NotNull Shop shop) {
 
         // Find group
-        final List<ShopGroup> groups = groupsList.get(ownerUUID);
+        final List<ShopGroup> groups = groupsList.get(shop.getOwnerUuid());
         if(groups != null) {
-            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(shop.getShopGroupUUID())).findFirst();
 
             // Remove shop from the group if it exists
             if(groupOpt.isPresent()) {
@@ -230,7 +253,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
                 // Load the data into the runtime map
                 final JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
-                addGroup(UUID.fromString(jsonObject.get("ownerUUID").getAsString()), new ShopGroup(
+                addGroup(new ShopGroup(
                     jsonObject.get("displayName").getAsString(),
                     groupUUID,
                     UUID.fromString(jsonObject.get("ownerUUID").getAsString())
