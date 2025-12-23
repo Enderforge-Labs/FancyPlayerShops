@@ -36,11 +36,14 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
     public static final float ITEM_WIDTH         = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
+    private final @NotNull ScrollableList parentList;
 
 
 
-    public Stash_ItemEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull int count) {
+
+    public Stash_ItemEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull int count, final @NotNull ScrollableList parentList) {
         super(context.getLevel(), null, "Collect this item", 2, new Stash_ItemEntry_S());
+        this.parentList = parentList;
         Div e;
 
 
@@ -84,7 +87,7 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
 
     @Override
     public void onScroll(final @NotNull Player player, final float amount) {
-        ((ScrollableList)(getParent().getParent())).onScroll(player, amount);
+        parentList.onScroll(player, amount);
     }
 }
 

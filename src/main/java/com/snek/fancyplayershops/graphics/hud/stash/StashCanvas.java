@@ -81,7 +81,7 @@ public class StashCanvas extends HudCanvas {
             final List<StashEntry> entries = new ArrayList<>(stash.values());
             for(int i = 0; i < entries.size(); ++i) {
                 final StashEntry entry = entries.get(i);
-                e = list.storeElm(new Stash_ItemEntry(context, entry.item, entry.getCount()));
+                e = list.storeElm(new Stash_ItemEntry(context, entry.item, entry.getCount(), list));
             }
         }
 

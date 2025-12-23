@@ -35,15 +35,17 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
     public static final float BALANCE_WIDTH = 0.2f;
     public static final float NAME_WIDTH = 1f - MARGIN_LEFT - BALANCE_WIDTH;
 
-    protected final @Nullable ShopGroup groupInstance;
+    private final @Nullable ShopGroup groupInstance;
+    private final @NotNull ScrollableList parentList;
 
 
 
 
     //TODO update balance dynamically?
-    public MainMenu_GroupEntry(final @NotNull HudContext context, final @NotNull ShopGroup groupInstance) {
+    public MainMenu_GroupEntry(final @NotNull HudContext context, final @NotNull ShopGroup groupInstance, final @NotNull ScrollableList parentList) {
         super(context.getLevel(), "Claim balance", "Edit group", 2, new MainMenu_GroupEntry_S());
         this.groupInstance = groupInstance;
+        this.parentList = parentList;
         Div e;
 
 
@@ -82,6 +84,6 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
     @Override
     public void onScroll(final @NotNull Player player, final float amount) {
-        ((ScrollableList)(getParent().getParent())).onScroll(player, amount);
+        parentList.onScroll(player, amount);
     }
 }

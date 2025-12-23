@@ -98,7 +98,7 @@ public class MainMenuCanvas extends HudCanvas {
 
             // Add shop group entry displays
             for(int i = 0; i < shopGroups.size(); ++i) {
-               list.storeElm(new MainMenu_GroupEntry(_hud, shopGroups.get(i)));
+               list.storeElm(new MainMenu_GroupEntry(_hud, shopGroups.get(i), list));
             }
         }
 
