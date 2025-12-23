@@ -59,6 +59,24 @@ public class ShopGroupManager extends UtilityClassBase {
     private static @NotNull List<@NotNull ShopGroup> scheduledForSaving = new ArrayList<>();
 
 
+    /**
+     * Calculates the path to the directory where shop groups are saved.
+     * @return The path to the safe file directory.
+     */
+    public static @NotNull Path calcGroupDirPath() {
+        return FancyPlayerShops.getStorageDir().resolve("shop groups");
+    }
+
+    /**
+     * Calculates the path to the save file of the specified group.
+     * @param group The group.
+     * @return The path to the safe file of {@code group}.
+     */
+    public static @NotNull Path calcGroupFilePath(final @NotNull ShopGroup group) {
+        return calcGroupDirPath().resolve(group.getUuid().toString() + ".json");
+    }
+
+
 
 
 
@@ -82,29 +100,28 @@ public class ShopGroupManager extends UtilityClassBase {
             if(g.getUuid().equals(group.getUuid())) return;
         }
         groups.add(group);
+        scheduleGroupSave(group);
     }
 
 
 
 
-    // /**
-    //  * Deletes a shop group and its associated data file.
-    //  * @param group The group to delete.
-    //  */
-    // public static void deleteGroup(final @NotNull ShopGroup group) {
+    /**
+     * Deletes a shop group and its associated data file.
+     * @param group The group to delete.
+     */
+    public static void deleteGroup(final @NotNull ShopGroup group) {
 
-    //     // Get the list of groups
-    //     final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
+        // Get the list of groups
+        final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
 
-    //     // Remove group from the map, then dissolve it
+        // Remove group from the map, then dissolve it and remove the file
+        groups.remove(group);
+        group.dissolve();
 
-
-    //     // Return if UUID exists, add group otherwise
-    //     for(final ShopGroup g : groups) {
-    //         if(g.getUuid().equals(group.getUuid())) return;
-    //     }
-    //     groups.add(group);
-    // }
+        // Delete the config file
+        calcGroupFilePath(group).toFile().delete();
+    }
 
 
 
@@ -189,17 +206,16 @@ public class ShopGroupManager extends UtilityClassBase {
     public static void saveScheduledGroups() {
 
         // Create directory for the groups
-        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shop groups");
         try {
-            Files.createDirectories(levelStorageDir);
+            Files.createDirectories(calcGroupDirPath());
         } catch(final IOException e) {
             FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player shop groups", e);
         }
 
 
+        // Iterate shops. Save them if they are not dissolved and their UUID doesn't match the default group
         for(final ShopGroup g : scheduledForSaving) {
-            //FIXME CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
-            if(!g.getUuid().equals(DEFAULT_GROUP_UUID)) {
+            if(!g.isDissolved() && !g.getUuid().equals(DEFAULT_GROUP_UUID)) {
 
                 // Create the JSON objects that contains the group data
                 final JsonObject jsonObject = new JsonObject();
@@ -209,8 +225,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
                 // Create this group's config file if absent, then save the JSON in it
-                final File groupStorageFile = new File(levelStorageDir + "/" + g.getUuid().toString() + ".json");
-                try(final Writer writer = new FileWriter(groupStorageFile)) {
+                try(final Writer writer = new FileWriter(calcGroupFilePath(g).toFile())) {
                     new Gson().toJson(jsonObject, writer);
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", g.getDisplayName(), e);

@@ -20,8 +20,9 @@ import com.snek.fancyplayershops.main.Shop;
 //FIXME - PersistentDataManager
 public class ShopGroup {
     private boolean scheduledForSave = false;
-    //TODO add "deleted" boolean, check that when saving. also delete the file when the group is deleted
+    private boolean dissolved = false;
     public boolean isScheduledForSave() { return scheduledForSave; }
+    public boolean isDissolved() { return dissolved; }
     public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
     // Group data
@@ -97,5 +98,18 @@ public class ShopGroup {
         for(final Shop s : shops) {
             s.claimBalance();
         }
+    }
+
+
+    /**
+     * Removes all of the shops from this group, then flags it as dissolved (which prevents it from getting saved to file).
+     * <p>
+     * This method doesn't claim the balance as removing all of the shops already results in the group having 0 balance.
+     */
+    public void dissolve() {
+        for(final Shop shop : shops) {
+            ShopGroupManager.unregisterShop(shop);
+        }
+        dissolved = true;
     }
 }
