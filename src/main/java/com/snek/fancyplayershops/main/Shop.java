@@ -38,6 +38,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
@@ -1047,5 +1048,41 @@ public class Shop {
      */
     public @NotNull String getStandaloneName() {
         return item.is(Items.AIR) ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
+    }
+
+
+
+
+
+    /**
+     * Changes the group of the shop to the one whose display name matches the provided string.
+     * <p>
+     * If the name doesn't match any existing group, a new one is created.
+     * @param name The name of the new group.
+     */
+    public void changeGroup(final @NotNull String name, final @NotNull ServerPlayer owner) {
+        ShopGroup group = null;
+
+
+        // Try to find the group
+        for(final ShopGroup g : ShopGroupManager.getShopGroups(owner)) {
+            if(g.getDisplayName().equals(name)) {
+                group = g;
+            }
+        }
+
+
+        // Create a new group if one with the specified display name doesn't already exist
+        if(group == null) {
+            group = new ShopGroup(name, ownerUUID);
+            ShopGroupManager.addGroup(ownerUUID, group);
+        }
+
+
+        // Change group and update group references
+        ShopGroupManager.unregisterShop(this, ownerUUID, groupUUID);
+        shopGroup = group;
+        groupUUID = group.getUuid();
+        ShopGroupManager.registerShop(this, ownerUUID, groupUUID);
     }
 }

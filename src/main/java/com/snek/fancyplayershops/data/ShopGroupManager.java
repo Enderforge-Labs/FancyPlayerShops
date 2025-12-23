@@ -127,7 +127,7 @@ public class ShopGroupManager extends UtilityClassBase {
         if(groups != null) {
             final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
 
-            // Add shop to the group if it exists
+            // Remove shop from the group if it exists
             if(groupOpt.isPresent()) {
                 final ShopGroup group = groupOpt.get();
                 group.subBalance(shop.getBalance());
