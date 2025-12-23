@@ -11,6 +11,7 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_GroupInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButton;
@@ -50,11 +51,11 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = 0.45f - FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
+    public static final float ROTATE_BUTTON_Y            = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.EDIT_MOVE.y;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
+    public static final float ITEM_SELECTOR_Y            = ShopItemDisplayElm.EDIT_MOVE.y;
 
     public static final float COLOR_SELECTOR_W        = 0.2f;
     public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
@@ -119,6 +120,13 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         e = bg.addChild(new Edit_ItemSelector(_shop));
         e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
+        e.setAlignmentX(AlignmentX.CENTER);
+
+
+        // Add group input
+        e = bg.addChild(new Edit_GroupInput(_shop));
+        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
+        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + FancyPlayerShops.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 

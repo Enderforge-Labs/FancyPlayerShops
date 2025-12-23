@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.Shop;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 
 
@@ -32,5 +33,11 @@ public class ShopTextInput_S extends TextInputElmStyle {
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
         return shop.getThemeColor1();
+    }
+
+
+    @Override
+    public @NotNull TextOverflowBehaviour getTextOverflowBehaviour() {
+        return TextOverflowBehaviour.SCROLL;
     }
 }

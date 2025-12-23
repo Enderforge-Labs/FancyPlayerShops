@@ -66,7 +66,7 @@ public class ShopItemDisplayElm extends ItemElm {
 
     // Edit animation scale and transition
     public static final @NotNull Vector3f EDIT_SCALE  = new Vector3f(0.4f);
-    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.25f, 0);
+    public static final @NotNull Vector3f EDIT_MOVE   = new Vector3f(0, 0.25f, 0.25f).mul(1f - 0.5f).add(0, 0.30f, 0);
 
 
 

@@ -280,7 +280,7 @@ public abstract class CommandManager {
 
 
 
-
+    //TODO add a command that lets owners transfer all of the shop blocks in a radius to the specified shop.
 
 
 

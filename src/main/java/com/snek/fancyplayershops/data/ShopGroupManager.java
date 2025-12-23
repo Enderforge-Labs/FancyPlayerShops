@@ -59,6 +59,24 @@ public class ShopGroupManager extends UtilityClassBase {
     private static @NotNull List<@NotNull ShopGroup> scheduledForSaving = new ArrayList<>();
 
 
+    /**
+     * Calculates the path to the directory where shop groups are saved.
+     * @return The path to the safe file directory.
+     */
+    public static @NotNull Path calcGroupDirPath() {
+        return FancyPlayerShops.getStorageDir().resolve("shop groups");
+    }
+
+    /**
+     * Calculates the path to the save file of the specified group.
+     * @param group The group.
+     * @return The path to the safe file of {@code group}.
+     */
+    public static @NotNull Path calcGroupFilePath(final @NotNull ShopGroup group) {
+        return calcGroupDirPath().resolve(group.getUuid().toString() + ".json");
+    }
+
+
 
 
 
@@ -69,13 +87,12 @@ public class ShopGroupManager extends UtilityClassBase {
      * Adds a new shop group and associates it with the specified player.
      * <p>
      * Groups with duplicate UUIDs are not added.
-     * @param playerUUID The UUID of the player.
      * @param group The group to add.
      */
-    public static void addGroup(final @NotNull UUID playerUUID, final @NotNull ShopGroup group) {
+    public static void addGroup(final @NotNull ShopGroup group) {
 
         // Get the list of groups
-        final List<ShopGroup> groups = groupsList.computeIfAbsent(playerUUID, uuid -> new ArrayList<>());
+        final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
 
 
         // Return if UUID exists, add group otherwise
@@ -83,19 +100,42 @@ public class ShopGroupManager extends UtilityClassBase {
             if(g.getUuid().equals(group.getUuid())) return;
         }
         groups.add(group);
+        scheduleGroupSave(group);
     }
 
 
 
 
-    public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+    /**
+     * Deletes a shop group and its associated data file.
+     * @param group The group to delete.
+     */
+    public static void deleteGroup(final @NotNull ShopGroup group) {
+
+        // Get the list of groups
+        final List<ShopGroup> groups = groupsList.computeIfAbsent(group.getOwnerUuid(), uuid -> new ArrayList<>());
+
+        // Remove group from the map, then dissolve it and remove the file
+        groups.remove(group);
+        group.dissolve();
+
+        // Delete the config file
+        calcGroupFilePath(group).toFile().delete();
+    }
+
+
+
+
+    public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID groupUUID) {
+        final UUID ownerUUID = shop.getOwnerUuid();
+
 
         // Create default group if needed
         //! This special group is not stored to file or loaded
         if(groupUUID.equals(DEFAULT_GROUP_UUID)) {
-            addGroup(ownerUUID, new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID, ownerUUID));
+            addGroup(new ShopGroup(DEFAULT_GROUP_NAME, DEFAULT_GROUP_UUID, ownerUUID));
             //TODO use italic grey once colors are implemented
-            //TODO allow players to use &[0-9a-gulomkr]
+            //TODO allow players to use &[0-9a-gulomkr&]
         }
 
 
@@ -120,14 +160,14 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
-    public static void unregisterShop(final @NotNull Shop shop, final @NotNull UUID ownerUUID, final @NotNull UUID groupUUID) {
+    public static void unregisterShop(final @NotNull Shop shop) {
 
         // Find group
-        final List<ShopGroup> groups = groupsList.get(ownerUUID);
+        final List<ShopGroup> groups = groupsList.get(shop.getOwnerUuid());
         if(groups != null) {
-            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(groupUUID)).findFirst();
+            final Optional<ShopGroup> groupOpt = groups.stream().filter(e -> e.getUuid().equals(shop.getShopGroupUUID())).findFirst();
 
-            // Add shop to the group if it exists
+            // Remove shop from the group if it exists
             if(groupOpt.isPresent()) {
                 final ShopGroup group = groupOpt.get();
                 group.subBalance(shop.getBalance());
@@ -166,17 +206,16 @@ public class ShopGroupManager extends UtilityClassBase {
     public static void saveScheduledGroups() {
 
         // Create directory for the groups
-        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shop groups");
         try {
-            Files.createDirectories(levelStorageDir);
+            Files.createDirectories(calcGroupDirPath());
         } catch(final IOException e) {
             FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player shop groups", e);
         }
 
 
+        // Iterate shops. Save them if they are not dissolved and their UUID doesn't match the default group
         for(final ShopGroup g : scheduledForSaving) {
-            //FIXME CHECK IF THE GROUP HAS BEEN DELETED. DON'T SAVE DELETED GROUPS
-            if(!g.getUuid().equals(DEFAULT_GROUP_UUID)) {
+            if(!g.isDissolved() && !g.getUuid().equals(DEFAULT_GROUP_UUID)) {
 
                 // Create the JSON objects that contains the group data
                 final JsonObject jsonObject = new JsonObject();
@@ -186,8 +225,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
                 // Create this group's config file if absent, then save the JSON in it
-                final File groupStorageFile = new File(levelStorageDir + "/" + g.getUuid().toString() + ".json");
-                try(final Writer writer = new FileWriter(groupStorageFile)) {
+                try(final Writer writer = new FileWriter(calcGroupFilePath(g).toFile())) {
                     new Gson().toJson(jsonObject, writer);
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop group {}", g.getDisplayName(), e);
@@ -230,7 +268,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
                 // Load the data into the runtime map
                 final JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
-                addGroup(UUID.fromString(jsonObject.get("ownerUUID").getAsString()), new ShopGroup(
+                addGroup(new ShopGroup(
                     jsonObject.get("displayName").getAsString(),
                     groupUUID,
                     UUID.fromString(jsonObject.get("ownerUUID").getAsString())

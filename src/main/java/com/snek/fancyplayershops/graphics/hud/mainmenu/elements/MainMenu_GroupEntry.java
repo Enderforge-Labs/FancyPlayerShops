@@ -41,7 +41,7 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
 
 
     //TODO update balance dynamically?
-    public MainMenu_GroupEntry(final @NotNull HudContext context, final @Nullable ShopGroup groupInstance) {
+    public MainMenu_GroupEntry(final @NotNull HudContext context, final @NotNull ShopGroup groupInstance) {
         super(context.getLevel(), "Claim balance", "Edit group", 2, new MainMenu_GroupEntry_S());
         this.groupInstance = groupInstance;
         Div e;
