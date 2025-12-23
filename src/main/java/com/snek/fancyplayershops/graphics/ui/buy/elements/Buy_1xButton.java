@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_BuyButton_S;
@@ -35,7 +35,7 @@ public class Buy_1xButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Buy_1xButton(final @NotNull Shop _shop) {
+    public Buy_1xButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "Buy 1 item", 1,  new Buy_BuyButton_S(_shop));
 
         // Create design
@@ -65,7 +65,7 @@ public class Buy_1xButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Play sound and buy items
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         if(active) Clickable.playSound(player);
         if(player.getUUID().equals(shop.getOwnerUuid())) {
             shop.retrieveItem(player, 1, true);

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.misc.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 
 
@@ -17,13 +17,13 @@ import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
  * The style of shop simple button elements.
  */
 public class SimpleShopButton_S extends SimpleButtonElmStyle {
-    protected final @NotNull Shop shop;
+    protected final @NotNull ProductDisplay shop;
 
 
     /**
      * Creates a new SimpleShopButton_S.
      */
-    public SimpleShopButton_S(final @NotNull Shop _shop) {
+    public SimpleShopButton_S(final @NotNull ProductDisplay _shop) {
         super();
         shop = _shop;
     }

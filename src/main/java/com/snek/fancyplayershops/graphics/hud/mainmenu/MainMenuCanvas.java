@@ -25,7 +25,7 @@ import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -70,7 +70,7 @@ public class MainMenuCanvas extends HudCanvas {
 
 
         // Add no shops text if the player doesn't own any shop
-        final @Nullable HashSet<@NotNull Shop> shops = ShopManager.getShopsOfPlayer(player);
+        final @Nullable HashSet<@NotNull ProductDisplay> shops = ShopManager.getShopsOfPlayer(player);
         if(shops == null || shops.isEmpty()) {
             e = bg.addChild(new SimpleTextElm(level, new MainMenu_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));

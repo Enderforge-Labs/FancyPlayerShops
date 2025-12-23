@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
@@ -32,7 +32,7 @@ public class Edit_StockLimitInput extends TextInputElm {
      * Creates a new EditUi_StockLimitInput.
      * @param _shop The target shop.
      */
-    public Edit_StockLimitInput(final @NotNull Shop _shop) {
+    public Edit_StockLimitInput(final @NotNull ProductDisplay _shop) {
         super(
             _shop.getLevel(),
             null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
@@ -50,7 +50,7 @@ public class Edit_StockLimitInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt("Stock limit: ").lightGray())
             .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).white())
@@ -63,7 +63,7 @@ public class Edit_StockLimitInput extends TextInputElm {
 
     @Override
     protected boolean messageCallback(final @NotNull String s) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         try {
 
             // Try to set the new stock limit, update the display if it's valid

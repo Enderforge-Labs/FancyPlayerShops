@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.fancyplayershops.GetShop;
@@ -31,7 +31,7 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
      * Creates a new InspectUi_InventoryView.
      * @param _shop The target shop.
      */
-    public Inspect_InventoryViewButton(final @NotNull Shop _shop) {
+    public Inspect_InventoryViewButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "View item in inventory", 0, new Buy_ItemInspector_S(_shop));
         inventoryViewFactory = new ItemInspectorInventory_Factory(_shop);
     }
@@ -42,7 +42,7 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Open menu if the shop is configured
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         if(!shop.getItem().is(Items.AIR)) {
             player.openMenu(inventoryViewFactory);
             Clickable.playSound(player);

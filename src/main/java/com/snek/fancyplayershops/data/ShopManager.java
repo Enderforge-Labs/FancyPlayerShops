@@ -29,7 +29,7 @@ import org.joml.Vector3i;
 import com.google.gson.Gson;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ShopKey;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.FrameworkLib;
@@ -87,21 +87,21 @@ public final class ShopManager extends UtilityClassBase {
 
 
     // Stores the shops of players, identifying them by their owner's UUID and their coordinates and level in the format "x,y,z,levelId"
-    private static final @NotNull Map<@NotNull ShopKey, @Nullable Shop> shopsByCoords = new HashMap<>();
-    private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull Shop>> shopsByOwner  = new HashMap<>();
+    private static final @NotNull Map<@NotNull ShopKey, @Nullable ProductDisplay> shopsByCoords = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID,    @Nullable HashSet<@NotNull ProductDisplay>> shopsByOwner  = new HashMap<>();
     private static boolean dataLoaded = false;
-    public static @Nullable HashSet<@NotNull Shop> getShopsOfPlayer(final @NotNull Player player) { return shopsByOwner.get(player.getUUID()); }
+    public static @Nullable HashSet<@NotNull ProductDisplay> getShopsOfPlayer(final @NotNull Player player) { return shopsByOwner.get(player.getUUID()); }
 
     // Async update list
     private static int updateIndex = 0;
-    private static @NotNull List<@NotNull Shop> updateSnapshot = List.of();
+    private static @NotNull List<@NotNull ProductDisplay> updateSnapshot = List.of();
     private static final @NotNull RateLimiter updateCycleLimiter = new RateLimiter();
 
     // Keeps track of the amount of shops in each chunk
     private static final @NotNull Map<@NotNull ChunkPos, @Nullable Integer> chunkShopNumber = new HashMap<>();
 
     // The list of shops scheduled for saving
-    private static @NotNull List<@NotNull Shop> scheduledForSaving = new ArrayList<>();
+    private static @NotNull List<@NotNull ProductDisplay> scheduledForSaving = new ArrayList<>();
 
 
 
@@ -175,7 +175,7 @@ public final class ShopManager extends UtilityClassBase {
      * Registers the shop in the runtime maps.
      * <p> Calling this method on a shop that's already registered will have no effect.
      */
-    public static void registerShop(final @NotNull Shop shop) {
+    public static void registerShop(final @NotNull ProductDisplay shop) {
         if(shopsByCoords.put(shop.getKey(), shop) == null) {
             shopsByOwner.putIfAbsent(shop.getOwnerUuid(), new HashSet<>());
             shopsByOwner.get(shop.getOwnerUuid()).add(shop);
@@ -190,9 +190,9 @@ public final class ShopManager extends UtilityClassBase {
      * Unregisters the shop from the runtime maps.
      * <p> Calling this method on a shop that's already not registered will have no effect.
      */
-    public static void unregisterShop(final @NotNull Shop shop) {
+    public static void unregisterShop(final @NotNull ProductDisplay shop) {
         if(shopsByCoords.remove(shop.getKey(), shop)) {
-            final HashSet<Shop> set = shopsByOwner.get(shop.getOwnerUuid());
+            final HashSet<ProductDisplay> set = shopsByOwner.get(shop.getOwnerUuid());
             if(set != null) set.remove(shop);
 
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
@@ -217,7 +217,7 @@ public final class ShopManager extends UtilityClassBase {
      * Call saveScheduledShops() to save schedules shops.
      * @param shop The shop to save.
      */
-    public static void scheduleShopSave(final @NotNull Shop shop) {
+    public static void scheduleShopSave(final @NotNull ProductDisplay shop) {
         if(!shop.isScheduledForSave()) {
             scheduledForSaving.add(shop);
             shop.setScheduledForSave(true);
@@ -229,7 +229,7 @@ public final class ShopManager extends UtilityClassBase {
      */
     public static void saveScheduledShops() {
 
-        for(final Shop shop : scheduledForSaving) {
+        for(final ProductDisplay shop : scheduledForSaving) {
 
             // Create directory for the level
             final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("shops/" + shop.getLevelId());
@@ -281,9 +281,9 @@ public final class ShopManager extends UtilityClassBase {
             if(shopStorageFiles != null) for(final File shopStorageFile : shopStorageFiles) {
 
                 // Read file and deserialize the data
-                Shop retrievedShop = null;
+                ProductDisplay retrievedShop = null;
                 try (final Reader reader = new FileReader(shopStorageFile)) {
-                    retrievedShop = new Gson().fromJson(reader, Shop.class);
+                    retrievedShop = new Gson().fromJson(reader, ProductDisplay.class);
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the shop \"{}\"", shopStorageFile.getName(), e);
                 }
@@ -311,8 +311,8 @@ public final class ShopManager extends UtilityClassBase {
      * @param level The level the shop is in.
      * @return The shop, or null if no shop is there.
     */
-    public static Shop findShop(final @NotNull BlockPos pos, final @NotNull Level level) {
-        return shopsByCoords.get(Shop.calcShopKey(pos, level));
+    public static ProductDisplay findShop(final @NotNull BlockPos pos, final @NotNull Level level) {
+        return shopsByCoords.get(ProductDisplay.calcShopKey(pos, level));
     }
 
 
@@ -322,7 +322,7 @@ public final class ShopManager extends UtilityClassBase {
      * Deletes the data associated with this hop instance.
      * @param shop The shop to delete.
      */
-    public static void deleteShop(final @NotNull Shop shop) {
+    public static void deleteShop(final @NotNull ProductDisplay shop) {
 
         // Remove shop from the runtime maps
         unregisterShop(shop);
@@ -355,7 +355,7 @@ public final class ShopManager extends UtilityClassBase {
         // Update shops
         for(int i = 0; i < Configs.getPerf().pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
 
-            final Shop shop = updateSnapshot.get(updateIndex);
+            final ProductDisplay shop = updateSnapshot.get(updateIndex);
             final ChunkPos chunkPos = new ChunkPos(shop.getPos());
             if(shop.getLevel().hasChunk(chunkPos.x, chunkPos.z)) {
                 shop.pullItems();
@@ -385,8 +385,8 @@ public final class ShopManager extends UtilityClassBase {
      */
     public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
-        final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
-        for(final Shop shop : shops) {
+        final List<ProductDisplay> shops = new ArrayList<>(shopsByCoords.values());
+        for(final ProductDisplay shop : shops) {
             if(shop.getLevel() == level && shop.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
@@ -417,8 +417,8 @@ public final class ShopManager extends UtilityClassBase {
      */
     public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
-        final List<Shop> shops = new ArrayList<>(shopsByCoords.values());
-        for(final Shop shop : shops) {
+        final List<ProductDisplay> shops = new ArrayList<>(shopsByCoords.values());
+        for(final ProductDisplay shop : shops) {
             if(shop.getLevel() == level && shop.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
@@ -467,7 +467,7 @@ public final class ShopManager extends UtilityClassBase {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
-                        final Shop shop = new Shop(level, blockPos, owner);
+                        final ProductDisplay shop = new ProductDisplay(level, blockPos, owner);
                         shop.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
                         shop.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
                         shop.setStockLimit(1_000_000f);
@@ -506,11 +506,11 @@ public final class ShopManager extends UtilityClassBase {
      * @param shop The shop.
      * @return The created shop item.
      */
-    public static @NotNull ItemStack createShopSnapshot(final @NotNull Shop shop) {
+    public static @NotNull ItemStack createShopSnapshot(final @NotNull ProductDisplay shop) {
         if(
             shop.getItem().is(Items.AIR) &&
-            shop.getPrice() == Configs.getShop().price.getDefault() &&
-            shop.getMaxStock() == Configs.getShop().stock_limit.getDefault()
+            shop.getPrice() == Configs.getDisplay().price.getDefault() &&
+            shop.getMaxStock() == Configs.getDisplay().stock_limit.getDefault()
         ) {
             return getShopItemCopy();
         }

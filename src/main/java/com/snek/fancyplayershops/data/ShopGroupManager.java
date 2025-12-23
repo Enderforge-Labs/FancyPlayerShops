@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.data.data_types.ShopGroup;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -126,7 +126,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
-    public static ShopGroup registerShop(final @NotNull Shop shop, final @NotNull UUID groupUUID) {
+    public static ShopGroup registerShop(final @NotNull ProductDisplay shop, final @NotNull UUID groupUUID) {
         final UUID ownerUUID = shop.getOwnerUuid();
 
 
@@ -160,7 +160,7 @@ public class ShopGroupManager extends UtilityClassBase {
 
 
 
-    public static void unregisterShop(final @NotNull Shop shop) {
+    public static void unregisterShop(final @NotNull ProductDisplay shop) {
 
         // Find group
         final List<ShopGroup> groups = groupsList.get(shop.getOwnerUuid());

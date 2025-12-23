@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_Sub_BackButton;
@@ -69,7 +69,7 @@ public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public BuyCanvas(final @NotNull Shop _shop) {
+    public BuyCanvas(final @NotNull ProductDisplay _shop) {
 
         // Call superconstructor
         super(_shop, 1, FancyPlayerShops.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
@@ -166,8 +166,8 @@ public class BuyCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
             user.displayClientMessage(new Txt("The amount must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(_amount > Configs.getShop().stock_limit.getMax()) {
-            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.getShop().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(_amount > Configs.getDisplay().stock_limit.getMax()) {
+            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else changeAmount(Math.round(_amount));

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
@@ -35,7 +35,7 @@ public class Buy_ItemInspector extends SimpleButtonElm {
      * @param _lmbActionNameOverride The text to display for the right click action in the input indicator. Can be null.
      * @param _backButton The back button. This defines which menu the player is brought to when going back.
      */
-    public Buy_ItemInspector(final @NotNull Shop _shop, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
+    public Buy_ItemInspector(final @NotNull ProductDisplay _shop, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
         super(
             _shop.getLevel(),
             _lmbActionNameOverride != null ? _lmbActionNameOverride : (_rmbActionNameOverride != null ? "Inspect item" : null),
@@ -59,7 +59,7 @@ public class Buy_ItemInspector extends SimpleButtonElm {
         }
 
         // Change canvas
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         shop.changeCanvas(new InspectCanvas(shop, backButton));
     }
 }

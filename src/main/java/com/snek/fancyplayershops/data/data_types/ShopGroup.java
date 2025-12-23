@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.data.ShopGroupManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 
 
 
@@ -33,7 +33,7 @@ public class ShopGroup {
 
     // Runtime data
     private long balance;
-    private @NotNull List<@NotNull Shop> shops;
+    private @NotNull List<@NotNull ProductDisplay> shops;
     //TODO ^ this prob doesn't get updated correctly when loading in.
     //TODO shops are saved when they load into the world, not all at once when the server starts. though im not sure
     //TODO check this
@@ -43,7 +43,7 @@ public class ShopGroup {
     public @NotNull UUID                getUuid       () { return uuid;        }
     public @NotNull String              getDisplayName() { return displayName; }
     public          long                getBalance    () { return balance;     }
-    public @NotNull List<@NotNull Shop> getShops      () { return shops;       }
+    public @NotNull List<@NotNull ProductDisplay> getShops      () { return shops;       }
 
     // Setters
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
@@ -51,14 +51,14 @@ public class ShopGroup {
     public void subBalance(final long amount) { balance -= amount; ShopGroupManager.scheduleGroupSave(this); }
 
 
-    public void addShop(final @NotNull Shop shop) {
+    public void addShop(final @NotNull ProductDisplay shop) {
         shops.add(shop);
         //TODO update shop list UIs
         //TODO also update the list of items in any buyer's HUD
     }
 
 
-    public void removeShop(final @NotNull Shop shop) {
+    public void removeShop(final @NotNull ProductDisplay shop) {
         shops.remove(shop);
         //TODO update shop list UIs
         //TODO also update the list of items in any buyer's HUD
@@ -95,7 +95,7 @@ public class ShopGroup {
      * Claims the balance of all the shops in this group, sending it to the owner's balance.
     */
     public void claimBalance() {
-        for(final Shop s : shops) {
+        for(final ProductDisplay s : shops) {
             s.claimBalance();
         }
     }
@@ -107,7 +107,7 @@ public class ShopGroup {
      * This method doesn't claim the balance as removing all of the shops already results in the group having 0 balance.
      */
     public void dissolve() {
-        for(final Shop shop : shops) {
+        for(final ProductDisplay shop : shops) {
             ShopGroupManager.unregisterShop(shop);
         }
         dissolved = true;

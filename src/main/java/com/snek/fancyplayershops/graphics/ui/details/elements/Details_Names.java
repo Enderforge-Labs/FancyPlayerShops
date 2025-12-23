@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.details.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
@@ -26,7 +26,7 @@ public class Details_Names extends SimpleTextElm {
      * Creates a new DetailsUiDisplayNames.
      * @param _shop The target shop.
      */
-    public Details_Names(final @NotNull Shop _shop) {
+    public Details_Names(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel());
     }
 

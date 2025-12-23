@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.core.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
@@ -14,10 +14,10 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 public class ShopCanvasBackground_S extends PanelElmStyle {
-    private final @NotNull Shop shop;
+    private final @NotNull ProductDisplay shop;
 
 
-    public ShopCanvasBackground_S(final @NotNull Shop _shop) {
+    public ShopCanvasBackground_S(final @NotNull ProductDisplay _shop) {
         super();
         shop = _shop;
     }

@@ -6,7 +6,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S;
@@ -47,7 +47,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
      * @param _shop The target shop.
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
      */
-    public Edit_RotateButton(final @NotNull Shop _shop, final float _rotation) {
+    public Edit_RotateButton(final @NotNull ProductDisplay _shop, final float _rotation) {
         super(
             _shop.getLevel(),
             "Rotate once",
@@ -73,7 +73,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         shop.addDefaultRotation(rotation);
 
         // Animate the item display to show the new rotation
@@ -97,7 +97,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverEnter(player);
 
         // Handle item display animations
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         final ShopItemDisplayElm itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
@@ -118,7 +118,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverExit(player);
 
         // Handle item display animations
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         shop.getItemDisplay().startLoopAnimation();
     }
 }

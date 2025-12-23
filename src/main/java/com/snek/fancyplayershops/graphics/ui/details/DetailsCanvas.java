@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
@@ -62,7 +62,7 @@ public class DetailsCanvas extends ShopCanvasBase {
      * Creates a new DetailsUi.
      * @param _shop The target shop.
      */
-    public DetailsCanvas(final @NotNull Shop _shop) {
+    public DetailsCanvas(final @NotNull ProductDisplay _shop) {
 
         // Call superconstructor
         super(_shop, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
@@ -128,7 +128,7 @@ public class DetailsCanvas extends ShopCanvasBase {
 
 
     public @NotNull Component recalculateTitle() {
-        return shop.getItem().is(Items.AIR) ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
+        return shop.getItem().is(Items.AIR) ? ProductDisplay.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
     }
 
 

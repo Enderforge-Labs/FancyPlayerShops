@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_BuyButton_S;
@@ -35,7 +35,7 @@ public class Buy_1iButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Buy_1iButton(final @NotNull Shop _shop) {
+    public Buy_1iButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "Fill inventory", 1,  new Buy_BuyButton_S(_shop));
 
         // Create design
@@ -63,7 +63,7 @@ public class Buy_1iButton extends FancyButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
         final int oldStock = shop.getStock();
 

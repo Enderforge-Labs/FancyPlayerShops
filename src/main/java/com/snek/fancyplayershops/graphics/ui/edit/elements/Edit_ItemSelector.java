@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -35,7 +35,7 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
      * Creates a new EditUiItemSelector.
      * @param _shop The target shop.
      */
-    public Edit_ItemSelector(final @NotNull Shop _shop) {
+    public Edit_ItemSelector(final @NotNull ProductDisplay _shop) {
         super(_shop, null, "Change item", new Edit_Sub_BackButton(_shop));
     }
 
@@ -74,7 +74,7 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
 
 
         // Change item if all checks passed
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         shop.changeItem(item);
         //FIXME check blacklist before setting the item
         //TODO add item blacklist

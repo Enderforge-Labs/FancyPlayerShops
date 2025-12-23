@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBack_S;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
  * It stores a reference to the shop and handles the item display.
  */
 public abstract class ShopCanvasBase extends UiCanvas {
-    protected final @NotNull Shop shop;
+    protected final @NotNull ProductDisplay shop;
 
 
     /**
@@ -34,7 +34,7 @@ public abstract class ShopCanvasBase extends UiCanvas {
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected ShopCanvasBase(final @NotNull Shop shop, final float height, final float heightTop, final float heightBottom) {
+    protected ShopCanvasBase(final @NotNull ProductDisplay shop, final float height, final float heightTop, final float heightBottom) {
         super(shop.getUi(), height, heightTop, heightBottom, new ShopCanvasBackground_S(shop), new ShopCanvasBack_S());
         this.shop = shop;
     }

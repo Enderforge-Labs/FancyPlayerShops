@@ -210,7 +210,7 @@ public class FancyPlayerShops implements ModInitializer {
                     if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            new Shop(
+                            new ProductDisplay(
                                 serverLevel, blockPos,
                                 player.getUUID(), data.getUUID("group_uuid"), data.getLong("balance"),
                                 data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item")
@@ -225,7 +225,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty shop otherwise
                     else {
-                        new Shop(serverLevel, blockPos, player);
+                        new ProductDisplay(serverLevel, blockPos, player);
                         player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
                     }

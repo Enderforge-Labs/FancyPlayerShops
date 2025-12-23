@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -25,7 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
-    public Edit_OpenBuyMenuButton(final @NotNull Shop _shop) {
+    public Edit_OpenBuyMenuButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "Open buy menu", 1, new Edit_SquareButton_S(_shop));
 
         // Create design
@@ -42,7 +42,7 @@ public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Open UI
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         shop.openBuyUi(player, false);
     }
 }

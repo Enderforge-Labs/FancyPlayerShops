@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -25,7 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_StatsButton extends SimpleButtonElm {
-    public Edit_StatsButton(final @NotNull Shop _shop) {
+    public Edit_StatsButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "Open statistics", 1,  new Edit_SquareButton_S(_shop));
 
         // Create design

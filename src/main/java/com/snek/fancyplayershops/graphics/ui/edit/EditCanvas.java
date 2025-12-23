@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
@@ -77,7 +77,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
      * Creates a new EditUi.
      * @param _shop The target shop.
      */
-    public EditCanvas(final @NotNull Shop _shop) {
+    public EditCanvas(final @NotNull ProductDisplay _shop) {
 
         // Call superconstructor
         super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
@@ -155,7 +155,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
         // Add color selectors
-        final Float[] hues = Configs.getShop().theme_hues.getValue();
+        final Float[] hues = Configs.getDisplay().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
             final float h = (1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE) / hues.length;
             e = bg.addChild(new Edit_ColorSelector(_shop, hues[i], this));

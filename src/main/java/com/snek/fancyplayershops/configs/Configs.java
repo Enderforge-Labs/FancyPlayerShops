@@ -19,10 +19,10 @@ public abstract class Configs {
 
     private Configs() {}
 
-    private static @NotNull ShopConfig        shop = null;
+    private static @NotNull DisplayConfig display = null;
     private static @NotNull PerformanceConfig perf = null;
 
-    public static @NotNull ShopConfig        getShop() { return shop; }
+    public static @NotNull DisplayConfig getDisplay() { return display; }
     public static @NotNull PerformanceConfig getPerf() { return perf; }
 
 
@@ -32,7 +32,7 @@ public abstract class Configs {
      * Loads the configuration files or creates new ones if they are missing.
      */
     public static void loadConfigs() {
-        shop = ConfigManager.loadConfig("ShopConfig",         ShopConfig.class,        FancyPlayerShops.MOD_ID);
-        perf = ConfigManager.loadConfig("PerformanceConfig",  PerformanceConfig.class, FancyPlayerShops.MOD_ID);
+        display = ConfigManager.loadConfig("DisplayConfig",     DisplayConfig.class,     FancyPlayerShops.MOD_ID);
+        perf    = ConfigManager.loadConfig("PerformanceConfig", PerformanceConfig.class, FancyPlayerShops.MOD_ID);
     }
 }

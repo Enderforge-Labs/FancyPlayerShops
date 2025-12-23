@@ -66,7 +66,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * This class manages a player shop that is placed somewhere in a level.
  */
-public class Shop {
+public class ProductDisplay {
 
     // Strings
     public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
@@ -263,15 +263,15 @@ public class Shop {
      * @param _pos The position of the new shop.
      * @param owner The player that places the shop.
      */
-    public Shop(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
+    public ProductDisplay(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
 
         // Set shop data
         this.level = level;
         ownerUUID = owner.getUUID();
         pos = _pos;
-        price         = Configs.getShop().price.getDefault();
-        maxStock      = Configs.getShop().stock_limit.getDefault();
-        colorThemeHue = Configs.getShop().theme_hues.getValue()[Configs.getShop().theme.getDefault()];
+        price         = Configs.getDisplay().price.getDefault();
+        maxStock      = Configs.getDisplay().stock_limit.getDefault();
+        colorThemeHue = Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()];
 
         // Calculate serialized data and shop identifier
         serializedItem = MinecraftUtils.serializeItem(item);
@@ -305,7 +305,7 @@ public class Shop {
      * @param _hue The hue of the color theme.
      * @param _serializedIitem The item in serialized form.
      */
-    public Shop(
+    public ProductDisplay(
         final @NotNull ServerLevel level, final @NotNull BlockPos _pos,
         final @NotNull UUID _ownerUUID, final UUID _shopGroupUUID, final long _balance,
         final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
@@ -724,8 +724,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
         }
-        if(newPrice > Configs.getShop().price.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(Configs.getShop().price.getMax())).red().bold().get(), true);
+        if(newPrice > Configs.getDisplay().price.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(Configs.getDisplay().price.getMax())).red().bold().get(), true);
             return false;
         }
         else if(newPrice < 0.00001) price = 0;
@@ -751,8 +751,8 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.getShop().stock_limit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getShop().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > Configs.getDisplay().stock_limit.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
@@ -1011,7 +1011,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor1() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getShop().theme_saturation_main.getValue(), Configs.getShop().theme_luminosity_main.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_main.getValue(), Configs.getDisplay().theme_luminosity_main.getValue()));
     }
 
     /**
@@ -1019,7 +1019,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor2() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getShop().theme_saturation_secondary.getValue(), Configs.getShop().theme_luminosity_secondary.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_secondary.getValue(), Configs.getDisplay().theme_luminosity_secondary.getValue()));
     }
 
 

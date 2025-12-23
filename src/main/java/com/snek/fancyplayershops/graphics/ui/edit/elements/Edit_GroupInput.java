@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
@@ -35,7 +35,7 @@ public class Edit_GroupInput extends TextInputElm {
      * Creates a new Edit_GroupInput.
      * @param _shop The target shop.
      */
-    public Edit_GroupInput(final @NotNull Shop _shop) {
+    public Edit_GroupInput(final @NotNull ProductDisplay _shop) {
         super(
             _shop.getLevel(),
             null, "Transfer to another shop",
@@ -56,7 +56,7 @@ public class Edit_GroupInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat("Shop: ")
             .cat(shop.getShopGroup().getDisplayName())
@@ -81,7 +81,7 @@ public class Edit_GroupInput extends TextInputElm {
             return false;
         }
         else {
-            final Shop shop = GetShop.get(this);
+            final ProductDisplay shop = GetShop.get(this);
             shop.changeGroup(s, player);
             return true;
         }

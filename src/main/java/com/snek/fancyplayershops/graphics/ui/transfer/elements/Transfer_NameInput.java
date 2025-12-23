@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_Input_S;
@@ -36,7 +36,7 @@ public class Transfer_NameInput extends TextInputElm {
      * Creates a new TransferUi_NameInput.
      * @param _shop The target shop.
      */
-    public Transfer_NameInput(final @NotNull Shop _shop, final @NotNull TransferCanvas _menu) {
+    public Transfer_NameInput(final @NotNull ProductDisplay _shop, final @NotNull TransferCanvas _menu) {
         super(
             _shop.getLevel(),
             null, "Choose new owner",
@@ -58,7 +58,7 @@ public class Transfer_NameInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(
                 !menu.getNewOwnerUUID().equals(shop.getOwnerUuid()) ?

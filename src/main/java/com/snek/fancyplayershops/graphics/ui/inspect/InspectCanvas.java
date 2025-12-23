@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -53,7 +53,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
      * @param _backButton The back button.
      * <p> This defines which menu the player is brought to when going back.
      */
-    public InspectCanvas(final @NotNull Shop _shop, final @NotNull Div _backButton) {
+    public InspectCanvas(final @NotNull ProductDisplay _shop, final @NotNull Div _backButton) {
 
         // Call superconstructor
         super(_shop, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);

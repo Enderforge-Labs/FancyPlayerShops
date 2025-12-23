@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -28,7 +28,7 @@ public class Edit_RotateButtonLeft_S extends Edit_RotateButtonRight_S {
     /**
      * Creates a new EditUi_LeftRotateButton_S.
      */
-    public Edit_RotateButtonLeft_S(final @NotNull Shop _shop) {
+    public Edit_RotateButtonLeft_S(final @NotNull ProductDisplay _shop) {
         super(_shop);
     }
 

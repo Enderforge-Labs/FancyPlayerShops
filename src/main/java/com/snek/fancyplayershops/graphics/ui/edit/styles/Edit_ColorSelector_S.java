@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.styles;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.SimpleShopButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -29,7 +29,7 @@ public class Edit_ColorSelector_S extends SimpleShopButton_S {
     /**
      * Creates a new EditUi_ColorSelector_S.
      */
-    public Edit_ColorSelector_S(final @NotNull Shop _shop) {
+    public Edit_ColorSelector_S(final @NotNull ProductDisplay _shop) {
         super(_shop);
     }
 

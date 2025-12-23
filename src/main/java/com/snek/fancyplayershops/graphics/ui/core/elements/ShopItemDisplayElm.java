@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -44,7 +44,7 @@ import net.minecraft.world.item.Items;
  */
 public class ShopItemDisplayElm extends ItemElm {
     public static final @NotNull String ITEM_DISPLAY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.itemdisplay";
-    private final @NotNull  Shop         shop;
+    private final @NotNull  ProductDisplay         shop;
     private       @Nullable FancyTextElm name;
 
     // Layout
@@ -109,7 +109,7 @@ public class ShopItemDisplayElm extends ItemElm {
      * Creates a new ShopItemDisplay.
      * @param _targetShop The target shop.
      */
-    public ShopItemDisplayElm(final @NotNull Shop _targetShop) {
+    public ShopItemDisplayElm(final @NotNull ProductDisplay _targetShop) {
         super(_targetShop.getLevel(), new ItemElmStyle());
         shop = _targetShop;
         //! updateDisplay call is in spawn()
@@ -142,7 +142,7 @@ public class ShopItemDisplayElm extends ItemElm {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(ProductDisplay.EMPTY_SHOP_NAME).white().get());
                 name.flushStyle();
             }
         }
@@ -320,7 +320,7 @@ public class ShopItemDisplayElm extends ItemElm {
                     entity.remove(RemovalReason.KILLED);
 
                     // Respawn shop item display if needed
-                    final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
+                    final ProductDisplay shop = ShopManager.findShop(entity.blockPosition(), entity.level());
                     if(shop != null) {
                         shop.invalidateItemDisplay();
                     }

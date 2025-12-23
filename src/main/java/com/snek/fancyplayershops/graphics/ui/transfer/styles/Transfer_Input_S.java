@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.transfer.styles;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -27,7 +27,7 @@ public class Transfer_Input_S extends ShopTextInput_S {
     /**
      * Creates a new TransferUi_Input_S.
      */
-    public Transfer_Input_S(final @NotNull Shop _shop) {
+    public Transfer_Input_S(final @NotNull ProductDisplay _shop) {
         super(_shop);
     }
 

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
@@ -35,7 +35,7 @@ public class Details_Values extends SimpleTextElm {
      * Creates a new DetailsUiDisplayValues.
      * @param _shop The target shop.
      */
-    public Details_Values(@NotNull Shop _shop) {
+    public Details_Values(@NotNull ProductDisplay _shop) {
         super(_shop.getLevel());
         ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid());
     }
@@ -54,7 +54,7 @@ public class Details_Values extends SimpleTextElm {
      * Updates the displayed values using the current item name, price and stock.
      */
     public void updateDisplay() {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
 
         // Calculate the color of the stock amount and retrieve the owner's name
         final float factor = Math.min(1.0f, (float)shop.getStock() / shop.getMaxStock());

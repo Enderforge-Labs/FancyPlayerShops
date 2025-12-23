@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_Input_S;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -28,7 +28,7 @@ public class Buy_AmountInputDisplay extends TextInputElm {
     private final @NotNull BuyCanvas menu;
 
 
-    public Buy_AmountInputDisplay(final @NotNull Shop _shop, final @NotNull BuyCanvas _menu) {
+    public Buy_AmountInputDisplay(final @NotNull ProductDisplay _shop, final @NotNull BuyCanvas _menu) {
         super(_shop.getLevel(), null, "Specify buy amount", new Txt("Send the amount in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), new Buy_Input_S(_shop));
         menu = _menu;
     }
@@ -43,7 +43,7 @@ public class Buy_AmountInputDisplay extends TextInputElm {
 
     @Override
     protected boolean messageCallback(final @NotNull String s) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         final Player user = shop.getuser();
         if(user == null) return false;
 
@@ -67,7 +67,7 @@ public class Buy_AmountInputDisplay extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         getStyle(SimpleTextElmStyle.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt("Amount: ").lightGray())
             .cat(new Txt(Utils.formatAmount(menu.getAmount())).white())

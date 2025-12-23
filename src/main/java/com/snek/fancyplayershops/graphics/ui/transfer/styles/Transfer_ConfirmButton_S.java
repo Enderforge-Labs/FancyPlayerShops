@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -32,7 +32,7 @@ public class Transfer_ConfirmButton_S extends FancyShopButton_S {
 
 
 
-    public Transfer_ConfirmButton_S(final @NotNull Shop _shop) {
+    public Transfer_ConfirmButton_S(final @NotNull ProductDisplay _shop) {
         super(_shop);
     }
 

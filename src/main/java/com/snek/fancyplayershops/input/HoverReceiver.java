@@ -13,7 +13,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
@@ -45,12 +45,12 @@ public abstract class HoverReceiver {
 
 
     // The list of shops that were targeted in the previous tick
-    private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
+    private static @NotNull Set<@NotNull ProductDisplay> targetedShopsOld = new LinkedHashSet<>();
 
 
     // Partial ray casting batch data
     private static @Nullable List<Player> playerListSnapshot = null;
-    private static @Nullable Set<Shop> targetedShops         = null;
+    private static @Nullable Set<ProductDisplay> targetedShops         = null;
     private static int updateIndex = 0;
 
 
@@ -81,7 +81,7 @@ public abstract class HoverReceiver {
             }
 
             // Set all previously focused shops' next focus state to false
-            for(final Shop shop : targetedShopsOld) {
+            for(final ProductDisplay shop : targetedShopsOld) {
                 shop.setFocusStateNext(false);
             }
         }
@@ -97,7 +97,7 @@ public abstract class HoverReceiver {
 
             // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            final Shop shop = HoverReceiver.getLookedAtShop(player);
+            final ProductDisplay shop = HoverReceiver.getLookedAtShop(player);
             if(shop == null) continue;
 
 
@@ -141,7 +141,7 @@ public abstract class HoverReceiver {
 
         // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
         targetedShopsOld.removeAll(targetedShops);
-        for(final Shop shop : targetedShopsOld) {
+        for(final ProductDisplay shop : targetedShopsOld) {
             if(!shop.isDeleted()) {
                 shop.setViewer(null);
                 shop.updateFocusState();
@@ -150,7 +150,7 @@ public abstract class HoverReceiver {
 
 
         // Update looked-at shops
-        for(final Shop shop : targetedShops) {
+        for(final ProductDisplay shop : targetedShops) {
             if(!shop.isDeleted() && shop.getuser() != null) {
 
                 // If the user isn't looking at the shop anymore, unfocus it
@@ -179,7 +179,7 @@ public abstract class HoverReceiver {
      *     <p> Owner:         Lower priority
      *     <p> Other players: Lowest priority
      */
-    public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull Player player) {
+    public static int getPlayerPriority(final @NotNull ProductDisplay shop, final @NotNull Player player) {
         if(player == shop.getuser()) return 0;
         if(player.getUUID().equals(shop.getOwnerUuid())) return -1;
         return -2;
@@ -271,7 +271,7 @@ public abstract class HoverReceiver {
      * @param player The player.
      * @return The Shop instance of the shop block, or null if the player is not looking at one.
      */
-    public static Shop getLookedAtShop(final @NotNull Player player) {
+    public static ProductDisplay getLookedAtShop(final @NotNull Player player) {
         final Vec3 playerEyePos = player.getEyePosition();
 
 
@@ -302,7 +302,7 @@ public abstract class HoverReceiver {
             // Find target shop block
             for(final Vec3 pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
-                final Shop shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
+                final ProductDisplay shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
                 if(shop != null) return shop;
             }
         }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
@@ -61,7 +61,7 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
      * Creates a new TransferUi.
      * @param _shop The target shop.
      */
-    public TransferCanvas(final @NotNull Shop _shop) {
+    public TransferCanvas(final @NotNull ProductDisplay _shop) {
 
         // Call superconstructor
         super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);

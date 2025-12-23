@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.inventories;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +25,7 @@ public class ItemInspectorInventory extends AbstractContainerMenu {
 
 
 
-    public ItemInspectorInventory(final int containerId, final @NotNull Inventory playerInventory, final @NotNull Shop _shop) {
+    public ItemInspectorInventory(final int containerId, final @NotNull Inventory playerInventory, final @NotNull ProductDisplay _shop) {
         super(MenuType.HOPPER, containerId);
         inventory = new SimpleContainer(5);
 

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetShop;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
@@ -32,7 +32,7 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
 
 
 
-    public Buy_Sub_BackButton(final @NotNull Shop _shop) {
+    public Buy_Sub_BackButton(final @NotNull ProductDisplay _shop) {
         super(_shop.getLevel(), null, "Go back", 1,  new Edit_SquareButton_S(_shop));
 
         // Create design
@@ -49,7 +49,7 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change canvas
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay shop = GetShop.get(this);
         final BuyCanvas ui = new BuyCanvas(shop);
         shop.changeCanvas(ui);
 
