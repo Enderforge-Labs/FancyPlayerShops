@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
@@ -51,12 +51,12 @@ public class Edit_DeleteButton extends SimpleButtonElm {
         // Send feedback message
         player.displayClientMessage(new Txt()
             .cat("Your " + shop.getDecoratedName() + " has been deleted.")
-            .color(ShopManager.SHOP_ITEM_NAME_COLOR)
+            .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 
 
         // Give the player a default shop item
-        final ItemStack defaultShopItem =  ShopManager.getShopItemCopy();
+        final ItemStack defaultShopItem =  ProductDisplayManager.getProductDisplayItemCopy();
         if(!MinecraftUtils.attemptGive(player, defaultShopItem)) {
             StashManager.stashItem(shop.getOwnerUuid(), defaultShopItem, 1);
             //! ^ saveStash() call is done by shop.stash()

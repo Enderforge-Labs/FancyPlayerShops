@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
@@ -49,7 +49,7 @@ public class Edit_MoveButton extends SimpleButtonElm {
         //! This has to be executed before shop.pickUp as the message needs to appear before the "set to stash" message
         player.displayClientMessage(new Txt()
             .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
-            .color(ShopManager.SHOP_ITEM_NAME_COLOR)
+            .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 
 

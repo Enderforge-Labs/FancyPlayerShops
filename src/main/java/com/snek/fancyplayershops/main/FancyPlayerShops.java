@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
@@ -134,20 +134,20 @@ public class FancyPlayerShops implements ModInitializer {
             if(fatal) return;
 
             // Load persistent data
-            ShopGroupManager.loadGroups(); //! Must be loaded before shops
-            ShopManager.loadShops();
+            ShopManager.loadShops(); //! Must be loaded before shops
+            ProductDisplayManager.loadShops();
             StashManager.loadStashes();
 
 
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule shop pull updates
-            Scheduler.loop(0, 1, ShopManager::pullItems);
+            Scheduler.loop(0, 1, ProductDisplayManager::pullItems);
 
             // Schedule data saves
             Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
-                ShopGroupManager.saveScheduledGroups();
                 ShopManager.saveScheduledShops();
+                ProductDisplayManager.saveScheduledDisplays();
                 StashManager.saveScheduledStashes();
             });
 
@@ -195,7 +195,7 @@ public class FancyPlayerShops implements ModInitializer {
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level level, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ShopManager.SHOP_ITEM_NBT_KEY)) {
+        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ProductDisplayManager.DISPLAY_ITEM_NBT_KEY)) {
 
             // If the level is a server level and the player is allowed to modify the level
             if(level instanceof ServerLevel serverLevel && player.getAbilities().mayBuild) {
@@ -204,18 +204,18 @@ public class FancyPlayerShops implements ModInitializer {
                 // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 final CompoundTag tag = stack.getTag();
-                if(ShopManager.findShop(blockPos, level) == null) {
+                if(ProductDisplayManager.findDisplay(blockPos, level) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
-                    if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
+                    if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             new ProductDisplay(
                                 serverLevel, blockPos,
-                                player.getUUID(), data.getUUID("group_uuid"), data.getLong("balance"),
+                                player.getUUID(), data.getUUID("shop_uuid"), data.getLong("balance"),
                                 data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item")
                             );
-                            player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                            player.displayClientMessage(new Txt("Shop snapshot restored.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
                         else {
@@ -226,7 +226,7 @@ public class FancyPlayerShops implements ModInitializer {
                     // Spawn empty shop otherwise
                     else {
                         new ProductDisplay(serverLevel, blockPos, player);
-                        player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                        player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
                     }
                 }

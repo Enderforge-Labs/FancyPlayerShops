@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
@@ -35,7 +35,7 @@ public class Edit_StockLimitInput extends TextInputElm {
     public Edit_StockLimitInput(final @NotNull ProductDisplay _shop) {
         super(
             _shop.getLevel(),
-            null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
+            null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
             new Edit_Input_S(_shop)
         );
     }

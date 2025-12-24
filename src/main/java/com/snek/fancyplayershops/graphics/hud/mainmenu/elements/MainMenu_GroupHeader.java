@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -34,21 +34,21 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
 
 
     //TODO update dynamically?
-    private static long calcTotalBalance(final @NotNull List<ShopGroup> groups) {
+    private static long calcTotalBalance(final @NotNull List<Shop> groups) {
         long r = 0;
-        for(final ShopGroup g : groups) {
+        for(final Shop g : groups) {
             r += g.getBalance();
         }
         return r;
     }
-    private static int calcTotalItems(final @NotNull List<ShopGroup> groups) {
+    private static int calcTotalItems(final @NotNull List<Shop> groups) {
         int r = 0;
-        for(final ShopGroup g : groups) {
-            r += g.getShops().size();
+        for(final Shop g : groups) {
+            r += g.getDisplays().size();
         }
         return r;
     }
-    public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<ShopGroup> groups) {
+    public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
         super(context.getLevel(), null, "Claim everything", 2, new MainMenu_GroupEntry_S());
         Div e;
 

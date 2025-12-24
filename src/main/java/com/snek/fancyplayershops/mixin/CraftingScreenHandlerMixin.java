@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 
@@ -67,7 +67,7 @@ public abstract class CraftingScreenHandlerMixin {
             if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
 
                 // Replace the output item
-                resultSlots.setItem(0, ShopManager.getShopItemCopy());
+                resultSlots.setItem(0, ProductDisplayManager.getProductDisplayItemCopy());
                 ((CraftingMenu)(Object)this).broadcastChanges();
             }
         }

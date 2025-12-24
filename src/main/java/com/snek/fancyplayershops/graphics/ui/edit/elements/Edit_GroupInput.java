@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
@@ -39,7 +39,7 @@ public class Edit_GroupInput extends TextInputElm {
         super(
             _shop.getLevel(),
             null, "Transfer to another shop",
-            new Txt("Send the name of the shop in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the name of the shop in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
             new Edit_Input_S(_shop)
         );
     }
@@ -59,7 +59,7 @@ public class Edit_GroupInput extends TextInputElm {
         final ProductDisplay shop = GetShop.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat("Shop: ")
-            .cat(shop.getShopGroup().getDisplayName())
+            .cat(shop.getShop().getDisplayName())
             //TODO convert component to string before using it
         .white().get());
         flushStyle();

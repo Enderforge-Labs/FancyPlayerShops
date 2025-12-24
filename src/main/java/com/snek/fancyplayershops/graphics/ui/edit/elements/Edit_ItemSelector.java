@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -60,14 +60,14 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
 
 
         // Send a message to the player if item is a shop snapshot, then return
-        if(MinecraftUtils.hasTag(item, ShopManager.SNAPSHOT_NBT_KEY)) {
+        if(MinecraftUtils.hasTag(item, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Shop snapshots cannot be sold!").red().bold().get(), true);
             return;
         }
 
 
         // Send a message to the player if item contains a shop snapshot, then return
-        if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ShopManager.SNAPSHOT_NBT_KEY)) {
+        if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
             player.displayClientMessage(new Txt("Items containing shop snapshots cannot be sold!").red().bold().get(), true);
             return;
         }

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -35,14 +35,14 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
     public static final float BALANCE_WIDTH = 0.2f;
     public static final float NAME_WIDTH = 1f - MARGIN_LEFT - BALANCE_WIDTH;
 
-    private final @Nullable ShopGroup groupInstance;
+    private final @Nullable Shop groupInstance;
     private final @NotNull ScrollableList parentList;
 
 
 
 
     //TODO update balance dynamically?
-    public MainMenu_GroupEntry(final @NotNull HudContext context, final @NotNull ShopGroup groupInstance, final @NotNull ScrollableList parentList) {
+    public MainMenu_GroupEntry(final @NotNull HudContext context, final @NotNull Shop groupInstance, final @NotNull ScrollableList parentList) {
         super(context.getLevel(), "Claim balance", "Edit group", 2, new MainMenu_GroupEntry_S());
         this.groupInstance = groupInstance;
         this.parentList = parentList;
@@ -52,7 +52,7 @@ public class MainMenu_GroupEntry extends SimpleButtonElm implements Scrollable {
         // Add shop group name
         e = addChild(new SimpleTextElm(
             level,
-            new Txt(groupInstance.getDisplayName()).cat("\n★★★☆☆ | " + groupInstance.getShops().size() + " products").get(), //TODO make this dynamic and real
+            new Txt(groupInstance.getDisplayName()).cat("\n★★★☆☆ | " + groupInstance.getDisplays().size() + " products").get(), //TODO make this dynamic and real
             TextAlignment.LEFT,
             TextOverflowBehaviour.SCROLL)
         );

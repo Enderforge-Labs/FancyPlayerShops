@@ -5,7 +5,7 @@ import org.joml.Vector3d;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -163,7 +163,7 @@ public abstract class CommandManager {
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
-                        player.getInventory().add(ShopManager.getShopItemCopy());
+                        player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy());
                         return 1;
                     }))
                 )
@@ -194,7 +194,7 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            final int n = ProductDisplayManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
                             player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
                             return 1;
                         }))
@@ -213,7 +213,7 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            final int n = ProductDisplayManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
                             player.displayClientMessage(new Txt("Converted " + n + " shops into items.").get(), false);
                             return 1;
                         }))
@@ -232,7 +232,7 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+                            final int n = ProductDisplayManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
                             player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
                             return 1;
                         })

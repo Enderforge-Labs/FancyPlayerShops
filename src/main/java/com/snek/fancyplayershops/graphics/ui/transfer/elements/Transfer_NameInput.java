@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
@@ -40,7 +40,7 @@ public class Transfer_NameInput extends TextInputElm {
         super(
             _shop.getLevel(),
             null, "Choose new owner",
-            new Txt("Send the name of the new owner in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the name of the new owner in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
             new Transfer_Input_S(_shop)
         );
         menu = _menu;

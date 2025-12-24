@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_Input_S;
@@ -29,7 +29,7 @@ public class Buy_AmountInputDisplay extends TextInputElm {
 
 
     public Buy_AmountInputDisplay(final @NotNull ProductDisplay _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getLevel(), null, "Specify buy amount", new Txt("Send the amount in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), new Buy_Input_S(_shop));
+        super(_shop.getLevel(), null, "Specify buy amount", new Txt("Send the amount in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), new Buy_Input_S(_shop));
         menu = _menu;
     }
 

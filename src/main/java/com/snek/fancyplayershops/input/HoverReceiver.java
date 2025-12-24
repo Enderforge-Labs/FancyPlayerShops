@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.FrameworkLib;
@@ -278,16 +278,16 @@ public abstract class HoverReceiver {
         // Check the number of shops in the chunks the player can reach
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
-        boolean check = ShopManager.chunkHasShops(playerChunk);
+        boolean check = ProductDisplayManager.chunkHasDisplays(playerChunk);
         final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
         int minX = playerPos.getX() - reach;
         int maxX = playerPos.getX() + reach;
         int minZ = playerPos.getZ() - reach;
         int maxZ = playerPos.getZ() + reach;
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
 
 
         // If they contain at least one shop
@@ -302,7 +302,7 @@ public abstract class HoverReceiver {
             // Find target shop block
             for(final Vec3 pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
-                final ProductDisplay shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
+                final ProductDisplay shop = ProductDisplayManager.findDisplay(new BlockPos(blockPos), player.level());
                 if(shop != null) return shop;
             }
         }

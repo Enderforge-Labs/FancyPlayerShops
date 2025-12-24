@@ -11,10 +11,10 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui.ShopContext;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
@@ -82,9 +82,9 @@ public class ProductDisplay {
     private transient @Nullable ShopItemDisplayElm itemDisplay = null;          // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos           pos;                         // The position of the shop
     private transient @NotNull  String             shopIdentifierCache_noLevel; // The cached shop identifier, not including the level
-    private transient @NotNull  ShopKey            shopKeyCache;                // The cached shop key
+    private transient @NotNull  ProductDisplayKey            shopKeyCache;                // The cached shop key
     private           @NotNull  UUID               groupUUID;                   // The UUID of the group this shop has been assigned to
-    private transient @NotNull  ShopGroup          shopGroup;                   // The group this shop has been assigned to
+    private transient @NotNull  Shop          shopGroup;                   // The group this shop has been assigned to
 
 
     // Shop data
@@ -129,11 +129,11 @@ public class ProductDisplay {
     public @Nullable Player          getuser             () { return user;                            }
     public @Nullable Player          getViewer           () { return viewer;                          }
     public           boolean         isScheduledForSave  () { return scheduledForSave;                }
-    public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
+    public @NotNull  ProductDisplayKey         getKey              () { return shopKeyCache;                    }
     public @NotNull  String          getIdentifierNoLevel() { return shopIdentifierCache_noLevel;     }
     public           float           getColorThemeHue    () { return colorThemeHue;                   }
-    public @NotNull  UUID            getShopGroupUUID    () { return groupUUID;                       }
-    public @NotNull  ShopGroup       getShopGroup        () { return shopGroup;                       }
+    public @NotNull  UUID            getShopUUID    () { return groupUUID;                       }
+    public @NotNull  Shop       getShop        () { return shopGroup;                       }
     public           void            setViewer           (final @Nullable Player  _viewer        ) { viewer           = _viewer;         }
     public           void            setScheduledForSave (final           boolean scheduled      ) { scheduledForSave = scheduled;       }
     public           void            setFocusStateNext   (final           boolean _nextFocusState) { focusStateNext   = _nextFocusState; }
@@ -195,7 +195,7 @@ public class ProductDisplay {
      * Computes and caches the shop key.
      */
     private void cacheShopKey() {
-        shopKeyCache = calcShopKey(pos, level);
+        shopKeyCache = calcDisplayKey(pos, level);
     }
 
 
@@ -212,8 +212,8 @@ public class ProductDisplay {
      * @param _pos The position.
      * @return The generated identifier.
      */
-    public static ShopKey calcShopKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
-        return new ShopKey(_pos, level);
+    public static ProductDisplayKey calcDisplayKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
+        return new ProductDisplayKey(_pos, level);
     }
 
 
@@ -238,7 +238,7 @@ public class ProductDisplay {
         }
 
         cacheShopKey();
-        shopGroup = ShopGroupManager.registerShop(this, groupUUID);
+        shopGroup = ShopManager.registerDisplay(this, groupUUID);
         return true;
     }
 
@@ -278,16 +278,16 @@ public class ProductDisplay {
         calcSerializedLevelId();
         cacheShopIdentifier();
         cacheShopKey();
-        groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
-        shopGroup = ShopGroupManager.registerShop(this, ShopGroupManager.DEFAULT_GROUP_UUID);
+        groupUUID = ShopManager.DEFAULT_SHOP_UUID;
+        shopGroup = ShopManager.registerDisplay(this, ShopManager.DEFAULT_SHOP_UUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
-        ShopManager.scheduleShopSave(this);
-        ShopManager.registerShop(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.registerDisplay(this);
     }
 
 
@@ -331,15 +331,15 @@ public class ProductDisplay {
         cacheShopIdentifier();
         cacheShopKey();
         groupUUID = _shopGroupUUID;
-        shopGroup = ShopGroupManager.registerShop(this, _shopGroupUUID);
+        shopGroup = ShopManager.registerDisplay(this, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ShopItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
-        ShopManager.scheduleShopSave(this);
-        ShopManager.registerShop(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.registerDisplay(this);
     }
 
 
@@ -504,7 +504,7 @@ public class ProductDisplay {
             owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            ShopManager.scheduleShopSave(this);
+            ProductDisplayManager.scheduleDisplaySave(this);
 
 
             // Send feedback to the player
@@ -569,7 +569,7 @@ public class ProductDisplay {
             final long totPrice = price * amount;
 
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                ShopManager.scheduleShopSave(this);
+                ProductDisplayManager.scheduleDisplaySave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
@@ -731,7 +731,7 @@ public class ProductDisplay {
         else if(newPrice < 0.00001) price = 0;
         else if(newPrice < 0.01000) price = 1;
         else price = newPrice;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
         return true;
     }
 
@@ -756,7 +756,7 @@ public class ProductDisplay {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
         return true;
     }
 
@@ -773,7 +773,7 @@ public class ProductDisplay {
         //! Reduce range to [-2pi, 2pi], then add 2pi to wrap negative values and reduce to [-2pi, 2pi] again
         final double r = Math.PI * 2d;
         defaultRotation = (float)(((defaultRotation + _rotation) % r + r) % r);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -791,7 +791,7 @@ public class ProductDisplay {
         // Change item value, then serialize it and save the shop
         item = _item.copyWithCount(1);
         serializedItem = MinecraftUtils.serializeItem(item);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -823,7 +823,7 @@ public class ProductDisplay {
 
         // Reset stock
         stock = 0;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -845,8 +845,8 @@ public class ProductDisplay {
             getItemDisplay().despawn(true);
 
             // Delete the data associated with this shop
-            ShopManager.deleteShop(this);
-            ShopGroupManager.unregisterShop(this);
+            ProductDisplayManager.deleteDisplay(this);
+            ShopManager.unregisterDisplay(this);
         }
     }
 
@@ -865,7 +865,7 @@ public class ProductDisplay {
 
 
         // Create the snapshot and try to send it to the owner's inventory
-        final @NotNull ItemStack snapshot = ShopManager.createShopSnapshot(this);
+        final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
         boolean giveResult = false;
         if(tryInventory) {
             giveResult = MinecraftUtils.attemptGive(owner, snapshot);
@@ -900,7 +900,7 @@ public class ProductDisplay {
 
         // Update stock and save the shop
         if(oldStock == stock) return;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
 
         // Update active canvas
         final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
@@ -976,7 +976,7 @@ public class ProductDisplay {
         oldOwner.displayClientMessage(new Txt()
             .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
             .cat("" + newOwner.getName().getString() + ".")
-        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
@@ -984,14 +984,14 @@ public class ProductDisplay {
             .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + level.dimension().location().toString())
-        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
         // Actually change the owner and save the shop, then force it to unfocus to prevent the previous owner from accessing the UI
         focusStateNext = false;
         updateFocusState();
         ownerUUID = newOwner.getUUID();
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -1003,7 +1003,7 @@ public class ProductDisplay {
      */
     public void setColorThemeHue(final float _hue) {
         colorThemeHue = _hue;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
     /**
@@ -1061,11 +1061,11 @@ public class ProductDisplay {
      * @param name The name of the new group.
      */
     public void changeGroup(final @NotNull String name, final @NotNull ServerPlayer owner) {
-        ShopGroup group = null;
+        Shop group = null;
 
 
         // Try to find the group
-        for(final ShopGroup g : ShopGroupManager.getShopGroups(owner)) {
+        for(final Shop g : ShopManager.getShops(owner)) {
             if(g.getDisplayName().equals(name)) {
                 group = g;
             }
@@ -1074,15 +1074,15 @@ public class ProductDisplay {
 
         // Create a new group if one with the specified display name doesn't already exist
         if(group == null) {
-            group = new ShopGroup(name, ownerUUID);
-            ShopGroupManager.addGroup(group);
+            group = new Shop(name, ownerUUID);
+            ShopManager.createShop(group);
         }
 
 
         // Change group and update group references
-        ShopGroupManager.unregisterShop(this);
+        ShopManager.unregisterDisplay(this);
         shopGroup = group;
         groupUUID = group.getUuid();
-        ShopGroupManager.registerShop(this, groupUUID);
+        ShopManager.registerDisplay(this, groupUUID);
     }
 }

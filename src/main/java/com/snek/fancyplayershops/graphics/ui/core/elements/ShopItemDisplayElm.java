@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
@@ -313,14 +313,14 @@ public class ShopItemDisplayElm extends ItemElm {
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
                 //! Force data loading in case this event gets called before the scheduled data loading
-                ShopManager.loadShops();
+                ProductDisplayManager.loadShops();
 
                 // Remove entity
                 if(!entity.isRemoved()) {
                     entity.remove(RemovalReason.KILLED);
 
                     // Respawn shop item display if needed
-                    final ProductDisplay shop = ShopManager.findShop(entity.blockPosition(), entity.level());
+                    final ProductDisplay shop = ProductDisplayManager.findDisplay(entity.blockPosition(), entity.level());
                     if(shop != null) {
                         shop.invalidateItemDisplay();
                     }
