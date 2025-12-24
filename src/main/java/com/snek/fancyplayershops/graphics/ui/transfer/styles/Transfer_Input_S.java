@@ -19,7 +19,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The style of TransferUi's text input elements.
+ * The style of TransferCanvas's text input elements.
  */
 public class Transfer_Input_S extends ProductDisplay_TextInput_S {
 
@@ -27,8 +27,8 @@ public class Transfer_Input_S extends ProductDisplay_TextInput_S {
     /**
      * Creates a new TransferUi_Input_S.
      */
-    public Transfer_Input_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Transfer_Input_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

@@ -14,23 +14,23 @@ import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 
 
 /**
- * The style of shop fancy button elements.
+ * The style of product display fancy button elements.
  */
 public class ProductDisplay_FancyButton_S extends FancyButtonElmStyle {
-    protected final @NotNull ProductDisplay shop;
+    protected final @NotNull ProductDisplay display;
 
 
     /**
-     * Creates a new ShopButton_S.
+     * Creates a new ProductDisplay_FancyButton_S.
      */
-    public ProductDisplay_FancyButton_S(final @NotNull ProductDisplay _shop) {
+    public ProductDisplay_FancyButton_S(final @NotNull ProductDisplay display) {
         super();
-        shop = _shop;
+        this.display = display;
     }
 
 
     @Override
     public Vector3i getDefaultBgColor() {
-        return shop.getThemeColor1();
+        return display.getThemeColor1();
     }
 }

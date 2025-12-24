@@ -21,7 +21,7 @@ import net.minecraft.world.item.Items;
 
 
 /**
- * A button that allows the user of the shop to view the item as a stack in a vanilla inventory.
+ * A button that allows the user of the product displat to view the item as a stack in a vanilla inventory.
  */
 public class Inspect_InventoryViewButton extends SimpleButtonElm {
     private final @NotNull ItemInspectorInventory_Factory inventoryViewFactory;
@@ -29,11 +29,11 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
 
     /**
      * Creates a new InspectUi_InventoryView.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Inspect_InventoryViewButton(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), null, "View item in inventory", 0, new Buy_ItemInspector_S(_shop));
-        inventoryViewFactory = new ItemInspectorInventory_Factory(_shop);
+    public Inspect_InventoryViewButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "View item in inventory", 0, new Buy_ItemInspector_S(display));
+        inventoryViewFactory = new ItemInspectorInventory_Factory(display);
     }
 
 
@@ -41,9 +41,9 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
 
-        // Open menu if the shop is configured
-        final ProductDisplay shop = GetDisplay.get(this);
-        if(!shop.getItem().is(Items.AIR)) {
+        // Open menu if the product display is configured
+        final ProductDisplay display = GetDisplay.get(this);
+        if(!display.getItem().is(Items.AIR)) {
             player.openMenu(inventoryViewFactory);
             Clickable.playSound(player);
         }

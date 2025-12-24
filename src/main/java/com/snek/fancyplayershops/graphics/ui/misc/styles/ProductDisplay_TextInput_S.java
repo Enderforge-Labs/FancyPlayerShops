@@ -15,24 +15,24 @@ import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 
 
 /**
- * The style of shop text input elements.
+ * The style of product display text input elements.
  */
 public class ProductDisplay_TextInput_S extends TextInputElmStyle {
-    protected final @NotNull ProductDisplay shop;
+    protected final @NotNull ProductDisplay display;
 
 
     /**
-     * Creates a new ShopTextInput_S.
+     * Creates a new ProductDisplay_TextInput_S.
      */
-    public ProductDisplay_TextInput_S(final @NotNull ProductDisplay _shop) {
+    public ProductDisplay_TextInput_S(final @NotNull ProductDisplay display) {
         super();
-        shop = _shop;
+        this.display = display;
     }
 
 
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return shop.getThemeColor1();
+        return display.getThemeColor1();
     }
 
 

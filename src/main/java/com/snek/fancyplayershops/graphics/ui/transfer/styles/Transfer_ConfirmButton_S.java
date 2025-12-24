@@ -32,8 +32,8 @@ public class Transfer_ConfirmButton_S extends ProductDisplay_FancyButton_S {
 
 
 
-    public Transfer_ConfirmButton_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Transfer_ConfirmButton_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

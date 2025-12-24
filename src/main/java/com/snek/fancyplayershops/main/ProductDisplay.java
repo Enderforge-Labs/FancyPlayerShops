@@ -16,7 +16,7 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.frameworklib.input.MessageReceiver;
-import com.snek.fancyplayershops.graphics.ui.ProductDisplayContext;
+import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
@@ -100,7 +100,7 @@ public class ProductDisplay {
 
 
     // Shop state
-    private transient @Nullable ProductDisplayContext ui               = null;   // The UI context used for the display
+    private transient @Nullable ProductDisplay_Context ui               = null;   // The UI context used for the display
     private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
     private transient @Nullable Player      viewer           = null;   // The prioritized viewer
     private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
@@ -117,7 +117,7 @@ public class ProductDisplay {
     public @NotNull  ItemStack       getItem             () { return item;                            }
     public @NotNull  String          getSerializedItem   () { return serializedItem;                  }
     public @NotNull  ProductItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ProductDisplayContext     getUi               () { return ui;                              }
+    public @Nullable ProductDisplay_Context     getUi               () { return ui;                              }
     public           long            getPrice            () { return price;                           }
     public           long            getBalance          () { return balance;                         }
     public           int             getStock            () { return stock;                           }
@@ -360,7 +360,7 @@ public class ProductDisplay {
             if(focusState) {
 
                 // Create details canvas
-                ui = new ProductDisplayContext(this, viewer);
+                ui = new ProductDisplay_Context(this, viewer);
                 ui.spawn(MinecraftUtils.blockSourceCoords(pos), true);
                 ui.changeCanvas(new DetailsCanvas(this));
 

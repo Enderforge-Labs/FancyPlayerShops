@@ -14,23 +14,23 @@ import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 
 
 /**
- * The style of shop simple button elements.
+ * The style of product display simple button elements.
  */
 public class ProductDisplay_SipleButton_S extends SimpleButtonElmStyle {
-    protected final @NotNull ProductDisplay shop;
+    protected final @NotNull ProductDisplay display;
 
 
     /**
-     * Creates a new SimpleShopButton_S.
+     * Creates a new ProductDisplay_SipleButton_S.
      */
-    public ProductDisplay_SipleButton_S(final @NotNull ProductDisplay _shop) {
+    public ProductDisplay_SipleButton_S(final @NotNull ProductDisplay display) {
         super();
-        shop = _shop;
+        this.display = display;
     }
 
 
     @Override
     public Vector3i getDefaultColor() {
-        return shop.getThemeColor1();
+        return display.getThemeColor1();
     }
 }

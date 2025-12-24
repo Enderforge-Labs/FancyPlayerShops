@@ -31,8 +31,8 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Transfer_ConfirmButton(final @NotNull ProductDisplay _shop, final @NotNull TransferCanvas _menu) {
-        super(_shop.getLevel(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
+    public Transfer_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull TransferCanvas _menu) {
+        super(display.getLevel(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(display));
         menu = _menu;
     }
 
@@ -42,8 +42,8 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Change owner
-        final ProductDisplay shop = GetDisplay.get(this);
-        shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
         if(active) Clickable.playSound(player);
     }
 

@@ -2,7 +2,7 @@ package com.snek.fancyplayershops;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.graphics.ui.ProductDisplayContext;
+import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Context;
@@ -19,7 +19,7 @@ public final class GetDisplay extends UtilityClassBase {
         assert Require.condition(_this.getCanvas() != null, "GetDisplay.get() used on orphan element");
         final Context context = _this.getCanvas().getContext();
 
-        assert Require.instanceOf(context, ProductDisplayContext.class, "element's context");
-        return ((ProductDisplayContext)context).getDisplay();
+        assert Require.instanceOf(context, ProductDisplay_Context.class, "element's context");
+        return ((ProductDisplay_Context)context).getDisplay();
     }
 }

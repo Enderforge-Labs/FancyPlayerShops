@@ -28,10 +28,10 @@ public class Inspect_ModDisplay extends SimpleTextElm {
 
     /**
      * Creates a new InspectUi_ModDisplay.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Inspect_ModDisplay(@NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), new Inspect_ModDisplay_S());
+    public Inspect_ModDisplay(@NotNull ProductDisplay display) {
+        super(display.getLevel(), new Inspect_ModDisplay_S());
     }
 
 
@@ -47,12 +47,12 @@ public class Inspect_ModDisplay extends SimpleTextElm {
      */
     public void updateDisplay() {
 
-        final ProductDisplay shop = GetDisplay.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
         getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(
-                shop.getItem().is(Items.AIR) ? "-" :
-                BuiltInRegistries.ITEM.getKey(shop.getItem().getItem()).getNamespace()
+                display.getItem().is(Items.AIR) ? "-" :
+                BuiltInRegistries.ITEM.getKey(display.getItem().getItem()).getNamespace()
             ).white())
         .get());
 
