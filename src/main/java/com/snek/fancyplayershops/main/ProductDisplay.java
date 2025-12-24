@@ -1060,7 +1060,7 @@ public class ProductDisplay {
      * If the name doesn't match any existing group, a new one is created.
      * @param name The name of the new group.
      */
-    public void changeGroup(final @NotNull String name, final @NotNull ServerPlayer owner) {
+    public void changeShop(final @NotNull String name, final @NotNull ServerPlayer owner) {
         Shop group = null;
 
 

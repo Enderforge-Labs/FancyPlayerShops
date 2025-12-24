@@ -26,17 +26,17 @@ import net.minecraft.world.item.Items;
 
 
 /**
- * A button that allows the owner of the shop to change the item sold by it.
+ * A button that allows the owner of the product display to change the item sold by it.
  */
 public class Edit_ItemSelector extends Buy_ItemInspector {
 
 
     /**
      * Creates a new EditUiItemSelector.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Edit_ItemSelector(final @NotNull ProductDisplay _shop) {
-        super(_shop, null, "Change item", new Edit_Sub_BackButton(_shop));
+    public Edit_ItemSelector(final @NotNull ProductDisplay display) {
+        super(display, null, "Change item", new Edit_Sub_BackButton(display));
     }
 
 
@@ -59,26 +59,26 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
         if(item == null || item.is(Items.AIR)) return;
 
 
-        // Send a message to the player if item is a shop snapshot, then return
+        // Send a message to the player if item is a display snapshot, then return
         if(MinecraftUtils.hasTag(item, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
-            player.displayClientMessage(new Txt("Shop snapshots cannot be sold!").red().bold().get(), true);
+            player.displayClientMessage(new Txt("Product display snapshots cannot be sold!").red().bold().get(), true);
             return;
         }
 
 
-        // Send a message to the player if item contains a shop snapshot, then return
+        // Send a message to the player if item contains a display snapshot, then return
         if(item.hasTag() && MinecraftUtils.nbtContainsSubstring(item.getTag(), ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
-            player.displayClientMessage(new Txt("Items containing shop snapshots cannot be sold!").red().bold().get(), true);
+            player.displayClientMessage(new Txt("Items containing product display snapshots cannot be sold!").red().bold().get(), true);
             return;
         }
 
 
         // Change item if all checks passed
-        final ProductDisplay shop = GetDisplay.get(this);
-        shop.changeItem(item);
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeItem(item);
         //FIXME check blacklist before setting the item
         //TODO add item blacklist
-        shop.getItemDisplay().updateDisplay();
+        display.getItemDisplay().updateDisplay();
         ((EditCanvas)canvas).updateTitle();
         Clickable.playSound(player);
     }

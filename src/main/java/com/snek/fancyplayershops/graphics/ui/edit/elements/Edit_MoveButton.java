@@ -27,11 +27,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_MoveButton extends SimpleButtonElm {
-    public Edit_MoveButton(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), null, "Move shop", 1,  new Edit_SquareButton_S(_shop));
+    public Edit_MoveButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Move product display", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), SymbolDesigns.ArrowHeadsPointingOut));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.ArrowHeadsPointingOut));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -42,19 +42,19 @@ public class Edit_MoveButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final ProductDisplay shop = GetDisplay.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
 
 
         // Send feedback message to the player
-        //! This has to be executed before shop.pickUp as the message needs to appear before the "set to stash" message
+        //! This has to be executed before display.pickUp as the message needs to appear before the "set to stash" message
         player.displayClientMessage(new Txt()
-            .cat(new Txt("Your " + shop.getDecoratedName() + " has been converted into an item."))
+            .cat(new Txt("Your " + display.getDecoratedName() + " has been converted into an item."))
             .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 
 
-        // Pick up and delete shop
-        shop.pickUp(true);
-        shop.delete();
+        // Pick up and delete product display
+        display.pickUp(true);
+        display.delete();
     }
 }

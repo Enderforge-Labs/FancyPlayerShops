@@ -28,8 +28,8 @@ public class Edit_RotateButtonLeft_S extends Edit_RotateButtonRight_S {
     /**
      * Creates a new EditUi_LeftRotateButton_S.
      */
-    public Edit_RotateButtonLeft_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Edit_RotateButtonLeft_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

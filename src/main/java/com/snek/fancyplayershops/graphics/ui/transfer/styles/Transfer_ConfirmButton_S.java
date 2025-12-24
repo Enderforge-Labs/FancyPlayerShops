@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.FancyShopButton_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_FancyButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
@@ -23,7 +23,7 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class Transfer_ConfirmButton_S extends FancyShopButton_S {
+public class Transfer_ConfirmButton_S extends ProductDisplay_FancyButton_S {
     public static final @NotNull Vector3i BASE_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
 
     private @NotNull Vector3i defaultBgColor = new Vector3i(BASE_COLOR);

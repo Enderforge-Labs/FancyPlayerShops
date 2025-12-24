@@ -45,11 +45,11 @@ public class Edit_ColorSelector extends SimpleButtonElm {
 
     /**
      * Creates a new EditUi_ColorSelector.
-     * @param _shop The target shop.
+     * @param display The target product display.
      * @param hue The hue of the color theme.
      */
-    public Edit_ColorSelector(final @NotNull ProductDisplay _shop, final float _hue, final @NotNull EditCanvas _menu) {
-        super(_shop.getLevel(), null, "Change color theme", 1, new Edit_ColorSelector_S(_shop));
+    public Edit_ColorSelector(final @NotNull ProductDisplay display, final float _hue, final @NotNull EditCanvas _menu) {
+        super(display.getLevel(), null, "Change color theme", 1, new Edit_ColorSelector_S(display));
         hue = _hue;
         menu = _menu;
         getStyle(Edit_ColorSelector_S.class).setColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
@@ -63,9 +63,9 @@ public class Edit_ColorSelector extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change theme hue
-        final ProductDisplay shop = GetDisplay.get(this);
-        shop.setColorThemeHue(hue);
-        ProductDisplayManager.scheduleDisplaySave(shop);
+        final ProductDisplay display = GetDisplay.get(this);
+        display.setColorThemeHue(hue);
+        ProductDisplayManager.scheduleDisplaySave(display);
 
 
         // Reset colored backgrounds of themed elements

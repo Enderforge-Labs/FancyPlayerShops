@@ -26,11 +26,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_TransferButton extends SimpleButtonElm {
-    public Edit_TransferButton(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), null, "Transfer ownership", 1,  new Edit_SquareButton_S(_shop));
+    public Edit_TransferButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Transfer ownership", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.UserIcon));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.UserIcon));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -43,7 +43,7 @@ public class Edit_TransferButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change canvas
-        final ProductDisplay shop = GetDisplay.get(this);
-        shop.changeCanvas(new TransferCanvas(shop));
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeCanvas(new TransferCanvas(display));
     }
 }

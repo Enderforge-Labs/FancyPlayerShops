@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_GroupInput;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ShopInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButton;
@@ -42,7 +42,7 @@ import com.snek.frameworklib.graphics.layout.Div;
 
 
 /**
- * A UI that allows the owner of the shop to edit it.
+ * A UI that allows the owner of the product display to edit it.
  */
 public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
     private final @NotNull TitleElm title;
@@ -75,17 +75,17 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
     /**
      * Creates a new EditUi.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public EditCanvas(final @NotNull ProductDisplay _shop) {
+    public EditCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         Div e;
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
+        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         title = (TitleElm)e;
@@ -93,45 +93,45 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
         // Add price button
-        e = bg.addChild(new Edit_PriceInput(_shop));
+        e = bg.addChild(new Edit_PriceInput(display));
         e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add stock limit button
-        e = bg.addChild(new Edit_StockLimitInput(_shop));
+        e = bg.addChild(new Edit_StockLimitInput(display));
         e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add rotation buttons
-        e = bg.addChild(new Edit_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT));
+        e = bg.addChild(new Edit_RotateButton(display, -ROTATE_BUTTON_AMOUNT));
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
-        e = bg.addChild(new Edit_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT));
+        e = bg.addChild(new Edit_RotateButton(display, +ROTATE_BUTTON_AMOUNT));
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
 
         // Add item selector
-        e = bg.addChild(new Edit_ItemSelector(_shop));
+        e = bg.addChild(new Edit_ItemSelector(display));
         e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
-        // Add group input
-        e = bg.addChild(new Edit_GroupInput(_shop));
+        // Add shop input
+        e = bg.addChild(new Edit_ShopInput(display));
         e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
         e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + FancyPlayerShops.LINE_H * 1f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
+        e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -140,11 +140,11 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new Edit_MoveButton(_shop),
-            new Edit_StatsButton(_shop),
-            new Edit_OpenBuyMenuButton(_shop),
-            new Edit_TransferButton(_shop),
-            new Edit_DeleteButton(_shop),
+            new Edit_MoveButton(display),
+            new Edit_StatsButton(display),
+            new Edit_OpenBuyMenuButton(display),
+            new Edit_TransferButton(display),
+            new Edit_DeleteButton(display),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
@@ -158,7 +158,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         final Float[] hues = Configs.getDisplay().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
             final float h = (1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE) / hues.length;
-            e = bg.addChild(new Edit_ColorSelector(_shop, hues[i], this));
+            e = bg.addChild(new Edit_ColorSelector(display, hues[i], this));
             e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
             e.setAlignmentX(AlignmentX.RIGHT);
             e.setPosY(1f - FancyPlayerShops.LINE_H - h * (i + 1));
@@ -169,7 +169,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
     public @NotNull Component recalculateTitle() {
         if(display.getItem().is(Items.AIR)) {
             return new Txt()
-                .cat(new Txt("Editing an empty shop").white())
+                .cat(new Txt("Editing an empty product display").white())
             .get();
         }
         else {

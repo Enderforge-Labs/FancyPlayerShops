@@ -17,14 +17,14 @@ import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 /**
  * The style of shop text input elements.
  */
-public class ShopTextInput_S extends TextInputElmStyle {
+public class ProductDisplay_TextInput_S extends TextInputElmStyle {
     protected final @NotNull ProductDisplay shop;
 
 
     /**
      * Creates a new ShopTextInput_S.
      */
-    public ShopTextInput_S(final @NotNull ProductDisplay _shop) {
+    public ProductDisplay_TextInput_S(final @NotNull ProductDisplay _shop) {
         super();
         shop = _shop;
     }
