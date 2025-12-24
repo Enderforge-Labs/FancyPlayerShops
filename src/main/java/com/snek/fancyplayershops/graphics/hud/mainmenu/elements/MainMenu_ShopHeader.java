@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_GroupEntry_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_ShopEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -28,7 +28,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 //TODO don't use an entity instead of making it invisible. To improve performance
-public class MainMenu_GroupHeader extends SimpleButtonElm {
+public class MainMenu_ShopHeader extends SimpleButtonElm {
 
 
 
@@ -48,22 +48,22 @@ public class MainMenu_GroupHeader extends SimpleButtonElm {
         }
         return r;
     }
-    public MainMenu_GroupHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
-        super(context.getLevel(), null, "Claim everything", 2, new MainMenu_GroupEntry_S());
+    public MainMenu_ShopHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
+        super(context.getLevel(), null, "Claim everything", 2, new MainMenu_ShopEntry_S());
         Div e;
 
 
         // Add shop group name header
         e = addChild(new SimpleTextElm(level, new Txt("" + calcTotalItems(groups) + " products").get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
-        e.setSize(new Vector2f(MainMenu_GroupEntry.NAME_WIDTH, 1));
-        e.setPosX(-0.5f + MainMenu_GroupEntry.NAME_WIDTH / 2 + MainMenu_GroupEntry.MARGIN_LEFT);
+        e.setSize(new Vector2f(MainMenu_ShopEntry.NAME_WIDTH, 1));
+        e.setPosX(-0.5f + MainMenu_ShopEntry.NAME_WIDTH / 2 + MainMenu_ShopEntry.MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
 
 
         // Add shop group balance header
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance(groups))).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
-        e.setSize(new Vector2f(MainMenu_GroupEntry.BALANCE_WIDTH, 1));
+        e.setSize(new Vector2f(MainMenu_ShopEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
     }

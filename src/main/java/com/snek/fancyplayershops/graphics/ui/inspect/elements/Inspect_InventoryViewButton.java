@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 
 import net.minecraft.world.entity.player.Player;
@@ -42,7 +42,7 @@ public class Inspect_InventoryViewButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Open menu if the shop is configured
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         if(!shop.getItem().is(Items.AIR)) {
             player.openMenu(inventoryViewFactory);
             Clickable.playSound(player);

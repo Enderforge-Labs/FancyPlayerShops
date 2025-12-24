@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -43,7 +43,7 @@ public class Edit_TransferButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change canvas
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.changeCanvas(new TransferCanvas(shop));
     }
 }

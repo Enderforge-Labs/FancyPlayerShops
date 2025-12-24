@@ -5,7 +5,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items;
 
 /**
  * Part of the main display of DetailsUi.
- * <p> It shows the values of informations about the shop.
+ * <p> It shows the values of informations about the product.
  */
 public class Details_Values extends SimpleTextElm {
     final @NotNull String ownerName;
@@ -33,11 +33,11 @@ public class Details_Values extends SimpleTextElm {
 
     /**
      * Creates a new DetailsUiDisplayValues.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Details_Values(@NotNull ProductDisplay _shop) {
-        super(_shop.getLevel());
-        ownerName = MinecraftUtils.getOfflinePlayerName(_shop.getOwnerUuid());
+    public Details_Values(@NotNull ProductDisplay display) {
+        super(display.getLevel());
+        ownerName = MinecraftUtils.getOfflinePlayerName(display.getOwnerUuid());
     }
 
 
@@ -54,14 +54,14 @@ public class Details_Values extends SimpleTextElm {
      * Updates the displayed values using the current item name, price and stock.
      */
     public void updateDisplay() {
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
 
         // Calculate the color of the stock amount and retrieve the owner's name
-        final float factor = Math.min(1.0f, (float)shop.getStock() / shop.getMaxStock());
+        final float factor = Math.min(1.0f, (float)display.getStock() / display.getMaxStock());
         final Vector3i col = Utils.interpolateRGB(DetailsCanvas.C_HSV_STOCK_LOW, DetailsCanvas.C_HSV_STOCK_HIGH, (float)Easings.quadOut.compute(factor));
 
-        // Empty shop case
-        if(shop.getItem().is(Items.AIR)) {
+        // Empty product display case
+        if(display.getItem().is(Items.AIR)) {
             getStyle(SimpleTextElmStyle.class).setText(new Txt()
                 .cat(new Txt("-").lightGray())
                 .cat(new Txt("\n-").lightGray())
@@ -69,13 +69,13 @@ public class Details_Values extends SimpleTextElm {
             .get());
         }
 
-        // Configured shop case
+        // Configured product display case
         else {
-            final long price = shop.getPrice();
+            final long price = display.getPrice();
             final String priceStr = price == 0 ? "Free" : (price >= 100_000_00 ? Utils.formatPriceShort(price) : Utils.formatPrice(price));
             getStyle(SimpleTextElmStyle.class).setText(new Txt()
                 .cat(new Txt(priceStr).color(DetailsCanvas.C_RGB_PRICE))
-                .cat("\n").cat(new Txt(Utils.formatAmount(shop.getStock())).color(col))
+                .cat("\n").cat(new Txt(Utils.formatAmount(display.getStock())).color(col))
                 .cat("\n" + ownerName)
             .get());
         }

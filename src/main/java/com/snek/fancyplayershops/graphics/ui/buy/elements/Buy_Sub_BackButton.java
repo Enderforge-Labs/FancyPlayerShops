@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -32,11 +32,11 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
 
 
 
-    public Buy_Sub_BackButton(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), null, "Go back", 1,  new Edit_SquareButton_S(_shop));
+    public Buy_Sub_BackButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Go back", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), SymbolDesigns.CurvedArrowPointingLeft));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.CurvedArrowPointingLeft));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -49,9 +49,9 @@ public class Buy_Sub_BackButton extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change canvas
-        final ProductDisplay shop = GetShop.get(this);
-        final BuyCanvas ui = new BuyCanvas(shop);
-        shop.changeCanvas(ui);
+        final ProductDisplay display = GetDisplay.get(this);
+        final BuyCanvas ui = new BuyCanvas(display);
+        display.changeCanvas(ui);
 
         // Update amount
         ui.changeAmount(amountCache);

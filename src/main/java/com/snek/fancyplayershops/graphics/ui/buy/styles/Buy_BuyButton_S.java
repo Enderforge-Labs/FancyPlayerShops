@@ -17,8 +17,8 @@ import net.minecraft.network.chat.Component;
 public class Buy_BuyButton_S extends Buy_ConfirmButton_S {
 
 
-    public Buy_BuyButton_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Buy_BuyButton_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

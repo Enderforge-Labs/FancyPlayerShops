@@ -7,8 +7,8 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_GroupInput;
@@ -44,18 +44,18 @@ import com.snek.frameworklib.graphics.layout.Div;
 /**
  * A UI that allows the owner of the shop to edit it.
  */
-public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
+public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
     private final @NotNull TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
     public @NotNull SimpleTextElm getTitle() { return title; }
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.EDIT_MOVE.y;
+    public static final float ROTATE_BUTTON_Y            = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = ShopItemDisplayElm.EDIT_MOVE.y;
+    public static final float ITEM_SELECTOR_Y            = ProductItemDisplayElm.EDIT_MOVE.y;
 
     public static final float COLOR_SELECTOR_W        = 0.2f;
     public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
@@ -167,7 +167,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
 
     public @NotNull Component recalculateTitle() {
-        if(shop.getItem().is(Items.AIR)) {
+        if(display.getItem().is(Items.AIR)) {
             return new Txt()
                 .cat(new Txt("Editing an empty shop").white())
             .get();
@@ -175,7 +175,7 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
         else {
             return new Txt()
                 .cat(new Txt("Editing: ").white())
-                .cat(shop.getStandaloneName())
+                .cat(display.getStandaloneName())
             .get();
         }
     }

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_ConfirmButton_S;
 import com.snek.frameworklib.FrameworkLib;
@@ -42,7 +42,7 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Change owner
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
         if(active) Clickable.playSound(player);
     }

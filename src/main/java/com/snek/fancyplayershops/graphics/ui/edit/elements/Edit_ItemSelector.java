@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
@@ -74,7 +74,7 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
 
 
         // Change item if all checks passed
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.changeItem(item);
         //FIXME check blacklist before setting the item
         //TODO add item blacklist

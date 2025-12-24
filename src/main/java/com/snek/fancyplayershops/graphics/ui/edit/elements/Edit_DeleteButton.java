@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -45,7 +45,7 @@ public class Edit_DeleteButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
 
 
         // Send feedback message

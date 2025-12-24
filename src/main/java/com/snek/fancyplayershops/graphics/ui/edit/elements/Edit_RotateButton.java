@@ -7,8 +7,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonRight_S;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -73,7 +73,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.addDefaultRotation(rotation);
 
         // Animate the item display to show the new rotation
@@ -97,8 +97,8 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverEnter(player);
 
         // Handle item display animations
-        final ProductDisplay shop = GetShop.get(this);
-        final ShopItemDisplayElm itemDisplay = shop.getItemDisplay();
+        final ProductDisplay shop = GetDisplay.get(this);
+        final ProductItemDisplayElm itemDisplay = shop.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
@@ -118,7 +118,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverExit(player);
 
         // Handle item display animations
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.getItemDisplay().startLoopAnimation();
     }
 }

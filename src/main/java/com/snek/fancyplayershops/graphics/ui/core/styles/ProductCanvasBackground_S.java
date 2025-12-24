@@ -13,19 +13,19 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 
-public class ShopCanvasBackground_S extends PanelElmStyle {
-    private final @NotNull ProductDisplay shop;
+public class ProductCanvasBackground_S extends PanelElmStyle {
+    private final @NotNull ProductDisplay display;
 
 
-    public ShopCanvasBackground_S(final @NotNull ProductDisplay _shop) {
+    public ProductCanvasBackground_S(final @NotNull ProductDisplay display) {
         super();
-        shop = _shop;
+        this.display = display;
     }
 
 
     @Override
     public Vector3i getDefaultColor() {
-        return shop.getThemeColor2();
+        return display.getThemeColor2();
     }
 
 

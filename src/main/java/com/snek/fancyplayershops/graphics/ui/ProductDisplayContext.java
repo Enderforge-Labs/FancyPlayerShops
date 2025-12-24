@@ -14,12 +14,12 @@ import net.minecraft.world.entity.player.Player;
 /**
  * The UI context for shop displays
  */
-public class ShopContext extends UiContext {
+public class ProductDisplayContext extends UiContext {
     private final @NotNull ProductDisplay shop;
-    public @NotNull ProductDisplay getShop() { return shop; }
+    public @NotNull ProductDisplay getDisplay() { return shop; }
 
 
-    public ShopContext(final @NotNull ProductDisplay _shop, final @NotNull Player _player) {
+    public ProductDisplayContextlayContext(final @NotNull ProductDisplay _shop, final @NotNull Player _player) {
         super(_player);
         shop = _shop;
     }

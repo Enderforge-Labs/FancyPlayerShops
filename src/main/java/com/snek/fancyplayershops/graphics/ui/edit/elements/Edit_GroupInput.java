@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -56,7 +56,7 @@ public class Edit_GroupInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat("Shop: ")
             .cat(shop.getShop().getDisplayName())
@@ -81,7 +81,7 @@ public class Edit_GroupInput extends TextInputElm {
             return false;
         }
         else {
-            final ProductDisplay shop = GetShop.get(this);
+            final ProductDisplay shop = GetDisplay.get(this);
             shop.changeGroup(s, player);
             return true;
         }

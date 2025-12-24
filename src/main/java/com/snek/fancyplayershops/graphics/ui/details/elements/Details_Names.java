@@ -17,17 +17,17 @@ import com.snek.frameworklib.utils.Txt;
 
 /**
  * Part of the main display of DetailsUi.
- * <p> It shows the names of informations about the shop.
+ * <p> It shows the names of informations about the product.
  */
 public class Details_Names extends SimpleTextElm {
 
 
     /**
      * Creates a new DetailsUiDisplayNames.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Details_Names(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel());
+    public Details_Names(final @NotNull ProductDisplay display) {
+        super(display.getLevel());
     }
 
 

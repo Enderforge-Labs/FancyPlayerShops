@@ -1,7 +1,7 @@
 package com.snek.fancyplayershops.graphics.hud.mainmenu;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +14,8 @@ import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
 import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_BrowseShopsButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_GroupEntry;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_GroupHeader;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopEntry;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopHeader;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_InfoButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_OpenStashButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_PreferencesButton;
@@ -69,21 +69,21 @@ public class MainMenuCanvas extends HudCanvas {
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
-        // Add no shops text if the player doesn't own any shop
-        final @Nullable HashSet<@NotNull ProductDisplay> shops = ProductDisplayManager.getDisplaysOfPlayer(player);
-        if(shops == null || shops.isEmpty()) {
+        // Add no products text if the player doesn't own any product display
+        final @Nullable Set<@NotNull ProductDisplay> displays = ProductDisplayManager.getDisplaysOfPlayer(player);
+        if(displays == null || displays.isEmpty()) {
             e = bg.addChild(new SimpleTextElm(level, new MainMenu_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
 
 
-        // If groups are present
+        // If displays are present
         else {
 
-            // Add shop group header
-            final List<Shop> shopGroups = ShopManager.getShops(player);
-            e = bg.addChild(new MainMenu_GroupHeader(_hud, shopGroups));
+            // Add shop header
+            final List<Shop> shops = ShopManager.getShops(player);
+            e = bg.addChild(new MainMenu_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);
             e.setPosY(1f - FancyPlayerShops.LINE_H - HEADER_H);
@@ -96,9 +96,9 @@ public class MainMenuCanvas extends HudCanvas {
             list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
 
-            // Add shop group entry displays
-            for(int i = 0; i < shopGroups.size(); ++i) {
-               list.storeElm(new MainMenu_GroupEntry(_hud, shopGroups.get(i), list));
+            // Add shop entry displays
+            for(int i = 0; i < shops.size(); ++i) {
+               list.storeElm(new MainMenu_ShopEntry(_hud, shops.get(i), list));
             }
         }
 

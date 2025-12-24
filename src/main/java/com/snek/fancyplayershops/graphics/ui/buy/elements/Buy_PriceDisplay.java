@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -22,8 +22,8 @@ public class Buy_PriceDisplay extends SimpleTextElm {
     private final @NotNull BuyCanvas menu;
 
 
-    public Buy_PriceDisplay(final @NotNull ProductDisplay _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getLevel());
+    public Buy_PriceDisplay(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
+        super(display.getLevel());
         menu = _menu;
     }
 
@@ -36,12 +36,12 @@ public class Buy_PriceDisplay extends SimpleTextElm {
 
 
     public void updateDisplay() {
-        final ProductDisplay shop = GetShop.get(this);
-        final Txt priceTxt = new Txt(Utils.formatPrice(shop.getPrice() * menu.getAmount()));
+        final ProductDisplay display = GetDisplay.get(this);
+        final Txt priceTxt = new Txt(Utils.formatPrice(display.getPrice() * menu.getAmount()));
 
         getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Total: ").lightGray())
-            .cat(shop.getuser().getUUID().equals(shop.getOwnerUuid()) ? priceTxt.lightGray().strikethrough().cat(new Txt(" 0").white().noStrikethrough()) : priceTxt.white() )
+            .cat(display.getuser().getUUID().equals(display.getOwnerUuid()) ? priceTxt.lightGray().strikethrough().cat(new Txt(" 0").white().noStrikethrough()) : priceTxt.white() )
         .get());
         flushStyle();
     }

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_ModDisplay_S;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
@@ -47,7 +47,7 @@ public class Inspect_ModDisplay extends SimpleTextElm {
      */
     public void updateDisplay() {
 
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         getStyle(SimpleTextElmStyle.class).setText(new Txt()
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(

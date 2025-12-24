@@ -30,8 +30,8 @@ public class Buy_ConfirmButton_S extends FancyShopButton_S {
 
 
 
-    public Buy_ConfirmButton_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Buy_ConfirmButton_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

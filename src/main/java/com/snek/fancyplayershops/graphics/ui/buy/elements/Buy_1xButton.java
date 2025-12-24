@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_BuyButton_S;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ConfirmButton_S;
@@ -35,11 +35,11 @@ public class Buy_1xButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Buy_1xButton(final @NotNull ProductDisplay _shop) {
-        super(_shop.getLevel(), null, "Buy 1 item", 1,  new Buy_BuyButton_S(_shop));
+    public Buy_1xButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Buy 1 item", 1,  new Buy_BuyButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.Coin));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.Coin));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE, FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -65,13 +65,13 @@ public class Buy_1xButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Play sound and buy items
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
         if(active) Clickable.playSound(player);
-        if(player.getUUID().equals(shop.getOwnerUuid())) {
-            shop.retrieveItem(player, 1, true);
+        if(player.getUUID().equals(display.getOwnerUuid())) {
+            display.retrieveItem(player, 1, true);
         }
         else {
-            shop.buyItem(player, 1, true);
+            display.buyItem(player, 1, true);
         }
     }
 }

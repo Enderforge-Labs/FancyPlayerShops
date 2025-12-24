@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ConfirmButton_S;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -32,8 +32,8 @@ public class Buy_ConfirmButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Buy_ConfirmButton(final @NotNull ProductDisplay _shop, final @NotNull BuyCanvas _menu) {
-        super(_shop.getLevel(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(_shop));
+    public Buy_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
+        super(display.getLevel(), null, "Confirm bulk buy", 10, new Buy_ConfirmButton_S(display));
         menu = _menu;
     }
 
@@ -50,13 +50,13 @@ public class Buy_ConfirmButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Play sound and buy items
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
         if(active) Clickable.playSound(player);
-        if(player.getUUID().equals(shop.getOwnerUuid())) {
-            shop.retrieveItem(player, menu.getAmount(), true);
+        if(player.getUUID().equals(display.getOwnerUuid())) {
+            display.retrieveItem(player, menu.getAmount(), true);
         }
         else {
-            shop.buyItem(player, menu.getAmount(), true);
+            display.buyItem(player, menu.getAmount(), true);
         }
     }
 

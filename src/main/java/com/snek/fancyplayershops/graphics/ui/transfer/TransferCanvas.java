@@ -8,7 +8,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
@@ -41,7 +41,7 @@ import net.minecraft.world.item.Items;
 /**
  * A UI that allows the owner of the shop to edit it.
  */
-public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
+public class TransferCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
     public static final float CONFIRM_BUTTON_Y = 0.25f;
     private final @NotNull DualInputIndicator inputIndicator;
 
@@ -128,7 +128,7 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
 
         // Check if the name is not a valid username
         if(!s.matches("^\\w{3,16}$")) {
-            shop.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
+            display.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
             confirmButton.updateColor(false);
         }
 
@@ -136,11 +136,11 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
         else {
             final Player newOwner = FrameworkLib.getServer().getPlayerList().getPlayerByName(s);
             if(newOwner == null) {
-                shop.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
+                display.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
                 confirmButton.updateColor(false);
             }
-            else if(newOwner.getUUID().equals(shop.getOwnerUuid())) {
-                shop.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
+            else if(newOwner.getUUID().equals(display.getOwnerUuid())) {
+                display.getuser().displayClientMessage(new Txt("You already own this shop!").red().bold().get(), true);
                 confirmButton.updateColor(false);
             }
             else {
@@ -161,13 +161,13 @@ public class TransferCanvas extends ShopCanvasBase implements InputIndicatorCanv
 
 
     public @NotNull Component recalculateTitle() {
-        if(shop.getItem().is(Items.AIR)) {
+        if(display.getItem().is(Items.AIR)) {
             return new Txt("Transferring an empty shop").white().get();
         }
         else {
             return new Txt()
                 .cat(new Txt("Transferring: ").white())
-                .cat(shop.getStandaloneName())
+                .cat(display.getStandaloneName())
             .get();
         }
     }

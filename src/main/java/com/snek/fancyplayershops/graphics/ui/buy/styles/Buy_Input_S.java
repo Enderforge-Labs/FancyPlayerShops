@@ -27,8 +27,8 @@ public class Buy_Input_S extends ShopTextInput_S {
     /**
      * Creates a new TransferUi_Input_S.
      */
-    public Buy_Input_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Buy_Input_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

@@ -27,8 +27,8 @@ public class Buy_ItemInspector_S extends SimpleShopButton_S {
     /**
      * Creates a new EditUi_ItemSelector_S.
      */
-    public Buy_ItemInspector_S(final @NotNull ProductDisplay _shop) {
-        super(_shop);
+    public Buy_ItemInspector_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

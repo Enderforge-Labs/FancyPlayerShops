@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -46,7 +46,7 @@ public class Edit_PriceInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat(new Txt("Price: ").lightGray())
             .cat(new Txt(Utils.formatPrice(shop.getPrice())).white())
@@ -60,7 +60,7 @@ public class Edit_PriceInput extends TextInputElm {
         try {
 
             // Try to set the new price and update the display if it's valid
-            final ProductDisplay shop = GetShop.get(this);
+            final ProductDisplay shop = GetDisplay.get(this);
             if(shop.setPrice(Double.parseDouble(s))) updateDisplay(null);
             return true;
 

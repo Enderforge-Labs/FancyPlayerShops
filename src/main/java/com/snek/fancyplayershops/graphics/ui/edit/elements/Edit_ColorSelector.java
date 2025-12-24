@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_ColorSelector_S;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -63,14 +63,14 @@ public class Edit_ColorSelector extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change theme hue
-        final ProductDisplay shop = GetShop.get(this);
+        final ProductDisplay shop = GetDisplay.get(this);
         shop.setColorThemeHue(hue);
         ProductDisplayManager.scheduleDisplaySave(shop);
 
 
         // Reset colored backgrounds of themed elements
         final Elm bg = menu.getBg();
-        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ShopCanvasBackground_S.class).getDefaultColor()));
+        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()));
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof Edit_ColorSelector)) {
                 if(c instanceof FancyTextElm e) {

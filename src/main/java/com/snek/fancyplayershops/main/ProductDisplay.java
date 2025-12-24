@@ -16,9 +16,9 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.frameworklib.input.MessageReceiver;
-import com.snek.fancyplayershops.graphics.ui.ShopContext;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.ProductDisplayContext;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -69,17 +69,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class ProductDisplay {
 
     // Strings
-    public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
-    public static final Component SHOP_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();
-    public static final Component SHOP_STOCK_TEXT  = new Txt("This shop has no items in stock!").lightGray().get();
-    public static final Component SHOP_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
+    public static final Component EMPTY_PRODUCT_DISPLAY_NAME  = new Txt("[Empty]").italic().lightGray().get();
+    public static final Component PRODUCT_DISPLAY_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();
+    public static final Component PRODUCT_DISPLAY_STOCK_TEXT  = new Txt("This shop has no items in stock!").lightGray().get();
+    public static final Component PRODUCT_DISPLAY_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
 
 
 
     // Basic data
     private transient @NotNull  ServerLevel        level;                       // The level this shop was placed in
     private           @NotNull  String             levelId;                     // The Identifier of the level
-    private transient @Nullable ShopItemDisplayElm itemDisplay = null;          // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
+    private transient @Nullable ProductItemDisplayElm itemDisplay = null;          // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private           @NotNull  BlockPos           pos;                         // The position of the shop
     private transient @NotNull  String             shopIdentifierCache_noLevel; // The cached shop identifier, not including the level
     private transient @NotNull  ProductDisplayKey            shopKeyCache;                // The cached shop key
@@ -100,7 +100,7 @@ public class ProductDisplay {
 
 
     // Shop state
-    private transient @Nullable ShopContext ui               = null;   // The UI context used for the display
+    private transient @Nullable ProductDisplayContext ui               = null;   // The UI context used for the display
     private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
     private transient @Nullable Player      viewer           = null;   // The prioritized viewer
     private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
@@ -116,8 +116,8 @@ public class ProductDisplay {
     public @NotNull  BlockPos        getPos              () { return pos;                             }
     public @NotNull  ItemStack       getItem             () { return item;                            }
     public @NotNull  String          getSerializedItem   () { return serializedItem;                  }
-    public @NotNull  ShopItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ShopContext     getUi               () { return ui;                              }
+    public @NotNull  ProductItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
+    public @Nullable ProductDisplayContext     getUi               () { return ui;                              }
     public           long            getPrice            () { return price;                           }
     public           long            getBalance          () { return balance;                         }
     public           int             getStock            () { return stock;                           }
@@ -149,9 +149,9 @@ public class ProductDisplay {
      * Returns the active canvas of the shop's UI.
      * @return The active canvas, or null if either the UI or the canvas is null.
      */
-    public @Nullable ShopCanvasBase getActiveCanvas() {
+    public @Nullable ProductCanvasBase getActiveCanvas() {
         if(ui == null) return null;
-        return (ShopCanvasBase)ui.getActiveCanvas();
+        return (ProductCanvasBase)ui.getActiveCanvas();
     }
     /**
      * Calculates the position display entities should be spawned at.
@@ -282,7 +282,7 @@ public class ProductDisplay {
         shopGroup = ShopManager.registerDisplay(this, ShopManager.DEFAULT_SHOP_UUID);
 
         // Create and spawn the Item Display entity
-        itemDisplay = new ShopItemDisplayElm(this);
+        itemDisplay = new ProductItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
@@ -334,7 +334,7 @@ public class ProductDisplay {
         shopGroup = ShopManager.registerDisplay(this, _shopGroupUUID);
 
         // Create and spawn the Item Display entity
-        itemDisplay = new ShopItemDisplayElm(this);
+        itemDisplay = new ProductItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the shop
@@ -360,7 +360,7 @@ public class ProductDisplay {
             if(focusState) {
 
                 // Create details canvas
-                ui = new ShopContext(this, viewer);
+                ui = new ProductDisplayContext(this, viewer);
                 ui.spawn(MinecraftUtils.blockSourceCoords(pos), true);
                 ui.changeCanvas(new DetailsCanvas(this));
 
@@ -373,7 +373,7 @@ public class ProductDisplay {
                 ui.despawn(true);
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
-                menuOpenLimiter.renewCooldown(ShopItemDisplayElm.D_TIME);
+                menuOpenLimiter.renewCooldown(ProductItemDisplayElm.D_TIME);
                 if(user != null) MessageReceiver.removeCallback(user);
                 user = null;
 
@@ -402,10 +402,10 @@ public class ProductDisplay {
      * <p> If no connected entity is found, a new ShopItemDisplay is created.
      * @reutrn the item display.
      */
-    private @NotNull ShopItemDisplayElm findItemDisplayEntityIfNeeded() {
+    private @NotNull ProductItemDisplayElm findItemDisplayEntityIfNeeded() {
 
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
-            itemDisplay = new ShopItemDisplayElm(this);
+            itemDisplay = new ProductItemDisplayElm(this);
             itemDisplay.spawn(calcDisplayPos(), true);
         }
         return itemDisplay;
@@ -495,13 +495,13 @@ public class ProductDisplay {
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
         if(item.is(Items.AIR)) {
-            owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.displayClientMessage(SHOP_STOCK_TEXT, true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             ProductDisplayManager.scheduleDisplaySave(this);
@@ -538,7 +538,7 @@ public class ProductDisplay {
 
 
             // Update active canvas
-            final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+            final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
             if(activeCanvas != null) {
                 activeCanvas.onStockChange();
             }
@@ -557,13 +557,13 @@ public class ProductDisplay {
      */
     public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
         if(item.is(Items.AIR)) {
-            buyer.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            buyer.displayClientMessage(SHOP_STOCK_TEXT, true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            buyer.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             final long totPrice = price * amount;
@@ -605,7 +605,7 @@ public class ProductDisplay {
 
 
                 // Update active canvas
-                final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+                final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
                 if(activeCanvas != null) {
                     activeCanvas.onStockChange();
                 }
@@ -660,7 +660,7 @@ public class ProductDisplay {
      * Switches the active canvas with a new one and plays a sound.
      * @param canvas The new canvas.
      */
-    public void changeCanvas(final @NotNull ShopCanvasBase canvas) {
+    public void changeCanvas(final @NotNull ProductCanvasBase canvas) {
         ui.changeCanvas(canvas);
         if(user != null) Clickable.playSound(user);
     }
@@ -691,7 +691,7 @@ public class ProductDisplay {
      */
     public boolean openBuyUi(final @NotNull Player player, final boolean adjustItemDisplay) {
         if(!canBuyUiBeOpened()) {
-            player.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            player.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
             return false;
         }
         else {
@@ -903,7 +903,7 @@ public class ProductDisplay {
         ProductDisplayManager.scheduleDisplaySave(this);
 
         // Update active canvas
-        final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+        final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
         if(activeCanvas != null) {
             activeCanvas.onStockChange();
         }

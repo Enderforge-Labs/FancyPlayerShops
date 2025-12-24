@@ -6,7 +6,7 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
@@ -34,9 +34,9 @@ import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
 
 /**
- * A UI that shows informations about the shop.
+ * A UI that shows informations about the product.
  */
-public class DetailsCanvas extends ShopCanvasBase {
+public class DetailsCanvas extends ProductCanvasBase {
     private final @NotNull Details_Values values;
 
 
@@ -60,17 +60,17 @@ public class DetailsCanvas extends ShopCanvasBase {
 
     /**
      * Creates a new DetailsUi.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public DetailsCanvas(final @NotNull ProductDisplay _shop) {
+    public DetailsCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(_shop, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
         Div e;
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
+        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setSizeX(TitleElm.DEFAULT_W);
         e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
@@ -81,13 +81,13 @@ public class DetailsCanvas extends ShopCanvasBase {
         final Div details = bg.addChild(new Div());
         {
             // Add details display names
-            e = details.addChild(new Details_Names(_shop));
+            e = details.addChild(new Details_Names(display));
             e.setAlignmentX(AlignmentX.LEFT);
             ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
 
             // Add details display values
-            e = details.addChild(new Details_Values(_shop));
+            e = details.addChild(new Details_Values(display));
             e.setAlignmentX(AlignmentX.RIGHT);
             ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
@@ -100,21 +100,21 @@ public class DetailsCanvas extends ShopCanvasBase {
 
 
         // Add owner's head's background
-        final Div headBg = bg.addChild(new PanelElm(_shop.getLevel(), new Details_OwnerHeadBg_S()));
+        final Div headBg = bg.addChild(new PanelElm(display.getLevel(), new Details_OwnerHeadBg_S()));
         headBg.setSize(HEAD_BG_SIZE);
         headBg.setPosY(H0 - HEAD_BG_SIZE.y);
         headBg.setAlignmentX(AlignmentX.LEFT);
 
 
         // Add owner's head
-        e = headBg.addChild(new Details_OwnerHead(_shop));
+        e = headBg.addChild(new Details_OwnerHead(display));
         e.setSize(new Vector2f(1f));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(0.03f);
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
+        e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPos(new Vector2f(HEAD_BG_SIZE.x, H0 - (DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE.y + HEAD_BG_SIZE.y) / 2));
         final DualInputIndicator inputIndicator = (DualInputIndicator)e;
@@ -122,13 +122,13 @@ public class DetailsCanvas extends ShopCanvasBase {
         // Force indicator text //! Details canvas doesn't have any buttons. Instead, it respons to click events directly
         final Player player = canvas.getContext().getPlayer();
         inputIndicator.getLmbIndicator().updateDisplay("Buy 1 item");
-        inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(_shop.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
+        inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(display.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
     }
 
 
 
     public @NotNull Component recalculateTitle() {
-        return shop.getItem().is(Items.AIR) ? ProductDisplay.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
+        return display.getItem().is(Items.AIR) ? ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME : Component.literal(display.getStandaloneName());
     }
 
 
