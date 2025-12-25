@@ -13,9 +13,9 @@ import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 
 
 
-public class ShopCanvasBack_S extends PanelElmStyle {
+public class ProductCanvasBack_S extends PanelElmStyle {
 
-    public ShopCanvasBack_S() {
+    public ProductCanvasBack_S() {
         super();
     }
 

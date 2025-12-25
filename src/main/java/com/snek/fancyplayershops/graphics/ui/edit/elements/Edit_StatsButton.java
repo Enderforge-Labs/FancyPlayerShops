@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -25,11 +25,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Edit_StatsButton extends SimpleButtonElm {
-    public Edit_StatsButton(final @NotNull Shop _shop) {
-        super(_shop.getLevel(), null, "Open statistics", 1,  new Edit_SquareButton_S(_shop));
+    public Edit_StatsButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Open statistics", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), SymbolDesigns.GraphUp));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.GraphUp));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -40,6 +40,6 @@ public class Edit_StatsButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        player.displayClientMessage(new Txt("Shop stats coming soon!").get(), false);
+        player.displayClientMessage(new Txt("Product stats coming soon!").get(), false);
     }
 }

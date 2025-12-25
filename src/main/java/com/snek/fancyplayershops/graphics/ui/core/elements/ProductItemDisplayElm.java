@@ -6,9 +6,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -39,12 +39,12 @@ import net.minecraft.world.item.Items;
 
 
 /**
- * An item display that shows the item currently being sold by a shop.
- * <p> Unconfigured shops show a barrier item.
+ * An item display that shows the item currently being sold by a product display.
+ * <p> Unconfigured product displays show a barrier item.
  */
-public class ShopItemDisplayElm extends ItemElm {
+public class ProductItemDisplayElm extends ItemElm {
     public static final @NotNull String ITEM_DISPLAY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.itemdisplay";
-    private final @NotNull  Shop         shop;
+    private final @NotNull  ProductDisplay productDisplay;
     private       @Nullable FancyTextElm name;
 
     // Layout
@@ -106,12 +106,12 @@ public class ShopItemDisplayElm extends ItemElm {
 
 
     /**
-     * Creates a new ShopItemDisplay.
-     * @param _targetShop The target shop.
+     * Creates a new ProductItemDisplay.
+     * @param targetProductDisplay The target product display.
      */
-    public ShopItemDisplayElm(final @NotNull Shop _targetShop) {
-        super(_targetShop.getLevel(), new ItemElmStyle());
-        shop = _targetShop;
+    public ProductItemDisplayElm(final @NotNull ProductDisplay targetProductDisplay) {
+        super(targetProductDisplay.getLevel(), new ItemElmStyle());
+        productDisplay = targetProductDisplay;
         //! updateDisplay call is in spawn()
 
 
@@ -126,33 +126,33 @@ public class ShopItemDisplayElm extends ItemElm {
 
 
     /**
-     * Updates the displayed item reading data from the target shop.
+     * Updates the displayed item reading data from the target product display.
      */
     public void updateDisplay() {
-        final ItemStack _item = shop.getItem();
+        final ItemStack _item = productDisplay.getItem();
 
 
         // Spawn or despawn the name entity if necessary
-        if(!shop.isFocused()) spawnNameEntity();
+        if(!productDisplay.isFocused()) spawnNameEntity();
         else                despawnNameEntity();
 
 
-        // If the shop is unconfigured (item is AIR), display a barrier and EMPTY_SHOP_NAME as name
+        // If the product display is unconfigured (item is AIR), display a barrier and EMPTY_PRODUCT_DISPLAY_NAME as name
         if(_item.is(Items.AIR)) {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
             getStyle(ItemElmStyle.class).setItem(noItem);
             if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(Shop.EMPTY_SHOP_NAME).white().get());
+                name.getStyle(FancyTextElmStyle.class).setText(new Txt(ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME).white().get());
                 name.flushStyle();
             }
         }
 
 
-        // If the shop is configured, display the current item and its name
+        // If the product display is configured, display the current item and its name
         else {
             getStyle(ItemElmStyle.class).setItem(_item);
             if(name != null) {
-                final String fullName = Utils.formatPriceShort(shop.getPrice()) + " - " + shop.getStandaloneName();
+                final String fullName = Utils.formatPriceShort(productDisplay.getPrice()) + " - " + productDisplay.getStandaloneName();
                 name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
                 name.flushStyle();
             }
@@ -171,7 +171,7 @@ public class ShopItemDisplayElm extends ItemElm {
     @Override
     public @NotNull Transform __calcTransform() {
         return super.__calcTransform()
-            .rotY(shop.getDefaultRotation())
+            .rotY(productDisplay.getDefaultRotation())
             .scale(0.4f)
         ;
     }
@@ -230,7 +230,7 @@ public class ShopItemDisplayElm extends ItemElm {
     public void enterEditState() {
 
         // Adjust global rotation
-        final @NotNull ShopCanvasBase activeCanvas = shop.getActiveCanvas();
+        final @NotNull ProductCanvasBase activeCanvas = productDisplay.getActiveCanvas();
         activeCanvas.updateItemDisplayRot(0, activeCanvas.getContext().getRotation(), true);
 
         // Local position shift
@@ -313,14 +313,14 @@ public class ShopItemDisplayElm extends ItemElm {
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
                 //! Force data loading in case this event gets called before the scheduled data loading
-                ShopManager.loadShops();
+                ProductDisplayManager.loadDisplays();
 
                 // Remove entity
                 if(!entity.isRemoved()) {
                     entity.remove(RemovalReason.KILLED);
 
                     // Respawn shop item display if needed
-                    final Shop shop = ShopManager.findShop(entity.blockPosition(), entity.level());
+                    final ProductDisplay shop = ProductDisplayManager.findDisplay(entity.blockPosition(), entity.level());
                     if(shop != null) {
                         shop.invalidateItemDisplay();
                     }

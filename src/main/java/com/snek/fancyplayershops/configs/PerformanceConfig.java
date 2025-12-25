@@ -13,7 +13,7 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 public class PerformanceConfig implements ConfigFile {
     public final ValueConfigField<Float> reach_distance = new ValueConfigField<>(
         new String[] {
-            "The maximum distance at which players can interact with shops. Measured in Blocks.",
+            "The maximum distance at which players can interact with product displays. Measured in Blocks.",
             "Must be between 0.5 and 8.0.",
             "Higher values can impact performance."
         },
@@ -22,7 +22,7 @@ public class PerformanceConfig implements ConfigFile {
 
     public final ValueConfigField<Float> ray_casting_step = new ValueConfigField<>(
         new String[] {
-            "The distance between ray casting steps for shop focus detection. Measured in Blocks.",
+            "The distance between ray casting steps for product display focus detection. Measured in Blocks.",
             "Must be between 0.02 and 0.5.",
             "Higher values provide higher accuracy and responsiveness but can easily degrade performance."
         },
@@ -35,13 +35,13 @@ public class PerformanceConfig implements ConfigFile {
             "Must be >= 1",
             "Player ray casting checks are performed every tick, but they can be split into batches to improve performance.",
             "e.g. 1 batch means that every player is checked every tick. 2 batches means that half the players are checked every even tick, while the other half is checked every odd tick.",
-            "Higher values improve performance but increase shop hover detection delay by up to (ray_casting_batches + 1) ticks."
+            "Higher values improve performance but increase product display hover detection delay by up to (ray_casting_batches + 1) ticks."
         },
         4
     );
     public final ValueConfigField<Integer> pulls_per_tick = new ValueConfigField<>(
         new String[] {
-            "The maximum number of shops to push items into per tick.",
+            "The maximum number of product displays to push items into per tick.",
             "Must be >= 1.",
             "Higher values decrease the total duration of pull cycles, but can severly impact performance.",
         },
@@ -51,17 +51,18 @@ public class PerformanceConfig implements ConfigFile {
         new String[] {
             "The minimum time between item pull cycles. Measured in ticks.",
             "Must be >= 1.",
-            "Lower values increase pull frequency but can reduce performance when a lot of unloaded shops are present.",
+            "Lower values increase pull frequency but can reduce performance when a lot of unloaded product displays are present.",
             "Values above 20 are generally safe."
         },
         5 * 20
     );
     public final ValueConfigField<Integer> data_save_frequency = new ValueConfigField<>(
         new String[] {
-            "The time between shop and stash data saves. Measured in ticks.",
+            "The time between data saves. Measured in ticks.",
             "Must be >= 1.",
-            "Only modified shops and stashes are saved to file, so this config has little inpact on performance.",
-            "Very high values can occasionally create lag spikes. Lower values improve safety and tps stability but slightly degrade performance.",
+            "Only modified data blocks are saved to file, so this config has little inpact on performance.",
+            "Very high values can occasionally create lag spikes. Lower values improve data safety and tps stability but slightly degrade performance.",
+            "1 is recommended for most servers."
         },
         1
     );

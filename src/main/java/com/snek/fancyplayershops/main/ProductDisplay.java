@@ -11,14 +11,14 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.data.data_types.ShopGroup;
+import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.frameworklib.input.MessageReceiver;
-import com.snek.fancyplayershops.graphics.ui.ShopContext;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -64,30 +64,31 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 
 /**
- * This class manages a player shop that is placed somewhere in a level.
+ * This class manages a product display that is placed somewhere in a level.
  */
-public class Shop {
+public class ProductDisplay {
 
     // Strings
-    public static final Component EMPTY_SHOP_NAME  = new Txt("[Empty]").italic().lightGray().get();
-    public static final Component SHOP_EMPTY_TEXT  = new Txt("This shop is empty!").lightGray().get();
-    public static final Component SHOP_STOCK_TEXT  = new Txt("This shop has no items in stock!").lightGray().get();
-    public static final Component SHOP_AMOUNT_TEXT = new Txt("This shop doesn't have enough items in stock!").lightGray().get();
+    public static final Component EMPTY_PRODUCT_DISPLAY_NAME  = new Txt("[Empty]").italic().lightGray().get();
+    public static final Component PRODUCT_DISPLAY_EMPTY_TEXT  = new Txt("This display is empty!").lightGray().get();
+    public static final Component PRODUCT_DISPLAY_STOCK_TEXT  = new Txt("This display has no items in stock!").lightGray().get();
+    public static final Component PRODUCT_DISPLAY_AMOUNT_TEXT = new Txt("This display doesn't have enough items in stock!").lightGray().get();
 
 
 
     // Basic data
-    private transient @NotNull  ServerLevel        level;                       // The level this shop was placed in
-    private           @NotNull  String             levelId;                     // The Identifier of the level
-    private transient @Nullable ShopItemDisplayElm itemDisplay = null;          // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           @NotNull  BlockPos           pos;                         // The position of the shop
-    private transient @NotNull  String             shopIdentifierCache_noLevel; // The cached shop identifier, not including the level
-    private transient @NotNull  ShopKey            shopKeyCache;                // The cached shop key
-    private           @NotNull  UUID               groupUUID;                   // The UUID of the group this shop has been assigned to
-    private transient @NotNull  ShopGroup          shopGroup;                   // The group this shop has been assigned to
+    private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
+    private           @NotNull  String                levelId;                          // The Identifier of the level
+    private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
+    private           @NotNull  BlockPos              pos;                              // The position of the display
+    private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
+    private transient @NotNull  ProductDisplayKey     displayKeyCache;                  // The cached display key
+    private           @NotNull  UUID                  shopUUID;                         // The UUID of the shop this display has been assigned to
+    private transient @NotNull  Shop                  shop;                  // The shop this display has been assigned to
+    //TODO rename shopGroup to shop
 
 
-    // Shop data
+    // Display data
     private transient @NotNull ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
     private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
     private                    long      balance         = 0;                   // The balance collected by the shop since it was last claimed
@@ -99,44 +100,47 @@ public class Shop {
     private                    float     colorThemeHue   = 0f;                  // The configured hue of the color theme
 
 
-    // Shop state
-    private transient @Nullable ShopContext ui               = null;   // The UI context used for the display
-    private transient @Nullable Player      user             = null;   // The current user of the shop (the player that first opened a menu)
+    // Display state
+    private transient @Nullable ProductDisplay_Context ui    = null;   // The UI context used for the display
+    private transient @Nullable Player      user             = null;   // The current user of the display (the player that first opened a menu)
     private transient @Nullable Player      viewer           = null;   // The prioritized viewer
-    private transient           boolean     deletionState    = false;  // True if the shop has been deleted, false otherwise
-    private transient           boolean     focusState       = false;  // True if the shop is currently being looked at by at least one player, false otherwise
+    private transient           boolean     deletionState    = false;  // True if the display has been deleted, false otherwise
+    private transient           boolean     focusState       = false;  // True if the display is currently being looked at by at least one player, false otherwise
     private transient           boolean     focusStateNext   = false;  // The next focus state
     private transient @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
     private transient           boolean     scheduledForSave = false;
 
 
-    // Accessors
-    public @NotNull  ServerLevel     getLevel            () { return level;                           }
-    public @NotNull  String          getLevelId          () { return levelId;                         }
-    public @NotNull  BlockPos        getPos              () { return pos;                             }
-    public @NotNull  ItemStack       getItem             () { return item;                            }
-    public @NotNull  String          getSerializedItem   () { return serializedItem;                  }
-    public @NotNull  ShopItemDisplayElm getItemDisplay   () { return findItemDisplayEntityIfNeeded(); }
-    public @Nullable ShopContext     getUi               () { return ui;                              }
-    public           long            getPrice            () { return price;                           }
-    public           long            getBalance          () { return balance;                         }
-    public           int             getStock            () { return stock;                           }
-    public           int             getMaxStock         () { return maxStock;                        }
-    public           float           getDefaultRotation  () { return defaultRotation;                 }
-    public           boolean         isFocused           () { return focusState;                      }
-    public           boolean         isDeleted           () { return deletionState;                   }
-    public @NotNull  UUID            getOwnerUuid        () { return ownerUUID;                       }
-    public @Nullable Player          getuser             () { return user;                            }
-    public @Nullable Player          getViewer           () { return viewer;                          }
-    public           boolean         isScheduledForSave  () { return scheduledForSave;                }
-    public @NotNull  ShopKey         getKey              () { return shopKeyCache;                    }
-    public @NotNull  String          getIdentifierNoLevel() { return shopIdentifierCache_noLevel;     }
-    public           float           getColorThemeHue    () { return colorThemeHue;                   }
-    public @NotNull  UUID            getShopGroupUUID    () { return groupUUID;                       }
-    public @NotNull  ShopGroup       getShopGroup        () { return shopGroup;                       }
-    public           void            setViewer           (final @Nullable Player  _viewer        ) { viewer           = _viewer;         }
-    public           void            setScheduledForSave (final           boolean scheduled      ) { scheduledForSave = scheduled;       }
-    public           void            setFocusStateNext   (final           boolean _nextFocusState) { focusStateNext   = _nextFocusState; }
+    // Getters
+    public @NotNull  ServerLevel            getLevel            () { return level;                           }
+    public @NotNull  String                 getLevelId          () { return levelId;                         }
+    public @NotNull  BlockPos               getPos              () { return pos;                             }
+    public @NotNull  ItemStack              getItem             () { return item;                            }
+    public @NotNull  String                 getSerializedItem   () { return serializedItem;                  }
+    public @NotNull  ProductItemDisplayElm  getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
+    public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
+    public           long                   getPrice            () { return price;                           }
+    public           long                   getBalance          () { return balance;                         }
+    public           int                    getStock            () { return stock;                           }
+    public           int                    getMaxStock         () { return maxStock;                        }
+    public           float                  getDefaultRotation  () { return defaultRotation;                 }
+    public           boolean                isFocused           () { return focusState;                      }
+    public           boolean                isDeleted           () { return deletionState;                   }
+    public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
+    public @Nullable Player                 getuser             () { return user;                            }
+    public @Nullable Player                 getViewer           () { return viewer;                          }
+    public           boolean                isScheduledForSave  () { return scheduledForSave;                }
+    public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
+    public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
+    public           float                  getColorThemeHue    () { return colorThemeHue;                   }
+    public @NotNull  UUID                   getShopUUID         () { return shopUUID;                        }
+    public @NotNull  Shop                   getShop             () { return shop;                 }
+
+
+    // Setters
+    public void setViewer          (final @Nullable Player  viewer        ) { this.viewer         = viewer;         }
+    public void setScheduledForSave(final           boolean scheduled     ) { scheduledForSave    = scheduled;      }
+    public void setFocusStateNext  (final           boolean nextFocusState) { this.focusStateNext = nextFocusState; }
 
 
 
@@ -146,12 +150,12 @@ public class Shop {
 
 
     /**
-     * Returns the active canvas of the shop's UI.
+     * Returns the active canvas of the product display's UI.
      * @return The active canvas, or null if either the UI or the canvas is null.
      */
-    public @Nullable ShopCanvasBase getActiveCanvas() {
+    public @Nullable ProductCanvasBase getActiveCanvas() {
         if(ui == null) return null;
-        return (ShopCanvasBase)ui.getActiveCanvas();
+        return (ProductCanvasBase)ui.getActiveCanvas();
     }
     /**
      * Calculates the position display entities should be spawned at.
@@ -181,52 +185,52 @@ public class Shop {
                 return;
             }
         }
-        throw new RuntimeException("Invalid shop data: Specified level \"" + levelId + "\" was not found");
+        throw new RuntimeException("Invalid product display data: Specified level \"" + levelId + "\" was not found");
     }
 
 
     /**
-     * Computes and caches the shop identifiers.
+     * Computes and caches the display identifiers.
      */
-    private void cacheShopIdentifier() {
-        shopIdentifierCache_noLevel = calcShopIdentifier(pos);
+    private void cacheDisplayIdentifier() {
+        displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
     }
     /**
-     * Computes and caches the shop key.
+     * Computes and caches the display key.
      */
-    private void cacheShopKey() {
-        shopKeyCache = calcShopKey(pos, level);
+    private void cacheDisplayKey() {
+        displayKeyCache = calcDisplayKey(pos, level);
     }
 
 
     /**
-     * Calculates a shop identifier from the position. This identifier doesn't include the level ID.
+     * Calculates a display identifier from the position. This identifier doesn't include the level ID.
      * @param _pos The position.
      * @return The generated identifier.
      */
-    public static String calcShopIdentifier(final @NotNull BlockPos _pos) {
+    public static String calcDisplayIdentifier(final @NotNull BlockPos _pos) {
         return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
     }
     /**
-     * Calculates a shop identifier from the position. This identifier doesn't include the level ID.
+     * Calculates a display identifier from the position. This identifier doesn't include the level ID.
      * @param _pos The position.
      * @return The generated identifier.
      */
-    public static ShopKey calcShopKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
-        return new ShopKey(_pos, level);
+    public static ProductDisplayKey calcDisplayKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
+        return new ProductDisplayKey(_pos, level);
     }
 
 
     /**
      * Reinitializes the transient members.
      * @return Whether the item and level id have been deserialized successfully.
-     * <p> Shops whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
+     * <p> Displays whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
     */
     public boolean reinitTransient() {
         focusState      = false;
         focusStateNext  = false;
         menuOpenLimiter = new RateLimiter();
-        cacheShopIdentifier();
+        cacheDisplayIdentifier();
 
 
         item = MinecraftUtils.deserializeItem(serializedItem);
@@ -237,8 +241,8 @@ public class Shop {
             return false;
         }
 
-        cacheShopKey();
-        shopGroup = ShopGroupManager.registerShop(this, groupUUID);
+        cacheDisplayKey();
+        shop = ShopManager.registerDisplay(this, shopUUID);
         return true;
     }
 
@@ -258,46 +262,46 @@ public class Shop {
 
 
     /**
-     * Creates a new Shop and saves it in its own file.
-     * @param level The level the shop has to be created in.
-     * @param _pos The position of the new shop.
-     * @param owner The player that places the shop.
+     * Creates a new ProductDisplay and saves it in its own file.
+     * @param level The level the display has to be created in.
+     * @param _pos The position of the new display.
+     * @param owner The player that places the display.
      */
-    public Shop(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
+    public ProductDisplay(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
 
-        // Set shop data
+        // Set display data
         this.level = level;
         ownerUUID = owner.getUUID();
         pos = _pos;
-        price         = Configs.getShop().price.getDefault();
-        maxStock      = Configs.getShop().stock_limit.getDefault();
-        colorThemeHue = Configs.getShop().theme_hues.getValue()[Configs.getShop().theme.getDefault()];
+        price         = Configs.getDisplay().price.getDefault();
+        maxStock      = Configs.getDisplay().stock_limit.getDefault();
+        colorThemeHue = Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()];
 
-        // Calculate serialized data and shop identifier
+        // Calculate serialized data and display identifier
         serializedItem = MinecraftUtils.serializeItem(item);
         calcSerializedLevelId();
-        cacheShopIdentifier();
-        cacheShopKey();
-        groupUUID = ShopGroupManager.DEFAULT_GROUP_UUID;
-        shopGroup = ShopGroupManager.registerShop(this, ShopGroupManager.DEFAULT_GROUP_UUID);
+        cacheDisplayIdentifier();
+        cacheDisplayKey();
+        shopUUID = ShopManager.DEFAULT_SHOP_UUID;
+        shop = ShopManager.registerDisplay(this, ShopManager.DEFAULT_SHOP_UUID);
 
         // Create and spawn the Item Display entity
-        itemDisplay = new ShopItemDisplayElm(this);
+        itemDisplay = new ProductItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
-        // Save the shop
-        ShopManager.scheduleShopSave(this);
-        ShopManager.registerShop(this);
+        // Save the display
+        ProductDisplayManager.registerDisplay(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
 
 
     /**
-     * Creates a new Shop and saves it in its own file.
-     * @param level The level the shop has to be created in.
-     * @param _pos The position of the new shop.
-     * @param _ownerUUID The UUID of the player that places the shop.
+     * Creates a new ProductDisplay and saves it in its own file.
+     * @param level The level the display has to be created in.
+     * @param _pos The position of the new display.
+     * @param _ownerUUID The UUID of the player that places the display.
      * @param _price The price of the item.
      * @param _stock The current stock.
      * @param _maxStock The stock limit.
@@ -305,13 +309,13 @@ public class Shop {
      * @param _hue The hue of the color theme.
      * @param _serializedIitem The item in serialized form.
      */
-    public Shop(
+    public ProductDisplay(
         final @NotNull ServerLevel level, final @NotNull BlockPos _pos,
-        final @NotNull UUID _ownerUUID, final UUID _shopGroupUUID, final long _balance,
+        final @NotNull UUID _ownerUUID, final UUID _shopUUID, final long _balance,
         final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
     ) {
 
-        // Set shop data
+        // Set display data
         this.level = level;
         ownerUUID = _ownerUUID;
         balance = _balance;
@@ -326,20 +330,20 @@ public class Shop {
         calcSerializedLevelId();
         serializedItem = _serializedIitem;
 
-        // Get members from serialized data and calculate shop identifier
+        // Get members from serialized data and calculate display identifier
         item = MinecraftUtils.deserializeItem(serializedItem);
-        cacheShopIdentifier();
-        cacheShopKey();
-        groupUUID = _shopGroupUUID;
-        shopGroup = ShopGroupManager.registerShop(this, _shopGroupUUID);
+        cacheDisplayIdentifier();
+        cacheDisplayKey();
+        shopUUID = _shopUUID;
+        shop = ShopManager.registerDisplay(this, _shopUUID);
 
         // Create and spawn the Item Display entity
-        itemDisplay = new ShopItemDisplayElm(this);
+        itemDisplay = new ProductItemDisplayElm(this);
         itemDisplay.spawn(calcDisplayPos(), true);
 
-        // Save the shop
-        ShopManager.scheduleShopSave(this);
-        ShopManager.registerShop(this);
+        // Save the display
+        ProductDisplayManager.registerDisplay(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -360,7 +364,7 @@ public class Shop {
             if(focusState) {
 
                 // Create details canvas
-                ui = new ShopContext(this, viewer);
+                ui = new ProductDisplay_Context(this, viewer);
                 ui.spawn(MinecraftUtils.blockSourceCoords(pos), true);
                 ui.changeCanvas(new DetailsCanvas(this));
 
@@ -373,7 +377,7 @@ public class Shop {
                 ui.despawn(true);
 
                 // Cancel chat input callbacks, then reset the user and renew the focus cooldown
-                menuOpenLimiter.renewCooldown(ShopItemDisplayElm.D_TIME);
+                menuOpenLimiter.renewCooldown(ProductItemDisplayElm.D_TIME);
                 if(user != null) MessageReceiver.removeCallback(user);
                 user = null;
 
@@ -398,14 +402,14 @@ public class Shop {
 
 
     /**
-     * Finds the display entity connected to this shop and saves it to this.itemDisplay.
-     * <p> If no connected entity is found, a new ShopItemDisplay is created.
+     * Finds the display entity connected to this product display and saves it to this.itemDisplay.
+     * <p> If no connected entity is found, a new {@link ProductItemDisplayElm} is created.
      * @reutrn the item display.
      */
-    private @NotNull ShopItemDisplayElm findItemDisplayEntityIfNeeded() {
+    private @NotNull ProductItemDisplayElm findItemDisplayEntityIfNeeded() {
 
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
-            itemDisplay = new ShopItemDisplayElm(this);
+            itemDisplay = new ProductItemDisplayElm(this);
             itemDisplay.spawn(calcDisplayPos(), true);
         }
         return itemDisplay;
@@ -415,20 +419,20 @@ public class Shop {
 
 
     /**
-     * Handles a single click event on this shop block.
-     * @param player The player that clicked the shop.
+     * Handles a single click event on this display.
+     * @param player The player that clicked the display.
      * @param click The click type.
-     * @return Whether the player has permission to click the shop's UI.
+     * @return Whether the player has permission to click the display's UI.
      */
     public boolean onClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
 
 
-        // If the shop is currently focused
-        //! checking that the shop is focused prevents erroneous "someone else is using the shop" errors
+        // If the display is currently focused
+        //! checking that the display is focused prevents erroneous "someone else is using the display" errors
         //! in case of clicks during the focus cooldown time or before the focus is actually registered
         if(isFocused()) {
 
-            // If the shop is not currently being used, flag the player as its user
+            // If the display is not currently being used, flag the player as its user
             if(user == null) {
                 if(clickType == ClickAction.PRIMARY) {
                     if(player.getUUID().equals(ownerUUID)) {
@@ -460,11 +464,11 @@ public class Shop {
             }
 
 
-            // Send an error message to the player if someone else has already opened a menu in the same shop, then return false
+            // Send an error message to the player if someone else has already opened a menu in the same display, then return false
             else {
                 if(clickType == ClickAction.SECONDARY) {
                     player.displayClientMessage(new Txt(
-                        "Someone else is already using this shop! Left click to " +
+                        "Someone else is already using this display! Left click to " +
                         (player.getUUID().equals(ownerUUID) ? "retrieve" : "buy") +
                         " one item."
                     ).lightGray().get(), true);
@@ -487,24 +491,24 @@ public class Shop {
 
 
     /**
-     * Retrieves the specified amount of items from the shop at no cost and gives them to the owner.
-     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain any item.
-     * @param owner The owner of the shop.
+     * Retrieves the specified amount of items from the display at no cost and gives them to the owner.
+     * <p> Sends an error message to the player if the display is unconfigured or doesn't contain any item.
+     * @param owner The owner of the display.
      * @param amount The amount of items to retrieve.
-     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
+     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
         if(item.is(Items.AIR)) {
-            owner.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            owner.displayClientMessage(SHOP_STOCK_TEXT, true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            owner.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            owner.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            ShopManager.scheduleShopSave(this);
+            ProductDisplayManager.scheduleDisplaySave(this);
 
 
             // Send feedback to the player
@@ -517,7 +521,7 @@ public class Shop {
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt("You retrieved ").lightGray())
                     .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                    .cat(new Txt(" from your shop.").lightGray())
+                    .cat(new Txt(" from your product display.").lightGray())
                 .get(), false);
                 stock -= retrievedAmount;
             }
@@ -531,14 +535,14 @@ public class Shop {
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
                     .cat(new Txt(MinecraftUtils.getFancyItemName(item)).white())
-                    .cat(new Txt(" retrieved from your shop " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .cat(new Txt(" retrieved from your product display " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                 .get(), false);
                 stock -= stashedAmount;
             }
 
 
             // Update active canvas
-            final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+            final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
             if(activeCanvas != null) {
                 activeCanvas.onStockChange();
             }
@@ -549,27 +553,27 @@ public class Shop {
 
 
     /**
-     * Makes a player buy a specified amount of items from the shop.
-     * <p> Sends an error message to the player if the shop is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
+     * Makes a player buy a specified amount of items from the display.
+     * <p> Sends an error message to the player if the display is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param buyer The player.
      * @param amount The amount of items to buy.
-     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the shop.
+     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
      */
     public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
         if(item.is(Items.AIR)) {
-            buyer.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
         else if(stock < 1) {
-            buyer.displayClientMessage(SHOP_STOCK_TEXT, true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_STOCK_TEXT, true);
         }
         else if(stock < amount) {
-            buyer.displayClientMessage(SHOP_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
+            buyer.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
             final long totPrice = price * amount;
 
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                ShopManager.scheduleShopSave(this);
+                ProductDisplayManager.scheduleDisplaySave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
@@ -605,7 +609,7 @@ public class Shop {
 
 
                 // Update active canvas
-                final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+                final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
                 if(activeCanvas != null) {
                     activeCanvas.onStockChange();
                 }
@@ -622,22 +626,22 @@ public class Shop {
 
 
     /**
-     * Adds the specified amount to this shop's balance and its group's balance.
+     * Adds the specified amount to this display's balance and its shop's balance.
      * @param amount The amount to add. Must be >= 0
      */
     public void addBalance(final long amount) {
         this.balance += amount;
-        shopGroup.addBalance(amount);
+        shop.addBalance(amount);
     }
 
 
     /**
      * Sets the balance back to 0, without sending it to the owner's balance.
      * <p>
-     * This also updates the shop's group's balance.
+     * This also updates the display's shop's balance.
      */
     public void clearBalance() {
-        shopGroup.subBalance(getBalance());
+        shop.subBalance(getBalance());
         balance = 0;
     }
 
@@ -646,7 +650,7 @@ public class Shop {
     /**
      * Claims the current balance, sending it to the owner's balance.
      * <p>
-     * This also updates the shop's group's balance.
+     * This also updates the display's shop's balance.
      */
     public void claimBalance() {
         EconomyManager.addCurrency(ownerUUID, balance);
@@ -660,7 +664,7 @@ public class Shop {
      * Switches the active canvas with a new one and plays a sound.
      * @param canvas The new canvas.
      */
-    public void changeCanvas(final @NotNull ShopCanvasBase canvas) {
+    public void changeCanvas(final @NotNull ProductCanvasBase canvas) {
         ui.changeCanvas(canvas);
         if(user != null) Clickable.playSound(user);
     }
@@ -669,7 +673,7 @@ public class Shop {
 
 
     /**
-     * Opens the edit shop UI.
+     * Opens the edit display UI.
      * @param player The player.
      */
     public void openEditUi(final @NotNull Player player) {
@@ -691,7 +695,7 @@ public class Shop {
      */
     public boolean openBuyUi(final @NotNull Player player, final boolean adjustItemDisplay) {
         if(!canBuyUiBeOpened()) {
-            player.displayClientMessage(SHOP_EMPTY_TEXT, true);
+            player.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
             return false;
         }
         else {
@@ -724,14 +728,14 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The price cannot be negative").red().bold().get(), true);
             return false;
         }
-        if(newPrice > Configs.getShop().price.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(Configs.getShop().price.getMax())).red().bold().get(), true);
+        if(newPrice > Configs.getDisplay().price.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The price cannot be greater than " + Utils.formatPrice(Configs.getDisplay().price.getMax())).red().bold().get(), true);
             return false;
         }
         else if(newPrice < 0.00001) price = 0;
         else if(newPrice < 0.01000) price = 1;
         else price = newPrice;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
         return true;
     }
 
@@ -742,7 +746,7 @@ public class Shop {
      * Tries to set a new stock limit for the item and sends an error message to the user if it's invalid.
      *     <p> Amounts are rounded to the nearest integer.
      *     <p> Negative values and 0 are considered invalid and return false without changing the stock limit.
-     *     <p> Values above MAX_STOCK or that are higher than the shop's storage capacity are also considered invalid. //TODO implement shop tiers
+     *     <p> Values above MAX_STOCK or that are higher than the display's storage capacity are also considered invalid. //TODO implement shop tiers
      * @param newStockLimit The new stock limit.
      * @return Whether the new value could be set.
      */
@@ -751,12 +755,12 @@ public class Shop {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.getShop().stock_limit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getShop().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > Configs.getDisplay().stock_limit.getMax()) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
         return true;
     }
 
@@ -764,23 +768,23 @@ public class Shop {
 
 
     /**
-     * Adds a specified rotation to the default rotation of the item display and saves the shop to its file.
+     * Adds a specified rotation to the default rotation of the item display and saves the product display to its file.
      * @param _rotation The rotation to add. Negative values are allowed and are converted to their positive equivalent.
      */
     public void addDefaultRotation(final float _rotation) {
 
-        // Add value to default rotation and save the shop
+        // Add value to default rotation and save the display
         //! Reduce range to [-2pi, 2pi], then add 2pi to wrap negative values and reduce to [-2pi, 2pi] again
         final double r = Math.PI * 2d;
         defaultRotation = (float)(((defaultRotation + _rotation) % r + r) % r);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
 
 
     /**
-     * Changes the item sold by this shop and saves it to its file.
+     * Changes the item sold by this display and saves it to its file.
      * @param _item the new item.
      */
     public void changeItem(final @NotNull ItemStack _item) {
@@ -788,17 +792,17 @@ public class Shop {
         // Stash the current items
         stash();
 
-        // Change item value, then serialize it and save the shop
+        // Change item value, then serialize it and save the display
         item = _item.copyWithCount(1);
         serializedItem = MinecraftUtils.serializeItem(item);
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
 
 
     /**
-     * Forcefully changes the stock of this shops.
+     * Forcefully changes the stock of this display.
      */
     public void changeStock(final int stock) {
         this.stock = stock;
@@ -808,8 +812,8 @@ public class Shop {
 
 
     /**
-     * Sends the items stored in this shop to the owner's stash.
-     * <p> This method also sets the shop's stock to 0.
+     * Sends the items stored in this display to the owner's stash.
+     * <p> This method also sets the display's stock to 0.
      */
     public void stash() {
         if(stock == 0) return;
@@ -823,17 +827,17 @@ public class Shop {
 
         // Reset stock
         stock = 0;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
 
 
     /**
-     * Deletes this shop without stashing the items or giving the player an unconfigured shop.
-     * <p> Any item left in the shop is fully deleted and cannot be recovered.
+     * Deletes this display without stashing the items or giving the player an unconfigured display item.
+     * <p> Any item left in the display is fully deleted and cannot be recovered.
      * <p> The balance is also deleted and cannot be recovered.
-     * <p> The save file of this shop is deleted as well.
+     * <p> The save file of this display is deleted as well.
      */
     public void delete() {
         if(!deletionState) {
@@ -844,9 +848,9 @@ public class Shop {
             getItemDisplay().stopLoopAnimation();
             getItemDisplay().despawn(true);
 
-            // Delete the data associated with this shop
-            ShopManager.deleteShop(this);
-            ShopGroupManager.unregisterShop(this);
+            // Delete the data associated with this display
+            ShopManager.unregisterDisplay(this);
+            ProductDisplayManager.deleteDisplay(this);
         }
     }
 
@@ -854,9 +858,9 @@ public class Shop {
 
 
     /**
-     * Converts this shop into a snapshot and sends it to the owner's inventory or stash.
+     * Converts this display into a snapshot and sends it to the owner's inventory or stash.
      * <p>
-     * Notice: This method does NOT delete the shop. Call {@link #delete()} to avoid item duplications.
+     * Notice: This method does NOT delete the display. Call {@link #delete()} to avoid item duplications.
      * @param tryInventory Whether to try placing the item in the owner's inventory.
      *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
      */
@@ -865,7 +869,7 @@ public class Shop {
 
 
         // Create the snapshot and try to send it to the owner's inventory
-        final @NotNull ItemStack snapshot = ShopManager.createShopSnapshot(this);
+        final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
         boolean giveResult = false;
         if(tryInventory) {
             giveResult = MinecraftUtils.attemptGive(owner, snapshot);
@@ -884,7 +888,7 @@ public class Shop {
 
     /**
      * Tries to retrieve items from nearby inventories.
-     * <p> This call has no effect if the shop is fully stocked.
+     * <p> This call has no effect if the display is fully stocked.
      */
     public void pullItems() {
         if(stock >= maxStock || item.is(Items.AIR)) return;
@@ -898,12 +902,12 @@ public class Shop {
         pullItems(new BlockPos(+1, +0, +0));
         pullItems(new BlockPos(-1, +0, +0));
 
-        // Update stock and save the shop
+        // Update stock and save the display
         if(oldStock == stock) return;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
 
         // Update active canvas
-        final ShopCanvasBase activeCanvas = (ShopCanvasBase)ui.getActiveCanvas();
+        final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
         if(activeCanvas != null) {
             activeCanvas.onStockChange();
         }
@@ -913,12 +917,12 @@ public class Shop {
 
 
     /**
-     * Tries to retrieve items from a specified position relative to the shop.
-     * <p> This call has no effect if the shop is fully stocked.
-     * @param rel The position of the inventory, relative to the shop.
+     * Tries to retrieve items from a specified position relative to the display.
+     * <p> This call has no effect if the display is fully stocked.
+     * @param rel The position of the inventory, relative to the display.
      */
     public void pullItems(final @NotNull BlockPos rel) {
-        if(stock >= maxStock) return;                                           // Skip pull if shop is full
+        if(stock >= maxStock) return;                                           // Skip pull if display is full
         final BlockPos targetPos = pos.offset(rel);                             // Calculate inventory position
         final ChunkPos chunkPos = new ChunkPos(pos);                            // Calculate inventory chunk position
         if(!getLevel().hasChunk(chunkPos.x, chunkPos.z)) return;                // Skip pull if inventory is unloaded
@@ -942,7 +946,7 @@ public class Shop {
                 if(!variant.isBlank() && amount > 0) {
                     final ItemStack stackInSlot = variant.toStack((int) amount);
 
-                    // If the item in the slot matches the item sold by the shop
+                    // If the item in the slot matches the item sold by the display
                     if(ItemStack.isSameItemSameTags(stackInSlot, item)) {
                         try(final Transaction tx = Transaction.openOuter()) {
                             final long missing = (long)maxStock - stock;
@@ -963,7 +967,7 @@ public class Shop {
 
 
     /**
-     * Changes the owner of this shop and sends a feedback message to the old owner.
+     * Changes the owner of this display and sends a feedback message to the old owner.
      * <p> If the new owner and the current one are the same player, this call will have no effect.
      * @param newOwner The new owner.
      */
@@ -976,7 +980,7 @@ public class Shop {
         oldOwner.displayClientMessage(new Txt()
             .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
             .cat("" + newOwner.getName().getString() + ".")
-        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
@@ -984,14 +988,14 @@ public class Shop {
             .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + level.dimension().location().toString())
-        .color(ShopManager.SHOP_ITEM_NAME_COLOR).get(), false);
+        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
-        // Actually change the owner and save the shop, then force it to unfocus to prevent the previous owner from accessing the UI
+        // Actually change the owner and save the display, then force it to unfocus to prevent the previous owner from accessing the UI
         focusStateNext = false;
         updateFocusState();
         ownerUUID = newOwner.getUUID();
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -1003,7 +1007,7 @@ public class Shop {
      */
     public void setColorThemeHue(final float _hue) {
         colorThemeHue = _hue;
-        ShopManager.scheduleShopSave(this);
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
     /**
@@ -1011,7 +1015,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor1() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getShop().theme_saturation_main.getValue(), Configs.getShop().theme_luminosity_main.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_main.getValue(), Configs.getDisplay().theme_luminosity_main.getValue()));
     }
 
     /**
@@ -1019,7 +1023,7 @@ public class Shop {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor2() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getShop().theme_saturation_secondary.getValue(), Configs.getShop().theme_luminosity_secondary.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_secondary.getValue(), Configs.getDisplay().theme_luminosity_secondary.getValue()));
     }
 
 
@@ -1030,24 +1034,24 @@ public class Shop {
 
 
     /**
-     * Computes the name of the shop.
+     * Computes the name of the display.
      * This is meant for use in sentences.
-     * The name is not capitalized and the shop name is prefixed with "shop " and enclosed in double quotes.
-     * @return The name of the shop, or "empty shop" if unconfigured.
+     * The name is not capitalized and the display name is prefixed with "display " and enclosed in double quotes.
+     * @return The name of the display, or "empty product display" if unconfigured.
      */
     public @NotNull String getDecoratedName() {
-        return item.is(Items.AIR) ? "empty shop" : "shop \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
+        return item.is(Items.AIR) ? "empty product display" : "product display \"" + MinecraftUtils.getFancyItemName(item).getString() + "\"";
     }
 
 
     /**
-     * Computes the name of the shop.
+     * Computes the name of the display.
      * This is meant for use in stand-alone text elements such as titles.
      * The name is capitalized and doesn't contain any additional text.
-     * @return The name of the shop, or "Empty shop" if unconfigured.
+     * @return The name of the display, or "Empty product display" if unconfigured.
      */
     public @NotNull String getStandaloneName() {
-        return item.is(Items.AIR) ? "Empty shop" : MinecraftUtils.getFancyItemName(item).getString();
+        return item.is(Items.AIR) ? "Empty product display" : MinecraftUtils.getFancyItemName(item).getString();
     }
 
 
@@ -1055,34 +1059,34 @@ public class Shop {
 
 
     /**
-     * Changes the group of the shop to the one whose display name matches the provided string.
+     * Changes the shop of the display to the one whose display name matches the provided string.
      * <p>
-     * If the name doesn't match any existing group, a new one is created.
-     * @param name The name of the new group.
+     * If the name doesn't match any existing shop, a new one is created.
+     * @param name The name of the new shop.
      */
-    public void changeGroup(final @NotNull String name, final @NotNull ServerPlayer owner) {
-        ShopGroup group = null;
+    public void changeShop(final @NotNull String name, final @NotNull ServerPlayer owner) {
+        Shop newShop = null;
 
 
-        // Try to find the group
-        for(final ShopGroup g : ShopGroupManager.getShopGroups(owner)) {
-            if(g.getDisplayName().equals(name)) {
-                group = g;
+        // Try to find the shop
+        for(final Shop newShopCandidate : ShopManager.getShops(owner)) {
+            if(newShopCandidate.getDisplayName().equals(name)) {
+                newShop = newShopCandidate;
             }
         }
 
 
-        // Create a new group if one with the specified display name doesn't already exist
-        if(group == null) {
-            group = new ShopGroup(name, ownerUUID);
-            ShopGroupManager.addGroup(group);
+        // Create a new shop if one with the specified display name doesn't already exist
+        if(newShop == null) {
+            newShop = new Shop(name, ownerUUID);
+            ShopManager.createShop(newShop);
         }
 
 
-        // Change group and update group references
-        ShopGroupManager.unregisterShop(this);
-        shopGroup = group;
-        groupUUID = group.getUuid();
-        ShopGroupManager.registerShop(this, groupUUID);
+        // Change shop and update shop references
+        ShopManager.unregisterDisplay(this);
+        shop = newShop;
+        shopUUID = newShop.getUuid();
+        ShopManager.registerDisplay(this, shopUUID);
     }
 }

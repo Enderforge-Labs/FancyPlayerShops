@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_IdDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_InventoryViewButton;
@@ -31,9 +31,9 @@ import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 
 
 /**
- * A UI that allows the user of a shop to view details about the item.
+ * A UI that allows the user of a product display to view details about the item.
  */
-public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
+public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
     public static final float DETAILS_W = 0.9f;                 // The total width of the main displays
     public static final float NAMES_VALUES_WIDTH_RATIO = 0.35f; // The ration between the width of the names and the width of the values
 
@@ -49,25 +49,25 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
     /**
      * Creates a new InspectUi.
-     * @param _shop The target shop.
+     * @param display The target product display.
      * @param _backButton The back button.
      * <p> This defines which menu the player is brought to when going back.
      */
-    public InspectCanvas(final @NotNull Shop _shop, final @NotNull Div _backButton) {
+    public InspectCanvas(final @NotNull ProductDisplay display, final @NotNull Div _backButton) {
 
         // Call superconstructor
-        super(_shop, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         Div e;
 
 
         // Add title
-        e = bg.addChild(new TitleElm(_shop.getLevel(), shop.getStandaloneName()));
+        e = bg.addChild(new TitleElm(display.getLevel(), display.getStandaloneName()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add id display
-        e = bg.addChild(new Inspect_IdDisplay(_shop));
+        e = bg.addChild(new Inspect_IdDisplay(display));
         e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 1));
@@ -75,7 +75,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
 
         // Add mod display
-        e = bg.addChild(new Inspect_ModDisplay(_shop));
+        e = bg.addChild(new Inspect_ModDisplay(display));
         e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 2));
@@ -83,7 +83,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
 
         //Add inventory view button
-        e = bg.addChild(new Inspect_InventoryViewButton(_shop));
+        e = bg.addChild(new Inspect_InventoryViewButton(display));
         e.setSize(new Vector2f(EditCanvas.ITEM_SELECTOR_SIZE));
         e.setPosY(EditCanvas.ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -96,7 +96,7 @@ public class InspectCanvas extends ShopCanvasBase implements InputIndicatorCanva
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
+        e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);

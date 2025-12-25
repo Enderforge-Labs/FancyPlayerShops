@@ -13,8 +13,8 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
 
-public class Stash_ItemEntry_Count_S extends SimpleTextElmStyle {
-    public Stash_ItemEntry_Count_S() {
+public class Stash_ProductEntry_Count_S extends SimpleTextElmStyle {
+    public Stash_ProductEntry_Count_S() {
         super();
     }
 

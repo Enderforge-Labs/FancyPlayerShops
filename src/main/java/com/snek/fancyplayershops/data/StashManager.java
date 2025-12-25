@@ -67,6 +67,24 @@ public final class StashManager extends UtilityClassBase {
     private static @NotNull List<@NotNull Pair<@NotNull UUID, @Nullable PlayerStash>> scheduledForSaving = new ArrayList<>();
 
 
+    /**
+     * Calculates the path to the directory where stashes are saved.
+     * @return The path to the save file directory.
+     */
+    public static @NotNull Path calcStashDirPath() {
+        return FancyPlayerShops.getStorageDir().resolve("stash");
+    }
+
+    /**
+     * Calculates the path to the save file of the specified player.
+     * @param playerUuid The uuid of the player.
+     * @return The path to the save file of the player's stash.
+     */
+    public static @NotNull Path calcStashFilePath(final @NotNull UUID playerUuid) {
+        return calcStashDirPath().resolve(playerUuid.toString() + ".json");
+    }
+
+
 
 
 
@@ -136,7 +154,7 @@ public final class StashManager extends UtilityClassBase {
     public static void saveScheduledStashes() {
 
         // Create directory for the stashes
-        final Path levelStorageDir = FancyPlayerShops.getStorageDir().resolve("stash");
+        final Path levelStorageDir = calcStashDirPath();
         try {
             Files.createDirectories(levelStorageDir);
         } catch(final IOException e) {
@@ -158,7 +176,7 @@ public final class StashManager extends UtilityClassBase {
 
 
             // Create this player's config file if absent, then save the JSON in it
-            final File stashStorageFile = new File(levelStorageDir + "/" + pair.getFirst().toString() + ".json");
+            final File stashStorageFile = calcStashFilePath(pair.getFirst()).toFile();
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
             } catch(final IOException e) {
@@ -186,7 +204,7 @@ public final class StashManager extends UtilityClassBase {
 
 
         // For each stash storage file
-        final File[] stashStorageFiles = FancyPlayerShops.getStorageDir().resolve("stash").toFile().listFiles();
+        final File[] stashStorageFiles = calcStashDirPath().toFile().listFiles();
         if(stashStorageFiles != null) for(final File stashStorageFile : stashStorageFiles) {
 
             // Read the file

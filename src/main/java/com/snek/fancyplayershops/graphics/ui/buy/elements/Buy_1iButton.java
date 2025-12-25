@@ -5,8 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_BuyButton_S;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ConfirmButton_S;
@@ -35,11 +35,11 @@ public class Buy_1iButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Buy_1iButton(final @NotNull Shop _shop) {
-        super(_shop.getLevel(), null, "Fill inventory", 1,  new Buy_BuyButton_S(_shop));
+    public Buy_1iButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Fill inventory", 1,  new Buy_BuyButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(_shop.getLevel(), ItemDesigns.MinecraftChest));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.MinecraftChest));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE, FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -63,16 +63,16 @@ public class Buy_1iButton extends FancyButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final Shop shop = GetShop.get(this);
-        final int amount = Math.min(shop.getStock(), 64 * 9 * 4);
-        final int oldStock = shop.getStock();
+        final ProductDisplay display = GetDisplay.get(this);
+        final int amount = Math.min(display.getStock(), 64 * 9 * 4);
+        final int oldStock = display.getStock();
 
-        if(player.getUUID().equals(shop.getOwnerUuid())) {
-            shop.retrieveItem(player, amount, false);
+        if(player.getUUID().equals(display.getOwnerUuid())) {
+            display.retrieveItem(player, amount, false);
         }
         else {
-            shop.buyItem(player, amount, false);
+            display.buyItem(player, amount, false);
         }
-        if(shop.getStock() != oldStock) Clickable.playSound(player);
+        if(display.getStock() != oldStock) Clickable.playSound(player);
     }
 }

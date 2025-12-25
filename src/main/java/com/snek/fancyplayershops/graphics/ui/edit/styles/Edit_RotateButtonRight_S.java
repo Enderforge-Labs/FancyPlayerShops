@@ -3,8 +3,8 @@ package com.snek.fancyplayershops.graphics.ui.edit.styles;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.SimpleShopButton_S;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_SipleButton_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -21,14 +21,14 @@ import com.snek.frameworklib.utils.Easings;
 /**
  * The style of the EditUi_PriceButton UI element.
  */
-public class Edit_RotateButtonRight_S extends SimpleShopButton_S {
+public class Edit_RotateButtonRight_S extends ProductDisplay_SipleButton_S {
 
 
     /**
      * Creates a new EditUi_RightRotateButton_S.
      */
-    public Edit_RotateButtonRight_S(final @NotNull Shop _shop) {
-        super(_shop);
+    public Edit_RotateButtonRight_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

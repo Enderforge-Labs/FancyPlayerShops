@@ -3,9 +3,9 @@ package com.snek.fancyplayershops.graphics.ui.edit.styles;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -22,7 +22,7 @@ import com.snek.frameworklib.utils.Easings;
 /**
  * The style of EditUi's text input elements.
  */
-public class Edit_Input_S extends ShopTextInput_S {
+public class Edit_Input_S extends ProductDisplay_TextInput_S {
     public static final float SHIFT_X  = EditCanvas.INPUT_W / 2f;
     public static final float ADJUST_X = 1 - EditCanvas.INPUT_W;
 
@@ -30,8 +30,8 @@ public class Edit_Input_S extends ShopTextInput_S {
     /**
      * Creates a new EditUi_Input_S.
      */
-    public Edit_Input_S(final @NotNull Shop _shop) {
-        super(_shop);
+    public Edit_Input_S(final @NotNull ProductDisplay display) {
+        super(display);
     }
 
 

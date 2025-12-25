@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
@@ -36,21 +36,20 @@ import net.minecraft.world.phys.Vec3;
 
 
 
-
 /**
- * Utility class containing methods to detect shops players are looking at and handle hover events.
+ * Utility class containing methods to detect displays players are looking at and handle hover events.
  */
 public abstract class HoverReceiver {
     private HoverReceiver() {}
 
 
-    // The list of shops that were targeted in the previous tick
-    private static @NotNull Set<@NotNull Shop> targetedShopsOld = new LinkedHashSet<>();
+    // The list of displays that were targeted in the previous tick
+    private static @NotNull Set<@NotNull ProductDisplay> targetedDisplaysOld = new LinkedHashSet<>();
 
 
     // Partial ray casting batch data
     private static @Nullable List<Player> playerListSnapshot = null;
-    private static @Nullable Set<Shop> targetedShops         = null;
+    private static @Nullable Set<ProductDisplay> targetedDisplays = null;
     private static int updateIndex = 0;
 
 
@@ -71,7 +70,7 @@ public abstract class HoverReceiver {
 
             // Reset the lists
             playerListSnapshot   = new ArrayList<>();
-            targetedShops        = new LinkedHashSet<>();
+            targetedDisplays        = new LinkedHashSet<>();
 
             // Recalculate player list snapshot
             for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
@@ -80,38 +79,38 @@ public abstract class HoverReceiver {
                 }
             }
 
-            // Set all previously focused shops' next focus state to false
-            for(final Shop shop : targetedShopsOld) {
-                shop.setFocusStateNext(false);
+            // Set all previously focused displays' next focus state to false
+            for(final ProductDisplay display : targetedDisplaysOld) {
+                display.setFocusStateNext(false);
             }
         }
 
 
 
 
-        // Find currently focused shops and their viewers
+        // Find currently focused displays and their viewers
         final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.getPerf().ray_casting_batches.getValue());
         for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
             final Player player = playerListSnapshot.get(updateIndex);
 
 
-            // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
+            // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any display
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            final Shop shop = HoverReceiver.getLookedAtShop(player);
-            if(shop == null) continue;
+            final ProductDisplay display = HoverReceiver.getLookedAtDisplay(player);
+            if(display == null) continue;
 
 
-            // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
-            final boolean isShopNew = targetedShops.add(shop);
-            if(isShopNew) {
-                shop.setFocusStateNext(true);
-                shop.setViewer(player);
+            // Try to add a display to the focused displays list. If it's not already in it, set its next focus state to true
+            final boolean isDisplayNew = targetedDisplays.add(display);
+            if(isDisplayNew) {
+                display.setFocusStateNext(true);
+                display.setViewer(player);
             }
 
-            // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
+            // If the display is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
             else {
-                if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
-                    shop.setViewer(player);
+                if(getPlayerPriority(display, player) > getPlayerPriority(display, display.getViewer())) {
+                    display.setViewer(player);
                 }
             }
         }
@@ -139,28 +138,28 @@ public abstract class HoverReceiver {
      */
     public static void finalizeTick() {
 
-        // Unfocus all the shops that don't have any viewer anymore. Set their viewer to null
-        targetedShopsOld.removeAll(targetedShops);
-        for(final Shop shop : targetedShopsOld) {
-            if(!shop.isDeleted()) {
-                shop.setViewer(null);
-                shop.updateFocusState();
+        // Unfocus all the displays that don't have any viewer anymore. Set their viewer to null
+        targetedDisplaysOld.removeAll(targetedDisplays);
+        for(final ProductDisplay display : targetedDisplaysOld) {
+            if(!display.isDeleted()) {
+                display.setViewer(null);
+                display.updateFocusState();
             }
         }
 
 
-        // Update looked-at shops
-        for(final Shop shop : targetedShops) {
-            if(!shop.isDeleted() && shop.getuser() != null) {
+        // Update looked-at displays
+        for(final ProductDisplay display : targetedDisplays) {
+            if(!display.isDeleted() && display.getuser() != null) {
 
-                // If the user isn't looking at the shop anymore, unfocus it
-                if(shop.getViewer() != shop.getuser()) {
-                    shop.setFocusStateNext(false);
+                // If the user isn't looking at the display anymore, unfocus it
+                if(display.getViewer() != display.getuser()) {
+                    display.setFocusStateNext(false);
                 }
             }
-            shop.updateFocusState();
+            display.updateFocusState();
         }
-        targetedShopsOld = targetedShops;
+        targetedDisplaysOld = targetedDisplays;
     }
 
 
@@ -171,17 +170,17 @@ public abstract class HoverReceiver {
 
 
     /**
-     * Calculates the priority the provided player has on a shop display.
-     * @param shop The shop.
+     * Calculates the priority the provided player has on a display.
+     * @param display The display.
      * @param player The player.
      * @return The priority.
      *     <p> User:          Highest priority
      *     <p> Owner:         Lower priority
      *     <p> Other players: Lowest priority
      */
-    public static int getPlayerPriority(final @NotNull Shop shop, final @NotNull Player player) {
-        if(player == shop.getuser()) return 0;
-        if(player.getUUID().equals(shop.getOwnerUuid())) return -1;
+    public static int getPlayerPriority(final @NotNull ProductDisplay display, final @NotNull Player player) {
+        if(player == display.getuser()) return 0;
+        if(player.getUUID().equals(display.getOwnerUuid())) return -1;
         return -2;
     }
 
@@ -233,7 +232,7 @@ public abstract class HoverReceiver {
      * @param player The player to cast the ray from.
      * @return A list of coordinates, one for each full block the ray collides with. Not sorted.
      */
-    private static @NotNull List<@NotNull Vec3> getViewCollisisons(final @NotNull Player player, final double maxDistance) {
+    private static @NotNull List<@NotNull Vec3> getViewCollisions(final @NotNull Player player, final double maxDistance) {
         final List<Vec3> blockPositions = new ArrayList<>();
         Vec3i lastBlockPosition = new Vec3i(0, 0, 0);
 
@@ -266,49 +265,49 @@ public abstract class HoverReceiver {
 
 
     /**
-     * Finds the closest shop block that directly collides with the player's view.
+     * Finds the closest display that directly collides with the player's view.
      * <p> The ray casting is hitbox-based, so it can go through gaps in non-full blocks and it ignores fluids.
      * @param player The player.
-     * @return The Shop instance of the shop block, or null if the player is not looking at one.
+     * @return The Product display instance, or null if the player is not looking at one.
      */
-    public static Shop getLookedAtShop(final @NotNull Player player) {
+    public static ProductDisplay getLookedAtDisplay(final @NotNull Player player) {
         final Vec3 playerEyePos = player.getEyePosition();
 
 
-        // Check the number of shops in the chunks the player can reach
+        // Check the number of displays in the chunks the player can reach
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
-        boolean check = ShopManager.chunkHasShops(playerChunk);
+        boolean check = ProductDisplayManager.chunkHasDisplays(playerChunk);
         final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
         int minX = playerPos.getX() - reach;
         int maxX = playerPos.getX() + reach;
         int minZ = playerPos.getZ() - reach;
         int maxZ = playerPos.getZ() + reach;
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ShopManager.chunkHasShops(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
 
 
-        // If they contain at least one shop
+        // If they contain at least one display
         if(check) {
 
             // Calculate ray casting max distance, then find and sort colliding blocks
             final Vec3 targetBlock = getTargetBlockPrecise(player);
             final double maxDistance = targetBlock != null ? targetBlock.distanceTo(playerEyePos) + Configs.getPerf().ray_casting_step.getValue() * 1.2 : Configs.getPerf().reach_distance.getValue();
-            final List<Vec3> collidingBlocks = getViewCollisisons(player, maxDistance);
+            final List<Vec3> collidingBlocks = getViewCollisions(player, maxDistance);
             Collections.sort(collidingBlocks, Comparator.comparingDouble(b -> b.distanceToSqr(playerEyePos)));
 
-            // Find target shop block
+            // Find target display
             for(final Vec3 pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
-                final Shop shop = ShopManager.findShop(new BlockPos(blockPos), player.level());
-                if(shop != null) return shop;
+                final ProductDisplay display = ProductDisplayManager.findDisplay(new BlockPos(blockPos), player.level());
+                if(display != null) return display;
             }
         }
 
 
-        // Return null if no item display entity is near the player or no shop block is targeted
+        // Return null if no item display entity is near the player or no product display is targeted
         return null;
     }
 }

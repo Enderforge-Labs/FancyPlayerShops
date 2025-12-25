@@ -62,7 +62,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    final float tmp_bar_width = 0.01f;
+    final float tmp_bar_width = 0.01f; //TODO
     public ScrollableList(final @NotNull ServerLevel level, final @NotNull ScrollableListStyle style, final float elmSize) {
         super(level, style);
         this.elmSize = elmSize;

@@ -12,10 +12,14 @@
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
 - add ae2 compatibility
-  - let players craft higher tiers of shop that can contain more stock
-  - shops don't pull any item by default but require manual restocking.
+  - let players craft higher tiers of product displays that can contain more stock
+  - product displays don't pull any item by default but require manual restocking.
     - Crafting them with an interface and a controller allows them to pull items from nearby inventories, or something annoying like that
   - each tier can become wireless by crafting it with a wireless transmitter
+  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
+  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
+  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
+  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
 
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
@@ -23,11 +27,11 @@
   - replace hand written inventory checks and calls with a generic give() method that checks for this option and also adds extra items to the stash
 
 - add an undo command & chat message click command to undo item buy actions
-  - add undos for shop deletion too. moving a shop doesn't need undos
-  - add undos for shop transfer
+  - add undos for product display deletion too. moving a product display doesn't need undos
+  - add undos for product display transfer
   - make undos expire after the next undoable action or after 5 seconds
 
-- Restrict shop placement to the owner's claims (Open Parties and Claims mod compatibility)
+- Restrict product display placement to the owner's claims (Open Parties and Claims mod compatibility)
   - do something about ownership transfer, idk if it would bypass this or what
   - placing on chunk borders should be fine. you can already place ae2 components on claim borders, why not shops?
   - limit pulls to inventories players can access in survival, be that manually or through other mods.
@@ -43,11 +47,9 @@
 - fix ae2 cells stacking for some obscure reason??? they shouldn't stack.
 
 - add options in the edit menu to not check for NBTs.
-  - this will let the shop pull any item with matching ID
+  - this will let the product display pull any item with matching ID
   - add a disclaimer for buyers or an icon that clearly shows you can get any NBT
     - "..., which might include energy, item variations, custom names, and other data. Buy at your own risk!"
-
-- add shop group display/input in the edit UI
 
 - cache text and fancytext value width and height.
 - update them on Text change
@@ -61,24 +63,24 @@
   - smithing template [Custom behaviour, vanilla doesn't show the name]
 
 - "top shops" list that shows the shops that made the most money in the specified timeframe
-  - This is separate from the list of groups in the main menu. you access this from the stats
+  - This is separate from the list of shops in the main menu. you access this from the stats
 - "best customers" list that shows the players that spent the most money in the specified timeframe
-  - This is separate from the list of groups in the main menu. you access this from the stats
+  - This is separate from the list of shops in the main menu. you access this from the stats
 
 - add a bar at the left of HUDs that shows how long is left until they despawns
 
-- add performance options to skip unimportant animations and hide item displays when the TPS goes below certain thresholds
+- add performance options to skip unimportant animations and hide product displays when the TPS goes below certain thresholds
 
-- allow players to transfer entire shop groups
+- allow players to transfer entire shops
 
 - add Jade mod compatibility
   - Show a nicer name when the player looks at UI elements
     - add an overridable method that returns a name for jade
-  - Show a nicer name when the player looks at shop item displays
+  - Show a nicer name when the player looks at product displays
     - use the overridable method that returns a name for jade
 
 - add a system to preorder items
-  - you can buy in advance and your items will be sent to the stash as soon as they are available in the shop block
+  - you can buy in advance and your items will be sent to the stash as soon as they are available in the product display
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
 Cleanup:

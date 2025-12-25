@@ -4,12 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
 
@@ -24,23 +24,23 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 /**
- * A button that allows the owner of the shop to specify the shop's group.
+ * A button that allows the owner of the product display to specify the shop it belongs to.
  */
-public class Edit_GroupInput extends TextInputElm {
+public class Edit_ShopInput extends TextInputElm {
 
 
 
 
     /**
-     * Creates a new Edit_GroupInput.
-     * @param _shop The target shop.
+     * Creates a new Edit_ShopInput.
+     * @param display The target product display.
      */
-    public Edit_GroupInput(final @NotNull Shop _shop) {
+    public Edit_ShopInput(final @NotNull ProductDisplay display) {
         super(
-            _shop.getLevel(),
+            display.getLevel(),
             null, "Transfer to another shop",
-            new Txt("Send the name of the shop in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
-            new Edit_Input_S(_shop)
+            new Txt("Send the name of the shop in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
+            new Edit_Input_S(display)
         );
     }
 
@@ -56,10 +56,10 @@ public class Edit_GroupInput extends TextInputElm {
 
     @Override
     public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
-        getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+        final ProductDisplay display = GetDisplay.get(this);
+        getStyle(ProductDisplay_TextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
             .cat("Shop: ")
-            .cat(shop.getShopGroup().getDisplayName())
+            .cat(display.getShop().getDisplayName())
             //TODO convert component to string before using it
         .white().get());
         flushStyle();
@@ -81,8 +81,8 @@ public class Edit_GroupInput extends TextInputElm {
             return false;
         }
         else {
-            final Shop shop = GetShop.get(this);
-            shop.changeGroup(s, player);
+            final ProductDisplay display = GetDisplay.get(this);
+            display.changeShop(s, player);
             return true;
         }
     }

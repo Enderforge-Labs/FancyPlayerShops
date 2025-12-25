@@ -6,9 +6,9 @@ import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonRight_S;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -33,7 +33,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * A button that allows the owner of the shop to change the default rotation of the displayed object.
+ * A button that allows the owner of the product display to change the default rotation of the displayed object.
  */
 public class Edit_RotateButton extends SimpleButtonElm {
     public static final int ROTATION_ANIMATION_TIME = 8;
@@ -44,23 +44,23 @@ public class Edit_RotateButton extends SimpleButtonElm {
 
     /**
      * Creates a new RotateButton.
-     * @param _shop The target shop.
+     * @param display The target product display.
      * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
      */
-    public Edit_RotateButton(final @NotNull Shop _shop, final float _rotation) {
+    public Edit_RotateButton(final @NotNull ProductDisplay display, final float _rotation) {
         super(
-            _shop.getLevel(),
+            display.getLevel(),
             "Rotate once",
             "Rotate quickly",
             2,
-            _rotation > 0 ? new Edit_RotateButtonRight_S(_shop) : new Edit_RotateButtonLeft_S(_shop)
+            _rotation > 0 ? new Edit_RotateButtonRight_S(display) : new Edit_RotateButtonLeft_S(display)
         );
         rotation = _rotation;
 
 
         // Create design
         final Div e = addChild(new PolylineSetElm(
-            _shop.getLevel(),
+            display.getLevel(),
             _rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight
         ));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
@@ -73,15 +73,15 @@ public class Edit_RotateButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        final Shop shop = GetShop.get(this);
-        shop.addDefaultRotation(rotation);
+        final ProductDisplay display = GetDisplay.get(this);
+        display.addDefaultRotation(rotation);
 
         // Animate the item display to show the new rotation
-        shop.getItemDisplay().applyAnimation(
+        display.getItemDisplay().applyAnimation(
             new Transition(2, Easings.expOut)
             .additiveTransform(new Transform().rotY(-rotation))
         );
-        shop.getItemDisplay().applyAnimation(
+        display.getItemDisplay().applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(new Transform().rotY(rotation))
         );
@@ -97,8 +97,8 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverEnter(player);
 
         // Handle item display animations
-        final Shop shop = GetShop.get(this);
-        final ShopItemDisplayElm itemDisplay = shop.getItemDisplay();
+        final ProductDisplay display = GetDisplay.get(this);
+        final ProductItemDisplayElm itemDisplay = display.getItemDisplay();
         itemDisplay.stopLoopAnimation();
         itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
@@ -118,7 +118,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         super.onHoverExit(player);
 
         // Handle item display animations
-        final Shop shop = GetShop.get(this);
-        shop.getItemDisplay().startLoopAnimation();
+        final ProductDisplay display = GetDisplay.get(this);
+        display.getItemDisplay().startLoopAnimation();
     }
 }

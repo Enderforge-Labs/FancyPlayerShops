@@ -14,7 +14,7 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 
 
 
-public class ShopConfig implements ConfigFile {
+public class DisplayConfig implements ConfigFile {
     public final ConstrainedConfigField<Long> price = new ConstrainedConfigField<>(
         new String[] {
             "The price players are allowed to set.",

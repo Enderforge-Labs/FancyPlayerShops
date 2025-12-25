@@ -25,6 +25,7 @@ public class Hud_SquareButton_S extends Hud_SimpleButton_S {
      * Creates a new EditUi_SquareButton_S.
      */
     public Hud_SquareButton_S() {
+        super();
     }
 
 

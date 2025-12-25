@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_Count_S;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_Name_S;
+import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ProductEntry_Count_S;
+import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ProductEntry_Name_S;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -31,16 +31,19 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
+public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
     public static final float MARGIN_LEFT        = 0.05f;
     public static final float ITEM_WIDTH         = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
 
+    private final @NotNull ScrollableList parentList;
 
 
 
-    public Stash_ItemEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull int count) {
+
+    public Stash_ProductEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull int count, final @NotNull ScrollableList parentList) {
         super(context.getLevel(), null, "Collect this item", 2, new Stash_ItemEntry_S());
+        this.parentList = parentList;
         Div e;
 
 
@@ -56,14 +59,14 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
         c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
 
         // Add item name display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ItemEntry_Name_S()));
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ProductEntry_Name_S()));
         e.setSize(new Vector2f(1f, 0.5f));
         e.setAlignmentY(AlignmentY.TOP);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get());
 
 
         // Add item count display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ItemEntry_Count_S()));
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ProductEntry_Count_S()));
         e.setSize(new Vector2f(1f, 0.5f));
         e.setAlignmentY(AlignmentY.BOTTOM);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(Utils.formatAmount(count)).lightGray().get());
@@ -84,7 +87,7 @@ public class Stash_ItemEntry extends SimpleButtonElm implements Scrollable {
 
     @Override
     public void onScroll(final @NotNull Player player, final float amount) {
-        ((ScrollableList)(getParent().getParent())).onScroll(player, amount);
+        parentList.onScroll(player, amount);
     }
 }
 

@@ -14,8 +14,8 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
 
-public class Stash_ItemEntry_Name_S extends SimpleTextElmStyle {
-    public Stash_ItemEntry_Name_S() {
+public class Stash_ProductEntry_Name_S extends SimpleTextElmStyle {
+    public Stash_ProductEntry_Name_S() {
         super();
     }
 

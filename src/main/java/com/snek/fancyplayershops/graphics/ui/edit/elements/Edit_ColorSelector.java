@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.ui.core.styles.ShopCanvasBackground_S;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_ColorSelector_S;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -45,11 +45,11 @@ public class Edit_ColorSelector extends SimpleButtonElm {
 
     /**
      * Creates a new EditUi_ColorSelector.
-     * @param _shop The target shop.
+     * @param display The target product display.
      * @param hue The hue of the color theme.
      */
-    public Edit_ColorSelector(final @NotNull Shop _shop, final float _hue, final @NotNull EditCanvas _menu) {
-        super(_shop.getLevel(), null, "Change color theme", 1, new Edit_ColorSelector_S(_shop));
+    public Edit_ColorSelector(final @NotNull ProductDisplay display, final float _hue, final @NotNull EditCanvas _menu) {
+        super(display.getLevel(), null, "Change color theme", 1, new Edit_ColorSelector_S(display));
         hue = _hue;
         menu = _menu;
         getStyle(Edit_ColorSelector_S.class).setColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
@@ -63,14 +63,14 @@ public class Edit_ColorSelector extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Change theme hue
-        final Shop shop = GetShop.get(this);
-        shop.setColorThemeHue(hue);
-        ShopManager.scheduleShopSave(shop);
+        final ProductDisplay display = GetDisplay.get(this);
+        display.setColorThemeHue(hue);
+        ProductDisplayManager.scheduleDisplaySave(display);
 
 
         // Reset colored backgrounds of themed elements
         final Elm bg = menu.getBg();
-        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ShopCanvasBackground_S.class).getDefaultColor()));
+        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()));
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof Edit_ColorSelector)) {
                 if(c instanceof FancyTextElm e) {

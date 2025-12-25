@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.GetShop;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_ConfirmButton_S;
 import com.snek.frameworklib.FrameworkLib;
@@ -31,8 +31,8 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
     private boolean active = true;
 
 
-    public Transfer_ConfirmButton(final @NotNull Shop _shop, final @NotNull TransferCanvas _menu) {
-        super(_shop.getLevel(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(_shop));
+    public Transfer_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull TransferCanvas _menu) {
+        super(display.getLevel(), null, "Confirm ownership transfer", 1, new Transfer_ConfirmButton_S(display));
         menu = _menu;
     }
 
@@ -42,8 +42,8 @@ public class Transfer_ConfirmButton extends FancyButtonElm {
         super.onClick(player, click, coords);
 
         // Change owner
-        final Shop shop = GetShop.get(this);
-        shop.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
         if(active) Clickable.playSound(player);
     }
 
