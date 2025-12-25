@@ -47,17 +47,15 @@ public class Buy_AmountInputDisplay extends TextInputElm {
         try {
 
             // Try to set the new amount
-            final boolean r = menu.attemptChangeAmount(user, Integer.parseInt(s));
-            if(r) updateDisplayedText();
-            return r;
+            if(menu.attemptChangeAmount(user, Integer.parseInt(s))) updateDisplayedText();
+            return true;
 
         } catch(NumberFormatException e) {
             try {
 
                 // Try to set the new amount
-                final boolean r = menu.attemptChangeAmount(user, Float.parseFloat(s));
-                if(r) updateDisplayedText();
-                return r;
+                if(menu.attemptChangeAmount(user, Float.parseFloat(s))) updateDisplayedText();
+                return true;
 
             } catch(NumberFormatException e2) {
                 return false;
