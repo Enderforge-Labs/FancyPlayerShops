@@ -30,6 +30,6 @@ public class Details_OwnerHead_S extends ItemElmStyle {
 
     @Override
     public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(DetailsCanvas.HEAD_SIZE).scaleZ(Z_SCALE).rotY((float)Math.PI);
+        return super.getDefaultTransform().scale(DetailsCanvas.HEAD_SIZE).scaleZ(Z_SCALE);
     }
 }
