@@ -154,16 +154,24 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         }
 
 
+        // Add color selector container
+        final float cslHeight = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
+        final Div csl = bg.addChild(new Div());
+        csl.setSize(new Vector2f(COLOR_SELECTOR_W, cslHeight));
+        csl.setAlignmentX(AlignmentX.RIGHT);
+        csl.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
+
         // Add color selectors
         final Float[] hues = Configs.getDisplay().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
-            final float h = (1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE) / hues.length;
-            e = bg.addChild(new Edit_ColorSelector(display, hues[i], this));
-            e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
-            e.setAlignmentX(AlignmentX.RIGHT);
-            e.setPosY(1f - FancyPlayerShops.LINE_H - h * (i + 1));
+            final float h = 1f / hues.length;
+            e = csl.addChild(new Edit_ColorSelector(display, hues[i], this));
+            e.setSize(new Vector2f(1, h));
+            e.setPosY(h * i * cslHeight);
         }
     }
+
+
 
 
     public @NotNull Component recalculateTitle() {
