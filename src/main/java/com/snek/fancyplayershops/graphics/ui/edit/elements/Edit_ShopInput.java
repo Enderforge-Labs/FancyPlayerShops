@@ -74,17 +74,15 @@ public class Edit_ShopInput extends TextInputElm {
         final char c = s.charAt(0);
         if(c == '.' || c == ' ' || c == ',') {
             player.displayClientMessage(new Txt("Shop names can't start with \"" + c + "\"!").red().bold().get(), true);
-            return false;
         }
         else if(Character.isDigit(c)) {
             player.displayClientMessage(new Txt("Shop names can't start with a number!").red().bold().get(), true);
-            return false;
         }
         else {
             final ProductDisplay display = GetDisplay.get(this);
             display.changeShop(s, player);
-            return true;
         }
+        return true;
     }
 
 
