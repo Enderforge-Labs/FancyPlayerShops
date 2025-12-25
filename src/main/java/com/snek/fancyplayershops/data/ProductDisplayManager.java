@@ -169,14 +169,16 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     // Rotation names
     private static final String[] ROTATION_NAMES = new String[] {
-        "North",
-        "Northwest",
-        "West",
-        "Southwest",
+        //! By default, items face south, so all the names are shifted by 180°
+        //! (0 = north = item faces south = "South")
         "South",
         "Southeast",
         "East",
         "Northeast",
+        "North",
+        "Northwest",
+        "West",
+        "Southwest",
     };
 
 
