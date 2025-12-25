@@ -58,8 +58,8 @@ public class Edit_ShopInput extends TextInputElm {
     public void updateDisplay(final @Nullable Component textOverride) {
         final ProductDisplay display = GetDisplay.get(this);
         getStyle(ProductDisplay_TextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
-            .cat("Shop: ")
-            .cat(display.getShop().getDisplayName())
+            .cat(new Txt("Shop: ").lightGray())
+            .cat(new Txt(display.getShop().getDisplayName()).white())
             //TODO convert component to string before using it
         .white().get());
         flushStyle();
