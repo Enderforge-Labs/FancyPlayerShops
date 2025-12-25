@@ -8,6 +8,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
@@ -66,7 +67,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
         this.elmSize = elmSize;
 
         // Add element container
-        elmContainer = addChild(new Div());
+        elmContainer = addChild(new HoverableDiv());
         elmContainer.setSize(new Vector2f(1 - tmp_bar_width, 1));
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 

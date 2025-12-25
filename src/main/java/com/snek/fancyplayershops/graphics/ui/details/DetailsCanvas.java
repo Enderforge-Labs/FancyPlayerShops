@@ -20,6 +20,7 @@ import net.minecraft.world.item.Items;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -78,7 +79,7 @@ public class DetailsCanvas extends ProductCanvasBase {
 
 
         // Add details display
-        final Div details = bg.addChild(new Div());
+        final Div details = bg.addChild(new HoverableDiv());
         {
             // Add details display names
             e = details.addChild(new Details_Names(display));

@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 
 
 
@@ -156,7 +157,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
         // Add color selector container
         final float cslHeight = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
-        final Div csl = bg.addChild(new Div());
+        final Div csl = bg.addChild(new HoverableDiv());
         csl.setSize(new Vector2f(COLOR_SELECTOR_W, cslHeight));
         csl.setAlignmentX(AlignmentX.RIGHT);
         csl.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);

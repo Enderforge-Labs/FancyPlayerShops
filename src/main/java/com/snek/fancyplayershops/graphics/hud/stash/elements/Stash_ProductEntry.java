@@ -16,6 +16,7 @@ import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -54,7 +55,7 @@ public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
         e.setAlignmentY(AlignmentY.CENTER);
 
 
-        final Div c = addChild(new Div());
+        final Div c = addChild(new HoverableDiv());
         c.setSize(new Vector2f(1f - ITEM_WIDTH - ITEM_NAME_SPACING - MARGIN_LEFT, 0.8f));
         c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
 
