@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
@@ -9,11 +8,9 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 
@@ -47,22 +44,22 @@ public class Edit_ShopInput extends TextInputElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        updateDisplay(null);
+        updateDisplayedText();
         super.spawn(pos, animate);
     }
 
 
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
+
+
+    public void updateDisplayedText() {
         final ProductDisplay display = GetDisplay.get(this);
-        getStyle(ProductDisplay_TextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+        setDisplayedText(new Txt()
             .cat(new Txt("Shop: ").lightGray())
             .cat(new Txt(display.getShop().getDisplayName()).white())
             //TODO convert component to string before using it
-        .white().get());
-        flushStyle();
+        .get());
     }
 
 
@@ -81,6 +78,7 @@ public class Edit_ShopInput extends TextInputElm {
         else {
             final ProductDisplay display = GetDisplay.get(this);
             display.changeShop(s, player);
+            updateDisplayedText();
         }
         return true;
     }

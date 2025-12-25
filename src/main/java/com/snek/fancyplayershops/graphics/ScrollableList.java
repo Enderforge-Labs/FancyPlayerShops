@@ -8,11 +8,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 import com.snek.frameworklib.data_types.containers.Flagged;

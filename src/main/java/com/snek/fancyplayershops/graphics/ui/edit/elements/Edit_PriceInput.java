@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
@@ -9,12 +8,9 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
-
-import net.minecraft.network.chat.Component;
 
 
 
@@ -44,19 +40,17 @@ public class Edit_PriceInput extends TextInputElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        updateDisplay(null);
+        updateDisplayedText();
         super.spawn(pos, animate);
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
+    public void updateDisplayedText() {
         final ProductDisplay display = GetDisplay.get(this);
-        getStyle(ProductDisplay_TextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+        setDisplayedText(new Txt()
             .cat(new Txt("Price: ").lightGray())
             .cat(new Txt(Utils.formatPrice(display.getPrice())).white())
         .get());
-        flushStyle();
     }
 
 
@@ -66,7 +60,7 @@ public class Edit_PriceInput extends TextInputElm {
 
             // Try to set the new price and update the display if it's valid
             final ProductDisplay display = GetDisplay.get(this);
-            if(display.setPrice(Double.parseDouble(s))) updateDisplay(null);
+            if(display.setPrice(Double.parseDouble(s))) updateDisplayedText();
             return true;
 
         } catch(NumberFormatException e) {

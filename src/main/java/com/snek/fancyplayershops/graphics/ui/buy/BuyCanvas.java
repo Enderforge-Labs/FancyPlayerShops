@@ -152,9 +152,11 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public void changeAmount(final int newAmount) {
         amount = newAmount;
         priceDisplay.updateDisplay();
-        amountInputDisplay.updateDisplay(null);
+        amountInputDisplay.updateDisplayedText();
+        amountInputDisplay.forceTextUpdate();
+
         confirmButton.updateColor(display.getStock() >= amount);
-        confirmButton.updateDisplay(null);
+        confirmButton.updateDisplay();
     }
 
 
@@ -179,7 +181,9 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
     @Override
     public void onStockChange() {
-        amountInputDisplay.updateDisplay(null);
+        amountInputDisplay.updateDisplayedText();
+        amountInputDisplay.forceTextUpdate();
+
         confirmButton.updateColor(display.getStock() >= amount);
         buy1xButton.updateColor(display.getStock() >= 1);
         buy1sButton.updateColor(display.getStock() >= 64);

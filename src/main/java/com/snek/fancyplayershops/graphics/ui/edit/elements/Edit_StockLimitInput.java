@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
@@ -9,12 +8,9 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
-
-import net.minecraft.network.chat.Component;
 
 
 
@@ -43,19 +39,19 @@ public class Edit_StockLimitInput extends TextInputElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        updateDisplayedText();
         super.spawn(pos, animate);
-        updateDisplay(null);
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
+
+
+    public void updateDisplayedText() {
         final ProductDisplay display = GetDisplay.get(this);
-        getStyle(ProductDisplay_TextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+        setDisplayedText(new Txt()
             .cat(new Txt("Stock limit: ").lightGray())
             .cat(new Txt(Utils.formatAmount(display.getMaxStock(), true, true)).white())
         .get());
-        flushStyle();
     }
 
 
@@ -67,14 +63,14 @@ public class Edit_StockLimitInput extends TextInputElm {
         try {
 
             // Try to set the new stock limit, update the display if it's valid
-            if(display.setStockLimit(Integer.parseInt(s))) updateDisplay(null);
+            if(display.setStockLimit(Integer.parseInt(s))) updateDisplayedText();
             return true;
 
         } catch(NumberFormatException e) {
             try {
 
                 // Try to set the new stock limit, update the display if it's valid
-                if(display.setStockLimit(Float.parseFloat(s))) updateDisplay(null);
+                if(display.setStockLimit(Float.parseFloat(s))) updateDisplayedText();
                 return true;
 
             } catch(NumberFormatException e2) {
