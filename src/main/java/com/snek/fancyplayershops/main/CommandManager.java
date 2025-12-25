@@ -38,7 +38,7 @@ public abstract class CommandManager {
 
     public static final Component HELP_TEXT_SHOP = new Txt()
         .cat(new Txt("/shop").bold().italic().lightGray())
-        .cat(new Txt(": Open the main menu of player shops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
+        .cat(new Txt(": Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
     .get();
 
         public static final Component HELP_TEXT_SHOP_OP = new Txt()
@@ -53,17 +53,17 @@ public abstract class CommandManager {
 
             public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
                 .cat(new Txt("/shop bulk fill <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().lightGray())
+                .cat(new Txt(": Create randomized product displays in every block within a specified radius. This is meant for testing.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
                 .cat(new Txt("/shop bulk purge <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().lightGray())
+                .cat(new Txt(": Remove all product displays within a specified radius. The stock and balance of deleted displays are automatically sent to their owner.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
                 .cat(new Txt("/shop bulk displace <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().lightGray())
+                .cat(new Txt(": Converts all product displays within a specified radius into their item form. The display snapshots are automatically sent to their owner.").italic().lightGray())
             .get();
         ;
 

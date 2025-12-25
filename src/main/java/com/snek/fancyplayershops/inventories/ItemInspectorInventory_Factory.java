@@ -15,24 +15,24 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 
 public class ItemInspectorInventory_Factory implements MenuProvider {
-    private final @NotNull ProductDisplay shop;
+    private final @NotNull ProductDisplay display;
 
 
-    public ItemInspectorInventory_Factory(final @NotNull ProductDisplay _shop) {
-        shop = _shop;
+    public ItemInspectorInventory_Factory(final @NotNull ProductDisplay display) {
+        this.display = display;
     }
 
 
     @Override
     public Component getDisplayName() {
         return new Txt()
-            .cat(new Txt(shop.getStandaloneName()).gray().noBold().noItalic())
+            .cat(new Txt(display.getStandaloneName()).gray().noBold().noItalic())
         .get();
     }
 
 
     @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
-        return new ItemInspectorInventory(syncId, playerInventory, shop);
+        return new ItemInspectorInventory(syncId, playerInventory, display);
     }
 }
