@@ -11,7 +11,6 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ShopInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_NbtButton;
@@ -58,19 +57,16 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
-    public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
-    public static final float NBT_RESTOCK_BUTTONS_Y = 0.3f;
-    public static final float NBT_RESTOCK_BUTTONS_WIDTH = 0.35f;
+    public static final float ROTATE_BUTTON_Y             = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
+    public static final float ROTATE_BUTTON_CENTER_SHIFT  = 0.2f;
+    public static final float NBT_RESTOCK_BUTTONS_Y       = 0.3f;
+    public static final float NBT_RESTOCK_BUTTONS_WIDTH   = 0.35f;
     public static final float NBT_RESTOCK_BUTTONS_SPACING = 0.025f;
-
-    public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = ProductItemDisplayElm.EDIT_MOVE.y;
-
-    public static final float COLOR_SELECTOR_W        = 0.2f;
-    public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
-
-    public static final float INPUT_W = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
+    public static final float ITEM_SELECTOR_SIZE          = 0.25f;
+    public static final float ITEM_SELECTOR_Y             = ProductItemDisplayElm.EDIT_MOVE.y;
+    public static final float COLOR_SELECTOR_W            = 0.1f;
+    public static final float COLOR_SELECTOR_HIDDEN_W     = 0.1f;
+    public static final float INPUT_W                     = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
 
 
     // Functionalities
