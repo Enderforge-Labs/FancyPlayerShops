@@ -111,17 +111,17 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
         // Add quick buy buttons
-        e = bg.addChild(new Buy_1xButton(display));
+        e = bg.addChild(new Buy_1xButton(display, this));
         e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
         e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1xButton = (Buy_1xButton)e;
 
-        e = bg.addChild(new Buy_1sButton(display));
+        e = bg.addChild(new Buy_1sButton(display, this));
         e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
         e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1sButton = (Buy_1sButton)e;
 
-        e = bg.addChild(new Buy_1iButton(display));
+        e = bg.addChild(new Buy_1iButton(display, this));
         e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
         e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
         buy1iButton = (Buy_1iButton)e;

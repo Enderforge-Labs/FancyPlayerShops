@@ -29,9 +29,12 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Buy_1sButton extends ProductDIsplay_ToggleableButton {
+    private final @NotNull BuyCanvas menu;
 
-    public Buy_1sButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Buy 64 items", 1);
+
+    public Buy_1sButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
+        super(display, "Buy one stack now", "Set amount to 1 stack", 1);
+        menu = _menu;
 
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.CoinPile));
@@ -56,15 +59,25 @@ public class Buy_1sButton extends ProductDIsplay_ToggleableButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-
-        // Play sound and buy items
         final ProductDisplay display = GetDisplay.get(this);
-        if(isActive()) Clickable.playSound(player);
-        if(player.getUUID().equals(display.getOwnerUuid())) {
-            display.retrieveItem(player, 64, true);
+        final int amount = display.getItem().getMaxStackSize();
+
+
+        // Play sound and buy items (left click)
+        if(click == ClickAction.PRIMARY) {
+            if(isActive()) Clickable.playSound(player);
+            if(player.getUUID().equals(display.getOwnerUuid())) {
+                display.retrieveItem(player, amount, true);
+            }
+            else {
+                display.buyItem(player, amount, true);
+            }
         }
+
+
+        // Change amount (right click)
         else {
-            display.buyItem(player, 64, true);
+            menu.changeAmount(amount);
         }
     }
 }

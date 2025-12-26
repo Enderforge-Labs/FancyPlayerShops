@@ -29,9 +29,12 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
+    private final @NotNull BuyCanvas menu;
 
-    public Buy_1iButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Fill inventory", 1);
+
+    public Buy_1iButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
+        super(display, "Buy a full inventory now", "Set amount to a full inventory", 1);
+        menu = _menu;
 
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.MinecraftChest));
@@ -57,15 +60,25 @@ public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         final ProductDisplay display = GetDisplay.get(this);
-        final int amount = Math.min(display.getStock(), 64 * 9 * 4);
-        final int oldStock = display.getStock();
+        final int amount = Math.min(display.getStock(), display.getItem().getMaxStackSize() * 9 * 4);
 
-        if(player.getUUID().equals(display.getOwnerUuid())) {
-            display.retrieveItem(player, amount, false);
+
+        // Play sound and buy items (left click)
+        if(click == ClickAction.PRIMARY) {
+            final int oldStock = display.getStock();
+            if(player.getUUID().equals(display.getOwnerUuid())) {
+                display.retrieveItem(player, amount, false);
+            }
+            else {
+                display.buyItem(player, amount, false);
+            }
+            if(display.getStock() != oldStock) Clickable.playSound(player);
         }
+
+
+        // Change amount (right click)
         else {
-            display.buyItem(player, amount, false);
+            menu.changeAmount(amount);
         }
-        if(display.getStock() != oldStock) Clickable.playSound(player);
     }
 }
