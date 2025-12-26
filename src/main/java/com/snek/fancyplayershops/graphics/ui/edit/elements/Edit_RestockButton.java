@@ -18,12 +18,14 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-//FIXME change product display settings from click callback
+//FIXME restock from click callback
 
-public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
+//FIXME change color when stock changes. grey if full. only check inventory on click
 
-    public Edit_NbtButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Toggle NBT filter", 1);
+public class Edit_RestockButton extends ProductDIsplay_ToggleableButton {
+
+    public Edit_RestockButton(final @NotNull ProductDisplay display) {
+        super(display, null, "Restock display", 1);
     }
 
 
@@ -35,7 +37,7 @@ public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
 
 
     public void updateDisplay() {
-        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt("NBT").get());
+        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt("Restock").get());
         flushStyle();
     }
 
@@ -45,6 +47,6 @@ public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        updateColor(!isActive());
+        // updateColor();
     }
 }

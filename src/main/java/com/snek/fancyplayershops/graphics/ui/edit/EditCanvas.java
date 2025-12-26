@@ -14,8 +14,10 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ShopInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_NbtButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PriceInput;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RestockButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StatsButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
@@ -54,6 +56,9 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
     // Layout
     public static final float ROTATE_BUTTON_Y            = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
     public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
+    public static final float NBT_RESTOCK_BUTTONS_Y = 0.3f;
+    public static final float NBT_RESTOCK_BUTTONS_WIDTH = 0.35f;
+    public static final float NBT_RESTOCK_BUTTONS_SPACING = 0.025f;
 
     public static final float ITEM_SELECTOR_SIZE         = 0.25f;
     public static final float ITEM_SELECTOR_Y            = ProductItemDisplayElm.EDIT_MOVE.y;
@@ -122,6 +127,16 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
+
+
+        // Add restock & nbt filter buttons
+        e = bg.addChild(new Edit_NbtButton(display));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, FancyPlayerShops.LINE_H));
+        e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / -2, NBT_RESTOCK_BUTTONS_Y));
+
+        e = bg.addChild(new Edit_RestockButton(display));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, FancyPlayerShops.LINE_H));
+        e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / 2, NBT_RESTOCK_BUTTONS_Y));
 
 
         // Add shop input
