@@ -135,9 +135,8 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         inputIndicator = (DualInputIndicator)e;
 
 
-        // Set default amount and force button color update
+        // Set default amount
         changeAmount(1);
-        onStockChange();
     }
 
 

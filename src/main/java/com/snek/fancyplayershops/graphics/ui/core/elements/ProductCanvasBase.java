@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBack_S;
@@ -16,6 +17,8 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+//TODO use the same base canvas system for the HUDs.
+//TODO add callbacks for stash changes / external display and shop removals / balance changes
 
 
 /**
@@ -40,7 +43,18 @@ public abstract class ProductCanvasBase extends UiCanvas {
     }
 
 
+    /**
+     * Callback method called any time the current stock changes.
+     * This is also called once right before the canvas spawns into the level.
+     */
     public abstract void onStockChange();
+
+
+    @Override
+    public void spawn(@NotNull Vector3d pos, boolean animate) {
+        onStockChange();
+        super.spawn(pos, animate);
+    }
 
 
     @Override
