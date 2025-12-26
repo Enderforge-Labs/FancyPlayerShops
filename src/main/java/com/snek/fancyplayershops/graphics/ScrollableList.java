@@ -68,7 +68,7 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
         // Add element container
         elmContainer = addChild(new HoverableDiv());
-        elmContainer.setSize(new Vector2f(1 - tmp_bar_width, 1));
+        elmContainer.setSize(new Vector2f(1, 1));
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
         // Add bar track
