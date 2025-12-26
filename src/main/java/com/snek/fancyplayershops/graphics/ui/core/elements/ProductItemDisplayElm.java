@@ -22,8 +22,8 @@ import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.scheduler.LoopTaskHandler;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Display.ItemDisplay;
@@ -52,7 +52,7 @@ public class ProductItemDisplayElm extends ItemElm {
     public static final float NAME_DISPLAY_WIDTH = 0.9f;
 
     // Task handlers. Used to cancel animations and other visual changes
-    private @Nullable TaskHandler loopHandler = null;
+    private @Nullable LoopTaskHandler loopAnimationHandler = null;
 
 
     // The Y translation applied by the spawning animation
@@ -195,8 +195,8 @@ public class ProductItemDisplayElm extends ItemElm {
      * Starts the loop animation.
      */
     public void startLoopAnimation() {
-        if(loopHandler != null) loopHandler.cancel();
-        loopHandler = Scheduler.loop(0, loopAnimation.getTotalDuration(), () -> applyAnimation(loopAnimation));
+        if(loopAnimationHandler != null) loopAnimationHandler.cancel();
+        loopAnimationHandler = Scheduler.loop(0, loopAnimation.getTotalDuration(), () -> applyAnimation(loopAnimation));
     }
 
 
@@ -218,7 +218,7 @@ public class ProductItemDisplayElm extends ItemElm {
      * Stops the loop animation.
      */
     public void stopLoopAnimation() {
-        if(loopHandler != null) loopHandler.cancel();
+        if(loopAnimationHandler != null) loopAnimationHandler.cancel();
     }
 
 
