@@ -20,12 +20,10 @@ import net.minecraft.world.inventory.ClickAction;
 
 //FIXME restock from click callback
 
-//FIXME change color when stock changes. grey if full. only check inventory on click
-
 public class Edit_RestockButton extends ProductDIsplay_ToggleableButton {
 
     public Edit_RestockButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Restock display", 1);
+        super(display, null, "Manually restock display", 1);
     }
 
 
@@ -47,6 +45,6 @@ public class Edit_RestockButton extends ProductDIsplay_ToggleableButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        // updateColor();
+        //TODO restock
     }
 }

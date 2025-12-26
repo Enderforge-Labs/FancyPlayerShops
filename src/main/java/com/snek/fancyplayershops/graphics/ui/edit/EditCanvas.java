@@ -19,7 +19,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButto
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PriceInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RestockButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StatsButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ChangeShopButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
@@ -51,6 +51,10 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
     private final @NotNull TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
     public @NotNull SimpleTextElm getTitle() { return title; }
+
+
+    // Dynamic elements
+    private final @NotNull Edit_RestockButton restockButton;
 
 
     // Layout
@@ -137,13 +141,14 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         e = bg.addChild(new Edit_RestockButton(display));
         e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, FancyPlayerShops.LINE_H));
         e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / 2, NBT_RESTOCK_BUTTONS_Y));
+        restockButton = (Edit_RestockButton)e;
 
 
-        // Add shop input
-        e = bg.addChild(new Edit_ShopInput(display));
-        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + FancyPlayerShops.LINE_H * 1f);
-        e.setAlignmentX(AlignmentX.CENTER);
+        // // Add shop input
+        // e = bg.addChild(new Edit_ShopInput(display));
+        // e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
+        // e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + FancyPlayerShops.LINE_H * 1f);
+        // e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add input indicators
@@ -157,7 +162,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         // Add buttons
         final Div[] buttons = new Div[] {
             new Edit_MoveButton(display),
-            new Edit_StatsButton(display),
+            new Edit_ChangeShopButton(display),
             new Edit_OpenBuyMenuButton(display),
             new Edit_TransferButton(display),
             new Edit_DeleteButton(display),
@@ -212,7 +217,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
     @Override
     public void onStockChange() {
-        // Empty
+        restockButton.updateColor(display.getMaxStock() < display.getStock());
     }
 
 

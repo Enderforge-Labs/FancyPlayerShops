@@ -12,7 +12,6 @@ import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -24,12 +23,12 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_StatsButton extends SimpleButtonElm {
-    public Edit_StatsButton(final @NotNull ProductDisplay display) {
-        super(display.getLevel(), null, "Open statistics", 1,  new Edit_SquareButton_S(display));
+public class Edit_ChangeShopButton extends SimpleButtonElm {
+    public Edit_ChangeShopButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Change shop", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.GraphUp));
+        final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.ArrowsPointingLeftRight));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
@@ -40,6 +39,6 @@ public class Edit_StatsButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        player.displayClientMessage(new Txt("Product stats coming soon!").get(), false);
+        //TODO open canvas
     }
 }
