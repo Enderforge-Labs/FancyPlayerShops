@@ -41,7 +41,7 @@ import net.minecraft.world.entity.player.Player;
  * A UI that allows the user of a shop to buy items from it.
  */
 public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
-    public static final float CONFIRM_BUTTON_Y = 0.25f;
+    public static final float CONFIRM_BUTTON_Y = 0.3f;
     public static final float CONFIRM_BUTTON_W = 0.5f;
     public static final float BUY_BUTTONS_SPACING = 0.025f;
     public static final float BUY_BUTTONS_W = (CONFIRM_BUTTON_W - BUY_BUTTONS_SPACING * 2f) / 3f;
