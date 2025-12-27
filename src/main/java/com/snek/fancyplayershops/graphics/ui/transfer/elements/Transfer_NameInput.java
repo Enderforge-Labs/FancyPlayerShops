@@ -6,8 +6,8 @@ import org.joml.Vector3d;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
-import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_Input_S;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
@@ -37,7 +37,7 @@ public class Transfer_NameInput extends TextInputElm {
             display.getLevel(),
             null, "Choose new owner",
             new Txt("Send the name of the new owner in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
-            new Transfer_Input_S(display)
+            new ProductDisplay_TextInput_S(display)
         );
         menu = _menu;
     }

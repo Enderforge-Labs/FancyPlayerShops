@@ -12,12 +12,10 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
-import com.snek.fancyplayershops.graphics.ui.transfer.styles.Transfer_Input_S;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
@@ -87,7 +85,6 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
         e.setSize(new Vector2f(1, FancyPlayerShops.LINE_H));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
-        ((Elm)e).getStyle(Transfer_Input_S.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add confirm button
