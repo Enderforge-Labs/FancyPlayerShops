@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.transfer.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
@@ -39,6 +40,13 @@ public class Transfer_NameInput extends TextInputElm {
             new Transfer_Input_S(display)
         );
         menu = _menu;
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        updateDisplayedText();
+        super.spawn(pos, animate);
     }
 
 
