@@ -25,6 +25,9 @@
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
 - add shop setting to send everything to the stash, skipping the inventory
   - replace hand written inventory checks and calls with a generic give() method that checks for this option and also adds extra items to the stash
+- add shop setting to change element max render distance
+  - This must be PER-PLAYER.
+  - meaning the server needs to override the entity's max render distance when sending packets to each player based on their personal settings
 
 - add an undo command & chat message click command to undo item buy actions
   - add undos for product display deletion too. moving a product display doesn't need undos

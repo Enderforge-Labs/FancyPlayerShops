@@ -120,7 +120,7 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
 
 
     /**
-     * Checks if the new shop can be found or created and updates the stored shop name value. //FIXME check if the shop still exists when clicking (check isDeleted)
+     * Checks if the new shop can be found or created and updates the stored shop name value.
      * <p> Updates the confirmation button's color and sends feedback messages to the player.
      * @param s The display name of the new shop.
      */
