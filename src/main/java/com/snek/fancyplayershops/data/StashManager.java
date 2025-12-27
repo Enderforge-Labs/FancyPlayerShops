@@ -31,6 +31,7 @@ import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -168,10 +169,22 @@ public final class StashManager extends UtilityClassBase {
             final JsonArray jsonEntries = new JsonArray();
             for(final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
                 final JsonObject jsonEntry = new JsonObject();
-                jsonEntry.addProperty("uuid", entry.getKey().toString());
-                jsonEntry.addProperty("item", MinecraftUtils.serializeItem(entry.getValue().item));
-                jsonEntry.addProperty("count", entry.getValue().getCount());
-                jsonEntries.add(jsonEntry);
+
+                final @Nullable String serializedItem = MinecraftUtils.serializeItem(entry.getValue().item);
+                if(serializedItem == null) {
+                    final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(pair.getFirst());
+                    if(player != null) player.displayClientMessage(new Txt(
+                        "An item in your stash couldn't be saved. You should contact a server admin. " +
+                        "Item ID: " + BuiltInRegistries.ITEM.getKey(entry.getValue().item.getItem()).toString() + ", " +
+                        "Count: " + entry.getValue().item.getCount()
+                    ).red().get(), false);
+                }
+                else {
+                    jsonEntry.addProperty("uuid", entry.getKey().toString());
+                    jsonEntry.addProperty("item", serializedItem);
+                    jsonEntry.addProperty("count", entry.getValue().getCount());
+                    jsonEntries.add(jsonEntry);
+                }
             }
 
 
@@ -217,9 +230,14 @@ public final class StashManager extends UtilityClassBase {
                 // Load the data into the runtime map
                 for(final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
-                    stashItem(playerUUID,
+                    @Nullable ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
+                    if(deserializedItem == null) {
+                        final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
+                        if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded.").red().get(), false);
+                    }
+                    else stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),
-                        MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString()),
+                        deserializedItem,
                         jsonEntry.get("count").getAsInt()
                     );
                 }
