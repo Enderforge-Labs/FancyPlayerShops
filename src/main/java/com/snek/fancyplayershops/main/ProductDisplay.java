@@ -234,6 +234,10 @@ public class ProductDisplay {
 
 
         item = MinecraftUtils.deserializeItem(serializedItem);
+        if(item == null) {
+            FancyPlayerShops.LOGGER.error("Couldn't deserialize item \"{}\"", serializedItem, new RuntimeException());
+            return false;
+        }
         try {
             calcDeserializedLevelId();
         } catch(final RuntimeException e) {
@@ -278,6 +282,7 @@ public class ProductDisplay {
         colorThemeHue = Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()];
 
         // Calculate serialized data and display identifier
+        //!No need to check that serializedItem != null, the item being serialized is the default AIR item
         serializedItem = MinecraftUtils.serializeItem(item);
         calcSerializedLevelId();
         cacheDisplayIdentifier();
@@ -331,7 +336,14 @@ public class ProductDisplay {
         serializedItem = _serializedIitem;
 
         // Get members from serialized data and calculate display identifier
-        item = MinecraftUtils.deserializeItem(serializedItem);
+        final @Nullable ItemStack _item = MinecraftUtils.deserializeItem(serializedItem);
+        if(_item == null) {
+            FancyPlayerShops.LOGGER.error("Item of product display coudln't be deserialized. Using AIR as fallback", new RuntimeException());
+            item = Items.AIR.getDefaultInstance();
+        }
+        else {
+            item = _item;
+        }
         cacheDisplayIdentifier();
         cacheDisplayKey();
         shopUUID = _shopUUID;
@@ -785,17 +797,26 @@ public class ProductDisplay {
 
     /**
      * Changes the item sold by this display and saves it to its file.
-     * @param _item the new item.
+     * @param newItem the new item.
      */
-    public void changeItem(final @NotNull ItemStack _item) {
+    public void changeItem(final @NotNull ItemStack newItem) {
 
         // Stash the current items
         stash();
 
-        // Change item value, then serialize it and save the display
-        item = _item.copyWithCount(1);
-        serializedItem = MinecraftUtils.serializeItem(item);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        // Serialize the item value, then change it and save the display. Send a message to the player if the item cannot be serialized
+        final @Nullable String _serializedItem = MinecraftUtils.serializeItem(newItem);
+        if(_serializedItem == null) {
+            if(user != null) {
+                FancyPlayerShops.LOGGER.error("New item of product display coudln't be serialized", new RuntimeException());
+                user.displayClientMessage(new Txt("An error occurred while trying to change the display's item: This item cannot be serialized").get(), false);
+            }
+        }
+        else {
+            item = newItem.copyWithCount(1);
+            serializedItem = _serializedItem;
+            ProductDisplayManager.scheduleDisplaySave(this);
+        }
     }
 
 
