@@ -144,6 +144,8 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
                 newOwnerUUID = newOwner.getUUID();
                 confirmButton.updateColor(true);
             }
+            //FIXME this is prob broken
+            //FIXME try to set a valid username, then set an invalid one. it's supposed to default to "not specified". it probably won't
         }
     }
 

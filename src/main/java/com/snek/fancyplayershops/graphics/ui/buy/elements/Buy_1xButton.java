@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;

@@ -2,21 +2,18 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TogglableButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

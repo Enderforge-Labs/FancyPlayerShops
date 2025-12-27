@@ -124,16 +124,20 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
         final char c = s.charAt(0);
         if(c == '.' || c == ' ' || c == ',') {
             player.displayClientMessage(new Txt("Shop names can't start with \"" + c + "\"!").red().bold().get(), true);
-            confirmButton.updateColor(false);
+            failNameValidation();
         }
         else if(Character.isDigit(c)) {
             player.displayClientMessage(new Txt("Shop names can't start with a number!").red().bold().get(), true);
-            confirmButton.updateColor(false);
+            failNameValidation();
         }
         else {
             newShopName = s;
             confirmButton.updateColor(true);
         }
+    }
+    private void failNameValidation() {
+        newShopName = display.getShop().getDisplayName();
+        confirmButton.updateColor(false);
     }
 
 
