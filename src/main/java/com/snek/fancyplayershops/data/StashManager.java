@@ -31,7 +31,6 @@ import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -175,7 +174,7 @@ public final class StashManager extends UtilityClassBase {
                     final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(pair.getFirst());
                     if(player != null) player.displayClientMessage(new Txt(
                         "An item in your stash couldn't be saved. You should contact a server admin. " +
-                        "Item ID: " + BuiltInRegistries.ITEM.getKey(entry.getValue().item.getItem()).toString() + ", " +
+                        "Item ID: " + MinecraftUtils.getItemId(entry.getValue().item) + ", " +
                         "Count: " + entry.getValue().item.getCount()
                     ).red().get(), false);
                 }

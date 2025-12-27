@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_IdDisplay_S;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -52,7 +53,7 @@ public class Inspect_IdDisplay extends SimpleTextElm {
             .cat(new Txt("ID: ").lightGray())
             .cat(new Txt(
                 display.getItem().is(Items.AIR) ? "-" :
-                BuiltInRegistries.ITEM.getKey(display.getItem().getItem()).getPath()
+                MinecraftUtils.getItemKey(display.getItem()).getPath()
             ).white())
         .get());
 

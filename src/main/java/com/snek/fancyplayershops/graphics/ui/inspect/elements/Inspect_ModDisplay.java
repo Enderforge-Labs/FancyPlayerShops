@@ -8,9 +8,9 @@ import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_ModDisplay_S
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 
 
@@ -52,7 +52,7 @@ public class Inspect_ModDisplay extends SimpleTextElm {
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(
                 display.getItem().is(Items.AIR) ? "-" :
-                BuiltInRegistries.ITEM.getKey(display.getItem().getItem()).getNamespace()
+                MinecraftUtils.getItemKey(display.getItem()).getNamespace()
             ).white())
         .get());
 
