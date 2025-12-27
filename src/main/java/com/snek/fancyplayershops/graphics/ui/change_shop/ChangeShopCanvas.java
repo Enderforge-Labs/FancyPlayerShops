@@ -112,6 +112,11 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
     }
 
 
+//TODO add the current shop to this canvas
+
+
+//TODO add go back button
+//TODO also automatically go back once the player clicks the confirmation button
 
 
     /**
