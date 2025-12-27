@@ -33,26 +33,13 @@ public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
 
 
     public Buy_1iButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
-        super(display, "Buy a full inventory now", "Set amount to a full inventory", 1);
+        super(display, "Buy a full inventory now", "Set amount to a full inventory", 1, "");
         menu = _menu;
 
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.MinecraftChest));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE, FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-    }
-
-
-    @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-    public void updateDisplay() {
-        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt().get());
-        flushStyle();
     }
 
 

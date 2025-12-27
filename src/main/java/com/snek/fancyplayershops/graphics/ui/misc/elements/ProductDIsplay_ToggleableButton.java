@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.Txt;
 
 
 
@@ -36,9 +37,13 @@ public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
         final @NotNull ProductDisplay display,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
-        final int clickCooldown
+        final int clickCooldown,
+        final @Nullable String textOverride
     ) {
         this(display, lmbActionName, rmbActionName, clickCooldown, new ProductDisplay_TogglableButton_S(display));
+        if(textOverride != null) {
+           getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt(textOverride).get());
+        }
     }
 
 

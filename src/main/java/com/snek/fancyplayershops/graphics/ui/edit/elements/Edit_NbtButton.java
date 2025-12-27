@@ -23,20 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
 
     public Edit_NbtButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Toggle NBT filter", 1);
-    }
-
-
-    @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-    public void updateDisplay() {
-        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt("NBT").get());
-        flushStyle();
+        super(display, null, "Toggle NBT filter", 1, "NBT");
     }
 
 

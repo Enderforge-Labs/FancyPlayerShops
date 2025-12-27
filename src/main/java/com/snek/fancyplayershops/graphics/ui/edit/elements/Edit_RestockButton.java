@@ -23,20 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 public class Edit_RestockButton extends ProductDIsplay_ToggleableButton {
 
     public Edit_RestockButton(final @NotNull ProductDisplay display) {
-        super(display, null, "Manually restock display", 1);
-    }
-
-
-    @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-    public void updateDisplay() {
-        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt("Restock").get());
-        flushStyle();
+        super(display, null, "Manually restock display", 1, "Restock");
     }
 
 

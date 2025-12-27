@@ -9,14 +9,12 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TogglableButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -33,26 +31,13 @@ public class Buy_1xButton extends ProductDIsplay_ToggleableButton {
 
 
     public Buy_1xButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
-        super(display, "Buy 1 item now", "Set amount to 1", 1);
+        super(display, "Buy 1 item now", "Set amount to 1", 1, "");
         menu = _menu;
 
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.Coin));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE, FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-    }
-
-
-    @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-    public void updateDisplay() {
-        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt().get());
-        flushStyle();
     }
 
 
