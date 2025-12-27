@@ -5,6 +5,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.graphics.ui.change_shop.ChangeShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -39,6 +41,9 @@ public class Edit_ChangeShopButton extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-        //TODO open canvas
+
+        // Change canvas
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeCanvas(new ChangeShopCanvas(display));
     }
 }

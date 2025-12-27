@@ -140,13 +140,6 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         restockButton = (Edit_RestockButton)e;
 
 
-        // // Add shop input
-        // e = bg.addChild(new Edit_ShopInput(display));
-        // e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        // e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + FancyPlayerShops.LINE_H * 1f);
-        // e.setAlignmentX(AlignmentX.CENTER);
-
-
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
