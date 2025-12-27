@@ -26,7 +26,7 @@ public class Transfer_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
 
     public Transfer_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull TransferCanvas _menu) {
-        super(display, null, "Confirm ownership transfer", 1);
+        super(display, null, "Confirm ownership transfer", 1, "Confirm");
         menu = _menu;
     }
 

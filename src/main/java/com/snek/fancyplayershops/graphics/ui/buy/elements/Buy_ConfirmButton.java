@@ -2,12 +2,15 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TogglableButton_S;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +29,15 @@ public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
 
     public Buy_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
-        super(display, null, "Confirm bulk buy", 10, "Buy " + Utils.formatAmountShort(_menu.getAmount()));
+        super(display, null, "Confirm bulk buy", 10, "");
         menu = _menu;
+    }
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        updateDisplay();
+        super.spawn(pos, animate);
     }
 
 
@@ -45,4 +55,11 @@ public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
             display.buyItem(player, menu.getAmount(), true);
         }
     }
+
+
+    public void updateDisplay() {
+        getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt("Buy " + Utils.formatAmountShort(menu.getAmount())).white().get());
+        flushStyle();
+    }
+
 }
