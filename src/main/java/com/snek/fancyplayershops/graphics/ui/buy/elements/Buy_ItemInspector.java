@@ -54,7 +54,7 @@ public class Buy_ItemInspector extends SimpleButtonElm {
         super.onClick(player, click, coords);
 
         // Save amount cache
-        if(backButton instanceof Buy_Sub_BackButton b) {
+        if(backButton instanceof final Buy_Sub_BackButton b) {
             b.setAmountCache(((BuyCanvas)canvas).getAmount());
         }
 

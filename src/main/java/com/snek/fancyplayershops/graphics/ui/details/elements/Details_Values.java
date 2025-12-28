@@ -35,7 +35,7 @@ public class Details_Values extends SimpleTextElm {
      * Creates a new DetailsUiDisplayValues.
      * @param display The target product display.
      */
-    public Details_Values(@NotNull ProductDisplay display) {
+    public Details_Values(@NotNull final ProductDisplay display) {
         super(display.getLevel());
         ownerName = MinecraftUtils.getOfflinePlayerName(display.getOwnerUuid());
     }

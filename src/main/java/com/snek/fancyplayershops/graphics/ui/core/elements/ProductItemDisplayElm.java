@@ -80,7 +80,7 @@ public class ProductItemDisplayElm extends ItemElm {
             .rotY(LOOP_ROT / 2)
         )
     );
-    private @NotNull Animation unfocusAnimation;
+    private final @NotNull Animation unfocusAnimation;
 
 
     // Setup loop animation

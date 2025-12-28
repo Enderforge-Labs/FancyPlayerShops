@@ -26,14 +26,14 @@ public class Shop {
     public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
     // Shop data
-    private @NotNull UUID   ownerUuid;
-    private @NotNull UUID   uuid;
+    private final @NotNull UUID   ownerUuid;
+    private final @NotNull UUID   uuid;
     private @NotNull String displayName;
     //TODO add icon - 8x pixel art
 
     // Runtime data
     private long balance;
-    private @NotNull List<@NotNull ProductDisplay> displays;
+    private final @NotNull List<@NotNull ProductDisplay> displays;
     //TODO ^ this prob doesn't get updated correctly when loading in.
     //TODO shops are saved when they load into the world, not all at once when the server starts. though im not sure
     //TODO check this

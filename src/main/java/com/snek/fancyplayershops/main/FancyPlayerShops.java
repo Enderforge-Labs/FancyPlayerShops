@@ -198,7 +198,7 @@ public class FancyPlayerShops implements ModInitializer {
         if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ProductDisplayManager.DISPLAY_ITEM_NBT_KEY)) {
 
             // If the level is a server level and the player is allowed to modify the level
-            if(level instanceof ServerLevel serverLevel && player.getAbilities().mayBuild) {
+            if(level instanceof final ServerLevel serverLevel && player.getAbilities().mayBuild) {
                 int newCount = stack.getCount();
 
                 // Calculate block position and create the new display if no other display is already there. Send a feedback message to the player

@@ -229,7 +229,7 @@ public final class StashManager extends UtilityClassBase {
                 // Load the data into the runtime map
                 for(final JsonElement _jsonEntry : jsonEntries.asList()) {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
-                    @Nullable ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
+                    final @NotNull ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
                     if(deserializedItem == null) {
                         final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
                         if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded.").red().get(), false);

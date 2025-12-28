@@ -66,14 +66,14 @@ public class Edit_StockLimitInput extends TextInputElm {
             if(display.setStockLimit(Integer.parseInt(s))) updateDisplayedText();
             return true;
 
-        } catch(NumberFormatException e) {
+        } catch(final NumberFormatException e) {
             try {
 
                 // Try to set the new stock limit, update the display if it's valid
                 if(display.setStockLimit(Float.parseFloat(s))) updateDisplayedText();
                 return true;
 
-            } catch(NumberFormatException e2) {
+            } catch(final NumberFormatException e2) {
                 return false;
             }
         }

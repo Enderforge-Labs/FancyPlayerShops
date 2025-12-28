@@ -18,17 +18,17 @@ import net.minecraft.world.item.ItemStack;
  */
 public class ReadOnlySlot extends Slot {
 
-    public ReadOnlySlot(Container container, int index, int x, int y) {
+    public ReadOnlySlot(final Container container, final int index, final int x, final int y) {
         super(container, index, x, y);
     }
 
     @Override
-    public boolean mayPlace(ItemStack stack) {
+    public boolean mayPlace(final ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean mayPickup(Player player) {
+    public boolean mayPickup(final Player player) {
         return false;
     }
 }

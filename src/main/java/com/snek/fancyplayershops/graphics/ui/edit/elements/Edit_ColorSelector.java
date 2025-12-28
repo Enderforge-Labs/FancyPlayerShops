@@ -73,10 +73,10 @@ public class Edit_ColorSelector extends SimpleButtonElm {
         bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()));
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof Edit_ColorSelector)) {
-                if(c instanceof FancyTextElm e) {
+                if(c instanceof final FancyTextElm e) {
                     e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()));
                 }
-                else if(c instanceof PanelElm e) {
+                else if(c instanceof final PanelElm e) {
                     e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()));
                 }
             }

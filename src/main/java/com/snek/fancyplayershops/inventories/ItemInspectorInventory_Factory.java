@@ -32,7 +32,7 @@ public class ItemInspectorInventory_Factory implements MenuProvider {
 
 
     @Override
-    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
+    public AbstractContainerMenu createMenu(final int syncId, final Inventory playerInventory, final Player player) {
         return new ItemInspectorInventory(syncId, playerInventory, display);
     }
 }

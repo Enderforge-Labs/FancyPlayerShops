@@ -25,7 +25,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
     private final @NotNull BuyCanvas menu;
-    private boolean active = true;
+    private final boolean active = true;
 
 
     public Buy_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {

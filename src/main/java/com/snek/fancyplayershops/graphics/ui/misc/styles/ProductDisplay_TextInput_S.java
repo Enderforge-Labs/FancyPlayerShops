@@ -1,17 +1,10 @@
 package com.snek.fancyplayershops.graphics.ui.misc.styles;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
-import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
-import com.snek.frameworklib.utils.Easings;
 
 
 

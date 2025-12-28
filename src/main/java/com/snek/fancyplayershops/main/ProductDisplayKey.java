@@ -28,10 +28,10 @@ public class ProductDisplayKey {
 
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(this == obj) return true;
         if(obj == null) return false;
-        if(obj instanceof ProductDisplayKey other) {
+        if(obj instanceof final ProductDisplayKey other) {
             return
                 x == other.x &&
                 y == other.y &&

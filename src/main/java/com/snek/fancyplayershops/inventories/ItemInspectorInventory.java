@@ -54,13 +54,13 @@ public class ItemInspectorInventory extends AbstractContainerMenu {
 
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(final Player player) {
         return true;
     }
 
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMoveStack(final Player player, final int slot) {
         // Disable shift click interactions
         return ItemStack.EMPTY;
     }

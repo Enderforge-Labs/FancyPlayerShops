@@ -23,7 +23,7 @@ public class ProductDisplay_TogglableButton_S extends ProductDisplay_FancyButton
     public static final @NotNull Vector3i BASE_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
     public static final @NotNull Vector3i BASE_COLOR_INACTIVE = Utils.toBW(BASE_COLOR);
 
-    private @NotNull Vector3i defaultBgColor = new Vector3i(BASE_COLOR);
+    private final @NotNull Vector3i defaultBgColor = new Vector3i(BASE_COLOR);
     public void setDefaultColor(final @NotNull Vector3i _color) { defaultBgColor.set(_color); }
 
 

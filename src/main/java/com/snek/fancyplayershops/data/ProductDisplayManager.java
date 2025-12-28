@@ -487,9 +487,9 @@ public final class ProductDisplayManager extends UtilityClassBase {
     public static int fill(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
 
         // Get a list of all registered items
-        Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
+        final Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
         final List<Item> itemList = new ArrayList<>();
-        for(Item item : itemRegistry) {
+        for(final Item item : itemRegistry) {
             itemList.add(item);
         }
 

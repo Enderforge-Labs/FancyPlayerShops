@@ -30,13 +30,13 @@ public class Inspect_ModDisplay extends SimpleTextElm {
      * Creates a new InspectUi_ModDisplay.
      * @param display The target product display.
      */
-    public Inspect_ModDisplay(@NotNull ProductDisplay display) {
+    public Inspect_ModDisplay(@NotNull final ProductDisplay display) {
         super(display.getLevel(), new Inspect_ModDisplay_S());
     }
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         updateDisplay();
         super.spawn(pos, animate);
     }

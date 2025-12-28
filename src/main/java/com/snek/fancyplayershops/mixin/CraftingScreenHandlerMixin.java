@@ -63,7 +63,7 @@ public abstract class CraftingScreenHandlerMixin {
 
 
         // Check if the grid matches the recipe
-        if(recipe instanceof ShapedRecipe r) {
+        if(recipe instanceof final ShapedRecipe r) {
             if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
 
                 // Replace the output item

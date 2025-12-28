@@ -63,7 +63,7 @@ public class Edit_PriceInput extends TextInputElm {
             if(display.setPrice(Double.parseDouble(s))) updateDisplayedText();
             return true;
 
-        } catch(NumberFormatException e) {
+        } catch(final NumberFormatException e) {
             return false;
         }
     }

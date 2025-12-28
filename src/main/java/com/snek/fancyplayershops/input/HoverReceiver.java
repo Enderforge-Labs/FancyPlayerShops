@@ -279,10 +279,10 @@ public abstract class HoverReceiver {
         final ChunkPos playerChunk = new ChunkPos(playerPos);
         boolean check = ProductDisplayManager.chunkHasDisplays(playerChunk);
         final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
-        int minX = playerPos.getX() - reach;
-        int maxX = playerPos.getX() + reach;
-        int minZ = playerPos.getZ() - reach;
-        int maxZ = playerPos.getZ() + reach;
+        final int minX = playerPos.getX() - reach;
+        final int maxX = playerPos.getX() + reach;
+        final int minZ = playerPos.getZ() - reach;
+        final int maxZ = playerPos.getZ() + reach;
         if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
         if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
         if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }

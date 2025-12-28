@@ -51,7 +51,7 @@ public abstract class ProductCanvasBase extends UiCanvas {
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         onStockChange();
         super.spawn(pos, animate);
     }

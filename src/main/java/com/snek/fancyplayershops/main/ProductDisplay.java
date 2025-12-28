@@ -80,7 +80,7 @@ public class ProductDisplay {
     private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
     private           @NotNull  String                levelId;                          // The Identifier of the level
     private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           @NotNull  BlockPos              pos;                              // The position of the display
+    private           final @NotNull  BlockPos              pos;                              // The position of the display
     private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
     private transient @NotNull  ProductDisplayKey     displayKeyCache;                  // The cached display key
     private           @NotNull  UUID                  shopUUID;                         // The UUID of the shop this display has been assigned to
@@ -949,7 +949,7 @@ public class ProductDisplay {
         if(!getLevel().hasChunk(chunkPos.x, chunkPos.z)) return;                // Skip pull if inventory is unloaded
         final BlockEntity be = level.getBlockEntity(targetPos);                 // Get block entity data
         if(be == null) return;                                                  // Skip pull if inventory is not a block entity
-        if(be instanceof BaseContainerBlockEntity cbe && cbe.isEmpty()) return; // Skip pull if inventory is empty
+        if(be instanceof final BaseContainerBlockEntity cbe && cbe.isEmpty()) return; // Skip pull if inventory is empty
 
 
         // Calculate side and find the storage block
@@ -959,7 +959,7 @@ public class ProductDisplay {
 
         // If a storage block is found, loop through its slots
         if(storage != null) {
-            for(StorageView<ItemVariant> slot : storage) {
+            for(final StorageView<ItemVariant> slot : storage) {
                 final ItemVariant variant = slot.getResource();
                 final long amount = slot.getAmount();
 
