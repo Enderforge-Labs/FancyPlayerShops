@@ -11,7 +11,6 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 
 

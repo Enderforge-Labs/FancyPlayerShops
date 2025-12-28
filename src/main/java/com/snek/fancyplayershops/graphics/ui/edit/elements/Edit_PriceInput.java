@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -33,7 +33,7 @@ public class Edit_PriceInput extends TextInputElm {
             display.getLevel(),
             null, "Change price",
             new Txt("Send the new price in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
-            new Edit_Input_S(display)
+            new ProductDisplay_TextInput_S(display)
         );
     }
 
