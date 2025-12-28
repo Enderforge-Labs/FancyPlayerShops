@@ -188,15 +188,15 @@ public class ProductItemDisplayElm extends ItemElm {
         updateDisplay();
 
         // Start animations
-        applyAnimation(focusAnimation);                         // Height change
-        startLoopAnimation();                                   // Loop movement
+        applyAnimation(focusAnimation, false, true); // Height change
+        startLoopAnimation();                        // Loop movement
     }
     /**
      * Starts the loop animation.
      */
     public void startLoopAnimation() {
         if(loopAnimationHandler != null) loopAnimationHandler.cancel();
-        loopAnimationHandler = Scheduler.loop(0, loopAnimation.getTotalDuration(), () -> applyAnimation(loopAnimation));
+        loopAnimationHandler = Scheduler.loop(0, loopAnimation.getTotalDuration(), () -> applyAnimation(loopAnimation, false, true));
     }
 
 
@@ -209,7 +209,7 @@ public class ProductItemDisplayElm extends ItemElm {
 
         // Stop loop animation and start unfocus animation
         stopLoopAnimation();
-        applyAnimation(unfocusAnimation);
+        applyAnimation(unfocusAnimation, false, true);
 
         // Show custom name after animations end
         Scheduler.schedule(unfocusAnimation.getTotalDuration(), this::updateDisplay);
@@ -234,7 +234,7 @@ public class ProductItemDisplayElm extends ItemElm {
         activeCanvas.updateItemDisplayRot(0, activeCanvas.getContext().getRotation(), true);
 
         // Local position shift
-        applyAnimation(enterEditAnimation);
+        applyAnimation(enterEditAnimation, false, true);
     }
 
 

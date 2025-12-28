@@ -79,11 +79,13 @@ public class Edit_RotateButton extends SimpleButtonElm {
         // Animate the item display to show the new rotation
         display.getItemDisplay().applyAnimation(
             new Transition(2, Easings.expOut)
-            .additiveTransform(new Transform().rotY(-rotation))
+            .additiveTransform(new Transform().rotY(-rotation)),
+            false, true
         );
         display.getItemDisplay().applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().rotY(rotation))
+            .additiveTransform(new Transform().rotY(rotation)),
+            false, true
         );
 
         Clickable.playSound(player);
@@ -106,7 +108,8 @@ public class Edit_RotateButton extends SimpleButtonElm {
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
                 .rotY(canvas.getContext().getRotation() / 8f * (float)(2f * Math.PI))
-            )
+            ),
+            false, true
         );
     }
 

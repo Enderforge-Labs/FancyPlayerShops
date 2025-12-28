@@ -70,14 +70,14 @@ public class Edit_ColorSelector extends SimpleButtonElm {
 
         // Reset colored backgrounds of themed elements
         final Elm bg = menu.getBg();
-        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()));
+        bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()), false, true);
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof Edit_ColorSelector)) {
                 if(c instanceof final FancyTextElm e) {
-                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()));
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()), false, true);
                 }
                 else if(c instanceof final PanelElm e) {
-                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()));
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()), false, true);
                 }
             }
         }
