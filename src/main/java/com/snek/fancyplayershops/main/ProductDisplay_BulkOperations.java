@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +10,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -49,7 +51,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
+                final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
                 if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
                     .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin.").red())
                 .get(), false);
@@ -81,7 +83,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
 
                 // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
+                final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
                 if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
                     .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin.").red())
                 .get(), false);
@@ -115,10 +117,6 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             itemList.add(item);
         }
 
-        // TODO generate randomly named groups
-        // TODO test store A0B5
-        // TODO test store 120B etc
-
 
         int r = 0;
         for(float i = pos.x - radius; i < pos.x + radius; ++i) {
@@ -126,13 +124,21 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
-                        final ProductDisplay display = new ProductDisplay(level, blockPos, owner);
-                        display.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
-                        display.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
-                        display.setStockLimit(1_000_000f);
-                        display.changeStock(Math.abs(rnd.nextInt() % 1_000_000));
-                        display.setPrice(Math.abs(rnd.nextLong() % 100_000));
-                        display.addBalance(Math.abs(rnd.nextLong() % 100));
+                        final ProductDisplay display = new ProductDisplay(
+                            /* ownerUUID   */ owner.getUUID(),
+                            /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
+                            /* price       */ Math.abs(rnd.nextLong() % 100_000),
+                            /* stock       */ Math.abs(rnd.nextInt() % 1_000_000),
+                            /* maxStock    */ 1_000_000,
+                            /* rotation    */ (float)Math.toRadians(45f) * (rnd.nextInt() % 8),
+                            /* hue         */ 0,
+                            /* balance     */ Math.abs(rnd.nextLong() % 100),
+                            /* nbtFilter   */ true,
+                            /* position    */ new BlockPos((int)pos.x, (int)pos.y, (int)pos.z),
+                            /* level       */ level,
+                            /* item        */ itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance(),
+                            /* storedItems */ new HashMap<>()
+                        );
                         display.invalidateItemDisplay();
                         ++r;
                     }

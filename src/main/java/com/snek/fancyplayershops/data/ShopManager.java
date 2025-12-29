@@ -165,7 +165,7 @@ public class ShopManager extends UtilityClassBase {
         // Find shop
         final List<Shop> shops = shopsList.get(display.getOwnerUuid());
         if(shops != null) {
-            final Optional<Shop> shopOpt = shops.stream().filter(e -> e.getUuid().equals(display.getShopUUID())).findFirst();
+            final Optional<Shop> shopOpt = shops.stream().filter(e -> e.getUuid().equals(display.getShop().getUuid())).findFirst();
 
             // Remove display from the shop if it exists
             if(shopOpt.isPresent()) {

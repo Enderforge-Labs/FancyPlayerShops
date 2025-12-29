@@ -32,6 +32,7 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
+import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -101,7 +102,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @return The path to the directory of the save file of {@code display}.
      */
     public static @NotNull Path calcDisplayFileDirPath(final @NotNull ProductDisplay display) {
-        return calcDisplayDirPath().resolve(display.getLevelId());
+        return calcDisplayDirPath().resolve(MinecraftUtils.getLevelId(display.getLevel()));
     }
 
     /**
@@ -274,7 +275,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", display.getLevelId(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", MinecraftUtils.getLevelId(display.getLevel()), e);
             }
 
 
@@ -287,7 +288,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             // Create this display's config file if absent, then save the JSON in it
             final File displayStorageFile = calcDisplayFilePath(display).toFile();
             try (final Writer writer = new FileWriter(displayStorageFile)) {
-                new Gson().toJson(display, writer);
+                writer.write(ProductDisplay_Serializer.serialize(display));
             } catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the product display \"{}\"", display.getIdentifierNoLevel(), e);
             }
@@ -298,6 +299,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
         }
         scheduledForSaving = new ArrayList<>();
     }
+
+
+
+
 
 
 
@@ -319,18 +324,21 @@ public final class ProductDisplayManager extends UtilityClassBase {
             if(displayStorageFiles != null) for(final File displayStorageFile : displayStorageFiles) {
 
                 // Read file and deserialize the data
-                ProductDisplay retrievedDisplay = null;
-                try (final Reader reader = new FileReader(displayStorageFile)) {
-                    retrievedDisplay = new Gson().fromJson(reader, ProductDisplay.class);
+                try {
+                    final String serializedDisplay = Files.readString(displayStorageFile.toPath());
+                    final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay);
+
+                    // Recalculate transient members and update display maps
+                    // if(retrievedDisplay != null) {
+                        // if(retrievedDisplay.reinitTransient()) { //TODO REMOVE
+                    registerDisplay(retrievedDisplay);
+                        // } //TODO REMOVE
+                    // }
+                // try(final Reader reader = new FileReader(displayStorageFile)) {
+                    // // retrievedDisplay = new Gson().fromJson(reader, ProductDisplay.class);
+                    // retrievedDisplay = ProductDisplay_Serializer.deserialize(reader.)
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the product display \"{}\"", displayStorageFile.getName(), e);
-                }
-
-                // Recalculate transient members and update display maps
-                if(retrievedDisplay != null) {
-                    if(retrievedDisplay.reinitTransient()) {
-                        registerDisplay(retrievedDisplay);
-                    }
                 }
             }
         }
@@ -451,18 +459,12 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
         // Create and add display data NBT
         final CompoundTag data = new CompoundTag();
+        data.putUUID  ("owner", display.getOwnerUuid());
+        data.putString("owner_name", MinecraftUtils.getPlayerByUUID(display.getOwnerUuid()).getName().getString());
+        data.putString("product_display_data", ProductDisplay_Serializer.serialize(display));
 
-        data.putUUID  ("owner",      display.getOwnerUuid      ());
-        data.putUUID  ("shop_uuid",  display.getShopUUID       ());
-        data.putLong  ("price",      display.getPrice          ());
-        data.putInt   ("stock",      display.getStock          ());
-        data.putInt   ("max_stock",  display.getMaxStock       ());
-        data.putFloat ("rotation",   display.getDefaultRotation());
-        data.putFloat ("hue",        display.getColorThemeHue  ());
-        data.putLong  ("balance",    display.getBalance        ());
-        data.putString("item",       display.getSerializedItem ());
-        data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid()).getName().getString());
 
+        // Create description
         final Component[] extraDescriptionLines = {
             new Txt()
                 .cat(new Txt("This ").white().noItalic())
@@ -477,7 +479,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
                 .cat(new Txt(" its stock and settings once placed.").white().noItalic())
             .get(),
             new Txt().get(),
-            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(MinecraftUtils.getPlayerByUUID(display.getOwnerUuid()).getName().getString())).white().noItalic().get(),
             new Txt().cat(new Txt("Shop: "       ).lightGray().noItalic()).cat(new Txt(display.getShop().getDisplayName())).white().noItalic().get(), //TODO use colored text for display names? maybe? idk. might have to change the shop data too
             new Txt().cat(new Txt("Balance: "    ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice(display.getBalance()))).gold().noItalic().get(),
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (display.getPrice   ()             ))).white().noItalic().get(),

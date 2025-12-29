@@ -85,7 +85,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
 
-    public static @Nullable ProductDisplay deserialize(final @NotNull String json) {
+    public static @NotNull ProductDisplay deserialize(final @NotNull String json) {
         final Gson gson = new Gson();
         final Map<String, Object> data = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
 
@@ -103,6 +103,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
         // Extract position data
+        @SuppressWarnings("unchecked")
         final List<Number> positionList = (List<Number>)data.get("position");
         final int x = positionList.get(0).intValue();
         final int y = positionList.get(1).intValue();
@@ -119,6 +120,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
         // Deserialize stored items
+        @SuppressWarnings("unchecked")
         final List<Map<String, Object>> storedItemsList = (List<Map<String, Object>>)data.get("stored_items");
         final Map<UUID, Pair<ItemStack, Integer>> storedItems = new HashMap<>();
 

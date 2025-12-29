@@ -118,7 +118,7 @@ public final class StashManager extends UtilityClassBase {
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
 
         // Send feedback to player
-        final @Nullable Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
+        final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
         if(player != null) {
             player.displayClientMessage(new Txt()
                 .cat(Utils.formatAmount(count, false, true) + "x ")
@@ -171,7 +171,7 @@ public final class StashManager extends UtilityClassBase {
 
                 final @Nullable String serializedItem = MinecraftUtils.serializeItem(entry.getValue().item);
                 if(serializedItem == null) {
-                    final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(pair.getFirst());
+                    final Player player = MinecraftUtils.getPlayerByUUID(pair.getFirst());
                     if(player != null) player.displayClientMessage(new Txt(
                         "An item in your stash couldn't be saved. You should contact a server admin. " +
                         "Item ID: " + MinecraftUtils.getItemId(entry.getValue().item) + ", " +
@@ -231,7 +231,7 @@ public final class StashManager extends UtilityClassBase {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
                     final @NotNull ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
                     if(deserializedItem == null) {
-                        final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
+                        final Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
                         if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded.").red().get(), false);
                     }
                     else stashItem(playerUUID,

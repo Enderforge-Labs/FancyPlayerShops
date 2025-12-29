@@ -23,6 +23,7 @@ import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -131,7 +132,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
         // If it is, try to set the new owner and update the display in case of success
         else {
-            final Player newOwner = FrameworkLib.getServer().getPlayerList().getPlayerByName(s);
+            final Player newOwner = MinecraftUtils.getPlayerByName(s);
             if(newOwner == null) {
                 display.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
                 confirmButton.updateColor(false);

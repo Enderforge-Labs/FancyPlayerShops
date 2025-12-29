@@ -958,7 +958,7 @@ public class ProductDisplay {
      *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
      */
     public void pickUp(final boolean tryInventory) {
-        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
+        final Player owner = MinecraftUtils.getPlayerByUUID(ownerUUID);
 
 
         // Create the snapshot and try to send it to the owner's inventory
@@ -1084,7 +1084,7 @@ public class ProductDisplay {
      */
     public void changeOwner(final @NotNull Player newOwner) {
         if(ownerUUID.equals(newOwner.getUUID())) return;
-        final Player oldOwner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
+        final Player oldOwner = MinecraftUtils.getPlayerByUUID(ownerUUID);
 
 
         // Send feedback to old owner

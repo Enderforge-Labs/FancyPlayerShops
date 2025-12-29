@@ -10,6 +10,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInpu
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 
@@ -56,7 +57,7 @@ public class Transfer_NameInput extends TextInputElm {
         final ProductDisplay display = GetDisplay.get(this);
         setDisplayedText((
             !menu.getNewOwnerUUID().equals(display.getOwnerUuid()) ?
-            new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()).getName().getString()) :
+            new Txt(MinecraftUtils.getPlayerByUUID(menu.getNewOwnerUUID()).getName().getString()) :
             new Txt("[Not specified]").lightGray().italic()
         ).white().get());
     }

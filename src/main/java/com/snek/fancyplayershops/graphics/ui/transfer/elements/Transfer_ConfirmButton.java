@@ -9,6 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_Toggle
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -36,7 +37,7 @@ public class Transfer_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
         // Change owner
         final ProductDisplay display = GetDisplay.get(this);
-        display.changeOwner(FrameworkLib.getServer().getPlayerList().getPlayer(menu.getNewOwnerUUID()));
+        display.changeOwner(MinecraftUtils.getPlayerByUUID(menu.getNewOwnerUUID()));
         if(isActive()) Clickable.playSound(player);
     }
 }
