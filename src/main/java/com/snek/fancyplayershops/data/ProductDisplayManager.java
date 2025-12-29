@@ -326,7 +326,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
                 // Read file and deserialize the data
                 try {
                     final String serializedDisplay = Files.readString(displayStorageFile.toPath());
-                    final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay);
+                    final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay, null, null);
 
                     // Recalculate transient members and update display maps
                     // if(retrievedDisplay != null) {
@@ -485,6 +485,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (display.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getMaxStock(), false, true))).white().noItalic().get(),
+            new Txt().cat(new Txt("NBT filter:  ").lightGray().noItalic()).cat(new Txt(display.getNbtFilter() ? "on" : "off")).white().noItalic().get(),
             new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ROTATION_NAMES[(int)Math.round(display.getDefaultRotation() / Math.PI * 4) % 8])).white().noItalic().get(),
             new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(display.getColorThemeHue(), Edit_ColorSelector.S, Edit_ColorSelector.V))).noItalic().get(),
             new Txt().get()

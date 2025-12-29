@@ -85,7 +85,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
 
-    public static @NotNull ProductDisplay deserialize(final @NotNull String json) {
+    public static @NotNull ProductDisplay deserialize(final @NotNull String json, final @Nullable ServerLevel serverLevelOverride, final @Nullable BlockPos blockPosOverride) {
         final Gson gson = new Gson();
         final Map<String, Object> data = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
 
@@ -102,15 +102,27 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         final boolean nbtFilter = (Boolean)data.get("nbt_filter");
 
 
-        // Extract position data
-        @SuppressWarnings("unchecked")
-        final List<Number> positionList = (List<Number>)data.get("position");
-        final int x = positionList.get(0).intValue();
-        final int y = positionList.get(1).intValue();
-        final int z = positionList.get(2).intValue();
-        final BlockPos position = new BlockPos(x, y, z);
-        final String levelId = (String)data.get("level_id");
-        final ServerLevel level = MinecraftUtils.findLevelFromId(levelId);
+        // Extract level and position data
+        ServerLevel level;
+        BlockPos position;
+        if(serverLevelOverride != null) {
+            level = serverLevelOverride;
+        }
+        else {
+            final String levelId = (String)data.get("level_id");
+            level = MinecraftUtils.findLevelFromId(levelId);
+        }
+        if(blockPosOverride != null) {
+            position = new BlockPos(blockPosOverride);
+        }
+        else {
+            @SuppressWarnings("unchecked")
+            final List<Number> positionList = (List<Number>)data.get("position");
+            final int x = positionList.get(0).intValue();
+            final int y = positionList.get(1).intValue();
+            final int z = positionList.get(2).intValue();
+            position = new BlockPos(x, y, z);
+        }
 
 
         // Deserialize item

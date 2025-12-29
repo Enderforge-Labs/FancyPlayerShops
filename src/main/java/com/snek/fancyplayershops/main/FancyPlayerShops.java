@@ -211,7 +211,7 @@ public class FancyPlayerShops implements ModInitializer {
                     if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            ProductDisplay_Serializer.deserialize(data.getString("product_display_data"));
+                            ProductDisplay_Serializer.deserialize(data.getString("product_display_data"), serverLevel, blockPos);
                             player.displayClientMessage(new Txt("Display snapshot restored.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
