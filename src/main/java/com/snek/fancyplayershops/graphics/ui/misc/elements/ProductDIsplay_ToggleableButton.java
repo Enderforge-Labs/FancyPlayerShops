@@ -47,8 +47,6 @@ public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
     }
 
 
-
-
     public void updateColor(final boolean _active) {
         if(active != _active) {
             active = _active;
