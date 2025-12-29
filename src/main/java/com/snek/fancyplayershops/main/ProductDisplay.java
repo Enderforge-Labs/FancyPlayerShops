@@ -100,6 +100,7 @@ public class ProductDisplay {
 
 
     // Stored items
+    private transient @NotNull UUID itemUUID; // The calculated UUID of the item. Used to compare items to store or remove
     private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems = new HashMap<>();
     public @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> getStoredItems() { return storedItems; }
 
@@ -229,6 +230,9 @@ public class ProductDisplay {
         this.item = item;
         this.storedItems = storedItems;
 
+        // Calculate item UUID
+        itemUUID = MinecraftUtils.calcItemUUID(item);
+
         // Register this display in the shop and store the shop instance locally
         this.shop = ShopManager.registerDisplay(this, shopUUID);
 
@@ -306,7 +310,6 @@ public class ProductDisplay {
      * @reutrn the item display.
      */
     private @NotNull ProductItemDisplayElm findItemDisplayEntityIfNeeded() {
-
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
             itemDisplay = new ProductItemDisplayElm(this);
             itemDisplay.spawn(calcDisplayPos(), true);
@@ -684,6 +687,8 @@ public class ProductDisplay {
 
     /**
      * Changes the item sold by this display and saves it to its file.
+     * <p>
+     * This method also stashes any item that isn't compatible with the new data.
      * @param newItem the new item.
      */
     public void changeItem(final @NotNull ItemStack newItem) {
@@ -700,16 +705,6 @@ public class ProductDisplay {
 
 
     /**
-     * Forcefully changes the stock of this display.
-     */
-    public void changeStock(final int stock) {
-        this.stock = stock;
-    }
-
-
-
-
-    /**
      * Sends the items stored in this display to the owner's stash.
      * <p> This method also sets the display's stock to 0.
      */
@@ -717,11 +712,9 @@ public class ProductDisplay {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
 
-
         // Stash items
         StashManager.stashItem(ownerUUID, item, stock);
         StashManager.scheduleStashSave(ownerUUID);
-
 
         // Reset stock
         stock = 0;
@@ -786,7 +779,10 @@ public class ProductDisplay {
 
     /**
      * Checks if the provided item stack can be held by this display.
+     * <p>
      * This takes into account the current NBT filter setting.
+     * <p>
+     * Items are compared using their calculated UUID.
      * @param itemStack The item stack to check.
      * @return True if the item can be held by this display, false otherwise.
      */
