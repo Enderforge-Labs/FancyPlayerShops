@@ -82,7 +82,6 @@ public final class ProductDisplayManager extends UtilityClassBase {
         .toFormatter(Locale.ENGLISH)
     ;
     private ProductDisplayManager() {}
-    private static final Random rnd = new Random();
 
 
 
@@ -125,6 +124,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
     private static final @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   displaysByCoords   = new HashMap<>();
     private static final @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> displaysByOwner = new HashMap<>();
     private static boolean dataLoaded = false;
+    public static @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   getDisplaysByCoords() { return displaysByCoords; }
+    public static @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
     public static @Nullable Set<@NotNull ProductDisplay> getDisplaysOfPlayer(final @NotNull Player player) { return displaysByOwner.get(player.getUUID()); }
 
     // Async update list
@@ -405,119 +406,6 @@ public final class ProductDisplayManager extends UtilityClassBase {
             updateCycleLimiter.renewCooldown(Configs.getPerf().pull_cycle_frequency.getValue());
             updateIndex = 0;
         }
-    }
-
-
-
-
-
-
-
-    /**
-     * Removes all displays near the specified position, sending all the items to their owner's stash.
-     * @param level The target level.
-     * @param pos The center of the purge radius.
-     * @param radius The maximum distance from pos displays can have in order to be purged.
-     * @return The number of displays that were removed.
-     */
-    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
-        int r = 0;
-        final List<ProductDisplay> displays = new ArrayList<>(displaysByCoords.values());
-        for(final ProductDisplay display : displays) {
-            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-
-                // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin.").red())
-                .get(), false);
-
-                // Stash, claim and delete the display, then increase the purged displays counter
-                display.stash();
-                display.claimBalance();
-                display.delete();
-                ++r;
-            }
-        }
-        return r;
-    }
-
-
-
-
-    /**
-     * Forces the owners to pick up any of their displays near the specified position, sending the snapshots to their stashes.
-     * @param level The target level.
-     * @param pos The center of the radius.
-     * @param radius The maximum distance from pos displays can have in order to be picked up.
-     * @return The number of displays that were picked up.
-     */
-    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
-        int r = 0;
-        final List<ProductDisplay> displays = new ArrayList<>(displaysByCoords.values());
-        for(final ProductDisplay display : displays) {
-            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-
-                // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin.").red())
-                .get(), false);
-
-                // Stash and delete the display, then increase the displaced displays counter
-                display.pickUp(false);
-                display.delete();
-                ++r;
-            }
-        }
-        return r;
-    }
-
-
-
-
-    /**
-     * Fill an area around the specified position with display.
-     * @param level The target level.
-     * @param pos The center of the fill area.
-     * @param radius The maximum distance to reach on each cardinal direction.
-     * @param owner The owner of the newly created displays.
-     * @return The number of displays that were created.
-     */
-    public static int fill(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
-
-        // Get a list of all registered items
-        final Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
-        final List<Item> itemList = new ArrayList<>();
-        for(final Item item : itemRegistry) {
-            itemList.add(item);
-        }
-
-        // TODO generate randomly named groups
-        // TODO test store A0B5
-        // TODO test store 120B etc
-
-
-        int r = 0;
-        for(float i = pos.x - radius; i < pos.x + radius; ++i) {
-            for(float j = pos.y - radius; j < pos.y + radius; ++j) {
-                for(float k = pos.z - radius; k < pos.z + radius; ++k) {
-                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
-                    if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
-                        final ProductDisplay display = new ProductDisplay(level, blockPos, owner);
-                        display.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
-                        display.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
-                        display.setStockLimit(1_000_000f);
-                        display.changeStock(Math.abs(rnd.nextInt() % 1_000_000));
-                        display.setPrice(Math.abs(rnd.nextLong() % 100_000));
-                        display.addBalance(Math.abs(rnd.nextLong() % 100));
-                        display.invalidateItemDisplay();
-                        ++r;
-                    }
-                }
-            }
-        }
-        return r;
     }
 
 
