@@ -46,7 +46,7 @@
 - add options in the edit menu to not check for NBTs.
   - this will let the product display pull any item with matching ID
   - add a disclaimer for buyers or an icon that clearly shows you can get any NBT
-    - "..., which might include energy, item variations, custom names, and other data. Buy at your own risk!"
+    - "..., which might include energy, item variations, upgrades, enchantments and other data. Buy at your own risk!"
 
 - cache text and fancytext value width and height.
 - update them on Text change

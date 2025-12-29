@@ -1,5 +1,9 @@
 package com.snek.fancyplayershops.main;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +27,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -80,24 +85,28 @@ public class ProductDisplay {
     private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
     private           @NotNull  String                levelId;                          // The Identifier of the level
     private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           final @NotNull  BlockPos              pos;                              // The position of the display
+    private     final @NotNull  BlockPos              pos;                              // The position of the display
     private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
     private transient @NotNull  ProductDisplayKey     displayKeyCache;                  // The cached display key
-    private           @NotNull  UUID                  shopUUID;                         // The UUID of the shop this display has been assigned to
-    private transient @NotNull  Shop                  shop;                  // The shop this display has been assigned to
-    //TODO rename shopGroup to shop
 
 
     // Display data
-    private transient @NotNull ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
-    private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
-    private                    long      balance         = 0;                   // The balance collected by the shop since it was last claimed
-    private           @NotNull String    serializedItem;                        // The item in serialized form
-    private                    int       stock           = 0;                   // The current stock
-    private                    long      price           = 0l;                  // The configured price for each item
-    private                    int       maxStock        = 0;                   // The configured maximum stock
-    private                    float     defaultRotation = 0f;                  // The configured item rotation
-    private                    float     colorThemeHue   = 0f;                  // The configured hue of the color theme
+    private transient @NotNull  ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
+    private           @NotNull  UUID      ownerUUID;                             // The UUID of the owner
+    private                     long      balance         = 0;                   // The balance collected by the shop since it was last claimed
+    // private           @NotNull String    serializedItem;                        // The item in serialized form //TODO REMOVE
+    private                     long      price           = 0l;                  // The configured price for each item
+    private                     int       stock           = 0;                   // The current stock
+    private                     int       maxStock        = 0;                   // The configured maximum stock
+    private                     float     defaultRotation = 0f;                  // The configured item rotation
+    private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
+    private           @NotNull  UUID      shopUUID;                              // The UUID of the shop this display has been assigned to
+    private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
+    private                     boolean   nbtFilter       = true;                // The configured nbt filter setting
+
+
+    // Stored items
+    private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems = new HashMap<>();
 
 
     // Display state
@@ -116,7 +125,7 @@ public class ProductDisplay {
     public @NotNull  String                 getLevelId          () { return levelId;                         }
     public @NotNull  BlockPos               getPos              () { return pos;                             }
     public @NotNull  ItemStack              getItem             () { return item;                            }
-    public @NotNull  String                 getSerializedItem   () { return serializedItem;                  }
+    // public @NotNull  String                 getSerializedItem   () { return serializedItem;                  } //TODO REMOVE
     public @NotNull  ProductItemDisplayElm  getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
     public           long                   getPrice            () { return price;                           }
@@ -134,7 +143,8 @@ public class ProductDisplay {
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
     public @NotNull  UUID                   getShopUUID         () { return shopUUID;                        }
-    public @NotNull  Shop                   getShop             () { return shop;                 }
+    public @NotNull  Shop                   getShop             () { return shop;                            }
+    public           boolean                getNbtFilter        () { return nbtFilter;                       }
 
 
     // Setters
@@ -231,6 +241,7 @@ public class ProductDisplay {
         focusStateNext  = false;
         menuOpenLimiter = new RateLimiter();
         cacheDisplayIdentifier();
+        storedItems = new HashMap<>();
 
 
         item = MinecraftUtils.deserializeItem(serializedItem);
@@ -908,6 +919,24 @@ public class ProductDisplay {
 
 
     /**
+     * Checks if the provided item stack can be held by this display.
+     * This takes into account the current NBT filter setting.
+     * @param itemStack The item stack to check.
+     * @return True if the item can be held by this display, false otherwise.
+     */
+    public boolean isItemCompatible(final @NotNull ItemStack itemStack) {
+        if(nbtFilter) {
+            return ItemStack.isSameItemSameTags(itemStack, item);
+        }
+        else {
+            return MinecraftUtils.getItemKey(itemStack).equals(MinecraftUtils.getItemKey(item));
+        }
+    }
+
+
+
+
+    /**
      * Tries to retrieve items from nearby inventories.
      * <p> This call has no effect if the display is fully stocked.
      */
@@ -965,16 +994,16 @@ public class ProductDisplay {
 
                 // If the slot is not empty
                 if(!variant.isBlank() && amount > 0) {
-                    final ItemStack stackInSlot = variant.toStack((int) amount);
 
                     // If the item in the slot matches the item sold by the display
-                    if(ItemStack.isSameItemSameTags(stackInSlot, item)) {
+                    if(isItemCompatible(variant.toStack((int) amount))) {
                         try(final Transaction tx = Transaction.openOuter()) {
                             final long missing = (long)maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();
                                 stock += extracted;
+                                //FIXME increase the stock of the item stack that matches the NBTs. use the UUID
                                 if(extracted == missing) return;
                             }
                         }
@@ -1109,5 +1138,26 @@ public class ProductDisplay {
         shop = newShop;
         shopUUID = newShop.getUuid();
         ShopManager.registerDisplay(this, shopUUID);
+    }
+
+
+
+
+    /**
+     * Changes the NBT filter setting of this product display.
+     * @param newNbtFilter The new setting. True filters for NBTs, false matches the item ID.
+     */
+    public void changeNbtFilterSetting(final boolean newNbtFilter) {
+        if(nbtFilter != newNbtFilter) {
+            nbtFilter = newNbtFilter;
+
+            // If the new setting filters NBTs, send non-compatible items to the stash
+            if(nbtFilter) {
+                //TODO
+            }
+
+            // If the new setting allows any NBT, change nothing
+            // This setting already allows any currently stored item
+        }
     }
 }
