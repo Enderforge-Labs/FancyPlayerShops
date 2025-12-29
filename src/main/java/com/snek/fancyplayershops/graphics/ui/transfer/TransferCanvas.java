@@ -13,7 +13,6 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;

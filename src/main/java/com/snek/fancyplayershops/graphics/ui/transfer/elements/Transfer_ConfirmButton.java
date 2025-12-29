@@ -7,7 +7,6 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.MinecraftUtils;
 

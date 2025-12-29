@@ -1,8 +1,6 @@
 package com.snek.fancyplayershops.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,7 +24,6 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -83,7 +80,6 @@ public class ProductDisplay {
 
     // Basic data
     private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
-    // private           @NotNull  String                levelId;                          // The Identifier of the level
     private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
     private     final @NotNull  BlockPos              pos;                              // The position of the display
     private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
@@ -94,13 +90,11 @@ public class ProductDisplay {
     private transient @NotNull  ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
     private           @NotNull  UUID      ownerUUID;                             // The UUID of the owner
     private                     long      balance         = 0;                   // The balance collected by the shop since it was last claimed
-    // private           @NotNull String    serializedItem;                        // The item in serialized form //TODO REMOVE
     private                     long      price           = 0l;                  // The configured price for each item
     private                     int       stock           = 0;                   // The current stock
     private                     int       maxStock        = 0;                   // The configured maximum stock
     private                     float     defaultRotation = 0f;                  // The configured item rotation
     private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
-    // private           @NotNull  UUID      shopUUID;                              // The UUID of the shop this display has been assigned to
     private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
     private                     boolean   nbtFilter       = true;                // The configured nbt filter setting
 
@@ -123,10 +117,8 @@ public class ProductDisplay {
 
     // Getters
     public @NotNull  ServerLevel            getLevel            () { return level;                           }
-    // public @NotNull  String                 getLevelId          () { return levelId;                         }
     public @NotNull  BlockPos               getPos              () { return pos;                             }
     public @NotNull  ItemStack              getItem             () { return item;                            }
-    // public @NotNull  String                 getSerializedItem   () { return serializedItem;                  } //TODO REMOVE
     public @NotNull  ProductItemDisplayElm  getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
     public           long                   getPrice            () { return price;                           }
@@ -143,7 +135,6 @@ public class ProductDisplay {
     public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
-    // public @NotNull  UUID                   getShopUUID         () { return shopUUID;                        }
     public @NotNull  Shop                   getShop             () { return shop;                            }
     public           boolean                getNbtFilter        () { return nbtFilter;                       }
 
@@ -176,30 +167,6 @@ public class ProductDisplay {
         return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
     }
 
-
-    // /**
-    //  * Computes the Identifier of the level.
-    //  */
-    // private void calcSerializedLevelId() {
-    //     levelId = level.dimension().location().toString();
-    // }
-
-
-    // /**
-    //  * Tries find the ServerLevel the level identifier belongs to.
-    //  * @throws RuntimeException if the level Identifier is invalid or the ServerLevel cannot be found.
-    //  */
-    // private void calcDeserializedLevelId() throws RuntimeException {
-    //     for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
-    //         if(w.dimension().location().toString().equals(levelId)) {
-    //             level = w;
-    //             return;
-    //         }
-    //     }
-    //     throw new RuntimeException("Invalid product display data: Specified level \"" + levelId + "\" was not found");
-    // }
-
-
     /**
      * Computes and caches the display identifiers.
      */
@@ -230,145 +197,6 @@ public class ProductDisplay {
     public static ProductDisplayKey calcDisplayKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
         return new ProductDisplayKey(_pos, level);
     }
-
-
-    // /**
-    //  * Reinitializes the transient members.
-    //  * @return Whether the item and level id have been deserialized successfully.
-    //  * <p> Displays whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
-    // */
-    // public boolean reinitTransient() {
-    //     focusState      = false;
-    //     focusStateNext  = false;
-    //     menuOpenLimiter = new RateLimiter();
-    //     cacheDisplayIdentifier();
-    //     storedItems = new HashMap<>();
-
-
-    //     // item = MinecraftUtils.deserializeItem(serializedItem);
-    //     // if(item == null) {
-    //     //     FancyPlayerShops.LOGGER.error("Couldn't deserialize item \"{}\"", serializedItem, new RuntimeException());
-    //     //     return false;
-    //     // }
-    //     // try {
-    //     //     calcDeserializedLevelId();
-    //     // } catch(final RuntimeException e) {
-    //     //     FancyPlayerShops.LOGGER.error("Couldn't deserialize level ID \"{}\"", levelId, e);
-    //     //     return false;
-    //     // }
-
-    //     cacheDisplayKey();
-    //     shop = ShopManager.registerDisplay(this, shopUUID);
-    //     return true;
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // /**
-    //  * Creates a new ProductDisplay and saves it in its own file.
-    //  * @param level The level the display has to be created in.
-    //  * @param _pos The position of the new display.
-    //  * @param owner The player that places the display.
-    //  */
-    // public ProductDisplay(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
-
-    //     // Set display data
-    //     this.level = level;
-    //     ownerUUID = owner.getUUID();
-    //     pos = _pos;
-    //     price         = Configs.getDisplay().price.getDefault();
-    //     maxStock      = Configs.getDisplay().stock_limit.getDefault();
-    //     colorThemeHue = Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()];
-
-    //     // Calculate serialized data and display identifier
-    //     //!No need to check that serializedItem != null, the item being serialized is the default AIR item
-    //     serializedItem = MinecraftUtils.serializeItem(item);
-    //     calcSerializedLevelId();
-    //     cacheDisplayIdentifier();
-    //     cacheDisplayKey();
-    //     shopUUID = ShopManager.DEFAULT_SHOP_UUID;
-    //     shop = ShopManager.registerDisplay(this, ShopManager.DEFAULT_SHOP_UUID);
-
-    //     // Create and spawn the Item Display entity
-    //     itemDisplay = new ProductItemDisplayElm(this);
-    //     itemDisplay.spawn(calcDisplayPos(), true);
-
-    //     // Save the display
-    //     ProductDisplayManager.registerDisplay(this);
-    //     ProductDisplayManager.scheduleDisplaySave(this);
-    // }
-
-
-
-
-    // /**
-    //  * Creates a new ProductDisplay and saves it in its own file.
-    //  * @param level The level the display has to be created in.
-    //  * @param _pos The position of the new display.
-    //  * @param _ownerUUID The UUID of the player that places the display.
-    //  * @param _price The price of the item.
-    //  * @param _stock The current stock.
-    //  * @param _maxStock The stock limit.
-    //  * @param _rotation The default rotation of the item display.
-    //  * @param _hue The hue of the color theme.
-    //  * @param _serializedIitem The item in serialized form.
-    //  */
-    // public ProductDisplay(
-    //     final @NotNull ServerLevel level, final @NotNull BlockPos _pos,
-    //     final @NotNull UUID _ownerUUID, final UUID _shopUUID, final long _balance,
-    //     final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
-    // ) {
-
-    //     // Set display data
-    //     this.level = level;
-    //     ownerUUID = _ownerUUID;
-    //     balance = _balance;
-    //     pos = _pos;
-    //     price = _price;
-    //     stock = _stock;
-    //     maxStock = _maxStock;
-    //     defaultRotation = _rotation;
-    //     colorThemeHue = _hue;
-
-    //     // Calculate serialized data
-    //     calcSerializedLevelId();
-    //     serializedItem = _serializedIitem;
-
-    //     // Get members from serialized data and calculate display identifier
-    //     final @Nullable ItemStack _item = MinecraftUtils.deserializeItem(serializedItem);
-    //     if(_item == null) {
-    //         FancyPlayerShops.LOGGER.error("Item of product display coudln't be deserialized. Using AIR as fallback", new RuntimeException());
-    //         item = Items.AIR.getDefaultInstance();
-    //     }
-    //     else {
-    //         item = _item;
-    //     }
-    //     cacheDisplayIdentifier();
-    //     cacheDisplayKey();
-    //     shopUUID = _shopUUID;
-    //     shop = ShopManager.registerDisplay(this, _shopUUID);
-
-    //     // Create and spawn the Item Display entity
-    //     itemDisplay = new ProductItemDisplayElm(this);
-    //     itemDisplay.spawn(calcDisplayPos(), true);
-
-    //     // Save the display
-    //     ProductDisplayManager.registerDisplay(this);
-    //     ProductDisplayManager.scheduleDisplaySave(this);
-    // }
 
 
 
@@ -873,22 +701,12 @@ public class ProductDisplay {
      */
     public void changeItem(final @NotNull ItemStack newItem) {
 
-        // Stash the current items
+        // Stash the current items and change the item value
         stash();
+        item = newItem.copyWithCount(1);
 
-        // Serialize the item value, then change it and save the display. Send a message to the player if the item cannot be serialized
-        // final @Nullable String _serializedItem = MinecraftUtils.serializeItem(newItem);
-        // if(_serializedItem == null) {
-        //     if(user != null) {
-        //         FancyPlayerShops.LOGGER.error("New item of product display coudln't be serialized", new RuntimeException());
-        //         user.displayClientMessage(new Txt("An error occurred while trying to change the display's item: This item cannot be serialized").get(), false);
-        //     }
-        // }
-        // else {
-            item = newItem.copyWithCount(1);
-            // serializedItem = _serializedItem;
-            ProductDisplayManager.scheduleDisplaySave(this);
-        // }
+        // Save it the shop
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
@@ -1212,7 +1030,7 @@ public class ProductDisplay {
 
             // If the new setting filters NBTs, send non-compatible items to the stash
             if(nbtFilter) {
-                //TODO
+                changeItem(item);
             }
 
             // If the new setting allows any NBT, change nothing

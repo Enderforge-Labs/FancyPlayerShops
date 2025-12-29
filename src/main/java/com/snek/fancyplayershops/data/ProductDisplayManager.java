@@ -1,10 +1,8 @@
 package com.snek.fancyplayershops.data;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,24 +15,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import com.google.gson.Gson;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -42,16 +36,12 @@ import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
@@ -327,16 +317,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
                 try {
                     final String serializedDisplay = Files.readString(displayStorageFile.toPath());
                     final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay, null, null);
-
-                    // Recalculate transient members and update display maps
-                    // if(retrievedDisplay != null) {
-                        // if(retrievedDisplay.reinitTransient()) { //TODO REMOVE
                     registerDisplay(retrievedDisplay);
-                        // } //TODO REMOVE
-                    // }
-                // try(final Reader reader = new FileReader(displayStorageFile)) {
-                    // // retrievedDisplay = new Gson().fromJson(reader, ProductDisplay.class);
-                    // retrievedDisplay = ProductDisplay_Serializer.deserialize(reader.)
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the product display \"{}\"", displayStorageFile.getName(), e);
                 }
