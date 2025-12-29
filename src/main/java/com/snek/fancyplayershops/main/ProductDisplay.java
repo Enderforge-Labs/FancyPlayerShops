@@ -167,19 +167,6 @@ public class ProductDisplay {
         return new Vector3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
     }
 
-    /**
-     * Computes and caches the display identifiers.
-     */
-    private void cacheDisplayIdentifier() {
-        displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
-    }
-    /**
-     * Computes and caches the display key.
-     */
-    private void cacheDisplayKey() {
-        displayKeyCache = calcDisplayKey(pos, level);
-    }
-
 
     /**
      * Calculates a display identifier from the position. This identifier doesn't include the level ID.
@@ -246,8 +233,8 @@ public class ProductDisplay {
         this.shop = ShopManager.registerDisplay(this, shopUUID);
 
         // Recalculate identifier and key
-        cacheDisplayIdentifier();
-        cacheDisplayKey();
+        displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
+        displayKeyCache = calcDisplayKey(pos, level);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ProductItemDisplayElm(this);
