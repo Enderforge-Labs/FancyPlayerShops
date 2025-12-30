@@ -430,8 +430,8 @@ public class ProductDisplay {
             // Send feedback message for the stashed items
             if(stashedAmount > 0) {
                 owner.displayClientMessage(new Txt()
-                    .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item) + " ").white())
+                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
                     .cat(new Txt("that didn't fit in your inventory ").white())
                     .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                 .get(), false);
@@ -492,7 +492,7 @@ public class ProductDisplay {
                 // Send feedback message for the stashed items
                 if(stashedAmount > 0) {
                     buyer.displayClientMessage(new Txt()
-                        .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                        .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                         .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
                         .cat(new Txt("that didn't fit in your inventory ").white())
                         .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
