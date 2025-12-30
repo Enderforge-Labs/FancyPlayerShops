@@ -57,10 +57,7 @@ public class Edit_DeleteButton extends SimpleButtonElm {
 
         // Give the player a default product display item
         final ItemStack defaultProductDisplayItem =  ProductDisplayManager.getProductDisplayItemCopy();
-        if(!MinecraftUtils.attemptGive(player, defaultProductDisplayItem)) {
-            StashManager.stashItem(display.getOwnerUuid(), defaultProductDisplayItem, 1);
-            //! ^ saveStash() call is done by display.stash()
-        }
+        StashManager.giveItem(player.getUUID(), defaultProductDisplayItem, 1, true);
 
 
         // Stash, claim and delete the display

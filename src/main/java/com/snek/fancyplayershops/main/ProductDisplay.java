@@ -1,5 +1,7 @@
 package com.snek.fancyplayershops.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +27,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -396,10 +399,12 @@ public class ProductDisplay {
      * Retrieves the specified amount of items from the display at no cost and gives them to the owner.
      * <p> Sends an error message to the player if the display is unconfigured or doesn't contain any item.
      * @param owner The owner of the display.
-     * @param amount The amount of items to retrieve.
+     * @param amount The amount of items to retrieve. Must be > 0.
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
+        assert Require.positive(amount, "retrieve amount");
+
         if(item.is(Items.AIR)) {
             owner.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
@@ -410,36 +415,26 @@ public class ProductDisplay {
             owner.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            ProductDisplayManager.scheduleDisplaySave(this);
 
+            // Transfer items
+            final var transferStats = sendItemsToPlayer(owner, amount);
+            final int stashedAmount = transferStats.getSecond();
 
-            // Send feedback to the player
-            final ItemStack _item = item.copyWithCount(amount);
-            MinecraftUtils.attemptGive(owner, _item);
-            final int stashedAmount = _item.getCount();
-            final int retrievedAmount = amount - stashedAmount;
+            // Send feedback messages
+            owner.displayClientMessage(new Txt()
+                .cat(new Txt("You retrieved ").lightGray())
+                .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                .cat(new Txt(" from your product display.").lightGray())
+            .get(), false);
 
-            if(retrievedAmount > 0) {
-                owner.displayClientMessage(new Txt()
-                    .cat(new Txt("You retrieved ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                    .cat(new Txt(" from your product display.").lightGray())
-                .get(), false);
-                stock -= retrievedAmount;
-            }
-            else if(!stashExcess) {
-                owner.displayClientMessage(new Txt("No item was retrieved. Your inventory is full.").lightGray().get(), false);
-            }
-
-            if(stashExcess && stashedAmount > 0) {
-                StashManager.stashItem(owner.getUUID(), _item, stashedAmount);
-                StashManager.scheduleStashSave(owner.getUUID());
+            // Send feedback message for the stashed items
+            if(stashedAmount > 0) {
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item)).white())
-                    .cat(new Txt(" retrieved from your product display " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item) + " ").white())
+                    .cat(new Txt("that didn't fit in your inventory ").white())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                 .get(), false);
-                stock -= stashedAmount;
             }
 
 
@@ -453,15 +448,16 @@ public class ProductDisplay {
 
 
 
-
     /**
      * Makes a player buy a specified amount of items from the display.
      * <p> Sends an error message to the player if the display is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param buyer The player.
-     * @param amount The amount of items to buy.
-     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
+     * @param amount The amount of items to buy. Must be > 0.
+     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display. //TODO REMOVE
      */
-    public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
+    public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) { //TODO remove stash excess
+        assert Require.positive(amount, "buy amount");
+
         if(item.is(Items.AIR)) {
             buyer.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
@@ -472,41 +468,35 @@ public class ProductDisplay {
             buyer.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            final long totPrice = price * amount;
 
+            // Handle payment
+            final long totPrice = price * amount;
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
                 ProductDisplayManager.scheduleDisplaySave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
 
-                // Send feedback to the player
-                final ItemStack _item = item.copyWithCount(amount);
-                MinecraftUtils.attemptGive(buyer, _item);
-                final int stashedAmount = _item.getCount();
-                final int retrievedAmount = amount - stashedAmount;
+                // Transfer items
+                final var transferStats = sendItemsToPlayer(buyer, amount);
+                final int stashedAmount = transferStats.getSecond();
 
-                if(retrievedAmount > 0) {
-                    buyer.displayClientMessage(new Txt()
-                        .cat(new Txt("Bought ").lightGray())
-                        .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                        .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                    .get(), false);
-                    stock -= retrievedAmount;
-                }
-                else if(!stashExcess) {
-                    buyer.displayClientMessage(new Txt("No item was bought. Your inventory is full.").lightGray().get(), false);
-                }
 
-                if(stashExcess && stashedAmount > 0) {
-                    StashManager.stashItem(buyer.getUUID(), _item, _item.getCount());
-                    StashManager.scheduleStashSave(buyer.getUUID());
+                // Send feedback messages
+                buyer.displayClientMessage(new Txt()
+                    .cat(new Txt("Bought ").lightGray())
+                    .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
+                .get(), false);
+
+                // Send feedback message for the stashed items
+                if(stashedAmount > 0) {
                     buyer.displayClientMessage(new Txt()
                         .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
-                        .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                        .cat(new Txt("that didn't fit in your inventory ").white())
+                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                     .get(), false);
-                    stock -= stashedAmount;
                 }
 
 
@@ -693,9 +683,9 @@ public class ProductDisplay {
      */
     public void changeItem(final @NotNull ItemStack newItem) {
 
-        // Stash the current items and change the item value
-        stash();
+        // Change the item value and stash incompatible stacks
         item = newItem.copyWithCount(1);
+        stashIncompatible();
 
         // Save it the shop
         ProductDisplayManager.scheduleDisplaySave(this);
@@ -705,19 +695,55 @@ public class ProductDisplay {
 
 
     /**
-     * Sends the items stored in this display to the owner's stash.
-     * <p> This method also sets the display's stock to 0.
+     * Sends the items stored in this display to the owner's inventory/stash.
+     * <p>
+     * This method also sets the display's stock to 0 and clears the list of stored items.
      */
     public void stash() {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
 
-        // Stash items
-        StashManager.stashItem(ownerUUID, item, stock);
-        StashManager.scheduleStashSave(ownerUUID);
+        // For each item
+        for(var entry : storedItems.entrySet()) {
 
-        // Reset stock
+            // Stash it
+            final ItemStack entryItem  = entry.getValue().getFirst();
+            final int       entryCount = entry.getValue().getSecond();
+            StashManager.giveItem(ownerUUID, entryItem, entryCount, deletionState);
+        }
+
+        // Clear stored items and reset stock, then save this display
+        storedItems.clear();
         stock = 0;
+        ProductDisplayManager.scheduleDisplaySave(this);
+    }
+
+
+    /**
+     * Sends any incompatible item stored in this display to the owner's inventory/stash.
+     */
+    public void stashIncompatible() {
+        if(stock == 0) return;
+        if(item.is(Items.AIR)) return;
+
+        // Check each item individually
+        final var iterator = storedItems.entrySet().iterator();
+        while(iterator.hasNext()) {
+
+            // If it's incompatible
+            final var entry = iterator.next();
+            final ItemStack entryItem = entry.getValue().getFirst();
+            if(isItemCompatible(entryItem, entry.getKey()) == null) {
+
+                // Stash it and remove it from the list of stored items
+                final int entryCount = entry.getValue().getSecond();
+                StashManager.giveItem(ownerUUID, entryItem, entryCount, true);
+                iterator.remove();
+                stock -= entryCount;
+            }
+        }
+
+        // Save this display
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -756,22 +782,10 @@ public class ProductDisplay {
      *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
      */
     public void pickUp(final boolean tryInventory) {
-        final Player owner = MinecraftUtils.getPlayerByUUID(ownerUUID);
 
-
-        // Create the snapshot and try to send it to the owner's inventory
+        // Create the snapshot and give it to the player
         final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
-        boolean giveResult = false;
-        if(tryInventory) {
-            giveResult = MinecraftUtils.attemptGive(owner, snapshot);
-        }
-
-
-        // If the inventory was full, send it to the stash
-        if(!giveResult) {
-            StashManager.stashItem(ownerUUID, snapshot, 1);
-            StashManager.scheduleStashSave(ownerUUID);
-        }
+        StashManager.giveItem(ownerUUID, snapshot, 1, true);
     }
 
 
@@ -781,17 +795,30 @@ public class ProductDisplay {
      * Checks if the provided item stack can be held by this display.
      * <p>
      * This takes into account the current NBT filter setting.
-     * <p>
-     * Items are compared using their calculated UUID.
      * @param itemStack The item stack to check.
-     * @return True if the item can be held by this display, false otherwise.
+     * @return The item's UUID if it can be held by this display, null otherwise.
      */
-    public boolean isItemCompatible(final @NotNull ItemStack itemStack) {
+    public @Nullable UUID isItemCompatible(final @NotNull ItemStack itemStack) {
+        return isItemCompatible(itemStack, MinecraftUtils.calcItemUUID(itemStack));
+    }
+
+    /**
+     * Checks if the provided item stack can be held by this display.
+     * <p>
+     * This takes into account the current NBT filter setting.
+     * @param itemStack The item stack to check.
+     * @param itemStackUUID The UUID of the item stack to check.
+     * @return The item's UUID if it can be held by this display, null otherwise.
+     */
+    public @Nullable UUID isItemCompatible(final @NotNull ItemStack itemStack, final @NotNull UUID itemStackUUID) {
+        if(!MinecraftUtils.getItemKey(itemStack).equals(MinecraftUtils.getItemKey(item))) {
+            return null;
+        }
         if(nbtFilter) {
-            return ItemStack.isSameItemSameTags(itemStack, item);
+            return itemStackUUID.equals(itemUUID) ? itemStackUUID : null;
         }
         else {
-            return MinecraftUtils.getItemKey(itemStack).equals(MinecraftUtils.getItemKey(item));
+            return itemStackUUID;
         }
     }
 
@@ -857,15 +884,18 @@ public class ProductDisplay {
                 // If the slot is not empty
                 if(!variant.isBlank() && amount > 0) {
 
-                    // If the item in the slot matches the item sold by the display
-                    if(isItemCompatible(variant.toStack((int) amount))) {
+                    // If the item in the slot matches the item sold by the display and it can be extracted
+                    final ItemStack itemStack = variant.toStack((int) amount);
+                    final @Nullable UUID variantUUID = isItemCompatible(itemStack);
+                    if(variantUUID != null) {
                         try(final Transaction tx = Transaction.openOuter()) {
                             final long missing = (long)maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();
-                                stock += extracted;
-                                //FIXME increase the stock of the item stack that matches the NBTs. use the UUID
+
+                                // Add it to this display's storage
+                                storeItems(variantUUID, itemStack, (int)extracted);
                                 if(extracted == missing) return;
                             }
                         }
@@ -1019,5 +1049,90 @@ public class ProductDisplay {
             // If the new setting allows any NBT, change nothing
             // This setting already allows any currently stored item
         }
+    }
+
+
+
+
+
+    /**
+     * Sends the specified amount of items to the player.
+     * <p>
+     * This updates the list of stored items, as well as the total stock of the product display.
+     * <p>
+     * This method also saves the display and accounts for the NBT filtering setting.
+     * <p>
+     * Items that don't fit in the player's inventory are sent to their stash.
+     * <p>
+     * @param player The player.
+     * @param amount The amount of items to send. Must be {@code < stock} and {@code > 0}.
+     * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
+     */
+    public @NotNull Pair<Integer, Integer> sendItemsToPlayer(final @NotNull Player player, final int amount) {
+        assert Require.condition(amount <= stock, "Amount of items to transfer cannot be higher than the current stock");
+        assert Require.positive(amount, "item amount");
+
+
+        // Create a shuffled list of entries
+        //! Polling variants randomly makes it impossible to predict the next items by checking previous purchases or reading the NBTs
+        final var entries = new ArrayList<>(storedItems.entrySet());
+        Collections.shuffle(entries);
+
+
+        // Give item variants one by one and keep count of the stats
+        //! Not distributing avoids filling the player's inventory/stash with absurd amounts of different variants of the same item
+        int left = amount;
+        int givenAmount = 0;
+        int stashedAmount = 0;
+        for(final var entry : entries) {
+            if(left <= 0) break;
+
+            // Cache item and count, then calculate the amount of items to take and give them to the player
+            final ItemStack entryItem  = entry.getValue().getFirst();
+            final int       entryCount = entry.getValue().getSecond();
+            final int amountTaken = Math.min(entryCount, left);
+            final var stashStats = StashManager.giveItem(player.getUUID(), entryItem, amountTaken, false);
+
+            // Update counters
+            left -= amountTaken;
+            givenAmount   += stashStats.getFirst();
+            stashedAmount += stashStats.getSecond();
+
+            // Delete entry if its stock is 0. Update its stock otherwise
+            if(amountTaken == entryCount) storedItems.remove(entry.getKey());
+            else storedItems.put(entry.getKey(), Pair.from(entryItem, entryCount - amountTaken));
+        }
+
+
+        // Update total stock, then save the display and return the stats
+        assert Require.condition(left == 0, "The amount of items to send left is not 0. This should never happen");
+        stock -= amount;
+        ProductDisplayManager.scheduleDisplaySave(this);
+        return Pair.from(givenAmount, stashedAmount);
+    }
+
+
+
+
+    /**
+     * Stores the specified item stack into this display's storage.
+     * <p>
+     * This updates the item instance's stock, as well as the total stock of the product display.
+     * @param itemStackUUID The UUID of the item stack.
+     * @param itemStack The item stack to store.
+     * @param amount The amount of items to store. Must be {@code > 0}.
+     */
+    public void storeItems(final @NotNull UUID itemStackUUID, final @NotNull ItemStack itemStack, final int amount) {
+        storedItems.compute(itemStackUUID, (key, existing) -> {
+
+            // If the item doesn't exist yet, create a new entry
+            if(existing == null) return new Pair<>(itemStack, amount);
+
+            // If the item exists, add amount to the existing stock
+            else return new Pair<>(existing.getFirst(), existing.getSecond() + amount);
+        });
+
+        // Update total stock
+        stock += amount;
     }
 }
