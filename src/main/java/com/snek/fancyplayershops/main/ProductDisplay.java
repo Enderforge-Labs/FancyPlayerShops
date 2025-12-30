@@ -683,8 +683,9 @@ public class ProductDisplay {
      */
     public void changeItem(final @NotNull ItemStack newItem) {
 
-        // Change the item value and stash incompatible stacks
+        // Change the item value, then recalculate the UUID and stash incompatible stacks
         item = newItem.copyWithCount(1);
+        itemUUID = MinecraftUtils.calcItemUUID(item);
         stashIncompatible();
 
         // Save it the shop
