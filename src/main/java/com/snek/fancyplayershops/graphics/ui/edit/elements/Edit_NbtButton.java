@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
@@ -20,6 +21,14 @@ public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
 
     public Edit_NbtButton(final @NotNull ProductDisplay display) {
         super(display, null, "Toggle NBT filter", 1, "NBT");
+    }
+
+
+    @Override
+    public void spawn(@NotNull Vector3d pos, boolean animate) {
+        final ProductDisplay display = GetDisplay.get(this);
+        updateColor(display.getNbtFilter());
+        super.spawn(pos, animate);
     }
 
 
