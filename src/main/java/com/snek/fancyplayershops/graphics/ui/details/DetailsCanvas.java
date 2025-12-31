@@ -6,6 +6,7 @@ import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_nbt_disclaimer;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
@@ -75,6 +76,14 @@ public class DetailsCanvas extends ProductCanvasBase {
         e.setSizeX(TitleElm.DEFAULT_W);
         e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
+
+
+        // Add NBT disclaimer
+        if(!display.getNbtFilter()) {
+            e = bg.addChild(new Buy_nbt_disclaimer(display.getLevel()));
+            e.setSize(new Vector2f(1f, Buy_nbt_disclaimer.DEFAULT_HEIGHT));
+            e.setPosY(1f + Buy_nbt_disclaimer.DEFAULT_DISTANCE);
+        }
 
 
         // Add details display
