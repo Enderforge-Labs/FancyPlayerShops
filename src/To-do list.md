@@ -7,6 +7,9 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
+- Fix broken crafting recipe in Prom2 server
+  - it works fine in local test server, but no on the public prom2 one
+
 - Replace manual stash messages with a utility method
   - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
   - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
