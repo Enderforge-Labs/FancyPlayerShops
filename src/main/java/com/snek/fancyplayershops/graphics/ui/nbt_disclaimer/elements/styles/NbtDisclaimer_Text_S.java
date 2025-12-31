@@ -20,11 +20,11 @@ public class NbtDisclaimer_Text_S extends SimpleTextElmStyle {
     @Override
     public @NotNull Component getDefaultText() {
         return new Txt(
-            "This display contains products with mixed NBT data.\n" +
+            "This display contains products with mixed NBTs.\n" +
             "\n" +
-            "You might receive any variation of the item shown.\n" +
-            "This includes energy level, upgrades, enchantments, \n" +
-            "and other data.\n" +
+            "You might receive any variation.\n" +
+            "of the item shown. This includes energy level,\n" +
+            "upgrades, enchantments, and other data.\n" +
             "Buy at your own risk!"
         ).white().italic().get();
     }
