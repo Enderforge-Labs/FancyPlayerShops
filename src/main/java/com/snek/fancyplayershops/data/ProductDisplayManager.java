@@ -217,7 +217,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     /**
      * Unregisters the display from the runtime maps.
-     * <p> Calling this method on a display that's already not registered will have no effect.
+     * <p>
+     * Calling this method on a display that's already not registered will have no effect.
+     * <p>
+     * This method doesn't remove the display from the world or modify its stock and balance in any way.
      */
     public static void unregisterDisplay(final @NotNull ProductDisplay display) {
         if(displaysByCoords.remove(display.getKey(), display)) {

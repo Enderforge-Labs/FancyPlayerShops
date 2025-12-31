@@ -969,10 +969,18 @@ public class ProductDisplay {
         .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
-        // Actually change the owner and save the display, then force it to unfocus to prevent the previous owner from accessing the UI
+        // Force the display to unfocus in order to close any UI
         focusStateNext = false;
         updateFocusState();
+
+
+        // Unregister the display from the runtime maps to update any linked data,
+        // then change the owner, save the shop and register the display again
+        ShopManager.unregisterDisplay(this);
+        ProductDisplayManager.unregisterDisplay(this);
         ownerUUID = newOwner.getUUID();
+        ProductDisplayManager.registerDisplay(this);
+        ShopManager.registerDisplay(this, getShop().getUuid());
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
