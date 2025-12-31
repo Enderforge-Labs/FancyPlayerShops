@@ -18,7 +18,7 @@ import net.minecraft.network.chat.Component;
 
 public class Buy_nbt_disclaimer_S extends FancyButtonElmStyle {
     public static final Vector3i DEFAULT_COLOR = new Vector3i(255, 0, 0);
-    public static final Vector3i HOVERED_COLOR = new Vector3i(255, 64, 64);
+    public static final Vector3i HOVERED_COLOR = new Vector3i(255, 96, 96);
 
 
     public Buy_nbt_disclaimer_S() {
@@ -34,13 +34,13 @@ public class Buy_nbt_disclaimer_S extends FancyButtonElmStyle {
 
     @Override
     public int getDefaultBgAlpha() {
-        return 32;
+        return 64;
     }
 
 
     @Override
     public @NotNull Component getDefaultText() {
-            return new Txt("⚠ Mixed NBTs ⚠").red().get();
+            return new Txt("⚠ Mixed NBTs").red().get();
     }
 
 
