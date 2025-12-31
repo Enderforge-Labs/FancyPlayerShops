@@ -10,7 +10,6 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_Sub_BackButton;
-import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_nbt_disclaimer;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1iButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1sButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1xButton;
@@ -19,6 +18,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDisplay_NbtDisclaimer;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -89,7 +89,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
         // Add NBT disclaimer
         if(!display.getNbtFilter()) {
-            e = bg.addChild(new Buy_nbt_disclaimer(display.getLevel()));
+            e = bg.addChild(new ProductDisplay_NbtDisclaimer(display.getLevel()));
             e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
             e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
             nbtDisclaimer = e;
