@@ -90,8 +90,8 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         // Add NBT disclaimer
         if(!display.getNbtFilter()) {
             e = bg.addChild(new Buy_nbt_disclaimer(display.getLevel()));
-            e.setSize(new Vector2f(1f, Buy_nbt_disclaimer.DEFAULT_HEIGHT));
-            e.setPosY(1f + Buy_nbt_disclaimer.DEFAULT_DISTANCE);
+            e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
+            e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
             nbtDisclaimer = e;
         }
         else {

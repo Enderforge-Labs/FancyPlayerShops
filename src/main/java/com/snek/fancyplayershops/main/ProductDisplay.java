@@ -322,6 +322,16 @@ public class ProductDisplay {
 
 
 
+    private boolean attemptDisclaimerClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+        final ProductCanvasBase canvas = getActiveCanvas();
+        if(canvas != null) {
+            return canvas.getDisclaimerElm().forwardClick(player, clickType);
+        }
+        return false;
+    }
+
+
+
 
     /**
      * Handles a single click event on this display.
@@ -337,8 +347,16 @@ public class ProductDisplay {
         //! in case of clicks during the focus cooldown time or before the focus is actually registered
         if(isFocused()) {
 
-            // If the display is not currently being used, flag the player as its user
+            // If the display is not currently being used
             if(user == null) {
+
+                // If the disclaimer was clicked, return true
+                final boolean disclaimerClickResult = attemptDisclaimerClick(player, clickType);
+                if(disclaimerClickResult) {
+                    return true;
+                }
+
+                // If the player left clicked, buy or retrieve an item
                 if(clickType == ClickAction.PRIMARY) {
                     if(player.getUUID().equals(ownerUUID)) {
                         retrieveItem(player, 1, true);
@@ -347,6 +365,8 @@ public class ProductDisplay {
                         buyItem(player, 1, true);
                     }
                 }
+
+                // If the player right clicked, open the buy or edit canvas
                 else {
                     if(player.getUUID().equals(ownerUUID)) {
                         user = player;

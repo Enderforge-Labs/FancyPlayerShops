@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_nbt_disclaimer_S;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 
 import net.minecraft.network.chat.Component;
@@ -20,8 +19,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Buy_nbt_disclaimer extends FancyButtonElm {
-    public static final float DEFAULT_HEIGHT = FancyPlayerShops.LINE_H * 0.75f;
-    public static final float DEFAULT_DISTANCE = 0.02f;
 
 
     public Buy_nbt_disclaimer(final @NotNull ServerLevel level) {
