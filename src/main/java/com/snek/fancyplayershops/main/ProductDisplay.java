@@ -372,7 +372,7 @@ public class ProductDisplay {
                         retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1, true);
+                        buyItem(player, 1);
                     }
                 }
 
@@ -413,7 +413,7 @@ public class ProductDisplay {
                         retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1, true);
+                        buyItem(player, 1);
                     }
                 }
                 return false;
@@ -483,9 +483,8 @@ public class ProductDisplay {
      * <p> Sends an error message to the player if the display is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param buyer The player.
      * @param amount The amount of items to buy. Must be > 0.
-     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display. //TODO REMOVE
      */
-    public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) { //TODO remove stash excess
+    public void buyItem(final @NotNull Player buyer, final int amount) {
         assert Require.positive(amount, "buy amount");
 
         if(item.is(Items.AIR)) {
