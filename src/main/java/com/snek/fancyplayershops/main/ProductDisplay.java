@@ -1203,7 +1203,7 @@ public class ProductDisplay {
         storedItems.compute(itemStackUUID, (key, existing) -> {
 
             // If the item doesn't exist yet, create a new entry
-            if(existing == null) return new Pair<>(itemStack, amount);
+            if(existing == null) return new Pair<>(itemStack.copyWithCount(1), amount);
 
             // If the item exists, add amount to the existing stock
             else return new Pair<>(existing.getFirst(), existing.getSecond() + amount);
