@@ -350,10 +350,10 @@ public class ProductDisplay {
             // If the display is not currently being used
             if(user == null) {
 
-                // If the disclaimer was clicked, return true
+                // If the disclaimer was clicked, return false (no permission to click UIs)
                 final boolean disclaimerClickResult = attemptDisclaimerClick(player, clickType);
                 if(disclaimerClickResult) {
-                    return true;
+                    return false;
                 }
 
                 // If the player left clicked, buy or retrieve an item

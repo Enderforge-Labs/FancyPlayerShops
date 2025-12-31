@@ -94,7 +94,7 @@ public abstract class ProductCanvasBase extends UiCanvas {
             // else return true;
         }
 
-        // If the player is not the user, return false (click not consumed)
+        // If the player is not the user, return true (click was consumed)
         else {
             return true;
         }
