@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
@@ -214,4 +215,5 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @Nullable Div getDisclaimerElm() { return null; }
 }

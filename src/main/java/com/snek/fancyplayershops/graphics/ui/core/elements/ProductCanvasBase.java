@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.core.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
@@ -8,6 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBack_S;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBackground_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.UiCanvas;
+import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -28,6 +30,7 @@ import net.minecraft.world.inventory.ClickAction;
  */
 public abstract class ProductCanvasBase extends UiCanvas {
     protected final @NotNull ProductDisplay display;
+    public abstract @Nullable Div getDisclaimerElm();
 
 
     /**
@@ -57,11 +60,48 @@ public abstract class ProductCanvasBase extends UiCanvas {
     }
 
 
+
+
+    @Override
+    public @Nullable Div findTargetedElement(@NotNull Player player) {
+
+        // Attempt to target the disclaimer. If that fails, target the actual canvas
+        //! This is done to allow the disclaimer element to be hoverable/clickable even though it's not inside of the canvas's hitbox
+        final @Nullable Div disclaimerElm = getDisclaimerElm();
+        if(disclaimerElm != null) {
+            final @Nullable Div targetedDisclaimer = disclaimerElm.findTargetedElement(player);
+            if(targetedDisclaimer != null) {
+                return targetedDisclaimer;
+            }
+        }
+        return super.findTargetedElement(player);
+    }
+
+
+
+
     @Override
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+
+        // Click the shop first. This allows non-users to retrieve items by left clicking
         final boolean player_has_permission = display.onClick(player, clickType);
-        if(player_has_permission) return super.forwardClick(player, clickType);
-        return true;
+
+        // If the player is the user
+        if(player_has_permission) {
+
+            // Attempt to click the disclaimer. If that fails, click the actual canvas
+            //! This is done to allow the disclaimer element to be clickable even though it's not inside of the canvas's hitbox
+            final @Nullable Div disclaimerElm = getDisclaimerElm();
+            if(disclaimerElm == null || !disclaimerElm.forwardClick(player, clickType)) {
+                return super.forwardClick(player, clickType);
+            }
+            else return true;
+        }
+
+        // If the player is not the user, return false (click not consumed)
+        else {
+            return true;
+        }
     }
 
 

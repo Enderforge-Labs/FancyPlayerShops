@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
@@ -46,6 +47,9 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public static final float CONFIRM_BUTTON_W = 0.5f;
     public static final float BUY_BUTTONS_SPACING = 0.025f;
     public static final float BUY_BUTTONS_W = (CONFIRM_BUTTON_W - BUY_BUTTONS_SPACING * 2f) / 3f;
+
+    // Elements
+    private final @Nullable Div nbtDisclaimer;
     private final @NotNull DualInputIndicator inputIndicator;
 
     // Instance data
@@ -88,6 +92,10 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
             e = bg.addChild(new Buy_nbt_disclaimer(display.getLevel()));
             e.setSize(new Vector2f(1f, Buy_nbt_disclaimer.DEFAULT_HEIGHT));
             e.setPosY(1f + Buy_nbt_disclaimer.DEFAULT_DISTANCE);
+            nbtDisclaimer = e;
+        }
+        else {
+            nbtDisclaimer = null;
         }
 
 
@@ -203,4 +211,5 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @Nullable Div getDisclaimerElm() { return nbtDisclaimer; }
 }

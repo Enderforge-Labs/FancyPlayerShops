@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.details;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
@@ -39,6 +40,7 @@ import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
  */
 public class DetailsCanvas extends ProductCanvasBase {
     private final @NotNull Details_Values values;
+    private final @Nullable Div nbtDisclaimer;
 
 
     // Colors
@@ -83,6 +85,10 @@ public class DetailsCanvas extends ProductCanvasBase {
             e = bg.addChild(new Buy_nbt_disclaimer(display.getLevel()));
             e.setSize(new Vector2f(1f, Buy_nbt_disclaimer.DEFAULT_HEIGHT));
             e.setPosY(1f + Buy_nbt_disclaimer.DEFAULT_DISTANCE);
+            nbtDisclaimer = e;
+        }
+        else {
+            nbtDisclaimer = null;
         }
 
 
@@ -156,4 +162,6 @@ public class DetailsCanvas extends ProductCanvasBase {
         //! Empty. This stops the item display from changing global rotation when the details UI rotates.
     }
 
+
+    @Override public @Nullable Div getDisclaimerElm() { return nbtDisclaimer; }
 }
