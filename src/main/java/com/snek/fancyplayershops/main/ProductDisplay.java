@@ -424,7 +424,7 @@ public class ProductDisplay {
             owner.displayClientMessage(new Txt()
                 .cat(new Txt("You retrieved ").lightGray())
                 .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                .cat(new Txt(" from your product display.").lightGray())
+                .cat(new Txt(" from your product display").lightGray())
             .get(), false);
 
             // Send feedback message for the stashed items
@@ -433,7 +433,7 @@ public class ProductDisplay {
                     .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                     .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
                     .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                 .get(), false);
             }
 
@@ -495,7 +495,7 @@ public class ProductDisplay {
                         .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                         .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
                         .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                     .get(), false);
                 }
 
@@ -768,7 +768,7 @@ public class ProductDisplay {
                     .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                     .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
                     .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                 .get(), false);
             }
         }
@@ -957,13 +957,13 @@ public class ProductDisplay {
         // Send feedback to old owner
         oldOwner.displayClientMessage(new Txt()
             .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
-            .cat("" + newOwner.getName().getString() + ".")
+            .cat("" + newOwner.getName().getString() + "")
         .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
         newOwner.displayClientMessage(new Txt()
-            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
+            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + level.dimension().location().toString())
         .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);

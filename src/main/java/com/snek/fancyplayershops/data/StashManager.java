@@ -128,7 +128,7 @@ public final class StashManager extends UtilityClassBase {
                 player.displayClientMessage(new Txt()
                     .cat(Utils.formatAmount(count, false, true) + "x ")
                     .cat(MinecraftUtils.getFancyItemName(item).getString())
-                    .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash.")
+                    .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash")
                 .lightGray().get(), false);
             }
         }
@@ -272,7 +272,7 @@ public final class StashManager extends UtilityClassBase {
                     final @NotNull ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
                     if(deserializedItem == null) {
                         final Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
-                        if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded.").red().get(), false);
+                        if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded").red().get(), false);
                     }
                     else stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),

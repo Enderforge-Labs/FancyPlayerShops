@@ -135,7 +135,7 @@ public class DisplayConfig implements ConfigFile {
         if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             throw new IllegalStateException(
                 "Maximum possible transaction price is above the Long limit by " + excess + (excess == 1 ? " digit." : " digits.") +
-                " Adjust the price.max and stock.max config values.")
+                " Adjust the price.max and stock.max config values")
             ;
         }
     }

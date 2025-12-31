@@ -50,7 +50,7 @@ public class Edit_DeleteButton extends SimpleButtonElm {
 
         // Send feedback message
         player.displayClientMessage(new Txt()
-            .cat("Your " + display.getDecoratedName() + " has been deleted.")
+            .cat("Your " + display.getDecoratedName() + " has been deleted")
             .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 

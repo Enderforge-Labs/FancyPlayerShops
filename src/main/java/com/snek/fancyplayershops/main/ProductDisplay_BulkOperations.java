@@ -53,7 +53,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 // Send feedback to affected player if they are online
                 final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
                 if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin.").red())
+                    .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin").red())
                 .get(), false);
 
                 // Stash, claim and delete the display, then increase the purged displays counter
@@ -85,7 +85,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 // Send feedback to affected player if they are online
                 final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
                 if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin.").red())
+                    .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin").red())
                 .get(), false);
 
                 // Stash and delete the display, then increase the displaced displays counter

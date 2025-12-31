@@ -195,7 +195,7 @@ public abstract class CommandManager {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
                             final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
+                            player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
                             return 1;
                         }))
                     )
@@ -214,7 +214,7 @@ public abstract class CommandManager {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
                             final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Converted " + n + " shops into items.").get(), false);
+                            player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
                             return 1;
                         }))
                     )
@@ -233,7 +233,7 @@ public abstract class CommandManager {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
                             final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
-                            player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
+                            player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
                             return 1;
                         })
                     )

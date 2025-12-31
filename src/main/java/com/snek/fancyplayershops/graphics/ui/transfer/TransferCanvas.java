@@ -125,7 +125,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
         // Check if the name is not a valid username
         if(!s.matches("^\\w{3,16}$")) {
-            display.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username.").red().bold().get(), true);
+            display.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username").red().bold().get(), true);
             confirmButton.updateColor(false);
         }
 
@@ -133,7 +133,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
         else {
             final Player newOwner = MinecraftUtils.getPlayerByName(s);
             if(newOwner == null) {
-                display.getuser().displayClientMessage(new Txt("The specified player is currently offline.").red().bold().get(), true);
+                display.getuser().displayClientMessage(new Txt("The specified player is currently offline").red().bold().get(), true);
                 confirmButton.updateColor(false);
             }
             else if(newOwner.getUUID().equals(display.getOwnerUuid())) {

@@ -212,11 +212,11 @@ public class FancyPlayerShops implements ModInitializer {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
                             ProductDisplay_Serializer.deserialize(data.getString("product_display_data"), serverLevel, blockPos);
-                            player.displayClientMessage(new Txt("Display snapshot restored.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
+                            player.displayClientMessage(new Txt("Display snapshot restored").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
                         else {
-                            player.displayClientMessage(new Txt("This product display belongs to " + data.getString("owner_name") + "! Only they can place it.").red().bold().get(), true);
+                            player.displayClientMessage(new Txt("This product display belongs to " + data.getString("owner_name") + "! Only they can place it").red().bold().get(), true);
                         }
                     }
 
@@ -237,7 +237,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* item        */ Items.AIR.getDefaultInstance(),
                             /* storedItems */ new HashMap<>()
                         );
-                        player.displayClientMessage(new Txt("New product display created. Right click it to configure.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
+                        player.displayClientMessage(new Txt("New product display created. Right click it to configure").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
                     }
                 }
