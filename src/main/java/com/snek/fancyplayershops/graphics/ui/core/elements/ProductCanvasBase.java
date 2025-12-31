@@ -41,7 +41,7 @@ public abstract class ProductCanvasBase extends UiCanvas {
     // Temporary product display reference
     //! This is used to initialize the default canvas elements
     //! the overridden provider method is called before the local reference can be initialized by the subclass
-    private static ProductDisplay __tmp_display_ref;
+    protected static ProductDisplay __tmp_display_ref;
 
 
     protected final @NotNull ProductDisplay display;

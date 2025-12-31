@@ -19,6 +19,6 @@ public class HudCanvasBase extends HudCanvas {
         super(hud, height, heightTop, heightBottom);
     }
 
-    @Override public PanelElm createNewBackElement(@NotNull ServerLevel level) { return new PanelElm(level, new HudCanvasBackground_S()); }
-    @Override public PanelElm createNewBgElement  (@NotNull ServerLevel level) { return new PanelElm(level, new HudCanvasBack_S()); }
+    @Override public PanelElm createNewBackElement(@NotNull ServerLevel level) { return new PanelElm(level, new HudCanvasBack_S()); }
+    @Override public PanelElm createNewBgElement  (@NotNull ServerLevel level) { return new PanelElm(level, new HudCanvasBackground_S()); }
 }
