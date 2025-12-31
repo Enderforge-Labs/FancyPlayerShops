@@ -432,7 +432,7 @@ public class ProductDisplay {
                 owner.displayClientMessage(new Txt()
                     .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                     .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
-                    .cat(new Txt("that didn't fit in your inventory ").white())
+                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
                     .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                 .get(), false);
             }
@@ -494,7 +494,7 @@ public class ProductDisplay {
                     buyer.displayClientMessage(new Txt()
                         .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
                         .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                        .cat(new Txt("that didn't fit in your inventory ").white())
+                        .cat(new Txt("that didn't fit in your inventory ").lightGray())
                         .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
                     .get(), false);
                 }
@@ -683,12 +683,14 @@ public class ProductDisplay {
      */
     public void changeItem(final @NotNull ItemStack newItem) {
 
-        // Change the item value, then recalculate the UUID and stash incompatible stacks
+        // Change the item value and recalculate the UUID
         item = newItem.copyWithCount(1);
         itemUUID = MinecraftUtils.calcItemUUID(item);
+
+        // Stash incompatible stacks
         stashIncompatible();
 
-        // Save it the shop
+        // Save the display
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -728,6 +730,8 @@ public class ProductDisplay {
         if(item.is(Items.AIR)) return;
 
         // Check each item individually
+        int givenAmount = 0;
+        int stashedAmount = 0;
         final var iterator = storedItems.entrySet().iterator();
         while(iterator.hasNext()) {
 
@@ -738,9 +742,34 @@ public class ProductDisplay {
 
                 // Stash it and remove it from the list of stored items
                 final int entryCount = entry.getValue().getSecond();
-                StashManager.giveItem(ownerUUID, entryItem, entryCount, true);
+                final var giveStats = StashManager.giveItem(ownerUUID, entryItem, entryCount, false);
                 iterator.remove();
                 stock -= entryCount;
+                givenAmount += giveStats.getFirst();
+                stashedAmount += giveStats.getSecond();
+            }
+        }
+
+        // Send feedback message to the player
+        final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
+        if(player != null) {
+            final int removedAmount = givenAmount + stashedAmount;
+            if(removedAmount > 0) {
+                player.displayClientMessage(new Txt()
+                    .cat(new Txt("You picked up ").lightGray())
+                    .cat(new Txt(Utils.formatAmount(removedAmount, true, true) + " ").white())
+                    .cat(new Txt("incompatible ").lightGray())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                    .cat(new Txt("from the product display").lightGray())
+                .get(), false);
+            }
+            if(stashedAmount > 0) {
+                player.displayClientMessage(new Txt()
+                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                .get(), false);
             }
         }
 
@@ -885,18 +914,24 @@ public class ProductDisplay {
                 // If the slot is not empty
                 if(!variant.isBlank() && amount > 0) {
 
-                    // If the item in the slot matches the item sold by the display and it can be extracted
+                    // If the items in the slot match the item sold by the display
                     final ItemStack itemStack = variant.toStack((int) amount);
                     final @Nullable UUID variantUUID = isItemCompatible(itemStack);
                     if(variantUUID != null) {
+
+                        // If the items can be extracted
                         try(final Transaction tx = Transaction.openOuter()) {
                             final long missing = (long)maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();
 
-                                // Add it to this display's storage
+                                // Add them to this display's storage
                                 storeItems(variantUUID, itemStack, (int)extracted);
+                                //! Total stock is updated by storeItems
+                                //! Display is saved by storeItems
+
+                                // Return if the display is full
                                 if(extracted == missing) return;
                             }
                         }
@@ -1044,11 +1079,14 @@ public class ProductDisplay {
 
             // If the new setting filters NBTs, send non-compatible items to the stash
             if(nbtFilter) {
-                changeItem(item);
+                stashIncompatible();
             }
 
             // If the new setting allows any NBT, change nothing
             // This setting already allows any currently stored item
+
+            // Save the display
+            ProductDisplayManager.scheduleDisplaySave(this);
         }
     }
 
@@ -1133,7 +1171,8 @@ public class ProductDisplay {
             else return new Pair<>(existing.getFirst(), existing.getSecond() + amount);
         });
 
-        // Update total stock
+        // Update total stock and save the display
         stock += amount;
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 }

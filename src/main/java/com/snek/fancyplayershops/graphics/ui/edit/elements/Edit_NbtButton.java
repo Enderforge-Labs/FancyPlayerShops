@@ -46,5 +46,3 @@ public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
 
 
 //TODO item view with nbts off should show a default item with custom description that says the shop has mixed nbts
-
-//TODO save a list of items instead of one single item in the display
