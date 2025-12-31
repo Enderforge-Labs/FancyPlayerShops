@@ -29,6 +29,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -322,10 +323,19 @@ public class ProductDisplay {
 
 
 
+    /**
+     * Tries to click the disclaimer element.
+     * @param player The player that clicked the display.
+     * @param click The click type.
+     * @return True if the disclaimer exists and was clicked, false otherwise
+     */
     private boolean attemptDisclaimerClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
-        final ProductCanvasBase canvas = getActiveCanvas();
+        final @Nullable ProductCanvasBase canvas = getActiveCanvas();
         if(canvas != null) {
-            return canvas.getDisclaimerElm().forwardClick(player, clickType);
+            final @Nullable Div disclaimerElm = canvas.getDisclaimerElm();
+            if(disclaimerElm != null) {
+                return disclaimerElm.forwardClick(player, clickType);
+            }
         }
         return false;
     }
