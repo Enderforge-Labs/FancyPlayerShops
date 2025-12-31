@@ -53,7 +53,7 @@ public class Buy_1xButton extends ProductDIsplay_ToggleableButton {
                 display.retrieveItem(player, 1, true);
             }
             else {
-                display.buyItem(player, 1, true);
+                display.buyItem(player, 1);
             }
         }
 

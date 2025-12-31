@@ -58,7 +58,7 @@ public abstract class CraftingScreenHandlerMixin {
         final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
         final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, "product_display_item");
         final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
-        if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId + ".");
+        if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId);
         final Recipe<?> recipe = recipeOptional.get();
 
 

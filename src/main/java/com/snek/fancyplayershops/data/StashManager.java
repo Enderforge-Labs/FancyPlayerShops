@@ -24,7 +24,6 @@ import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -99,11 +98,15 @@ public final class StashManager extends UtilityClassBase {
      * @param count The amount of items to add.
      */
     public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
+        if(count == 0) return;
         if(item.is(Items.AIR)) return;
         final PlayerStash stash = stashes.computeIfAbsent(playerUUID, k -> new PlayerStash());
         final StashEntry stashEntry = stash.computeIfAbsent(itemUUID, k -> new StashEntry(item));
         stashEntry.add(count);
+        StashManager.scheduleStashSave(playerUUID);
     }
+
+
     /**
      * Adds an item with known UUID to the stash of the specified player.
      * <p> Air is never stashed.
@@ -111,21 +114,58 @@ public final class StashManager extends UtilityClassBase {
      * @param itemUUID The UUID of the item.
      * @param item The item to add.
      * @param count The amount of items to add.
+     * @param playerFeedback Whether to send the player a feedback message.
      */
-    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count) {
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count, final boolean playerFeedback) {
         if(count == 0) return;
         if(item.is(Items.AIR)) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
 
         // Send feedback to player
-        final @Nullable Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
-        if(player != null) {
-            player.displayClientMessage(new Txt()
-                .cat(Utils.formatAmount(count, false, true) + "x ")
-                .cat(MinecraftUtils.getFancyItemName(item).getString())
-                .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash.")
-            .lightGray().get(), false);
+        if(playerFeedback) {
+            final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+            if(player != null) {
+                player.displayClientMessage(new Txt()
+                    .cat(Utils.formatAmount(count, false, true) + "x ")
+                    .cat(MinecraftUtils.getFancyItemName(item).getString())
+                    .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash")
+                .lightGray().get(), false);
+            }
         }
+    }
+
+
+    /**
+     * Gives the specified player {@code amount} items.
+     * <p>
+     * Items that don't fit in the inventory are sent to the player's stash.
+     * <p>
+     * If the player is currently offline, all the items are sent to their stash.
+     * @param playerUUID The UUID of the player to give items to.
+     * @param item The item to give to the player.
+     * @param amount The number of items to give.
+     * @param playerFeedback Whether to send the player a feedback message.
+     * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
+     */
+    public static @NotNull Pair<Integer, Integer> giveItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int amount, final boolean playerFeedback) {
+        final ItemStack _item = item.copyWithCount(amount);
+        //! Create a copy of the item. Its count gets modified by attemptGive
+
+
+        // Try to put items in the inventory
+        final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+        if(player != null) {
+            MinecraftUtils.attemptGive(player, _item);
+        }
+
+        // Send remaining items to the stash
+        final int stashedAmount = _item.getCount();
+        if(stashedAmount > 0) {
+            StashManager.stashItem(playerUUID, _item, _item.getCount(), player != null && playerFeedback);
+        }
+
+        // Return stats
+        return Pair.from(amount - stashedAmount, stashedAmount);
     }
 
 
@@ -171,7 +211,7 @@ public final class StashManager extends UtilityClassBase {
 
                 final @Nullable String serializedItem = MinecraftUtils.serializeItem(entry.getValue().item);
                 if(serializedItem == null) {
-                    final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(pair.getFirst());
+                    final Player player = MinecraftUtils.getPlayerByUUID(pair.getFirst());
                     if(player != null) player.displayClientMessage(new Txt(
                         "An item in your stash couldn't be saved. You should contact a server admin. " +
                         "Item ID: " + MinecraftUtils.getItemId(entry.getValue().item) + ", " +
@@ -231,8 +271,8 @@ public final class StashManager extends UtilityClassBase {
                     final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
                     final @NotNull ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
                     if(deserializedItem == null) {
-                        final Player player = FrameworkLib.getServer().getPlayerList().getPlayer(playerUUID);
-                        if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded.").red().get(), false);
+                        final Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+                        if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded").red().get(), false);
                     }
                     else stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),

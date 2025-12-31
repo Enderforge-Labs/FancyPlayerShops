@@ -54,7 +54,7 @@ public class Buy_1sButton extends ProductDIsplay_ToggleableButton {
                 display.retrieveItem(player, amount, true);
             }
             else {
-                display.buyItem(player, amount, true);
+                display.buyItem(player, amount);
             }
         }
 

@@ -1,5 +1,9 @@
 package com.snek.fancyplayershops.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +26,10 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -78,26 +84,29 @@ public class ProductDisplay {
 
     // Basic data
     private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
-    private           @NotNull  String                levelId;                          // The Identifier of the level
     private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private           final @NotNull  BlockPos              pos;                              // The position of the display
+    private     final @NotNull  BlockPos              pos;                              // The position of the display
     private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
     private transient @NotNull  ProductDisplayKey     displayKeyCache;                  // The cached display key
-    private           @NotNull  UUID                  shopUUID;                         // The UUID of the shop this display has been assigned to
-    private transient @NotNull  Shop                  shop;                  // The shop this display has been assigned to
-    //TODO rename shopGroup to shop
 
 
     // Display data
-    private transient @NotNull ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
-    private           @NotNull UUID      ownerUUID;                             // The UUID of the owner
-    private                    long      balance         = 0;                   // The balance collected by the shop since it was last claimed
-    private           @NotNull String    serializedItem;                        // The item in serialized form
-    private                    int       stock           = 0;                   // The current stock
-    private                    long      price           = 0l;                  // The configured price for each item
-    private                    int       maxStock        = 0;                   // The configured maximum stock
-    private                    float     defaultRotation = 0f;                  // The configured item rotation
-    private                    float     colorThemeHue   = 0f;                  // The configured hue of the color theme
+    private transient @NotNull  ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
+    private           @NotNull  UUID      ownerUUID;                             // The UUID of the owner
+    private                     long      balance         = 0;                   // The balance collected by the shop since it was last claimed
+    private                     long      price           = 0l;                  // The configured price for each item
+    private                     int       stock           = 0;                   // The current stock
+    private                     int       maxStock        = 0;                   // The configured maximum stock
+    private                     float     defaultRotation = 0f;                  // The configured item rotation
+    private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
+    private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
+    private                     boolean   nbtFilter       = true;                // The configured nbt filter setting
+
+
+    // Stored items
+    private transient @NotNull UUID itemUUID; // The calculated UUID of the item. Used to compare items to store or remove
+    private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems = new HashMap<>();
+    public @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> getStoredItems() { return storedItems; }
 
 
     // Display state
@@ -113,10 +122,8 @@ public class ProductDisplay {
 
     // Getters
     public @NotNull  ServerLevel            getLevel            () { return level;                           }
-    public @NotNull  String                 getLevelId          () { return levelId;                         }
     public @NotNull  BlockPos               getPos              () { return pos;                             }
     public @NotNull  ItemStack              getItem             () { return item;                            }
-    public @NotNull  String                 getSerializedItem   () { return serializedItem;                  }
     public @NotNull  ProductItemDisplayElm  getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
     public           long                   getPrice            () { return price;                           }
@@ -133,8 +140,8 @@ public class ProductDisplay {
     public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
-    public @NotNull  UUID                   getShopUUID         () { return shopUUID;                        }
-    public @NotNull  Shop                   getShop             () { return shop;                 }
+    public @NotNull  Shop                   getShop             () { return shop;                            }
+    public           boolean                getNbtFilter        () { return nbtFilter;                       }
 
 
     // Setters
@@ -167,43 +174,6 @@ public class ProductDisplay {
 
 
     /**
-     * Computes the Identifier of the level.
-     */
-    private void calcSerializedLevelId() {
-        levelId = level.dimension().location().toString();
-    }
-
-
-    /**
-     * Tries find the ServerLevel the level identifier belongs to.
-     * @throws RuntimeException if the level Identifier is invalid or the ServerLevel cannot be found.
-     */
-    private void calcDeserializedLevelId() throws RuntimeException {
-        for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
-            if(w.dimension().location().toString().equals(levelId)) {
-                level = w;
-                return;
-            }
-        }
-        throw new RuntimeException("Invalid product display data: Specified level \"" + levelId + "\" was not found");
-    }
-
-
-    /**
-     * Computes and caches the display identifiers.
-     */
-    private void cacheDisplayIdentifier() {
-        displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
-    }
-    /**
-     * Computes and caches the display key.
-     */
-    private void cacheDisplayKey() {
-        displayKeyCache = calcDisplayKey(pos, level);
-    }
-
-
-    /**
      * Calculates a display identifier from the position. This identifier doesn't include the level ID.
      * @param _pos The position.
      * @return The generated identifier.
@@ -221,86 +191,6 @@ public class ProductDisplay {
     }
 
 
-    /**
-     * Reinitializes the transient members.
-     * @return Whether the item and level id have been deserialized successfully.
-     * <p> Displays whose data cannot be deserialized shouldn't be loaded as their save file is likely corrupted.
-    */
-    public boolean reinitTransient() {
-        focusState      = false;
-        focusStateNext  = false;
-        menuOpenLimiter = new RateLimiter();
-        cacheDisplayIdentifier();
-
-
-        item = MinecraftUtils.deserializeItem(serializedItem);
-        if(item == null) {
-            FancyPlayerShops.LOGGER.error("Couldn't deserialize item \"{}\"", serializedItem, new RuntimeException());
-            return false;
-        }
-        try {
-            calcDeserializedLevelId();
-        } catch(final RuntimeException e) {
-            FancyPlayerShops.LOGGER.error("Couldn't deserialize level ID \"{}\"", levelId, e);
-            return false;
-        }
-
-        cacheDisplayKey();
-        shop = ShopManager.registerDisplay(this, shopUUID);
-        return true;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Creates a new ProductDisplay and saves it in its own file.
-     * @param level The level the display has to be created in.
-     * @param _pos The position of the new display.
-     * @param owner The player that places the display.
-     */
-    public ProductDisplay(final @NotNull ServerLevel level, final @NotNull BlockPos _pos, final @NotNull Player owner) {
-
-        // Set display data
-        this.level = level;
-        ownerUUID = owner.getUUID();
-        pos = _pos;
-        price         = Configs.getDisplay().price.getDefault();
-        maxStock      = Configs.getDisplay().stock_limit.getDefault();
-        colorThemeHue = Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()];
-
-        // Calculate serialized data and display identifier
-        //!No need to check that serializedItem != null, the item being serialized is the default AIR item
-        serializedItem = MinecraftUtils.serializeItem(item);
-        calcSerializedLevelId();
-        cacheDisplayIdentifier();
-        cacheDisplayKey();
-        shopUUID = ShopManager.DEFAULT_SHOP_UUID;
-        shop = ShopManager.registerDisplay(this, ShopManager.DEFAULT_SHOP_UUID);
-
-        // Create and spawn the Item Display entity
-        itemDisplay = new ProductItemDisplayElm(this);
-        itemDisplay.spawn(calcDisplayPos(), true);
-
-        // Save the display
-        ProductDisplayManager.registerDisplay(this);
-        ProductDisplayManager.scheduleDisplaySave(this);
-    }
-
-
-
 
     /**
      * Creates a new ProductDisplay and saves it in its own file.
@@ -315,39 +205,44 @@ public class ProductDisplay {
      * @param _serializedIitem The item in serialized form.
      */
     public ProductDisplay(
-        final @NotNull ServerLevel level, final @NotNull BlockPos _pos,
-        final @NotNull UUID _ownerUUID, final UUID _shopUUID, final long _balance,
-        final long _price, final int _stock, final int _maxStock, final float _rotation, final float _hue, final @NotNull String _serializedIitem
+        final @NotNull UUID ownerUUID,
+        final @NotNull UUID shopUUID,
+        final long price,
+        final int stock,
+        final int maxStock,
+        final float rotation,
+        final float hue,
+        final long balance,
+        final boolean nbtFilter,
+        final @NotNull BlockPos position,
+        final @NotNull ServerLevel level,
+        final @NotNull ItemStack item,
+        final @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems
     ) {
 
-        // Set display data
+        // Set basic data
+        this.ownerUUID = ownerUUID;
+        this.price = price;
+        this.stock = stock;
+        this.maxStock = maxStock;
+        this.defaultRotation = rotation;
+        this.colorThemeHue = hue;
+        this.balance = balance;
+        this.nbtFilter = nbtFilter;
+        this.pos = position;
         this.level = level;
-        ownerUUID = _ownerUUID;
-        balance = _balance;
-        pos = _pos;
-        price = _price;
-        stock = _stock;
-        maxStock = _maxStock;
-        defaultRotation = _rotation;
-        colorThemeHue = _hue;
+        this.item = item;
+        this.storedItems = storedItems;
 
-        // Calculate serialized data
-        calcSerializedLevelId();
-        serializedItem = _serializedIitem;
+        // Calculate item UUID
+        itemUUID = MinecraftUtils.calcItemUUID(item);
 
-        // Get members from serialized data and calculate display identifier
-        final @Nullable ItemStack _item = MinecraftUtils.deserializeItem(serializedItem);
-        if(_item == null) {
-            FancyPlayerShops.LOGGER.error("Item of product display coudln't be deserialized. Using AIR as fallback", new RuntimeException());
-            item = Items.AIR.getDefaultInstance();
-        }
-        else {
-            item = _item;
-        }
-        cacheDisplayIdentifier();
-        cacheDisplayKey();
-        shopUUID = _shopUUID;
-        shop = ShopManager.registerDisplay(this, _shopUUID);
+        // Register this display in the shop and store the shop instance locally
+        this.shop = ShopManager.registerDisplay(this, shopUUID);
+
+        // Recalculate identifier and key
+        displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
+        displayKeyCache = calcDisplayKey(pos, level);
 
         // Create and spawn the Item Display entity
         itemDisplay = new ProductItemDisplayElm(this);
@@ -419,12 +314,30 @@ public class ProductDisplay {
      * @reutrn the item display.
      */
     private @NotNull ProductItemDisplayElm findItemDisplayEntityIfNeeded() {
-
         if(itemDisplay == null || itemDisplay.getEntity().isRemoved()) {
             itemDisplay = new ProductItemDisplayElm(this);
             itemDisplay.spawn(calcDisplayPos(), true);
         }
         return itemDisplay;
+    }
+
+
+
+    /**
+     * Tries to click the disclaimer element.
+     * @param player The player that clicked the display.
+     * @param click The click type.
+     * @return True if the disclaimer exists and was clicked, false otherwise
+     */
+    private boolean attemptDisclaimerClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+        final @Nullable ProductCanvasBase canvas = getActiveCanvas();
+        if(canvas != null) {
+            final @Nullable Div disclaimerElm = canvas.getDisclaimerElm();
+            if(disclaimerElm != null) {
+                return disclaimerElm.forwardClick(player, clickType);
+            }
+        }
+        return false;
     }
 
 
@@ -444,16 +357,26 @@ public class ProductDisplay {
         //! in case of clicks during the focus cooldown time or before the focus is actually registered
         if(isFocused()) {
 
-            // If the display is not currently being used, flag the player as its user
+            // If the display is not currently being used
             if(user == null) {
+
+                // If the disclaimer was clicked, return false (no permission to click UIs)
+                final boolean disclaimerClickResult = attemptDisclaimerClick(player, clickType);
+                if(disclaimerClickResult) {
+                    return false;
+                }
+
+                // If the player left clicked, buy or retrieve an item
                 if(clickType == ClickAction.PRIMARY) {
                     if(player.getUUID().equals(ownerUUID)) {
                         retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1, true);
+                        buyItem(player, 1);
                     }
                 }
+
+                // If the player right clicked, open the buy or edit canvas
                 else {
                     if(player.getUUID().equals(ownerUUID)) {
                         user = player;
@@ -490,7 +413,7 @@ public class ProductDisplay {
                         retrieveItem(player, 1, true);
                     }
                     else {
-                        buyItem(player, 1, true);
+                        buyItem(player, 1);
                     }
                 }
                 return false;
@@ -506,10 +429,12 @@ public class ProductDisplay {
      * Retrieves the specified amount of items from the display at no cost and gives them to the owner.
      * <p> Sends an error message to the player if the display is unconfigured or doesn't contain any item.
      * @param owner The owner of the display.
-     * @param amount The amount of items to retrieve.
+     * @param amount The amount of items to retrieve. Must be > 0.
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
      */
     public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
+        assert Require.positive(amount, "retrieve amount");
+
         if(item.is(Items.AIR)) {
             owner.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
@@ -520,36 +445,26 @@ public class ProductDisplay {
             owner.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            ProductDisplayManager.scheduleDisplaySave(this);
 
+            // Transfer items
+            final var transferStats = sendItemsToPlayer(owner, amount);
+            final int stashedAmount = transferStats.getSecond();
 
-            // Send feedback to the player
-            final ItemStack _item = item.copyWithCount(amount);
-            MinecraftUtils.attemptGive(owner, _item);
-            final int stashedAmount = _item.getCount();
-            final int retrievedAmount = amount - stashedAmount;
+            // Send feedback messages
+            owner.displayClientMessage(new Txt()
+                .cat(new Txt("You retrieved ").lightGray())
+                .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                .cat(new Txt(" from your product display").lightGray())
+            .get(), false);
 
-            if(retrievedAmount > 0) {
+            // Send feedback message for the stashed items
+            if(stashedAmount > 0) {
                 owner.displayClientMessage(new Txt()
-                    .cat(new Txt("You retrieved ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                    .cat(new Txt(" from your product display.").lightGray())
+                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
+                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                 .get(), false);
-                stock -= retrievedAmount;
-            }
-            else if(!stashExcess) {
-                owner.displayClientMessage(new Txt("No item was retrieved. Your inventory is full.").lightGray().get(), false);
-            }
-
-            if(stashExcess && stashedAmount > 0) {
-                StashManager.stashItem(owner.getUUID(), _item, stashedAmount);
-                StashManager.scheduleStashSave(owner.getUUID());
-                owner.displayClientMessage(new Txt()
-                    .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item)).white())
-                    .cat(new Txt(" retrieved from your product display " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
-                .get(), false);
-                stock -= stashedAmount;
             }
 
 
@@ -563,15 +478,15 @@ public class ProductDisplay {
 
 
 
-
     /**
      * Makes a player buy a specified amount of items from the display.
      * <p> Sends an error message to the player if the display is unconfigured or doesn't contain enough items or the player cannot afford to buy the items.
      * @param buyer The player.
-     * @param amount The amount of items to buy.
-     * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
+     * @param amount The amount of items to buy. Must be > 0.
      */
-    public void buyItem(final @NotNull Player buyer, final int amount, final boolean stashExcess) {
+    public void buyItem(final @NotNull Player buyer, final int amount) {
+        assert Require.positive(amount, "buy amount");
+
         if(item.is(Items.AIR)) {
             buyer.displayClientMessage(PRODUCT_DISPLAY_EMPTY_TEXT, true);
         }
@@ -582,41 +497,35 @@ public class ProductDisplay {
             buyer.displayClientMessage(PRODUCT_DISPLAY_AMOUNT_TEXT.copy().append(new Txt(" Items left: " + stock).lightGray().get()), true);
         }
         else {
-            final long totPrice = price * amount;
 
+            // Handle payment
+            final long totPrice = price * amount;
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
                 ProductDisplayManager.scheduleDisplaySave(this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
 
-                // Send feedback to the player
-                final ItemStack _item = item.copyWithCount(amount);
-                MinecraftUtils.attemptGive(buyer, _item);
-                final int stashedAmount = _item.getCount();
-                final int retrievedAmount = amount - stashedAmount;
+                // Transfer items
+                final var transferStats = sendItemsToPlayer(buyer, amount);
+                final int stashedAmount = transferStats.getSecond();
 
-                if(retrievedAmount > 0) {
-                    buyer.displayClientMessage(new Txt()
-                        .cat(new Txt("Bought ").lightGray())
-                        .cat(new Txt(Utils.formatAmount(retrievedAmount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                        .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                    .get(), false);
-                    stock -= retrievedAmount;
-                }
-                else if(!stashExcess) {
-                    buyer.displayClientMessage(new Txt("No item was bought. Your inventory is full.").lightGray().get(), false);
-                }
 
-                if(stashExcess && stashedAmount > 0) {
-                    StashManager.stashItem(buyer.getUUID(), _item, _item.getCount());
-                    StashManager.scheduleStashSave(buyer.getUUID());
+                // Send feedback messages
+                buyer.displayClientMessage(new Txt()
+                    .cat(new Txt("Bought ").lightGray())
+                    .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
+                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
+                .get(), false);
+
+                // Send feedback message for the stashed items
+                if(stashedAmount > 0) {
                     buyer.displayClientMessage(new Txt()
-                        .cat(new Txt("" + Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white())
-                        .cat(new Txt(" bought for " + Utils.formatPrice(totPrice) + " " + (stashedAmount > 1 ? "have" : "has") + " been sent to your stash.").lightGray())
+                        .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                        .cat(new Txt("that didn't fit in your inventory ").lightGray())
+                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                     .get(), false);
-                    stock -= stashedAmount;
                 }
 
 
@@ -797,57 +706,103 @@ public class ProductDisplay {
 
     /**
      * Changes the item sold by this display and saves it to its file.
+     * <p>
+     * This method also stashes any item that isn't compatible with the new data.
      * @param newItem the new item.
      */
     public void changeItem(final @NotNull ItemStack newItem) {
 
-        // Stash the current items
-        stash();
+        // Change the item value and recalculate the UUID
+        item = newItem.copyWithCount(1);
+        itemUUID = MinecraftUtils.calcItemUUID(item);
 
-        // Serialize the item value, then change it and save the display. Send a message to the player if the item cannot be serialized
-        final @Nullable String _serializedItem = MinecraftUtils.serializeItem(newItem);
-        if(_serializedItem == null) {
-            if(user != null) {
-                FancyPlayerShops.LOGGER.error("New item of product display coudln't be serialized", new RuntimeException());
-                user.displayClientMessage(new Txt("An error occurred while trying to change the display's item: This item cannot be serialized").get(), false);
-            }
-        }
-        else {
-            item = newItem.copyWithCount(1);
-            serializedItem = _serializedItem;
-            ProductDisplayManager.scheduleDisplaySave(this);
-        }
+        // Stash incompatible stacks
+        stashIncompatible();
+
+        // Save the display
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 
 
 
 
     /**
-     * Forcefully changes the stock of this display.
-     */
-    public void changeStock(final int stock) {
-        this.stock = stock;
-    }
-
-
-
-
-    /**
-     * Sends the items stored in this display to the owner's stash.
-     * <p> This method also sets the display's stock to 0.
+     * Sends the items stored in this display to the owner's inventory/stash.
+     * <p>
+     * This method also sets the display's stock to 0 and clears the list of stored items.
      */
     public void stash() {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
 
+        // For each item
+        for(var entry : storedItems.entrySet()) {
 
-        // Stash items
-        StashManager.stashItem(ownerUUID, item, stock);
-        StashManager.scheduleStashSave(ownerUUID);
+            // Stash it
+            final ItemStack entryItem  = entry.getValue().getFirst();
+            final int       entryCount = entry.getValue().getSecond();
+            StashManager.giveItem(ownerUUID, entryItem, entryCount, deletionState);
+        }
 
-
-        // Reset stock
+        // Clear stored items and reset stock, then save this display
+        storedItems.clear();
         stock = 0;
+        ProductDisplayManager.scheduleDisplaySave(this);
+    }
+
+
+    /**
+     * Sends any incompatible item stored in this display to the owner's inventory/stash.
+     */
+    public void stashIncompatible() {
+        if(stock == 0) return;
+        if(item.is(Items.AIR)) return;
+
+        // Check each item individually
+        int givenAmount = 0;
+        int stashedAmount = 0;
+        final var iterator = storedItems.entrySet().iterator();
+        while(iterator.hasNext()) {
+
+            // If it's incompatible
+            final var entry = iterator.next();
+            final ItemStack entryItem = entry.getValue().getFirst();
+            if(isItemCompatible(entryItem, entry.getKey()) == null) {
+
+                // Stash it and remove it from the list of stored items
+                final int entryCount = entry.getValue().getSecond();
+                final var giveStats = StashManager.giveItem(ownerUUID, entryItem, entryCount, false);
+                iterator.remove();
+                stock -= entryCount;
+                givenAmount += giveStats.getFirst();
+                stashedAmount += giveStats.getSecond();
+            }
+        }
+
+        // Send feedback message to the player
+        final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
+        if(player != null) {
+            final int removedAmount = givenAmount + stashedAmount;
+            if(removedAmount > 0) {
+                player.displayClientMessage(new Txt()
+                    .cat(new Txt("You picked up ").lightGray())
+                    .cat(new Txt(Utils.formatAmount(removedAmount, true, true) + " ").white())
+                    .cat(new Txt("incompatible ").lightGray())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                    .cat(new Txt("from the product display").lightGray())
+                .get(), false);
+            }
+            if(stashedAmount > 0) {
+                player.displayClientMessage(new Txt()
+                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
+                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
+                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
+                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
+                .get(), false);
+            }
+        }
+
+        // Save this display
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -886,21 +841,43 @@ public class ProductDisplay {
      *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
      */
     public void pickUp(final boolean tryInventory) {
-        final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
 
-
-        // Create the snapshot and try to send it to the owner's inventory
+        // Create the snapshot and give it to the player
         final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
-        boolean giveResult = false;
-        if(tryInventory) {
-            giveResult = MinecraftUtils.attemptGive(owner, snapshot);
+        StashManager.giveItem(ownerUUID, snapshot, 1, true);
+    }
+
+
+
+
+    /**
+     * Checks if the provided item stack can be held by this display.
+     * <p>
+     * This takes into account the current NBT filter setting.
+     * @param itemStack The item stack to check.
+     * @return The item's UUID if it can be held by this display, null otherwise.
+     */
+    public @Nullable UUID isItemCompatible(final @NotNull ItemStack itemStack) {
+        return isItemCompatible(itemStack, MinecraftUtils.calcItemUUID(itemStack));
+    }
+
+    /**
+     * Checks if the provided item stack can be held by this display.
+     * <p>
+     * This takes into account the current NBT filter setting.
+     * @param itemStack The item stack to check.
+     * @param itemStackUUID The UUID of the item stack to check.
+     * @return The item's UUID if it can be held by this display, null otherwise.
+     */
+    public @Nullable UUID isItemCompatible(final @NotNull ItemStack itemStack, final @NotNull UUID itemStackUUID) {
+        if(!MinecraftUtils.getItemKey(itemStack).equals(MinecraftUtils.getItemKey(item))) {
+            return null;
         }
-
-
-        // If the inventory was full, send it to the stash
-        if(!giveResult) {
-            StashManager.stashItem(ownerUUID, snapshot, 1);
-            StashManager.scheduleStashSave(ownerUUID);
+        if(nbtFilter) {
+            return itemStackUUID.equals(itemUUID) ? itemStackUUID : null;
+        }
+        else {
+            return itemStackUUID;
         }
     }
 
@@ -965,16 +942,25 @@ public class ProductDisplay {
 
                 // If the slot is not empty
                 if(!variant.isBlank() && amount > 0) {
-                    final ItemStack stackInSlot = variant.toStack((int) amount);
 
-                    // If the item in the slot matches the item sold by the display
-                    if(ItemStack.isSameItemSameTags(stackInSlot, item)) {
+                    // If the items in the slot match the item sold by the display
+                    final ItemStack itemStack = variant.toStack((int) amount);
+                    final @Nullable UUID variantUUID = isItemCompatible(itemStack);
+                    if(variantUUID != null) {
+
+                        // If the items can be extracted
                         try(final Transaction tx = Transaction.openOuter()) {
                             final long missing = (long)maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();
-                                stock += extracted;
+
+                                // Add them to this display's storage
+                                storeItems(variantUUID, itemStack, (int)extracted);
+                                //! Total stock is updated by storeItems
+                                //! Display is saved by storeItems
+
+                                // Return if the display is full
                                 if(extracted == missing) return;
                             }
                         }
@@ -994,28 +980,36 @@ public class ProductDisplay {
      */
     public void changeOwner(final @NotNull Player newOwner) {
         if(ownerUUID.equals(newOwner.getUUID())) return;
-        final Player oldOwner = FrameworkLib.getServer().getPlayerList().getPlayer(ownerUUID);
+        final Player oldOwner = MinecraftUtils.getPlayerByUUID(ownerUUID);
 
 
         // Send feedback to old owner
         oldOwner.displayClientMessage(new Txt()
             .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
-            .cat("" + newOwner.getName().getString() + ".")
+            .cat("" + newOwner.getName().getString() + "")
         .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
         // Send feedback to new owner
         newOwner.displayClientMessage(new Txt()
-            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you.")
+            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you")
             .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
             .cat(" in the dimension " + level.dimension().location().toString())
         .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
 
 
-        // Actually change the owner and save the display, then force it to unfocus to prevent the previous owner from accessing the UI
+        // Force the display to unfocus in order to close any UI
         focusStateNext = false;
         updateFocusState();
+
+
+        // Unregister the display from the runtime maps to update any linked data,
+        // then change the owner, save the shop and register the display again
+        ShopManager.unregisterDisplay(this);
+        ProductDisplayManager.unregisterDisplay(this);
         ownerUUID = newOwner.getUUID();
+        ProductDisplayManager.registerDisplay(this);
+        ShopManager.registerDisplay(this, getShop().getUuid());
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -1106,8 +1100,116 @@ public class ProductDisplay {
 
         // Change shop and update shop references
         ShopManager.unregisterDisplay(this);
-        shop = newShop;
-        shopUUID = newShop.getUuid();
-        ShopManager.registerDisplay(this, shopUUID);
+        shop = ShopManager.registerDisplay(this, newShop.getUuid());
+    }
+
+
+
+
+    /**
+     * Changes the NBT filter setting of this product display.
+     * @param newNbtFilter The new setting. True filters for NBTs, false matches the item ID.
+     */
+    public void changeNbtFilterSetting(final boolean newNbtFilter) {
+        if(nbtFilter != newNbtFilter) {
+            nbtFilter = newNbtFilter;
+
+            // If the new setting filters NBTs, send non-compatible items to the stash
+            if(nbtFilter) {
+                stashIncompatible();
+            }
+
+            // If the new setting allows any NBT, change nothing
+            // This setting already allows any currently stored item
+
+            // Save the display
+            ProductDisplayManager.scheduleDisplaySave(this);
+        }
+    }
+
+
+
+
+
+    /**
+     * Sends the specified amount of items to the player.
+     * <p>
+     * This updates the list of stored items, as well as the total stock of the product display.
+     * <p>
+     * This method also saves the display and accounts for the NBT filtering setting.
+     * <p>
+     * Items that don't fit in the player's inventory are sent to their stash.
+     * <p>
+     * @param player The player.
+     * @param amount The amount of items to send. Must be {@code < stock} and {@code > 0}.
+     * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
+     */
+    public @NotNull Pair<Integer, Integer> sendItemsToPlayer(final @NotNull Player player, final int amount) {
+        assert Require.condition(amount <= stock, "Amount of items to transfer cannot be higher than the current stock");
+        assert Require.positive(amount, "item amount");
+
+
+        // Create a shuffled list of entries
+        //! Polling variants randomly makes it impossible to predict the next items by checking previous purchases or reading the NBTs
+        final var entries = new ArrayList<>(storedItems.entrySet());
+        Collections.shuffle(entries);
+
+
+        // Give item variants one by one and keep count of the stats
+        //! Not distributing avoids filling the player's inventory/stash with absurd amounts of different variants of the same item
+        int left = amount;
+        int givenAmount = 0;
+        int stashedAmount = 0;
+        for(final var entry : entries) {
+            if(left <= 0) break;
+
+            // Cache item and count, then calculate the amount of items to take and give them to the player
+            final ItemStack entryItem  = entry.getValue().getFirst();
+            final int       entryCount = entry.getValue().getSecond();
+            final int amountTaken = Math.min(entryCount, left);
+            final var stashStats = StashManager.giveItem(player.getUUID(), entryItem, amountTaken, false);
+
+            // Update counters
+            left -= amountTaken;
+            givenAmount   += stashStats.getFirst();
+            stashedAmount += stashStats.getSecond();
+
+            // Delete entry if its stock is 0. Update its stock otherwise
+            if(amountTaken == entryCount) storedItems.remove(entry.getKey());
+            else storedItems.put(entry.getKey(), Pair.from(entryItem, entryCount - amountTaken));
+        }
+
+
+        // Update total stock, then save the display and return the stats
+        assert Require.condition(left == 0, "The amount of items to send left is not 0. This should never happen");
+        stock -= amount;
+        ProductDisplayManager.scheduleDisplaySave(this);
+        return Pair.from(givenAmount, stashedAmount);
+    }
+
+
+
+
+    /**
+     * Stores the specified item stack into this display's storage.
+     * <p>
+     * This updates the item instance's stock, as well as the total stock of the product display.
+     * @param itemStackUUID The UUID of the item stack.
+     * @param itemStack The item stack to store.
+     * @param amount The amount of items to store. Must be {@code > 0}.
+     */
+    public void storeItems(final @NotNull UUID itemStackUUID, final @NotNull ItemStack itemStack, final int amount) {
+        storedItems.compute(itemStackUUID, (key, existing) -> {
+
+            // If the item doesn't exist yet, create a new entry
+            if(existing == null) return new Pair<>(itemStack.copyWithCount(1), amount);
+
+            // If the item exists, add amount to the existing stock
+            else return new Pair<>(existing.getFirst(), existing.getSecond() + amount);
+        });
+
+        // Update total stock and save the display
+        stock += amount;
+        ProductDisplayManager.scheduleDisplaySave(this);
     }
 }

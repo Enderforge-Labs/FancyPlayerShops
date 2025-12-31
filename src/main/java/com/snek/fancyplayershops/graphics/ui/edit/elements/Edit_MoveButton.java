@@ -48,7 +48,7 @@ public class Edit_MoveButton extends SimpleButtonElm {
         // Send feedback message to the player
         //! This has to be executed before display.pickUp as the message needs to appear before the "set to stash" message
         player.displayClientMessage(new Txt()
-            .cat(new Txt("Your " + display.getDecoratedName() + " has been converted into an item."))
+            .cat(new Txt("Your " + display.getDecoratedName() + " has been converted into an item"))
             .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 

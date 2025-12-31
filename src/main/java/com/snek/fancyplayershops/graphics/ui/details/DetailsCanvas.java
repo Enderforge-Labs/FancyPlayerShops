@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.details;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
@@ -11,6 +12,7 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDisplay_NbtDisclaimer;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -38,6 +40,7 @@ import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
  */
 public class DetailsCanvas extends ProductCanvasBase {
     private final @NotNull Details_Values values;
+    private final @Nullable Div nbtDisclaimer;
 
 
     // Colors
@@ -75,6 +78,18 @@ public class DetailsCanvas extends ProductCanvasBase {
         e.setSizeX(TitleElm.DEFAULT_W);
         e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
+
+
+        // Add NBT disclaimer
+        if(!display.getNbtFilter()) {
+            e = bg.addChild(new ProductDisplay_NbtDisclaimer(display.getLevel()));
+            e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
+            e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
+            nbtDisclaimer = e;
+        }
+        else {
+            nbtDisclaimer = null;
+        }
 
 
         // Add details display
@@ -147,4 +162,6 @@ public class DetailsCanvas extends ProductCanvasBase {
         //! Empty. This stops the item display from changing global rotation when the details UI rotates.
     }
 
+
+    @Override public @Nullable Div getDisclaimerElm() { return nbtDisclaimer; }
 }

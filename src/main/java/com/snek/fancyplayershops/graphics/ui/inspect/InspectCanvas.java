@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.inspect;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -115,4 +116,5 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
 
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @Nullable Div getDisclaimerElm() { return null; }
 }

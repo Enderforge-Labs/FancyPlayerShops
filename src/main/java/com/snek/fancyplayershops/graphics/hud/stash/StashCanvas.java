@@ -10,8 +10,7 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
-import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ProductEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
@@ -20,7 +19,6 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -35,7 +33,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-public class StashCanvas extends HudCanvas {
+public class StashCanvas extends HudCanvasBase {
     public static final float LIST_H    = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
     public static final int   LIST_SIZE = 7;
 
@@ -45,7 +43,7 @@ public class StashCanvas extends HudCanvas {
 
 
     public StashCanvas(final @NotNull HudContext context) {
-        super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;

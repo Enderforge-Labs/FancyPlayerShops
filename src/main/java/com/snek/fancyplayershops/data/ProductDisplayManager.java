@@ -1,10 +1,8 @@
 package com.snek.fancyplayershops.data;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,23 +15,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import com.google.gson.Gson;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
+import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -41,16 +36,12 @@ import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
@@ -82,7 +73,6 @@ public final class ProductDisplayManager extends UtilityClassBase {
         .toFormatter(Locale.ENGLISH)
     ;
     private ProductDisplayManager() {}
-    private static final Random rnd = new Random();
 
 
 
@@ -102,7 +92,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @return The path to the directory of the save file of {@code display}.
      */
     public static @NotNull Path calcDisplayFileDirPath(final @NotNull ProductDisplay display) {
-        return calcDisplayDirPath().resolve(display.getLevelId());
+        return calcDisplayDirPath().resolve(MinecraftUtils.getLevelId(display.getLevel()));
     }
 
     /**
@@ -125,6 +115,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
     private static final @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   displaysByCoords   = new HashMap<>();
     private static final @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> displaysByOwner = new HashMap<>();
     private static boolean dataLoaded = false;
+    public static @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   getDisplaysByCoords() { return displaysByCoords; }
+    public static @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
     public static @Nullable Set<@NotNull ProductDisplay> getDisplaysOfPlayer(final @NotNull Player player) { return displaysByOwner.get(player.getUUID()); }
 
     // Async update list
@@ -225,7 +217,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     /**
      * Unregisters the display from the runtime maps.
-     * <p> Calling this method on a display that's already not registered will have no effect.
+     * <p>
+     * Calling this method on a display that's already not registered will have no effect.
+     * <p>
+     * This method doesn't remove the display from the world or modify its stock and balance in any way.
      */
     public static void unregisterDisplay(final @NotNull ProductDisplay display) {
         if(displaysByCoords.remove(display.getKey(), display)) {
@@ -273,7 +268,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             try {
                 Files.createDirectories(levelStorageDir);
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", display.getLevelId(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", MinecraftUtils.getLevelId(display.getLevel()), e);
             }
 
 
@@ -286,7 +281,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             // Create this display's config file if absent, then save the JSON in it
             final File displayStorageFile = calcDisplayFilePath(display).toFile();
             try (final Writer writer = new FileWriter(displayStorageFile)) {
-                new Gson().toJson(display, writer);
+                writer.write(ProductDisplay_Serializer.serialize(display));
             } catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the product display \"{}\"", display.getIdentifierNoLevel(), e);
             }
@@ -297,6 +292,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
         }
         scheduledForSaving = new ArrayList<>();
     }
+
+
+
+
 
 
 
@@ -318,18 +317,12 @@ public final class ProductDisplayManager extends UtilityClassBase {
             if(displayStorageFiles != null) for(final File displayStorageFile : displayStorageFiles) {
 
                 // Read file and deserialize the data
-                ProductDisplay retrievedDisplay = null;
-                try (final Reader reader = new FileReader(displayStorageFile)) {
-                    retrievedDisplay = new Gson().fromJson(reader, ProductDisplay.class);
+                try {
+                    final String serializedDisplay = Files.readString(displayStorageFile.toPath());
+                    final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay, null, null);
+                    registerDisplay(retrievedDisplay);
                 } catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the product display \"{}\"", displayStorageFile.getName(), e);
-                }
-
-                // Recalculate transient members and update display maps
-                if(retrievedDisplay != null) {
-                    if(retrievedDisplay.reinitTransient()) {
-                        registerDisplay(retrievedDisplay);
-                    }
                 }
             }
         }
@@ -413,119 +406,6 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    /**
-     * Removes all displays near the specified position, sending all the items to their owner's stash.
-     * @param level The target level.
-     * @param pos The center of the purge radius.
-     * @param radius The maximum distance from pos displays can have in order to be purged.
-     * @return The number of displays that were removed.
-     */
-    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
-        int r = 0;
-        final List<ProductDisplay> displays = new ArrayList<>(displaysByCoords.values());
-        for(final ProductDisplay display : displays) {
-            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-
-                // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin.").red())
-                .get(), false);
-
-                // Stash, claim and delete the display, then increase the purged displays counter
-                display.stash();
-                display.claimBalance();
-                display.delete();
-                ++r;
-            }
-        }
-        return r;
-    }
-
-
-
-
-    /**
-     * Forces the owners to pick up any of their displays near the specified position, sending the snapshots to their stashes.
-     * @param level The target level.
-     * @param pos The center of the radius.
-     * @param radius The maximum distance from pos displays can have in order to be picked up.
-     * @return The number of displays that were picked up.
-     */
-    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
-        int r = 0;
-        final List<ProductDisplay> displays = new ArrayList<>(displaysByCoords.values());
-        for(final ProductDisplay display : displays) {
-            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-
-                // Send feedback to affected player if they are online
-                final Player owner = FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin.").red())
-                .get(), false);
-
-                // Stash and delete the display, then increase the displaced displays counter
-                display.pickUp(false);
-                display.delete();
-                ++r;
-            }
-        }
-        return r;
-    }
-
-
-
-
-    /**
-     * Fill an area around the specified position with display.
-     * @param level The target level.
-     * @param pos The center of the fill area.
-     * @param radius The maximum distance to reach on each cardinal direction.
-     * @param owner The owner of the newly created displays.
-     * @return The number of displays that were created.
-     */
-    public static int fill(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player owner) {
-
-        // Get a list of all registered items
-        final Registry<Item> itemRegistry = FrameworkLib.getServer().registryAccess().registryOrThrow(Registries.ITEM);
-        final List<Item> itemList = new ArrayList<>();
-        for(final Item item : itemRegistry) {
-            itemList.add(item);
-        }
-
-        // TODO generate randomly named groups
-        // TODO test store A0B5
-        // TODO test store 120B etc
-
-
-        int r = 0;
-        for(float i = pos.x - radius; i < pos.x + radius; ++i) {
-            for(float j = pos.y - radius; j < pos.y + radius; ++j) {
-                for(float k = pos.z - radius; k < pos.z + radius; ++k) {
-                    final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
-                    if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
-                        final ProductDisplay display = new ProductDisplay(level, blockPos, owner);
-                        display.changeItem(itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance());
-                        display.addDefaultRotation((float)Math.toRadians(45f) * (rnd.nextInt() % 8));
-                        display.setStockLimit(1_000_000f);
-                        display.changeStock(Math.abs(rnd.nextInt() % 1_000_000));
-                        display.setPrice(Math.abs(rnd.nextLong() % 100_000));
-                        display.addBalance(Math.abs(rnd.nextLong() % 100));
-                        display.invalidateItemDisplay();
-                        ++r;
-                    }
-                }
-            }
-        }
-        return r;
-    }
-
-
-
-
-
-
-
 
     /**
      * Returns a copy if the default product display item.
@@ -563,18 +443,12 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
         // Create and add display data NBT
         final CompoundTag data = new CompoundTag();
+        data.putUUID  ("owner", display.getOwnerUuid());
+        data.putString("owner_name", MinecraftUtils.getPlayerByUUID(display.getOwnerUuid()).getName().getString());
+        data.putString("product_display_data", ProductDisplay_Serializer.serialize(display));
 
-        data.putUUID  ("owner",      display.getOwnerUuid      ());
-        data.putUUID  ("shop_uuid",  display.getShopUUID       ());
-        data.putLong  ("price",      display.getPrice          ());
-        data.putInt   ("stock",      display.getStock          ());
-        data.putInt   ("max_stock",  display.getMaxStock       ());
-        data.putFloat ("rotation",   display.getDefaultRotation());
-        data.putFloat ("hue",        display.getColorThemeHue  ());
-        data.putLong  ("balance",    display.getBalance        ());
-        data.putString("item",       display.getSerializedItem ());
-        data.putString("owner_name", FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid()).getName().getString());
 
+        // Create description
         final Component[] extraDescriptionLines = {
             new Txt()
                 .cat(new Txt("This ").white().noItalic())
@@ -589,12 +463,13 @@ public final class ProductDisplayManager extends UtilityClassBase {
                 .cat(new Txt(" its stock and settings once placed.").white().noItalic())
             .get(),
             new Txt().get(),
-            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(FrameworkLib.getServer().getPlayerList().getPlayer(display.getOwnerUuid()).getName().getString())).white().noItalic().get(),
+            new Txt().cat(new Txt("Owner: "      ).lightGray().noItalic()).cat(new Txt(MinecraftUtils.getPlayerByUUID(display.getOwnerUuid()).getName().getString())).white().noItalic().get(),
             new Txt().cat(new Txt("Shop: "       ).lightGray().noItalic()).cat(new Txt(display.getShop().getDisplayName())).white().noItalic().get(), //TODO use colored text for display names? maybe? idk. might have to change the shop data too
             new Txt().cat(new Txt("Balance: "    ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice(display.getBalance()))).gold().noItalic().get(),
             new Txt().cat(new Txt("Price: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatPrice (display.getPrice   ()             ))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getMaxStock(), false, true))).white().noItalic().get(),
+            new Txt().cat(new Txt("NBT filter:  ").lightGray().noItalic()).cat(new Txt(display.getNbtFilter() ? "on" : "off")).white().noItalic().get(),
             new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ROTATION_NAMES[(int)Math.round(display.getDefaultRotation() / Math.PI * 4) % 8])).white().noItalic().get(),
             new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(display.getColorThemeHue(), Edit_ColorSelector.S, Edit_ColorSelector.V))).noItalic().get(),
             new Txt().get()

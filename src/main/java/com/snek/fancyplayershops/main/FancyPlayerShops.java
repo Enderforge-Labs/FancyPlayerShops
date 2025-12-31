@@ -21,6 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -210,23 +211,33 @@ public class FancyPlayerShops implements ModInitializer {
                     if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            new ProductDisplay(
-                                serverLevel, blockPos,
-                                player.getUUID(), data.getUUID("shop_uuid"), data.getLong("balance"),
-                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item")
-                            );
-                            player.displayClientMessage(new Txt("Display snapshot restored.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
+                            ProductDisplay_Serializer.deserialize(data.getString("product_display_data"), serverLevel, blockPos);
+                            player.displayClientMessage(new Txt("Display snapshot restored").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
                         else {
-                            player.displayClientMessage(new Txt("This product display belongs to " + data.getString("owner_name") + "! Only they can place it.").red().bold().get(), true);
+                            player.displayClientMessage(new Txt("This product display belongs to " + data.getString("owner_name") + "! Only they can place it").red().bold().get(), true);
                         }
                     }
 
                     // Spawn empty product display otherwise
                     else {
-                        new ProductDisplay(serverLevel, blockPos, player);
-                        player.displayClientMessage(new Txt("New product display created. Right click it to configure.").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
+                        new ProductDisplay(
+                            /* ownerUUID   */ player.getUUID(),
+                            /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
+                            /* price       */ 1000l,
+                            /* stock       */ 0,
+                            /* maxStock    */ 1000,
+                            /* rotation    */ 0f,
+                            /* hue         */ 0f,
+                            /* balance     */ 0l,
+                            /* nbtFilter   */ true,
+                            /* position    */ blockPos,
+                            /* level       */ serverLevel,
+                            /* item        */ Items.AIR.getDefaultInstance(),
+                            /* storedItems */ new HashMap<>()
+                        );
+                        player.displayClientMessage(new Txt("New product display created. Right click it to configure").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
                     }
                 }

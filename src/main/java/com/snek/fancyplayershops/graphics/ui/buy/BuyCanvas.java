@@ -1,6 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.buy;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
@@ -17,6 +18,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
+import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDisplay_NbtDisclaimer;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -45,6 +47,9 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public static final float CONFIRM_BUTTON_W = 0.5f;
     public static final float BUY_BUTTONS_SPACING = 0.025f;
     public static final float BUY_BUTTONS_W = (CONFIRM_BUTTON_W - BUY_BUTTONS_SPACING * 2f) / 3f;
+
+    // Elements
+    private final @Nullable Div nbtDisclaimer;
     private final @NotNull DualInputIndicator inputIndicator;
 
     // Instance data
@@ -80,6 +85,18 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
+
+
+        // Add NBT disclaimer
+        if(!display.getNbtFilter()) {
+            e = bg.addChild(new ProductDisplay_NbtDisclaimer(display.getLevel()));
+            e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
+            e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
+            nbtDisclaimer = e;
+        }
+        else {
+            nbtDisclaimer = null;
+        }
 
 
         // Add amount input and total price display
@@ -194,4 +211,5 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @Nullable Div getDisclaimerElm() { return nbtDisclaimer; }
 }

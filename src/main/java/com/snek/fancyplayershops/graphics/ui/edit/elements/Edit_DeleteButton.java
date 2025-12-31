@@ -15,7 +15,6 @@ import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -50,17 +49,14 @@ public class Edit_DeleteButton extends SimpleButtonElm {
 
         // Send feedback message
         player.displayClientMessage(new Txt()
-            .cat("Your " + display.getDecoratedName() + " has been deleted.")
+            .cat("Your " + display.getDecoratedName() + " has been deleted")
             .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)
         .get(), false);
 
 
         // Give the player a default product display item
         final ItemStack defaultProductDisplayItem =  ProductDisplayManager.getProductDisplayItemCopy();
-        if(!MinecraftUtils.attemptGive(player, defaultProductDisplayItem)) {
-            StashManager.stashItem(display.getOwnerUuid(), defaultProductDisplayItem, 1);
-            //! ^ saveStash() call is done by display.stash()
-        }
+        StashManager.giveItem(player.getUUID(), defaultProductDisplayItem, 1, true);
 
 
         // Stash, claim and delete the display
