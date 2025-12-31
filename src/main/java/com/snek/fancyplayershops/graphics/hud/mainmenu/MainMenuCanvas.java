@@ -11,8 +11,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBack_S;
-import com.snek.fancyplayershops.graphics.hud.core.styles.HudCanvasBackground_S;
+import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_BrowseShopsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopEntry;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopHeader;
@@ -30,7 +29,6 @@ import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 
@@ -44,7 +42,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-public class MainMenuCanvas extends HudCanvas {
+public class MainMenuCanvas extends HudCanvasBase {
     public static final float ICON_NAME_RATIO    = 0.1f;
     public static final float ICON_NAME_SPACING  = 0.02f;
 
@@ -58,7 +56,7 @@ public class MainMenuCanvas extends HudCanvas {
 
 
     public MainMenuCanvas(final @NotNull HudContext _hud) {
-        super(_hud, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE, new HudCanvasBackground_S(), new HudCanvasBack_S());
+        super(_hud, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
