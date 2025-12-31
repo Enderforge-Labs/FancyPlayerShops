@@ -54,7 +54,7 @@ public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
                 display.retrieveItem(player, amount, false);
             }
             else {
-                display.buyItem(player, amount, false);
+                display.buyItem(player, amount);
             }
             if(display.getStock() != oldStock) Clickable.playSound(player);
         }

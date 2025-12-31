@@ -25,7 +25,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
     private final @NotNull BuyCanvas menu;
-    private final boolean active = true;
 
 
     public Buy_ConfirmButton(final @NotNull ProductDisplay display, final @NotNull BuyCanvas _menu) {
@@ -47,12 +46,12 @@ public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
         // Play sound and buy items
         final ProductDisplay display = GetDisplay.get(this);
-        if(active) Clickable.playSound(player);
+        if(isActive()) Clickable.playSound(player);
         if(player.getUUID().equals(display.getOwnerUuid())) {
             display.retrieveItem(player, menu.getAmount(), true);
         }
         else {
-            display.buyItem(player, menu.getAmount(), true);
+            display.buyItem(player, menu.getAmount());
         }
     }
 
