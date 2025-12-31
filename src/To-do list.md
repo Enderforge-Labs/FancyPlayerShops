@@ -82,6 +82,13 @@
   - you can buy in advance and your items will be sent to the stash as soon as they are available in the product display
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
+- add exceptions for ad astra rover, rockets and all (ad astra compatibility?)
+- add exceptions for tinkering table and all of the other tables (chipped compatibility?)
+- add exceptions for water wheels and flywheel (create compatibility?)
+- add exceptions for handcrafted beds and similar (handcrafted compatibility?)
+- add exceptions for indrev mining rig (indrev compatibility?)
+- add exceptions for create boilers, track buffer and generator coils
+
 Cleanup:
     - add @NotNull and @Null to everything
     - Check and/or add documentation comments to all methods and classes. use <p> to separate paragraphs (put on its own line)
