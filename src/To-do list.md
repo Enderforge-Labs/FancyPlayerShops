@@ -7,6 +7,10 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
+- Replace manual stash messages with a utility method
+  - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
+  - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
+
 - add ae2 compatibility
   - let players craft higher tiers of product displays that can contain more stock
   - product displays don't pull any item by default but require manual restocking.
