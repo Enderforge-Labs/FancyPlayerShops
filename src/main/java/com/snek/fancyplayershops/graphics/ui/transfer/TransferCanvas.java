@@ -123,10 +123,10 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
      */
     public void attemptSetNewOwner(final @NotNull String s) {
 
-        // Check if the name is not a valid username
+        // Check if the name is not a valid username. In that case, send an error message to the player and update the input dipslay
         if(!s.matches("^\\w{3,16}$")) {
             display.getuser().displayClientMessage(new Txt("The specified name is not a valid Minecraft username").red().bold().get(), true);
-            confirmButton.updateColor(false);
+            failNameValidation();
         }
 
         // If it is, try to set the new owner and update the display in case of success
@@ -134,19 +134,21 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
             final Player newOwner = MinecraftUtils.getPlayerByName(s);
             if(newOwner == null) {
                 display.getuser().displayClientMessage(new Txt("The specified player is currently offline").red().bold().get(), true);
-                confirmButton.updateColor(false);
+                failNameValidation();
             }
             else if(newOwner.getUUID().equals(display.getOwnerUuid())) {
                 display.getuser().displayClientMessage(new Txt("You already own this product display!").red().bold().get(), true);
-                confirmButton.updateColor(false);
+                failNameValidation();
             }
             else {
                 newOwnerUUID = newOwner.getUUID();
                 confirmButton.updateColor(true);
             }
-            //FIXME this is prob broken
-            //FIXME try to set a valid username, then set an invalid one. it's supposed to default to "not specified". it probably won't
         }
+    }
+    private final void failNameValidation() {
+        confirmButton.updateColor(false);
+        newOwnerUUID = display.getOwnerUuid();
     }
 
 
