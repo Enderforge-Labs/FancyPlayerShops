@@ -209,19 +209,21 @@ public final class StashManager extends UtilityClassBase {
             for(final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
                 final JsonObject jsonEntry = new JsonObject();
 
-                final @Nullable String serializedItem = MinecraftUtils.serializeItem(entry.getValue().item);
+                final @NotNull ItemStack entryItem = entry.getValue().getItem();
+                final @NotNull int entryCount = entry.getValue().getCount();
+                final @Nullable String serializedItem = MinecraftUtils.serializeItem(entryItem);
                 if(serializedItem == null) {
                     final Player player = MinecraftUtils.getPlayerByUUID(pair.getFirst());
                     if(player != null) player.displayClientMessage(new Txt(
                         "An item in your stash couldn't be saved. You should contact a server admin. " +
-                        "Item ID: " + MinecraftUtils.getItemId(entry.getValue().item) + ", " +
-                        "Count: " + entry.getValue().item.getCount()
+                        "Item ID: " + MinecraftUtils.getItemId(entryItem) + ", " +
+                        "Count: " + entryCount
                     ).red().get(), false);
                 }
                 else {
                     jsonEntry.addProperty("uuid", entry.getKey().toString());
                     jsonEntry.addProperty("item", serializedItem);
-                    jsonEntry.addProperty("count", entry.getValue().getCount());
+                    jsonEntry.addProperty("count", entryCount);
                     jsonEntries.add(jsonEntry);
                 }
             }

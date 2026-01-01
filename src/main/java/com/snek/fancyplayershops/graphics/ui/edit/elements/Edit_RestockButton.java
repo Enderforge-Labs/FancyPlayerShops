@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 
@@ -26,7 +27,10 @@ public class Edit_RestockButton extends ProductDIsplay_ToggleableButton {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
+
+        // Play sound and attempt restock
         Clickable.playSound(player);
-//TODO
+        final ProductDisplay display = GetDisplay.get(this);
+        display.attemptRestock();
     }
 }

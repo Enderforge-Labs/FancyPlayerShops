@@ -26,6 +26,8 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
+import com.snek.fancyplayershops.data.data_types.PlayerStash;
+import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -45,6 +47,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
@@ -1211,5 +1214,107 @@ public class ProductDisplay {
         // Update total stock and save the display
         stock += amount;
         ProductDisplayManager.scheduleDisplaySave(this);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Tries to restock the display using the items in the owner's inventory and stash.
+     */
+    public void attemptRestock() {
+        final @Nullable Player owner = MinecraftUtils.getPlayerByUUID(ownerUUID);
+        if(owner == null) return;
+        int takenFromInventory = 0;
+        int takenFromStash = 0;
+
+
+        // Check each slot in the player's inventory (hotbar + 27 inventory slots)
+        final Inventory inventory = owner.getInventory();
+        for(final ItemStack stack : inventory.items) {
+            takenFromInventory += attemptRestock(stack, stack.getCount());
+            if(isFull()) {
+                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                return;
+            }
+        }
+
+
+        // Check the player's offhand slot
+        final ItemStack offhandItem = owner.getOffhandItem();
+        takenFromInventory += attemptRestock(offhandItem, offhandItem.getCount());
+        if(isFull()) {
+            finalizeRestock(owner, takenFromInventory, takenFromStash);
+            return;
+        }
+
+
+        // Check each slot in the player's stash
+        final @Nullable PlayerStash stash = StashManager.getStash((ServerPlayer)owner);
+        for(final var entry : stash.entrySet()) {
+            final StashEntry stashEntry = entry.getValue();
+            takenFromStash += attemptRestock(stashEntry.getItem(), stashEntry.getCount());
+            if(isFull()) {
+                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                return;
+            }
+        }
+    }
+
+
+    /**
+     * Tries to restock the display using the provided item stack.
+     * <p>
+     * This method modified the display's stock and stores a copy of the items.
+     * <p>
+     * The provided item stack is not modified.
+     * @param stack The item stack. Can be empty.
+     * @param count The number of available items.
+     * @return The amount of transferred items.
+     */
+    private int attemptRestock(final @NotNull ItemStack stack, final int count) {
+
+        // Return 0 if the item is empty or not compatible
+        if(stack.isEmpty()) return 0;
+        final @Nullable UUID comparisonResult = isItemCompatible(stack);
+        if(comparisonResult == null) return 0;
+
+        // If the item is compatible, store the new items and return their count
+        final int left = maxStock - stock;
+        final int transferred = Math.min(left, count);
+        storeItems(comparisonResult, stack, transferred);
+        return transferred;
+    }
+
+
+    /**
+     * Finalizes a restock operation, sending feedback messages to the owner.
+     * @param owner The owner of the display. Only used for optimization. Their UUID must match this.ownerUUID.
+     * @param takenFromInventory The number of items taken from the owner's inventory.
+     * @param takenFromStash The number of items taken from the owner's stash.
+     */
+    private void finalizeRestock(final @NotNull Player owner, final int takenFromInventory, final int takenFromStash) {
+        owner.displayClientMessage(new Txt()
+            .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+            .cat(new Txt(Utils.formatAmount(takenFromInventory, true, true)).white())
+            .cat(new Txt(" items from your inventory and ").lightGray())
+            .cat(new Txt(Utils.formatAmount(takenFromStash, true, true)).white())
+            .cat(new Txt(" items from your stash").lightGray())
+        .get(), false);
+    }
+
+
+
+
+    /**
+     * Checks if the product display is full.
+     * @return Whether the product display is full.
+     */
+    public boolean isFull() {
+        return stock >= maxStock;
     }
 }
