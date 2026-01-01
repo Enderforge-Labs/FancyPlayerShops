@@ -1348,7 +1348,9 @@ public class ProductDisplay {
 
         if(takenFromInventory > 0 && takenFromStash > 0) {
             owner.displayClientMessage(new Txt()
-                .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+                .cat(new Txt("You restocked your ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" with ").lightGray())
                 .cat(new Txt(Utils.formatAmount(takenFromInventory, true, true)).white())
                 .cat(new Txt(" items from your inventory and ").lightGray())
                 .cat(new Txt(Utils.formatAmount(takenFromStash, true, true)).white())
@@ -1357,14 +1359,18 @@ public class ProductDisplay {
         }
         else if(takenFromInventory > 0) {
             owner.displayClientMessage(new Txt()
-                .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+                .cat(new Txt("You restocked your ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" with ").lightGray())
                 .cat(new Txt(Utils.formatAmount(takenFromInventory, true, true)).white())
                 .cat(new Txt(" items from your inventory").lightGray())
             .get(), false);
         }
         else if(takenFromStash > 0) {
             owner.displayClientMessage(new Txt()
-                .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+                .cat(new Txt("You restocked your ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" with ").lightGray())
                 .cat(new Txt(Utils.formatAmount(takenFromStash, true, true)).white())
                 .cat(new Txt(" items from your stash").lightGray())
             .get(), false);
