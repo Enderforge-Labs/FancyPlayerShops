@@ -8,6 +8,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -38,9 +39,18 @@ public class Edit_NbtButton extends ProductDIsplay_ToggleableButton {
         super.onClick(player, click, coords);
         final ProductDisplay display = GetDisplay.get(this);
 
+        // Play sound and toggle the button
         Clickable.playSound(player);
         updateColor(!isActive());
+
+        // Actually change the NBT filter setting
         display.changeNbtFilterSetting(isActive());
+
+        // Send feedback message
+        player.displayClientMessage(new Txt()
+            .cat(new Txt("NBT Filter set to: ").lightGray())
+            .cat(isActive() ? new Txt("On").green().bold() : new Txt("Off").red().bold())
+        .get(), true);
     }
 }
 
