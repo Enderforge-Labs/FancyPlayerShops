@@ -83,6 +83,6 @@ public class _MainMenu_LargeButton_S extends FancyButtonElmStyle {
 
     @Override //TODO replace with font size override
     public @NotNull Transform getDefaultTransformFg() {
-        return super.getDefaultTransform().scale(0.5f);
+        return super.getDefaultTransformFg().scale(0.5f);
     }
 }
