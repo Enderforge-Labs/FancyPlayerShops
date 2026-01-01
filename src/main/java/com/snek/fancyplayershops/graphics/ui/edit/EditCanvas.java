@@ -207,7 +207,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
     @Override
     public void onStockChange() {
-        restockButton.updateColor(display.getMaxStock() < display.getStock());
+        restockButton.updateColor(display.getStock() < display.getMaxStock());
     }
 
 
