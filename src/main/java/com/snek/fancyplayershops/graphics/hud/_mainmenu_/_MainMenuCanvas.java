@@ -29,8 +29,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class _MainMenuCanvas extends HudCanvasBase {
-    public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.9f, 0.5f);
-    public static final float MAIN_BUTTONS_DISTANCE = 0.04f;
+    public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.96f, 0.5f);
+    public static final float MAIN_BUTTONS_DISTANCE = 0.02f;
     public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - FancyPlayerShops.LINE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
 
 
@@ -43,7 +43,7 @@ public class _MainMenuCanvas extends HudCanvasBase {
 
 
         // Add title
-        e = bg.addChild(new TitleElm(level, new Txt("Your shops").white().bold().get()));
+        e = bg.addChild(new TitleElm(level, new Txt("Fancy Player Shops").white().bold().get()));
         e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 

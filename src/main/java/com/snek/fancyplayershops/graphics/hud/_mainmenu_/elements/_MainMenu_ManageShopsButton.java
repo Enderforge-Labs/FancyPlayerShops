@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.styles._MainMenu_LargeButton_S;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
@@ -30,6 +32,7 @@ public class _MainMenu_ManageShopsButton extends FancyButtonElm {
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, ItemDesigns.Coin));
+        e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
         e.setSize(new Vector2f(0.4f));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
