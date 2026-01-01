@@ -129,5 +129,3 @@ public class MainMenuCanvas extends HudCanvasBase {
         //TODO ^ merge duplicate code. this is used in many UIs and HUDs, it should prob be a method or something
     }
 }
-
-//TODO provide common icons in FrameworkLib

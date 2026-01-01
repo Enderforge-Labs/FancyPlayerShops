@@ -144,6 +144,9 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         buy1iButton = (Buy_1iButton)e;
 
 
+        //TODO maybe move input indicators to ProductCanvasBase?
+        //TODO issue is, each canvas has its own bottomHeight which defines the position of the input indicator.
+        //TODO detailsCanvas has special position too
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
