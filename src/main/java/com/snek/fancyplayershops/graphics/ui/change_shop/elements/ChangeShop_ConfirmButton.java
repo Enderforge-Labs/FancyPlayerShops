@@ -43,8 +43,11 @@ public class ChangeShop_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
         // Send feedback message
         player.displayClientMessage(new Txt()
-            .cat(new Txt("Successfully moved your " + display.getDecoratedName() + " to the shop ").lightGray())
-            .cat(new Txt("\"" + display.getShop().getDisplayName() + "\"").white())
+            .cat(new Txt("Successfully moved your ").lightGray())
+            .cat(new Txt(display.getDecoratedName()).white())
+            .cat(new Txt(" to the shop \"").lightGray())
+            .cat(new Txt(display.getShop().getDisplayName()).white())
+            .cat(new Txt("\"").lightGray())
         .get(), false);
 
         // Change canvas

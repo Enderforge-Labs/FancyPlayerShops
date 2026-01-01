@@ -35,7 +35,7 @@ public class ChangeShop_NameInput extends TextInputElm {
         super(
             display.getLevel(),
             null, "Choose new shop",
-            new Txt("Send the name of the new shop in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the name of the new shop in chat!").lightGray().bold().get(),
             new ProductDisplay_TextInput_S(display)
         );
         menu = _menu;

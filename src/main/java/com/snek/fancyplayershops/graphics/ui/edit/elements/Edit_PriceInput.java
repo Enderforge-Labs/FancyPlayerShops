@@ -32,7 +32,7 @@ public class Edit_PriceInput extends TextInputElm {
         super(
             display.getLevel(),
             null, "Change price",
-            new Txt("Send the new price in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the new price in chat!").lightGray().bold().get(),
             new ProductDisplay_TextInput_S(display)
         );
     }

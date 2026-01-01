@@ -36,7 +36,7 @@ public class Transfer_NameInput extends TextInputElm {
         super(
             display.getLevel(),
             null, "Choose new owner",
-            new Txt("Send the name of the new owner in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
+            new Txt("Send the name of the new owner in chat!").lightGray().bold().get(),
             new ProductDisplay_TextInput_S(display)
         );
         menu = _menu;

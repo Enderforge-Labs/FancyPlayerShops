@@ -31,7 +31,7 @@ public class Edit_StockLimitInput extends TextInputElm {
     public Edit_StockLimitInput(final @NotNull ProductDisplay display) {
         super(
             display.getLevel(),
-            null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).bold().get(),
+            null, "Change stock limit", new Txt("Send the new stock limit in chat!").lightGray().bold().get(),
             new ProductDisplay_TextInput_S(display)
         );
     }

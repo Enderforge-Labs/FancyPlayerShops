@@ -1002,17 +1002,21 @@ public class ProductDisplay {
 
         // Send feedback to old owner
         oldOwner.displayClientMessage(new Txt()
-            .cat("You successfully transferred the ownership of your " + getDecoratedName() + " to ")
-            .cat("" + newOwner.getName().getString() + "")
-        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
+            .cat(new Txt("You successfully transferred the ownership of your ").lightGray())
+            .cat(new Txt(getDecoratedName()).white())
+            .cat(new Txt(" to ").lightGray())
+            .cat(new Txt(newOwner.getName().getString()).white())
+        .get(), false);
 
 
         // Send feedback to new owner
         newOwner.displayClientMessage(new Txt()
-            .cat("" + oldOwner.getName().getString() + " transferred ownership of their " + getDecoratedName() + " to you")
-            .cat("\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]")
-            .cat(" in the dimension " + level.dimension().location().toString())
-        .color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR).get(), false);
+            .cat(new Txt(oldOwner.getName().getString()).white())
+            .cat(new Txt(" transferred ownership of their ").lightGray())
+            .cat(new Txt(getDecoratedName()).white())
+            .cat(new Txt(" to you.\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]").lightGray())
+            .cat(new Txt(" in the dimension " + level.dimension().location().toString()).lightGray())
+        .get(), false);
 
 
         // Force the display to unfocus in order to close any UI
