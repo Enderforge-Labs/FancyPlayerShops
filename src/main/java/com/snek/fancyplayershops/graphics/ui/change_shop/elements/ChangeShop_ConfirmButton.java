@@ -9,6 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.change_shop.ChangeShopCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -39,6 +40,12 @@ public class ChangeShop_ConfirmButton extends ProductDIsplay_ToggleableButton {
         final ProductDisplay display = GetDisplay.get(this);
         display.changeShop(menu.getNewShopName(), (ServerPlayer)menu.getContext().getPlayer());
         if(isActive()) Clickable.playSound(player);
+
+        // Send feedback message
+        player.displayClientMessage(new Txt()
+            .cat(new Txt("Successfully moved your " + display.getDecoratedName() + " to the shop ").lightGray())
+            .cat(new Txt("\"" + display.getShop().getDisplayName() + "\"").white())
+        .get(), false);
 
         // Change canvas
         display.changeCanvas(new EditCanvas(display));
