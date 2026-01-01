@@ -57,7 +57,7 @@ public class Details_Values extends SimpleTextElm {
         final ProductDisplay display = GetDisplay.get(this);
 
         // Calculate the color of the stock amount and retrieve the owner's name
-        final float factor = Math.min(1.0f, (float)display.getStock() / display.getMaxStock());
+        final double factor = Math.min(1.0f, (double)display.getStock() / display.getMaxStock());
         final Vector3i col = Utils.interpolateRGB(DetailsCanvas.C_HSV_STOCK_LOW, DetailsCanvas.C_HSV_STOCK_HIGH, (float)Easings.quadOut.compute(factor));
 
         // Empty product display case

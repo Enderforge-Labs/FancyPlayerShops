@@ -60,8 +60,8 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     private final @NotNull Buy_1sButton buy1sButton;
     private final @NotNull Buy_1iButton buy1iButton;
 
-    private int amount = 0;
-    public int getAmount() { return amount; }
+    private long amount = 0;
+    public long getAmount() { return amount; }
 
 
 
@@ -165,7 +165,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
 
-    public void changeAmount(final int newAmount) {
+    public void changeAmount(final long newAmount) {
         amount = newAmount;
         priceDisplay.updateDisplay();
         amountInputDisplay.updateDisplayedText();
@@ -188,7 +188,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
             user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
             return false;
         }
-        else changeAmount(Math.round(_amount));
+        else changeAmount(Math.round((double)_amount));
         return true;
     }
 

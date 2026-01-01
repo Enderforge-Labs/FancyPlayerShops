@@ -97,7 +97,7 @@ public final class StashManager extends UtilityClassBase {
      * @param item The item to add.
      * @param count The amount of items to add.
      */
-    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final int count) {
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final long count) {
         if(count == 0) return;
         if(item.is(Items.AIR)) return;
         final PlayerStash stash = stashes.computeIfAbsent(playerUUID, k -> new PlayerStash());
@@ -116,7 +116,7 @@ public final class StashManager extends UtilityClassBase {
      * @param count The amount of items to add.
      * @param playerFeedback Whether to send the player a feedback message.
      */
-    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int count, final boolean playerFeedback) {
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final long count, final boolean playerFeedback) {
         if(count == 0) return;
         if(item.is(Items.AIR)) return;
         stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count);
@@ -147,8 +147,8 @@ public final class StashManager extends UtilityClassBase {
      * @param playerFeedback Whether to send the player a feedback message.
      * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
      */
-    public static @NotNull Pair<Integer, Integer> giveItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final int amount, final boolean playerFeedback) {
-        final ItemStack _item = item.copyWithCount(amount);
+    public static @NotNull Pair<Long, Long> giveItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final long amount, final boolean playerFeedback) {
+        final ItemStack _item = item.copyWithCount((int)Math.min(10_000l, amount));
         //! Create a copy of the item. Its count gets modified by attemptGive
 
 
@@ -159,9 +159,9 @@ public final class StashManager extends UtilityClassBase {
         }
 
         // Send remaining items to the stash
-        final int stashedAmount = _item.getCount();
+        final long stashedAmount = _item.getCount() + Math.max(amount - 10_000l, 0l);
         if(stashedAmount > 0) {
-            StashManager.stashItem(playerUUID, _item, _item.getCount(), player != null && playerFeedback);
+            StashManager.stashItem(playerUUID, _item, stashedAmount, player != null && playerFeedback);
         }
 
         // Return stats
@@ -210,7 +210,7 @@ public final class StashManager extends UtilityClassBase {
                 final JsonObject jsonEntry = new JsonObject();
 
                 final @NotNull ItemStack entryItem = entry.getValue().getItem();
-                final @NotNull int entryCount = entry.getValue().getCount();
+                final @NotNull long entryCount = entry.getValue().getCount();
                 final @Nullable String serializedItem = MinecraftUtils.serializeItem(entryItem);
                 if(serializedItem == null) {
                     final Player player = MinecraftUtils.getPlayerByUUID(pair.getFirst());
@@ -279,7 +279,7 @@ public final class StashManager extends UtilityClassBase {
                     else stashItem(playerUUID,
                         UUID.fromString(jsonEntry.get("uuid").getAsString()),
                         deserializedItem,
-                        jsonEntry.get("count").getAsInt()
+                        jsonEntry.get("count").getAsLong()
                     );
                 }
             } catch(final IOException e) {

@@ -41,7 +41,7 @@ public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
 
 
 
-    public Stash_ProductEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull int count, final @NotNull ScrollableList parentList) {
+    public Stash_ProductEntry(final @NotNull HudContext context, final @NotNull ItemStack item, final @NotNull long count, final @NotNull ScrollableList parentList) {
         super(context.getLevel(), null, "Collect this item", 2, new Stash_ItemEntry_S());
         this.parentList = parentList;
         Div e;

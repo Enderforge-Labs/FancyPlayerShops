@@ -44,7 +44,7 @@ public class Buy_1sButton extends ProductDIsplay_ToggleableButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         final ProductDisplay display = GetDisplay.get(this);
-        final int amount = display.getItem().getMaxStackSize();
+        final long amount = display.getItem().getMaxStackSize();
 
 
         // Play sound and buy items (left click)

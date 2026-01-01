@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Math;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -111,8 +110,8 @@ public class ProductDisplay {
     private           @NotNull  UUID      ownerUUID;                             // The UUID of the owner
     private                     long      balance         = 0;                   // The balance collected by the shop since it was last claimed
     private                     long      price           = 0l;                  // The configured price for each item
-    private                     int       stock           = 0;                   // The current stock
-    private                     int       maxStock        = 0;                   // The configured maximum stock
+    private                     long      stock           = 0;                   // The current stock
+    private                     long      maxStock        = 0;                   // The configured maximum stock
     private                     int       defaultRotation = 0;                   // The configured item rotation, in eighths
     private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
     private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
@@ -121,8 +120,8 @@ public class ProductDisplay {
 
     // Stored items
     private transient @NotNull UUID itemUUID; // The calculated UUID of the item. Used to compare items to store or remove
-    private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems = new HashMap<>();
-    public @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> getStoredItems() { return storedItems; }
+    private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems = new HashMap<>();
+    public @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> getStoredItems() { return storedItems; }
 
 
     // Display state
@@ -144,8 +143,8 @@ public class ProductDisplay {
     public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
     public           long                   getPrice            () { return price;                           }
     public           long                   getBalance          () { return balance;                         }
-    public           int                    getStock            () { return stock;                           }
-    public           int                    getMaxStock         () { return maxStock;                        }
+    public           long                   getStock            () { return stock;                           }
+    public           long                   getMaxStock         () { return maxStock;                        }
     public           int                    getDefaultRotation  () { return defaultRotation;                 }
     public           boolean                isFocused           () { return focusState;                      }
     public           boolean                isDeleted           () { return deletionState;                   }
@@ -228,8 +227,8 @@ public class ProductDisplay {
         final @NotNull UUID ownerUUID,
         final @NotNull UUID shopUUID,
         final long price,
-        final int stock,
-        final int maxStock,
+        final long stock,
+        final long maxStock,
         final int rotation,
         final float hue,
         final long balance,
@@ -237,7 +236,7 @@ public class ProductDisplay {
         final @NotNull BlockPos position,
         final @NotNull ServerLevel level,
         final @NotNull ItemStack item,
-        final @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Integer>> storedItems
+        final @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems
     ) {
 
         // Set basic data
@@ -452,7 +451,7 @@ public class ProductDisplay {
      * @param amount The amount of items to retrieve. Must be > 0.
      * @param stashExcess Whether to stash the items that didn't fit in the inventory or send them back to the display.
      */
-    public void retrieveItem(final @NotNull Player owner, final int amount, final boolean stashExcess) {
+    public void retrieveItem(final @NotNull Player owner, final long amount, final boolean stashExcess) {
         assert Require.positive(amount, "retrieve amount");
 
         if(item.is(Items.AIR)) {
@@ -468,7 +467,7 @@ public class ProductDisplay {
 
             // Transfer items
             final var transferStats = sendItemsToPlayer(owner, amount);
-            final int stashedAmount = transferStats.getSecond();
+            final long stashedAmount = transferStats.getSecond();
 
             // Send feedback messages
             owner.displayClientMessage(new Txt()
@@ -503,7 +502,7 @@ public class ProductDisplay {
      * @param buyer The player.
      * @param amount The amount of items to buy. Must be > 0.
      */
-    public void buyItem(final @NotNull Player buyer, final int amount) {
+    public void buyItem(final @NotNull Player buyer, final long amount) {
         assert Require.positive(amount, "buy amount");
 
         if(item.is(Items.AIR)) {
@@ -527,7 +526,7 @@ public class ProductDisplay {
 
                 // Transfer items
                 final var transferStats = sendItemsToPlayer(buyer, amount);
-                final int stashedAmount = transferStats.getSecond();
+                final long stashedAmount = transferStats.getSecond();
 
 
                 // Send feedback messages
@@ -689,7 +688,7 @@ public class ProductDisplay {
      * @param newStockLimit The new stock limit.
      * @return Whether the new value could be set.
      */
-    public boolean setStockLimit(final float newStockLimit) {
+    public boolean setStockLimit(final double newStockLimit) {
         if(newStockLimit < 0.9999) {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
@@ -758,7 +757,7 @@ public class ProductDisplay {
 
             // Stash it
             final ItemStack entryItem  = entry.getValue().getFirst();
-            final int       entryCount = entry.getValue().getSecond();
+            final long      entryCount = entry.getValue().getSecond();
             StashManager.giveItem(ownerUUID, entryItem, entryCount, deletionState);
         }
 
@@ -777,8 +776,8 @@ public class ProductDisplay {
         if(item.is(Items.AIR)) return;
 
         // Check each item individually
-        int givenAmount = 0;
-        int stashedAmount = 0;
+        long givenAmount = 0;
+        long stashedAmount = 0;
         final var iterator = storedItems.entrySet().iterator();
         while(iterator.hasNext()) {
 
@@ -788,7 +787,7 @@ public class ProductDisplay {
             if(isItemCompatible(entryItem, entry.getKey()) == null) {
 
                 // Stash it and remove it from the list of stored items
-                final int entryCount = entry.getValue().getSecond();
+                final long entryCount = entry.getValue().getSecond();
                 final var giveStats = StashManager.giveItem(ownerUUID, entryItem, entryCount, false);
                 iterator.remove();
                 stock -= entryCount;
@@ -800,7 +799,7 @@ public class ProductDisplay {
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
         if(player != null) {
-            final int removedAmount = givenAmount + stashedAmount;
+            final long removedAmount = givenAmount + stashedAmount;
             if(removedAmount > 0) {
                 player.displayClientMessage(new Txt()
                     .cat(new Txt("You picked up ").lightGray())
@@ -908,7 +907,7 @@ public class ProductDisplay {
      */
     public void pullItems() {
         if(stock >= maxStock || item.is(Items.AIR)) return;
-        final int oldStock = stock;
+        final long oldStock = stock;
 
         pullItems(new BlockPos(+0, +0, +0));
         pullItems(new BlockPos(+0, +0, +1));
@@ -967,7 +966,7 @@ public class ProductDisplay {
 
                         // If the items can be extracted
                         try(final Transaction tx = Transaction.openOuter()) {
-                            final long missing = (long)maxStock - stock;
+                            final long missing = maxStock - stock;
                             final long extracted = slot.extract(variant, missing, tx);
                             if(extracted > 0) {
                                 tx.commit();
@@ -1051,7 +1050,11 @@ public class ProductDisplay {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor1() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_main.getValue(), Configs.getDisplay().theme_luminosity_main.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(
+            colorThemeHue,
+            Configs.getDisplay().theme_saturation_main.getValue(),
+            Configs.getDisplay().theme_luminosity_main.getValue())
+        );
     }
 
     /**
@@ -1059,7 +1062,11 @@ public class ProductDisplay {
      * @return The RGB color value.
      */
     public Vector3i getThemeColor2() {
-        return Utils.HSVtoRGB(new Vector3f(colorThemeHue, Configs.getDisplay().theme_saturation_secondary.getValue(), Configs.getDisplay().theme_luminosity_secondary.getValue()));
+        return Utils.HSVtoRGB(new Vector3f(
+            colorThemeHue,
+            Configs.getDisplay().theme_saturation_secondary.getValue(),
+            Configs.getDisplay().theme_luminosity_secondary.getValue())
+        );
     }
 
 
@@ -1163,9 +1170,9 @@ public class ProductDisplay {
      * <p>
      * @param player The player.
      * @param amount The amount of items to send. Must be {@code < stock} and {@code > 0}.
-     * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
+     * @return A pair of Longs representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
      */
-    public @NotNull Pair<Integer, Integer> sendItemsToPlayer(final @NotNull Player player, final int amount) {
+    public @NotNull Pair<Long, Long> sendItemsToPlayer(final @NotNull Player player, final long amount) {
         assert Require.condition(amount <= stock, "Amount of items to transfer cannot be higher than the current stock");
         assert Require.positive(amount, "item amount");
 
@@ -1178,16 +1185,16 @@ public class ProductDisplay {
 
         // Give item variants one by one and keep count of the stats
         //! Not distributing avoids filling the player's inventory/stash with absurd amounts of different variants of the same item
-        int left = amount;
-        int givenAmount = 0;
-        int stashedAmount = 0;
+        long left = amount;
+        long givenAmount = 0;
+        long stashedAmount = 0;
         for(final var entry : entries) {
             if(left <= 0) break;
 
             // Cache item and count, then calculate the amount of items to take and give them to the player
             final ItemStack entryItem  = entry.getValue().getFirst();
-            final int       entryCount = entry.getValue().getSecond();
-            final int amountTaken = Math.min(entryCount, left);
+            final long      entryCount = entry.getValue().getSecond();
+            final long amountTaken = Math.min(entryCount, left);
             final var stashStats = StashManager.giveItem(player.getUUID(), entryItem, amountTaken, false);
 
             // Update counters
@@ -1219,14 +1226,14 @@ public class ProductDisplay {
      * @param itemStack The item stack to store.
      * @param amount The amount of items to store. Must be {@code > 0}.
      */
-    public void storeItems(final @NotNull UUID itemStackUUID, final @NotNull ItemStack itemStack, final int amount) {
+    public void storeItems(final @NotNull UUID itemStackUUID, final @NotNull ItemStack itemStack, final long amount) {
         storedItems.compute(itemStackUUID, (key, existing) -> {
 
             // If the item doesn't exist yet, create a new entry
-            if(existing == null) return new Pair<>(itemStack.copyWithCount(1), amount);
+            if(existing == null) return Pair.from(itemStack.copyWithCount(1), amount);
 
             // If the item exists, add amount to the existing stock
-            else return new Pair<>(existing.getFirst(), existing.getSecond() + amount);
+            else return Pair.from(existing.getFirst(), existing.getSecond() + amount);
         });
 
         // Update total stock and save the display
@@ -1254,9 +1261,9 @@ public class ProductDisplay {
         // Check each slot in the player's inventory (hotbar + 27 inventory slots)
         final Inventory inventory = owner.getInventory();
         for(final ItemStack inventoryItem : inventory.items) {
-            final int taken = attemptRestock(inventoryItem, inventoryItem.getCount());
+            final long taken = attemptRestock(inventoryItem, inventoryItem.getCount());
             takenFromInventory += taken;
-            inventoryItem.setCount(inventoryItem.getCount() - taken);
+            inventoryItem.setCount(inventoryItem.getCount() - (int)taken);
             if(isFull()) {
                 finalizeRestock(owner, takenFromInventory, takenFromStash);
                 return;
@@ -1267,9 +1274,9 @@ public class ProductDisplay {
         // Check the player's offhand slot
         /* Not a loop :3 */ {
             final ItemStack offhandItem = owner.getOffhandItem();
-            final int taken = attemptRestock(offhandItem, offhandItem.getCount());
+            final long taken = attemptRestock(offhandItem, offhandItem.getCount());
             takenFromInventory += taken;
-            offhandItem.setCount(offhandItem.getCount() - taken);
+            offhandItem.setCount(offhandItem.getCount() - (int)taken);
             if(isFull()) {
                 finalizeRestock(owner, takenFromInventory, takenFromStash);
                 return;
@@ -1283,7 +1290,7 @@ public class ProductDisplay {
         while(iterator.hasNext()) {
             final var entry = iterator.next();
             final StashEntry stashEntry = entry.getValue();
-            final int taken = attemptRestock(stashEntry.getItem(), stashEntry.getCount());
+            final long taken = attemptRestock(stashEntry.getItem(), stashEntry.getCount());
             takenFromStash += taken;
             if(taken == stashEntry.getCount()) {
                 iterator.remove();
@@ -1313,7 +1320,7 @@ public class ProductDisplay {
      * @param count The number of available items.
      * @return The amount of transferred items.
      */
-    private int attemptRestock(final @NotNull ItemStack stack, final int count) {
+    private long attemptRestock(final @NotNull ItemStack stack, final long count) {
 
         // Return 0 if the item is empty or not compatible
         if(stack.isEmpty()) return 0;
@@ -1321,8 +1328,8 @@ public class ProductDisplay {
         if(comparisonResult == null) return 0;
 
         // If the item is compatible, store the new items and return their count
-        final int left = maxStock - stock;
-        final int transferred = Math.min(left, count);
+        final long left = maxStock - stock;
+        final long transferred = Math.min(left, count);
         storeItems(comparisonResult, stack, transferred);
         return transferred;
     }

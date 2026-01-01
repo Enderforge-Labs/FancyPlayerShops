@@ -25,15 +25,15 @@ public class DisplayConfig implements ConfigFile {
         1_000l * 100l,
         10_000_000_000l * 100l
     );
-    public final ConstrainedConfigField<Integer> stock_limit = new ConstrainedConfigField<>(
+    public final ConstrainedConfigField<Long> stock_limit = new ConstrainedConfigField<>(
         new String[] {
             "The stock limit players are allowed to set.",
             "Must be >= 0.",
             "(price.max * stock.max) must be between 0 and Long.MAX_VALUE."
         },
-        0,
-        1_000,
-        1_000_000
+        0l,
+        1_000l,
+        1_000_000l
     );
     public final ValueConfigField<Float[]> theme_hues = new ValueConfigField<>(
         new String[] {

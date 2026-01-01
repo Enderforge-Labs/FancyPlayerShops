@@ -94,8 +94,8 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         final UUID    owner     = UUID.fromString((String)data.get("owner"));
         final UUID    shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
         final long    price     = ((Number)data.get("price")).longValue();
-        final int     stock     = ((Number)data.get("stock")).intValue();
-        final int     maxStock  = ((Number)data.get("max_stock")).intValue();
+        final long    stock     = ((Number)data.get("stock")).longValue();
+        final long    maxStock  = ((Number)data.get("max_stock")).longValue();
         final int     rotation  = ((Number)data.get("rotation")).intValue();
         final float   hue       = ((Number)data.get("hue")).floatValue();
         final long    balance   = ((Number)data.get("balance")).longValue();
@@ -134,11 +134,11 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         // Deserialize stored items
         @SuppressWarnings("unchecked")
         final List<Map<String, Object>> storedItemsList = (List<Map<String, Object>>)data.get("stored_items");
-        final Map<UUID, Pair<ItemStack, Integer>> storedItems = new HashMap<>();
+        final Map<UUID, Pair<ItemStack, Long>> storedItems = new HashMap<>();
 
         for(final Map<String, Object> storedItemData : storedItemsList) {
             final String storedItemString = (String)storedItemData.get("item");
-            final int count = ((Number)storedItemData.get("count")).intValue();
+            final long count = ((Number)storedItemData.get("count")).intValue();
             final ItemStack storedItem = MinecraftUtils.deserializeItem(storedItemString);
 
             if(storedItem != null) {

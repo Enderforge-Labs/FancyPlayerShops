@@ -17,10 +17,10 @@ public class StashEntry {
 
     // Basic data
     private final @NotNull ItemStack item;
-    private int count;
+    private long count;
 
     // Getters
-    public int getCount() { return count; }
+    public long getCount() { return count; }
     public ItemStack getItem() { return item; }
 
 
@@ -38,7 +38,7 @@ public class StashEntry {
      * Adds the specified amount of items to this entry.
      * @param count The amount of itmes to add.
      */
-    public void add(final int count) {
+    public void add(final long count) {
         this.count += count;
     }
 
@@ -47,7 +47,7 @@ public class StashEntry {
      * Removes the specified amount of items from this entry.
      * @param count The amount of itmes to remove. Must be {@code <= this.getCount()}.
      */
-    public void remove(final int count) {
+    public void remove(final long count) {
         assert Require.condition(count <= getCount(), "Amount of removed items cannot be greater than the current count"):
         this.count -= count;
     }

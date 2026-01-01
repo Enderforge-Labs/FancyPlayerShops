@@ -406,15 +406,13 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     /**
      * Creates a product display item containing the informations required to fully restore the provided display.
+     * <p>
+     * Unconfigured displays are deleted instead.
      * @param display The display.
      * @return The created product display item.
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull ProductDisplay display) {
-        if(
-            display.getItem().is(Items.AIR) &&
-            display.getPrice() == Configs.getDisplay().price.getDefault() &&
-            display.getMaxStock() == Configs.getDisplay().stock_limit.getDefault()
-        ) {
+        if(display.getItem().is(Items.AIR)) {
             return getProductDisplayItemCopy();
         }
 

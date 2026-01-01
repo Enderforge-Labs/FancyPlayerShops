@@ -50,17 +50,17 @@ public class Buy_1xButton extends ProductDIsplay_ToggleableButton {
             final ProductDisplay display = GetDisplay.get(this);
             if(isActive()) Clickable.playSound(player);
             if(player.getUUID().equals(display.getOwnerUuid())) {
-                display.retrieveItem(player, 1, true);
+                display.retrieveItem(player, 1l, true);
             }
             else {
-                display.buyItem(player, 1);
+                display.buyItem(player, 1l);
             }
         }
 
 
         // Change amount (right click)
         else {
-            menu.changeAmount(1);
+            menu.changeAmount(1l);
         }
     }
 }

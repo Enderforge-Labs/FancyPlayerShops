@@ -44,12 +44,12 @@ public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         final ProductDisplay display = GetDisplay.get(this);
-        final int amount = Math.min(display.getStock(), display.getItem().getMaxStackSize() * 9 * 4);
+        final long amount = Math.min(display.getStock(), display.getItem().getMaxStackSize() * 9l * 4l);
 
 
         // Play sound and buy items (left click)
         if(click == ClickAction.PRIMARY) {
-            final int oldStock = display.getStock();
+            final long oldStock = display.getStock();
             if(player.getUUID().equals(display.getOwnerUuid())) {
                 display.retrieveItem(player, amount, false);
             }

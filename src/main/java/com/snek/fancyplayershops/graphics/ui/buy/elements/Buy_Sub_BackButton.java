@@ -26,8 +26,8 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Buy_Sub_BackButton extends SimpleButtonElm {
-    private int amountCache = 1;
-    public void setAmountCache(final int _amountCache) { amountCache = _amountCache; }
+    private long amountCache = 1;
+    public void setAmountCache(final long _amountCache) { amountCache = _amountCache; }
 
 
 
