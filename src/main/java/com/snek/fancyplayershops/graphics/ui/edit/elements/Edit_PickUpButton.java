@@ -25,9 +25,9 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_MoveButton extends SimpleButtonElm {
-    public Edit_MoveButton(final @NotNull ProductDisplay display) {
-        super(display.getLevel(), null, "Move product display", 1,  new Edit_SquareButton_S(display));
+public class Edit_PickUpButton extends SimpleButtonElm {
+    public Edit_PickUpButton(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), null, "Pick up product display", 1,  new Edit_SquareButton_S(display));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), SymbolDesigns.ArrowHeadsPointingOut));

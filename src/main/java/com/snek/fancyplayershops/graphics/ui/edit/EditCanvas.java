@@ -13,7 +13,7 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PickUpButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_NbtButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PriceInput;
@@ -147,7 +147,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new Edit_MoveButton(display),
+            new Edit_PickUpButton(display),
             new Edit_ChangeShopButton(display),
             new Edit_OpenBuyMenuButton(display),
             new Edit_TransferButton(display),
