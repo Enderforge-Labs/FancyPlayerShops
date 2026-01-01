@@ -1278,6 +1278,10 @@ public class ProductDisplay {
                 return;
             }
         }
+
+
+        // Finalize restock (in case the display wasn't filled)
+        finalizeRestock(owner, takenFromInventory, takenFromStash);
     }
 
 
