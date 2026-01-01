@@ -472,9 +472,8 @@ public class ProductDisplay {
 
 
             // Update active canvas
-            final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
-            if(activeCanvas != null) {
-                activeCanvas.onStockChange();
+            if(getActiveCanvas() != null) {
+                getActiveCanvas().onStockChange();
             }
         }
     }
@@ -533,9 +532,8 @@ public class ProductDisplay {
 
 
                 // Update active canvas
-                final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
-                if(activeCanvas != null) {
-                    activeCanvas.onStockChange();
+                if(getActiveCanvas() != null) {
+                    getActiveCanvas().onStockChange();
                 }
             }
             else {
@@ -908,9 +906,8 @@ public class ProductDisplay {
         ProductDisplayManager.scheduleDisplaySave(this);
 
         // Update active canvas
-        final ProductCanvasBase activeCanvas = (ProductCanvasBase)ui.getActiveCanvas();
-        if(activeCanvas != null) {
-            activeCanvas.onStockChange();
+        if(getActiveCanvas() != null) {
+            getActiveCanvas().onStockChange();
         }
     }
 
@@ -1311,12 +1308,16 @@ public class ProductDisplay {
 
 
     /**
-     * Finalizes a restock operation, sending feedback messages to the owner.
+     * Finalizes a restock operation, calling stock change callbacks and sending feedback messages to the owner.
      * @param owner The owner of the display. Only used for optimization. Their UUID must match this.ownerUUID.
      * @param takenFromInventory The number of items taken from the owner's inventory.
      * @param takenFromStash The number of items taken from the owner's stash.
      */
     private void finalizeRestock(final @NotNull Player owner, final int takenFromInventory, final int takenFromStash) {
+        if(getActiveCanvas() != null) {
+            getActiveCanvas().onStockChange();
+        }
+
         if(takenFromInventory > 0 && takenFromStash > 0) {
             owner.displayClientMessage(new Txt()
                 .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
