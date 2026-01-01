@@ -21,6 +21,7 @@ import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -76,6 +77,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
         final ProductDisplay display = GetDisplay.get(this);
         display.addDefaultRotation(rotation);
 
+
         // Animate the item display to show the new rotation
         display.getItemDisplay().applyAnimation(
             new Transition(2, Easings.expOut)
@@ -88,7 +90,14 @@ public class Edit_RotateButton extends SimpleButtonElm {
             false, true
         );
 
+
+        // Play sound and send feedback message
         Clickable.playSound(player);
+        final int rotation = (int)Math.round(display.getDefaultRotation() / (Math.PI / 4));
+        player.displayClientMessage(new Txt()
+            .cat(new Txt("Item direction set to: ").lightGray())
+            .cat(new Txt(ProductDisplay.getOrientationName(rotation)).white())
+        .get(), true);
     }
 
 

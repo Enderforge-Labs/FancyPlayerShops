@@ -84,6 +84,20 @@ public class ProductDisplay {
     public static final Component PRODUCT_DISPLAY_AMOUNT_TEXT = new Txt("This display doesn't have enough items in stock!").lightGray().get();
 
 
+    /**
+     * Computes the name of the direction of the item from its rotation.
+     * @param rotation The rotation of the item, in eighths.
+     * @return The direction of the item as a string.
+     */
+    public static String getOrientationName(final int rotation) {
+        return ROTATION_NAMES[rotation];
+    }
+    private static final String[] ROTATION_NAMES = new String[] {
+        //! By default, items face south, so all the names are shifted by 180°
+        //! (0 = north = item faces south = "South")
+        "South", "Southeast", "East", "Northeast", "North", "Northwest", "West", "Southwest",
+    };
+
 
     // Basic data
     private transient @NotNull  ServerLevel           level;                            // The level this display was placed in

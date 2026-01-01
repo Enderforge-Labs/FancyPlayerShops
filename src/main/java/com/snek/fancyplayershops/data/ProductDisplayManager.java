@@ -159,20 +159,6 @@ public final class ProductDisplayManager extends UtilityClassBase {
         new Txt("").noItalic().get()
     };
 
-    // Rotation names
-    private static final String[] ROTATION_NAMES = new String[] {
-        //! By default, items face south, so all the names are shifted by 180°
-        //! (0 = north = item faces south = "South")
-        "South",
-        "Southeast",
-        "East",
-        "Northeast",
-        "North",
-        "Northwest",
-        "West",
-        "Southwest",
-    };
-
 
 
 
@@ -470,7 +456,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getMaxStock(), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("NBT filter:  ").lightGray().noItalic()).cat(new Txt(display.getNbtFilter() ? "on" : "off")).white().noItalic().get(),
-            new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ROTATION_NAMES[(int)Math.round(display.getDefaultRotation() / Math.PI * 4) % 8])).white().noItalic().get(),
+            new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ProductDisplay.getOrientationName((int)Math.round(display.getDefaultRotation() / Math.PI * 4) % 8))).white().noItalic().get(),
             new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(display.getColorThemeHue(), Edit_ColorSelector.S, Edit_ColorSelector.V))).noItalic().get(),
             new Txt().get()
         };
