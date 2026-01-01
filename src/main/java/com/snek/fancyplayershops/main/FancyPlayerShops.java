@@ -229,7 +229,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* stock       */ 0,
                             /* maxStock    */ 1000,
                             /* rotation    */ 0,
-                            /* hue         */ Configs.getDisplay().theme.getDefault(),
+                            /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,
                             /* position    */ blockPos,
