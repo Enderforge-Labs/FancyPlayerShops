@@ -1235,8 +1235,10 @@ public class ProductDisplay {
 
         // Check each slot in the player's inventory (hotbar + 27 inventory slots)
         final Inventory inventory = owner.getInventory();
-        for(final ItemStack stack : inventory.items) {
-            takenFromInventory += attemptRestock(stack, stack.getCount());
+        for(final ItemStack inventoryItem : inventory.items) {
+            final int taken = attemptRestock(inventoryItem, inventoryItem.getCount());
+            takenFromInventory += taken;
+            inventoryItem.setCount(inventoryItem.getCount() - taken);
             if(isFull()) {
                 finalizeRestock(owner, takenFromInventory, takenFromStash);
                 return;
@@ -1245,19 +1247,32 @@ public class ProductDisplay {
 
 
         // Check the player's offhand slot
-        final ItemStack offhandItem = owner.getOffhandItem();
-        takenFromInventory += attemptRestock(offhandItem, offhandItem.getCount());
-        if(isFull()) {
-            finalizeRestock(owner, takenFromInventory, takenFromStash);
-            return;
+        /* Not a loop :3 */ {
+            final ItemStack offhandItem = owner.getOffhandItem();
+            final int taken = attemptRestock(offhandItem, offhandItem.getCount());
+            takenFromInventory += taken;
+            offhandItem.setCount(offhandItem.getCount() - taken);
+            if(isFull()) {
+                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                return;
+            }
         }
 
 
         // Check each slot in the player's stash
         final @Nullable PlayerStash stash = StashManager.getStash((ServerPlayer)owner);
-        for(final var entry : stash.entrySet()) {
+        final var iterator = stash.entrySet().iterator();
+        while(iterator.hasNext()) {
+            final var entry = iterator.next();
             final StashEntry stashEntry = entry.getValue();
-            takenFromStash += attemptRestock(stashEntry.getItem(), stashEntry.getCount());
+            final int taken = attemptRestock(stashEntry.getItem(), stashEntry.getCount());
+            takenFromStash += taken;
+            if(taken == stashEntry.getCount()) {
+                iterator.remove();
+            }
+            else if(taken > 0) {
+                stashEntry.remove(taken);
+            }
             if(isFull()) {
                 finalizeRestock(owner, takenFromInventory, takenFromStash);
                 return;
