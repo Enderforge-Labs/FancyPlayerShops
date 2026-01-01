@@ -72,6 +72,8 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
         e = bg.addChild(new Edit_Sub_BackButton(display));
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
+
+        //FIXME add item inspector element
     }
 
 

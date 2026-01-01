@@ -107,6 +107,7 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
 
+        //FIXME add item inspector element
 
         // Force button color change
         confirmButton.updateColor(false);
@@ -116,8 +117,6 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
 //TODO add the current shop to this canvas
 
 
-//TODO add go back button
-//TODO also automatically go back once the player clicks the confirmation button
 
 
     /**

@@ -109,6 +109,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
 
+        //FIXME add item inspector element
 
         // Force button color change
         confirmButton.updateColor(false);
