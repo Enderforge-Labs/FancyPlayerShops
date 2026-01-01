@@ -45,7 +45,7 @@ public abstract class ProductCanvasBase extends UiCanvas {
 
 
     protected final @NotNull ProductDisplay display;
-    public abstract @Nullable Div getDisclaimerElm(); //TODO REMOVE
+    public abstract @Nullable Div getDisclaimerElm();
 
 
     /**
@@ -85,13 +85,7 @@ public abstract class ProductCanvasBase extends UiCanvas {
 
         // If the player is the user, click the canvas (which is now EditCanvas or BuyCanvas)
         if(player_has_permission) {
-
-            // // Attempt to click the disclaimer. If that fails, click the actual canvas //TODO remove
-            // //! This is done to allow the disclaimer element to be clickable even though it's not inside of the canvas's hitbox //TODO remove
-            // if(!display.attemptDisclaimerClick(player, clickType)) { //TODO remove
-                return super.forwardClick(player, clickType);
-            // }
-            // else return true;
+            return super.forwardClick(player, clickType);
         }
 
         // If the player is not the user, return true (click was consumed)
