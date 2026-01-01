@@ -54,7 +54,8 @@ public class MainMenu_ShopHeader extends SimpleButtonElm {
 
 
         // Add shop group name header
-        e = addChild(new SimpleTextElm(level, new Txt("" + calcTotalItems(groups) + " products").get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        final int productNum = calcTotalItems(groups);
+        e = addChild(new SimpleTextElm(level, new Txt("" + productNum + " product" + (productNum > 1 ? "s" : "")).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
         e.setSize(new Vector2f(MainMenu_ShopEntry.NAME_WIDTH, 1));
         e.setPosX(-0.5f + MainMenu_ShopEntry.NAME_WIDTH / 2 + MainMenu_ShopEntry.MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);

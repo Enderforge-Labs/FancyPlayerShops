@@ -50,9 +50,10 @@ public class MainMenu_ShopEntry extends SimpleButtonElm implements Scrollable {
 
 
         // Add shop name
+        final int productNum = shopInstance.getDisplays().size();
         e = addChild(new SimpleTextElm(
             level,
-            new Txt(shopInstance.getDisplayName()).cat("\n★★★☆☆ | " + shopInstance.getDisplays().size() + " products").get(), //TODO make this dynamic and real
+            new Txt(shopInstance.getDisplayName()).cat("\n★★★☆☆ | " + productNum + " product" + (productNum > 1 ? "s" : "")).get(), //TODO make this dynamic and real
             TextAlignment.LEFT,
             TextOverflowBehaviour.SCROLL)
         );
