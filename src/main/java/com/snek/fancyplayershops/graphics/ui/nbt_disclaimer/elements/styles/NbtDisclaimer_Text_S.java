@@ -31,7 +31,7 @@ public class NbtDisclaimer_Text_S extends SimpleTextElmStyle {
             "\n" + // Leave some space for the item display
             "\n" + // Leave some space for the item display
             "\n" +
-            "You might receive any variation of the\n" +
+            "You might receive any variant of the\n" +
             "item shown here. This includes energy level,\n" +
             "upgrades, enchantments, and other data.\n" +
             "Buy at your own risk!"
