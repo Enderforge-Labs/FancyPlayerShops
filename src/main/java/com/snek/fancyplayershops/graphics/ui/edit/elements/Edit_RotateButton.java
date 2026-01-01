@@ -38,7 +38,7 @@ import net.minecraft.world.inventory.ClickAction;
  */
 public class Edit_RotateButton extends SimpleButtonElm {
     public static final int ROTATION_ANIMATION_TIME = 8;
-    private final float rotation;
+    private final int rotation;
 
 
 
@@ -46,9 +46,9 @@ public class Edit_RotateButton extends SimpleButtonElm {
     /**
      * Creates a new RotateButton.
      * @param display The target product display.
-     * @param _rotateAngle The angle to add to the default rotation each time this button is pressed.
+     * @param _rotateAngle The angle to add to the default rotation each time this button is pressed, in eighths.
      */
-    public Edit_RotateButton(final @NotNull ProductDisplay display, final float _rotation) {
+    public Edit_RotateButton(final @NotNull ProductDisplay display, final int _rotation) {
         super(
             display.getLevel(),
             "Rotate once",
@@ -79,24 +79,24 @@ public class Edit_RotateButton extends SimpleButtonElm {
 
 
         // Animate the item display to show the new rotation
+        final float radians = rotation * (float)Math.PI / 4;
         display.getItemDisplay().applyAnimation(
             new Transition(2, Easings.expOut)
-            .additiveTransform(new Transform().rotY(-rotation)),
+            .additiveTransform(new Transform().rotY(-radians)),
             false, true
         );
         display.getItemDisplay().applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().rotY(rotation)),
+            .additiveTransform(new Transform().rotY(+radians)),
             false, true
         );
 
 
         // Play sound and send feedback message
         Clickable.playSound(player);
-        final int rotation = (int)Math.round(display.getDefaultRotation() / (Math.PI / 4));
         player.displayClientMessage(new Txt()
             .cat(new Txt("Item direction set to: ").lightGray())
-            .cat(new Txt(ProductDisplay.getOrientationName(rotation)).white())
+            .cat(new Txt(ProductDisplay.getOrientationName(display.getDefaultRotation())).white())
         .get(), true);
     }
 

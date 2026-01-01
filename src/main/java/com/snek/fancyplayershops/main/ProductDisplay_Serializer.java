@@ -96,7 +96,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         final long    price     = ((Number)data.get("price")).longValue();
         final int     stock     = ((Number)data.get("stock")).intValue();
         final int     maxStock  = ((Number)data.get("max_stock")).intValue();
-        final float   rotation  = ((Number)data.get("rotation")).floatValue();
+        final int     rotation  = ((Number)data.get("rotation")).intValue();
         final float   hue       = ((Number)data.get("hue")).floatValue();
         final long    balance   = ((Number)data.get("balance")).longValue();
         final boolean nbtFilter = (Boolean)data.get("nbt_filter");

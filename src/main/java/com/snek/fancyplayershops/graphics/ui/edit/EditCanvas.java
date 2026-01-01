@@ -70,10 +70,6 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
     public static final float INPUT_W                     = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
 
 
-    // Functionalities
-    public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
-
-
 
 
 
@@ -114,11 +110,11 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
         // Add rotation buttons
-        e = bg.addChild(new Edit_RotateButton(display, -ROTATE_BUTTON_AMOUNT));
+        e = bg.addChild(new Edit_RotateButton(display, -1));
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
-        e = bg.addChild(new Edit_RotateButton(display, +ROTATE_BUTTON_AMOUNT));
+        e = bg.addChild(new Edit_RotateButton(display, +1));
         e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 

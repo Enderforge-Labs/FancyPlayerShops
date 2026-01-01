@@ -228,7 +228,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* price       */ 1000l,
                             /* stock       */ 0,
                             /* maxStock    */ 1000,
-                            /* rotation    */ 0f,
+                            /* rotation    */ 0,
                             /* hue         */ 0f,
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,

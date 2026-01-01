@@ -171,7 +171,7 @@ public class ProductItemDisplayElm extends ItemElm {
     @Override
     public @NotNull Transform __calcTransform() {
         return super.__calcTransform()
-            .rotY(productDisplay.getDefaultRotation())
+            .rotY(productDisplay.getDefaultRotation() * (float)Math.PI / 4)
             .scale(0.4f)
         ;
     }

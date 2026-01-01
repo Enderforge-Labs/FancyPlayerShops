@@ -93,9 +93,8 @@ public class ProductDisplay {
         return ROTATION_NAMES[rotation];
     }
     private static final String[] ROTATION_NAMES = new String[] {
-        //! By default, items face south, so all the names are shifted by 180°
-        //! (0 = north = item faces south = "South")
-        "South", "Southeast", "East", "Northeast", "North", "Northwest", "West", "Southwest",
+        //! By default, item elements face north. 0° = North
+        "North", "Northwest", "West", "Southwest", "South", "Southeast", "East", "Northeast"
     };
 
 
@@ -114,7 +113,7 @@ public class ProductDisplay {
     private                     long      price           = 0l;                  // The configured price for each item
     private                     int       stock           = 0;                   // The current stock
     private                     int       maxStock        = 0;                   // The configured maximum stock
-    private                     float     defaultRotation = 0f;                  // The configured item rotation
+    private                     int       defaultRotation = 0;                   // The configured item rotation, in eighths
     private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
     private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
     private                     boolean   nbtFilter       = true;                // The configured nbt filter setting
@@ -147,7 +146,7 @@ public class ProductDisplay {
     public           long                   getBalance          () { return balance;                         }
     public           int                    getStock            () { return stock;                           }
     public           int                    getMaxStock         () { return maxStock;                        }
-    public           float                  getDefaultRotation  () { return defaultRotation;                 }
+    public           int                    getDefaultRotation  () { return defaultRotation;                 }
     public           boolean                isFocused           () { return focusState;                      }
     public           boolean                isDeleted           () { return deletionState;                   }
     public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
@@ -211,15 +210,19 @@ public class ProductDisplay {
 
     /**
      * Creates a new ProductDisplay and saves it in its own file.
-     * @param level The level the display has to be created in.
-     * @param _pos The position of the new display.
-     * @param _ownerUUID The UUID of the player that places the display.
-     * @param _price The price of the item.
-     * @param _stock The current stock.
-     * @param _maxStock The stock limit.
-     * @param _rotation The default rotation of the item display.
-     * @param _hue The hue of the color theme.
-     * @param _serializedIitem The item in serialized form.
+     * @param ownerUUID The UUID of the owner of this display.
+     * @param shopUUID The UUID of this display's shop.
+     * @param price The price of the item.
+     * @param stock The current stock.
+     * @param maxStock The stock limit.
+     * @param rotation The default rotation of the item display, in eighths.
+     * @param hue The hue of the color theme.
+     * @param balance The balance collected by this display.
+     * @param nbtFilter The NBT filter setting.
+     * @param position The position of this display.
+     * @param level The level this display is placed in.
+     * @param item The item filter of this display.
+     * @param storedItems The list of item variants stored in this display.
      */
     public ProductDisplay(
         final @NotNull UUID ownerUUID,
@@ -227,7 +230,7 @@ public class ProductDisplay {
         final long price,
         final int stock,
         final int maxStock,
-        final float rotation,
+        final int rotation,
         final float hue,
         final long balance,
         final boolean nbtFilter,
@@ -705,14 +708,14 @@ public class ProductDisplay {
 
     /**
      * Adds a specified rotation to the default rotation of the item display and saves the product display to its file.
-     * @param _rotation The rotation to add. Negative values are allowed and are converted to their positive equivalent.
+     * @param _rotation The rotation to add, in eighths.
+     *     Negative values are allowed and are converted to their positive equivalent.
      */
-    public void addDefaultRotation(final float _rotation) {
+    public void addDefaultRotation(final int _rotation) {
 
         // Add value to default rotation and save the display
-        //! Reduce range to [-2pi, 2pi], then add 2pi to wrap negative values and reduce to [-2pi, 2pi] again
-        final double r = Math.PI * 2d;
-        defaultRotation = (float)(((defaultRotation + _rotation) % r + r) % r);
+        //! Reduce range to [-7, 7], then add 8 to shift range to [1, 15], then reduce to [0, 7]
+        defaultRotation = ((defaultRotation + _rotation) % 8 + 8) % 8;
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 

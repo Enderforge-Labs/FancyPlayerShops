@@ -130,7 +130,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                             /* price       */ Math.abs(rnd.nextLong() % 100_000),
                             /* stock       */ Math.abs(rnd.nextInt() % 1_000_000),
                             /* maxStock    */ 1_000_000,
-                            /* rotation    */ (float)Math.toRadians(45f) * (rnd.nextInt() % 8),
+                            /* rotation    */ rnd.nextInt() % 8,
                             /* hue         */ 0,
                             /* balance     */ Math.abs(rnd.nextLong() % 100),
                             /* nbtFilter   */ true,
