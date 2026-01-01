@@ -28,7 +28,7 @@ public class Hud_CloseButton extends SimpleButtonElm {
         super(_hud.getLevel(), null, "Close", 1, new Hud_SquareButton_S());
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(level, SymbolDesigns.DiagonalCrossSmall));
+        final Div e = addChild(new PolylineSetElm(level, SymbolDesigns.DiagonalCross));
         e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }

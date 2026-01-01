@@ -35,9 +35,10 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class _MainMenuCanvas extends HudCanvasBase {
-    public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.8f, 0.5f);
-    public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f((1f - MAIN_BUTTONS_BB.x) / 2, 1f - MAIN_BUTTONS_BB.y);
-    public static final float MAIN_BUTTONS_DISTANCE = 0.1f;
+    public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.9f, 0.5f);
+    public static final float MAIN_BUTTONS_DISTANCE = 0.04f;
+    public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - FancyPlayerShops.LINE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
+
 
 
     public _MainMenuCanvas(final @NotNull HudContext context) {
@@ -56,26 +57,28 @@ public class _MainMenuCanvas extends HudCanvasBase {
         // Add main buttons
         final Div mainButtonsBB = bg.addChild(new HoverableDiv());
         mainButtonsBB.setSize(MAIN_BUTTONS_BB);
-        mainButtonsBB.setPos(MAIN_BUTTONS_BB_POS); {
+        mainButtonsBB.setPos(MAIN_BUTTONS_BB_POS);
+        final Vector2f parentSize = mainButtonsBB.getAbsSize();
+        final Vector2f buttonSize = new Vector2f(1f).sub(new Vector2f(1f).div(parentSize).mul(new Vector2f(MAIN_BUTTONS_DISTANCE))).div(2f); {
 
             // Browse shops
             e = mainButtonsBB.addChild(new _MainMenu_BrowseShopsButton(context));
-            e.setSize(new Vector2f((1f - MAIN_BUTTONS_DISTANCE) / 2));
+            e.setSize(buttonSize);
             e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
 
             // Manage shops
             e = mainButtonsBB.addChild(new _MainMenu_ManageShopsButton(context));
-            e.setSize(new Vector2f((1f - MAIN_BUTTONS_DISTANCE) / 2));
+            e.setSize(buttonSize);
             e.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
             // Statistics
             e = mainButtonsBB.addChild(new _MainMenu_StatsButton(context));
-            e.setSize(new Vector2f((1f - MAIN_BUTTONS_DISTANCE) / 2));
+            e.setSize(buttonSize);
             e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
             // Preferences
             e = mainButtonsBB.addChild(new _MainMenu_PreferencesButton(context));
-            e.setSize(new Vector2f((1f - MAIN_BUTTONS_DISTANCE) / 2));
+            e.setSize(buttonSize);
             e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         }
 

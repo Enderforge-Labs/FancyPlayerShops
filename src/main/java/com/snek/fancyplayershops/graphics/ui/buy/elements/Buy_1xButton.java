@@ -36,6 +36,7 @@ public class Buy_1xButton extends ProductDIsplay_ToggleableButton {
         // Create design
         final Div e = addChild(new PolylineSetElm(display.getLevel(), ItemDesigns.Coin));
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H / BuyCanvas.BUY_BUTTONS_W * FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE, FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
+        //FIXME use a normal size. element already maintains 1:1
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
     }
 

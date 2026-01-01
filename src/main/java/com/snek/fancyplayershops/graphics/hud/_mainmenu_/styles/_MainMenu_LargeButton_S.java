@@ -12,6 +12,7 @@ import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.network.chat.Component;
 
@@ -19,8 +20,8 @@ import net.minecraft.network.chat.Component;
 
 
 public class _MainMenu_LargeButton_S extends FancyButtonElmStyle {
-    public static final Vector3i DEFAULT_COLOR = new Vector3i(CanvasBorder_S.COLOR);
     public static final Vector3i HOVERED_COLOR = new Vector3i(64, 64, 64);
+    public static final Vector3i DEFAULT_COLOR = Utils.interpolateRGB(CanvasBorder_S.COLOR, HOVERED_COLOR, 0.5f);
 
     final @NotNull String displayedText;
 
@@ -81,7 +82,7 @@ public class _MainMenu_LargeButton_S extends FancyButtonElmStyle {
 
 
     @Override //TODO replace with font size override
-    public @NotNull Transform getDefaultTransform() {
+    public @NotNull Transform getDefaultTransformFg() {
         return super.getDefaultTransform().scale(0.5f);
     }
 }
