@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_nbt_disclaimer_S;
 import com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.NbtDisclaimerCanvas;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_NbtDisclaimer_S;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +26,7 @@ public class ProductDisplay_NbtDisclaimer extends FancyButtonElm {
 
 
     public ProductDisplay_NbtDisclaimer(final @NotNull ServerLevel level) {
-        super(level, null, "View details", 1, new Buy_nbt_disclaimer_S());
+        super(level, null, "View details", 1, new ProductDisplay_NbtDisclaimer_S());
     }
 
 

@@ -1,11 +1,13 @@
-package com.snek.fancyplayershops.graphics.ui.buy.styles;
+package com.snek.fancyplayershops.graphics.hud._mainmenu_.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -16,14 +18,19 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class Buy_nbt_disclaimer_S extends FancyButtonElmStyle {
-    public static final Vector3i DEFAULT_COLOR = new Vector3i(255, 0, 0);
-    public static final Vector3i HOVERED_COLOR = new Vector3i(255, 96, 96);
+public class _MainMenu_LargeButton_S extends FancyButtonElmStyle {
+    public static final Vector3i DEFAULT_COLOR = new Vector3i(CanvasBorder_S.COLOR);
+    public static final Vector3i HOVERED_COLOR = new Vector3i(64, 64, 64);
+
+    final @NotNull String displayedText;
 
 
-    public Buy_nbt_disclaimer_S() {
+    public _MainMenu_LargeButton_S(final @NotNull String displayedText) {
         super();
+        this.displayedText = displayedText;
     }
+
+
 
 
     @Override
@@ -31,17 +38,17 @@ public class Buy_nbt_disclaimer_S extends FancyButtonElmStyle {
         return new Vector3i(DEFAULT_COLOR);
     }
 
-
     @Override
     public int getDefaultBgAlpha() {
-        return 64;
+        return 255;
     }
-
 
     @Override
     public @NotNull Component getDefaultText() {
-            return new Txt("⚠ Mixed NBTs").red().get();
+        return new Txt("\n\n\n\n" + displayedText).white().get();
     }
+
+
 
 
     @Override
@@ -70,4 +77,11 @@ public class Buy_nbt_disclaimer_S extends FancyButtonElmStyle {
         return null;
     }
 
+
+
+
+    @Override //TODO replace with font size override
+    public @NotNull Transform getDefaultTransform() {
+        return super.getDefaultTransform().scale(0.5f);
+    }
 }

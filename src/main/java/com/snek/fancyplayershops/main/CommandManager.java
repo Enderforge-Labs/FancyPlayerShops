@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_._MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -104,7 +105,7 @@ public abstract class CommandManager {
                     final Vec3 pos = player.getPosition(1f);
                     final HudContext hud = new HudContext(player);
                     hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-                    hud.changeCanvas(new MainMenuCanvas(hud));
+                    hud.changeCanvas(new _MainMenuCanvas(hud));
                     return 1;
                 })
 
