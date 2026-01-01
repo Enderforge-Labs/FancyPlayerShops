@@ -1317,7 +1317,7 @@ public class ProductDisplay {
      * @param takenFromStash The number of items taken from the owner's stash.
      */
     private void finalizeRestock(final @NotNull Player owner, final int takenFromInventory, final int takenFromStash) {
-        if(takenFromInventory > 0 || takenFromStash > 0) {
+        if(takenFromInventory > 0 && takenFromStash > 0) {
             owner.displayClientMessage(new Txt()
                 .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
                 .cat(new Txt(Utils.formatAmount(takenFromInventory, true, true)).white())
@@ -1326,9 +1326,23 @@ public class ProductDisplay {
                 .cat(new Txt(" items from your stash").lightGray())
             .get(), false);
         }
+        else if(takenFromInventory > 0) {
+            owner.displayClientMessage(new Txt()
+                .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+                .cat(new Txt(Utils.formatAmount(takenFromInventory, true, true)).white())
+                .cat(new Txt(" items from your inventory").lightGray())
+            .get(), false);
+        }
+        else if(takenFromStash > 0) {
+            owner.displayClientMessage(new Txt()
+                .cat(new Txt("You restocked your " + getDecoratedName() + " with ").lightGray())
+                .cat(new Txt(Utils.formatAmount(takenFromStash, true, true)).white())
+                .cat(new Txt(" items from your stash").lightGray())
+            .get(), false);
+        }
         else {
             owner.displayClientMessage(
-                new Txt("None of the items in your inventory and stash are compatible").red().bold()
+                new Txt("None of the items in your inventory and stash are compatible!").red().bold()
             .get(), true);
         }
     }
