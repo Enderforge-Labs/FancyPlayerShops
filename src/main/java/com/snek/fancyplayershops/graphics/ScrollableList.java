@@ -170,30 +170,22 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
                 // Update scrollbar
                 if(lastVisible - firstVisible != elmList.size() - 1) {
-                    // final float elmAmount = elmList.size();
-                    // final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
-                    // final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
-                    // final float adjustY = finalHeight - trueHeight;
-                    // final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
-                    // final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
-                    // barThumb.setSizeY(finalHeight);
-                    // barThumb.setPosY(finalPosY);
                     final float elmAmount = elmList.size();
-final float visibleCount = lastVisible - firstVisible + 1f;
+                    final float visibleCount = lastVisible - firstVisible + 1f;
 
-// Thumb height (relative)
-final float trueHeight = visibleCount / elmAmount;
-final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
+                    // Thumb height (relative)
+                    final float trueHeight = visibleCount / elmAmount;
+                    final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
 
-// Position (relative 0-1, then convert to absolute)
-final float scrollProgress = firstVisible / (elmAmount - visibleCount);
-final float scrollableRange = 1.0f - finalHeight;
-final float relativePosY = (1.0f - scrollProgress) * scrollableRange;
-final float finalPosY = relativePosY * getAbsSize().y;
+                    // Position (relative 0-1, then convert to absolute)
+                    final float scrollProgress = firstVisible / (elmAmount - visibleCount);
+                    final float scrollableRange = 1.0f - finalHeight;
+                    final float relativePosY = (1.0f - scrollProgress) * scrollableRange;
+                    final float finalPosY = relativePosY * getAbsSize().y;
 
 
-barThumb.setSizeY(finalHeight);
-barThumb.setPosY(finalPosY);
+                    barThumb.setSizeY(finalHeight);
+                    barThumb.setPosY(finalPosY);
                     barThumb.flushStyle();
                     //TODO maybe animate this? idk. setSize and setPos and similar might need an "animate" parameter.
                     barTrack.spawn(canvas.getContext().getSpawnPos(), !instant);
