@@ -139,6 +139,7 @@ public class ProductDisplay {
     public @NotNull  ServerLevel            getLevel            () { return level;                           }
     public @NotNull  BlockPos               getPos              () { return pos;                             }
     public @NotNull  ItemStack              getItem             () { return item;                            }
+    public @NotNull  UUID                   getItemUUID         () { return itemUUID;                        }
     public @NotNull  ProductItemDisplayElm  getItemDisplay      () { return findItemDisplayEntityIfNeeded(); }
     public @Nullable ProductDisplay_Context getUi               () { return ui;                              }
     public           long                   getPrice            () { return price;                           }

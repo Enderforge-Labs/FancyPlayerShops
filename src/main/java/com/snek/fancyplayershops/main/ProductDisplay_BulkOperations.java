@@ -165,7 +165,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                             /* ownerUUID   */ owner.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
                             /* price       */ Math.abs(rnd.nextLong() % 100_000),
-                            /* stock       */ Math.abs(rnd.nextInt() % 1_000_000),
+                            /* stock       */ 0,
                             /* maxStock    */ 1_000_000,
                             /* rotation    */ rnd.nextInt() % 8,
                             /* hue         */ 0,
@@ -177,6 +177,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                             /* storedItems */ new HashMap<>()
                         );
                         display.invalidateItemDisplay();
+                        display.storeItems(display.getItemUUID(), display.getItem(), Math.abs(rnd.nextInt() % 1_000_000));
                         ++r;
                     }
                 }

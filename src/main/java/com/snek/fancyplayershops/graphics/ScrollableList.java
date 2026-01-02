@@ -187,9 +187,10 @@ final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
 
 // Position (relative 0-1, then convert to absolute)
 final float scrollProgress = firstVisible / (elmAmount - visibleCount);
-final float scrollableRange = 1.0f - finalHeight;  // How much room thumb has to move
-final float relativePosY = scrollProgress * scrollableRange;
-final float finalPosY = relativePosY * getAbsSize().y;  // Convert to absolute
+final float scrollableRange = 1.0f - finalHeight;
+final float relativePosY = (1.0f - scrollProgress) * scrollableRange;
+final float finalPosY = relativePosY * getAbsSize().y;
+
 
 barThumb.setSizeY(finalHeight);
 barThumb.setPosY(finalPosY);
