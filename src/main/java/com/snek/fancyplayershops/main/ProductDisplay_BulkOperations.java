@@ -134,7 +134,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                             /* hue         */ 0,
                             /* balance     */ Math.abs(rnd.nextLong() % 100),
                             /* nbtFilter   */ true,
-                            /* position    */ new BlockPos((int)pos.x, (int)pos.y, (int)pos.z),
+                            /* position    */ new BlockPos((int)i, (int)j, (int)k),
                             /* level       */ level,
                             /* item        */ itemList.get(Math.abs(rnd.nextInt() % itemList.size())).getDefaultInstance(),
                             /* storedItems */ new HashMap<>()
