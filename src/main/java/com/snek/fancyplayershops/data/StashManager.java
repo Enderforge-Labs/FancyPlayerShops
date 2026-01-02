@@ -143,25 +143,22 @@ public final class StashManager extends UtilityClassBase {
      * If the player is currently offline, all the items are sent to their stash.
      * @param playerUUID The UUID of the player to give items to.
      * @param item The item to give to the player.
-     * @param amount The number of items to give.
+     * @param amount The number of items to give. Must be > 0.
      * @param playerFeedback Whether to send the player a feedback message.
      * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
      */
     public static @NotNull Pair<Long, Long> giveItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final long amount, final boolean playerFeedback) {
-        final ItemStack _item = item.copyWithCount((int)Math.min(10_000l, amount));
-        //! Create a copy of the item. Its count gets modified by attemptGive
-
 
         // Try to put items in the inventory
+        long stashedAmount = amount;
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
         if(player != null) {
-            MinecraftUtils.attemptGive(player, _item);
+            stashedAmount = MinecraftUtils.attemptGive(player, item, amount);
         }
 
         // Send remaining items to the stash
-        final long stashedAmount = _item.getCount() + Math.max(amount - 10_000l, 0l);
         if(stashedAmount > 0) {
-            StashManager.stashItem(playerUUID, _item, stashedAmount, player != null && playerFeedback);
+            StashManager.stashItem(playerUUID, item, stashedAmount, player != null && playerFeedback);
         }
 
         // Return stats
