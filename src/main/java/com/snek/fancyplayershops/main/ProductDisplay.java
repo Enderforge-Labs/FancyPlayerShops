@@ -747,8 +747,9 @@ public class ProductDisplay {
      * Sends the items stored in this display to the owner's inventory/stash.
      * <p>
      * This method also sets the display's stock to 0 and clears the list of stored items.
+     * @param playerFeedback Whether to send the player a feedback message.
      */
-    public void stash() {
+    public void stash(final boolean playerFeedback) {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
 
@@ -758,7 +759,7 @@ public class ProductDisplay {
             // Stash it
             final ItemStack entryItem  = entry.getValue().getFirst();
             final long      entryCount = entry.getValue().getSecond();
-            StashManager.giveItem(ownerUUID, entryItem, entryCount, deletionState);
+            StashManager.giveItem(ownerUUID, entryItem, entryCount, playerFeedback);
         }
 
         // Clear stored items and reset stock, then save this display
@@ -854,14 +855,13 @@ public class ProductDisplay {
      * Converts this display into a snapshot and sends it to the owner's inventory or stash.
      * <p>
      * Notice: This method does NOT delete the display. Call {@link #delete()} to avoid item duplications.
-     * @param tryInventory Whether to try placing the item in the owner's inventory.
-     *     If the inventory is full or {@code tryInventory == true}, the item is sent to their stash.
+     * @param playerFeedback Whether to send the player a feedback message.
      */
-    public void pickUp(final boolean tryInventory) {
+    public void pickUp(final boolean playerFeedback) {
 
         // Create the snapshot and give it to the player
         final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
-        StashManager.giveItem(ownerUUID, snapshot, 1, true);
+        StashManager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
     }
 
 

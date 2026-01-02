@@ -3,7 +3,9 @@ package com.snek.fancyplayershops.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -46,21 +48,39 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      */
     public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
+        final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
 
-                // Send feedback to affected player if they are online
-                final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " has been removed by an admin").red())
-                .get(), false);
+                // Add display name to the feedback message
+                if(!display.getItem().is(Items.AIR)) {
+                    final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
+                    _displayNames.add(MinecraftUtils.getFancyItemName(display.getItem()).getString());
+                }
 
                 // Stash, claim and delete the display, then increase the purged displays counter
-                display.stash();
+                display.stash(false);
                 display.claimBalance();
                 display.delete();
                 ++r;
+            }
+        }
+
+
+        // Create feedback messages and send them to the affected players, then return
+        for(final var entry : displayNames.entrySet()) {
+            final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
+            if(owner != null) {
+                final int removedAmount = entry.getValue().size();
+                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been removed by an admin: ");
+                for(int i = 0; i < removedAmount; ++i) {
+                    feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
+                    if(i < displayNames.size() - 1) feedbackMsg.cat(",");
+                }
+                owner.displayClientMessage(feedbackMsg.red().get(), false);
+                owner.displayClientMessage(new Txt((removedAmount == 1 ? "Its balance has" : "Their balances have") + " been added to your personal balance").red().get(), false);
+                owner.displayClientMessage(new Txt("You will find any remaining stock in your inventory and/or your stash").red().get(), false);
             }
         }
         return r;
@@ -78,20 +98,37 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      */
     public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
         int r = 0;
+        final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
 
-                // Send feedback to affected player if they are online
-                final Player owner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
-                if(owner != null && !display.getItem().is(Items.AIR)) owner.displayClientMessage(new Txt()
-                    .cat(new Txt("Your " + display.getDecoratedName() + " was converted into an item by an admin").red())
-                .get(), false);
+                // Add display name to the feedback message
+                if(!display.getItem().is(Items.AIR)) {
+                    final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
+                    _displayNames.add(MinecraftUtils.getFancyItemName(display.getItem()).getString());
+                }
 
                 // Stash and delete the display, then increase the displaced displays counter
                 display.pickUp(false);
                 display.delete();
                 ++r;
+            }
+        }
+
+
+        // Create feedback messages and send them to the affected players, then return
+        for(final var entry : displayNames.entrySet()) {
+            final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
+            if(owner != null) {
+                final int removedAmount = entry.getValue().size();
+                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been converted into an item by an admin: ");
+                for(int i = 0; i < removedAmount; ++i) {
+                    feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
+                    if(i < displayNames.size() - 1) feedbackMsg.cat(",");
+                }
+                owner.displayClientMessage(feedbackMsg.red().get(), false);
+                owner.displayClientMessage(new Txt("You will find " + (removedAmount == 1 ? "it" : "them") + " in your inventory and/or your stash").red().get(), false);
             }
         }
         return r;

@@ -61,7 +61,7 @@ public class Edit_DeleteButton extends SimpleButtonElm {
 
 
         // Stash, claim and delete the display
-        display.stash();
+        display.stash(true);
         display.claimBalance();
         display.delete();
     }
