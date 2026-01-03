@@ -41,11 +41,11 @@ public class MainMenu_Summary extends SimpleTextElm {
             .cat(new Txt(" displays.").white())
             .cat("\n")
             .cat(new Txt("You sold a total of ").white())
-            .cat(new Txt(Utils.formatAmount(65_533_745l)).gold()) //TODO actually get the stats
+            .cat(new Txt(Utils.formatAmountShort(65_533_745l)).gold()) //TODO actually get the stats
             .cat(new Txt(" products.").white())
             .cat("\n")
             .cat(new Txt("You earned a total of ").white())
-            .cat(new Txt(Utils.formatPrice(4_621_564_234l)).gold()) //TODO actually get the stats
+            .cat(new Txt(Utils.formatPriceShort(4_621_564_234l)).gold()) //TODO actually get the stats
         .get());
     }
 }
