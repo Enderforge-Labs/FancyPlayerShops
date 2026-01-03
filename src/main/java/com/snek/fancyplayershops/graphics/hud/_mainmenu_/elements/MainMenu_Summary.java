@@ -45,7 +45,8 @@ public class MainMenu_Summary extends SimpleTextElm {
             .cat(new Txt(" products.").white())
             .cat("\n")
             .cat(new Txt("You earned a total of ").white())
-            .cat(new Txt(Utils.formatPriceShort(4_621_564_234l)).gold()) //TODO actually get the stats
+            .cat(new Txt(Utils.formatPriceShort(4_621_564_234_00l)).gold()) //TODO actually get the stats
+            .cat(new Txt(".").white())
         .get());
     }
 }

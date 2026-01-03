@@ -27,7 +27,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-//TODO don't use an entity instead of making it invisible. To improve performance
 public class ManageShops_ShopHeader extends SimpleButtonElm {
     private final List<Shop> shops;
 

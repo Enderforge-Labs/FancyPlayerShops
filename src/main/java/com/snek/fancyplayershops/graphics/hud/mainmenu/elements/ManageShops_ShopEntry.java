@@ -28,7 +28,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-//TODO don't use an entity instead of making it invisible. To improve performance
 public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable {
 
     public static final float MARGIN_LEFT = 0.05f;
