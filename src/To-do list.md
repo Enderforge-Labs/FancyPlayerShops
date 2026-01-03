@@ -82,12 +82,15 @@
   - you can buy in advance and your items will be sent to the stash as soon as they are available in the product display
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
-- add exceptions for ad astra rover, rockets and all (ad astra compatibility?)
-- add exceptions for tinkering table and all of the other tables (chipped compatibility?)
-- add exceptions for water wheels and flywheel (create compatibility?)
-- add exceptions for handcrafted beds and similar (handcrafted compatibility?)
-- add exceptions for indrev mining rig (indrev compatibility?)
-- add exceptions for create boilers, track buffer and generator coils
+- Add configurable size bitmaps
+  - use them as 3d texture to make simple 3d models
+  - add vendor profile lookup menus
+  - create 3d renderings of player skins to use in the profile of a seller/vendor
+    - get the texture data from the player cache, read the pixels and create one bitmap per face
+    - 72 entities per player model
+    - hide when tps are low
+  - or use fake players if they can be scaled down. this needs to be looked into
+    - might be useful for placeable npcs with the player's skin or something
 
 Cleanup:
     - add @NotNull and @Null to everything
