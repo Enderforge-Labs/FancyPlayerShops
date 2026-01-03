@@ -7,7 +7,8 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
@@ -48,7 +49,7 @@ import com.snek.frameworklib.graphics.layout.HoverableDiv;
  * A UI that allows the owner of the product display to edit it.
  */
 public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
-    private final @NotNull TitleElm title;
+    private final @NotNull Misc_TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
     public @NotNull SimpleTextElm getTitle() { return title; }
 
@@ -88,10 +89,10 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (TitleElm)e;
+        title = (Misc_TitleElm)e;
         updateTitle();
 
 
@@ -120,7 +121,9 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
         // Add item selector
-        e = bg.addChild(new Edit_ItemSelector(display));
+        e = bg.addChild(new Edit_ItemSelector(display, new Misc_BackButton(context, () ->
+            context.changeCanvas(new EditCanvas(display))
+        )));
         e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
@@ -158,7 +161,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
             e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
             e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
             e.setAlignmentY(AlignmentY.BOTTOM);
-        }
+        } //TODO unify duplicate code
 
 
         // Add color selector container

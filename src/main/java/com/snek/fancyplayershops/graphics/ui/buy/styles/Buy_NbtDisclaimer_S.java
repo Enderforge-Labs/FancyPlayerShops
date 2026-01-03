@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.ui.misc.styles;
+package com.snek.fancyplayershops.graphics.ui.buy.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,12 +16,15 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class ProductDisplay_NbtDisclaimer_S extends FancyButtonElmStyle {
+public class Buy_NbtDisclaimer_S extends FancyButtonElmStyle {
     public static final Vector3i DEFAULT_COLOR = new Vector3i(255, 0, 0);
     public static final Vector3i HOVERED_COLOR = new Vector3i(255, 96, 96);
+    public static final Component TEXT = new Txt("⚠ Mixed NBTs").red().get();
 
 
-    public ProductDisplay_NbtDisclaimer_S() {
+
+
+    public Buy_NbtDisclaimer_S() {
         super();
     }
 
@@ -40,7 +43,7 @@ public class ProductDisplay_NbtDisclaimer_S extends FancyButtonElmStyle {
 
     @Override
     public @NotNull Component getDefaultText() {
-        return new Txt("⚠ Mixed NBTs").red().get();
+        return new Txt(TEXT).get();
     }
 
 

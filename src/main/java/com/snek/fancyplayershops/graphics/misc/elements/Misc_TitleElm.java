@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
-public class TitleElm extends SimpleTextElm {
+public class Misc_TitleElm extends SimpleTextElm {
     public static final float DEFAULT_W = 0.9f;
 
 
@@ -26,7 +26,7 @@ public class TitleElm extends SimpleTextElm {
      * @param level The level to create this element in.
      * @param defaultText The initial text to display when the element is created.
      */
-    public TitleElm(final @NotNull ServerLevel level, final @NotNull Component defaultText) {
+    public Misc_TitleElm(final @NotNull ServerLevel level, final @NotNull Component defaultText) {
         super(level, defaultText, TextAlignment.CENTER, TextOverflowBehaviour.SCROLL);
     }
 
@@ -36,7 +36,7 @@ public class TitleElm extends SimpleTextElm {
      * @param level The level to create this element in.
      * @param defaultText The initial text to display when the element is created.
      */
-    public TitleElm(final @NotNull ServerLevel level, final @NotNull String defaultText) {
+    public Misc_TitleElm(final @NotNull ServerLevel level, final @NotNull String defaultText) {
         this(level, Component.literal(defaultText));
     }
 

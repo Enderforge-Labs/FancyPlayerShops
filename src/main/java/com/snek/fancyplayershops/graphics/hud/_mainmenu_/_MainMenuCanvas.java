@@ -13,7 +13,7 @@ import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_Rece
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_StatsButton;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -43,8 +43,8 @@ public class _MainMenuCanvas extends HudCanvasBase {
 
 
         // Add title
-        e = bg.addChild(new TitleElm(level, new Txt("Fancy Player Shops").white().bold().get()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(level, new Txt("Fancy Player Shops").white().bold().get()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 

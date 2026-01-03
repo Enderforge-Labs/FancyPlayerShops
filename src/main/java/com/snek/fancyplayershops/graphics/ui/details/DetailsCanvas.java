@@ -6,13 +6,13 @@ import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
+import com.snek.fancyplayershops.graphics.ui.details.elements.Details_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDisplay_NbtDisclaimer;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -73,16 +73,16 @@ public class DetailsCanvas extends ProductCanvasBase {
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setSizeX(TitleElm.DEFAULT_W);
-        e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
+        e.setSizeX(Misc_TitleElm.DEFAULT_W);
+        e.setAbsSizeY(((Misc_TitleElm)e).calcTotEntityHeight());
         e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 
         // Add NBT disclaimer
         if(!display.getNbtFilter()) {
-            e = bg.addChild(new ProductDisplay_NbtDisclaimer(display.getLevel()));
+            e = bg.addChild(new Details_NbtDisclaimer(display.getLevel()));
             e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
             e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
             nbtDisclaimer = e;

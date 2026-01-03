@@ -6,9 +6,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.elements.styles.NbtDisclaimer_Text_S;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -39,8 +38,9 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
     /**
      * Creates a new NbtDisclaimerCanvas.
      * @param display The target product display.
+     * @param _backButton The back button. This defines which menu the player is brought to when going back.
      */
-    public NbtDisclaimerCanvas(final @NotNull ProductDisplay display) {
+    public NbtDisclaimerCanvas(final @NotNull ProductDisplay display, final @NotNull Div _backButton) {
 
         // Call superconstructor
         super(display, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
@@ -48,9 +48,9 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), new Txt("Mixed NBTs").get()));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), new Txt("Mixed NBTs").get()));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 1f);
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
 
 
@@ -68,12 +68,19 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
         inputIndicator = (DualInputIndicator)e;
 
 
-        // Add back button
-        e = bg.addChild(new Edit_Sub_BackButton(display));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
-
         //FIXME add item inspector element
+
+
+        // Add buttons
+        final Div[] buttons = new Div[] {
+            _backButton
+        };
+        for(int i = 0; i < buttons.length; ++i) {
+            e = bg.addChild(buttons[i]);
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setAlignmentY(AlignmentY.BOTTOM);
+        } //TODO unify duplicate code
     }
 
 

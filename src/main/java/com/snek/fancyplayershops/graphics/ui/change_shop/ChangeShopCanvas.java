@@ -6,11 +6,12 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_NameInput;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_Sub_BackButton;
+import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -67,9 +68,9 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
         e.setPosY(1f - FancyPlayerShops.LINE_H * 1f);
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignmentX(AlignmentX.CENTER);
 
 
@@ -102,12 +103,23 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
         inputIndicator = (DualInputIndicator)e;
 
 
-        // Add back button
-        e = bg.addChild(new Edit_Sub_BackButton(display));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
+
+        // Add buttons
+        final Div[] buttons = new Div[] {
+            new Misc_BackButton(context, () ->
+                context.changeCanvas(new EditCanvas(display))
+            ),
+        };
+        for(int i = 0; i < buttons.length; ++i) {
+            e = bg.addChild(buttons[i]);
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setAlignmentY(AlignmentY.BOTTOM);
+        } //TODO merge duplicate code
+
 
         //FIXME add item inspector element
+
 
         // Force button color change
         confirmButton.updateColor(false);

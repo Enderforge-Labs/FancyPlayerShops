@@ -11,10 +11,11 @@ import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ProductEntry;
-import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_Sub_BackButton;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
@@ -49,8 +50,8 @@ public class StashCanvas extends HudCanvasBase {
         Div e;
 
         // Add title
-        e = bg.addChild(new TitleElm(level, new Txt("Your stash").white().bold().get()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(level, new Txt("Your stash").white().bold().get()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
@@ -86,14 +87,16 @@ public class StashCanvas extends HudCanvasBase {
 
         // Add buttons
         final Div[] buttons = new Div[] {
-            new Stash_Sub_BackButton(context),
+            new Misc_BackButton(context, () ->
+                canvas.getContext().changeCanvas(new MainMenuCanvas((HudContext)canvas.getContext()))
+            ),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
             e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
             e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
             e.setAlignmentY(AlignmentY.BOTTOM);
-        }
+        } //TODO merge duplicate code
     }
 }
 

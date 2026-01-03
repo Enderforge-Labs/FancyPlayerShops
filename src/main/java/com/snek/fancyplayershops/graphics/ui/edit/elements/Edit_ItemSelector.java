@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -34,9 +35,10 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
     /**
      * Creates a new EditUiItemSelector.
      * @param display The target product display.
+     * @param _backButton The back button. This defines which menu the player is brought to when going back.
      */
-    public Edit_ItemSelector(final @NotNull ProductDisplay display) {
-        super(display, null, "Change item", new Edit_Sub_BackButton(display));
+    public Edit_ItemSelector(final @NotNull ProductDisplay display, final @NotNull Misc_BackButton _backButton) {
+        super(display, null, "Change item", _backButton);
     }
 
 

@@ -16,7 +16,7 @@ import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopEnt
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopHeader;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -56,8 +56,8 @@ public class MainMenuCanvas extends HudCanvasBase {
         Div e;
 
         // Add title
-        e = bg.addChild(new TitleElm(level, new Txt("Your shops").white().bold().get()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(level, new Txt("Your shops").white().bold().get()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 

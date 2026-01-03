@@ -6,11 +6,10 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 import com.snek.fancyplayershops.graphics.ui.inspect.InspectCanvas;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -25,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
  * A button that allows the user of the display to view details about the item.
  */
 public class Buy_ItemInspector extends SimpleButtonElm {
-    final Div backButton;
+    final @NotNull Misc_BackButton backButton;
 
 
     /**
@@ -35,7 +34,11 @@ public class Buy_ItemInspector extends SimpleButtonElm {
      * @param _lmbActionNameOverride The text to display for the right click action in the input indicator. Can be null.
      * @param _backButton The back button. This defines which menu the player is brought to when going back.
      */
-    public Buy_ItemInspector(final @NotNull ProductDisplay display, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
+    public Buy_ItemInspector(
+        final @NotNull ProductDisplay display,
+        final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride,
+        final @NotNull Misc_BackButton _backButton
+    ) {
         super(
             display.getLevel(),
             _lmbActionNameOverride != null ? _lmbActionNameOverride : (_rmbActionNameOverride != null ? "Inspect item" : null),
@@ -52,11 +55,6 @@ public class Buy_ItemInspector extends SimpleButtonElm {
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
-
-        // Save amount cache
-        if(backButton instanceof final Buy_Sub_BackButton b) {
-            b.setAmountCache(((BuyCanvas)canvas).getAmount());
-        }
 
         // Change canvas
         final ProductDisplay display = GetDisplay.get(this);

@@ -8,17 +8,17 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_Sub_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1iButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1sButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1xButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_AmountInputDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
+import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDisplay_NbtDisclaimer;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -82,14 +82,19 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), recalculateTitle()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add NBT disclaimer
         if(!display.getNbtFilter()) {
-            e = bg.addChild(new ProductDisplay_NbtDisclaimer(display.getLevel()));
+            e = bg.addChild(new Buy_NbtDisclaimer(display.getLevel(),
+                new Misc_BackButton(context, () -> {
+                    context.changeCanvas(new BuyCanvas(display));
+                    ((BuyCanvas)context.getActiveCanvas()).changeAmount(amount);
+                })
+            ));
             e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
             e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
             nbtDisclaimer = e;
@@ -113,7 +118,13 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         amountInputDisplay = (Buy_AmountInputDisplay)e;
 
         //Add item inspector
-        e = bg.addChild(new Buy_ItemInspector(display, null, null, new Buy_Sub_BackButton(display)));
+        e = bg.addChild(new Buy_ItemInspector(
+            display, null, null,
+            new Misc_BackButton(context, () -> {
+                context.changeCanvas(new BuyCanvas(display));
+                ((BuyCanvas)context.getActiveCanvas()).changeAmount(amount);
+            })
+        ));
         e.setSize(new Vector2f(EditCanvas.ITEM_SELECTOR_SIZE));
         e.setPosY(EditCanvas.ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);

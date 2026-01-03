@@ -6,7 +6,8 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_IdDisplay;
@@ -54,7 +55,7 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
      * @param _backButton The back button.
      * <p> This defines which menu the player is brought to when going back.
      */
-    public InspectCanvas(final @NotNull ProductDisplay display, final @NotNull Div _backButton) {
+    public InspectCanvas(final @NotNull ProductDisplay display, final @NotNull Misc_BackButton _backButton) {
 
         // Call superconstructor
         super(display, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
@@ -62,8 +63,8 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
 
 
         // Add title
-        e = bg.addChild(new TitleElm(display.getLevel(), display.getStandaloneName()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
+        e = bg.addChild(new Misc_TitleElm(display.getLevel(), display.getStandaloneName()));
+        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
@@ -90,10 +91,16 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
         e.setAlignmentX(AlignmentX.CENTER);
 
 
-        // Add back button
-        e = bg.addChild(_backButton);
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
+        // Add buttons
+        final Div[] buttons = new Div[] {
+            _backButton
+        };
+        for(int i = 0; i < buttons.length; ++i) {
+            e = bg.addChild(buttons[i]);
+            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setAlignmentY(AlignmentY.BOTTOM);
+        } //TODO unify duplicate code
 
 
         // Add input indicators
