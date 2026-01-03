@@ -12,14 +12,8 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_BrowseShopsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopEntry;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopHeader;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_InfoButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_OpenStashButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_PreferencesButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_RecentActionsButton;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_StatsButton;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
@@ -106,19 +100,15 @@ public class MainMenuCanvas extends HudCanvasBase {
         e.setSize(new Vector2f(FancyPlayerShops.LINE_H));
         e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
 
-        // Add info button
-        e = bg.addChild(new MainMenu_InfoButton(_hud));
-        e.setSize(new Vector2f(FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
 
         // Add bottom bar buttons
         final Div[] buttons = new Div[] {
-            new MainMenu_BrowseShopsButton(_hud),
-            new MainMenu_RecentActionsButton(_hud),
-            new MainMenu_OpenStashButton(_hud),
-            new MainMenu_StatsButton(_hud),
-            new MainMenu_PreferencesButton(_hud)
+            // new MainMenu_BrowseShopsButton(_hud),
+            // new MainMenu_RecentActionsButton(_hud),
+            // new MainMenu_OpenStashButton(_hud),
+            // new MainMenu_StatsButton(_hud),
+            // new MainMenu_PreferencesButton(_hud)
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
