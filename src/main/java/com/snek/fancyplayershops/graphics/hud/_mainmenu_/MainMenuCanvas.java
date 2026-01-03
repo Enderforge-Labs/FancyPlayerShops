@@ -11,6 +11,7 @@ import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_OpenS
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_PreferencesButton;
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_RecentActionsButton;
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_StatsButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_Summary;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
@@ -36,6 +37,7 @@ public class MainMenuCanvas extends HudCanvasBase {
 
 
     public MainMenuCanvas(final @NotNull HudContext context) {
+        //TODO replace LINE_H and SQUARE_BUTTON_SIZE with proper dynamic computation methods from Canvas AND default border heights
         super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
@@ -75,6 +77,12 @@ public class MainMenuCanvas extends HudCanvasBase {
             e.setSize(buttonSize);
             e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         }
+
+
+        // Add summary
+        e = bg.addChild(new MainMenu_Summary(context));
+        e.setSize(new Vector2f(1f, 1f - MAIN_BUTTONS_BB.y - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE));
+        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
 
 
         // Add bottom bar buttons
