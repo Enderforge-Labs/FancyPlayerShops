@@ -35,7 +35,7 @@ public class NbtDisclaimer_Text_S extends SimpleTextElmStyle {
             "item shown here. This includes energy level,\n" +
             "upgrades, enchantments, and other data.\n" +
             "Buy at your own risk!"
-        ).white().italic().get();
+        ).white().get();
     }
 
 
