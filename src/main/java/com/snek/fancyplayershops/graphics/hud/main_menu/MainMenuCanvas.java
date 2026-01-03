@@ -1,19 +1,19 @@
-package com.snek.fancyplayershops.graphics.hud._mainmenu_;
+package com.snek.fancyplayershops.graphics.hud.main_menu;
 
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_BrowseShopsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_InfoButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_ManageShopsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_OpenStashButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_PreferencesButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_RecentActionsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_StatsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_Summary;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_ViewOrdersButton;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_BrowseShopsButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_InfoButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_ManageShopsButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_OpenStashButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_PreferencesButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_RecentActionsButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_StatsButton;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_Summary;
+import com.snek.fancyplayershops.graphics.hud.main_menu.elements.MainMenu_ViewOrdersButton;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;

@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.hud.mainmenu.elements;
+package com.snek.fancyplayershops.graphics.hud.manage_shops.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -6,8 +6,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_ShopEntry_S;
-import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.fancyplayershops.graphics.hud.manage_shops.styles.ManageShops_ShopEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;

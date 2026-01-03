@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.hud.mainmenu;
+package com.snek.fancyplayershops.graphics.hud.manage_shops;
 
 import java.util.List;
 import java.util.Set;
@@ -11,11 +11,11 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopEntry;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopHeader;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_EmptyText_S;
+import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
+import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopEntry;
+import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopHeader;
+import com.snek.fancyplayershops.graphics.hud.manage_shops.styles.ManageShops_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;

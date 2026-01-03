@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.hud._mainmenu_.styles;
+package com.snek.fancyplayershops.graphics.hud.main_menu.styles;
 
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 

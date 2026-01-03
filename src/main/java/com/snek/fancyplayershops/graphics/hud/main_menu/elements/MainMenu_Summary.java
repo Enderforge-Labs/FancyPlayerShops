@@ -1,10 +1,10 @@
-package com.snek.fancyplayershops.graphics.hud._mainmenu_.elements;
+package com.snek.fancyplayershops.graphics.hud.main_menu.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.styles.MainMenu_Summary_S;
+import com.snek.fancyplayershops.graphics.hud.main_menu.styles.MainMenu_Summary_S;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;

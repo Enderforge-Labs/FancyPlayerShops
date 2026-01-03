@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.hud._mainmenu_.elements;
+package com.snek.fancyplayershops.graphics.hud.main_menu.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;

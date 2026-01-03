@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.hud.mainmenu.styles;
+package com.snek.fancyplayershops.graphics.hud.manage_shops.styles;
 
 import org.jetbrains.annotations.NotNull;
 
