@@ -11,11 +11,12 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopEntry;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopHeader;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_EmptyText_S;
-import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
@@ -95,20 +96,11 @@ public class ManageShopsCanvas extends HudCanvasBase {
         }
 
 
-        // Add close button
-        e = bg.addChild(new Hud_CloseButton(_hud));
-        e.setSize(new Vector2f(FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
-
-
-
         // Add bottom bar buttons
         final Div[] buttons = new Div[] {
-            // new MainMenu_BrowseShopsButton(_hud),
-            // new MainMenu_RecentActionsButton(_hud),
-            // new MainMenu_OpenStashButton(_hud),
-            // new MainMenu_StatsButton(_hud),
-            // new MainMenu_PreferencesButton(_hud)
+            new Misc_BackButton(_hud, () ->
+                canvas.getContext().changeCanvas(new MainMenuCanvas(_hud))
+            ),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);
