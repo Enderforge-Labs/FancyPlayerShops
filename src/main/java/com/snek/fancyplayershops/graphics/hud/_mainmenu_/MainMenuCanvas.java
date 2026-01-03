@@ -12,6 +12,7 @@ import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_Prefe
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_RecentActionsButton;
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_StatsButton;
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_Summary;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_ViewOrdersButton;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
@@ -90,7 +91,7 @@ public class MainMenuCanvas extends HudCanvasBase {
             new MainMenu_RecentActionsButton(context),
             new MainMenu_OpenStashButton(context),
             new Hud_CloseButton(context),
-            new MainMenu_InfoButton(context), //FIXME replace this duplicate button with something useful
+            new MainMenu_ViewOrdersButton(context),
             new MainMenu_InfoButton(context),
         };
         for(int i = 0; i < buttons.length; ++i) {
