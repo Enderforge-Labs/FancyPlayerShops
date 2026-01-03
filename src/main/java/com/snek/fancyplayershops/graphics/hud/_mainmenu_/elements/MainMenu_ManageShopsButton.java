@@ -28,7 +28,7 @@ public class MainMenu_ManageShopsButton extends FancyButtonElm {
         super(context.getLevel(), null, "Manage your shops", 1, new MainMenu_LargeButton_S("Manage shops"));
 
         // Create design
-        final Div e = addDesign(ItemDesigns.Coin);
+        final Div e = addDesign(context.getLevel(), ItemDesigns.Coin);
         e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
     }
 

@@ -30,7 +30,7 @@ public class Misc_BackButton extends SimpleButtonElm {
         this.onClickTask = onClickTask;
 
         // Create design
-        addDesign(SymbolDesigns.CurvedArrowPointingLeft);
+        addDesign(context.getLevel(), SymbolDesigns.CurvedArrowPointingLeft);
     }
 
 

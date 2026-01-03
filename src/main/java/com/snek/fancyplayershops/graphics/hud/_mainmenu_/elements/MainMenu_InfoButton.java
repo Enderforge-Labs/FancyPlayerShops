@@ -24,7 +24,7 @@ public class MainMenu_InfoButton extends SimpleButtonElm {
         super(context.getLevel(), null, "Info", 1, new Hud_SquareButton_S());
 
         // Create design
-        addDesign(SymbolDesigns.Info);
+        addDesign(context.getLevel(), SymbolDesigns.Info);
     }
 
 

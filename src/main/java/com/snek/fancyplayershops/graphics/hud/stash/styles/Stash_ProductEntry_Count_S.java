@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.graphics.hud.stash.styles;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
@@ -26,7 +25,7 @@ public class Stash_ProductEntry_Count_S extends SimpleTextElmStyle {
 
 
     @Override
-    public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(0.5f); //FIXME move to confiurable style's font size or something
+    public int getDefaultFontSize() {
+        return 6;
     }
 }

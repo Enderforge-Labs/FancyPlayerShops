@@ -56,7 +56,7 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
             TextAlignment.LEFT,
             TextOverflowBehaviour.SCROLL)
         );
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
         e.setSize(new Vector2f(NAME_WIDTH, 1));
         e.setPosX(-0.5f + NAME_WIDTH / 2 + MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
@@ -64,7 +64,7 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
 
         // Add shop balance
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(shopInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
         e.setSize(new Vector2f(BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
     }

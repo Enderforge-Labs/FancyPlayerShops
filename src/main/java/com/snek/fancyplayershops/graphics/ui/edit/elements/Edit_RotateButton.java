@@ -53,7 +53,7 @@ public class Edit_RotateButton extends SimpleButtonElm {
 
 
         // Create design
-        addDesign(_rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight);
+        addDesign(display.getLevel(), _rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight);
     }
 
 

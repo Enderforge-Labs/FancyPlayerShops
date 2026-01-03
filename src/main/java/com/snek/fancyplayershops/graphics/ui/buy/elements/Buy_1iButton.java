@@ -29,7 +29,7 @@ public class Buy_1iButton extends ProductDIsplay_ToggleableButton {
         menu = _menu;
 
         // Create design
-        addDesign(ItemDesigns.MinecraftChest);
+        addDesign(display.getLevel(), ItemDesigns.MinecraftChest);
     }
 
 

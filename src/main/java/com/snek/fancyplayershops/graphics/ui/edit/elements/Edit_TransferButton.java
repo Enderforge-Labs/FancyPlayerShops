@@ -25,7 +25,7 @@ public class Edit_TransferButton extends SimpleButtonElm {
         super(display.getLevel(), null, "Transfer ownership", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        addDesign(ItemDesigns.UserIcon);
+        addDesign(display.getLevel(), ItemDesigns.UserIcon);
     }
 
 

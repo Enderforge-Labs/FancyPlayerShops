@@ -7,7 +7,6 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_ShopEntry_S;
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
@@ -66,14 +65,14 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
         e.setSize(new Vector2f(ManageShops_ShopEntry.NAME_WIDTH, 1));
         e.setPosX(-0.5f + ManageShops_ShopEntry.NAME_WIDTH / 2 + ManageShops_ShopEntry.MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
 
 
         // Add shop balance header
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(ManageShops_ShopEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
+        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
     }
 
 

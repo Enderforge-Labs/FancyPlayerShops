@@ -28,7 +28,7 @@ public class MainMenu_PreferencesButton extends FancyButtonElm {
         super(context.getLevel(), null, "Preferences", 1, new MainMenu_LargeButton_S("Preferences"));
 
         // Create design
-        final Div e = addDesign(SymbolDesigns.Settings);
+        final Div e = addDesign(context.getLevel(), SymbolDesigns.Settings);
         e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
     }
 

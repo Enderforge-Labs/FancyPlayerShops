@@ -25,7 +25,7 @@ public class Edit_PickUpButton extends SimpleButtonElm {
         super(display.getLevel(), null, "Pick up product display", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        addDesign(SymbolDesigns.ArrowHeadsPointingOut);
+        addDesign(display.getLevel(), SymbolDesigns.ArrowHeadsPointingOut);
     }
 
 

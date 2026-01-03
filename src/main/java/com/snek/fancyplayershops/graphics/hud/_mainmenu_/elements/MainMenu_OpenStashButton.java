@@ -25,7 +25,7 @@ public class MainMenu_OpenStashButton extends SimpleButtonElm {
         super(context.getLevel(), null, "Open stash", 1, new Hud_SquareButton_S());
 
         // Create design
-        addDesign(ItemDesigns.Drawer);
+        addDesign(context.getLevel(), ItemDesigns.Drawer);
     }
 
 

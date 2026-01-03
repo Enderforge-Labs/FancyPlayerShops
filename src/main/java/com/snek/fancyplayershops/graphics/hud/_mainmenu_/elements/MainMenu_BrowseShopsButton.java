@@ -28,7 +28,7 @@ public class MainMenu_BrowseShopsButton extends FancyButtonElm {
         super(context.getLevel(), null, "Open shop browser", 1, new MainMenu_LargeButton_S("Browse shops"));
 
         // Create design
-        final Div e = addDesign(ItemDesigns.MagnifyingGlass);
+        final Div e = addDesign(context.getLevel(), ItemDesigns.MagnifyingGlass);
         e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
     }
 

@@ -24,7 +24,7 @@ public class Edit_OpenBuyMenuButton extends SimpleButtonElm {
         super(display.getLevel(), null, "Open buy menu", 1, new Edit_SquareButton_S(display));
 
         // Create design
-        addDesign(ItemDesigns.PriceTag);
+        addDesign(display.getLevel(), ItemDesigns.PriceTag);
     }
 
 

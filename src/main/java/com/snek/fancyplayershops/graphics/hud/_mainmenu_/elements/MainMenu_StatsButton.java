@@ -28,7 +28,7 @@ public class MainMenu_StatsButton extends FancyButtonElm {
         super(context.getLevel(), null, "View statistics", 1, new MainMenu_LargeButton_S("View statistics"));
 
         // Create design
-        final Div e = addDesign(SymbolDesigns.GraphUp);
+        final Div e = addDesign(context.getLevel(), SymbolDesigns.GraphUp);
         e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
     }
 

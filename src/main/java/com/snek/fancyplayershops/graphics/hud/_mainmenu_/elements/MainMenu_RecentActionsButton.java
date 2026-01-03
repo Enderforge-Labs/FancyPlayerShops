@@ -25,7 +25,7 @@ public class MainMenu_RecentActionsButton extends SimpleButtonElm {
         super(context.getLevel(), null, "Recent actions", 1, new Hud_SquareButton_S());
 
         // Create design
-        addDesign(SymbolDesigns.CircularArrowCCW);
+        addDesign(context.getLevel(), SymbolDesigns.CircularArrowCCW);
     }
 
 

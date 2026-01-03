@@ -2,7 +2,6 @@ package com.snek.fancyplayershops.graphics.hud.mainmenu.styles;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -28,8 +27,8 @@ public class ManageShops_EmptyText_S extends SimpleTextElmStyle {
     }
 
 
-    @Override //TODO replace with font size override
-    public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(0.5f);
+    @Override
+    public int getDefaultFontSize() {
+        return 6;
     }
 }

@@ -28,7 +28,7 @@ public class Edit_DeleteButton extends SimpleButtonElm {
         super(display.getLevel(), null, "Delete product display", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        addDesign(SymbolDesigns.DiagonalCross);
+        addDesign(display.getLevel(), SymbolDesigns.DiagonalCross);
     }
 
 

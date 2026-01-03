@@ -24,7 +24,7 @@ public class MainMenu_ViewOrdersButton extends SimpleButtonElm {
         super(context.getLevel(), null, "View orders", 1, new Hud_SquareButton_S());
 
         // Create design
-        addDesign(ItemDesigns.MinecraftChest);
+        addDesign(context.getLevel(), ItemDesigns.MinecraftChest);
     }
 
 

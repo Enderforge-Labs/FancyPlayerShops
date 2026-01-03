@@ -19,11 +19,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public class Hud_CloseButton extends SimpleButtonElm {
-    public Hud_CloseButton(final @NotNull HudContext _hud) {
-        super(_hud.getLevel(), null, "Close", 1, new Hud_SquareButton_S());
+    public Hud_CloseButton(final @NotNull HudContext context) {
+        super(context.getLevel(), null, "Close", 1, new Hud_SquareButton_S());
 
         // Create design
-        addDesign(SymbolDesigns.DiagonalCross);
+        addDesign(context.getLevel(), SymbolDesigns.DiagonalCross);
     }
 
 

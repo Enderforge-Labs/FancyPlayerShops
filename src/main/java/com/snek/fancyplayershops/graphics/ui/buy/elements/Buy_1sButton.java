@@ -29,7 +29,7 @@ public class Buy_1sButton extends ProductDIsplay_ToggleableButton {
         menu = _menu;
 
         // Create design
-        addDesign(ItemDesigns.CoinPile);
+        addDesign(display.getLevel(), ItemDesigns.CoinPile);
     }
 
 

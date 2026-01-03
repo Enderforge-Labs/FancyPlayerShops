@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
@@ -81,8 +80,8 @@ public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
 
 
 
-    @Override //TODO replace with font size override
-    public @NotNull Transform getDefaultTransformFg() {
-        return super.getDefaultTransformFg().scale(0.5f);
+    @Override
+    public int getDefaultFontSize() {
+        return 6;
     }
 }

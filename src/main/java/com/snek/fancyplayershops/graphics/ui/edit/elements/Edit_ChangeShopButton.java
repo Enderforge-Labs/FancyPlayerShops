@@ -25,7 +25,7 @@ public class Edit_ChangeShopButton extends SimpleButtonElm {
         super(display.getLevel(), null, "Change shop", 1,  new Edit_SquareButton_S(display));
 
         // Create design
-        addDesign(SymbolDesigns.ArrowsPointingLeftRight);
+        addDesign(display.getLevel(), SymbolDesigns.ArrowsPointingLeftRight);
     }
 
 
