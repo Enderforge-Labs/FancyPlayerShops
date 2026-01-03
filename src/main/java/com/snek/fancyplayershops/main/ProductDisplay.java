@@ -97,42 +97,46 @@ public class ProductDisplay {
     };
 
 
-    // Basic data
-    private transient @NotNull  ServerLevel           level;                            // The level this display was placed in
-    private transient @Nullable ProductItemDisplayElm itemDisplay = null;               // The item display entity //! Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
-    private     final @NotNull  BlockPos              pos;                              // The position of the display
-    private transient @NotNull  String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
-    private transient @NotNull  ProductDisplayKey     displayKeyCache;                  // The cached display key
+    // Constant display data
+    private final @NotNull ServerLevel           level;                            // The level this display was placed in
+    private final @NotNull BlockPos              pos;                              // The position of the display
+    private final @NotNull String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
+    private final @NotNull ProductDisplayKey     displayKeyCache;                  // The cached display key
 
 
-    // Display data
-    private transient @NotNull  ItemStack item = Items.AIR.getDefaultInstance(); // The configured item
-    private           @NotNull  UUID      ownerUUID;                             // The UUID of the owner
-    private                     long      balance         = 0;                   // The balance collected by the shop since it was last claimed
-    private                     long      price           = 0l;                  // The configured price for each item
-    private                     long      stock           = 0;                   // The current stock
-    private                     long      maxStock        = 0;                   // The configured maximum stock
-    private                     int       defaultRotation = 0;                   // The configured item rotation, in eighths
-    private                     float     colorThemeHue   = 0f;                  // The configured hue of the color theme
-    private transient @NotNull  Shop      shop;                                  // The shop this display has been assigned to
-    private                     boolean   nbtFilter       = true;                // The configured nbt filter setting
+    // Mutable display data
+    private @NotNull  ItemStack item = Items.AIR.getDefaultInstance();  // The configured item
+    private @NotNull  UUID      ownerUUID;                              // The UUID of the owner
+    private           long      balance;                                // The balance collected by the shop since it was last claimed
+    private           long      price;                                  // The configured price for each item
+    private           long      stock;                                  // The current stock
+    private           long      maxStock;                               // The configured maximum stock
+    private           int       defaultRotation;                        // The configured item rotation, in eighths
+    private           float     colorThemeHue;                          // The configured hue of the color theme
+    private @NotNull  Shop      shop;                                   // The shop this display has been assigned to
+    private           boolean   nbtFilter;                              // The configured nbt filter setting
 
 
     // Stored items
-    private transient @NotNull UUID itemUUID; // The calculated UUID of the item. Used to compare items to store or remove
-    private transient @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems = new HashMap<>();
-    public @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> getStoredItems() { return storedItems; }
+    private @NotNull UUID itemUUID; // The calculated UUID of the item. Used to compare items to store or remove
+    private @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems = new HashMap<>();
+    public  @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> getStoredItems() { return storedItems; }
+
+
+    // Graphics
+    private @Nullable ProductDisplay_Context ui          = null;        // The UI context used for the display
+    private @Nullable ProductItemDisplayElm  itemDisplay = null;        // The item display entity
+    //! ^ Searched when needed instead of on data loading because the chunk needs to be loaded in order to find the entity.
 
 
     // Display state
-    private transient @Nullable ProductDisplay_Context ui    = null;   // The UI context used for the display
-    private transient @Nullable Player      user             = null;   // The current user of the display (the player that first opened a menu)
-    private transient @Nullable Player      viewer           = null;   // The prioritized viewer
-    private transient           boolean     deletionState    = false;  // True if the display has been deleted, false otherwise
-    private transient           boolean     focusState       = false;  // True if the display is currently being looked at by at least one player, false otherwise
-    private transient           boolean     focusStateNext   = false;  // The next focus state
-    private transient @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
-    private transient           boolean     scheduledForSave = false;
+    private @Nullable Player      user             = null;              // The current user of the display (the player that first opened a menu)
+    private @Nullable Player      viewer           = null;              // The prioritized viewer
+    private           boolean     deletionState    = false;             // True if the display has been deleted, false otherwise
+    private           boolean     focusState       = false;             // True if the display is currently being looked at by at least one player, false otherwise
+    private           boolean     focusStateNext   = false;             // The next focus state
+    private @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
+    private           boolean     scheduledForSave = false;             // True if the display is currently scheduled to be saved to file, false otherwise
 
 
     // Getters
@@ -585,7 +589,6 @@ public class ProductDisplay {
     }
 
 
-    //TODO call this from somewhere
     /**
      * Claims the current balance, sending it to the owner's balance.
      * <p>

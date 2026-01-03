@@ -123,7 +123,7 @@ public abstract class CommandManager {
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
                         // BalanceManager.claim(player);
-                        //FIXME claim all the groups
+                        //FIXME claim all the shops
                         return 1;
                     })
                 )
@@ -250,7 +250,7 @@ public abstract class CommandManager {
     //TODO add /shop op void balance <playerName|playerUUID>
     //TODO add /shop op void stash <playerName|playerUUID>
     //TODO add /shop op void shops <playerName|playerUUID>
-    //TODO add /shop op void group <playerName|playerUUID>  <groupName>
+    //TODO add /shop op void shop <playerName|playerUUID>  <shopName>
     //! ^ force /shop op confirm
     //! ^ "are you sure you want to delete 37,482 shops? This action cannot be undone. Use /shop op confirm to confirm"
     //FIXME LOG ALL OF THESE ACTIONS. THE OWNER SHOULD BE ABLE TO SEE THIS FROM MAIN-MENU > RECENT ACTIONS
@@ -258,7 +258,7 @@ public abstract class CommandManager {
     //TODO add /shop op collect balance <playerName|playerUUID>
     //TODO add /shop op collect stash <playerName|playerUUID>
     //TODO add /shop op collect shops <playerName|playerUUID>
-    //TODO add /shop op collect group <playerName|playerUUID>
+    //TODO add /shop op collect shop <playerName|playerUUID> <shopName>
 
 
     //FIXME add suggestions for all of the completable commands
@@ -290,6 +290,5 @@ public abstract class CommandManager {
 
 
 
-    //TODO add a likes/score system to shop groups
-    //TODO maybe rename "groups" to "shops" and shop items to something else?
+    //TODO add a likes/score system to shops
 }

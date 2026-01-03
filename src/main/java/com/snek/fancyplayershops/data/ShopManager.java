@@ -70,7 +70,7 @@ public class ShopManager extends UtilityClassBase {
     /**
      * Calculates the path to the save file of the specified shop.
      * @param shop The shop.
-     * @return The path to the save file of {@code group}.
+     * @return The path to the save file of {@code shop}.
      */
     public static @NotNull Path calcShopFilePath(final @NotNull Shop shop) {
         return calcShopDirPath().resolve(shop.getUuid().toString() + ".json");
@@ -110,7 +110,7 @@ public class ShopManager extends UtilityClassBase {
      * Deletes a shop and its associated data file.
      * @param shop The shop to delete.
      */
-    public static void deleteGroup(final @NotNull Shop shop) {
+    public static void deleteShop(final @NotNull Shop shop) {
 
         // Get the list of shops
         final List<Shop> shops = shopsList.computeIfAbsent(shop.getOwnerUuid(), uuid -> new ArrayList<>());

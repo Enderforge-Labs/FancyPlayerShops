@@ -43,7 +43,7 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
 
     //TODO update balance dynamically?
     public ManageShops_ShopEntry(final @NotNull HudContext context, final @NotNull Shop shopInstance, final @NotNull ScrollableList parentList) {
-        super(context.getLevel(), "Claim balance", "Edit group", 2, new ManageShops_ShopEntry_S());
+        super(context.getLevel(), "Claim balance", "Edit shop", 2, new ManageShops_ShopEntry_S());
         this.shopInstance = shopInstance;
         this.parentList = parentList;
         Div e;

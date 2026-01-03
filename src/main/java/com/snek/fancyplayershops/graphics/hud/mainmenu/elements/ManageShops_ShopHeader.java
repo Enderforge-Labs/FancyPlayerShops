@@ -37,8 +37,8 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
     //TODO update dynamically?
     private long calcTotalBalance() {
         long r = 0;
-        for(final Shop g : shops) {
-            r += g.getBalance();
+        for(final Shop s : shops) {
+            r += s.getBalance();
         }
         return r;
     }
@@ -46,8 +46,8 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
 
     private int calcTotalItems() {
         int r = 0;
-        for(final Shop g : shops) {
-            r += g.getDisplays().size();
+        for(final Shop s : shops) {
+            r += s.getDisplays().size();
         }
         return r;
     }
@@ -55,13 +55,13 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
 
 
 
-    public ManageShops_ShopHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
+    public ManageShops_ShopHeader(final @NotNull HudContext context, final @NotNull List<Shop> shops) {
         super(context.getLevel(), null, "Claim everything", 2, new ManageShops_ShopEntry_S());
-        this.shops = groups;
+        this.shops = shops;
         Div e;
 
 
-        // Add shop group name header
+        // Add shop name header
         final int productNum = calcTotalItems();
         e = addChild(new SimpleTextElm(level, new Txt("" + productNum + " product" + (productNum > 1 ? "s" : "")).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
         e.setSize(new Vector2f(ManageShops_ShopEntry.NAME_WIDTH, 1));
@@ -70,7 +70,7 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
 
 
-        // Add shop group balance header
+        // Add shop balance header
         e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
         e.setSize(new Vector2f(ManageShops_ShopEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
