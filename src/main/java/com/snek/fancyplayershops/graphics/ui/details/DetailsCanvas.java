@@ -6,7 +6,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
@@ -68,16 +67,10 @@ public class DetailsCanvas extends ProductCanvasBase {
     public DetailsCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        title.setAbsSizeY(title.calcTotEntityHeight());
+        title.setPosY(1 - title.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
         Div e;
-
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
-        e.setAlignmentX(AlignmentX.CENTER);
-        e.setSizeX(Misc_TitleElm.DEFAULT_W);
-        e.setAbsSizeY(((Misc_TitleElm)e).calcTotEntityHeight());
-        e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
 
 
         // Add NBT disclaimer
@@ -142,7 +135,7 @@ public class DetailsCanvas extends ProductCanvasBase {
 
 
 
-    public @NotNull Component recalculateTitle() {
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
         return display.getItem().is(Items.AIR) ? ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME : Component.literal(display.getStandaloneName());
     }
 

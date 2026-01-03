@@ -17,15 +17,12 @@ import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_Shop
 import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopHeader;
 import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,7 +39,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
     public static final float ICON_NAME_SPACING  = 0.02f;
 
     public static final float HEADER_H           = 0.05f;
-    public static final float LIST_H             = 1f - FancyPlayerShops.LINE_H - HEADER_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
+    public static final float LIST_H             = 1f - TITLE_H - HEADER_H - TOOLBAR_H;
     public static final int   LIST_SIZE          = 7;
 
     private ScrollableList list;
@@ -51,22 +48,17 @@ public class ManageShopsCanvas extends HudCanvasBase {
 
 
     public ManageShopsCanvas(final @NotNull HudContext _hud) {
-        super(_hud, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(_hud, "Your shops", 1f, TITLE_H, TOOLBAR_H);
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(level, new Txt("Your shops").white().bold().get()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add no products text if the player doesn't own any product display
         final @Nullable Set<@NotNull ProductDisplay> displays = ProductDisplayManager.getDisplaysOfPlayer(player);
         if(displays == null || displays.isEmpty()) {
             e = bg.addChild(new SimpleTextElm(level, new ManageShops_EmptyText_S()));
-            e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
+            e.setSize(new Vector2f(1f, TITLE_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
 
@@ -79,14 +71,14 @@ public class ManageShopsCanvas extends HudCanvasBase {
             e = bg.addChild(new ManageShops_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);
-            e.setPosY(1f - FancyPlayerShops.LINE_H - HEADER_H);
+            e.setPosY(1f - TITLE_H - HEADER_H);
 
             // Create scrollable list
             final float list_elm_h = 1f / LIST_SIZE;
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(1f, LIST_H));
             list.setAlignmentX(AlignmentX.LEFT);
-            list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
+            list.setPosY(TOOLBAR_H);
 
 
             // Add shop entry displays
@@ -97,17 +89,8 @@ public class ManageShopsCanvas extends HudCanvasBase {
 
 
         // Add bottom bar buttons
-        final Div[] buttons = new Div[] {
-            new Misc_BackButton(_hud, () ->
-                canvas.getContext().changeCanvas(new MainMenuCanvas(_hud))
-            ),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        }
-        //TODO ^ merge duplicate code. this is used in many UIs and HUDs, it should prob be a method or something
+        setToolbarButtons(new Div[] {
+            new Misc_BackButton(_hud, () -> canvas.getContext().changeCanvas(new MainMenuCanvas(_hud)))
+        });
     }
 }

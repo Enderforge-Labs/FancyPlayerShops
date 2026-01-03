@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
@@ -13,13 +12,9 @@ import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonRight_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
-import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
@@ -51,21 +46,14 @@ public class Edit_RotateButton extends SimpleButtonElm {
     public Edit_RotateButton(final @NotNull ProductDisplay display, final int _rotation) {
         super(
             display.getLevel(),
-            "Rotate once",
-            "Rotate quickly",
-            2,
+            "Rotate once", "Rotate quickly", 2,
             _rotation > 0 ? new Edit_RotateButtonRight_S(display) : new Edit_RotateButtonLeft_S(display)
         );
         rotation = _rotation;
 
 
         // Create design
-        final Div e = addChild(new PolylineSetElm(
-            display.getLevel(),
-            _rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight
-        ));
-        e.setSize(new Vector2f(FancyPlayerShops.BOTTOM_ROW_CONTENT_SIZE));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
+        addDesign(_rotation > 0 ? SymbolDesigns.ArrowHeadPointingLeft : SymbolDesigns.ArrowHeadPointingRight);
     }
 
 

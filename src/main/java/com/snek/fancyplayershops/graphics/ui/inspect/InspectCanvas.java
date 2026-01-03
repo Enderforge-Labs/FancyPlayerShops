@@ -4,10 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_IdDisplay;
@@ -16,7 +14,6 @@ import com.snek.fancyplayershops.graphics.ui.inspect.elements.Inspect_ModDisplay
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -58,29 +55,23 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
     public InspectCanvas(final @NotNull ProductDisplay display, final @NotNull Misc_BackButton _backButton) {
 
         // Call superconstructor
-        super(display, 1, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, display.getStandaloneName(), 1, TITLE_H, TOOLBAR_H);
         Div e;
-
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(display.getLevel(), display.getStandaloneName()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add id display
         e = bg.addChild(new Inspect_IdDisplay(display));
-        e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(DETAILS_W, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 1));
+        e.setPosY(1f - TITLE_H * (1 + 1));
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add mod display
         e = bg.addChild(new Inspect_ModDisplay(display));
-        e.setSize(new Vector2f(DETAILS_W, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(DETAILS_W, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - FancyPlayerShops.LINE_H * (1 + 2));
+        e.setPosY(1f - TITLE_H * (1 + 2));
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
@@ -92,21 +83,15 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
 
 
         // Add buttons
-        final Div[] buttons = new Div[] {
+        setToolbarButtons(new Div[] {
             _backButton
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        } //TODO unify duplicate code
+        });
 
 
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
     }

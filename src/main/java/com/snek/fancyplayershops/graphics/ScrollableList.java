@@ -44,7 +44,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
  * Notice: The position of child elements on the alignment axis is also ignored, as it's recaculated automatically every time the list is updated.
 */
 public class ScrollableList extends PanelElm implements Scrollable {
-    public @NotNull ScrollableListStyle getThisStyle() {
+    public @NotNull ScrollableListStyle getListStyle() {
         return getStyle(ScrollableListStyle.class);
     }
 
@@ -72,12 +72,12 @@ public class ScrollableList extends PanelElm implements Scrollable {
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
         // Add bar track
-        barTrack = (PanelElm)addChild(new PanelElm(level, getThisStyle().getTrackStyleReference()));
+        barTrack = (PanelElm)addChild(new PanelElm(level, getListStyle().getTrackStyleReference()));
         barTrack.setSize(new Vector2f(tmp_bar_width, 1)); //FIXME make width customizable
         barTrack.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
 
         // Add bar thumb
-        barThumb = (PanelElm)barTrack.addChild(new PanelElm(level, getThisStyle().getThumbStyleReference()));
+        barThumb = (PanelElm)barTrack.addChild(new PanelElm(level, getListStyle().getThumbStyleReference()));
         barThumb.setSizeX(3);
         barThumb.setSizeY(0.05f);   //! Actual height is set dynamically
         barThumb.setPosY(0);        //! Actual y position is set dynamically
@@ -248,13 +248,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
         // Set bar styles
-        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedThumbStyle();
+        { final Flagged<PanelElmStyle> f = getListStyle().getFlaggedThumbStyle();
         if(f.isFlagged()) {
             barThumb.setStyle(f.get());
             barThumb.getStyle().flagAll();
             f.unflag();
         }}
-        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedTrackStyle();
+        { final Flagged<PanelElmStyle> f = getListStyle().getFlaggedTrackStyle();
         if(f.isFlagged()) {
             barTrack.setStyle(f.get());
             barTrack.getStyle().flagAll();

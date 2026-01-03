@@ -57,13 +57,6 @@ public class FancyPlayerShops implements ModInitializer {
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
-    // Graphics data
-    public static final float LINE_H = 0.1f;
-    public static final float SQUARE_BUTTON_SIZE = 0.12f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SPACING      = 0.04f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SHIFT        = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f; //TODO move back to shops mod
-
 
 
 
@@ -157,18 +150,18 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create and register block click events (display placement + prevents early clicks going through the display)
             UseBlockCallback.EVENT.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) -> {
-                return onItemUse(level, player, hand, hitResult);
-            });
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) ->
+                onItemUse(level, player, hand, hitResult)
+            );
 
 
 
 
             // Register item display fix
             ServerEntityEvents.ENTITY_LOAD.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) -> {
-                ProductItemDisplayElm.onEntityLoad_item(entity);
-            });
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) ->
+                ProductItemDisplayElm.onEntityLoad_item(entity)
+            );
 
 
 

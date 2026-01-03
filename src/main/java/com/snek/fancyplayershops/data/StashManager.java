@@ -231,7 +231,7 @@ public final class StashManager extends UtilityClassBase {
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst().toString(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst(), e);
             }
 
 
@@ -280,7 +280,7 @@ public final class StashManager extends UtilityClassBase {
                     );
                 }
             } catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID.toString(), e);
+                FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID, e);
             }
         }
     }

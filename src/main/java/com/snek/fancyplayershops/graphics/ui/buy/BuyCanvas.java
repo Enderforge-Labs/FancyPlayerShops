@@ -5,11 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1iButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1sButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_1xButton;
@@ -24,7 +22,6 @@ import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -77,14 +74,8 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public BuyCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, 1, FancyPlayerShops.LINE_H, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), 1, TITLE_H, CanvasBorder.DEFAULT_HEIGHT);
         Div e;
-
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add NBT disclaimer
@@ -106,15 +97,15 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
         // Add amount input and total price display
         e = bg.addChild(new Buy_PriceDisplay(display, this));
-        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(1f, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 2);
+        e.setPosY(1f - TITLE_H * 2);
         priceDisplay = (Buy_PriceDisplay)e;
 
         e = bg.addChild(new Buy_AmountInputDisplay(display, this));
-        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(1f, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 3);
+        e.setPosY(1f - TITLE_H * 3);
         amountInputDisplay = (Buy_AmountInputDisplay)e;
 
         //Add item inspector
@@ -132,7 +123,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
         // Add confirm button
         e = bg.addChild(new Buy_ConfirmButton(display, this));
-        e.setSize(new Vector2f(CONFIRM_BUTTON_W, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(CONFIRM_BUTTON_W, TITLE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (Buy_ConfirmButton)e;
@@ -140,18 +131,18 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
         // Add quick buy buttons
         e = bg.addChild(new Buy_1xButton(display, this));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
-        e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, TITLE_H));
+        e.setPos(new Vector2f(-(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - TITLE_H - BUY_BUTTONS_SPACING));
         buy1xButton = (Buy_1xButton)e;
 
         e = bg.addChild(new Buy_1sButton(display, this));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
-        e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, TITLE_H));
+        e.setPos(new Vector2f(0, CONFIRM_BUTTON_Y - TITLE_H - BUY_BUTTONS_SPACING));
         buy1sButton = (Buy_1sButton)e;
 
         e = bg.addChild(new Buy_1iButton(display, this));
-        e.setSize(new Vector2f(BUY_BUTTONS_W, FancyPlayerShops.LINE_H));
-        e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - FancyPlayerShops.LINE_H - BUY_BUTTONS_SPACING));
+        e.setSize(new Vector2f(BUY_BUTTONS_W, TITLE_H));
+        e.setPos(new Vector2f(+(BUY_BUTTONS_SPACING + BUY_BUTTONS_W), CONFIRM_BUTTON_Y - TITLE_H - BUY_BUTTONS_SPACING));
         buy1iButton = (Buy_1iButton)e;
 
 
@@ -173,7 +164,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
 
-    public @NotNull Component recalculateTitle() {
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
         return new Txt("Buying: " + display.getStandaloneName()).white().get();
     }
 

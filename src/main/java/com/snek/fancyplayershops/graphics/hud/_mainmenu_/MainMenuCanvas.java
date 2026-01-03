@@ -15,17 +15,11 @@ import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_Summa
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_ViewOrdersButton;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.layout.HoverableDiv;
-import com.snek.frameworklib.utils.Txt;
-
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 
 
 
@@ -33,22 +27,13 @@ import net.minecraft.server.level.ServerPlayer;
 public class MainMenuCanvas extends HudCanvasBase {
     public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.96f, 0.5f);
     public static final float MAIN_BUTTONS_DISTANCE = 0.02f;
-    public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - FancyPlayerShops.LINE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
+    public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - TITLE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
 
 
 
     public MainMenuCanvas(final @NotNull HudContext context) {
-        //TODO replace LINE_H and SQUARE_BUTTON_SIZE with proper dynamic computation methods from Canvas AND default border heights
-        super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
-        final ServerPlayer player = (ServerPlayer)context.getPlayer();
-        final ServerLevel  level  = (ServerLevel)player.level();
+        super(context, "Fancy Player Shops", 1f, TITLE_H, TOOLBAR_H);
         Div e;
-
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(level, new Txt("Fancy Player Shops").white().bold().get()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add main buttons
@@ -82,24 +67,17 @@ public class MainMenuCanvas extends HudCanvasBase {
 
         // Add summary
         e = bg.addChild(new MainMenu_Summary(context));
-        e.setSize(new Vector2f(1f, 1f - MAIN_BUTTONS_BB.y - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE));
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        e.setSize(new Vector2f(1f, 1f - MAIN_BUTTONS_BB.y - TITLE_H - TOOLBAR_H));
+        e.setPosY(TOOLBAR_H);
 
 
         // Add bottom bar buttons
-        final Div[] buttons = new Div[] {
+        setToolbarButtons(new Div[] {
             new MainMenu_RecentActionsButton(context),
             new MainMenu_OpenStashButton(context),
             new Hud_CloseButton(context),
             new MainMenu_ViewOrdersButton(context),
             new MainMenu_InfoButton(context),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        }
-        //TODO ^ merge duplicate code. this is used in many UIs and HUDs, it should prob be a method or something
+        });
     }
 }

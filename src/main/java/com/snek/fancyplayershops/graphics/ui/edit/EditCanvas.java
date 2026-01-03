@@ -5,10 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
@@ -23,7 +21,6 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ChangeShopButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -34,7 +31,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.layout.HoverableDiv;
 
@@ -49,9 +45,7 @@ import com.snek.frameworklib.graphics.layout.HoverableDiv;
  * A UI that allows the owner of the product display to edit it.
  */
 public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
-    private final @NotNull Misc_TitleElm title;
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull SimpleTextElm getTitle() { return title; }
 
 
     // Dynamic elements
@@ -59,7 +53,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y             = FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
+    public static final float ROTATE_BUTTON_Y             = TOOLBAR_H / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
     public static final float ROTATE_BUTTON_CENTER_SHIFT  = 0.2f;
     public static final float NBT_RESTOCK_BUTTONS_Y       = 0.3f;
     public static final float NBT_RESTOCK_BUTTONS_WIDTH   = 0.35f;
@@ -84,39 +78,31 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
     public EditCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, calculateTitle(display), 1f, TITLE_H, TOOLBAR_H);
         Div e;
-
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (Misc_TitleElm)e;
-        updateTitle();
 
 
         // Add price button
         e = bg.addChild(new Edit_PriceInput(display));
-        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
+        e.setSize(new Vector2f(INPUT_W, TITLE_H));
+        e.setPosY(1f - TITLE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add stock limit button
         e = bg.addChild(new Edit_StockLimitInput(display));
-        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
+        e.setSize(new Vector2f(INPUT_W, TITLE_H));
+        e.setPosY(1f - TITLE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add rotation buttons
         e = bg.addChild(new Edit_RotateButton(display, -1));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(TOOLBAR_H));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
         e = bg.addChild(new Edit_RotateButton(display, +1));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+        e.setSize(new Vector2f(TOOLBAR_H));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
 
@@ -131,11 +117,11 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
         // Add restock & nbt filter buttons
         e = bg.addChild(new Edit_NbtButton(display));
-        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, TITLE_H));
         e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / -2, NBT_RESTOCK_BUTTONS_Y));
 
         e = bg.addChild(new Edit_RestockButton(display));
-        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, TITLE_H));
         e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / 2, NBT_RESTOCK_BUTTONS_Y));
         restockButton = (Edit_RestockButton)e;
 
@@ -143,33 +129,27 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
 
         // Add buttons
-        final Div[] buttons = new Div[] {
+        setToolbarButtons(new Div[] {
             new Edit_PickUpButton(display),
             new Edit_ChangeShopButton(display),
             new Edit_OpenBuyMenuButton(display),
             new Edit_TransferButton(display),
             new Edit_DeleteButton(display),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        } //TODO unify duplicate code
+        });
 
 
         // Add color selector container
-        final float cslHeight = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
+        final float cslHeight = 1f - TITLE_H - TOOLBAR_H;
         final Div csl = bg.addChild(new HoverableDiv());
         csl.setSize(new Vector2f(COLOR_SELECTOR_W, cslHeight));
         csl.setAlignmentX(AlignmentX.RIGHT);
-        csl.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        csl.setPosY(TOOLBAR_H);
 
         // Add color selectors
         final Float[] hues = Configs.getDisplay().theme_hues.getValue();
@@ -184,7 +164,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
 
-    public @NotNull Component recalculateTitle() {
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
             return new Txt()
                 .cat(new Txt("Editing an empty product display").white())
@@ -196,9 +176,6 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
                 .cat(display.getStandaloneName())
             .get();
         }
-    }
-    public void updateTitle() {
-        if(title != null) title.updateDisplay(recalculateTitle());
     }
 
 

@@ -15,10 +15,7 @@ import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ProductEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -35,7 +32,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class StashCanvas extends HudCanvasBase {
-    public static final float LIST_H    = 1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE;
+    public static final float LIST_H    = 1f - TITLE_H - TOOLBAR_H;
     public static final int   LIST_SIZE = 7;
 
     private ScrollableList list;
@@ -44,22 +41,17 @@ public class StashCanvas extends HudCanvasBase {
 
 
     public StashCanvas(final @NotNull HudContext context) {
-        super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(context, "Your stash", 1f, TITLE_H, TOOLBAR_H);
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
         Div e;
-
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(level, new Txt("Your stash").white().bold().get()));
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
 
         // Add "empty stash" text if the stash is empty
         final PlayerStash stash = StashManager.getStash(player);
         if(stash == null) {
             e = bg.addChild(new SimpleTextElm(level, new Stash_EmptyText_S()));
-            e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
+            e.setSize(new Vector2f(1f, TITLE_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
 
@@ -72,7 +64,7 @@ public class StashCanvas extends HudCanvasBase {
             list = (ScrollableList)bg.addChild(new ScrollableList(level, list_elm_h));
             list.setSize(new Vector2f(1f, LIST_H));
             list.setAlignmentX(AlignmentX.RIGHT);
-            list.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE);
+            list.setPosY(TOOLBAR_H);
 
 
             //FIXME update stash view when the stash is changed
@@ -86,17 +78,9 @@ public class StashCanvas extends HudCanvasBase {
 
 
         // Add buttons
-        final Div[] buttons = new Div[] {
-            new Misc_BackButton(context, () ->
-                canvas.getContext().changeCanvas(new MainMenuCanvas(context))
-            ),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        } //TODO merge duplicate code
+        setToolbarButtons(new Div[] {
+            new Misc_BackButton(context, () -> canvas.getContext().changeCanvas(new MainMenuCanvas(context)))
+        });
     }
 }
 

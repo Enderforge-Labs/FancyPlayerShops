@@ -81,7 +81,11 @@ public class Edit_ItemSelector extends Buy_ItemInspector {
         //FIXME check blacklist before setting the item
         //TODO add item blacklist
         display.getItemDisplay().updateDisplay();
-        ((EditCanvas)canvas).updateTitle();
+
+
+        // Update canvas title and play click sound
+        final EditCanvas editCanvas = (EditCanvas)canvas;
+        editCanvas.updateTitle(EditCanvas.calculateTitle(display));
         Clickable.playSound(player);
     }
 }

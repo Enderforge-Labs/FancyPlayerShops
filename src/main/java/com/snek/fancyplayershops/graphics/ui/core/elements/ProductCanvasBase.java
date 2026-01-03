@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBack_S;
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -14,7 +13,9 @@ import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.core.UiCanvas;
 import com.snek.frameworklib.graphics.core.UiContext;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.Txt;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -24,8 +25,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-//TODO use the same base canvas system for the HUDs.
-//TODO add callbacks for stash changes / external display and shop removals / balance changes
 
 
 /**
@@ -34,7 +33,7 @@ import net.minecraft.world.inventory.ClickAction;
  * It stores a reference to the product display and handles the item display.
  */
 public abstract class ProductCanvasBase extends UiCanvas {
-    public static final float DEFAULT_HEIGHT = FancyPlayerShops.LINE_H * 0.75f;
+    public static final float DEFAULT_HEIGHT = TITLE_H * 0.75f;
     public static final float DEFAULT_DISTANCE = 0.02f;
 
 
@@ -51,14 +50,39 @@ public abstract class ProductCanvasBase extends UiCanvas {
     /**
      * Creates a new ProductDisplayCanvasBase.
      * @param display The target display.
+     * @param defaultTitle The text to display in the title element.
+     *     If null, no title element is created.
+     *     This value can be later changed using {@link #updateTitle(Component)}
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected ProductCanvasBase(final @NotNull ProductDisplay display, final float height, final float heightTop, final float heightBottom) {
-        super(((Supplier<UiContext>)()->{ __tmp_display_ref = display; return display.getUi(); }).get(), height, heightTop, heightBottom);
+    @SuppressWarnings("java:S3010")
+    protected ProductCanvasBase(final @NotNull ProductDisplay display, final @Nullable Component defaultTitle, final float height, final float heightTop, final float heightBottom) {
+        super(
+            ((Supplier<UiContext>)()->{ __tmp_display_ref = display; return display.getUi(); }).get(),
+            defaultTitle,
+            height, heightTop, heightBottom
+        );
         this.display = display;
     }
+
+    /**
+     * Creates a new ProductDisplayCanvasBase.
+     * @param display The target display.
+     * @param defaultTitle The text to display in the title element.
+     *     If null, no title element is created.
+     *     This value can be later changed using {@link #updateTitle(Component)}
+     * @param height The total height of the canvas.
+     * @param heightTop The height of the top border.
+     * @param heightBottom The height of the bottom border.
+     */
+    @SuppressWarnings("java:S3010")
+    protected ProductCanvasBase(final @NotNull ProductDisplay display, final @Nullable String defaultTitle, final float height, final float heightTop, final float heightBottom) {
+        this(display, defaultTitle == null ? null : new Txt(defaultTitle).white().bold().get(), height, heightTop, heightBottom);
+    }
+
+
 
 
     /**

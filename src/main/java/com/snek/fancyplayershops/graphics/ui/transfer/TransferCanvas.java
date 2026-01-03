@@ -6,17 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
@@ -64,34 +61,27 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
     public TransferCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, calculateTitle(display), 1f, TITLE_H, TOOLBAR_H);
         newOwnerUUID = display.getOwnerUuid();
         Div e;
 
 
-        // Add title
-        e = bg.addChild(new Misc_TitleElm(display.getLevel(), recalculateTitle()));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 1f);
-        e.setSize(new Vector2f(Misc_TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignmentX(AlignmentX.CENTER);
-
-
         // Add player name input
         e = bg.addChild(new SimpleTextElm(display.getLevel()));
-        e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
+        e.setSize(new Vector2f(1f, TITLE_H));
+        e.setPosY(1f - TITLE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("New owner:").get());
 
         e = bg.addChild(new Transfer_NameInput(display, this));
-        e.setSize(new Vector2f(1, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
+        e.setSize(new Vector2f(1, TITLE_H));
+        e.setPosY(1f - TITLE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add confirm button
         e = bg.addChild(new Transfer_ConfirmButton(display, this));
-        e.setSize(new Vector2f(0.5f, FancyPlayerShops.LINE_H));
+        e.setSize(new Vector2f(0.5f, TITLE_H));
         e.setPosY(CONFIRM_BUTTON_Y);
         e.setAlignmentX(AlignmentX.CENTER);
         confirmButton = (Transfer_ConfirmButton)e;
@@ -100,7 +90,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
@@ -109,17 +99,9 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
 
         // Add buttons
-        final Div[] buttons = new Div[] {
-            new Misc_BackButton(context, () ->
-                context.changeCanvas(new EditCanvas(display))
-            )
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        } //TODO unify duplicate code
+        setToolbarButtons(new Div[] {
+            new Misc_BackButton(context, () -> context.changeCanvas(new EditCanvas(display)))
+        });
 
 
         // Force button color change
@@ -174,7 +156,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
 
 
-    public @NotNull Component recalculateTitle() {
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
             return new Txt("Transferring an empty product display").white().get();
         }

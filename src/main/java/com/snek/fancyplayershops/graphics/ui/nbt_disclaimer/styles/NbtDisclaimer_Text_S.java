@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.elements.styles;
+package com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.styles;
 
 import org.jetbrains.annotations.NotNull;
 
