@@ -11,8 +11,8 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class MainMenu_EmptyText_S extends SimpleTextElmStyle {
-    public MainMenu_EmptyText_S() {
+public class ManageShops_EmptyText_S extends SimpleTextElmStyle {
+    public ManageShops_EmptyText_S() {
         super();
     }
 

@@ -12,9 +12,9 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopEntry;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.MainMenu_ShopHeader;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_EmptyText_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopEntry;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.elements.ManageShops_ShopHeader;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_EmptyText_S;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
@@ -36,7 +36,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-public class MainMenuCanvas extends HudCanvasBase {
+public class ManageShopsCanvas extends HudCanvasBase {
     public static final float ICON_NAME_RATIO    = 0.1f;
     public static final float ICON_NAME_SPACING  = 0.02f;
 
@@ -49,7 +49,7 @@ public class MainMenuCanvas extends HudCanvasBase {
 
 
 
-    public MainMenuCanvas(final @NotNull HudContext _hud) {
+    public ManageShopsCanvas(final @NotNull HudContext _hud) {
         super(_hud, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         final ServerPlayer player = (ServerPlayer)_hud.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
@@ -64,7 +64,7 @@ public class MainMenuCanvas extends HudCanvasBase {
         // Add no products text if the player doesn't own any product display
         final @Nullable Set<@NotNull ProductDisplay> displays = ProductDisplayManager.getDisplaysOfPlayer(player);
         if(displays == null || displays.isEmpty()) {
-            e = bg.addChild(new SimpleTextElm(level, new MainMenu_EmptyText_S()));
+            e = bg.addChild(new SimpleTextElm(level, new ManageShops_EmptyText_S()));
             e.setSize(new Vector2f(1f, FancyPlayerShops.LINE_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
@@ -75,7 +75,7 @@ public class MainMenuCanvas extends HudCanvasBase {
 
             // Add shop header
             final List<Shop> shops = ShopManager.getShops(player);
-            e = bg.addChild(new MainMenu_ShopHeader(_hud, shops));
+            e = bg.addChild(new ManageShops_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);
             e.setPosY(1f - FancyPlayerShops.LINE_H - HEADER_H);
@@ -90,7 +90,7 @@ public class MainMenuCanvas extends HudCanvasBase {
 
             // Add shop entry displays
             for(int i = 0; i < shops.size(); ++i) {
-               list.storeElm(new MainMenu_ShopEntry(_hud, shops.get(i), list));
+               list.storeElm(new ManageShops_ShopEntry(_hud, shops.get(i), list));
             }
         }
 

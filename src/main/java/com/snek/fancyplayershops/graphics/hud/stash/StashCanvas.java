@@ -10,8 +10,8 @@ import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_._MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ProductEntry;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
@@ -88,7 +88,7 @@ public class StashCanvas extends HudCanvasBase {
         // Add buttons
         final Div[] buttons = new Div[] {
             new Misc_BackButton(context, () ->
-                canvas.getContext().changeCanvas(new MainMenuCanvas((HudContext)canvas.getContext()))
+                canvas.getContext().changeCanvas(new _MainMenuCanvas(context))
             ),
         };
         for(int i = 0; i < buttons.length; ++i) {

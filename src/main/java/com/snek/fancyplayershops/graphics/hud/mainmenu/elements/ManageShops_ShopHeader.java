@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_ShopEntry_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_ShopEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -28,43 +28,51 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 //TODO don't use an entity instead of making it invisible. To improve performance
-public class MainMenu_ShopHeader extends SimpleButtonElm {
+public class ManageShops_ShopHeader extends SimpleButtonElm {
+    private final List<Shop> shops;
 
 
 
 
     //TODO update dynamically?
-    private static long calcTotalBalance(final @NotNull List<Shop> groups) {
+    private long calcTotalBalance() {
         long r = 0;
-        for(final Shop g : groups) {
+        for(final Shop g : shops) {
             r += g.getBalance();
         }
         return r;
     }
-    private static int calcTotalItems(final @NotNull List<Shop> groups) {
+
+
+    private int calcTotalItems() {
         int r = 0;
-        for(final Shop g : groups) {
+        for(final Shop g : shops) {
             r += g.getDisplays().size();
         }
         return r;
     }
-    public MainMenu_ShopHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
-        super(context.getLevel(), null, "Claim everything", 2, new MainMenu_ShopEntry_S());
+
+
+
+
+    public ManageShops_ShopHeader(final @NotNull HudContext context, final @NotNull List<Shop> groups) {
+        super(context.getLevel(), null, "Claim everything", 2, new ManageShops_ShopEntry_S());
+        this.shops = groups;
         Div e;
 
 
         // Add shop group name header
-        final int productNum = calcTotalItems(groups);
+        final int productNum = calcTotalItems();
         e = addChild(new SimpleTextElm(level, new Txt("" + productNum + " product" + (productNum > 1 ? "s" : "")).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
-        e.setSize(new Vector2f(MainMenu_ShopEntry.NAME_WIDTH, 1));
-        e.setPosX(-0.5f + MainMenu_ShopEntry.NAME_WIDTH / 2 + MainMenu_ShopEntry.MARGIN_LEFT);
+        e.setSize(new Vector2f(ManageShops_ShopEntry.NAME_WIDTH, 1));
+        e.setPosX(-0.5f + ManageShops_ShopEntry.NAME_WIDTH / 2 + ManageShops_ShopEntry.MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
 
 
         // Add shop group balance header
-        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance(groups))).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
-        e.setSize(new Vector2f(MainMenu_ShopEntry.BALANCE_WIDTH, 1));
+        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        e.setSize(new Vector2f(ManageShops_ShopEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
         ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setTransform(new Transform().scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE / 2f)); //TODO move to configurable style
     }
@@ -76,11 +84,10 @@ public class MainMenu_ShopHeader extends SimpleButtonElm {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        if(click == ClickAction.PRIMARY) {
-            //TODO
-        }
-        else {
-            //TODO
+
+        // Claim all shops
+        for(final Shop s : shops) {
+            s.claimBalance();
         }
     }
 }

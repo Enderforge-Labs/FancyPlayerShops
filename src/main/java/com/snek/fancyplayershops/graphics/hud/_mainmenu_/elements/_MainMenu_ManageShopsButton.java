@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud._mainmenu_.styles._MainMenu_LargeButton_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.ManageShopsCanvas;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -14,7 +15,6 @@ import com.snek.frameworklib.graphics.designs.ItemDesigns;
 import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -44,6 +44,9 @@ public class _MainMenu_ManageShopsButton extends FancyButtonElm {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        player.displayClientMessage(new Txt("manage shops").get(), false); //TODO
+
+        // Change canvas
+        final HudContext context = (HudContext)canvas.getContext();
+        context.changeCanvas(new ManageShopsCanvas(context));
     }
 }

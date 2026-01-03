@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.MainMenu_ShopEntry_S;
+import com.snek.fancyplayershops.graphics.hud.mainmenu.styles.ManageShops_ShopEntry_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -29,7 +29,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 //TODO don't use an entity instead of making it invisible. To improve performance
-public class MainMenu_ShopEntry extends SimpleButtonElm implements Scrollable {
+public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable {
 
     public static final float MARGIN_LEFT = 0.05f;
     public static final float BALANCE_WIDTH = 0.2f;
@@ -42,8 +42,8 @@ public class MainMenu_ShopEntry extends SimpleButtonElm implements Scrollable {
 
 
     //TODO update balance dynamically?
-    public MainMenu_ShopEntry(final @NotNull HudContext context, final @NotNull Shop shopInstance, final @NotNull ScrollableList parentList) {
-        super(context.getLevel(), "Claim balance", "Edit group", 2, new MainMenu_ShopEntry_S());
+    public ManageShops_ShopEntry(final @NotNull HudContext context, final @NotNull Shop shopInstance, final @NotNull ScrollableList parentList) {
+        super(context.getLevel(), "Claim balance", "Edit group", 2, new ManageShops_ShopEntry_S());
         this.shopInstance = shopInstance;
         this.parentList = parentList;
         Div e;
@@ -77,7 +77,16 @@ public class MainMenu_ShopEntry extends SimpleButtonElm implements Scrollable {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        //TODO
+
+        // Claim balance (left click)
+        if(click == ClickAction.PRIMARY) {
+            shopInstance.claimBalance();
+        }
+
+        // Open edit shop canvas (right click)
+        else {
+            //TODO
+        }
     }
 
 

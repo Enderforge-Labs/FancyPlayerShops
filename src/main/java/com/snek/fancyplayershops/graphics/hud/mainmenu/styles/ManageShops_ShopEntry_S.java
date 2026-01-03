@@ -16,13 +16,13 @@ import com.snek.frameworklib.utils.Easings;
 
 
 
-public class MainMenu_ShopEntry_S extends Hud_SimpleButton_S {
+public class ManageShops_ShopEntry_S extends Hud_SimpleButton_S {
 
 
     /**
      * Creates a new MainMenu_GroupEntry_S.
      */
-    public MainMenu_ShopEntry_S() {
+    public ManageShops_ShopEntry_S() {
         super();
     }
 
