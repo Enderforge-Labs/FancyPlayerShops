@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud._mainmenu_.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.styles._MainMenu_LargeButton_S;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.styles.MainMenu_LargeButton_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -26,9 +26,9 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class _MainMenu_BrowseShopsButton extends FancyButtonElm {
-    public _MainMenu_BrowseShopsButton(final @NotNull HudContext context) {
-        super(context.getLevel(), null, "Open shop browser", 1, new _MainMenu_LargeButton_S("Browse shops"));
+public class MainMenu_BrowseShopsButton extends FancyButtonElm {
+    public MainMenu_BrowseShopsButton(final @NotNull HudContext context) {
+        super(context.getLevel(), null, "Open shop browser", 1, new MainMenu_LargeButton_S("Browse shops"));
 
         // Create design
         final Div e = addChild(new PolylineSetElm(level, ItemDesigns.MagnifyingGlass));

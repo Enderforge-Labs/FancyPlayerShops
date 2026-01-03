@@ -4,13 +4,13 @@ package com.snek.fancyplayershops.graphics.hud._mainmenu_;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_BrowseShopsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_InfoButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_ManageShopsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_OpenStashButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_PreferencesButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_RecentActionsButton;
-import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements._MainMenu_StatsButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_BrowseShopsButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_InfoButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_ManageShopsButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_OpenStashButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_PreferencesButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_RecentActionsButton;
+import com.snek.fancyplayershops.graphics.hud._mainmenu_.elements.MainMenu_StatsButton;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.misc.elements.Hud_CloseButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_TitleElm;
@@ -28,14 +28,14 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-public class _MainMenuCanvas extends HudCanvasBase {
+public class MainMenuCanvas extends HudCanvasBase {
     public static final Vector2f MAIN_BUTTONS_BB = new Vector2f(0.96f, 0.5f);
     public static final float MAIN_BUTTONS_DISTANCE = 0.02f;
     public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - FancyPlayerShops.LINE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
 
 
 
-    public _MainMenuCanvas(final @NotNull HudContext context) {
+    public MainMenuCanvas(final @NotNull HudContext context) {
         super(context, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
         final ServerPlayer player = (ServerPlayer)context.getPlayer();
         final ServerLevel  level  = (ServerLevel)player.level();
@@ -56,22 +56,22 @@ public class _MainMenuCanvas extends HudCanvasBase {
         final Vector2f buttonSize = new Vector2f(1f).sub(new Vector2f(1f).div(parentSize).mul(new Vector2f(MAIN_BUTTONS_DISTANCE))).div(2f); {
 
             // Browse shops
-            e = mainButtonsBB.addChild(new _MainMenu_BrowseShopsButton(context));
+            e = mainButtonsBB.addChild(new MainMenu_BrowseShopsButton(context));
             e.setSize(buttonSize);
             e.setAlignment(AlignmentX.LEFT, AlignmentY.TOP);
 
             // Manage shops
-            e = mainButtonsBB.addChild(new _MainMenu_ManageShopsButton(context));
+            e = mainButtonsBB.addChild(new MainMenu_ManageShopsButton(context));
             e.setSize(buttonSize);
             e.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
             // Statistics
-            e = mainButtonsBB.addChild(new _MainMenu_StatsButton(context));
+            e = mainButtonsBB.addChild(new MainMenu_StatsButton(context));
             e.setSize(buttonSize);
             e.setAlignment(AlignmentX.RIGHT, AlignmentY.TOP);
 
             // Preferences
-            e = mainButtonsBB.addChild(new _MainMenu_PreferencesButton(context));
+            e = mainButtonsBB.addChild(new MainMenu_PreferencesButton(context));
             e.setSize(buttonSize);
             e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         }
@@ -79,11 +79,11 @@ public class _MainMenuCanvas extends HudCanvasBase {
 
         // Add bottom bar buttons
         final Div[] buttons = new Div[] {
-            new _MainMenu_RecentActionsButton(context),
-            new _MainMenu_OpenStashButton(context),
+            new MainMenu_RecentActionsButton(context),
+            new MainMenu_OpenStashButton(context),
             new Hud_CloseButton(context),
-            new _MainMenu_InfoButton(context), //FIXME replace this duplicate button with something useful
-            new _MainMenu_InfoButton(context),
+            new MainMenu_InfoButton(context), //FIXME replace this duplicate button with something useful
+            new MainMenu_InfoButton(context),
         };
         for(int i = 0; i < buttons.length; ++i) {
             e = bg.addChild(buttons[i]);

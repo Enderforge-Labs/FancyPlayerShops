@@ -19,14 +19,14 @@ import net.minecraft.network.chat.Component;
 
 
 
-public class _MainMenu_LargeButton_S extends FancyButtonElmStyle {
+public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     public static final Vector3i HOVERED_COLOR = new Vector3i(64, 64, 64);
     public static final Vector3i DEFAULT_COLOR = Utils.interpolateRGB(CanvasBorder_S.COLOR, HOVERED_COLOR, 0.5f);
 
     final @NotNull String displayedText;
 
 
-    public _MainMenu_LargeButton_S(final @NotNull String displayedText) {
+    public MainMenu_LargeButton_S(final @NotNull String displayedText) {
         super();
         this.displayedText = displayedText;
     }

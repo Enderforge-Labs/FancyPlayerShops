@@ -25,8 +25,8 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class _MainMenu_OpenStashButton extends SimpleButtonElm {
-    public _MainMenu_OpenStashButton(final @NotNull HudContext context) {
+public class MainMenu_OpenStashButton extends SimpleButtonElm {
+    public MainMenu_OpenStashButton(final @NotNull HudContext context) {
         super(context.getLevel(), null, "Open stash", 1, new Hud_SquareButton_S());
 
         // Create design
