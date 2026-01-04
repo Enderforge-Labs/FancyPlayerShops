@@ -5,12 +5,13 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.styles.NbtDisclaimer_Text_S;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
@@ -45,7 +46,25 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
 
 
         // Add message
-        e = bg.addChild(new SimpleTextElm(display.getLevel(), new NbtDisclaimer_Text_S()));
+        e = bg.addChild(new SimpleTextElm(display.getLevel(), new SimpleTextElmStyle_Small()
+            .withText(new Txt(
+                "\n" +
+                "This display contains products with mixed NBTs.\n" +
+                "\n" +
+                "\n" + // Leave some space for the item display
+                "\n" + //
+                "\n" + //
+                "\n" + //
+                "\n" + //
+                "\n" + //
+                "\n" + // Leave some space for the item display
+                "\n" +
+                "You might receive any variant of the\n" +
+                "item shown here. This includes energy level,\n" +
+                "upgrades, enchantments, and other data.\n" +
+                "Buy at your own risk!"
+            ).white().get())
+        ));
         e.setSize(new Vector2f(1f, TITLE_H));
         e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 

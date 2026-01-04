@@ -19,11 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
 
@@ -87,24 +84,22 @@ public class DetailsCanvas extends ProductCanvasBase {
 
         // Add details display
         final Div details = bg.addChild(new Div());
-        {
+        details.setSizeX(DETAILS_W);
+        details.setSizeY(0.25f);
+        details.setAlignmentX(AlignmentX.CENTER);
+        details.setPosY(H0 + VERTICAL_PADDING); {
+
             // Add details display names
             e = details.addChild(new Details_Names(display));
             e.setAlignmentX(AlignmentX.LEFT);
-            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
 
             // Add details display values
             e = details.addChild(new Details_Values(display));
             e.setAlignmentX(AlignmentX.RIGHT);
-            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
             e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
             values = (Details_Values)e;
         }
-        details.setSizeX(DETAILS_W);
-        details.setSizeY(0.25f);
-        details.setAlignmentX(AlignmentX.CENTER);
-        details.setPosY(H0 + VERTICAL_PADDING);
 
 
         // Add owner's head's background

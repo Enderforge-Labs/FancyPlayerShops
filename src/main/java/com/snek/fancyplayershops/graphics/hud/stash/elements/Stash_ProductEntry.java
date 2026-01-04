@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ProductEntry_Count_S;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ProductEntry_Name_S;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -59,17 +59,22 @@ public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
         c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
 
         // Add item name display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ProductEntry_Name_S()));
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new SimpleTextElmStyle_Small()
+            .withText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get())
+            .withTextAlignment(TextAlignment.LEFT)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        ));
         e.setSize(new Vector2f(1f, 0.5f));
         e.setAlignmentY(AlignmentY.TOP);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get());
 
 
         // Add item count display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new Stash_ProductEntry_Count_S()));
+        e = c.addChild(new SimpleTextElm(context.getLevel(), new SimpleTextElmStyle_Small()
+            .withText(new Txt(Utils.formatAmount(count)).lightGray().get())
+            .withTextAlignment(TextAlignment.LEFT)
+        ));
         e.setSize(new Vector2f(1f, 0.5f));
         e.setAlignmentY(AlignmentY.BOTTOM);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt(Utils.formatAmount(count)).lightGray().get());
     }
 
 

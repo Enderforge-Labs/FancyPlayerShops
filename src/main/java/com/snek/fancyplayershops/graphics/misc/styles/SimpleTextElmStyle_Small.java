@@ -1,14 +1,12 @@
-package com.snek.fancyplayershops.graphics.hud.main_menu.styles;
+package com.snek.fancyplayershops.graphics.misc.styles;
 
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
 
 
-public class MainMenu_Summary_S extends SimpleTextElmStyle {
-
-
-    public MainMenu_Summary_S() {
+public class SimpleTextElmStyle_Small extends SimpleTextElmStyle {
+    public SimpleTextElmStyle_Small() {
         super();
     }
 

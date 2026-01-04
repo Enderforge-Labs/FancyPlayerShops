@@ -64,7 +64,6 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
         e.setSize(new Vector2f(DETAILS_W, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - TITLE_H * (1 + 1));
-        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         // Add mod display
@@ -72,7 +71,6 @@ public class InspectCanvas extends ProductCanvasBase implements InputIndicatorCa
         e.setSize(new Vector2f(DETAILS_W, TITLE_H));
         e.setAlignmentX(AlignmentX.CENTER);
         e.setPosY(1f - TITLE_H * (1 + 2));
-        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.CENTER);
 
 
         //Add inventory view button

@@ -7,12 +7,12 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.styles.ManageShops_ShopEntry_S;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -49,21 +49,22 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
 
         // Add shop name
         final int productNum = shopInstance.getDisplays().size();
-        e = addChild(new SimpleTextElm(
-            level,
-            new Txt(shopInstance.getDisplayName()).cat("\n★★★☆☆ | " + productNum + " product" + (productNum > 1 ? "s" : "")).get(), //TODO make this dynamic and real
-            TextAlignment.LEFT,
-            TextOverflowBehaviour.SCROLL)
-        );
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
+        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            .withText(new Txt(shopInstance.getDisplayName()).cat("\n★★★☆☆ | " + productNum + " product" + (productNum > 1 ? "s" : "")).get()) //TODO make this dynamic and real
+            .withTextAlignment(TextAlignment.LEFT)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        ));
         e.setSize(new Vector2f(NAME_WIDTH, 1));
         e.setPosX(-0.5f + NAME_WIDTH / 2 + MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
 
 
         // Add shop balance
-        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(shopInstance.getBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
+        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            .withText(new Txt(Utils.formatPriceShort(shopInstance.getBalance())).get())
+            .withTextAlignment(TextAlignment.LEFT)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.OVERFLOW)
+        ));
         e.setSize(new Vector2f(BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
     }

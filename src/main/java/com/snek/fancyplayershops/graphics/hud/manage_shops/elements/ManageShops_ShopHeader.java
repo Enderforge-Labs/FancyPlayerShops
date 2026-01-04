@@ -7,12 +7,12 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.styles.ManageShops_ShopEntry_S;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -61,18 +61,24 @@ public class ManageShops_ShopHeader extends SimpleButtonElm {
 
         // Add shop name header
         final int productNum = calcTotalItems();
-        e = addChild(new SimpleTextElm(level, new Txt("" + productNum + " product" + (productNum > 1 ? "s" : "")).get(), TextAlignment.LEFT, TextOverflowBehaviour.SCROLL));
+        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            .withText(new Txt("" + productNum + " product" + (productNum > 1 ? "s" : "")).get())
+            .withTextAlignment(TextAlignment.LEFT)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        ));
         e.setSize(new Vector2f(ManageShops_ShopEntry.NAME_WIDTH, 1));
         e.setPosX(-0.5f + ManageShops_ShopEntry.NAME_WIDTH / 2 + ManageShops_ShopEntry.MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
 
 
         // Add shop balance header
-        e = addChild(new SimpleTextElm(level, new Txt(Utils.formatPriceShort(calcTotalBalance())).get(), TextAlignment.LEFT, TextOverflowBehaviour.OVERFLOW));
+        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            .withText(new Txt(Utils.formatPriceShort(calcTotalBalance())).get())
+            .withTextAlignment(TextAlignment.LEFT)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        ));
         e.setSize(new Vector2f(ManageShops_ShopEntry.BALANCE_WIDTH, 1));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
-        ((SimpleTextElm)e).getStyle(SimpleTextElmStyle.class).setFontSize(6);
     }
 
 

@@ -1,0 +1,61 @@
+package com.snek.fancyplayershops.graphics.misc.styles;
+
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+
+import net.minecraft.world.item.ItemStack;
+
+
+
+
+public class ScalableItemElmStyle extends ItemElmStyle {
+    public static final float Z_SCALE = 0.05f;
+
+    private final float size;
+    private final ItemStack item;
+    private final Vector3f shift;
+
+
+    /**
+     * Creates a new ScalableItemElmStyle.
+     */
+    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size) {
+        this(item, size, 0);
+    }
+
+    /**
+     * Creates a new ScalableItemElmStyle.
+     */
+    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ) {
+        this(item, size, shiftZ, new Vector2f());
+    }
+
+    /**
+     * Creates a new ScalableItemElmStyle.
+     */
+    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
+        super();
+        this.size = size;
+        this.item = item;
+        this.shift = new Vector3f(shift.x, shift.y, shiftZ);
+    }
+
+
+
+
+    @Override
+    public @NotNull ItemStack getDefaultItem() {
+        return item;
+    }
+
+
+    @Override
+    public @NotNull Transform getDefaultTransform() {
+        return super.getDefaultTransform().scale(size).scaleZ(Z_SCALE).move(shift);
+    }
+}
+

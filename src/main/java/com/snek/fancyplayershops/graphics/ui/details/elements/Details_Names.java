@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
@@ -27,31 +28,14 @@ public class Details_Names extends SimpleTextElm {
      * @param display The target product display.
      */
     public Details_Names(final @NotNull ProductDisplay display) {
-        super(display.getLevel());
-    }
-
-
-    @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-
-
-    /**
-     * Updates the displayed values.
-     */
-    public void updateDisplay() {
-
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
-            .cat("Price:")
-            .cat("\nStock:")
-            .cat("\nOwner:")
-        .lightGray().get());
-
-        // Flush style
-        flushStyle();
+        super(display.getLevel(), new SimpleTextElmStyle()
+            .withText(new Txt()
+                .cat("Price:\n")
+                .cat("Stock:\n")
+                .cat("Owner:")
+                .lightGray().get()
+            )
+            .withTextAlignment(TextAlignment.LEFT)
+        );
     }
 }

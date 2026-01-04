@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_IdDisplay_S;
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -31,7 +31,9 @@ public class Inspect_IdDisplay extends SimpleTextElm {
      * @param display The target product display.
      */
     public Inspect_IdDisplay(@NotNull final ProductDisplay display) {
-        super(display.getLevel(), new Inspect_IdDisplay_S());
+        super(display.getLevel(), new SimpleTextElmStyle()
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        );
     }
 
 

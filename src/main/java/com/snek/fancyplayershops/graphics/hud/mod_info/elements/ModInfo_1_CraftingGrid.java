@@ -5,17 +5,18 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.mod_info.ModInfoCanvas;
+import com.snek.fancyplayershops.graphics.misc.styles.ScalableItemElmStyle;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.styles.ConfigurableItemElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 
 
 
@@ -45,7 +46,11 @@ public class ModInfo_1_CraftingGrid extends Div {
 
                 // For each ingredient, create a new item display
                 for(int i = 0; i < ingredients.size(); ++i) {
-                    e = c.addChild(new ItemElm(context.getLevel(), new ConfigurableItemElmStyle(ingredients.get(i).getItems()[0], SLOT_SIZE.x)));
+                    e = c.addChild(new ItemElm(context.getLevel(), new ScalableItemElmStyle(
+                        ingredients.get(i).getItems()[0],
+                        SLOT_SIZE.x)
+                        .withDisplayContext(ItemDisplayContext.NONE)
+                    ));
                     e.setSize(new Vector2f(1f / 3f));
                     e.setAlignmentX(switch(i % 3){ case 0 -> AlignmentX.LEFT; case 1 -> AlignmentX.CENTER; default -> AlignmentX.RIGHT;  });
                     e.setAlignmentY(switch(i / 3){ case 0 -> AlignmentY.TOP;  case 1 -> AlignmentY.CENTER; default -> AlignmentY.BOTTOM; });
@@ -62,7 +67,11 @@ public class ModInfo_1_CraftingGrid extends Div {
 
 
         // Add result slot
-        e = addChild(new ItemElm(context.getLevel(), new ConfigurableItemElmStyle(ProductDisplayManager.getProductDisplayItemCopy(), SLOT_SIZE.x)));
+        e = addChild(new ItemElm(context.getLevel(), new ScalableItemElmStyle(
+            ProductDisplayManager.getProductDisplayItemCopy(),
+            SLOT_SIZE.x)
+            .withDisplayContext(ItemDisplayContext.NONE)
+        ));
         e.setSize(SLOT_SIZE);
         e.setAlignmentY(AlignmentY.CENTER);
     }

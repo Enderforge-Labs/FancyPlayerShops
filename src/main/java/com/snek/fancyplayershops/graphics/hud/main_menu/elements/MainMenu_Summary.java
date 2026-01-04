@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.graphics.hud.main_menu.styles.MainMenu_Summary_S;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -20,8 +20,7 @@ import net.minecraft.world.entity.player.Player;
 public class MainMenu_Summary extends SimpleTextElm {
 
     public MainMenu_Summary(final @NotNull HudContext context) {
-        super(context.getLevel(), new MainMenu_Summary_S());
-        //TODO Auto-generated constructor stub
+        super(context.getLevel(), new SimpleTextElmStyle_Small());
     }
 
 

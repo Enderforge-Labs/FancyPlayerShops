@@ -49,10 +49,11 @@ public class Edit_ColorSelector extends SimpleButtonElm {
      * @param hue The hue of the color theme.
      */
     public Edit_ColorSelector(final @NotNull ProductDisplay display, final float _hue, final @NotNull EditCanvas _menu) {
-        super(display.getLevel(), null, "Change color theme", 1, new Edit_ColorSelector_S(display));
+        super(display.getLevel(), null, "Change color theme", 1, (Edit_ColorSelector_S)new Edit_ColorSelector_S(display)
+            .withColor(Utils.HSVtoRGB(new Vector3f(_hue, S, V)))
+        );
         hue = _hue;
         menu = _menu;
-        getStyle(Edit_ColorSelector_S.class).setColor(Utils.HSVtoRGB(new Vector3f(hue, S, V)));
     }
 
 

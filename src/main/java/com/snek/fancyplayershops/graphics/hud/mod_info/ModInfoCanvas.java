@@ -6,18 +6,17 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
-import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_0_DisplayItem;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_CraftingGrid;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
-import com.snek.fancyplayershops.graphics.hud.mod_info.styles.ModInfo_0_TextA_S;
-import com.snek.fancyplayershops.graphics.hud.mod_info.styles.ModInfo_0_TextB_S;
-import com.snek.fancyplayershops.graphics.hud.mod_info.styles.ModInfo_1_TextA_S;
-import com.snek.fancyplayershops.graphics.hud.mod_info.styles.ModInfo_1_TextB_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.styles.ScalableItemElmStyle;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
@@ -75,17 +74,38 @@ public class ModInfoCanvas extends HudCanvasBase {
         addPage(p, "Selling items"); {
 
             // Add text A
-            e = p.addChild(new SimpleTextElm(level, new ModInfo_0_TextA_S()));
+            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+                .withText(new Txt()
+                    .cat(new Txt("Shops").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" are a great way to sell your items.\n")
+                    .cat("Other players can purchase products remotely\n")
+                    .cat("or visit your shops for bulk options and orders.\n")
+                    .white().get()
+                )
+            ));
             e.setSize(new Vector2f(1f, P0_TEXT_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
+
             // Add display item
-            e = p.addChild(new ModInfo_0_DisplayItem(context));
+            e = p.addChild(new ItemElm(context.getLevel(), new ScalableItemElmStyle(
+                ProductDisplayManager.getProductDisplayItemCopy(),
+                ModInfoCanvas.P0_ITEM_H
+            )));
             e.setSize(new Vector2f(1f, P0_ITEM_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
+
             // Add text B
-            e = p.addChild(new SimpleTextElm(level, new ModInfo_0_TextB_S()));
+            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+                .withText(new Txt()
+                    .cat("To get started, craft a ").cat(new Txt("Product Display").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(".\n")
+                    .cat("Once placed, you will be able to\n")
+                    .cat("select the item to sell, set a price, and\n")
+                    .cat("adjust other settings to your liking.\n")
+                    .cat(new Txt("Enjoy :3").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
+                    .white().get()
+                )
+            ));
             e.setSize(new Vector2f(1f, P0_TEXT_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
         }
@@ -99,17 +119,33 @@ public class ModInfoCanvas extends HudCanvasBase {
         addPage(p, "Crafting a Display"); {
 
             // Add text
-            e = p.addChild(new SimpleTextElm(level, new ModInfo_1_TextA_S()));
+            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+                .withText(new Txt()
+                    .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
+                    .cat("using Vanilla materials.\n")
+                    .cat("They have a maximum stock of " + 123456 + " items.") //FIXME actually retrieve the max stock from configs
+                    .white().get()
+                )
+            ));
             e.setSize(new Vector2f(1f, P1_TEXT_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
+
 
             // Add crafting grid
             e = p.addChild(new ModInfo_1_CraftingGrid(context));
             e.setSize(new Vector2f(1f, P1_CRAFTING_GRID_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
+
             // Add text
-            e = p.addChild(new SimpleTextElm(level, new ModInfo_1_TextB_S()));
+            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+                .withText(new Txt()
+                    .cat("They can be ").cat(new Txt("upgraded").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" using various items\n")
+                    .cat("to increase their storage, let them restock\n")
+                    .cat("automatically and retrieve items wirelessly.")
+                    .white().get()
+                )
+            ));
             e.setSize(new Vector2f(1f, P1_TEXT_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
         }

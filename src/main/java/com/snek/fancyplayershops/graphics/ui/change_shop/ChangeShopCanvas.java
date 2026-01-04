@@ -65,11 +65,12 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
 
 
         // Add player name input
-        e = bg.addChild(new SimpleTextElm(display.getLevel()));
+        e = bg.addChild(new SimpleTextElm(display.getLevel(), new SimpleTextElmStyle()
+            .withText(new Txt("Shop name:").get())
+        ));
         e.setSize(new Vector2f(1f, TITLE_H));
         e.setPosY(1f - TITLE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
-        ((Elm)e).getStyle(SimpleTextElmStyle.class).setText(new Txt("Shop name:").get());
 
         e = bg.addChild(new ChangeShop_NameInput(display, this));
         e.setSize(new Vector2f(1, TITLE_H));

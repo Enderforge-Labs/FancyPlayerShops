@@ -13,11 +13,12 @@ import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.stash.elements.Stash_ProductEntry;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_EmptyText_S;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 
@@ -50,7 +51,13 @@ public class StashCanvas extends HudCanvasBase {
         // Add "empty stash" text if the stash is empty
         final PlayerStash stash = StashManager.getStash(player);
         if(stash == null) {
-            e = bg.addChild(new SimpleTextElm(level, new Stash_EmptyText_S()));
+            e = bg.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+                .withText(new Txt(
+                    "Your stash is empty :3\n" +
+                    "Items you buy or claim that don't fit\n" +
+                    "in your inventory will appear here."
+                ).white().italic().get())
+            ));
             e.setSize(new Vector2f(1f, TITLE_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         }
