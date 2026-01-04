@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
+import com.snek.fancyplayershops.graphics.hud.mod_info.ModInfoCanvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
@@ -34,6 +35,9 @@ public class MainMenu_InfoButton extends SimpleButtonElm {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         super.onClick(player, click, coords);
         Clickable.playSound(player);
-        //TODO
+
+        // Change canvas
+        final HudContext context = (HudContext)canvas.getContext();
+        context.changeCanvas(new ModInfoCanvas(context));
     }
 }
