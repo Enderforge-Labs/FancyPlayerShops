@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_0_DisplayItem;
+import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_CraftingGrid;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.styles.ModInfo_0_TextA_S;
@@ -35,10 +36,10 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 public class ModInfoCanvas extends HudCanvasBase {
-    public static final float P0_ITEM_H = 0.5f;
+    public static final float P0_ITEM_H = 0.3f;
     public static final float P0_TEXT_H = (1f - P0_ITEM_H) / 2;
 
-    public static final float P1_CRAFTING_GRID_H = 0.3f;
+    public static final float P1_CRAFTING_GRID_H = 0.5f;
     public static final float P1_TEXT_H = (1f - P1_CRAFTING_GRID_H) / 2;
 
 
@@ -103,6 +104,9 @@ public class ModInfoCanvas extends HudCanvasBase {
             e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
 
             // Add crafting grid
+            e = p.addChild(new ModInfo_1_CraftingGrid(context));
+            e.setSize(new Vector2f(1f, P1_CRAFTING_GRID_H));
+            e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
             // Add text
             e = p.addChild(new SimpleTextElm(level, new ModInfo_1_TextB_S()));

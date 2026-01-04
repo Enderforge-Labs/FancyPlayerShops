@@ -20,9 +20,9 @@ public class ModInfo_1_TextB_S extends SimpleTextElmStyle {
     @Override
     public @NotNull Component getDefaultText() {
         return new Txt()
-            .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
-            .cat("using Vanilla materials.\n")
-            .cat("They have a maximum stock of " + 123456 + " items.") //FIXME actually retrieve the max stock from configs
+            .cat("They can be ").cat(new Txt("upgraded").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" using various items\n")
+            .cat("to increase their storage, let them restock\n")
+            .cat("automatically and retrieve items wirelessly.")
         .white().get();
     }
 
