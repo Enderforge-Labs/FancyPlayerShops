@@ -92,6 +92,8 @@ public abstract class ProductCanvasBase extends UiCanvas {
     public abstract void onStockChange();
 
 
+
+
     @Override
     public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         onStockChange();

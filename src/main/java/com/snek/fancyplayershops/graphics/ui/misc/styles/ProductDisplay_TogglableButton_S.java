@@ -43,10 +43,6 @@ public class ProductDisplay_TogglableButton_S extends FancyButtonElmStyle {
     }
 
 
-    // @Override
-    // public @NotNull Vector3i getDefaultBgColor() {
-    //     return new Vector3i(bgColor);
-    // }
 
 
     @Override
