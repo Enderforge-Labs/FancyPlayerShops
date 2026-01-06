@@ -13,7 +13,6 @@ import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;

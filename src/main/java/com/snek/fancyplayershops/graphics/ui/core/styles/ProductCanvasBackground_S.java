@@ -18,8 +18,9 @@ public class ProductCanvasBackground_S extends PanelElmStyle {
 
 
     public ProductCanvasBackground_S(final @NotNull ProductDisplay display) {
-        super();
+        super(false);
         this.display = display;
+        resetAll();
     }
 
 

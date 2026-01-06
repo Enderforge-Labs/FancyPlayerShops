@@ -24,8 +24,9 @@ public class ProductDisplay_TextInput_S extends TextInputElmStyle {
      * Creates a new ProductDisplay_TextInput_S.
      */
     public ProductDisplay_TextInput_S(final @NotNull ProductDisplay display) {
-        super();
+        super(false);
         this.display = display;
+        resetAll();
     }
 
 

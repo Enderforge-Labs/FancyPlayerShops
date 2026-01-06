@@ -40,7 +40,7 @@ public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
         final int clickCooldown,
         final @Nullable String textOverride
     ) {
-        this(display, lmbActionName, rmbActionName, clickCooldown, new ProductDisplay_TogglableButton_S(display));
+        this(display, lmbActionName, rmbActionName, clickCooldown, new ProductDisplay_TogglableButton_S());
         if(textOverride != null) {
            getStyle(ProductDisplay_TogglableButton_S.class).setText(new Txt(textOverride).get());
         }
@@ -51,7 +51,7 @@ public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
         if(active != _active) {
             active = _active;
             final ProductDisplay_TogglableButton_S s = getStyle(ProductDisplay_TogglableButton_S.class);
-            s.setDefaultColor(active ? ProductDisplay_TogglableButton_S.BASE_COLOR : ProductDisplay_TogglableButton_S.BASE_COLOR_INACTIVE);
+            s.setColor(active ? ProductDisplay_TogglableButton_S.BASE_COLOR : ProductDisplay_TogglableButton_S.BASE_COLOR_INACTIVE);
             applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()), false, true);
         }
     }

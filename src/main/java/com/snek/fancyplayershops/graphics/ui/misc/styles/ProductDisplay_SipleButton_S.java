@@ -24,8 +24,9 @@ public class ProductDisplay_SipleButton_S extends SimpleButtonElmStyle {
      * Creates a new ProductDisplay_SipleButton_S.
      */
     public ProductDisplay_SipleButton_S(final @NotNull ProductDisplay display) {
-        super();
+        super(false);
         this.display = display;
+        resetAll();
     }
 
 

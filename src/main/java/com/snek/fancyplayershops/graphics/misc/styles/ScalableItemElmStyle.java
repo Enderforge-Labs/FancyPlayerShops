@@ -10,7 +10,7 @@ import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import net.minecraft.world.item.ItemStack;
 
 
-
+//TODO idk if overriding get methods is fine, this needs to be checked
 
 public class ScalableItemElmStyle extends ItemElmStyle {
     public static final float Z_SCALE = 0.05f;
@@ -38,10 +38,11 @@ public class ScalableItemElmStyle extends ItemElmStyle {
      * Creates a new ScalableItemElmStyle.
      */
     public ScalableItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
-        super();
+        super(false);
         this.size = size;
         this.item = item;
         this.shift = new Vector3f(shift.x, shift.y, shiftZ);
+        resetAll();
     }
 
 

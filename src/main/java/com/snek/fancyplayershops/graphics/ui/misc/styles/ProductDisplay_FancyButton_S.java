@@ -24,8 +24,9 @@ public class ProductDisplay_FancyButton_S extends FancyButtonElmStyle {
      * Creates a new ProductDisplay_FancyButton_S.
      */
     public ProductDisplay_FancyButton_S(final @NotNull ProductDisplay display) {
-        super();
+        super(false);
         this.display = display;
+        resetAll();
     }
 
 

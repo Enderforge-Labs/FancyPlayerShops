@@ -13,21 +13,19 @@ import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
-import net.minecraft.network.chat.Component;
 
 
-
+//TODO idk if overriding get methods is fine, this needs to be checked
 
 public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     public static final Vector3i HOVERED_COLOR = new Vector3i(64, 64, 64);
     public static final Vector3i DEFAULT_COLOR = Utils.interpolateRGB(CanvasBorder_S.COLOR, HOVERED_COLOR, 0.5f);
 
-    final @NotNull String displayedText;
 
 
     public MainMenu_LargeButton_S(final @NotNull String displayedText) {
         super();
-        this.displayedText = displayedText;
+        setText(new Txt("\n\n\n\n" + displayedText).white().get());
     }
 
 
@@ -41,11 +39,6 @@ public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     @Override
     public int getDefaultBgAlpha() {
         return 255;
-    }
-
-    @Override
-    public @NotNull Component getDefaultText() {
-        return new Txt("\n\n\n\n" + displayedText).white().get();
     }
 
 

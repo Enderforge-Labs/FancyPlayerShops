@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
@@ -19,46 +19,51 @@ import com.snek.frameworklib.utils.Utils;
 
 
 
-public class ProductDisplay_TogglableButton_S extends ProductDisplay_FancyButton_S {
+public class ProductDisplay_TogglableButton_S extends FancyButtonElmStyle {
     public static final @NotNull Vector3i BASE_COLOR = Utils.HSVtoRGB(new Vector3f(120f, 0.2f, 0.6f));
     public static final @NotNull Vector3i BASE_COLOR_INACTIVE = Utils.toBW(BASE_COLOR);
 
-    private final @NotNull Vector3i defaultBgColor = new Vector3i(BASE_COLOR);
-    public void setDefaultColor(final @NotNull Vector3i _color) { defaultBgColor.set(_color); }
+    private final @NotNull Vector3i bgColor = new Vector3i(BASE_COLOR);
+    public void setColor(final @NotNull Vector3i _color) {
+        bgColor.set(_color);
+        setBgColor(_color);
+    }
 
 
 
 
-    public ProductDisplay_TogglableButton_S(final @NotNull ProductDisplay display) {
-        super(display);
+    public ProductDisplay_TogglableButton_S() {
+        super(false);
+        resetAll();
+        setBgColor(bgColor);
     }
 
 
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(defaultBgColor);
+        return new Vector3i(bgColor);
     }
 
 
     @Override
-    public @Nullable Animation getHoverPrimerAnimation() {
+    public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgColor(getDefaultBgColor())
+            .targetBgColor(bgColor)
         );
     }
     @Override
-    public @Nullable Animation getHoverEnterAnimation() {
+    public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(getDefaultBgColor().add(20, 20, 20).min(new Vector3i(255)))
+            .targetBgColor(bgColor.add(20, 20, 20).min(new Vector3i(255)))
         );
     }
     @Override
-    public @Nullable Animation getHoverLeaveAnimation() {
+    public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(getDefaultBgColor())
+            .targetBgColor(bgColor)
         );
     }
 }

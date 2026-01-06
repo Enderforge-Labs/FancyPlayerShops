@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;

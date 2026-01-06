@@ -22,12 +22,19 @@ public class ScrollableListStyle extends PanelElmStyle {
 
 
 
+    /**
+     * Creates a new ScrollableListStyle.
+     */
+    public ScrollableListStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
 
     /**
      * Creates a new ScrollableListStyle.
      */
     public ScrollableListStyle() {
-        super();
+        this(true);
     }
 
 
@@ -80,20 +87,20 @@ public class ScrollableListStyle extends PanelElmStyle {
     public void setThumbStyleReference(final @NotNull PanelElmStyle style) { thumbStyle.set(style); }
 
 
-    public @NotNull Flagged<@NotNull Vector3i>      getFlaggedThumbColor() { return thumbStyle.get().getFlaggedColor(); }
-    public @NotNull Flagged<@NotNull Integer>       getFlaggedThumbAlpha() { return thumbStyle.get().getFlaggedAlpha(); }
-    public @NotNull Flagged<@NotNull Vector3i>      getFlaggedTrackColor() { return trackStyle.get().getFlaggedColor(); }
-    public @NotNull Flagged<@NotNull Integer>       getFlaggedTrackAlpha() { return trackStyle.get().getFlaggedAlpha(); }
-    public @NotNull Flagged<@NotNull PanelElmStyle> getFlaggedTrackStyle() { return trackStyle; }
-    public @NotNull Flagged<@NotNull PanelElmStyle> getFlaggedThumbStyle() { return thumbStyle; }
+    public final @NotNull Flagged<@NotNull Vector3i>      getFlaggedThumbColor() { return thumbStyle.get().getFlaggedColor(); }
+    public final @NotNull Flagged<@NotNull Integer>       getFlaggedThumbAlpha() { return thumbStyle.get().getFlaggedAlpha(); }
+    public final @NotNull Flagged<@NotNull Vector3i>      getFlaggedTrackColor() { return trackStyle.get().getFlaggedColor(); }
+    public final @NotNull Flagged<@NotNull Integer>       getFlaggedTrackAlpha() { return trackStyle.get().getFlaggedAlpha(); }
+    public final @NotNull Flagged<@NotNull PanelElmStyle> getFlaggedTrackStyle() { return trackStyle; }
+    public final @NotNull Flagged<@NotNull PanelElmStyle> getFlaggedThumbStyle() { return thumbStyle; }
 
 
-    public @NotNull Vector3i      getThumbColor() { return thumbStyle.get().getColor(); }
-    public          int           getThumbAlpha() { return thumbStyle.get().getAlpha(); }
-    public @NotNull Vector3i      getTrackColor() { return trackStyle.get().getColor(); }
-    public          int           getTrackAlpha() { return trackStyle.get().getAlpha(); }
-    public @NotNull PanelElmStyle getTrackStyleReference() { return trackStyle.get(); }
-    public @NotNull PanelElmStyle getThumbStyleReference() { return thumbStyle.get(); }
+    public final @NotNull Vector3i      getThumbColor() { return thumbStyle.get().getColor(); }
+    public final          int           getThumbAlpha() { return thumbStyle.get().getAlpha(); }
+    public final @NotNull Vector3i      getTrackColor() { return trackStyle.get().getColor(); }
+    public final          int           getTrackAlpha() { return trackStyle.get().getAlpha(); }
+    public final @NotNull PanelElmStyle getTrackStyleReference() { return trackStyle.get(); }
+    public final @NotNull PanelElmStyle getThumbStyleReference() { return thumbStyle.get(); }
 
 
     public @NotNull Vector3i      editThumbColor() { return thumbStyle.get().editColor(); }
@@ -102,4 +109,12 @@ public class ScrollableListStyle extends PanelElmStyle {
     public          int           editTrackAlpha() { return trackStyle.get().editAlpha(); }
     public @NotNull PanelElmStyle editTrackStyleReference() { return trackStyle.edit(); }
     public @NotNull PanelElmStyle editThumbStyleReference() { return thumbStyle.edit(); }
+
+
+    public @NotNull ScrollableListStyle withThumbColor         (final @NotNull Vector3i      color) { setThumbColor         (color); return this; }
+    public @NotNull ScrollableListStyle withThumbAlpha         (final          int           alpha) { setThumbAlpha         (alpha); return this; }
+    public @NotNull ScrollableListStyle withTrackColor         (final @NotNull Vector3i      color) { setTrackColor         (color); return this; }
+    public @NotNull ScrollableListStyle withTrackAlpha         (final          int           alpha) { setTrackAlpha         (alpha); return this; }
+    public @NotNull ScrollableListStyle withTrackStyleReference(final @NotNull PanelElmStyle style) { setTrackStyleReference(style); return this; }
+    public @NotNull ScrollableListStyle withThumbStyleReference(final @NotNull PanelElmStyle style) { setThumbStyleReference(style); return this; }
 }
