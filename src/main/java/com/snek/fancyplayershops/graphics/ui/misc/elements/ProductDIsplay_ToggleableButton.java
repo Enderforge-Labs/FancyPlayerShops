@@ -52,7 +52,7 @@ public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
             active = _active;
             final ProductDisplay_TogglableButton_S s = getStyle(ProductDisplay_TogglableButton_S.class);
             s.setColor(active ? ProductDisplay_TogglableButton_S.BASE_COLOR : ProductDisplay_TogglableButton_S.BASE_COLOR_INACTIVE);
-            applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getDefaultBgColor()), false, true);
+            applyAnimation(new Transition(4, Easings.expOut).targetBgColor(s.getColor()), false, true);
         }
     }
 }

@@ -26,7 +26,12 @@ public class ProductDisplay_TogglableButton_S extends FancyButtonElmStyle {
     private final @NotNull Vector3i bgColor = new Vector3i(BASE_COLOR);
     public void setColor(final @NotNull Vector3i _color) {
         bgColor.set(_color);
-        setBgColor(_color);
+        resetHoverPrimerAnimation();
+        resetHoverEnterAnimation();
+        resetHoverLeaveAnimation();
+    }
+    public Vector3i getColor() {
+        return new Vector3i(bgColor);
     }
 
 
@@ -35,14 +40,13 @@ public class ProductDisplay_TogglableButton_S extends FancyButtonElmStyle {
     public ProductDisplay_TogglableButton_S() {
         super(false);
         resetAll();
-        setBgColor(bgColor);
     }
 
 
-    @Override
-    public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(bgColor);
-    }
+    // @Override
+    // public @NotNull Vector3i getDefaultBgColor() {
+    //     return new Vector3i(bgColor);
+    // }
 
 
     @Override
