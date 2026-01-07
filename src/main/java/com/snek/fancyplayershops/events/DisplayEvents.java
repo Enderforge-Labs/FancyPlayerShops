@@ -2,10 +2,14 @@ package com.snek.fancyplayershops.events;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.fancyplayershops.events.data.DisplayCreationReason;
+import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.main.ProductDisplay;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 
 
@@ -23,12 +27,71 @@ public class DisplayEvents {
         )
     ;
 
+    public static final Event<ItemsSold> ITEMS_SOLD =
+        EventFactory.createArrayBacked(ItemsSold.class,
+            callbacks -> (display, buyer, item, amount) -> {
+                for(ItemsSold callback : callbacks) {
+                    callback.onItemsSell(display, buyer, item, amount);
+                }
+            }
+        )
+    ;
+
+    // //TODO
+    // public static final Event<OrderPlaced> ORDER_PLACED =
+    //     EventFactory.createArrayBacked(OrderPlaced.class,
+    //         callbacks -> (display, oldStock, newStock) -> {
+    //             for(OrderPlaced callback : callbacks) {
+    //                 callback.onOrderPlace(display, oldStock, newStock);
+    //             }
+    //         }
+    //     )
+    // ;
+
+    public static final Event<DisplayCreated> DISPLAY_CREATED =
+        EventFactory.createArrayBacked(DisplayCreated.class,
+            callbacks -> (display, reason) -> {
+                for(DisplayCreated callback : callbacks) {
+                    callback.onDisplayCreate(display, reason);
+                }
+            }
+        )
+    ;
+
+    public static final Event<DisplayRemoved> DISPLAY_REMOVED =
+        EventFactory.createArrayBacked(DisplayRemoved.class,
+            callbacks -> (display, reason) -> {
+                for(DisplayRemoved callback : callbacks) {
+                    callback.onDisplayRemove(display, reason);
+                }
+            }
+        )
+    ;
+
 
     @FunctionalInterface
     public interface ShopStockChanged {
         void onStockChange(@NotNull ProductDisplay display, long oldStock, long newStock);
     }
 
-    //TODO ITEMS_SOLD onItemsSell
-    //TODO ORDER_PLACED onOrderPlace
+    @FunctionalInterface
+    public interface ItemsSold {
+        void onItemsSell(@NotNull ProductDisplay display, @NotNull Player buyer, @NotNull ItemStack item, long amount);
+    }
+
+    // //TODO
+    // @FunctionalInterface
+    // public interface OrderPlaced {
+    //     void onOrderPlace(@NotNull ProductDisplay display, long oldStock, long newStock);
+    // }
+
+    @FunctionalInterface
+    public interface DisplayCreated {
+        void onDisplayCreate(@NotNull ProductDisplay display, @NotNull DisplayCreationReason reason);
+    }
+
+    @FunctionalInterface
+    public interface DisplayRemoved {
+        void onDisplayRemove(@NotNull ProductDisplay display, @NotNull DisplayRemovalReason reason);
+    }
 }
