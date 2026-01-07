@@ -12,7 +12,7 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
-import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
@@ -66,8 +67,8 @@ public class DetailsCanvas extends ProductCanvasBase {
 
         // Call superconstructor
         super(display, calculateTitle(display), BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
-        title.setAbsSizeY(title.calcTotEntityHeight());
-        title.setPosY(1 - title.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
+        title.setAlignmentY(AlignmentY.NONE);
+        title.setPosY(1f - Canvas.TITLE_H - CanvasBorder.DEFAULT_HEIGHT);
         Div e;
 
 
