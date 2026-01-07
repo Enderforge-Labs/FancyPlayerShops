@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBack_S;
@@ -80,24 +79,6 @@ public abstract class ProductCanvasBase extends UiCanvas {
     @SuppressWarnings("java:S3010")
     protected ProductCanvasBase(final @NotNull ProductDisplay display, final @Nullable String defaultTitle, final float height, final float heightTop, final float heightBottom) {
         this(display, defaultTitle == null ? null : new Txt(defaultTitle).white().bold().get(), height, heightTop, heightBottom);
-    }
-
-
-
-
-    // /**
-    //  * Callback method called any time the current stock changes.
-    //  * This is also called once right before the canvas spawns into the level.
-    //  */
-    // public abstract void onStockChange();
-
-
-
-
-    @Override
-    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
-        // onStockChange();
-        super.spawn(pos, animate);
     }
 
 
