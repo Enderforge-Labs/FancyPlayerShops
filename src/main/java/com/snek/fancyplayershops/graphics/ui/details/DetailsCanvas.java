@@ -12,6 +12,7 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
+import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -137,9 +138,11 @@ public class DetailsCanvas extends ProductCanvasBase {
 
 
 
-    @Override
-    public void onStockChange() {
-        values.updateDisplay();
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof DetailsCanvas c) {
+            c.values.updateDisplay();
+        }
     }
 
 

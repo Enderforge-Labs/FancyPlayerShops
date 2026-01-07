@@ -31,8 +31,12 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworkconfig.FrameworkConfig;
+import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
+import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -126,6 +130,19 @@ public class FancyPlayerShops implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
             if(fatal) return;
+
+
+
+
+            // Register shop event listeners
+            DisplayEvents.STOCK_CHANGED.register((display, oldStock, newStock) -> {
+                EditCanvas   .__callback_onStockChange(display, oldStock, newStock);
+                BuyCanvas    .__callback_onStockChange(display, oldStock, newStock);
+                DetailsCanvas.__callback_onStockChange(display, oldStock, newStock);
+            });
+
+
+
 
             // Load persistent data
             ShopManager.loadShops(); //! Must be loaded before displays

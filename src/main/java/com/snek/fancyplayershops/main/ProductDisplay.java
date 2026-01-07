@@ -27,6 +27,7 @@ import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
+import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -473,6 +474,7 @@ public class ProductDisplay {
             // Transfer items
             final var transferStats = sendItemsToPlayer(owner, amount);
             final long stashedAmount = transferStats.getSecond();
+            //! Stock change events are fired by sendItemsToPlayer call
 
             // Send feedback messages
             owner.displayClientMessage(new Txt()
@@ -489,12 +491,6 @@ public class ProductDisplay {
                     .cat(new Txt("that didn't fit in your inventory ").lightGray())
                     .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                 .get(), false);
-            }
-
-
-            // Update active canvas
-            if(getActiveCanvas() != null) {
-                getActiveCanvas().onStockChange();
             }
         }
     }
@@ -532,6 +528,7 @@ public class ProductDisplay {
                 // Transfer items
                 final var transferStats = sendItemsToPlayer(buyer, amount);
                 final long stashedAmount = transferStats.getSecond();
+                //! Stock change events are fired by sendItemsToPlayer call
 
 
                 // Send feedback messages
@@ -549,12 +546,6 @@ public class ProductDisplay {
                         .cat(new Txt("that didn't fit in your inventory ").lightGray())
                         .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
                     .get(), false);
-                }
-
-
-                // Update active canvas
-                if(getActiveCanvas() != null) {
-                    getActiveCanvas().onStockChange();
                 }
             }
             else {
@@ -766,9 +757,11 @@ public class ProductDisplay {
             StashManager.giveItem(ownerUUID, entryItem, entryCount, playerFeedback);
         }
 
-        // Clear stored items and reset stock, then save this display
+        // Clear stored items and reset stock, then fire events and save this display
         storedItems.clear();
+        final long oldStock = stock;
         stock = 0;
+        DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -779,6 +772,8 @@ public class ProductDisplay {
     public void stashIncompatible() {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
+        final long oldStock = stock;
+
 
         // Check each item individually
         long givenAmount = 0;
@@ -800,6 +795,7 @@ public class ProductDisplay {
                 stashedAmount += giveStats.getSecond();
             }
         }
+
 
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
@@ -824,7 +820,9 @@ public class ProductDisplay {
             }
         }
 
-        // Save this display
+
+        // Fire event and save this display
+        DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -921,14 +919,10 @@ public class ProductDisplay {
         pullItems(new BlockPos(+1, +0, +0));
         pullItems(new BlockPos(-1, +0, +0));
 
-        // Update stock and save the display
+        // Update stock, then fire events and save the display
         if(oldStock == stock) return;
+        DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
         ProductDisplayManager.scheduleDisplaySave(this);
-
-        // Update active canvas
-        if(getActiveCanvas() != null) {
-            getActiveCanvas().onStockChange();
-        }
     }
 
 
@@ -1179,6 +1173,7 @@ public class ProductDisplay {
     public @NotNull Pair<Long, Long> sendItemsToPlayer(final @NotNull Player player, final long amount) {
         assert Require.condition(amount <= stock, "Amount of items to transfer cannot be higher than the current stock");
         assert Require.positive(amount, "item amount");
+        final long oldStock = stock;
 
 
         // Create a shuffled list of entries
@@ -1212,9 +1207,12 @@ public class ProductDisplay {
         }
 
 
-        // Update total stock, then save the display and return the stats
+        // Update total stock, then fire events.
         assert Require.condition(left == 0, "The amount of items to send left is not 0. This should never happen");
         stock -= amount;
+        DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
+
+        // Save the display and return the stats
         ProductDisplayManager.scheduleDisplaySave(this);
         return Pair.from(givenAmount, stashedAmount);
     }
@@ -1226,6 +1224,8 @@ public class ProductDisplay {
      * Stores the specified item stack into this display's storage.
      * <p>
      * This updates the item instance's stock, as well as the total stock of the product display.
+     * <p>
+     * This doesn't fire stock change events.
      * @param itemStackUUID The UUID of the item stack.
      * @param itemStack The item stack to store.
      * @param amount The amount of items to store. Must be {@code > 0}.
@@ -1258,8 +1258,9 @@ public class ProductDisplay {
     public void attemptRestock() {
         final @Nullable Player owner = MinecraftUtils.getPlayerByUUID(ownerUUID);
         if(owner == null) return;
-        int takenFromInventory = 0;
-        int takenFromStash = 0;
+        final long oldStock = stock;
+        long takenFromInventory = 0;
+        long takenFromStash = 0;
 
 
         // Check each slot in the player's inventory (hotbar + 27 inventory slots)
@@ -1269,7 +1270,7 @@ public class ProductDisplay {
             takenFromInventory += taken;
             inventoryItem.setCount(inventoryItem.getCount() - (int)taken);
             if(isFull()) {
-                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                finalizeRestock(owner, takenFromInventory, takenFromStash, oldStock);
                 return;
             }
         }
@@ -1282,7 +1283,7 @@ public class ProductDisplay {
             takenFromInventory += taken;
             offhandItem.setCount(offhandItem.getCount() - (int)taken);
             if(isFull()) {
-                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                finalizeRestock(owner, takenFromInventory, takenFromStash, oldStock);
                 return;
             }
         }
@@ -1303,14 +1304,14 @@ public class ProductDisplay {
                 stashEntry.remove(taken);
             }
             if(isFull()) {
-                finalizeRestock(owner, takenFromInventory, takenFromStash);
+                finalizeRestock(owner, takenFromInventory, takenFromStash, oldStock);
                 return;
             }
         }
 
 
         // Finalize restock (in case the display wasn't filled)
-        finalizeRestock(owner, takenFromInventory, takenFromStash);
+        finalizeRestock(owner, takenFromInventory, takenFromStash, oldStock);
     }
 
 
@@ -1345,10 +1346,8 @@ public class ProductDisplay {
      * @param takenFromInventory The number of items taken from the owner's inventory.
      * @param takenFromStash The number of items taken from the owner's stash.
      */
-    private void finalizeRestock(final @NotNull Player owner, final int takenFromInventory, final int takenFromStash) {
-        if(getActiveCanvas() != null) {
-            getActiveCanvas().onStockChange();
-        }
+    private void finalizeRestock(final @NotNull Player owner, final long takenFromInventory, final long takenFromStash, final long oldStock) {
+        DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
 
         if(takenFromInventory > 0 && takenFromStash > 0) {
             owner.displayClientMessage(new Txt()

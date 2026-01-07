@@ -85,18 +85,18 @@ public abstract class ProductCanvasBase extends UiCanvas {
 
 
 
-    /**
-     * Callback method called any time the current stock changes.
-     * This is also called once right before the canvas spawns into the level.
-     */
-    public abstract void onStockChange();
+    // /**
+    //  * Callback method called any time the current stock changes.
+    //  * This is also called once right before the canvas spawns into the level.
+    //  */
+    // public abstract void onStockChange();
 
 
 
 
     @Override
     public void spawn(@NotNull final Vector3d pos, final boolean animate) {
-        onStockChange();
+        // onStockChange();
         super.spawn(pos, animate);
     }
 

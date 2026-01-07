@@ -89,14 +89,6 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
 
 
 
-    @Override
-    public void onStockChange() {
-        // Empty
-    }
-
-
-
-
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
     @Override public @Nullable Div getDisclaimerElm() { return null; }

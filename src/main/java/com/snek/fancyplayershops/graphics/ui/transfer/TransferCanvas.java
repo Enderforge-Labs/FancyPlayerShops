@@ -146,14 +146,6 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
 
 
-
-    @Override
-    public void onStockChange() {
-        // Empty
-    }
-
-
-
     public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
             return new Txt("Transferring an empty product display").white().get();
