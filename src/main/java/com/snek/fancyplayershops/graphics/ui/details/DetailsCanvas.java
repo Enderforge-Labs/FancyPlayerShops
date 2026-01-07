@@ -139,9 +139,11 @@ public class DetailsCanvas extends ProductCanvasBase {
 
 
 
-    @Override
-    public void onStockChange() {
-        values.updateDisplay();
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof DetailsCanvas c) {
+            c.values.updateDisplay();
+        }
     }
 
 

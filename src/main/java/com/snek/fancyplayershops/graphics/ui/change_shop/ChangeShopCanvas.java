@@ -142,13 +142,6 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
 
 
 
-    @Override
-    public void onStockChange() {
-        // Empty
-    }
-
-
-
     public static @NotNull Component culateTitle(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
             return new Txt("Moving an empty product display to another shop").white().get();

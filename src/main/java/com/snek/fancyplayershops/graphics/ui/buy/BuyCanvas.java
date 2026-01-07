@@ -157,8 +157,9 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         inputIndicator = (DualInputIndicator)e;
 
 
-        // Set default amount
+        // Set default amount and update dynamic elements
         changeAmount(1);
+        onStockChange(display, this);
     }
 
 
@@ -200,15 +201,24 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
 
-    @Override
-    public void onStockChange() {
-        amountInputDisplay.updateDisplayedText();
-        amountInputDisplay.forceTextUpdate();
+    private static void onStockChange(final @NotNull ProductDisplay display, final @NotNull BuyCanvas c) {
+        c.amountInputDisplay.updateDisplayedText();
+        c.amountInputDisplay.forceTextUpdate();
 
-        confirmButton.updateColor(display.getStock() >= amount);
-        buy1xButton.updateColor(display.getStock() >= 1);
-        buy1sButton.updateColor(display.getStock() >= 64);
-        buy1iButton.updateColor(display.getStock() > 0);
+        c.confirmButton.updateColor(display.getStock() >= c.amount);
+        c.buy1xButton.updateColor(display.getStock() >= 1);
+        c.buy1sButton.updateColor(display.getStock() >= display.getItem().getMaxStackSize());
+        c.buy1iButton.updateColor(display.getStock() > 0);
+    }
+
+
+
+
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof BuyCanvas c) {
+            onStockChange(display, c);
+        }
     }
 
 

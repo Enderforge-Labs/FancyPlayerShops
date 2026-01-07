@@ -31,8 +31,13 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.events.DisplayEvents;
+import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
+import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
+import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -127,6 +132,19 @@ public class FancyPlayerShops implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
             if(fatal) return;
 
+
+
+
+            // Register shop event listeners
+            DisplayEvents.STOCK_CHANGED.register((display, oldStock, newStock) -> {
+                EditCanvas   .__callback_onStockChange(display, oldStock, newStock);
+                BuyCanvas    .__callback_onStockChange(display, oldStock, newStock);
+                DetailsCanvas.__callback_onStockChange(display, oldStock, newStock);
+            });
+
+
+
+
             // Load persistent data
             ShopManager.loadShops(); //! Must be loaded before displays
             ProductDisplayManager.loadDisplays();
@@ -215,7 +233,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
-                        new ProductDisplay(
+                        final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
                             /* price       */ 1000l,
@@ -232,6 +250,7 @@ public class FancyPlayerShops implements ModInitializer {
                         );
                         player.displayClientMessage(new Txt("New product display created. Right click it to configure").lightGray().bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
+                        DisplayEvents.DISPLAY_CREATED.invoker().onDisplayCreate(display, DisplayCreationReason.NEW);
                     }
                 }
 

@@ -159,6 +159,10 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
             e.setSize(new Vector2f(1, h));
             e.setPosY(h * i * cslHeight);
         }
+
+
+        // Update dynamic elements
+        onStockChange(display, this);
     }
 
 
@@ -180,10 +184,16 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
 
 
 
+    public static void onStockChange(final @NotNull ProductDisplay display, final @NotNull EditCanvas canvas) {
+        canvas.restockButton.updateColor(display.getStock() < display.getMaxStock());
+    }
 
-    @Override
-    public void onStockChange() {
-        restockButton.updateColor(display.getStock() < display.getMaxStock());
+
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof EditCanvas c) {
+            onStockChange(display, c);
+        }
     }
 
 

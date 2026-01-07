@@ -153,5 +153,6 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
             owner, shopUuid, price, stock, maxStock, rotation, hue, balance,
             nbtFilter, position, level, item, storedItems
         );
+        //! display creation event not fired. That's the caller method's responsibility
     }
 }

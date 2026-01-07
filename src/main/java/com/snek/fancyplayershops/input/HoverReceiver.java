@@ -141,7 +141,7 @@ public abstract class HoverReceiver {
         // Unfocus all the displays that don't have any viewer anymore. Set their viewer to null
         targetedDisplaysOld.removeAll(targetedDisplays);
         for(final ProductDisplay display : targetedDisplaysOld) {
-            if(!display.isDeleted()) {
+            if(!display.isRemoved()) {
                 display.setViewer(null);
                 display.updateFocusState();
             }
@@ -150,7 +150,7 @@ public abstract class HoverReceiver {
 
         // Update looked-at displays
         for(final ProductDisplay display : targetedDisplays) {
-            if(!display.isDeleted() && display.getuser() != null) {
+            if(!display.isRemoved() && display.getuser() != null) {
 
                 // If the user isn't looking at the display anymore, unfocus it
                 if(display.getViewer() != display.getuser()) {

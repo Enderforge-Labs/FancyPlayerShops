@@ -13,6 +13,9 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.events.DisplayEvents;
+import com.snek.fancyplayershops.events.data.DisplayCreationReason;
+import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -62,7 +65,8 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 // Stash, claim and delete the display, then increase the purged displays counter
                 display.stash(false);
                 display.claimBalance();
-                display.delete();
+                display.remove();
+                DisplayEvents.DISPLAY_REMOVED.invoker().onDisplayRemove(display, DisplayRemovalReason.DELETED);
                 ++r;
             }
         }
@@ -111,7 +115,8 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
                 // Stash and delete the display, then increase the displaced displays counter
                 display.pickUp(false);
-                display.delete();
+                display.remove();
+                DisplayEvents.DISPLAY_REMOVED.invoker().onDisplayRemove(display, DisplayRemovalReason.PICKED_UP);
                 ++r;
             }
         }
@@ -178,6 +183,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                         );
                         display.invalidateItemDisplay();
                         display.storeItems(display.getItemUUID(), display.getItem(), Math.abs(rnd.nextInt() % 1_000_000));
+                        DisplayEvents.DISPLAY_CREATED.invoker().onDisplayCreate(display, DisplayCreationReason.NEW);
                         ++r;
                     }
                 }

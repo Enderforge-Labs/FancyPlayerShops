@@ -259,7 +259,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
             // Skip deleted displays
-            if(display.isDeleted()) {
+            if(display.isRemoved()) {
                 continue;
             }
 
