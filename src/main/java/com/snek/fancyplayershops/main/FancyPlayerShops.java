@@ -32,6 +32,7 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
+import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
@@ -232,7 +233,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
-                        new ProductDisplay(
+                        final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
                             /* price       */ 1000l,
@@ -249,6 +250,7 @@ public class FancyPlayerShops implements ModInitializer {
                         );
                         player.displayClientMessage(new Txt("New product display created. Right click it to configure").lightGray().bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
+                        DisplayEvents.DISPLAY_CREATED.invoker().onDisplayCreate(display, DisplayCreationReason.NEW);
                     }
                 }
 

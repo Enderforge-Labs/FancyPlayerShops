@@ -29,7 +29,6 @@ public class DisplayEvents {
         )
     ;
 
-    //TODO actually fire the events
     public static final Event<ItemsSold> ITEMS_SOLD =
         EventFactory.createArrayBacked(ItemsSold.class,
             callbacks -> (display, buyer, item, amount) -> {
@@ -51,7 +50,6 @@ public class DisplayEvents {
     //     )
     // ;
 
-    //TODO actually fire the events
     public static final Event<DisplayCreated> DISPLAY_CREATED =
         EventFactory.createArrayBacked(DisplayCreated.class,
             callbacks -> (display, reason) -> {
@@ -62,7 +60,6 @@ public class DisplayEvents {
         )
     ;
 
-    //TODO actually fire the events
     public static final Event<DisplayRemoved> DISPLAY_REMOVED =
         EventFactory.createArrayBacked(DisplayRemoved.class,
             callbacks -> (display, reason) -> {
