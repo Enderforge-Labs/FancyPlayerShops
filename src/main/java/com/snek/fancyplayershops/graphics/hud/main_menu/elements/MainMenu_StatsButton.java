@@ -3,6 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.main_menu.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.main_menu.styles.MainMenu_LargeButton_S;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -28,7 +29,7 @@ public class MainMenu_StatsButton extends FancyButtonElm {
         super(context.getLevel(), null, "View statistics", 1, new MainMenu_LargeButton_S("View statistics"));
 
         // Create design
-        final Div e = addDesign(context.getLevel(), SymbolDesigns.GraphUp);
+        final Div e = addDesign(context.getLevel(), SymbolDesigns.GraphUp, MainMenuCanvas.MAIN_BUTTON_DEISNG_SIZE);
         e.applyAnimation(new Transition().additiveTransform(new Transform().moveY(0.025f)), true, false);
     }
 

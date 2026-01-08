@@ -29,6 +29,8 @@ public class MainMenuCanvas extends HudCanvasBase {
     public static final float MAIN_BUTTONS_DISTANCE = 0.02f;
     public static final Vector2f MAIN_BUTTONS_BB_POS = new Vector2f(0f, 1f - TITLE_H - MAIN_BUTTONS_BB.y - MAIN_BUTTONS_DISTANCE);
 
+    public static final float MAIN_BUTTON_DEISNG_SIZE = 0.4f;
+
 
 
     public MainMenuCanvas(final @NotNull HudContext context) {
