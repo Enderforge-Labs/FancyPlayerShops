@@ -13,6 +13,7 @@ import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_Crafti
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.misc.styles.GuiItemElmStyle;
 import com.snek.fancyplayershops.graphics.misc.styles.ScalableItemElmStyle;
 import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -87,7 +88,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add display item
-            e = p.addChild(new ItemElm(context.getLevel(), new ScalableItemElmStyle(
+            e = p.addChild(new ItemElm(context.getLevel(), new GuiItemElmStyle(
                 ProductDisplayManager.getProductDisplayItemCopy(),
                 ModInfoCanvas.P0_ITEM_H
             )));
@@ -123,7 +124,8 @@ public class ModInfoCanvas extends HudCanvasBase {
                 .withText(new Txt()
                     .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
                     .cat("using Vanilla materials.\n")
-                    .cat("They have a maximum stock of " + 123456 + " items.") //FIXME actually retrieve the max stock from configs
+                    .cat("They have a maximum stock of ").cat(new Txt("123456").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" items.")
+                    //FIXME actually retrieve the max stock from configs
                     .white().get()
                 )
             ));

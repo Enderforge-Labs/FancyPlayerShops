@@ -712,7 +712,7 @@ public class ProductDisplay {
 
         // Add value to default rotation and save the display
         //! Reduce range to [-7, 7], then add 8 to shift range to [1, 15], then reduce to [0, 7]
-        defaultRotation = ((defaultRotation + _rotation) % 8 + 8) % 8;
+        defaultRotation = ((defaultRotation + _rotation) % 8 + 8) % 8; //TODO no need to do this anymore
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
