@@ -40,6 +40,7 @@ import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -239,7 +240,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* price       */ 1000l,
                             /* stock       */ 0,
                             /* maxStock    */ 1000,
-                            /* rotation    */ 0,
+                            /* direction   */ Direction.NORTH,
                             /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,

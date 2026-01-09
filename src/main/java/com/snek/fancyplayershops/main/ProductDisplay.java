@@ -29,6 +29,7 @@ import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -43,7 +44,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -84,20 +84,6 @@ public class ProductDisplay {
     public static final Component PRODUCT_DISPLAY_AMOUNT_TEXT = new Txt("This display doesn't have enough items in stock!").lightGray().get();
 
 
-    /**
-     * Computes the name of the direction of the item from its rotation.
-     * @param rotation The rotation of the item, in eighths.
-     * @return The direction of the item as a string.
-     */
-    public static String getOrientationName(final int rotation) {
-        return ROTATION_NAMES[rotation];
-    }
-    private static final String[] ROTATION_NAMES = new String[] {
-        //! By default, item elements face north. 0° = North
-        "North", "Northwest", "West", "Southwest", "South", "Southeast", "East", "Northeast"
-    };
-
-
     // Constant display data
     private final @NotNull ServerLevel           level;                            // The level this display was placed in
     private final @NotNull BlockPos              pos;                              // The position of the display
@@ -112,7 +98,7 @@ public class ProductDisplay {
     private           long      price;                                  // The configured price for each item
     private           long      stock;                                  // The current stock
     private           long      maxStock;                               // The configured maximum stock
-    private           int       defaultRotation;                        // The configured item rotation, in eighths
+    private @NotNull  Direction defaultDirection;                       // The configured item direction
     private           float     colorThemeHue;                          // The configured hue of the color theme
     private @NotNull  Shop      shop;                                   // The shop this display has been assigned to
     private           boolean   nbtFilter;                              // The configured nbt filter setting
@@ -151,7 +137,7 @@ public class ProductDisplay {
     public           long                   getBalance          () { return balance;                         }
     public           long                   getStock            () { return stock;                           }
     public           long                   getMaxStock         () { return maxStock;                        }
-    public           int                    getDefaultRotation  () { return defaultRotation;                 }
+    public @NotNull  Direction              getDefaultDirection () { return defaultDirection;                }
     public           boolean                isFocused           () { return focusState;                      }
     public           boolean                isRemoved           () { return removalState;                    }
     public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
@@ -220,7 +206,7 @@ public class ProductDisplay {
      * @param price The price of the item.
      * @param stock The current stock.
      * @param maxStock The stock limit.
-     * @param rotation The default rotation of the item display, in eighths.
+     * @param direction The default direction of the item display, in eighths.
      * @param hue The hue of the color theme.
      * @param balance The balance collected by this display.
      * @param nbtFilter The NBT filter setting.
@@ -235,7 +221,7 @@ public class ProductDisplay {
         final long price,
         final long stock,
         final long maxStock,
-        final int rotation,
+        final @NotNull Direction direction,
         final float hue,
         final long balance,
         final boolean nbtFilter,
@@ -250,7 +236,7 @@ public class ProductDisplay {
         this.price = price;
         this.stock = stock;
         this.maxStock = maxStock;
-        this.defaultRotation = rotation;
+        this.defaultDirection = direction;
         this.colorThemeHue = hue;
         this.balance = balance;
         this.nbtFilter = nbtFilter;
@@ -704,15 +690,12 @@ public class ProductDisplay {
 
 
     /**
-     * Adds a specified rotation to the default rotation of the item display and saves the product display to its file.
+     * Adds a specified rotation to the default direction of the item display and saves the product display to its file.
      * @param _rotation The rotation to add, in eighths.
      *     Negative values are allowed and are converted to their positive equivalent.
      */
     public void addDefaultRotation(final int _rotation) {
-
-        // Add value to default rotation and save the display
-        //! Reduce range to [-7, 7], then add 8 to shift range to [1, 15], then reduce to [0, 7]
-        defaultRotation = ((defaultRotation + _rotation) % 8 + 8) % 8; //TODO no need to do this anymore
+        defaultDirection = Direction.fromEighths(defaultDirection.getEighths() + _rotation);
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -947,7 +930,7 @@ public class ProductDisplay {
 
 
         // Calculate side and find the storage block
-        final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
+        final var direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : net.minecraft.core.Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
         final Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, targetPos, direction);
 
 

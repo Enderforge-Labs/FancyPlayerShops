@@ -84,7 +84,7 @@ public class Edit_RotateButton extends ButtonElm {
         Clickable.playSound(player);
         player.displayClientMessage(new Txt()
             .cat(new Txt("Item direction set to: ").lightGray())
-            .cat(new Txt(ProductDisplay.getOrientationName(display.getDefaultRotation())).white())
+            .cat(new Txt(display.getDefaultDirection().getName()).white())
         .get(), true);
     }
 

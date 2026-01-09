@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
@@ -40,7 +41,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         data.put("price",      display.getPrice());
         data.put("stock",      display.getStock());
         data.put("max_stock",  display.getMaxStock());
-        data.put("rotation",   display.getDefaultRotation());
+        data.put("direction",  display.getDefaultDirection().getEighths());
         data.put("hue",        display.getColorThemeHue());
         data.put("balance",    display.getBalance());
         data.put("nbt_filter", display.getNbtFilter());
@@ -91,15 +92,15 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
         // Extract basic data
-        final UUID    owner     = UUID.fromString((String)data.get("owner"));
-        final UUID    shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
-        final long    price     = ((Number)data.get("price")).longValue();
-        final long    stock     = ((Number)data.get("stock")).longValue();
-        final long    maxStock  = ((Number)data.get("max_stock")).longValue();
-        final int     rotation  = ((Number)data.get("rotation")).intValue();
-        final float   hue       = ((Number)data.get("hue")).floatValue();
-        final long    balance   = ((Number)data.get("balance")).longValue();
-        final boolean nbtFilter = (Boolean)data.get("nbt_filter");
+        final UUID      owner     = UUID.fromString((String)data.get("owner"));
+        final UUID      shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
+        final long      price     = ((Number)data.get("price")).longValue();
+        final long      stock     = ((Number)data.get("stock")).longValue();
+        final long      maxStock  = ((Number)data.get("max_stock")).longValue();
+        final Direction direction = Direction.fromEighths(((Number)data.get("direction")).intValue());
+        final float     hue       = ((Number)data.get("hue")).floatValue();
+        final long      balance   = ((Number)data.get("balance")).longValue();
+        final boolean   nbtFilter = (Boolean)data.get("nbt_filter");
 
 
         // Extract level and position data
@@ -150,7 +151,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
         // Create shop and return
         return new ProductDisplay(
-            owner, shopUuid, price, stock, maxStock, rotation, hue, balance,
+            owner, shopUuid, price, stock, maxStock, direction, hue, balance,
             nbtFilter, position, level, item, storedItems
         );
         //! display creation event not fired. That's the caller method's responsibility

@@ -17,6 +17,7 @@ import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -172,7 +173,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                             /* price       */ Math.abs(rnd.nextLong() % 100_000),
                             /* stock       */ 0,
                             /* maxStock    */ 1_000_000,
-                            /* rotation    */ rnd.nextInt() % 8,
+                            /* direction   */ Direction.fromEighths(rnd.nextInt() % 8),
                             /* hue         */ 0,
                             /* balance     */ Math.abs(rnd.nextLong() % 100),
                             /* nbtFilter   */ true,
