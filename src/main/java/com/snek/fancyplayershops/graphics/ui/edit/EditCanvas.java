@@ -1,25 +1,26 @@
 package com.snek.fancyplayershops.graphics.ui.edit;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_DeleteButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ItemSelector;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_MoveButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PickUpButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_NbtButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_OpenBuyMenuButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_PriceInput;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RestockButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_RotateButton;
-import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StatsButton;
+import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ChangeShopButton;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
@@ -30,8 +31,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 
 
 
@@ -41,29 +42,27 @@ import com.snek.frameworklib.graphics.layout.Div;
 
 
 /**
- * A UI that allows the owner of the shop to edit it.
+ * A UI that allows the owner of the product display to edit it.
  */
-public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
-    private final @NotNull TitleElm title;
+public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanvas {
     private final @NotNull DualInputIndicator inputIndicator;
-    public @NotNull SimpleTextElm getTitle() { return title; }
+
+
+    // Dynamic elements
+    private final @NotNull Edit_RestockButton restockButton;
 
 
     // Layout
-    public static final float ROTATE_BUTTON_Y            = 0.45f - FancyPlayerShops.SQUARE_BUTTON_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
-    public static final float ROTATE_BUTTON_CENTER_SHIFT = 0.2f;
-
-    public static final float ITEM_SELECTOR_SIZE         = 0.25f;
-    public static final float ITEM_SELECTOR_Y            = 0.45f - ITEM_SELECTOR_SIZE / 2 + ShopItemDisplayElm.FOCUS_HEIGHT;
-
-    public static final float COLOR_SELECTOR_W        = 0.2f;
-    public static final float COLOR_SELECTOR_HIDDEN_W = 0.1f;
-
-    public static final float INPUT_W = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
-
-
-    // Functionalities
-    public static final float ROTATE_BUTTON_AMOUNT = (float)Math.toRadians(45);
+    public static final float ROTATE_BUTTON_Y             = TOOLBAR_H / 2 + ProductItemDisplayElm.EDIT_MOVE.y;
+    public static final float ROTATE_BUTTON_CENTER_SHIFT  = 0.2f;
+    public static final float NBT_RESTOCK_BUTTONS_Y       = 0.3f;
+    public static final float NBT_RESTOCK_BUTTONS_WIDTH   = 0.35f;
+    public static final float NBT_RESTOCK_BUTTONS_SPACING = 0.025f;
+    public static final float ITEM_SELECTOR_SIZE          = 0.25f;
+    public static final float ITEM_SELECTOR_Y             = ProductItemDisplayElm.EDIT_MOVE.y;
+    public static final float COLOR_SELECTOR_W            = 0.1f;
+    public static final float COLOR_SELECTOR_HIDDEN_W     = 0.1f;
+    public static final float INPUT_W                     = 1f - COLOR_SELECTOR_W * COLOR_SELECTOR_HIDDEN_W;
 
 
 
@@ -74,113 +73,127 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
     /**
      * Creates a new EditUi.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public EditCanvas(final @NotNull Shop _shop) {
+    public EditCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(_shop, 1f, FancyPlayerShops.LINE_H, FancyPlayerShops.SQUARE_BUTTON_SIZE);
+        super(display, calculateTitle(display), 1f, TITLE_H, TOOLBAR_H);
         Div e;
 
 
-        // Add title
-        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
-        e.setSize(new Vector2f(TitleElm.DEFAULT_W, FancyPlayerShops.LINE_H));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
-        title = (TitleElm)e;
-        updateTitle();
-
-
         // Add price button
-        e = bg.addChild(new Edit_PriceInput(_shop));
-        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 2f);
+        e = bg.addChild(new Edit_PriceInput(display));
+        e.setSize(new Vector2f(INPUT_W, TITLE_H));
+        e.setPosY(1f - TITLE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add stock limit button
-        e = bg.addChild(new Edit_StockLimitInput(_shop));
-        e.setSize(new Vector2f(INPUT_W, FancyPlayerShops.LINE_H));
-        e.setPosY(1f - FancyPlayerShops.LINE_H * 3f);
+        e = bg.addChild(new Edit_StockLimitInput(display));
+        e.setSize(new Vector2f(INPUT_W, TITLE_H));
+        e.setPosY(1f - TITLE_H * 3f);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
         // Add rotation buttons
-        e = bg.addChild(new Edit_RotateButton(_shop, -ROTATE_BUTTON_AMOUNT));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+        e = bg.addChild(new Edit_RotateButton(display, -1));
+        e.setSize(new Vector2f(TOOLBAR_H));
         e.setPos(new Vector2f(-ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
-        e = bg.addChild(new Edit_RotateButton(_shop, +ROTATE_BUTTON_AMOUNT));
-        e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
+        e = bg.addChild(new Edit_RotateButton(display, +1));
+        e.setSize(new Vector2f(TOOLBAR_H));
         e.setPos(new Vector2f(+ROTATE_BUTTON_CENTER_SHIFT, ROTATE_BUTTON_Y));
 
 
         // Add item selector
-        e = bg.addChild(new Edit_ItemSelector(_shop));
+        e = bg.addChild(new Edit_ItemSelector(display, new Misc_BackButton(context, () ->
+            context.changeCanvas(new EditCanvas(display))
+        )));
         e.setSize(new Vector2f(ITEM_SELECTOR_SIZE));
         e.setPosY(ITEM_SELECTOR_Y);
         e.setAlignmentX(AlignmentX.CENTER);
 
 
+        // Add restock & nbt filter buttons
+        e = bg.addChild(new Edit_NbtButton(display));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, TITLE_H));
+        e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / -2, NBT_RESTOCK_BUTTONS_Y));
+
+        e = bg.addChild(new Edit_RestockButton(display));
+        e.setSize(new Vector2f(NBT_RESTOCK_BUTTONS_WIDTH, TITLE_H));
+        e.setPos(new Vector2f((NBT_RESTOCK_BUTTONS_SPACING + NBT_RESTOCK_BUTTONS_WIDTH) / 2, NBT_RESTOCK_BUTTONS_Y));
+        restockButton = (Edit_RestockButton)e;
+
+
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
+        e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(FancyPlayerShops.SQUARE_BUTTON_SIZE + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
 
         // Add buttons
-        final Div[] buttons = new Div[] {
-            new Edit_MoveButton(_shop),
-            new Edit_StatsButton(_shop),
-            new Edit_OpenBuyMenuButton(_shop),
-            new Edit_TransferButton(_shop),
-            new Edit_DeleteButton(_shop),
-        };
-        for(int i = 0; i < buttons.length; ++i) {
-            e = bg.addChild(buttons[i]);
-            e.setSize(new Vector2f(FancyPlayerShops.SQUARE_BUTTON_SIZE));
-            e.setPosX(FancyPlayerShops.BOTTOM_ROW_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
-            e.setAlignmentY(AlignmentY.BOTTOM);
-        }
+        setToolbarButtons(new Div[] {
+            new Edit_PickUpButton(display),
+            new Edit_ChangeShopButton(display),
+            new Edit_OpenBuyMenuButton(display),
+            new Edit_TransferButton(display),
+            new Edit_DeleteButton(display),
+        });
 
+
+        // Add color selector container
+        final float cslHeight = 1f - TITLE_H - TOOLBAR_H;
+        final Div csl = bg.addChild(new HoverableDiv());
+        csl.setSize(new Vector2f(COLOR_SELECTOR_W, cslHeight));
+        csl.setAlignmentX(AlignmentX.RIGHT);
+        csl.setPosY(TOOLBAR_H);
 
         // Add color selectors
-        final Float[] hues = Configs.getShop().theme_hues.getValue();
+        final Float[] hues = Configs.getDisplay().theme_hues.getValue();
         for(int i = 0; i < hues.length; ++i) {
-            final float h = (1f - FancyPlayerShops.LINE_H - FancyPlayerShops.SQUARE_BUTTON_SIZE) / hues.length;
-            e = bg.addChild(new Edit_ColorSelector(_shop, hues[i], this));
-            e.setSize(new Vector2f(COLOR_SELECTOR_W, h));
-            e.setAlignmentX(AlignmentX.RIGHT);
-            e.setPosY(1f - FancyPlayerShops.LINE_H - h * (i + 1));
+            final float h = 1f / hues.length;
+            e = csl.addChild(new Edit_ColorSelector(display, hues[i], this));
+            e.setSize(new Vector2f(1, h));
+            e.setPosY(h * i * cslHeight);
         }
+
+
+        // Update dynamic elements
+        onStockChange(display, this);
     }
 
 
-    public @NotNull Component recalculateTitle() {
-        if(shop.getItem().is(Items.AIR)) {
+
+
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
+        if(display.getItem().is(Items.AIR)) {
             return new Txt()
-                .cat(new Txt("Editing an empty shop").white())
+                .cat(new Txt("Editing an empty product display").white())
             .get();
         }
         else {
             return new Txt()
                 .cat(new Txt("Editing: ").white())
-                .cat(shop.getStandaloneName())
+                .cat(display.getStandaloneName())
             .get();
         }
     }
-    public void updateTitle() {
-        if(title != null) title.updateDisplay(recalculateTitle());
+
+
+
+    public static void onStockChange(final @NotNull ProductDisplay display, final @NotNull EditCanvas canvas) {
+        canvas.restockButton.updateColor(display.getStock() < display.getMaxStock());
     }
 
 
-
-
-    @Override
-    public void onStockChange() {
-        // Empty
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof EditCanvas c) {
+            onStockChange(display, c);
+        }
     }
 
 
@@ -188,4 +201,5 @@ public class EditCanvas extends ShopCanvasBase implements InputIndicatorCanvas {
 
     @Override public @NotNull InputIndicator getLmbIndicator() { return inputIndicator.getLmbIndicator(); }
     @Override public @NotNull InputIndicator getRmbIndicator() { return inputIndicator.getRmbIndicator(); }
+    @Override public @Nullable Div getDisclaimerElm() { return null; }
 }

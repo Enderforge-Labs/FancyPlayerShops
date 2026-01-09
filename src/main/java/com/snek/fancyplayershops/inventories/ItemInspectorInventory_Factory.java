@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.inventories;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -15,24 +15,24 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 
 public class ItemInspectorInventory_Factory implements MenuProvider {
-    private final @NotNull Shop shop;
+    private final @NotNull ProductDisplay display;
 
 
-    public ItemInspectorInventory_Factory(final @NotNull Shop _shop) {
-        shop = _shop;
+    public ItemInspectorInventory_Factory(final @NotNull ProductDisplay display) {
+        this.display = display;
     }
 
 
     @Override
     public Component getDisplayName() {
         return new Txt()
-            .cat(new Txt(shop.getStandaloneName()).gray().noBold().noItalic())
+            .cat(new Txt(display.getStandaloneName()).gray().noBold().noItalic())
         .get();
     }
 
 
     @Override
-    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
-        return new ItemInspectorInventory(syncId, playerInventory, shop);
+    public AbstractContainerMenu createMenu(final int syncId, final Inventory playerInventory, final Player player) {
+        return new ItemInspectorInventory(syncId, playerInventory, display);
     }
 }

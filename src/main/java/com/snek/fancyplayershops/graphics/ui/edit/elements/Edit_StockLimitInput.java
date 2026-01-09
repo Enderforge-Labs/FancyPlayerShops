@@ -1,20 +1,15 @@
 package com.snek.fancyplayershops.graphics.ui.edit.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_Input_S;
-import com.snek.fancyplayershops.graphics.ui.misc.styles.ShopTextInput_S;
-import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
+import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
+import com.snek.frameworklib.graphics.functional.elements.ChatInputElm;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
-
-import net.minecraft.network.chat.Component;
 
 
 
@@ -24,38 +19,38 @@ import net.minecraft.network.chat.Component;
 
 
 /**
- * A button that allows the owner of the shop to change its stock limit.
+ * A button that allows the owner of the product display to change its stock limit.
  */
-public class Edit_StockLimitInput extends TextInputElm {
+public class Edit_StockLimitInput extends ChatInputElm {
 
     /**
      * Creates a new EditUi_StockLimitInput.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Edit_StockLimitInput(final @NotNull Shop _shop) {
+    public Edit_StockLimitInput(final @NotNull ProductDisplay display) {
         super(
-            _shop.getLevel(),
-            null, "Change stock limit", new Txt("Send the new stock limit in chat!").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(),
-            new Edit_Input_S(_shop)
+            display.getLevel(),
+            null, "Change stock limit", new Txt("Send the new stock limit in chat!").lightGray().bold().get(),
+            new ProductDisplay_TextInput_S(display)
         );
     }
 
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        updateDisplayedText();
         super.spawn(pos, animate);
-        updateDisplay(null);
     }
 
 
-    @Override
-    public void updateDisplay(final @Nullable Component textOverride) {
-        final Shop shop = GetShop.get(this);
-        getStyle(ShopTextInput_S.class).setText(textOverride != null ? textOverride : new Txt()
+
+
+    public void updateDisplayedText() {
+        final ProductDisplay display = GetDisplay.get(this);
+        setDisplayedText(new Txt()
             .cat(new Txt("Stock limit: ").lightGray())
-            .cat(new Txt(Utils.formatAmount(shop.getMaxStock(), true, true)).white())
+            .cat(new Txt(Utils.formatAmount(display.getMaxStock(), true, true)).white())
         .get());
-        flushStyle();
     }
 
 
@@ -63,21 +58,21 @@ public class Edit_StockLimitInput extends TextInputElm {
 
     @Override
     protected boolean messageCallback(final @NotNull String s) {
-        final Shop shop = GetShop.get(this);
+        final ProductDisplay display = GetDisplay.get(this);
         try {
 
             // Try to set the new stock limit, update the display if it's valid
-            if(shop.setStockLimit(Integer.parseInt(s))) updateDisplay(null);
+            if(display.setStockLimit(Integer.parseInt(s))) updateDisplayedText();
             return true;
 
-        } catch(NumberFormatException e) {
+        } catch(final NumberFormatException e) {
             try {
 
                 // Try to set the new stock limit, update the display if it's valid
-                if(shop.setStockLimit(Float.parseFloat(s))) updateDisplay(null);
+                if(display.setStockLimit(Float.parseFloat(s))) updateDisplayedText();
                 return true;
 
-            } catch(NumberFormatException e2) {
+            } catch(final NumberFormatException e2) {
                 return false;
             }
         }

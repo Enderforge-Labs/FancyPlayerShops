@@ -1,16 +1,18 @@
 package com.snek.fancyplayershops.graphics.ui.details;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.graphics.misc.elements.TitleElm;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopCanvasBase;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
+import com.snek.fancyplayershops.graphics.ui.details.elements.Details_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
@@ -18,11 +20,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
-import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
 
@@ -34,10 +34,11 @@ import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 
 
 /**
- * A UI that shows informations about the shop.
+ * A UI that shows informations about the product.
  */
-public class DetailsCanvas extends ShopCanvasBase {
+public class DetailsCanvas extends ProductCanvasBase {
     private final @NotNull Details_Values values;
+    private final @Nullable Div nbtDisclaimer;
 
 
     // Colors
@@ -60,61 +61,65 @@ public class DetailsCanvas extends ShopCanvasBase {
 
     /**
      * Creates a new DetailsUi.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public DetailsCanvas(final @NotNull Shop _shop) {
+    public DetailsCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(_shop, BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        title.setAlignmentY(AlignmentY.NONE);
+        title.setPosY(1f - Canvas.TITLE_H - CanvasBorder.DEFAULT_HEIGHT);
         Div e;
 
 
-        // Add title
-        e = bg.addChild(new TitleElm(_shop.getLevel(), recalculateTitle()));
-        e.setAlignmentX(AlignmentX.CENTER);
-        e.setSizeX(TitleElm.DEFAULT_W);
-        e.setAbsSizeY(((TitleElm)e).calcTotEntityHeight());
-        e.setPosY(1 - e.getAbsSize().y - CanvasBorder.DEFAULT_HEIGHT - VERTICAL_PADDING);
+        // Add NBT disclaimer
+        if(!display.getNbtFilter()) {
+            e = bg.addChild(new Details_NbtDisclaimer(display.getLevel()));
+            e.setSize(new Vector2f(1f, ProductCanvasBase.DEFAULT_HEIGHT));
+            e.setPosY(1f + ProductCanvasBase.DEFAULT_DISTANCE);
+            nbtDisclaimer = e;
+        }
+        else {
+            nbtDisclaimer = null;
+        }
 
 
         // Add details display
         final Div details = bg.addChild(new Div());
-        {
-            // Add details display names
-            e = details.addChild(new Details_Names(_shop));
-            e.setAlignmentX(AlignmentX.LEFT);
-            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
-            e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
-
-            // Add details display values
-            e = details.addChild(new Details_Values(_shop));
-            e.setAlignmentX(AlignmentX.RIGHT);
-            ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
-            e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
-            values = (Details_Values)e;
-        }
         details.setSizeX(DETAILS_W);
         details.setSizeY(0.25f);
         details.setAlignmentX(AlignmentX.CENTER);
-        details.setPosY(H0 + VERTICAL_PADDING);
+        details.setPosY(H0 + VERTICAL_PADDING); {
+
+            // Add details display names
+            e = details.addChild(new Details_Names(display));
+            e.setAlignmentX(AlignmentX.LEFT);
+            e.setSize(new Vector2f(NAMES_VALUES_WIDTH_RATIO, 1f));
+
+            // Add details display values
+            e = details.addChild(new Details_Values(display));
+            e.setAlignmentX(AlignmentX.RIGHT);
+            e.setSize(new Vector2f(1f - NAMES_VALUES_WIDTH_RATIO, 1f));
+            values = (Details_Values)e;
+        }
 
 
         // Add owner's head's background
-        final Div headBg = bg.addChild(new PanelElm(_shop.getLevel(), new Details_OwnerHeadBg_S()));
+        final Div headBg = bg.addChild(new PanelElm(display.getLevel(), new Details_OwnerHeadBg_S()));
         headBg.setSize(HEAD_BG_SIZE);
         headBg.setPosY(H0 - HEAD_BG_SIZE.y);
         headBg.setAlignmentX(AlignmentX.LEFT);
 
 
         // Add owner's head
-        e = headBg.addChild(new Details_OwnerHead(_shop));
+        e = headBg.addChild(new Details_OwnerHead(display));
         e.setSize(new Vector2f(1f));
         e.setAlignmentX(AlignmentX.CENTER);
-        e.setPosY(0.03f);
+        e.setPosY(-0.02f);
 
 
         // Add input indicators
-        e = bg.addChild(new DualInputIndicator(_shop.getLevel()));
+        e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
         e.setPos(new Vector2f(HEAD_BG_SIZE.x, H0 - (DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE.y + HEAD_BG_SIZE.y) / 2));
         final DualInputIndicator inputIndicator = (DualInputIndicator)e;
@@ -122,29 +127,33 @@ public class DetailsCanvas extends ShopCanvasBase {
         // Force indicator text //! Details canvas doesn't have any buttons. Instead, it respons to click events directly
         final Player player = canvas.getContext().getPlayer();
         inputIndicator.getLmbIndicator().updateDisplay("Buy 1 item");
-        inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(_shop.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
+        inputIndicator.getRmbIndicator().updateDisplay(player.getUUID().equals(display.getOwnerUuid()) ? "Edit shop" : "Bulk buy options");
     }
 
 
 
-    public @NotNull Component recalculateTitle() {
-        return shop.getItem().is(Items.AIR) ? Shop.EMPTY_SHOP_NAME : Component.literal(shop.getStandaloneName());
+    public static @NotNull Component calculateTitle(final @NotNull ProductDisplay display) {
+        return display.getItem().is(Items.AIR) ? ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME : Component.literal(display.getStandaloneName());
+    }
+
+
+
+
+    @SuppressWarnings("java:S1172")
+    public static void __callback_onStockChange(final @NotNull ProductDisplay display, final long oldStock, final long newStock) {
+        if(display.getActiveCanvas() instanceof DetailsCanvas c) {
+            c.values.updateDisplay();
+        }
     }
 
 
 
 
     @Override
-    public void onStockChange() {
-        values.updateDisplay();
-    }
-
-
-
-
-    @Override
-    protected void updateItemDisplayRot(final int from, final int to, boolean instant) {
+    protected void updateItemDisplayRot(final int from, final int to, final boolean instant) {
         //! Empty. This stops the item display from changing global rotation when the details UI rotates.
     }
 
+
+    @Override public @Nullable Div getDisclaimerElm() { return nbtDisclaimer; }
 }

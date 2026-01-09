@@ -21,19 +21,26 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopGroupManager;
 import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.events.DisplayEvents;
+import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
-import com.snek.fancyplayershops.graphics.ui.core.elements.ShopItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
+import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
+import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
+import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -55,13 +62,6 @@ public class FancyPlayerShops implements ModInitializer {
     public static final @NotNull String MOD_ID = "fancyplayershops";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
-
-    // Graphics data
-    public static final float LINE_H = 0.1f;
-    public static final float SQUARE_BUTTON_SIZE = 0.12f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SPACING      = 0.04f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SHIFT        = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f; //TODO move back to shops mod
 
 
 
@@ -109,9 +109,9 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create storage directories
             try {
-                for(final String path : new String[] { "shops", "stash" }) {
-                    Files.createDirectories(getStorageDir().resolve(path));
-                }
+                Files.createDirectories(ShopManager.calcShopDirPath());
+                Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
+                Files.createDirectories(StashManager.calcStashDirPath());
             } catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
                 flagFatal();
@@ -133,41 +133,54 @@ public class FancyPlayerShops implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
             if(fatal) return;
 
+
+
+
+            // Register shop event listeners
+            DisplayEvents.STOCK_CHANGED.register((display, oldStock, newStock) -> {
+                EditCanvas   .__callback_onStockChange(display, oldStock, newStock);
+                BuyCanvas    .__callback_onStockChange(display, oldStock, newStock);
+                DetailsCanvas.__callback_onStockChange(display, oldStock, newStock);
+            });
+
+
+
+
             // Load persistent data
-            ShopGroupManager.loadGroups(); //! Must be loaded before shops
-            ShopManager.loadShops();
+            ShopManager.loadShops(); //! Must be loaded before displays
+            ProductDisplayManager.loadDisplays();
             StashManager.loadStashes();
 
 
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
-            // Schedule shop pull updates
-            Scheduler.loop(0, 1, ShopManager::pullItems);
+            // Schedule product display pull updates
+            Scheduler.loop(0, 1, ProductDisplayManager::pullItems);
 
             // Schedule data saves
             Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
-                ShopGroupManager.saveScheduledGroups();
                 ShopManager.saveScheduledShops();
+                ProductDisplayManager.saveScheduledDisplays();
                 StashManager.saveScheduledStashes();
             });
 
 
 
 
-            // Create and register block click events (shop placement + prevents early clicks going through the shop)
+            // Create and register block click events (display placement + prevents early clicks going through the display)
             UseBlockCallback.EVENT.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) -> {
-                return onItemUse(level, player, hand, hitResult);
-            });
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) ->
+                onItemUse(level, player, hand, hitResult)
+            );
 
 
 
 
             // Register item display fix
             ServerEntityEvents.ENTITY_LOAD.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
-            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) -> {
-                ShopItemDisplayElm.onEntityLoad_item(entity);
-            });
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) ->
+                ProductItemDisplayElm.onEntityLoad_item(entity)
+            );
 
 
 
@@ -186,48 +199,59 @@ public class FancyPlayerShops implements ModInitializer {
 
     /**
      * Callback for item use events.
-     * <p> Checks if the held item is a shop item. If it is, it spawns a new shop at the targeted location.
+     * <p> Checks if the held item is a product display item. If it is, it spawns a new product display at the targeted location.
      * @param level The level.
      * @param player The player that clicked.
      * @param hand The hand used.
      * @param hitResult The hit result of the click action.
-     * @return FAIL if the player tried to place a shop, PASS otherwise.
+     * @return FAIL if the player tried to place a product display, PASS otherwise.
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level level, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ShopManager.SHOP_ITEM_NBT_KEY)) {
+        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ProductDisplayManager.DISPLAY_ITEM_NBT_KEY)) {
 
             // If the level is a server level and the player is allowed to modify the level
-            if(level instanceof ServerLevel serverLevel && player.getAbilities().mayBuild) {
+            if(level instanceof final ServerLevel serverLevel && player.getAbilities().mayBuild) {
                 int newCount = stack.getCount();
 
-                // Calculate block position and create the new shop if no other shop is already there. Send a feedback message to the player
+                // Calculate block position and create the new display if no other display is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 final CompoundTag tag = stack.getTag();
-                if(ShopManager.findShop(blockPos, level) == null) {
+                if(ProductDisplayManager.findDisplay(blockPos, level) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
-                    if(MinecraftUtils.hasTag(stack, ShopManager.SNAPSHOT_NBT_KEY)) {
-                        final CompoundTag data = tag.getCompound(MOD_ID + ".shop_data");
+                    if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
+                        final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            new Shop(
-                                serverLevel, blockPos,
-                                player.getUUID(), data.getUUID("group_uuid"), data.getLong("balance"),
-                                data.getLong("price"), data.getInt("stock"), data.getInt("max_stock"), data.getFloat("rotation"), data.getFloat("hue"), data.getString("item")
-                            );
-                            player.displayClientMessage(new Txt("Shop snapshot restored.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                            ProductDisplay_Serializer.deserialize(data.getString("product_display_data"), serverLevel, blockPos);
+                            player.displayClientMessage(new Txt("Display snapshot restored").lightGray().bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
                         else {
-                            player.displayClientMessage(new Txt("This shop belongs to " + data.getString("owner_name") + "! Only they can place it.").red().bold().get(), true);
+                            player.displayClientMessage(new Txt("This product display belongs to " + data.getString("owner_name") + "! Only they can place it").red().bold().get(), true);
                         }
                     }
 
-                    // Spawn empty shop otherwise
+                    // Spawn empty product display otherwise
                     else {
-                        new Shop(serverLevel, blockPos, player);
-                        player.displayClientMessage(new Txt("New shop created. Right click it to configure.").color(ShopManager.SHOP_ITEM_NAME_COLOR).bold().get(), true);
+                        final ProductDisplay display = new ProductDisplay(
+                            /* ownerUUID   */ player.getUUID(),
+                            /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
+                            /* price       */ 1000l,
+                            /* stock       */ 0,
+                            /* maxStock    */ 1000,
+                            /* direction   */ Direction.NORTH,
+                            /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
+                            /* balance     */ 0l,
+                            /* nbtFilter   */ true,
+                            /* position    */ blockPos,
+                            /* level       */ serverLevel,
+                            /* item        */ Items.AIR.getDefaultInstance(),
+                            /* storedItems */ new HashMap<>()
+                        );
+                        player.displayClientMessage(new Txt("New product display created. Right click it to configure").lightGray().bold().get(), true);
                         if(!player.getAbilities().instabuild) --newCount;
+                        DisplayEvents.DISPLAY_CREATED.invoker().onDisplayCreate(display, DisplayCreationReason.NEW);
                     }
                 }
 
@@ -238,7 +262,7 @@ public class FancyPlayerShops implements ModInitializer {
             }
 
             // If not, send an error message to the player
-            else player.displayClientMessage(new Txt("You cannot create a shop here!").red().bold().get(), true);
+            else player.displayClientMessage(new Txt("You cannot place a product display here!").red().bold().get(), true);
             return InteractionResult.FAIL;
         }
         return InteractionResult.PASS;

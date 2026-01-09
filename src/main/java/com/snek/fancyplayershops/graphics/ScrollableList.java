@@ -8,18 +8,17 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.graphics.layout.HoverableDiv;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 
 
 
@@ -45,7 +44,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
  * Notice: The position of child elements on the alignment axis is also ignored, as it's recaculated automatically every time the list is updated.
 */
 public class ScrollableList extends PanelElm implements Scrollable {
-    public @NotNull ScrollableListStyle getThisStyle() {
+    public @NotNull ScrollableListStyle getListStyle() {
         return getStyle(ScrollableListStyle.class);
     }
 
@@ -62,23 +61,23 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
 
-    final float tmp_bar_width = 0.01f;
+    final float tmp_bar_width = 0.01f; //TODO
     public ScrollableList(final @NotNull ServerLevel level, final @NotNull ScrollableListStyle style, final float elmSize) {
         super(level, style);
         this.elmSize = elmSize;
 
         // Add element container
-        elmContainer = addChild(new Div());
-        elmContainer.setSize(new Vector2f(1 - tmp_bar_width, 1));
+        elmContainer = addChild(new HoverableDiv());
+        elmContainer.setSize(new Vector2f(1, 1));
         elmContainer.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
 
         // Add bar track
-        barTrack = (PanelElm)addChild(new PanelElm(level, getThisStyle().getTrackStyleReference()));
+        barTrack = (PanelElm)addChild(new PanelElm(level, getListStyle().getTrackStyleReference()));
         barTrack.setSize(new Vector2f(tmp_bar_width, 1)); //FIXME make width customizable
         barTrack.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
 
         // Add bar thumb
-        barThumb = (PanelElm)barTrack.addChild(new PanelElm(level, getThisStyle().getThumbStyleReference()));
+        barThumb = (PanelElm)barTrack.addChild(new PanelElm(level, getListStyle().getThumbStyleReference()));
         barThumb.setSizeX(3);
         barThumb.setSizeY(0.05f);   //! Actual height is set dynamically
         barThumb.setPosY(0);        //! Actual y position is set dynamically
@@ -171,12 +170,20 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
                 // Update scrollbar
                 if(lastVisible - firstVisible != elmList.size() - 1) {
-                    final float elmAmount = (float)elmList.size();
-                    final float trueHeight = (lastVisible - firstVisible + 1f) / elmAmount;
+                    final float elmAmount = elmList.size();
+                    final float visibleCount = lastVisible - firstVisible + 1f;
+
+                    // Thumb height (relative)
+                    final float trueHeight = visibleCount / elmAmount;
                     final float finalHeight = Math.max(trueHeight, THUMB_MIN_HEIGHT);
-                    final float adjustY = finalHeight - trueHeight;
-                    final float truePosY = (elmAmount - lastVisible + 1f) / elmAmount;  //! 0 to 1.0f
-                    final float finalPosY = (truePosY - adjustY) * getAbsSize().y;      //! 0 to list height
+
+                    // Position (relative 0-1, then convert to absolute)
+                    final float scrollProgress = firstVisible / (elmAmount - visibleCount);
+                    final float scrollableRange = 1.0f - finalHeight;
+                    final float relativePosY = (1.0f - scrollProgress) * scrollableRange;
+                    final float finalPosY = relativePosY * getAbsSize().y;
+
+
                     barThumb.setSizeY(finalHeight);
                     barThumb.setPosY(finalPosY);
                     barThumb.flushStyle();
@@ -241,13 +248,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
         // Set bar styles
-        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedThumbStyle();
+        { final Flagged<PanelStyle> f = getListStyle().getFlaggedThumbStyle();
         if(f.isFlagged()) {
             barThumb.setStyle(f.get());
             barThumb.getStyle().flagAll();
             f.unflag();
         }}
-        { final Flagged<PanelElmStyle> f = getThisStyle().getFlaggedTrackStyle();
+        { final Flagged<PanelStyle> f = getListStyle().getFlaggedTrackStyle();
         if(f.isFlagged()) {
             barTrack.setStyle(f.get());
             barTrack.getStyle().flagAll();

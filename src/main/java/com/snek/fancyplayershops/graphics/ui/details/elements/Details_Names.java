@@ -1,11 +1,11 @@
 package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Txt;
 
 
@@ -17,41 +17,24 @@ import com.snek.frameworklib.utils.Txt;
 
 /**
  * Part of the main display of DetailsUi.
- * <p> It shows the names of informations about the shop.
+ * <p> It shows the names of informations about the product.
  */
-public class Details_Names extends SimpleTextElm {
+public class Details_Names extends TextElm {
 
 
     /**
      * Creates a new DetailsUiDisplayNames.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Details_Names(final @NotNull Shop _shop) {
-        super(_shop.getLevel());
-    }
-
-
-    @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        updateDisplay();
-        super.spawn(pos, animate);
-    }
-
-
-
-
-    /**
-     * Updates the displayed values.
-     */
-    public void updateDisplay() {
-
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
-            .cat("Price:")
-            .cat("\nStock:")
-            .cat("\nOwner:")
-        .lightGray().get());
-
-        // Flush style
-        flushStyle();
+    public Details_Names(final @NotNull ProductDisplay display) {
+        super(display.getLevel(), new TextStyle()
+            .withText(new Txt()
+                .cat("Price:\n")
+                .cat("Stock:\n")
+                .cat("Owner:")
+                .lightGray().get()
+            )
+            .withTextAlignment(TextAlignment.LEFT)
+        );
     }
 }

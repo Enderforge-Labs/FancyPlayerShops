@@ -2,14 +2,14 @@ package com.snek.fancyplayershops.graphics.ui.buy.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 import com.snek.fancyplayershops.graphics.ui.inspect.InspectCanvas;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -21,26 +21,30 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * A button that allows the user of the shop to view details about the item.
+ * A button that allows the user of the display to view details about the item.
  */
-public class Buy_ItemInspector extends SimpleButtonElm {
-    final Div backButton;
+public class Buy_ItemInspector extends ButtonElm {
+    final @NotNull Misc_BackButton backButton;
 
 
     /**
      * Creates a new BuyUi_ItemInspector.
-     * @param _shop The target shop.
+     * @param display The target display.
      * @param _lmbActionNameOverride The text to display for the leftt click action in the input indicator. Can be null.
      * @param _lmbActionNameOverride The text to display for the right click action in the input indicator. Can be null.
      * @param _backButton The back button. This defines which menu the player is brought to when going back.
      */
-    public Buy_ItemInspector(final @NotNull Shop _shop, final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride, final @NotNull Div _backButton) {
+    public Buy_ItemInspector(
+        final @NotNull ProductDisplay display,
+        final @Nullable String _lmbActionNameOverride, final @Nullable String _rmbActionNameOverride,
+        final @NotNull Misc_BackButton _backButton
+    ) {
         super(
-            _shop.getLevel(),
+            display.getLevel(),
             _lmbActionNameOverride != null ? _lmbActionNameOverride : (_rmbActionNameOverride != null ? "Inspect item" : null),
             _rmbActionNameOverride != null ? _rmbActionNameOverride : "Inspect item",
             0,
-            new Buy_ItemInspector_S(_shop)
+            new Buy_ItemInspector_S(display)
         );
         backButton = _backButton;
     }
@@ -49,16 +53,11 @@ public class Buy_ItemInspector extends SimpleButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
-
-        // Save amount cache
-        if(backButton instanceof Buy_Sub_BackButton b) {
-            b.setAmountCache(((BuyCanvas)canvas).getAmount());
-        }
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
 
         // Change canvas
-        final Shop shop = GetShop.get(this);
-        shop.changeCanvas(new InspectCanvas(shop, backButton));
+        final ProductDisplay display = GetDisplay.get(this);
+        display.changeCanvas(new InspectCanvas(display, backButton));
     }
 }

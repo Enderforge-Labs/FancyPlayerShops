@@ -3,14 +3,14 @@ package com.snek.fancyplayershops.graphics.ui.inspect.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.GetShop;
-import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_IdDisplay_S;
-import com.snek.fancyplayershops.main.Shop;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.fancyplayershops.GetDisplay;
+import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Items;
 
 
@@ -23,20 +23,22 @@ import net.minecraft.world.item.Items;
 /**
  * A UI element that shows the ID of the item.
  */
-public class Inspect_IdDisplay extends SimpleTextElm {
+public class Inspect_IdDisplay extends TextElm {
 
 
     /**
      * Creates a new InspectUi_IdDisplay.
-     * @param _shop The target shop.
+     * @param display The target product display.
      */
-    public Inspect_IdDisplay(@NotNull Shop _shop) {
-        super(_shop.getLevel(), new Inspect_IdDisplay_S());
+    public Inspect_IdDisplay(@NotNull final ProductDisplay display) {
+        super(display.getLevel(), new TextStyle()
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        );
     }
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         updateDisplay();
         super.spawn(pos, animate);
     }
@@ -47,12 +49,12 @@ public class Inspect_IdDisplay extends SimpleTextElm {
      */
     public void updateDisplay() {
 
-        final Shop shop = GetShop.get(this);
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
+        final ProductDisplay display = GetDisplay.get(this);
+        getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("ID: ").lightGray())
             .cat(new Txt(
-                shop.getItem().is(Items.AIR) ? "-" :
-                BuiltInRegistries.ITEM.getKey(shop.getItem().getItem()).getPath()
+                display.getItem().is(Items.AIR) ? "-" :
+                MinecraftUtils.getItemKey(display.getItem()).getPath()
             ).white())
         .get());
 

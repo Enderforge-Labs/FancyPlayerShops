@@ -5,8 +5,8 @@ import org.joml.Vector3d;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.graphics.hud.mainmenu.MainMenuCanvas;
+import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
@@ -38,7 +38,7 @@ public abstract class CommandManager {
 
     public static final Component HELP_TEXT_SHOP = new Txt()
         .cat(new Txt("/shop").bold().italic().lightGray())
-        .cat(new Txt(": Open the main menu of player shops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
+        .cat(new Txt(": Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
     .get();
 
         public static final Component HELP_TEXT_SHOP_OP = new Txt()
@@ -53,17 +53,17 @@ public abstract class CommandManager {
 
             public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
                 .cat(new Txt("/shop bulk fill <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Create randomized shops in every block within a specified radius. This is meant for testing.").italic().lightGray())
+                .cat(new Txt(": Create randomized product displays in every block within a specified radius. This is meant for testing.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
                 .cat(new Txt("/shop bulk purge <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Remove all shops within a specified radius. The stock and balance of deleted shops are automatically sent to their owner.").italic().lightGray())
+                .cat(new Txt(": Remove all product displays within a specified radius. The stock and balance of deleted displays are automatically sent to their owner.").italic().lightGray())
             .get();
 
             public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
                 .cat(new Txt("/shop bulk displace <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Converts all shops within a specified radius into their item form. The shop snapshots are automatically sent to their owner.").italic().lightGray())
+                .cat(new Txt(": Converts all product displays within a specified radius into their item form. The display snapshots are automatically sent to their owner.").italic().lightGray())
             .get();
         ;
 
@@ -122,7 +122,7 @@ public abstract class CommandManager {
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
                         // BalanceManager.claim(player);
-                        //FIXME claim all the groups
+                        //FIXME claim all the shops
                         return 1;
                     })
                 )
@@ -163,7 +163,7 @@ public abstract class CommandManager {
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
                     .executes(context -> {
                         final ServerPlayer player = context.getSource().getPlayer();
-                        player.getInventory().add(ShopManager.getShopItemCopy());
+                        player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy());
                         return 1;
                     }))
                 )
@@ -194,8 +194,8 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Purged " + n + " shops.").get(), false);
+                            final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
                             return 1;
                         }))
                     )
@@ -213,8 +213,8 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Converted " + n + " shops into items.").get(), false);
+                            final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+                            player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
                             return 1;
                         }))
                     )
@@ -232,8 +232,8 @@ public abstract class CommandManager {
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ShopManager.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
-                            player.displayClientMessage(new Txt("Created " + n + " shops.").get(), false);
+                            final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+                            player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
                             return 1;
                         })
                     )
@@ -249,7 +249,7 @@ public abstract class CommandManager {
     //TODO add /shop op void balance <playerName|playerUUID>
     //TODO add /shop op void stash <playerName|playerUUID>
     //TODO add /shop op void shops <playerName|playerUUID>
-    //TODO add /shop op void group <playerName|playerUUID>  <groupName>
+    //TODO add /shop op void shop <playerName|playerUUID>  <shopName>
     //! ^ force /shop op confirm
     //! ^ "are you sure you want to delete 37,482 shops? This action cannot be undone. Use /shop op confirm to confirm"
     //FIXME LOG ALL OF THESE ACTIONS. THE OWNER SHOULD BE ABLE TO SEE THIS FROM MAIN-MENU > RECENT ACTIONS
@@ -257,7 +257,7 @@ public abstract class CommandManager {
     //TODO add /shop op collect balance <playerName|playerUUID>
     //TODO add /shop op collect stash <playerName|playerUUID>
     //TODO add /shop op collect shops <playerName|playerUUID>
-    //TODO add /shop op collect group <playerName|playerUUID>
+    //TODO add /shop op collect shop <playerName|playerUUID> <shopName>
 
 
     //FIXME add suggestions for all of the completable commands
@@ -280,6 +280,7 @@ public abstract class CommandManager {
 
 
 
+    //TODO add a command that lets owners transfer all of the shop blocks in a radius to the specified shop.
 
 
 
@@ -288,7 +289,5 @@ public abstract class CommandManager {
 
 
 
-
-    //TODO add a likes/score system to shop groups
-    //TODO maybe rename "groups" to "shops" and shop items to something else?
+    //TODO add a likes/score system to shops
 }

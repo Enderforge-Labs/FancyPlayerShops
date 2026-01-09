@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.inventories;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.Shop;
+import com.snek.fancyplayershops.main.ProductDisplay;
 
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +25,7 @@ public class ItemInspectorInventory extends AbstractContainerMenu {
 
 
 
-    public ItemInspectorInventory(final int containerId, final @NotNull Inventory playerInventory, final @NotNull Shop _shop) {
+    public ItemInspectorInventory(final int containerId, final @NotNull Inventory playerInventory, final @NotNull ProductDisplay display) {
         super(MenuType.HOPPER, containerId);
         inventory = new SimpleContainer(5);
 
@@ -33,8 +33,8 @@ public class ItemInspectorInventory extends AbstractContainerMenu {
         for(int i = 0; i < 5; i++) {
             this.addSlot(new ReadOnlySlot(inventory, i, i, 0));
         }
-        // Copy shop item to central slot
-        this.setItem(2, this.incrementStateId(), _shop.getItem().copy());
+        // Copy display item to central slot
+        this.setItem(2, this.incrementStateId(), display.getItem().copy());
 
 
         // Add player inventory (27 slots)
@@ -54,13 +54,13 @@ public class ItemInspectorInventory extends AbstractContainerMenu {
 
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(final Player player) {
         return true;
     }
 
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMoveStack(final Player player, final int slot) {
         // Disable shift click interactions
         return ItemStack.EMPTY;
     }

@@ -3,12 +3,12 @@ package com.snek.fancyplayershops.graphics.ui.inspect.styles;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 
 
 
 
-public class Inspect_ModDisplay_S extends SimpleTextElmStyle {
+public class Inspect_ModDisplay_S extends TextStyle {
     public Inspect_ModDisplay_S() {
         super();
     }
