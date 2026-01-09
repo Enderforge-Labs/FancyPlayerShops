@@ -1,9 +1,14 @@
 package com.snek.fancyplayershops.graphics.misc.styles;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
+import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -41,5 +46,24 @@ public class GuiItemElmStyle extends ScalableItemElmStyle {
     @Override
     public @NotNull Transform getDefaultTransform() {
         return super.getDefaultTransform().rotY((float)Math.PI);
+    }
+
+
+
+    @Override
+    public @Nullable Animation getDefaultPrimerAnimation() {
+        return new Animation(
+            new Transition()
+            .additiveTransform(new Transform().scale(PRIMER_ANIMATION_SCALE, PRIMER_ANIMATION_SCALE, 1))
+        );
+    }
+
+
+    @Override
+    public @Nullable Animation getDefaultSpawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            .additiveTransform(new Transform().scale(1f / PRIMER_ANIMATION_SCALE, 1f / PRIMER_ANIMATION_SCALE, 1))
+        );
     }
 }
