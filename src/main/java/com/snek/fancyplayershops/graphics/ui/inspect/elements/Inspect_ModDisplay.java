@@ -6,8 +6,8 @@ import org.joml.Vector3d;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_ModDisplay_S;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
 /**
  * A UI element that shows the mod of the item.
  */
-public class Inspect_ModDisplay extends SimpleTextElm {
+public class Inspect_ModDisplay extends TextElm {
 
 
     /**
@@ -48,7 +48,7 @@ public class Inspect_ModDisplay extends SimpleTextElm {
     public void updateDisplay() {
 
         final ProductDisplay display = GetDisplay.get(this);
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
+        getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("Mod: ").lightGray())
             .cat(new Txt(
                 display.getItem().is(Items.AIR) ? "-" :

@@ -13,12 +13,12 @@ import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
+import com.snek.frameworklib.graphics.basic.elements.PanelTextElm;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -45,7 +45,7 @@ import net.minecraft.world.item.Items;
 public class ProductItemDisplayElm extends ItemElm {
     public static final @NotNull String ITEM_DISPLAY_CUSTOM_NAME = FancyPlayerShops.MOD_ID + ".ui.itemdisplay";
     private final @NotNull  ProductDisplay productDisplay;
-    private       @Nullable FancyTextElm name;
+    private       @Nullable PanelTextElm name;
 
     // Layout
     public static final float NAME_SHIFT_Y = 0.6f;
@@ -59,8 +59,8 @@ public class ProductItemDisplayElm extends ItemElm {
     public static final float FOCUS_HEIGHT = 0.05f;
 
     // Animation duration and loop rotation
-    public static final int   S_TIME = ElmStyle.S_TIME * 2;
-    public static final int   D_TIME = ElmStyle.D_TIME * 2;
+    public static final int   S_TIME = Style.S_TIME * 2;
+    public static final int   D_TIME = Style.D_TIME * 2;
     public static final int   LOOP_TIME   = 32;
     public static final float LOOP_ROT    = (float)Math.toRadians(120);
 
@@ -110,7 +110,7 @@ public class ProductItemDisplayElm extends ItemElm {
      * @param targetProductDisplay The target product display.
      */
     public ProductItemDisplayElm(final @NotNull ProductDisplay targetProductDisplay) {
-        super(targetProductDisplay.getLevel(), new ItemElmStyle());
+        super(targetProductDisplay.getLevel(), new ItemStyle());
         productDisplay = targetProductDisplay;
         //! updateDisplay call is in spawn()
 
@@ -140,9 +140,9 @@ public class ProductItemDisplayElm extends ItemElm {
         // If the product display is unconfigured (item is AIR), display a barrier and EMPTY_PRODUCT_DISPLAY_NAME as name
         if(_item.is(Items.AIR)) {
             final ItemStack noItem = Items.BARRIER.getDefaultInstance();
-            getStyle(ItemElmStyle.class).setItem(noItem);
+            getStyle(ItemStyle.class).setItem(noItem);
             if(name != null) {
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME).white().get());
+                name.getStyle(PanelTextStyle.class).setText(new Txt(ProductDisplay.EMPTY_PRODUCT_DISPLAY_NAME).white().get());
                 name.flushStyle();
             }
         }
@@ -150,10 +150,10 @@ public class ProductItemDisplayElm extends ItemElm {
 
         // If the product display is configured, display the current item and its name
         else {
-            getStyle(ItemElmStyle.class).setItem(_item);
+            getStyle(ItemStyle.class).setItem(_item);
             if(name != null) {
                 final String fullName = Utils.formatPriceShort(productDisplay.getPrice()) + " - " + productDisplay.getStandaloneName();
-                name.getStyle(FancyTextElmStyle.class).setText(new Txt(fullName).white().get());
+                name.getStyle(PanelTextStyle.class).setText(new Txt(fullName).white().get());
                 name.flushStyle();
             }
         }
@@ -278,7 +278,7 @@ public class ProductItemDisplayElm extends ItemElm {
      */
     public void spawnNameEntity() {
         if(name == null) {
-            name = new FancyTextElm(level, new SimpleNameDisplay_S());
+            name = new PanelTextElm(level, new SimpleNameDisplay_S());
             name.setSize(new Vector2f(NAME_DISPLAY_WIDTH, 0.1f));
             name.spawn(new Vector3d(getEntity().getPosCopy()).add(0, NAME_SHIFT_Y, 0), true);
         }

@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class Edit_DeleteButton extends SimpleButtonElm {
+public class Edit_DeleteButton extends ButtonElm {
     public Edit_DeleteButton(final @NotNull ProductDisplay display) {
         super(display.getLevel(), null, "Delete product display", 1,  new Edit_SquareButton_S(display));
 

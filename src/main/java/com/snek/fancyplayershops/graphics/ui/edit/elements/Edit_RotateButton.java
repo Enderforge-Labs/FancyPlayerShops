@@ -13,7 +13,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonRight_
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
@@ -31,7 +31,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the owner of the product display to change the default rotation of the displayed object.
  */
-public class Edit_RotateButton extends SimpleButtonElm {
+public class Edit_RotateButton extends ButtonElm {
     public static final int ROTATION_ANIMATION_TIME = 8;
     private final int rotation;
 

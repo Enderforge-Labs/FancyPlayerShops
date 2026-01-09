@@ -7,8 +7,8 @@ import org.joml.Vector3i;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -27,7 +27,7 @@ import net.minecraft.world.item.Items;
  * Part of the main display of DetailsUi.
  * <p> It shows the values of informations about the product.
  */
-public class Details_Values extends SimpleTextElm {
+public class Details_Values extends TextElm {
     final @NotNull String ownerName;
 
 
@@ -62,7 +62,7 @@ public class Details_Values extends SimpleTextElm {
 
         // Empty product display case
         if(display.getItem().is(Items.AIR)) {
-            getStyle(SimpleTextElmStyle.class).setText(new Txt()
+            getStyle(TextStyle.class).setText(new Txt()
                 .cat(new Txt("-").lightGray())
                 .cat(new Txt("\n-").lightGray())
                 .cat("\n" + ownerName)
@@ -73,7 +73,7 @@ public class Details_Values extends SimpleTextElm {
         else {
             final long price = display.getPrice();
             final String priceStr = price == 0 ? "Free" : (price >= 100_000_00 ? Utils.formatPriceShort(price) : Utils.formatPrice(price));
-            getStyle(SimpleTextElmStyle.class).setText(new Txt()
+            getStyle(TextStyle.class).setText(new Txt()
                 .cat(new Txt(priceStr).color(DetailsCanvas.C_RGB_PRICE))
                 .cat("\n").cat(new Txt(Utils.formatAmount(display.getStock())).color(col))
                 .cat("\n" + ownerName)

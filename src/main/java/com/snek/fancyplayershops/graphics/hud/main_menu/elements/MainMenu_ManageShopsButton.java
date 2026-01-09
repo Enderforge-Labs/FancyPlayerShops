@@ -10,7 +10,7 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
-import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.TextButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.layout.Div;
 
@@ -24,7 +24,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class MainMenu_ManageShopsButton extends FancyButtonElm {
+public class MainMenu_ManageShopsButton extends TextButtonElm {
     public MainMenu_ManageShopsButton(final @NotNull HudContext context) {
         super(context.getLevel(), null, "Manage your shops", 1, new MainMenu_LargeButton_S("Manage shops"));
 

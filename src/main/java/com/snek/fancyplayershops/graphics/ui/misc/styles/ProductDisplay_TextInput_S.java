@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.ChatInputStyle;
 
 
 
@@ -16,7 +16,7 @@ import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 /**
  * The style of product display text input elements.
  */
-public class ProductDisplay_TextInput_S extends TextInputElmStyle {
+public class ProductDisplay_TextInput_S extends ChatInputStyle {
     protected final @NotNull ProductDisplay display;
 
 

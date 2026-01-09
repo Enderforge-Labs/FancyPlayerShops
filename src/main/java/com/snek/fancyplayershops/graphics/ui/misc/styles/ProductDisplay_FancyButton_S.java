@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.TextButtonStyle;
 
 
 
@@ -16,7 +16,7 @@ import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 /**
  * The style of product display fancy button elements.
  */
-public class ProductDisplay_FancyButton_S extends FancyButtonElmStyle {
+public class ProductDisplay_FancyButton_S extends TextButtonStyle {
     protected final @NotNull ProductDisplay display;
 
 

@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.fancyplayershops.graphics.misc.styles.TextStyle_Small;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -17,10 +17,10 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-public class MainMenu_Summary extends SimpleTextElm {
+public class MainMenu_Summary extends TextElm {
 
     public MainMenu_Summary(final @NotNull HudContext context) {
-        super(context.getLevel(), new SimpleTextElmStyle_Small());
+        super(context.getLevel(), new TextStyle_Small());
     }
 
 
@@ -34,7 +34,7 @@ public class MainMenu_Summary extends SimpleTextElm {
     public void updateDisplay() {
         //TODO update auomtically? idk
         final Player player = getCanvas().getContext().getPlayer();
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
+        getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("You own ").white())
             .cat(new Txt("" + ProductDisplayManager.getDisplaysByOwner().get(player.getUUID()).size()).color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
             .cat(new Txt(" displays.").white())

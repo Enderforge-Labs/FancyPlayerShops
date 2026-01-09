@@ -5,14 +5,14 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 
 import net.minecraft.world.item.ItemStack;
 
 
 //TODO idk if overriding get methods is fine, this needs to be checked
 
-public class ScalableItemElmStyle extends ItemElmStyle {
+public class ScalableItemStyle extends ItemStyle {
     public static final float Z_SCALE = 0.001f;
 
     private final float size;
@@ -21,23 +21,23 @@ public class ScalableItemElmStyle extends ItemElmStyle {
 
 
     /**
-     * Creates a new ScalableItemElmStyle.
+     * Creates a new ScalableItemStyle.
      */
-    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size) {
+    public ScalableItemStyle(final @NotNull ItemStack item, final float size) {
         this(item, size, 0);
     }
 
     /**
-     * Creates a new ScalableItemElmStyle.
+     * Creates a new ScalableItemStyle.
      */
-    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ) {
+    public ScalableItemStyle(final @NotNull ItemStack item, final float size, final float shiftZ) {
         this(item, size, shiftZ, new Vector2f());
     }
 
     /**
-     * Creates a new ScalableItemElmStyle.
+     * Creates a new ScalableItemStyle.
      */
-    public ScalableItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
+    public ScalableItemStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
         super(false);
         this.size = size;
         this.item = item;

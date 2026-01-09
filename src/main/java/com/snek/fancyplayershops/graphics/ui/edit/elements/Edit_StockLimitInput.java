@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
-import com.snek.frameworklib.graphics.functional.elements.TextInputElm;
+import com.snek.frameworklib.graphics.functional.elements.ChatInputElm;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
@@ -21,7 +21,7 @@ import com.snek.frameworklib.utils.Utils;
 /**
  * A button that allows the owner of the product display to change its stock limit.
  */
-public class Edit_StockLimitInput extends TextInputElm {
+public class Edit_StockLimitInput extends ChatInputElm {
 
     /**
      * Creates a new EditUi_StockLimitInput.

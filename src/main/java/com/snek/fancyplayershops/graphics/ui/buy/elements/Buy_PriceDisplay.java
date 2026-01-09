@@ -6,8 +6,8 @@ import org.joml.Vector3d;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
@@ -18,7 +18,7 @@ import com.snek.frameworklib.utils.Utils;
 
 
 
-public class Buy_PriceDisplay extends SimpleTextElm {
+public class Buy_PriceDisplay extends TextElm {
     private final @NotNull BuyCanvas menu;
 
 
@@ -39,7 +39,7 @@ public class Buy_PriceDisplay extends SimpleTextElm {
         final ProductDisplay display = GetDisplay.get(this);
         final Txt priceTxt = new Txt(Utils.formatPrice(display.getPrice() * menu.getAmount()));
 
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
+        getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("Total: ").lightGray())
             .cat(display.getuser().getUUID().equals(display.getOwnerUuid()) ? priceTxt.lightGray().strikethrough().cat(new Txt(" 0").white().noStrikethrough()) : priceTxt.white() )
         .get());

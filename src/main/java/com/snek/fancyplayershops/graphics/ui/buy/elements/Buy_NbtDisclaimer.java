@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_NbtDisclaimer_S;
 import com.snek.frameworklib.graphics.core.Context;
-import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.TextButtonElm;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Buy_NbtDisclaimer extends FancyButtonElm {
+public class Buy_NbtDisclaimer extends TextButtonElm {
     final @NotNull Misc_BackButton backButton;
 
 

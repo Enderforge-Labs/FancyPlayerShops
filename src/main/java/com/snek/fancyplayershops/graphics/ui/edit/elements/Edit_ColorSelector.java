@@ -13,11 +13,11 @@ import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_ColorSelector_S;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.core.elements.Elm;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
-import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
+import com.snek.frameworklib.graphics.basic.elements.PanelTextElm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Utils;
 
@@ -31,7 +31,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_ColorSelector extends SimpleButtonElm {
+public class Edit_ColorSelector extends ButtonElm {
     public static final float S = 0.4f;
     public static final float V = 0.8f;
 
@@ -74,11 +74,11 @@ public class Edit_ColorSelector extends SimpleButtonElm {
         bg.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(bg.getStyle(ProductCanvasBackground_S.class).getDefaultColor()), false, true);
         for(final Div c : menu.getBg().getChildren()) {
             if(!(c instanceof Edit_ColorSelector)) {
-                if(c instanceof final FancyTextElm e) {
-                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(FancyTextElmStyle.class).getDefaultBgColor()), false, true);
+                if(c instanceof final PanelTextElm e) {
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelTextStyle.class).getDefaultBgColor()), false, true);
                 }
                 else if(c instanceof final PanelElm e) {
-                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelElmStyle.class).getDefaultColor()), false, true);
+                    e.applyAnimation(new Transition(2, Easings.sineOut).targetBgColor(e.getStyle(PanelStyle.class).getDefaultColor()), false, true);
                 }
             }
         }

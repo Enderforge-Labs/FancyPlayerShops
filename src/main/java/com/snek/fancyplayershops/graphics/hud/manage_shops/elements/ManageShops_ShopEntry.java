@@ -7,14 +7,14 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.styles.ManageShops_ShopEntry_S;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
+import com.snek.fancyplayershops.graphics.misc.styles.TextStyle_Small;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -27,7 +27,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable {
+public class ManageShops_ShopEntry extends ButtonElm implements Scrollable {
 
     public static final float MARGIN_LEFT = 0.05f;
     public static final float BALANCE_WIDTH = 0.2f;
@@ -49,7 +49,7 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
 
         // Add shop name
         final int productNum = shopInstance.getDisplays().size();
-        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+        e = addChild(new TextElm(level, new TextStyle_Small()
             .withText(new Txt(shopInstance.getDisplayName()).cat("\n★★★☆☆ | " + productNum + " product" + (productNum > 1 ? "s" : "")).get()) //TODO make this dynamic and real
             .withTextAlignment(TextAlignment.LEFT)
             .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
@@ -60,7 +60,7 @@ public class ManageShops_ShopEntry extends SimpleButtonElm implements Scrollable
 
 
         // Add shop balance
-        e = addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+        e = addChild(new TextElm(level, new TextStyle_Small()
             .withText(new Txt(Utils.formatPriceShort(shopInstance.getBalance())).get())
             .withTextAlignment(TextAlignment.LEFT)
             .withTextOverflowBehaviour(TextOverflowBehaviour.OVERFLOW)

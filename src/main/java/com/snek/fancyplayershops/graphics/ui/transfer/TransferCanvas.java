@@ -16,8 +16,8 @@ import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -66,7 +66,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
 
 
         // Add player name input
-        e = bg.addChild(new SimpleTextElm(display.getLevel(), new SimpleTextElmStyle().withText(new Txt("New owner:").get())));
+        e = bg.addChild(new TextElm(display.getLevel(), new TextStyle().withText(new Txt("New owner:").get())));
         e.setSize(new Vector2f(1f, TITLE_H));
         e.setPosY(1f - TITLE_H * 2f);
         e.setAlignmentX(AlignmentX.CENTER);

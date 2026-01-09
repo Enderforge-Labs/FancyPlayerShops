@@ -13,12 +13,12 @@ import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_Crafti
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.styles.GuiItemElmStyle;
-import com.snek.fancyplayershops.graphics.misc.styles.ScalableItemElmStyle;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
+import com.snek.fancyplayershops.graphics.misc.styles.GuiItemStyle;
+import com.snek.fancyplayershops.graphics.misc.styles.ScalableItemStyle;
+import com.snek.fancyplayershops.graphics.misc.styles.TextStyle_Small;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -75,7 +75,7 @@ public class ModInfoCanvas extends HudCanvasBase {
         addPage(p, "Selling items"); {
 
             // Add text A
-            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
                     .cat(new Txt("Shops").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" are a great way to sell your items.\n")
                     .cat("Other players can purchase products remotely\n")
@@ -88,7 +88,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add display item
-            e = p.addChild(new ItemElm(context.getLevel(), new GuiItemElmStyle(
+            e = p.addChild(new ItemElm(context.getLevel(), new GuiItemStyle(
                 ProductDisplayManager.getProductDisplayItemCopy(),
                 ModInfoCanvas.P0_ITEM_H
             )));
@@ -97,7 +97,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add text B
-            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
                     .cat("To get started, craft a ").cat(new Txt("Product Display").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(".\n")
                     .cat("Once placed, you will be able to\n")
@@ -120,7 +120,7 @@ public class ModInfoCanvas extends HudCanvasBase {
         addPage(p, "Crafting a Display"); {
 
             // Add text
-            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
                     .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
                     .cat("using Vanilla materials.\n")
@@ -140,7 +140,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add text
-            e = p.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
                     .cat("They can be ").cat(new Txt("upgraded").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" using various items\n")
                     .cat("to increase their storage, let them restock\n")
@@ -158,7 +158,7 @@ public class ModInfoCanvas extends HudCanvasBase {
         // // Add page 3
         // p = new Div();
         // addPage(p, "Shop commands"); {
-        //     e = p.addChild(new SimpleTextElm(level, new ModInfo_2_Text_S()));
+        //     e = p.addChild(new TextElm(level, new ModInfo_2_Text_S()));
         //     e.setSize(new Vector2f(1f, 1f));
         //     e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
         // }

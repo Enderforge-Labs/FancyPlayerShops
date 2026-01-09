@@ -16,13 +16,13 @@ import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopEntry;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopHeader;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
+import com.snek.fancyplayershops.graphics.misc.styles.TextStyle_Small;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
 
 import net.minecraft.server.level.ServerLevel;
@@ -58,7 +58,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
         // Add no products text if the player doesn't own any product display
         final @Nullable Set<@NotNull ProductDisplay> displays = ProductDisplayManager.getDisplaysOfPlayer(player);
         if(displays == null || displays.isEmpty()) {
-            e = bg.addChild(new SimpleTextElm(level, new SimpleTextElmStyle_Small()
+            e = bg.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt(
                     "You aren't selling any product!\n" +
                     "Product displays you place will appear here,\n" +

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.misc.styles;
 
 import org.joml.Vector3i;
 
-import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.ButtonStyle;
 
 
 
@@ -15,7 +15,7 @@ import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 /**
  * The style of a generic HUD button.
  */
-public class Hud_SimpleButton_S extends SimpleButtonElmStyle {
+public class Hud_SimpleButton_S extends ButtonStyle {
 
     /**
      * Creates a new HudSimpleButton_S.

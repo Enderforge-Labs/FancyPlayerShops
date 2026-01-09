@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Misc_BackButton extends SimpleButtonElm {
+public class Misc_BackButton extends ButtonElm {
     final Runnable onClickTask;
 
 

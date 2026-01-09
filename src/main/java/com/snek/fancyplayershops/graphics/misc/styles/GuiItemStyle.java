@@ -7,32 +7,32 @@ import org.joml.Vector2f;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-public class GuiItemElmStyle extends ScalableItemElmStyle {
+public class GuiItemStyle extends ScalableItemStyle {
 
     /**
-     * Creates a new GuiItemElmStyle.
+     * Creates a new GuiItemStyle.
      */
-    public GuiItemElmStyle(final @NotNull ItemStack item, final float size) {
+    public GuiItemStyle(final @NotNull ItemStack item, final float size) {
         super(item, size);
     }
 
     /**
-     * Creates a new GuiItemElmStyle.
+     * Creates a new GuiItemStyle.
      */
-    public GuiItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ) {
+    public GuiItemStyle(final @NotNull ItemStack item, final float size, final float shiftZ) {
         super(item, size, shiftZ);
     }
 
     /**
-     * Creates a new GuiItemElmStyle.
+     * Creates a new GuiItemStyle.
      */
-    public GuiItemElmStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
+    public GuiItemStyle(final @NotNull ItemStack item, final float size, final float shiftZ, final @NotNull Vector2f shift) {
         super(item, size, shiftZ, shift);
     }
 
@@ -62,7 +62,7 @@ public class GuiItemElmStyle extends ScalableItemElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scale(1f / PRIMER_ANIMATION_SCALE, 1f / PRIMER_ANIMATION_SCALE, 1))
         );
     }

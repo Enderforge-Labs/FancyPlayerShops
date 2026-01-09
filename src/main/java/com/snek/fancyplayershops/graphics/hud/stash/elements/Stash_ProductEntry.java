@@ -4,15 +4,15 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ScrollableList;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
+import com.snek.fancyplayershops.graphics.misc.styles.TextStyle_Small;
 import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemEntry_S;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -31,7 +31,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
+public class Stash_ProductEntry extends ButtonElm implements Scrollable {
     public static final float MARGIN_LEFT        = 0.05f;
     public static final float ITEM_WIDTH         = 0.1f;
     public static final float ITEM_NAME_SPACING  = 0.02f;
@@ -59,7 +59,7 @@ public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
         c.setAlignment(AlignmentX.RIGHT, AlignmentY.CENTER);
 
         // Add item name display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new SimpleTextElmStyle_Small()
+        e = c.addChild(new TextElm(context.getLevel(), new TextStyle_Small()
             .withText(new Txt(MinecraftUtils.getFancyItemName(item).getString()).white().get())
             .withTextAlignment(TextAlignment.LEFT)
             .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
@@ -69,7 +69,7 @@ public class Stash_ProductEntry extends SimpleButtonElm implements Scrollable {
 
 
         // Add item count display
-        e = c.addChild(new SimpleTextElm(context.getLevel(), new SimpleTextElmStyle_Small()
+        e = c.addChild(new TextElm(context.getLevel(), new TextStyle_Small()
             .withText(new Txt(Utils.formatAmount(count)).lightGray().get())
             .withTextAlignment(TextAlignment.LEFT)
         ));

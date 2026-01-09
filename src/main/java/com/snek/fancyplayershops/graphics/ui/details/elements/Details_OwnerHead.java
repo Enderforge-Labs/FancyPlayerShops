@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHead_S;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +45,7 @@ public class Details_OwnerHead extends ItemElm {
         final ProductDisplay display = GetDisplay.get(this);
         final @Nullable ItemStack head = MinecraftUtils.getOfflinePlayerHead(display.getOwnerUuid());
         if(head == null) suppressSpawn = true; //! Prevent rendering the default skins in case of cached player data lookup issues
-        else getStyle(ItemElmStyle.class).setItem(head);
+        else getStyle(ItemStyle.class).setItem(head);
     }
 
 
