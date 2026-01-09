@@ -4,19 +4,19 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.graphics.Axis2;
-import com.snek.fancyplayershops.graphics.Flex;
 import com.snek.fancyplayershops.graphics.hud.mod_info.ModInfoCanvas;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.Axis2;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.presets.ItemStyle_Gui;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.Flex;
 
 import net.minecraft.resources.ResourceLocation;
 
