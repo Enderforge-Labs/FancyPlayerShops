@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.stash.elements;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.fancyplayershops.graphics.hud.stash.styles.Stash_ItemDisplay_S;
+import com.snek.fancyplayershops.graphics.misc.styles.GuiItemElmStyle;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 
@@ -25,7 +25,7 @@ public class Stash_ItemDisplay extends ItemElm {
      * @param _hud The parent HUD.
      */
     public Stash_ItemDisplay(final @NotNull HudContext _hud, final @NotNull ItemStack _item) {
-        super(_hud.getLevel(), new Stash_ItemDisplay_S());
+        super(_hud.getLevel(), new GuiItemElmStyle(_item, 0.075f));
         item = _item;
         updateDisplay();
     }

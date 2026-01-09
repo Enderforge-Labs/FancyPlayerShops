@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 //TODO idk if overriding get methods is fine, this needs to be checked
 
 public class ScalableItemElmStyle extends ItemElmStyle {
-    public static final float Z_SCALE = 0.05f;
+    public static final float Z_SCALE = 0.001f;
 
     private final float size;
     private final ItemStack item;
