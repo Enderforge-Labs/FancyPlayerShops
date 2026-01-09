@@ -7,12 +7,12 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.Axis2;
 import com.snek.fancyplayershops.graphics.Flex;
 import com.snek.fancyplayershops.graphics.hud.mod_info.ModInfoCanvas;
-import com.snek.fancyplayershops.graphics.misc.styles.GuiItemStyle;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
+import com.snek.frameworklib.graphics.basic.presets.ItemStyle_Gui;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
@@ -52,7 +52,7 @@ public class ModInfo_1_CraftingGrid extends Div {
 
                     // For each ingredient, create a new item display
                     for(int i = 0; i < ingredients.size(); ++i) {
-                        e = grid.addChild(new ItemElm(context.getLevel(), new GuiItemStyle(
+                        e = grid.addChild(new ItemElm(context.getLevel(), new ItemStyle_Gui(
                             ingredients.get(i).getItems()[0],
                             SLOT_SIZE.x
                         )));
@@ -72,7 +72,7 @@ public class ModInfo_1_CraftingGrid extends Div {
 
 
             // Add result slot
-            e = flex.addChild(new ItemElm(context.getLevel(), new GuiItemStyle(
+            e = flex.addChild(new ItemElm(context.getLevel(), new ItemStyle_Gui(
                 ProductDisplayManager.getProductDisplayItemCopy(),
                 SLOT_SIZE.x
             )));
