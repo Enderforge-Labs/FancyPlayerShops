@@ -15,7 +15,7 @@
         "HCR"
     ],
     "result": {
-        "fancyplayershops:item_stack_reference": "fancyplayershops:product_display_t1"
+        "frameworklib:item_stack_reference": "fancyplayershops:product_display_t1"
     },
     "show_notification": false
 }

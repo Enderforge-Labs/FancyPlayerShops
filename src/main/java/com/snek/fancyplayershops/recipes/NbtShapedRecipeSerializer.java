@@ -3,6 +3,8 @@ package com.snek.fancyplayershops.recipes;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 
 public class NbtShapedRecipeSerializer implements RecipeSerializer<NbtShapedRecipe> {
+    public static final @NotNull String ITEM_STACK_REFERENCE_PLACEHOLDER = "frameworklib:item_stack_reference";
 
     @Override
     public NbtShapedRecipe fromJson(ResourceLocation id, JsonObject json) {
@@ -33,8 +36,8 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<NbtShapedReci
         for (Map.Entry<String, JsonElement> entry : keyObj.entrySet()) {
             JsonObject ingredientObj = entry.getValue().getAsJsonObject();
 
-            if (ingredientObj.has("fancyplayershops:item_stack_reference")) {
-                String refId = ingredientObj.get("fancyplayershops:item_stack_reference").getAsString();
+            if (ingredientObj.has(ITEM_STACK_REFERENCE_PLACEHOLDER)) {
+                String refId = ingredientObj.get(ITEM_STACK_REFERENCE_PLACEHOLDER).getAsString();
                 ResourceLocation refLocation = new ResourceLocation(refId);
                 ItemStack refStack = NbtShapedRecipe.getItemStackReference(refLocation);
 
@@ -55,8 +58,8 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<NbtShapedReci
         JsonObject resultObj = json.getAsJsonObject("result");
         ItemStack resultStack;
 
-        if (resultObj.has("fancyplayershops:item_stack_reference")) {
-            String refId = resultObj.get("fancyplayershops:item_stack_reference").getAsString();
+        if (resultObj.has(ITEM_STACK_REFERENCE_PLACEHOLDER)) {
+            String refId = resultObj.get(ITEM_STACK_REFERENCE_PLACEHOLDER).getAsString();
             ResourceLocation refLocation = new ResourceLocation(refId);
             resultStack = NbtShapedRecipe.getItemStackReference(refLocation);
 
