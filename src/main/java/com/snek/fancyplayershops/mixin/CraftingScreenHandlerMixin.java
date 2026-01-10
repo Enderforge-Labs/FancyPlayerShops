@@ -24,7 +24,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 
-
+//          TODO remove? if the custom recipe works well, that is. also move it to frameworklib
 
 
 
@@ -41,43 +41,43 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 public abstract class CraftingScreenHandlerMixin {
 
 
-    // Shadow the result field to access it directly
-    @Shadow private ResultContainer resultSlots;
+    // // Shadow the result field to access it directly
+    // @Shadow private ResultContainer resultSlots;
 
 
 
 
-    /**
-     * Detects the current items in the crafting grid and replaces the output with the display item if necessary.
-     */
-    @Inject(method = "slotsChanged", at = @At("TAIL"))
-    private void onCraftUpdate(final @NotNull Container inventory, final @NotNull CallbackInfo ci) {
-        if(inventory.getContainerSize() != 9) return;
+    // /**
+    //  * Detects the current items in the crafting grid and replaces the output with the display item if necessary.
+    //  */
+    // @Inject(method = "slotsChanged", at = @At("TAIL"))
+    // private void onCraftUpdate(final @NotNull Container inventory, final @NotNull CallbackInfo ci) {
+    //     if(inventory.getContainerSize() != 9) return;
 
 
-        // For each display tier
-        for(final var tier: DisplayTier.values()) {
+    //     // For each display tier
+    //     for(final var tier: DisplayTier.values()) {
 
-            // Get recipe manager from the server and retrieve the display's recipe
-            final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
-            final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId());
-            final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
-            if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId);
-            final Recipe<?> recipe = recipeOptional.get();
+    //         // Get recipe manager from the server and retrieve the display's recipe
+    //         final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
+    //         final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId());
+    //         final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
+    //         if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId);
+    //         final Recipe<?> recipe = recipeOptional.get();
 
 
-            // Check if the grid matches the recipe
-            if(recipe instanceof final ShapedRecipe r) {
-                if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
+    //         // Check if the grid matches the recipe
+    //         if(recipe instanceof final ShapedRecipe r) {
+    //             if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
 
-                    // Replace the output item
-                    resultSlots.setItem(0, ProductDisplayManager.getProductDisplayItemCopy(tier));
-                    ((CraftingMenu)(Object)this).broadcastChanges();
+    //                 // Replace the output item
+    //                 resultSlots.setItem(0, ProductDisplayManager.getProductDisplayItemCopy(tier));
+    //                 ((CraftingMenu)(Object)this).broadcastChanges();
 
-                    // Stop checking recipes
-                    break;
-                }
-            }
-        }
-    }
+    //                 // Stop checking recipes
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
 }

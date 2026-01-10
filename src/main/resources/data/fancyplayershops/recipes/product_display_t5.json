@@ -1,5 +1,11 @@
 {
-    "type": "minecraft:crafting_shaped",
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["appliedenergistics2"]
+        }
+    ],
+    "type": "fancyplayershops:nbt_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {
@@ -7,7 +13,7 @@
         "S": { "tag": "minecraft:signs"       },
         "R": { "item": "minecraft:comparator" },
         "H": { "item": "minecraft:hopper"     },
-        "C": { "item": "minecraft:chest"      }
+        "C": { "item": "minecraft:barrel"      }
     },
     "pattern": [
         "GGG",

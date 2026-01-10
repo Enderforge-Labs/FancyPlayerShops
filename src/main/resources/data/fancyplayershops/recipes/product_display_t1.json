@@ -1,5 +1,5 @@
 {
-    "type": "minecraft:crafting_shaped",
+    "type": "fancyplayershops:nbt_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {
@@ -15,8 +15,7 @@
         "HCR"
     ],
     "result": {
-        "item": "minecraft:player_head",
-        "count": 1
+        "fancyplayershops:item_stack_reference": "fancyplayershops:product_display_t1"
     },
     "show_notification": false
 }
