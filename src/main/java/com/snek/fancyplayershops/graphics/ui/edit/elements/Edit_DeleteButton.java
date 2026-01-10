@@ -51,7 +51,7 @@ public class Edit_DeleteButton extends ButtonElm {
 
 
         // Give the player a default product display item
-        final ItemStack defaultProductDisplayItem =  ProductDisplayManager.getProductDisplayItemCopy();
+        final ItemStack defaultProductDisplayItem =  ProductDisplayManager.getProductDisplayItemCopy(display.getTier());
         StashManager.giveItem(player.getUUID(), defaultProductDisplayItem, 1, true);
 
 

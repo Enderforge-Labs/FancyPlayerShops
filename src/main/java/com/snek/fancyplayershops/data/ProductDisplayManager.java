@@ -24,6 +24,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
@@ -137,13 +138,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
     //! Don't use the name or tooltip to check the item. Displays should work even when renamed in an anvil or modified by mods
     public  static final @NotNull String DISPLAY_ITEM_NBT_KEY = FancyPlayerShops.MOD_ID + ".item.display_item";
     public  static final @NotNull String SNAPSHOT_NBT_KEY  = DISPLAY_ITEM_NBT_KEY + ".snapshot";
-    private static final @NotNull ItemStack productDisplayItem;
-
-    // Product display item texture
-    private static final @NotNull String DISPLAY_ITEM_TEXTURE =
-        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
-        "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
-    ;
+    private static final @NotNull List<ItemStack> productDisplayItems = new ArrayList<>();
 
     // Product display item name
     public static final @NotNull Vector3i DISPLAY_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
@@ -162,22 +157,33 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    // Initialize display item stack
+    // Initialize display item stacks
     static {
+        for(final var tier : DisplayTier.values()) {
 
-        // Create item and set custom name
-        productDisplayItem = MinecraftUtils.createCustomHead(DISPLAY_ITEM_TEXTURE, false);
-        productDisplayItem.setHoverName(DISPLAY_ITEM_NAME);
 
-        // Set identification tag
-        MinecraftUtils.addTag(productDisplayItem, DISPLAY_ITEM_NBT_KEY);
+            // Create item and set custom name
+            final var item = MinecraftUtils.createCustomHead(tier.getTexture(), false);
+            item.setHoverName(DISPLAY_ITEM_NAME);
 
-        // Set lore
-        final ListTag lore = new ListTag();
-        for(final Component line : DISPLAY_ITEM_DESCRITPION) {
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+
+            // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
+            MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
+            item.getOrCreateTag().putInt("tier", tier.getIndex());
+
+
+            // Set lore
+            final ListTag lore = new ListTag();
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(tier.getName() + " tier").lightGray().noItalic().get())));
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: " + Utils.formatAmount(tier.getCapacity())).lightGray().noItalic().get())));
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(Component.empty())));
+            for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+            item.getOrCreateTagElement("display").put("Lore", lore);
+
+
+            // Set item reference
+            productDisplayItems.add(item);
         }
-        productDisplayItem.getOrCreateTagElement("display").put("Lore", lore);
     }
 
 
@@ -398,10 +404,11 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     /**
      * Returns a copy if the default product display item.
+     * @param tier The tier of shop to create.
      * @return A copy of the product display item.
      */
-    public static @NotNull ItemStack getProductDisplayItemCopy() {
-        return productDisplayItem.copy();
+    public static @NotNull ItemStack getProductDisplayItemCopy(final @NotNull DisplayTier tier) {
+        return productDisplayItems.get(tier.getIndex()).copy();
     }
 
 
@@ -416,11 +423,11 @@ public final class ProductDisplayManager extends UtilityClassBase {
      */
     public static @NotNull ItemStack createShopSnapshot(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
-            return getProductDisplayItemCopy();
+            return getProductDisplayItemCopy(display.getTier());
         }
 
         // Get NBTs
-        final ItemStack item = productDisplayItem.copy();
+        final ItemStack item = productDisplayItems.get(display.getTier().getIndex()).copy();
         final CompoundTag nbt = item.getOrCreateTag();
         final CompoundTag nbtDisplay = nbt.getCompound("display");
         final ListTag lore = nbtDisplay.getList("Lore", Tag.TAG_STRING);

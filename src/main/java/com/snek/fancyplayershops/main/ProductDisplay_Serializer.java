@@ -45,6 +45,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         data.put("hue",        display.getColorThemeHue());
         data.put("balance",    display.getBalance());
         data.put("nbt_filter", display.getNbtFilter());
+        data.put("tier",       display.getTier().getIndex());
 
 
         // Store position data
@@ -92,15 +93,16 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
         // Extract basic data
-        final UUID      owner     = UUID.fromString((String)data.get("owner"));
-        final UUID      shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
-        final long      price     = ((Number)data.get("price")).longValue();
-        final long      stock     = ((Number)data.get("stock")).longValue();
-        final long      maxStock  = ((Number)data.get("max_stock")).longValue();
-        final Direction direction = Direction.fromEighths(((Number)data.get("direction")).intValue());
-        final float     hue       = ((Number)data.get("hue")).floatValue();
-        final long      balance   = ((Number)data.get("balance")).longValue();
-        final boolean   nbtFilter = (Boolean)data.get("nbt_filter");
+        final UUID        owner     = UUID.fromString((String)data.get("owner"));
+        final UUID        shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
+        final long        price     = ((Number)data.get("price")).longValue();
+        final long        stock     = ((Number)data.get("stock")).longValue();
+        final long        maxStock  = ((Number)data.get("max_stock")).longValue();
+        final Direction   direction = Direction.fromEighths(((Number)data.get("direction")).intValue());
+        final float       hue       = ((Number)data.get("hue")).floatValue();
+        final long        balance   = ((Number)data.get("balance")).longValue();
+        final boolean     nbtFilter = (Boolean)data.get("nbt_filter");
+        final DisplayTier tier      = DisplayTier.fromIndex(((Number)data.get("tier")).intValue());
 
 
         // Extract level and position data
@@ -152,7 +154,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         // Create shop and return
         return new ProductDisplay(
             owner, shopUuid, price, stock, maxStock, direction, hue, balance,
-            nbtFilter, position, level, item, storedItems
+            nbtFilter, position, level, tier, item, storedItems
         );
         //! display creation event not fired. That's the caller method's responsibility
     }

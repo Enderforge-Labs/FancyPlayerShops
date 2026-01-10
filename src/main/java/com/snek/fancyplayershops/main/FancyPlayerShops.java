@@ -246,6 +246,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* nbtFilter   */ true,
                             /* position    */ blockPos,
                             /* level       */ serverLevel,
+                            /* tier        */ DisplayTier.fromIndex(tag.getInt("tier")),
                             /* item        */ Items.AIR.getDefaultInstance(),
                             /* storedItems */ new HashMap<>()
                         );

@@ -15,13 +15,9 @@
   - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
 
 - add ae2 compatibility
-  - let players craft higher tiers of product displays that can contain more stock
   - product displays don't pull any item by default but require manual restocking.
     - Crafting them with an interface and a controller allows them to pull items from nearby inventories, or something annoying like that
   - each tier can become wireless by crafting it with a wireless transmitter
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
   - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
 
 - add shop setting to change HUD distance

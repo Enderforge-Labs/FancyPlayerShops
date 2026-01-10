@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.mod_info.ModInfoCanvas;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
@@ -46,7 +47,7 @@ public class ModInfo_1_CraftingGrid extends Div {
             grid.setAlignmentY(AlignmentY.CENTER); {
 
                 // Get recipe. If the recipe exists
-                final var optRecipe = FrameworkLib.getServer().getRecipeManager().byKey(new ResourceLocation(FancyPlayerShops.MOD_ID, "product_display_item"));
+                final var optRecipe = FrameworkLib.getServer().getRecipeManager().byKey(new ResourceLocation(FancyPlayerShops.MOD_ID, "product_display"));
                 if(optRecipe.isPresent()) {
                     final var ingredients = optRecipe.get().getIngredients();
 
@@ -73,7 +74,7 @@ public class ModInfo_1_CraftingGrid extends Div {
 
             // Add result slot
             e = flex.addChild(new ItemElm(context.getLevel(), new ItemStyle_Gui(
-                ProductDisplayManager.getProductDisplayItemCopy(),
+                ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T1),
                 SLOT_SIZE.x
             )));
             e.setSize(SLOT_SIZE);

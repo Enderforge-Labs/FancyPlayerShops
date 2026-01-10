@@ -13,6 +13,7 @@ import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_Crafti
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
@@ -88,7 +89,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
             // Add display item
             e = p.addChild(new ItemElm(context.getLevel(), new ItemStyle_Gui(
-                ProductDisplayManager.getProductDisplayItemCopy(),
+                ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4),
                 ModInfoCanvas.P0_ITEM_H
             )));
             e.setSize(new Vector2f(1f, P0_ITEM_H));
