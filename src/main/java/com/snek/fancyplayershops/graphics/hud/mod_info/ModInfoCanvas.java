@@ -21,6 +21,7 @@ import com.snek.frameworklib.graphics.basic.presets.ItemStyle_Gui;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 
@@ -124,8 +125,7 @@ public class ModInfoCanvas extends HudCanvasBase {
                 .withText(new Txt()
                     .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
                     .cat("using Vanilla materials.\n")
-                    .cat("They have a maximum stock of ").cat(new Txt("123456").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" items.")
-                    //FIXME actually retrieve the max stock from configs
+                    .cat("They have a maximum stock of ").cat(new Txt(Utils.formatAmount(DisplayTier.T1.getCapacity())).color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" items.")
                     .white().get()
                 )
             ));

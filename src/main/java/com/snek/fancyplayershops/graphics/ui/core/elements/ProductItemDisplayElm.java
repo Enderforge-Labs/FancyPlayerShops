@@ -231,7 +231,7 @@ public class ProductItemDisplayElm extends ItemElm {
 
         // Adjust global rotation
         final @NotNull ProductCanvasBase activeCanvas = productDisplay.getActiveCanvas();
-        activeCanvas.updateItemDisplayRot(0, activeCanvas.getContext().getRotation(), true);
+        activeCanvas.updateItemDisplayRot(0f, activeCanvas.getContext().getRotation(), true);
 
         // Local position shift
         applyAnimation(enterEditAnimation, false, true);
