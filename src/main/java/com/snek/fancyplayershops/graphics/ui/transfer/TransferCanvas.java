@@ -12,7 +12,6 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.transfer.elements.Transfer_NameInput;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
@@ -20,6 +19,7 @@ import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -88,7 +88,7 @@ public class TransferCanvas extends ProductCanvasBase implements InputIndicatorC
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + Canvas.DEFAULT_BORDER_H);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 

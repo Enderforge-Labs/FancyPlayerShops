@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "wooden_sign",
+    "key": {
+        "G": { "item": "minecraft:glass_pane" },
+        "S": { "tag": "minecraft:signs"       },
+        "R": { "item": "minecraft:comparator" },
+        "H": { "item": "minecraft:hopper"     },
+        "C": { "item": "minecraft:chest"      }
+    },
+    "pattern": [
+        "GGG",
+        "GSG",
+        "HCR"
+    ],
+    "result": {
+        "item": "minecraft:player_head",
+        "count": 1
+    },
+    "show_notification": false
+}

@@ -85,10 +85,11 @@ public class ProductDisplay {
 
 
     // Constant display data
-    private final @NotNull ServerLevel           level;                            // The level this display was placed in
-    private final @NotNull BlockPos              pos;                              // The position of the display
-    private final @NotNull String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
-    private final @NotNull ProductDisplayKey     displayKeyCache;                  // The cached display key
+    private final @NotNull ServerLevel       level;                             // The level this display was placed in
+    private final @NotNull BlockPos          pos;                               // The position of the display
+    private final @NotNull String            displayIdentifierCache_noLevel;    // The cached display identifier, not including the level
+    private final @NotNull ProductDisplayKey displayKeyCache;                   // The cached display key
+    private final @NotNull DisplayTier       tier;                              // The tier of the display
 
 
     // Mutable display data
@@ -145,6 +146,7 @@ public class ProductDisplay {
     public @Nullable Player                 getViewer           () { return viewer;                          }
     public           boolean                isScheduledForSave  () { return scheduledForSave;                }
     public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
+    public @NotNull  DisplayTier            getTier             () { return tier;                            }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
     public @NotNull  Shop                   getShop             () { return shop;                            }
@@ -227,6 +229,7 @@ public class ProductDisplay {
         final boolean nbtFilter,
         final @NotNull BlockPos position,
         final @NotNull ServerLevel level,
+        final @NotNull DisplayTier tier,
         final @NotNull ItemStack item,
         final @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems
     ) {
@@ -242,6 +245,7 @@ public class ProductDisplay {
         this.nbtFilter = nbtFilter;
         this.pos = position;
         this.level = level;
+        this.tier = tier;
         this.item = item;
         this.storedItems = storedItems;
 
@@ -673,12 +677,13 @@ public class ProductDisplay {
      * @return Whether the new value could be set.
      */
     public boolean setStockLimit(final double newStockLimit) {
+        final long capacity = tier.getCapacity();
         if(newStockLimit < 0.9999) {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.getDisplay().stock_limit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > capacity) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than the display's capacity (" + Utils.formatAmount(capacity) + ")!").red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);

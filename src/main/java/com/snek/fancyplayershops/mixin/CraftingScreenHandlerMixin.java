@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 
@@ -54,21 +55,28 @@ public abstract class CraftingScreenHandlerMixin {
         if(inventory.getContainerSize() != 9) return;
 
 
-        // Get recipe manager from the server and retrieve the display's recipe
-        final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
-        final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, "product_display_item");
-        final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
-        if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId);
-        final Recipe<?> recipe = recipeOptional.get();
+        // For each display tier
+        for(final var tier: DisplayTier.values()) {
+
+            // Get recipe manager from the server and retrieve the display's recipe
+            final RecipeManager recipeManager = FrameworkLib.getServer().getRecipeManager();
+            final ResourceLocation recipeId = new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId());
+            final Optional<? extends Recipe<?>> recipeOptional = recipeManager.byKey(recipeId);
+            if(recipeOptional.isEmpty()) throw new RuntimeException("The crafting recipe of the display item could not be found: " + recipeId);
+            final Recipe<?> recipe = recipeOptional.get();
 
 
-        // Check if the grid matches the recipe
-        if(recipe instanceof final ShapedRecipe r) {
-            if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
+            // Check if the grid matches the recipe
+            if(recipe instanceof final ShapedRecipe r) {
+                if(r.matches((CraftingContainer)inventory, null)) { //! Level parameter isn't actually used by the function
 
-                // Replace the output item
-                resultSlots.setItem(0, ProductDisplayManager.getProductDisplayItemCopy());
-                ((CraftingMenu)(Object)this).broadcastChanges();
+                    // Replace the output item
+                    resultSlots.setItem(0, ProductDisplayManager.getProductDisplayItemCopy(tier));
+                    ((CraftingMenu)(Object)this).broadcastChanges();
+
+                    // Stop checking recipes
+                    break;
+                }
             }
         }
     }

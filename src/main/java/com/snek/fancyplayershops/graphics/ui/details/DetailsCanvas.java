@@ -13,7 +13,6 @@ import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Values;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_NbtDisclaimer;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHeadBg_S;
 import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -66,9 +65,9 @@ public class DetailsCanvas extends ProductCanvasBase {
     public DetailsCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, calculateTitle(display), BACKGROUND_HEIGHT, CanvasBorder.DEFAULT_HEIGHT, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), BACKGROUND_HEIGHT, Canvas.DEFAULT_BORDER_H, Canvas.DEFAULT_BORDER_H);
         title.setAlignmentY(AlignmentY.NONE);
-        title.setPosY(1f - Canvas.TITLE_H - CanvasBorder.DEFAULT_HEIGHT);
+        title.setPosY(1f - Canvas.TITLE_H - Canvas.DEFAULT_BORDER_H);
         Div e;
 
 
