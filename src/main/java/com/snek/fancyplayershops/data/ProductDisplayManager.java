@@ -142,9 +142,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     // Product display item name
     public static final @NotNull Vector3i DISPLAY_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
-    public static final @NotNull Component DISPLAY_ITEM_NAME =
-        new Txt("Product display").noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR)
-    .get();
+    public static final @NotNull String DISPLAY_ITEM_NAME = "Product display";
 
     // Product display item description
     private static final @NotNull Vector3i DISPLAY_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
@@ -164,7 +162,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
             // Create item and set custom name
             final var item = MinecraftUtils.createCustomHead(tier.getTexture(), false);
-            item.setHoverName(DISPLAY_ITEM_NAME);
+            item.setHoverName(new Txt(DISPLAY_ITEM_NAME + " - " + tier.name()).noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR).get());
 
 
             // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
