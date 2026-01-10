@@ -19,7 +19,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -74,7 +74,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public BuyCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, calculateTitle(display), 1, TITLE_H, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), 1, TITLE_H, Canvas.DEFAULT_BORDER_H);
         Div e;
 
 
@@ -152,7 +152,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(CanvasBorder.DEFAULT_HEIGHT * 2);
+        e.setPosY(Canvas.DEFAULT_BORDER_H * 2);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 

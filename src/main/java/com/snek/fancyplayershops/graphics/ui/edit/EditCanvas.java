@@ -23,7 +23,7 @@ import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_StockLimitInput;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_TransferButton;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.utils.Txt;
 
@@ -129,7 +129,7 @@ public class EditCanvas extends ProductCanvasBase implements InputIndicatorCanva
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + Canvas.DEFAULT_BORDER_H);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
