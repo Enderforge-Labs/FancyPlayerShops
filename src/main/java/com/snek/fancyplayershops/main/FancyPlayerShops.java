@@ -234,19 +234,20 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
+                        final DisplayTier tier = DisplayTier.fromIndex(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
                             /* price       */ 1000l,
                             /* stock       */ 0,
-                            /* maxStock    */ 1000,
+                            /* maxStock    */ tier.getCapacity(),
                             /* direction   */ Direction.NORTH,
                             /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,
                             /* position    */ blockPos,
                             /* level       */ serverLevel,
-                            /* tier        */ DisplayTier.fromIndex(tag.getInt("tier")),
+                            /* tier        */ tier,
                             /* item        */ Items.AIR.getDefaultInstance(),
                             /* storedItems */ new HashMap<>()
                         );

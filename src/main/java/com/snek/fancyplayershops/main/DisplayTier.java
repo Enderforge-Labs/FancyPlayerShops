@@ -60,6 +60,23 @@ public enum DisplayTier {
         return index;
     }
 
+    public static @NotNull DisplayTier getHighestTier() {
+        return fromIndex(values().length - 1);
+    }
+
+    public static long getHighestCapacity() {
+        return getHighestTier().getCapacity();
+    }
+
+
+
+
+    /**
+     * Calculates the ID of the crafting recipe of the product display item of this tier.
+     * <p>
+     * This doesn't include the namespace.
+     * @return The ID of this tier's crafting recipe.
+     */
     public @NotNull String getId() {
         return "product_display_" + name().toLowerCase();
     }

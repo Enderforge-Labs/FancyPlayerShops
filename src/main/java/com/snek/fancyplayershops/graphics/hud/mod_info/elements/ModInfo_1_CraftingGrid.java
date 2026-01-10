@@ -47,7 +47,7 @@ public class ModInfo_1_CraftingGrid extends Div {
             grid.setAlignmentY(AlignmentY.CENTER); {
 
                 // Get recipe. If the recipe exists
-                final var optRecipe = FrameworkLib.getServer().getRecipeManager().byKey(new ResourceLocation(FancyPlayerShops.MOD_ID, "product_display"));
+                final var optRecipe = FrameworkLib.getServer().getRecipeManager().byKey(new ResourceLocation(FancyPlayerShops.MOD_ID, DisplayTier.T1.getId()));
                 if(optRecipe.isPresent()) {
                     final var ingredients = optRecipe.get().getIngredients();
 

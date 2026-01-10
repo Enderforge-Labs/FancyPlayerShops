@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
@@ -185,13 +185,12 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
     public boolean attemptChangeAmount(final @NotNull Player user, final float _amount) {
-
         if(_amount < 0.9999) {
             user.displayClientMessage(new Txt("The amount must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(_amount > Configs.getDisplay().stock_limit.getMax()) {
-            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(_amount > DisplayTier.getHighestCapacity()) {
+            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(DisplayTier.getHighestCapacity())).red().bold().get(), true);
             return false;
         }
         else changeAmount(Math.round((double)_amount));

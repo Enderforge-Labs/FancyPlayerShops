@@ -677,12 +677,13 @@ public class ProductDisplay {
      * @return Whether the new value could be set.
      */
     public boolean setStockLimit(final double newStockLimit) {
+        final long capacity = tier.getCapacity();
         if(newStockLimit < 0.9999) {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.getDisplay().stock_limit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > capacity) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than the display's capacity (" + Utils.formatAmount(capacity) + ")!").red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
