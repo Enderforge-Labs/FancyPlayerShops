@@ -1,6 +1,8 @@
 package com.snek.fancyplayershops.recipes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -23,106 +26,183 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 
 
-
-public class NbtShapedRecipeSerializer implements RecipeSerializer<NbtShapedRecipe> {
-    public static final @NotNull String ITEM_STACK_REFERENCE_PLACEHOLDER = "frameworklib:item_stack_reference";
+//TODO rename to DynamicShapedRecipeSerializer
+public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShapedRecipe> {
+    public static final @NotNull String DYNAMIC_REF_PLACEHOLDER = "frameworklib:dynamic_ref";
+    public static final @NotNull String ANY_NBT_PLACEHOLDER     = "frameworklib:any_nbt";
+    public static final @NotNull String ALL_NBTS_PLACEHOLDER    = "frameworklib:all_nbts";
 
     @Override
-    public NbtShapedRecipe fromJson(ResourceLocation id, JsonObject json) {
+    public DynamicShapedRecipe fromJson(ResourceLocation id, JsonObject json) {
+
+
+        // Parse ingredients
         JsonObject keyObj = json.getAsJsonObject("key");
         Map<String, Ingredient> keyMap = new HashMap<>();
-        Map<String, ItemStack> customReferences = new HashMap<>(); // Track which keys need NBT checking
+        Map<String, ItemStack> dynamicReferenceIngredients = new HashMap<>();
+        Map<String, List<String>> anyNbtIngredients = new HashMap<>();
+        Map<String, List<String>> allNbtsIngredients = new HashMap<>();
 
-        for (Map.Entry<String, JsonElement> entry : keyObj.entrySet()) {
+        for(Map.Entry<String, JsonElement> entry : keyObj.entrySet()) {
             JsonObject ingredientObj = entry.getValue().getAsJsonObject();
 
-            if (ingredientObj.has(ITEM_STACK_REFERENCE_PLACEHOLDER)) {
-                String refId = ingredientObj.get(ITEM_STACK_REFERENCE_PLACEHOLDER).getAsString();
+            // Dynamic stack reference case
+            if(ingredientObj.has(DYNAMIC_REF_PLACEHOLDER)) {
+                String refId = ingredientObj.get(DYNAMIC_REF_PLACEHOLDER).getAsString();
                 ResourceLocation refLocation = new ResourceLocation(refId);
-                ItemStack refStack = NbtShapedRecipe.getItemStackReference(refLocation);
+                ItemStack refStack = DynamicShapedRecipe.getItemStackReference(refLocation);
+                if(refStack.isEmpty()) throw new JsonSyntaxException("Unknown ItemStack reference: " + refId);
 
-                if (refStack.isEmpty()) {
-                    throw new JsonSyntaxException("Unknown ItemStack reference: " + refId);
-                }
-
-                // Store for NBT checking later
-                customReferences.put(entry.getKey(), refStack);
-                // Use vanilla ingredient for base item type matching
+                // Store for NBT checking later. Use vanilla ingredient for base item type matching
+                dynamicReferenceIngredients.put(entry.getKey(), refStack);
                 keyMap.put(entry.getKey(), Ingredient.of(refStack.getItem()));
-            } else {
+            }
+
+            // Any tag case
+            else if(ingredientObj.has(ANY_NBT_PLACEHOLDER)) {
+                JsonArray nbtNamesArray = ingredientObj.get(ANY_NBT_PLACEHOLDER).getAsJsonArray();
+                final List<String> nbtNamesList = new ArrayList<>();
+                for(final JsonElement obj : nbtNamesArray.asList()) nbtNamesList.add(obj.getAsString());
+
+                // Store for NBT checking later. Use empty ingredient as a placeholder
+                anyNbtIngredients.put(entry.getKey(), nbtNamesList );
+                keyMap.put(entry.getKey(), Ingredient.EMPTY);
+            }
+
+            // All tags case
+            else if(ingredientObj.has(ALL_NBTS_PLACEHOLDER)) {
+                JsonArray nbtNamesArray = ingredientObj.get(ALL_NBTS_PLACEHOLDER).getAsJsonArray();
+                final List<String> nbtNamesList = new ArrayList<>();
+                for(final JsonElement obj : nbtNamesArray.asList()) nbtNamesList.add(obj.getAsString());
+
+                // Store for NBT checking later. Use empty ingredient as a placeholder
+                allNbtsIngredients.put(entry.getKey(), nbtNamesList );
+                keyMap.put(entry.getKey(), Ingredient.EMPTY);
+            }
+
+            // Vanilla item case
+            else {
                 keyMap.put(entry.getKey(), Ingredient.fromJson(entry.getValue()));
             }
         }
 
+
         // Parse result
         JsonObject resultObj = json.getAsJsonObject("result");
-        ItemStack resultStack;
+        ItemStack resultStack; {
 
-        if (resultObj.has(ITEM_STACK_REFERENCE_PLACEHOLDER)) {
-            String refId = resultObj.get(ITEM_STACK_REFERENCE_PLACEHOLDER).getAsString();
-            ResourceLocation refLocation = new ResourceLocation(refId);
-            resultStack = NbtShapedRecipe.getItemStackReference(refLocation);
-
-            if (resultStack.isEmpty()) {
-                throw new JsonSyntaxException("Unknown ItemStack reference: " + refId);
+            // Dynamic stack reference case
+            if(resultObj.has(DYNAMIC_REF_PLACEHOLDER)) {
+                String refId = resultObj.get(DYNAMIC_REF_PLACEHOLDER).getAsString();
+                ResourceLocation refLocation = new ResourceLocation(refId);
+                resultStack = DynamicShapedRecipe.getItemStackReference(refLocation);
+                if(resultStack.isEmpty()) throw new JsonSyntaxException("Unknown ItemStack reference: " + refId);
             }
-        } else {
-            resultStack = ShapedRecipe.itemStackFromJson(resultObj);
+
+            // Vanilla item case
+            else {
+                resultStack = ShapedRecipe.itemStackFromJson(resultObj);
+            }
         }
+
 
         // Parse pattern
         JsonArray patternArray = json.getAsJsonArray("pattern");
         String[] pattern = new String[patternArray.size()];
-        for (int i = 0; i < patternArray.size(); i++) {
+        for(int i = 0; i < patternArray.size(); i++) {
             pattern[i] = patternArray.get(i).getAsString();
         }
 
+
         // Map character positions to slot indices for NBT checking
-        Map<Integer, ItemStack> nbtRequiredSlots = new HashMap<>();
+        Map<Integer, ItemStack> dynamicReferenceSlots = new HashMap<>();
+        Map<Integer, List<String>> anyNbtSlots = new HashMap<>();
+        Map<Integer, List<String>> allNbtsSlots = new HashMap<>();
         int width = pattern[0].length();
-        for (int i = 0; i < pattern.length; i++) {
+        for(int i = 0; i < pattern.length; i++) {
             String row = pattern[i];
-            for (int j = 0; j < row.length(); j++) {
+            for(int j = 0; j < row.length(); j++) {
                 char c = row.charAt(j);
-                if (c != ' ' && customReferences.containsKey(String.valueOf(c))) {
-                    int slot = j + i * width;
-                    nbtRequiredSlots.put(slot, customReferences.get(String.valueOf(c)));
+                if(c != ' ') {
+                    final String cStr = String.valueOf(c);
+                    if(dynamicReferenceIngredients.containsKey(cStr)) {
+                        int slot = j + i * width;
+                        dynamicReferenceSlots.put(slot, dynamicReferenceIngredients.get(cStr));
+                    }
+                    else if(anyNbtIngredients.containsKey(cStr)) {
+                        int slot = j + i * width;
+                        anyNbtSlots.put(slot, anyNbtIngredients.get(cStr));
+                    }
+                    else if(allNbtsIngredients.containsKey(cStr)) {
+                        int slot = j + i * width;
+                        allNbtsSlots.put(slot, allNbtsIngredients.get(cStr));
+                    }
                 }
             }
         }
 
+
+        // Read group and category
         String group = json.has("group") ? json.get("group").getAsString() : "";
         CraftingBookCategory category = json.has("category")
             ? CraftingBookCategory.CODEC.byName(json.get("category").getAsString(), CraftingBookCategory.MISC)
-            : CraftingBookCategory.MISC;
+            : CraftingBookCategory.MISC
+        ;
 
-        return new NbtShapedRecipe(id, group, category, pattern, keyMap, resultStack, nbtRequiredSlots);
+
+        // Return data
+        return new DynamicShapedRecipe(
+            id, group, category, pattern, keyMap, resultStack,
+            dynamicReferenceSlots, anyNbtSlots, allNbtsSlots
+        );
     }
+
+
+
+
 
 
     @Override
-    public NbtShapedRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-        ShapedRecipe base = RecipeSerializer.SHAPED_RECIPE.fromNetwork(id, buffer);
-
-        int nbtSlotsCount = buffer.readVarInt();
-        Map<Integer, ItemStack> nbtRequiredSlots = new HashMap<>();
-        for (int i = 0; i < nbtSlotsCount; i++) {
-            int slot = buffer.readVarInt();
-            ItemStack stack = buffer.readItem();
-            nbtRequiredSlots.put(slot, stack);
-        }
-
-        return new NbtShapedRecipe(base, nbtRequiredSlots);
+    public void toNetwork(FriendlyByteBuf buffer, DynamicShapedRecipe recipe) {
+        //! Empty method. Client and server never communicate this.
+        //! The client doesn't know these recipes exist, so network stuff is not needed
+        buffer.writeUtf("");
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, NbtShapedRecipe recipe) {
-        RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe);
-
-        buffer.writeVarInt(recipe.getRequiredSlots().size());
-        for (Map.Entry<Integer, ItemStack> entry : recipe.getRequiredSlots().entrySet()) {
-            buffer.writeVarInt(entry.getKey());
-            buffer.writeItem(entry.getValue());
-        }
+    public DynamicShapedRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        //! Empty method. Client and server never communicate this.
+        //! The client doesn't know these recipes exist, so network stuff is not needed
+        buffer.readUtf();
+        return null;
     }
+
+    // @Override
+    // public DynamicShapedRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+    //     ShapedRecipe base = RecipeSerializer.SHAPED_RECIPE.fromNetwork(id, buffer);
+
+    //     int nbtSlotsCount = buffer.readVarInt();
+    //     Map<Integer, ItemStack> nbtRequiredSlots = new HashMap<>();
+    //     for(int i = 0; i < nbtSlotsCount; i++) {
+    //         int slot = buffer.readVarInt();
+    //         ItemStack stack = buffer.readItem();
+    //         nbtRequiredSlots.put(slot, stack);
+    //     }
+
+    //     return new DynamicShapedRecipe(base, nbtRequiredSlots);
+    // }
+
+
+
+
+    // @Override
+    // public void toNetwork(FriendlyByteBuf buffer, DynamicShapedRecipe recipe) {
+    //     RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe);
+
+    //     buffer.writeVarInt(recipe.getRequiredSlots().size());
+    //     for(Map.Entry<Integer, ItemStack> entry : recipe.getRequiredSlots().entrySet()) {
+    //         buffer.writeVarInt(entry.getKey());
+    //         buffer.writeItem(entry.getValue());
+    //     }
+    // }
 }

@@ -29,6 +29,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
+import com.snek.fancyplayershops.recipes.DynamicShapedRecipe;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -42,6 +43,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -155,20 +157,18 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    // Initialize display item stacks
     static {
-        for(final var tier : DisplayTier.values()) {
 
+        // Initialize display item stacks
+        for(final var tier : DisplayTier.values()) {
 
             // Create item and set custom name
             final var item = MinecraftUtils.createCustomHead(tier.getTexture(), false);
             item.setHoverName(new Txt(DISPLAY_ITEM_NAME + " - " + tier.name()).noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR).get());
 
-
             // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
             MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
             item.getOrCreateTag().putInt("tier", tier.getIndex());
-
 
             // Set lore
             final ListTag lore = new ListTag();
@@ -178,9 +178,14 @@ public final class ProductDisplayManager extends UtilityClassBase {
             for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
             item.getOrCreateTagElement("display").put("Lore", lore);
 
-
             // Set item reference
             productDisplayItems.add(item);
+
+            // Register recipe items
+            DynamicShapedRecipe.registerDynamicReference(
+                new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
+                ProductDisplayManager.getProductDisplayItemCopy(tier)
+            );
         }
     }
 

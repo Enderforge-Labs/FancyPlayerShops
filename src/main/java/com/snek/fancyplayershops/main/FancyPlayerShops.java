@@ -43,7 +43,7 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.fancyplayershops.recipes.NbtShapedRecipe;
+import com.snek.fancyplayershops.recipes.DynamicShapedRecipe;
 import com.snek.fancyplayershops.recipes.NbtShapedRecipeSerializer;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.Direction;
@@ -70,26 +70,21 @@ public class FancyPlayerShops implements ModInitializer {
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
 
-    public static final RecipeSerializer<NbtShapedRecipe> NBT_SHAPED_SERIALIZER;
-    // public static final RecipeType<NbtShapedRecipe> NBT_SHAPED_TYPE;
-
+    //TODO move to FrameworkLib
+    public static RecipeSerializer<DynamicShapedRecipe> NBT_SHAPED_SERIALIZER = null;
     static {
+
+
+        // Force display item cration
+        //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
+        try { Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager"); } catch(ClassNotFoundException e) { e.printStackTrace(); }
+
+        // Register dynamic crafting recipe serializer
         NBT_SHAPED_SERIALIZER = Registry.register(
             BuiltInRegistries.RECIPE_SERIALIZER,
-            new ResourceLocation("fancyplayershops", "nbt_crafting_shaped"),
+            new ResourceLocation("frameworklib", "dynamic_crafting_shaped"),
             new NbtShapedRecipeSerializer()
         );
-
-        // NBT_SHAPED_TYPE = Registry.register(
-        //     BuiltInRegistries.RECIPE_TYPE,
-        //     new ResourceLocation("fancyplayershops", "nbt_crafting_shaped"),
-        //     new RecipeType<NbtShapedRecipe>() {
-        //         @Override
-        //         public String toString() {
-        //             return "fancyplayershops:nbt_crafting_shaped";
-        //         }
-        //     }
-        // );
     }
 
 
@@ -119,22 +114,8 @@ public class FancyPlayerShops implements ModInitializer {
     @Override
     public void onInitialize() {
 
-
         // Register commands
         CommandManager.register();
-
-    System.out.println("REGISTERING NBT RECIPE TYPe");
-    System.out.println("Serializer: " + NBT_SHAPED_SERIALIZER);
-    // System.out.println("Type: " + NBT_SHAPED_TYPE);
-//TODO
-//TODO
-//TODO
-    NbtShapedRecipe.registerItemStackReference(
-        new ResourceLocation(MOD_ID, DisplayTier.T1.getId()),
-        ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T1)
-    );
-
-
 
 
         // Register initialization

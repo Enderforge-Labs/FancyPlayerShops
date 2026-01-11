@@ -41,9 +41,9 @@ public class CraftingMenuMixin {
         CallbackInfo ci
     ) {
 
-        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+        if(!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             ItemStack craftResult = result.getItem(0);
-            if (!craftResult.isEmpty()) {
+            if(!craftResult.isEmpty()) {
                 RecipeManager recipeManager = level.getRecipeManager();
                 Optional<CraftingRecipe> recipe = recipeManager.getRecipeFor(
                     RecipeType.CRAFTING,
@@ -51,7 +51,7 @@ public class CraftingMenuMixin {
                     level
                 );
                 // Check if the recipe used was the custom type
-                if (recipe.isPresent() && recipe.get().getSerializer() == FancyPlayerShops.NBT_SHAPED_SERIALIZER) {
+                if(recipe.isPresent() && recipe.get().getSerializer() == FancyPlayerShops.NBT_SHAPED_SERIALIZER) {
                     // Force send the result slot to the client
                     serverPlayer.connection.send(
                         new ClientboundContainerSetSlotPacket(
