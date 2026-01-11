@@ -162,13 +162,18 @@ public final class ProductDisplayManager extends UtilityClassBase {
         // Initialize display item stacks
         for(final var tier : DisplayTier.values()) {
 
+
             // Create item and set custom name
             final var item = MinecraftUtils.createCustomHead(tier.getTexture(), false);
             item.setHoverName(new Txt(DISPLAY_ITEM_NAME + " - " + tier.name()).noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR).get());
 
+
             // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
+            //! Add the ID itself as a tag. This lets crafting recipes recognize the item
             MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
+            MinecraftUtils.addTag(item, new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()).toString());
             item.getOrCreateTag().putInt("tier", tier.getIndex());
+
 
             // Set lore
             final ListTag lore = new ListTag();
@@ -178,8 +183,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
             for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
             item.getOrCreateTagElement("display").put("Lore", lore);
 
+
             // Set item reference
             productDisplayItems.add(item);
+
 
             // Register recipe items
             DynamicShapedRecipe.registerDynamicReference(

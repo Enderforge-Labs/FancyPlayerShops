@@ -2,27 +2,27 @@
     "fabric:load_conditions": [
         {
             "condition": "fabric:all_mods_loaded",
-            "values": ["appliedenergistics2"]
+            "values": ["ae2"]
         }
     ],
-    "type": "fancyplayershops:nbt_crafting_shaped",
+    "type": "frameworklib:dynamic_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {
-        "G": { "item": "minecraft:glass_pane" },
-        "S": { "tag": "minecraft:signs"       },
-        "R": { "item": "minecraft:comparator" },
-        "H": { "item": "minecraft:hopper"     },
-        "C": { "item": "minecraft:barrel"      }
+        "Q": { "tag": "ae2:smart_dense_cable" },
+        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ] },
+        "S": { "item": "ae2:cell_component_256k" },
+        "C": { "item": "minecraft:nether_star" },
+        "R": { "item": "ae2:wireless_booster" },
+        "B": { "item": "ae2:acceleration_card" }
     },
     "pattern": [
-        "GGG",
-        "GSG",
-        "HCR"
+        "QQQ",
+        "BDR",
+        "SCS"
     ],
     "result": {
-        "item": "minecraft:player_head",
-        "count": 1
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t5"
     },
     "show_notification": false
 }

@@ -97,25 +97,25 @@ public class DynamicShapedRecipe extends ShapedRecipe {
 
 
 
-    public DynamicShapedRecipe(
-        ShapedRecipe base,
-        Map<Integer, ItemStack> nbtRequiredSlots,
-        Map<Integer, List<String>> anyNbtSlots,
-        Map<Integer, List<String>> allNbtsSlots
-    ) {
-        super(
-            base.getId(),
-            base.getGroup(),
-            base.category(),
-            base.getWidth(),
-            base.getHeight(),
-            base.getIngredients(),
-            base.getResultItem(null)
-        );
-        this.dynamicReferenceSlots = nbtRequiredSlots;
-        this.anyNbtSlots = anyNbtSlots;
-        this.allNbtsSlots = allNbtsSlots;
-    }
+    // public DynamicShapedRecipe(
+    //     ShapedRecipe base,
+    //     Map<Integer, ItemStack> nbtRequiredSlots,
+    //     Map<Integer, List<String>> anyNbtSlots,
+    //     Map<Integer, List<String>> allNbtsSlots
+    // ) {
+    //     super(
+    //         base.getId(),
+    //         base.getGroup(),
+    //         base.category(),
+    //         base.getWidth(),
+    //         base.getHeight(),
+    //         base.getIngredients(),
+    //         base.getResultItem(null)
+    //     );
+    //     this.dynamicReferenceSlots = nbtRequiredSlots;
+    //     this.anyNbtSlots = anyNbtSlots;
+    //     this.allNbtsSlots = allNbtsSlots;
+    // }
 
 
 
