@@ -203,6 +203,15 @@ public abstract class CommandManager {
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.CREATIVE));
                             return 1;
                         }))
+
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("all")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            for(final var tier : DisplayTier.values()) {
+                                player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(tier));
+                            }
+                            return 1;
+                        }))
                     )
                 )
 

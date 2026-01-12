@@ -16,8 +16,14 @@ public enum DisplayTier {
     T4(3, "Industrial",  262144l,   128,  32, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjk2NDE2MDIyMTI5ODY3YzAwOGM5ODgxNWQ3NDlkMjk4ZjU4NmRkZTRiOWFlODk1ZDdiMGJjNDk4NjRhNzA0YiJ9fX0"),
     T5(4, "Quantum",    4194304l, 16384, 256, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBiNzQ2YTc2YzI4MjU4NWNiODU0ZDRiMzQ3ZTdlZjcxZTI2MzUxNDU4OTcyNzRiNWNlZjJiNWFjZTFmM2NiNiJ9fX0"),
 
+
     // Creative tier
+    //! Maximum capacity can NEVER exceed the highest tier's capacity.
+    //! This is because the max transaction cost is evaluated using it and not the special CREATIVE tier.
+    //! Creative shops auto restock instantly, so there is no need for the capacity to be high.
     CREATIVE(999, "Creative", Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBiNzQ2YTc2YzI4MjU4NWNiODU0ZDRiMzQ3ZTdlZjcxZTI2MzUxNDU4OTcyNzRiNWNlZjJiNWFjZTFmM2NiNiJ9fX0");
+    //FIXME make creative tier auto restock.
+    //FIXME set its default max stock to 1 million
 
 
 
@@ -105,6 +111,8 @@ public enum DisplayTier {
 
     /**
      * Calculates the ID of the crafting recipe of the product display item of this tier.
+     * <p>
+     * This is equal to the lowercase name of the tier, preceded by {@code "product_display_"}.
      * <p>
      * This doesn't include the namespace.
      * @return The ID of this tier's crafting recipe.
