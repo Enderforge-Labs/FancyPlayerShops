@@ -31,6 +31,7 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShaped
     public static final @NotNull String DYNAMIC_REF_PLACEHOLDER = "frameworklib:dynamic_ref";
     public static final @NotNull String ANY_NBT_PLACEHOLDER     = "frameworklib:any_nbt";
     public static final @NotNull String ALL_NBTS_PLACEHOLDER    = "frameworklib:all_nbts";
+    public static final @NotNull String COUNT                   = "frameworklib:count";
 
     @Override
     public DynamicShapedRecipe fromJson(ResourceLocation id, JsonObject json) {
@@ -39,12 +40,18 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShaped
         // Parse ingredients
         JsonObject keyObj = json.getAsJsonObject("key");
         Map<String, Ingredient> keyMap = new HashMap<>();
+        Map<String, Integer> ingredientRequiredCounts = new HashMap<>();
         Map<String, ItemStack> dynamicReferenceIngredients = new HashMap<>();
         Map<String, List<String>> anyNbtIngredients = new HashMap<>();
         Map<String, List<String>> allNbtsIngredients = new HashMap<>();
 
         for(Map.Entry<String, JsonElement> entry : keyObj.entrySet()) {
             JsonObject ingredientObj = entry.getValue().getAsJsonObject();
+
+            // Extract count if present
+            int count = ingredientObj.has(COUNT) ? ingredientObj.get(COUNT).getAsInt() : 1;
+            ingredientRequiredCounts.put(entry.getKey(), count);
+
 
             // Dynamic stack reference case
             if(ingredientObj.has(DYNAMIC_REF_PLACEHOLDER)) {
@@ -115,6 +122,7 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShaped
 
 
         // Map character positions to slot indices for NBT checking
+        Map<Integer, Integer> requiredCountSlots = new HashMap<>();
         Map<Integer, ItemStack> dynamicReferenceSlots = new HashMap<>();
         Map<Integer, List<String>> anyNbtSlots = new HashMap<>();
         Map<Integer, List<String>> allNbtsSlots = new HashMap<>();
@@ -125,6 +133,15 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShaped
                 char c = row.charAt(j);
                 if(c != ' ') {
                     final String cStr = String.valueOf(c);
+
+                    // Save count
+                    assert Require.nonNull(ingredientRequiredCounts.get(cStr), "extracted material count");
+                    assert Require.positive(ingredientRequiredCounts.get(cStr), "specified material count"); {
+                        int slot = j + i * width;
+                        requiredCountSlots.put(slot, ingredientRequiredCounts.get(cStr));
+                    }
+
+                    // Save ingredient type
                     if(dynamicReferenceIngredients.containsKey(cStr)) {
                         int slot = j + i * width;
                         dynamicReferenceSlots.put(slot, dynamicReferenceIngredients.get(cStr));
@@ -153,7 +170,7 @@ public class NbtShapedRecipeSerializer implements RecipeSerializer<DynamicShaped
         // Return data
         return new DynamicShapedRecipe(
             id, group, category, pattern, keyMap, resultStack,
-            dynamicReferenceSlots, anyNbtSlots, allNbtsSlots
+            requiredCountSlots, dynamicReferenceSlots, anyNbtSlots, allNbtsSlots
         );
     }
 

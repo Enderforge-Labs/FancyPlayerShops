@@ -167,7 +167,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 for(float k = pos.z - radius; k < pos.z + radius; ++k) {
                     final BlockPos blockPos = new BlockPos(MinecraftUtils.doubleToBlockCoords(new Vector3d(i, j, k)));
                     if(new Vector3f(i, j, k).distance(pos) <= radius && level.getBlockState(blockPos).isAir()) {
-                        final var tier = DisplayTier.fromIndex(rnd.nextInt() % DisplayTier.values().length);
+                        final var tier = DisplayTier.values()[rnd.nextInt() % DisplayTier.values().length];
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ owner.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,

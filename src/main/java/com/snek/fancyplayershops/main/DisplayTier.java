@@ -17,13 +17,13 @@ public enum DisplayTier {
     T5(4, "Quantum",    4194304l, 16384, 256, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBiNzQ2YTc2YzI4MjU4NWNiODU0ZDRiMzQ3ZTdlZjcxZTI2MzUxNDU4OTcyNzRiNWNlZjJiNWFjZTFmM2NiNiJ9fX0"),
 
     // Creative tier
-    CREATIVE(5, "Creative",    Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBiNzQ2YTc2YzI4MjU4NWNiODU0ZDRiMzQ3ZTdlZjcxZTI2MzUxNDU4OTcyNzRiNWNlZjJiNWFjZTFmM2NiNiJ9fX0");
+    CREATIVE(999, "Creative", Long.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTBiNzQ2YTc2YzI4MjU4NWNiODU0ZDRiMzQ3ZTdlZjcxZTI2MzUxNDU4OTcyNzRiNWNlZjJiNWFjZTFmM2NiNiJ9fX0");
 
 
 
 
     // Basic data
-    private final int index;
+    private final int numericalId;
     private final @NotNull String name;
     private final long capacity;
     private final @NotNull String texture;
@@ -36,11 +36,11 @@ public enum DisplayTier {
 
 
     private DisplayTier(
-        final int index, final @NotNull String name, final long capacity,
+        final int numericalId, final @NotNull String name, final long capacity,
         final int restockSpeed, final int wirelessDistance,
         final @NotNull String texture
     ) {
-        this.index = index;
+        this.numericalId = numericalId;
         this.name = name;
         this.capacity = capacity;
         this.texture = texture;
@@ -48,15 +48,19 @@ public enum DisplayTier {
         this.wirelessDistance = wirelessDistance;
     }
 
-    public static @NotNull DisplayTier fromIndex(final int index) {
-        assert Require.inRange(index, 0, values().length - 1, "tier index");
-        return switch(index) {
-            case 0  -> T1;
-            case 1  -> T2;
-            case 2  -> T3;
-            case 3  -> T4;
-            default -> T5;
-        };
+    public static @NotNull DisplayTier fromNumericalId(final int numericalId) {
+        switch(numericalId) {
+            case 0:   return T1;
+            case 1:   return T2;
+            case 2:   return T3;
+            case 3:   return T4;
+            case 4:   return T5;
+            case 999: return CREATIVE;
+            default: {
+                assert Require.fail("Invalid tier index: " + numericalId);
+                return T1; //! Never actually called
+            }
+        }
     }
 
 
@@ -74,12 +78,12 @@ public enum DisplayTier {
         return texture;
     }
 
-    public int getIndex() {
-        return index;
+    public int getNumericalId() {
+        return numericalId;
     }
 
     public static @NotNull DisplayTier getHighestTier() {
-        return fromIndex(values().length - 1);
+        return values()[values().length - 2];
     }
 
     public static long getHighestCapacity() {

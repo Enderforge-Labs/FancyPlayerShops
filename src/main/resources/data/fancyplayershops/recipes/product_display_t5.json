@@ -12,9 +12,18 @@
         "Q": { "tag": "ae2:smart_dense_cable" },
         "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ] },
         "S": { "item": "ae2:cell_component_256k" },
-        "C": { "item": "minecraft:nether_star" },
-        "R": { "item": "ae2:wireless_booster" },
-        "B": { "item": "ae2:acceleration_card" }
+        "C": {
+            "item": "minecraft:nether_star",
+            "frameworklib:count": 4
+        },
+        "R": {
+            "item": "ae2:wireless_booster",
+            "frameworklib:count": 16
+        },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 64
+        }
     },
     "pattern": [
         "QQQ",

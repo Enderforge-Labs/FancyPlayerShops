@@ -9,14 +9,18 @@
     "category": "misc",
     "group": "wooden_sign",
     "key": {
-        "Q": { "item": "ae2:quartz_fibre" },
+        "Q": { "item": "ae2:quartz_fiber" },
         "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t1" ] },
         "S": { "item": "ae2:cell_component_1k" },
-        "C": { "item": "minecraft:end_crystal" }
+        "C": { "item": "minecraft:end_crystal" },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 2
+        }
     },
     "pattern": [
         "QQQ",
-        "QDQ",
+        "BDB",
         "SCS"
     ],
     "result": {

@@ -38,7 +38,13 @@ import net.minecraft.world.level.Level;
  * To match any ItemStack that contains all the specified NBT tags: {@code "frameworklib:all_nbts": ["list", "of", "names"]}
  */
 public class DynamicShapedRecipe extends ShapedRecipe {
+
+    // Dynamic item references
     private static final Map<ResourceLocation, ItemStack> itemStackReferences = new HashMap<>();
+
+
+    // Recipe data - provided by the serializer
+    private final Map<Integer, Integer> requiredCounts;
     private final Map<Integer, ItemStack> dynamicReferenceSlots;
     private final Map<Integer, List<String>> anyNbtSlots;
     private final Map<Integer, List<String>> allNbtsSlots;
@@ -66,6 +72,7 @@ public class DynamicShapedRecipe extends ShapedRecipe {
         String[] pattern,
         Map<String, Ingredient> key,
         ItemStack result,
+        Map<Integer, Integer> requiredCounts,
         Map<Integer, ItemStack> dynamicReferenceSlots,
         Map<Integer, List<String>> anyNbtSlots,
         Map<Integer, List<String>> allNbtsSlots
@@ -75,6 +82,7 @@ public class DynamicShapedRecipe extends ShapedRecipe {
             dissolvePattern(pattern, key, pattern[0].length(), pattern.length),
             result
         );
+        this.requiredCounts = requiredCounts;
         this.dynamicReferenceSlots = dynamicReferenceSlots;
         this.anyNbtSlots = anyNbtSlots;
         this.allNbtsSlots = allNbtsSlots;
@@ -97,32 +105,18 @@ public class DynamicShapedRecipe extends ShapedRecipe {
 
 
 
-    // public DynamicShapedRecipe(
-    //     ShapedRecipe base,
-    //     Map<Integer, ItemStack> nbtRequiredSlots,
-    //     Map<Integer, List<String>> anyNbtSlots,
-    //     Map<Integer, List<String>> allNbtsSlots
-    // ) {
-    //     super(
-    //         base.getId(),
-    //         base.getGroup(),
-    //         base.category(),
-    //         base.getWidth(),
-    //         base.getHeight(),
-    //         base.getIngredients(),
-    //         base.getResultItem(null)
-    //     );
-    //     this.dynamicReferenceSlots = nbtRequiredSlots;
-    //     this.anyNbtSlots = anyNbtSlots;
-    //     this.allNbtsSlots = allNbtsSlots;
-    // }
-
-
-
-
     @Override
     public boolean matches(CraftingContainer container, Level level) {
         for(int i = 0; i < container.getContainerSize(); ++i) {
+
+            // Check count
+            Integer requiredCount = requiredCounts.get(i);
+            if(requiredCount != null) {
+                ItemStack actual = container.getItem(i);
+                if(actual.getCount() < requiredCount) {
+                    return false;
+                }
+            }
 
             // Check references for slots that require it
             final var dynamicRef = dynamicReferenceSlots.get(i);
@@ -176,6 +170,33 @@ public class DynamicShapedRecipe extends ShapedRecipe {
     }
 
 
+//! 19  19  19
+//!  2  62   2
+//! 30  62  30
+
+    // @Override
+    // public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
+    //     NonNullList<ItemStack> remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
+
+    //     for(int i = 0; i < remaining.size(); i++) {
+    //         ItemStack stack = container.getItem(i);
+
+    //         if(!stack.isEmpty()) {
+    //             Integer requiredCount = requiredCounts.get(i);
+    //             if(requiredCount != null && requiredCount > 1) {
+    //                 ItemStack copy = stack.copy();
+    //                 copy.shrink(requiredCount - 1); // -1 because vanilla consumes 1 already
+    //                 if(!copy.isEmpty()) {
+    //                     remaining.set(i, copy);
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return remaining;
+    // }
+
+
 
 
     @Override
@@ -188,7 +209,11 @@ public class DynamicShapedRecipe extends ShapedRecipe {
         return FancyPlayerShops.NBT_SHAPED_SERIALIZER;
     }
 
-    public Map<Integer, ItemStack> getRequiredSlots() {
+    public Map<Integer, ItemStack> getDynamicReferences() {
         return dynamicReferenceSlots;
+    }
+
+    public Map<Integer, Integer> getRequiredCounts() {
+        return requiredCounts;
     }
 }

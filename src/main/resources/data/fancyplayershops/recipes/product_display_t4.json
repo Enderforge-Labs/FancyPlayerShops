@@ -14,7 +14,10 @@
         "S": { "item": "ae2:cell_component_64k" },
         "C": { "item": "minecraft:nether_star" },
         "R": { "item": "ae2:wireless_receiver" },
-        "B": { "item": "ae2:acceleration_card" }
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 32
+        }
     },
     "pattern": [
         "QQQ",

@@ -45,7 +45,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         data.put("hue",        display.getColorThemeHue());
         data.put("balance",    display.getBalance());
         data.put("nbt_filter", display.getNbtFilter());
-        data.put("tier",       display.getTier().getIndex());
+        data.put("tier",       display.getTier().getNumericalId());
 
 
         // Store position data
@@ -102,7 +102,7 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
         final float       hue       = ((Number)data.get("hue")).floatValue();
         final long        balance   = ((Number)data.get("balance")).longValue();
         final boolean     nbtFilter = (Boolean)data.get("nbt_filter");
-        final DisplayTier tier      = DisplayTier.fromIndex(((Number)data.get("tier")).intValue());
+        final DisplayTier tier      = DisplayTier.fromNumericalId(((Number)data.get("tier")).intValue());
 
 
         // Extract level and position data

@@ -14,7 +14,10 @@
         "S": { "item": "ae2:cell_component_16k" },
         "C": { "item": "minecraft:end_crystal" },
         "R": { "item": "ae2:io_port" },
-        "B": { "item": "ae2:acceleration_card" }
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 16
+        }
     },
     "pattern": [
         "QQQ",

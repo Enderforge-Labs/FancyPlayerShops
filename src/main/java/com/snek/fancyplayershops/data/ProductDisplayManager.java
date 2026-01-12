@@ -172,7 +172,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             //! Add the ID itself as a tag. This lets crafting recipes recognize the item
             MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
             MinecraftUtils.addTag(item, new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()).toString());
-            item.getOrCreateTag().putInt("tier", tier.getIndex());
+            item.getOrCreateTag().putInt("tier", tier.getNumericalId());
 
 
             // Set lore
@@ -418,7 +418,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @return A copy of the product display item.
      */
     public static @NotNull ItemStack getProductDisplayItemCopy(final @NotNull DisplayTier tier) {
-        return productDisplayItems.get(tier.getIndex()).copy();
+        return productDisplayItems.get(tier.ordinal()).copy();
     }
 
 
@@ -437,7 +437,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
         }
 
         // Get NBTs
-        final ItemStack item = productDisplayItems.get(display.getTier().getIndex()).copy();
+        final ItemStack item = productDisplayItems.get(display.getTier().getNumericalId()).copy();
         final CompoundTag nbt = item.getOrCreateTag();
         final CompoundTag nbtDisplay = nbt.getCompound("display");
         final ListTag lore = nbtDisplay.getList("Lore", Tag.TAG_STRING);

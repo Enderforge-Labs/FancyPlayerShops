@@ -251,7 +251,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
-                        final DisplayTier tier = DisplayTier.fromIndex(tag.getInt("tier"));
+                        final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,

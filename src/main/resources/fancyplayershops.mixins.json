@@ -5,7 +5,8 @@
     "mixins": [
         "CraftingScreenHandlerMixin",
         "CraftingMenuMixin",
-        "RecipeSyncMixin"
+        "RecipeSyncMixin",
+        "DynamicRecipeIngredientConsumer"
     ],
     "injectors": {
         "defaultRequire": 1
