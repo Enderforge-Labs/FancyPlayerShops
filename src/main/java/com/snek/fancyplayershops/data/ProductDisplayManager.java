@@ -195,15 +195,17 @@ public final class ProductDisplayManager extends UtilityClassBase {
             item.getOrCreateTagElement("display").put("Lore", lore);
 
 
-            // Set item reference
+            // Set item reference (creative one shouldn't be in any recipe)
             productDisplayItems.add(item);
 
 
             // Register recipe items
-            EnhancedShapedRecipe.registerDynamicReference(
-                new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
-                ProductDisplayManager.getProductDisplayItemCopy(tier)
-            );
+            if(tier != DisplayTier.CREATIVE) {
+                EnhancedShapedRecipe.registerDynamicReference(
+                    new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
+                    ProductDisplayManager.getProductDisplayItemCopy(tier)
+                );
+            }
         }
     }
 
