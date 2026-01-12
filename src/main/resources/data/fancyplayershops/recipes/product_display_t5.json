@@ -10,7 +10,10 @@
     "group": "wooden_sign",
     "key": {
         "Q": { "tag": "ae2:smart_dense_cable" },
-        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ] },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t4"
+        },
         "S": { "item": "ae2:cell_component_256k" },
         "C": {
             "item": "minecraft:nether_star",

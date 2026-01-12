@@ -7,7 +7,7 @@
         "S": { "tag": "minecraft:signs"         },
         "R": { "item": "minecraft:comparator"   },
         "H": { "item": "minecraft:hopper"       },
-        "C": { "tag": "minecraft:shulker_boxes" }
+        "C": { "tag": "c:shulker_boxes" }
     },
     "pattern": [
         "GGG",

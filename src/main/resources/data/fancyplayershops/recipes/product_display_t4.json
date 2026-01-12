@@ -10,7 +10,10 @@
     "group": "wooden_sign",
     "key": {
         "Q": { "tag": "ae2:smart_cable" },
-        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t3" ] },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t3" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t3"
+        },
         "S": { "item": "ae2:cell_component_64k" },
         "C": { "item": "minecraft:nether_star" },
         "R": { "item": "ae2:wireless_receiver" },

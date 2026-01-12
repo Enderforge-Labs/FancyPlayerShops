@@ -10,7 +10,10 @@
     "group": "wooden_sign",
     "key": {
         "Q": { "tag": "ae2:glass_cable" },
-        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t2" ] },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t2" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t2"
+        },
         "S": { "item": "ae2:cell_component_16k" },
         "C": { "item": "minecraft:end_crystal" },
         "R": { "item": "ae2:io_port" },
