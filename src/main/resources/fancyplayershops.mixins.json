@@ -3,9 +3,6 @@
     "package": "com.snek.fancyplayershops.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "recipes.enhanced.ClientResultSlotSyncMixin",
-        "recipes.enhanced.RecipePacketSuppressorMixin",
-        "recipes.enhanced.IngredientConsumerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

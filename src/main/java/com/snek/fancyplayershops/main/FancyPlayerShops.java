@@ -6,8 +6,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -16,8 +14,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.BlockHitResult;
@@ -43,8 +39,6 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.fancyplayershops.recipes.EnhancedShapedRecipe;
-import com.snek.fancyplayershops.recipes.EnhancedShapedRecipeSerializer;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -70,21 +64,14 @@ public class FancyPlayerShops implements ModInitializer {
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
 
-    //TODO move to FrameworkLib
-    public static RecipeSerializer<EnhancedShapedRecipe> NBT_SHAPED_SERIALIZER = null;
+    // Force display item cration
+    //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
     static {
-
-
-        // Force display item cration
-        //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
-        try { Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager"); } catch(ClassNotFoundException e) { e.printStackTrace(); }
-
-        // Register enhanced crafting recipe serializer
-        NBT_SHAPED_SERIALIZER = Registry.register(
-            BuiltInRegistries.RECIPE_SERIALIZER,
-            new ResourceLocation("frameworklib", "enhanced_crafting_shaped"),
-            new EnhancedShapedRecipeSerializer()
-        );
+        try {
+            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -138,6 +125,15 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Read config files
             Configs.loadConfigs();
+
+
+            // // Force display item cration
+            // // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
+            // try {
+            //     Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+            // } catch(ClassNotFoundException e) {
+            //     e.printStackTrace();
+            // }
 
 
             // Stop if errors occurred
