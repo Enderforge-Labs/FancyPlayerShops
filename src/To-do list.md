@@ -14,6 +14,8 @@
   - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
   - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
 
+- Make shops (not snapshots) spawn with a direction that faces the player
+
 - finish adding AE2 compatibility
   - Make restocking follow the tier's speeds (no restocking for t2 and t1)
   - Implement wireless restocking
