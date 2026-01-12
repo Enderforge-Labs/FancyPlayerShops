@@ -1,22 +1,37 @@
 {
-    "type": "minecraft:crafting_shaped",
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["ae2"]
+        }
+    ],
+    "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {
-        "G": { "item": "minecraft:glass_pane" },
-        "S": { "tag": "minecraft:signs"       },
-        "R": { "item": "minecraft:comparator" },
-        "H": { "item": "minecraft:hopper"     },
-        "C": { "item": "minecraft:chest"      }
+        "Q": { "tag": "ae2:smart_dense_cable" },
+        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ] },
+        "S": { "item": "ae2:cell_component_256k" },
+        "C": {
+            "item": "minecraft:nether_star",
+            "frameworklib:count": 4
+        },
+        "R": {
+            "item": "ae2:wireless_booster",
+            "frameworklib:count": 16
+        },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 64
+        }
     },
     "pattern": [
-        "GGG",
-        "GSG",
-        "HCR"
+        "QQQ",
+        "BDR",
+        "SCS"
     ],
     "result": {
-        "item": "minecraft:player_head",
-        "count": 1
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t5"
     },
     "show_notification": false
 }

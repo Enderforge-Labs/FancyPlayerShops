@@ -162,38 +162,54 @@ public abstract class CommandManager {
                     // Item give command
                     .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
 
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("T1")
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t1")
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T1));
                             return 1;
                         }))
 
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("T2")
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t2")
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T2));
                             return 1;
                         }))
 
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("T3")
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t3")
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T3));
                             return 1;
                         }))
 
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("T4")
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t4")
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4));
                             return 1;
                         }))
 
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("T5")
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t5")
                         .executes(context -> {
                             final ServerPlayer player = context.getSource().getPlayer();
                             player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T5));
+                            return 1;
+                        }))
+
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("creative")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.CREATIVE));
+                            return 1;
+                        }))
+
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("all")
+                        .executes(context -> {
+                            final ServerPlayer player = context.getSource().getPlayer();
+                            for(final var tier : DisplayTier.values()) {
+                                player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(tier));
+                            }
                             return 1;
                         }))
                     )

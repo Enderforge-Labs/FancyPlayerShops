@@ -1,22 +1,30 @@
 {
-    "type": "minecraft:crafting_shaped",
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["ae2"]
+        }
+    ],
+    "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {
-        "G": { "item": "minecraft:glass_pane" },
-        "S": { "tag": "minecraft:signs"       },
-        "R": { "item": "minecraft:comparator" },
-        "H": { "item": "minecraft:hopper"     },
-        "C": { "item": "minecraft:chest"      }
+        "Q": { "item": "ae2:quartz_fiber" },
+        "D": { "frameworklib:all_nbts": [ "fancyplayershops:product_display_t1" ] },
+        "S": { "item": "ae2:cell_component_1k" },
+        "C": { "item": "minecraft:end_crystal" },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 2
+        }
     },
     "pattern": [
-        "GGG",
-        "GSG",
-        "HCR"
+        "QQQ",
+        "BDB",
+        "SCS"
     ],
     "result": {
-        "item": "minecraft:player_head",
-        "count": 1
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t2"
     },
     "show_notification": false
 }

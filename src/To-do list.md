@@ -14,11 +14,10 @@
   - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
   - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
 
-- add ae2 compatibility
-  - product displays don't pull any item by default but require manual restocking.
-    - Crafting them with an interface and a controller allows them to pull items from nearby inventories, or something annoying like that
-  - each tier can become wireless by crafting it with a wireless transmitter
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
+- finish adding AE2 compatibility
+  - Make restocking follow the tier's speeds (no restocking for t2 and t1)
+  - Implement wireless restocking
+  - Keep all the data of snapshots when used as an ingredient for T2 and higher displays. ! RN IT GETS WIPED
 
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)

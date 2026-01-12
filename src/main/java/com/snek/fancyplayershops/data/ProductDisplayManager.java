@@ -30,6 +30,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
+import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -42,6 +43,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -155,8 +157,9 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    // Initialize display item stacks
     static {
+
+        // Initialize display item stacks
         for(final var tier : DisplayTier.values()) {
 
 
@@ -166,14 +169,27 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
             // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
+            //! Add the ID itself as a tag. This lets crafting recipes recognize the item
             MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
-            item.getOrCreateTag().putInt("tier", tier.getIndex());
+            MinecraftUtils.addTag(item, new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()).toString());
+            item.getOrCreateTag().putInt("tier", tier.getNumericalId());
 
 
             // Set lore
             final ListTag lore = new ListTag();
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(tier.getName() + " tier").lightGray().noItalic().get())));
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: " + Utils.formatAmount(tier.getCapacity())).lightGray().noItalic().get())));
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(tier.getName() + " tier").gray().noItalic().get())));
+            if(tier == DisplayTier.CREATIVE) {
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: "        + "Unlimited").gray().noItalic().get())));
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Restocking speed: "    + "Unlimited").gray().noItalic().get())));
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Restocking distance: " + "Unlimited").gray().noItalic().get())));
+            }
+            else {
+                final String restockSpeedString = tier    .getRestockSpeed() == 0 ? "No automatic restocking" : "Restocking speed: "    + Utils.formatAmount(tier.getRestockSpeed()) + " items/cycle";
+                final String wirelessDistString = tier.getWirelessDistance() == 0 ? "No wireless restocking"  : "Restocking distance: " + Utils.formatAmount(tier.getWirelessDistance()) + " blocks";
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: " + Utils.formatAmount(tier.getCapacity())).gray().noItalic().get())));
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(restockSpeedString).gray().noItalic().get())));
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(wirelessDistString).gray().noItalic().get())));
+            }
             lore.add(StringTag.valueOf(Component.Serializer.toJson(Component.empty())));
             for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
             item.getOrCreateTagElement("display").put("Lore", lore);
@@ -181,6 +197,13 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
             // Set item reference
             productDisplayItems.add(item);
+
+
+            // Register recipe items
+            EnhancedShapedRecipe.registerDynamicReference(
+                new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
+                ProductDisplayManager.getProductDisplayItemCopy(tier)
+            );
         }
     }
 
@@ -406,7 +429,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @return A copy of the product display item.
      */
     public static @NotNull ItemStack getProductDisplayItemCopy(final @NotNull DisplayTier tier) {
-        return productDisplayItems.get(tier.getIndex()).copy();
+        return productDisplayItems.get(tier.ordinal()).copy();
     }
 
 
@@ -425,7 +448,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
         }
 
         // Get NBTs
-        final ItemStack item = productDisplayItems.get(display.getTier().getIndex()).copy();
+        final ItemStack item = productDisplayItems.get(display.getTier().getNumericalId()).copy();
         final CompoundTag nbt = item.getOrCreateTag();
         final CompoundTag nbtDisplay = nbt.getCompound("display");
         final ListTag lore = nbtDisplay.getList("Lore", Tag.TAG_STRING);

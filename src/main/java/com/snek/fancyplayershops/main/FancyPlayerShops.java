@@ -64,6 +64,15 @@ public class FancyPlayerShops implements ModInitializer {
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
 
+    // Force display item cration
+    //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
+    static {
+        try {
+            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static Path getStorageDir() {
@@ -92,13 +101,8 @@ public class FancyPlayerShops implements ModInitializer {
     @Override
     public void onInitialize() {
 
-
         // Register commands
         CommandManager.register();
-
-
-
-
 
 
         // Register initialization
@@ -121,6 +125,15 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Read config files
             Configs.loadConfigs();
+
+
+            // // Force display item cration
+            // // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
+            // try {
+            //     Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+            // } catch(ClassNotFoundException e) {
+            //     e.printStackTrace();
+            // }
 
 
             // Stop if errors occurred
@@ -234,7 +247,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
-                        final DisplayTier tier = DisplayTier.fromIndex(tag.getInt("tier"));
+                        final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
