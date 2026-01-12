@@ -29,7 +29,7 @@ import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
-import com.snek.fancyplayershops.recipes.DynamicShapedRecipe;
+import com.snek.fancyplayershops.recipes.EnhancedShapedRecipe;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -189,7 +189,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
             // Register recipe items
-            DynamicShapedRecipe.registerDynamicReference(
+            EnhancedShapedRecipe.registerDynamicReference(
                 new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
                 ProductDisplayManager.getProductDisplayItemCopy(tier)
             );

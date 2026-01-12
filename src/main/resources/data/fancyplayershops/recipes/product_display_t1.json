@@ -1,5 +1,5 @@
 {
-    "type": "frameworklib:dynamic_crafting_shaped",
+    "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
     "group": "wooden_sign",
     "key": {

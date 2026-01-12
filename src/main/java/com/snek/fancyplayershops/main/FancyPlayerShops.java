@@ -43,8 +43,8 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
-import com.snek.fancyplayershops.recipes.DynamicShapedRecipe;
-import com.snek.fancyplayershops.recipes.NbtShapedRecipeSerializer;
+import com.snek.fancyplayershops.recipes.EnhancedShapedRecipe;
+import com.snek.fancyplayershops.recipes.EnhancedShapedRecipeSerializer;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -71,7 +71,7 @@ public class FancyPlayerShops implements ModInitializer {
 
 
     //TODO move to FrameworkLib
-    public static RecipeSerializer<DynamicShapedRecipe> NBT_SHAPED_SERIALIZER = null;
+    public static RecipeSerializer<EnhancedShapedRecipe> NBT_SHAPED_SERIALIZER = null;
     static {
 
 
@@ -79,11 +79,11 @@ public class FancyPlayerShops implements ModInitializer {
         //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
         try { Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager"); } catch(ClassNotFoundException e) { e.printStackTrace(); }
 
-        // Register dynamic crafting recipe serializer
+        // Register enhanced crafting recipe serializer
         NBT_SHAPED_SERIALIZER = Registry.register(
             BuiltInRegistries.RECIPE_SERIALIZER,
-            new ResourceLocation("frameworklib", "dynamic_crafting_shaped"),
-            new NbtShapedRecipeSerializer()
+            new ResourceLocation("frameworklib", "enhanced_crafting_shaped"),
+            new EnhancedShapedRecipeSerializer()
         );
     }
 
