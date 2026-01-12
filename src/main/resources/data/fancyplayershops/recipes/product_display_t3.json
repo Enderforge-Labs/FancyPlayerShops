@@ -7,9 +7,12 @@
     ],
     "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
-    "group": "wooden_sign",
+    "group": "Product displays",
     "key": {
-        "Q": { "tag": "ae2:glass_cable" },
+        "Q": {
+            "tag": "ae2:covered_cable",
+            "frameworklib:count": 4
+        },
         "D": {
             "frameworklib:all_nbts": [ "fancyplayershops:product_display_t2" ],
             "frameworklib:client_override" : "fancyplayershops:product_display_t2"

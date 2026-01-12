@@ -7,14 +7,20 @@
     ],
     "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
-    "group": "wooden_sign",
+    "group": "Product displays",
     "key": {
-        "Q": { "tag": "ae2:smart_dense_cable" },
+        "Q": {
+            "tag": "ae2:smart_dense_cable",
+            "frameworklib:count": 16
+        },
         "D": {
             "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ],
             "frameworklib:client_override" : "fancyplayershops:product_display_t4"
         },
-        "S": { "item": "ae2:cell_component_256k" },
+        "S": {
+            "item": "ae2:cell_component_256k",
+            "frameworklib:count": 16
+        },
         "C": {
             "item": "minecraft:nether_star",
             "frameworklib:count": 4

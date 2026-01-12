@@ -64,15 +64,6 @@ public class FancyPlayerShops implements ModInitializer {
     public static final ResourceLocation PHASE_ID = new ResourceLocation(MOD_ID, "phase_id");
 
 
-    // Force display item cration
-    //! This loads them in the reference map, which is needed by NBT_SHAPED_SERIALIZER
-    static {
-        try {
-            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
-        } catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     public static Path getStorageDir() {
@@ -105,6 +96,15 @@ public class FancyPlayerShops implements ModInitializer {
         CommandManager.register();
 
 
+        // Force display item cration
+        // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
+        try {
+            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
         // Register initialization
         ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkConfig.PHASE_ID, PHASE_ID);
         ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkLib.PHASE_ID, PHASE_ID);
@@ -125,15 +125,6 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Read config files
             Configs.loadConfigs();
-
-
-            // // Force display item cration
-            // // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
-            // try {
-            //     Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
-            // } catch(ClassNotFoundException e) {
-            //     e.printStackTrace();
-            // }
 
 
             // Stop if errors occurred

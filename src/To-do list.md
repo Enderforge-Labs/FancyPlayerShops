@@ -18,6 +18,9 @@
   - Make restocking follow the tier's speeds (no restocking for t2 and t1)
   - Implement wireless restocking
   - Keep all the data of snapshots when used as an ingredient for T2 and higher displays. ! RN IT GETS WIPED
+  - AE2 auto crafting doesn't support using more than 1 item per slot, like vanilla crafting tables.
+    - an okay solution would be to add intermediate materials that are craftable using more of the same item and use these in the final recipe.
+    - keep the multi-item recipes as they are handy for manual crafting and EMI supports them
 
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)

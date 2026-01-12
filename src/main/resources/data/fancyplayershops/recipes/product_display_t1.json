@@ -1,7 +1,7 @@
 {
     "type": "frameworklib:enhanced_crafting_shaped",
     "category": "misc",
-    "group": "wooden_sign",
+    "group": "Product displays",
     "key": {
         "G": { "item": "minecraft:glass_pane"   },
         "S": { "tag": "minecraft:signs"         },
