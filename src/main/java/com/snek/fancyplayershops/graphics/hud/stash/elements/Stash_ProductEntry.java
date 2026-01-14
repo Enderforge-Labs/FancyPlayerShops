@@ -10,6 +10,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.presets.ItemElm_Gui;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
@@ -48,7 +49,7 @@ public class Stash_ProductEntry extends ButtonElm implements Scrollable {
 
 
         // Add item display
-        e = addChild(new Stash_ItemDisplay(context, item));
+        e = addChild(new ItemElm_Gui(context.getLevel(), item));
         e.setSize(new Vector2f(ITEM_WIDTH - ITEM_NAME_SPACING, 0.65f));
         e.setPosX(-0.5f + ITEM_WIDTH / 2 + MARGIN_LEFT);
         e.setAlignmentY(AlignmentY.CENTER);

@@ -1,8 +1,12 @@
 package com.snek.fancyplayershops.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.Utils;
 
 
 
@@ -37,6 +41,7 @@ public enum DisplayTier {
     // Features
     private final int restockSpeed;
     private final int wirelessDistance;
+    private @NotNull List<@NotNull String> statsLines = new ArrayList<>();
 
 
 
@@ -52,7 +57,25 @@ public enum DisplayTier {
         this.texture = texture;
         this.restockSpeed = restockSpeed;
         this.wirelessDistance = wirelessDistance;
+
+
+        statsLines.add(getName() + " tier");
+        if(getNumericalId() == 999) {
+            statsLines.add("Max capacity: "        + "Unlimited");
+            statsLines.add("Restocking: "    + "Unlimited");
+            statsLines.add("Distance: " + "Unlimited");
+        }
+        else {
+            final String restockSpeedString = getRestockSpeed()     == 0 ? "No automatic restocking" : "Restocking: " + Utils.formatAmount(getRestockSpeed()) + "/cycle";
+            final String wirelessDistString = getWirelessDistance() == 0 ? "No wireless restocking"  : "Distance: "   + Utils.formatAmount(getWirelessDistance()) + " blocks";
+            statsLines.add("Max capacity: " + Utils.formatAmount(getCapacity()));
+            statsLines.add(restockSpeedString);
+            statsLines.add(wirelessDistString);
+        }
     }
+
+
+
 
     public static @NotNull DisplayTier fromNumericalId(final int numericalId) {
         switch(numericalId) {
@@ -104,6 +127,10 @@ public enum DisplayTier {
     //TODO implement wireless restocking
     public int getWirelessDistance() {
         return wirelessDistance;
+    }
+
+    public @NotNull List<@NotNull String> getStatsLines() {
+        return statsLines;
     }
 
 

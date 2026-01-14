@@ -177,18 +177,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
             // Set lore
             final ListTag lore = new ListTag();
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(tier.getName() + " tier").gray().noItalic().get())));
-            if(tier == DisplayTier.CREATIVE) {
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: "        + "Unlimited").gray().noItalic().get())));
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Restocking speed: "    + "Unlimited").gray().noItalic().get())));
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Restocking distance: " + "Unlimited").gray().noItalic().get())));
-            }
-            else {
-                final String restockSpeedString = tier    .getRestockSpeed() == 0 ? "No automatic restocking" : "Restocking speed: "    + Utils.formatAmount(tier.getRestockSpeed()) + " items/cycle";
-                final String wirelessDistString = tier.getWirelessDistance() == 0 ? "No wireless restocking"  : "Restocking distance: " + Utils.formatAmount(tier.getWirelessDistance()) + " blocks";
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt("Max capacity: " + Utils.formatAmount(tier.getCapacity())).gray().noItalic().get())));
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(restockSpeedString).gray().noItalic().get())));
-                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(wirelessDistString).gray().noItalic().get())));
+            for(final String s : tier.getStatsLines()) {
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(s).gray().noItalic().get())));
             }
             lore.add(StringTag.valueOf(Component.Serializer.toJson(Component.empty())));
             for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));

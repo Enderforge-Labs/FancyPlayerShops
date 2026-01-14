@@ -9,21 +9,25 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
-import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_1_CraftingGrid;
+import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_CraftingGrid;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.main.DisplayTier;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
-import com.snek.frameworklib.graphics.basic.presets.ItemStyle_Gui;
+import com.snek.frameworklib.graphics.basic.presets.ItemElm_Gui;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.graphics.layout.Flex;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.Axis2;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +37,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 
 
-
+//FIXME display counts if ingredient count > 1
 
 
 public class ModInfoCanvas extends HudCanvasBase {
@@ -41,7 +45,11 @@ public class ModInfoCanvas extends HudCanvasBase {
     public static final float P0_TEXT_H = (1f - P0_ITEM_H) / 2;
 
     public static final float P1_CRAFTING_GRID_H = 0.5f;
+    public static final float P1_CRAFTING_GRID_RATIO = (1f - Canvas.TITLE_H - Canvas.TOOLBAR_H) * ModInfoCanvas.P1_CRAFTING_GRID_H;
     public static final float P1_TEXT_H = (1f - P1_CRAFTING_GRID_H) / 2;
+
+    public static final float P2_CRAFTING_GRIDS_H = 0.5f;
+    public static final float P2_CRAFTING_GRID_RATIO = (1f - Canvas.TITLE_H - Canvas.TOOLBAR_H) / 2f * 2f * P2_CRAFTING_GRIDS_H;
 
 
     // Page data
@@ -89,10 +97,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add display item
-            e = p.addChild(new ItemElm(context.getLevel(), new ItemStyle_Gui(
-                ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4),
-                ModInfoCanvas.P0_ITEM_H
-            )));
+            e = p.addChild(new ItemElm_Gui(context.getLevel(), ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4)));
             e.setSize(new Vector2f(1f, P0_ITEM_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
@@ -134,7 +139,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add crafting grid
-            e = p.addChild(new ModInfo_1_CraftingGrid(context));
+            e = p.addChild(new ModInfo_CraftingGrid(context, DisplayTier.T1, P1_CRAFTING_GRID_RATIO));
             e.setSize(new Vector2f(1f, P1_CRAFTING_GRID_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
@@ -155,13 +160,41 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
 
-        // // Add page 3
-        // p = new Div();
-        // addPage(p, "Shop commands"); {
-        //     e = p.addChild(new TextElm(level, new ModInfo_2_Text_S()));
-        //     e.setSize(new Vector2f(1f, 1f));
-        //     e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-        // }
+        // Add page 3 //TODO only display this page if AE2 is installed on the server
+        p = new Div();
+        addPage(p, "Display upgrades"); {
+
+            // Add crafting grids flex
+            final Div flex = p.addChild(new Flex(Axis2.Y)); {
+
+                // For each craftable tier (start from the last one, Flex stacks elements from the bottom. Also skip T1)
+                for(int i = DisplayTier.getHighestTier().ordinal(); i > 0; --i) {
+
+                    //Add container
+                    final DisplayTier tier = DisplayTier.values()[i];
+                    final Div d = flex.addChild(new Div());
+                    d.setSize(new Vector2f(1f, 0.25f)); {
+
+                        // Add crafting grid
+                        e = d.addChild(new ModInfo_CraftingGrid(context, tier, P2_CRAFTING_GRID_RATIO));
+                        e.setSize(new Vector2f(0.5f, 1f));
+                        e.setAlignmentX(AlignmentX.LEFT);
+
+                        // Add text
+                        final var lines = tier.getStatsLines();
+                        e = d.addChild(new TextElm(level, new TextStyle_Small()
+                            .withText(new Txt()
+                                .cat(new Txt(lines.get(0) + "\n").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
+                                .cat(new Txt(String.join("\n", lines.subList(1, lines.size()))).white())
+                            .get())
+                            .withTextAlignment(TextAlignment.LEFT)
+                        ));
+                        e.setSize(new Vector2f(0.5f, 1f));
+                        e.setAlignmentX(AlignmentX.RIGHT);
+                    }
+                }
+            }
+        }
 
 
 
