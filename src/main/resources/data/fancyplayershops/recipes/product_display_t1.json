@@ -4,10 +4,10 @@
     "group": "Product displays",
     "key": {
         "G": { "item": "minecraft:glass_pane"   },
-        "S": { "tag": "minecraft:signs"         },
+        "S": { "item": "minecraft:item_frame"   },
         "R": { "item": "minecraft:comparator"   },
         "H": { "item": "minecraft:hopper"       },
-        "C": { "tag": "c:shulker_boxes" }
+        "C": { "tag":  "c:shulker_boxes"        }
     },
     "pattern": [
         "GGG",
