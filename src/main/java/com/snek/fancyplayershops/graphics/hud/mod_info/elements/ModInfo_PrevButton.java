@@ -18,7 +18,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class ModInfo_PrevButton extends ButtonElm {
     public ModInfo_PrevButton(final @NotNull HudContext context) {
-        super(context.getLevel(), null, "Next", 1, new Hud_SquareButton_S());
+        super(context.getLevel(), null, "Previous", 1, new Hud_SquareButton_S());
         addDesign(context.getLevel(), SymbolDesigns.ArrowPointingLeft);
     }
 
