@@ -10,7 +10,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.Axis2;
 import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
-import com.snek.frameworklib.graphics.basic.presets.ItemElm_Gui;
+import com.snek.frameworklib.graphics.composite.elements.GuiItemElm;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -55,7 +55,8 @@ public class ModInfo_CraftingGrid extends Div {
                         final var firstItem = items.length == 0 ? Items.AIR.getDefaultInstance() : items[0];
                         final var overrideId = enhancedRecipe.getClientOverrides().get(i);
                         final var overrideItem = overrideId == null ? null : EnhancedShapedRecipe.getItemStackReference(new ResourceLocation(overrideId));
-                        e = grid.addChild(new ItemElm_Gui(context.getLevel(), overrideItem != null ? overrideItem : firstItem));
+                        final var count = enhancedRecipe.getRequiredCounts().get(i);
+                        e = grid.addChild(new GuiItemElm(context.getLevel(), overrideItem != null ? overrideItem : firstItem, count < 2 ? null : count));
                         e.setSize(new Vector2f(1f / 3f));
                         e.setAlignmentX(switch(i % 3) { case 0 -> AlignmentX.LEFT; case 1 -> AlignmentX.CENTER; default -> AlignmentX.RIGHT;  });
                         e.setAlignmentY(switch(i / 3) { case 0 -> AlignmentY.TOP;  case 1 -> AlignmentY.CENTER; default -> AlignmentY.BOTTOM; });
@@ -68,7 +69,7 @@ public class ModInfo_CraftingGrid extends Div {
                     e.addDesign(context.getLevel(), SymbolDesigns.ArrowPointingRight);
 
                     // Add result slot
-                    e = flex.addChild(new ItemElm_Gui(context.getLevel(), enhancedRecipe.getResultItem(context.getLevel().registryAccess())));
+                    e = flex.addChild(new GuiItemElm(context.getLevel(), enhancedRecipe.getResultItem(context.getLevel().registryAccess())));
                     e.setSize(new Vector2f(SLOT_SIZE * xyRatio, SLOT_SIZE));
                     e.setAlignmentY(AlignmentY.CENTER);
                 }

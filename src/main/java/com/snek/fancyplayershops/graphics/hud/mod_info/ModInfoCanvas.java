@@ -17,8 +17,8 @@ import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
-import com.snek.frameworklib.graphics.basic.presets.ItemElm_Gui;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
+import com.snek.frameworklib.graphics.composite.elements.GuiItemElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.layout.Flex;
 import com.snek.frameworklib.utils.Txt;
@@ -27,7 +27,6 @@ import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.Axis2;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
-import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -97,7 +96,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add display item
-            e = p.addChild(new ItemElm_Gui(context.getLevel(), ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4)));
+            e = p.addChild(new GuiItemElm(context.getLevel(), ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4)));
             e.setSize(new Vector2f(1f, P0_ITEM_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
