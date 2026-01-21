@@ -1,4 +1,4 @@
-# Stuff to fix / add
+# To-do
 
 - use spawn animations in list elements, actually animate scrolling with y scale changes
 
@@ -83,7 +83,13 @@
   - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
 
 - Add configurable size bitmaps
-  - use them as 3d texture to make simple 3d models
+
+  - let players draw their own 8x8 icon for their shops
+    - add "flip x" and "flip y" buttons to the editor
+    - add "rotate cw" and "rotate ccw" buttons to the editor
+    - add "shift up", "shift down", "shift left" and "shift right" buttons to the editor
+
+  - use bitmaps as 3d texture to make simple 3d models
   - add vendor profile lookup menus
   - create 3d renderings of player skins to use in the profile of a seller/vendor
     - get the texture data from the player cache, read the pixels and create one bitmap per face

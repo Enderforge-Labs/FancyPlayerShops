@@ -49,21 +49,21 @@ public class ProductDisplay_TogglableButton_S extends TextButtonStyle {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .targetBgColor(bgColor)
+            .targetBgColor(getColor())
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
             new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(bgColor.add(20, 20, 20).min(new Vector3i(255)))
+            .targetBgColor(getColor().add(20, 20, 20).min(new Vector3i(255)))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
             new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .targetBgColor(bgColor)
+            .targetBgColor(getColor())
         );
     }
 }
