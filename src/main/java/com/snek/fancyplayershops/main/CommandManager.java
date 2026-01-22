@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.StashManager;
@@ -129,24 +130,45 @@ public abstract class CommandManager {
                     .then(Commands.literal("give")
                         .then(Commands.literal("t1")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("t2")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("t3")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("t4")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("t5")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("creative")
                             .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                         .then(Commands.literal("all")
                             .executes(context -> executeGiveAllDisplayItems(context, 1L))
+                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                                .executes(context -> executeGiveAllDisplayItems(context, LongArgumentType.getLong(context, "amount")))
+                            )
                         )
                     )
                 )
@@ -179,10 +201,10 @@ public abstract class CommandManager {
                             .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_FILL))
                         )
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
-                            .executes(CommandManager::executeBulkFill
+                            .executes(CommandManager::executeBulkFill)
                         )
                     )
-                ))
+                )
             );
         });
     }
