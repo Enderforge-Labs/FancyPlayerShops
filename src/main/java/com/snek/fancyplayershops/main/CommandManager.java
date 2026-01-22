@@ -1,11 +1,12 @@
 package com.snek.fancyplayershops.main;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -13,6 +14,7 @@ import com.snek.frameworklib.utils.Txt;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +32,7 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A utility class that registers and handles in-game commands.
  */
+@SuppressWarnings("java:S1116") //! Empty semicolon statement
 public abstract class CommandManager {
     private CommandManager() {}
 
@@ -92,197 +95,92 @@ public abstract class CommandManager {
 
 
             // Shop main menu
-            dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("shop")
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    player.displayClientMessage(HELP_TEXT_SHOP, false);
-                    return 1;
-                }))
-                .executes(context -> {
-                    final ServerPlayer player = context.getSource().getPlayer();
-                    final Vec3 pos = player.getPosition(1f);
-                    final HudContext hud = new HudContext(player);
-                    hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
-                    hud.changeCanvas(new MainMenuCanvas(hud));
-                    return 1;
-                })
-
-
+            dispatcher.register(Commands.literal("shop")
+                .then(Commands.literal("help")
+                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP))
+                )
+                .executes(CommandManager::executeOpenMainMenu)
 
 
                 // Balance claim
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("claim")
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        player.displayClientMessage(HELP_TEXT_SHOP_CLAIM, false);
-                        return 1;
-                    }))
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        // BalanceManager.claim(player);
-                        //FIXME claim all the shops
-                        return 1;
-                    })
+                .then(Commands.literal("claim")
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLAIM))
+                    )
+                    .executes(CommandManager::executeClaim)
                 )
-
-
 
 
                 // Force close HUD
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("close-hud")
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        player.displayClientMessage(HELP_TEXT_SHOP_CLOSEHUD, false);
-                        return 1;
-                    }))
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        Context.closeContexts(player);
-                        return 1;
-                    })
+                .then(Commands.literal("close-hud")
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLOSEHUD))
+                    )
+                    .executes(CommandManager::executeCloseHud)
                 )
-
-
 
 
                 // Operator commands
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("op")
+                .then(Commands.literal("op")
                 .requires(source -> source.hasPermission(2))
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        player.displayClientMessage(HELP_TEXT_SHOP_OP, false);
-                        return 1;
-                    }))
-
-
-                    // Item give command
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("give")
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t1")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T1));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t2")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T2));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t3")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T3));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t4")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("t5")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T5));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("creative")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.CREATIVE));
-                            return 1;
-                        }))
-
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("all")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            for(final var tier : DisplayTier.values()) {
-                                player.getInventory().add(ProductDisplayManager.getProductDisplayItemCopy(tier));
-                            }
-                            return 1;
-                        }))
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP))
+                    )
+                    .then(Commands.literal("give")
+                        .then(Commands.literal("t1")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, 1L))
+                        )
+                        .then(Commands.literal("t2")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, 1L))
+                        )
+                        .then(Commands.literal("t3")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, 1L))
+                        )
+                        .then(Commands.literal("t4")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, 1L))
+                        )
+                        .then(Commands.literal("t5")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, 1L))
+                        )
+                        .then(Commands.literal("creative")
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, 1L))
+                        )
+                        .then(Commands.literal("all")
+                            .executes(context -> executeGiveAllDisplayItems(context, 1L))
+                        )
                     )
                 )
 
 
-
-
                 // Operator bulk commands
-                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("bulk")
+                .then(Commands.literal("bulk")
                 .requires(source -> source.hasPermission(2))
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                    .executes(context -> {
-                        final ServerPlayer player = context.getSource().getPlayer();
-                        player.displayClientMessage(HELP_TEXT_SHOP_BULK, false);
-                        return 1;
-                    }))
-
-
-                    // Purge command
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("purge")
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_PURGE, false);
-                            return 1;
-                        }))
-                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
-                            return 1;
-                        }))
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK))
                     )
-
-
-                    // Displace command
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("displace")
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_DISPLACE, false);
-                            return 1;
-                        }))
-                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
-                            player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
-                            return 1;
-                        }))
+                    .then(Commands.literal("purge")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_PURGE))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                            .executes(CommandManager::executeBulkPurge)
+                        )
                     )
-
-
-                    // Fill command
-                    .then(LiteralArgumentBuilder.<CommandSourceStack>literal("fill")
-                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("help")
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            player.displayClientMessage(HELP_TEXT_SHOP_BULK_FILL, false);
-                            return 1;
-                        }))
-                        .then(RequiredArgumentBuilder.<CommandSourceStack, Float>argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
-                        .executes(context -> {
-                            final ServerPlayer player = context.getSource().getPlayer();
-                            final float radius = FloatArgumentType.getFloat(context, "radius");
-                            final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
-                            player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
-                            return 1;
-                        })
+                    .then(Commands.literal("displace")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_DISPLACE))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                            .executes(CommandManager::executeBulkDisplace)
+                        )
+                    )
+                    .then(Commands.literal("fill")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_FILL))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
+                            .executes(CommandManager::executeBulkFill
+                        )
                     )
                 ))
             );
@@ -337,4 +235,82 @@ public abstract class CommandManager {
 
 
     //TODO add a likes/score system to shops
+
+
+
+
+
+
+    public static int executeOpenMainMenu(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        final Vec3 pos = player.getPosition(1f);
+        final HudContext hud = new HudContext(player);
+        hud.spawn(new Vector3d(pos.x, pos.y, pos.z), true);
+        hud.changeCanvas(new MainMenuCanvas(hud));
+        return 1;
+    }
+
+
+    public static int executeClaim(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        // BalanceManager.claim(player);
+        //FIXME claim all the shops
+        return 1;
+    }
+
+
+    public static int executeCloseHud(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        Context.closeContexts(player);
+        return 1;
+    }
+
+
+    public static int executeGiveAllDisplayItems(final @NotNull CommandContext<CommandSourceStack> context, final long count) {
+        for(final var tier : DisplayTier.values()) {
+            executeGiveDisplayItem(context, tier, count);
+        }
+        return 1;
+    }
+
+
+    public static int executeGiveDisplayItem(final @NotNull CommandContext<CommandSourceStack> context, final @NotNull DisplayTier tier, final long count) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        StashManager.giveItem(player.getUUID(), ProductDisplayManager.getProductDisplayItemCopy(tier), count, true);
+        return 1;
+    }
+
+
+    public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        final float radius = FloatArgumentType.getFloat(context, "radius");
+        final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+        player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
+        return 1;
+    }
+
+
+    public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        final float radius = FloatArgumentType.getFloat(context, "radius");
+        final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+        player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
+        return 1;
+    }
+
+
+    public static int executeBulkFill(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        final float radius = FloatArgumentType.getFloat(context, "radius");
+        final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+        player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
+        return 1;
+    }
+
+
+    public static int executeSendHelpMessage(final @NotNull CommandContext<CommandSourceStack> context, final Component message) {
+        final ServerPlayer player = context.getSource().getPlayer();
+        player.displayClientMessage(message, false);
+        return 1;
+    }
 }
