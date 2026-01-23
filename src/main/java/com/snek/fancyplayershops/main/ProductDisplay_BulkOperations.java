@@ -18,10 +18,12 @@ import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Option;
+import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
+import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -78,23 +80,22 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         }
 
 
-        // Create feedback messages and send them to the affected players, then return
-        for(final var entry : displayNames.entrySet()) {
-            final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
-            if(owner != null) {
-                final int removedAmount = entry.getValue().size();
-                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been removed" + (enforceOwner.isNone() ? " by an admin" : "") + ": ");
-                for(int i = 0; i < removedAmount; ++i) {
-                    feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
-                    if(i < displayNames.size() - 1) feedbackMsg.cat(",");
-                }
-                owner.displayClientMessage(feedbackMsg.red().get(), false);
-                owner.displayClientMessage(new Txt((removedAmount == 1 ? "Its balance has" : "Their balances have") + " been added to your personal balance").red().get(), false);
-                owner.displayClientMessage(new Txt("You will find any remaining stock in your inventory and/or your stash").red().get(), false);
-            }
-        }
+        sendBulkOperationFeedbackMessages(
+            enforceOwner.isNone(), displayNames,
+            "%1$d of your product displays %3$s been removed%6$s: %2$s." +
+            "%4$s balance%5$s %3$s been added to your personal balance" +
+            "You will find any remaining stock in your inventory and/or your stash"
+        );
         return r;
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -136,20 +137,11 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         }
 
 
-        // Create feedback messages and send them to the affected players, then return
-        for(final var entry : displayNames.entrySet()) {
-            final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
-            if(owner != null) {
-                final int removedAmount = entry.getValue().size();
-                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been converted into an item" + (enforceOwner.isNone() ? " by an admin" : "") + ": ");
-                for(int i = 0; i < removedAmount; ++i) {
-                    feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
-                    if(i < displayNames.size() - 1) feedbackMsg.cat(",");
-                }
-                owner.displayClientMessage(feedbackMsg.red().get(), false);
-                owner.displayClientMessage(new Txt("You will find " + (removedAmount == 1 ? "it" : "them") + " in your inventory and/or your stash").red().get(), false);
-            }
-        }
+        sendBulkOperationFeedbackMessages(
+            enforceOwner.isNone(), displayNames,
+            "%1$d of your product displays %3$s been converted into an item%6$s: %2$s." +
+            "You will find %7$s in your inventory and/or your stash"
+        );
         return r;
     }
 
@@ -210,5 +202,53 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             }
         }
         return r;
+    }
+
+
+
+
+
+    /**
+     * Creates and sends bulk operation feedback messages to the affected players.
+     * @param admin Whether the operation was performed by an admin or by the player. This changes the displayed message
+     * @param affectedDisplaysNames A map that associates each affected player's UUID with a list
+     *     containing the names of the displays owned by the player that were affected by this operation.
+     * @param formatString The format string to use for the message.
+     * <ul>
+     * <li> %1$d The amount of affected displays.</li>
+     * <li> %2$s The list of names of the affected displays.</li>
+     * <li> %3$s either "has" or "have", depending on the amount of effected displays.</li>
+     * <li> %4$s either "its" or "their", depending on the amount of effected displays.</li>
+     * <li> %5$s either an empty string or "s", depending on the amount of effected displays.</li>
+     * <li> %6$s either " by an admin" or an empty string, depending on the {@code admin} parameter.</li>
+     * <li> %7$s either "it" or "them", depending on the amount of effected displays.</li>
+     * </ul>
+     */
+    private static void sendBulkOperationFeedbackMessages(final boolean admin, final @NotNull Map<@NotNull UUID, @NotNull List<String>> affectedDisplaysNames, final @NotNull String formatString) {
+        // Create feedback messages and send them to the affected players, then return
+        for(final var entry : affectedDisplaysNames.entrySet()) {
+            final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
+            if(owner != null) {
+                final var names = entry.getValue();
+                final int affectedAmount = names.size();
+                StringBuilder namesString = new StringBuilder();
+                for(int i = 0; i < affectedAmount; ++i) {
+                    namesString.append(" \"").append(names.get(i)).append("\"");
+                    if(i < affectedDisplaysNames.size() - 1) namesString.append(",");
+                }
+                owner.displayClientMessage(new Txt()
+                    .cat(new Txt(String.format(
+                        formatString,
+                        Utils.formatAmount(affectedAmount),
+                        namesString,
+                        affectedAmount == 1 ? "has" : "have",
+                        affectedAmount == 1 ? "its" : "their",
+                        affectedAmount == 1 ? "" : "s",
+                        admin ? " by an admin" : "",
+                        affectedAmount == 1 ? "it" : "them"
+                    )).red().get())
+                .get(), false);
+            }
+        }
     }
 }
