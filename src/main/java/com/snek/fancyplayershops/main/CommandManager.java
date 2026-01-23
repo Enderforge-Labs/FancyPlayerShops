@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.graphics.core.Context;
@@ -50,6 +51,11 @@ public abstract class CommandManager {
             .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().lightGray())
         .get();
 
+            public static final Component HELP_TEXT_SHOP_OP_SAVE_ALL = new Txt()
+                .cat(new Txt("/shop op save-all").bold().italic().lightGray())
+                .cat(new Txt(": Save any queued data instantly, skipping configured save cooldowns.").italic().lightGray())
+            .get();
+
         public static final Component HELP_TEXT_SHOP_BULK = new Txt()
             .cat(new Txt("/shop bulk").bold().italic().lightGray())
             .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().lightGray())
@@ -88,126 +94,131 @@ public abstract class CommandManager {
 
 
 
+
     /**
      * Registers the /shop command
      */
-    public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+    public static void register() { CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 
 
-            // Shop main menu
-            dispatcher.register(Commands.literal("shop")
+        // Shop main menu
+        dispatcher.register(Commands.literal("shop")
+            .then(Commands.literal("help")
+                .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP))
+            )
+            .executes(CommandManager::executeOpenMainMenu)
+
+
+            // Balance claim
+            .then(Commands.literal("claim")
                 .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP))
+                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLAIM))
                 )
-                .executes(CommandManager::executeOpenMainMenu)
+                .executes(CommandManager::executeClaim)
+            )
 
 
-                // Balance claim
-                .then(Commands.literal("claim")
+            // Force close HUD
+            .then(Commands.literal("close-hud")
+                .then(Commands.literal("help")
+                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLOSEHUD))
+                )
+                .executes(CommandManager::executeCloseHud)
+            )
+
+
+            // Operator commands
+            .then(Commands.literal("op")
+            .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("help")
+                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP))
+                )
+                .then(Commands.literal("give")
+                    .then(Commands.literal("t1")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("t2")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("t3")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("t4")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("t5")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("creative")
+                        .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                    .then(Commands.literal("all")
+                        .executes(context -> executeGiveAllDisplayItems(context, 1L))
+                        .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
+                            .executes(context -> executeGiveAllDisplayItems(context, LongArgumentType.getLong(context, "amount")))
+                        )
+                    )
+                )
+                .then(Commands.literal("save-all")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLAIM))
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_SAVE_ALL))
                     )
-                    .executes(CommandManager::executeClaim)
+                    .executes(CommandManager::executeSaveAll)
                 )
+            )
 
 
-                // Force close HUD
-                .then(Commands.literal("close-hud")
+            // Operator bulk commands
+            .then(Commands.literal("bulk")
+            .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("help")
+                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK))
+                )
+                .then(Commands.literal("purge")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLOSEHUD))
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_PURGE))
                     )
-                    .executes(CommandManager::executeCloseHud)
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(CommandManager::executeBulkPurge)
+                    )
                 )
-
-
-                // Operator commands
-                .then(Commands.literal("op")
-                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("displace")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP))
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_DISPLACE))
                     )
-                    .then(Commands.literal("give")
-                        .then(Commands.literal("t1")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("t2")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T2, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("t3")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T3, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("t4")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T4, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("t5")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.T5, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("creative")
-                            .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveDisplayItem(context, DisplayTier.CREATIVE, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
-                        .then(Commands.literal("all")
-                            .executes(context -> executeGiveAllDisplayItems(context, 1L))
-                            .then(Commands.argument("amount", LongArgumentType.longArg(1L, 10000L))
-                                .executes(context -> executeGiveAllDisplayItems(context, LongArgumentType.getLong(context, "amount")))
-                            )
-                        )
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(CommandManager::executeBulkDisplace)
                     )
                 )
-
-
-                // Operator bulk commands
-                .then(Commands.literal("bulk")
-                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("fill")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK))
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_FILL))
                     )
-                    .then(Commands.literal("purge")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_PURGE))
-                        )
-                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(CommandManager::executeBulkPurge)
-                        )
-                    )
-                    .then(Commands.literal("displace")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_DISPLACE))
-                        )
-                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(CommandManager::executeBulkDisplace)
-                        )
-                    )
-                    .then(Commands.literal("fill")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_FILL))
-                        )
-                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
-                            .executes(CommandManager::executeBulkFill)
-                        )
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
+                        .executes(CommandManager::executeBulkFill)
                     )
                 )
-            );
-        });
-    }
+            )
+        );
+    }); }
 
     //TODO add /shop op view stash <playerName|playerUUID>
     //TODO add /shop op view balance <playerName|playerUUID>
@@ -236,24 +247,7 @@ public abstract class CommandManager {
 
 
 
-    //TODO add /shop op save-all
-    //! ^ Saves all of the data instantly, skipping configured save cooldowns
-
-
-
-
-
-
-
-
-
     //TODO add a command that lets owners transfer all of the shop blocks in a radius to the specified shop.
-
-
-
-
-
-
 
 
     //TODO add a likes/score system to shops
@@ -261,6 +255,14 @@ public abstract class CommandManager {
 
 
 
+
+
+    public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
+        StashManager.saveScheduledStashes();
+        ProductDisplayManager.saveScheduledDisplays();
+        ShopManager.saveScheduledShops();
+        return 1;
+    }
 
 
     public static int executeOpenMainMenu(final @NotNull CommandContext<CommandSourceStack> context) {
