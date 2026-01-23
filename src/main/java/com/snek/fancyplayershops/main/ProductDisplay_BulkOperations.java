@@ -17,6 +17,7 @@ import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -48,14 +49,18 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      * @param level The target level.
      * @param pos The center of the purge radius.
      * @param radius The maximum distance from pos displays can have in order to be purged.
+     * @param enforceOwned Whether to affect only displays owned by the specified player.
      * @return The number of displays that were removed.
      */
-    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
+    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final Option<Player> enforceOwner) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
+                if(enforceOwner.isNoneOr(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
+                    continue;
+                }
 
                 // Add display name to the feedback message
                 if(!display.getItem().is(Items.AIR)) {
@@ -78,7 +83,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
             if(owner != null) {
                 final int removedAmount = entry.getValue().size();
-                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been removed by an admin: ");
+                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been removed" + (enforceOwner.isNone() ? " by an admin" : "") + ": ");
                 for(int i = 0; i < removedAmount; ++i) {
                     feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
                     if(i < displayNames.size() - 1) feedbackMsg.cat(",");
@@ -94,19 +99,27 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
 
+
+
+
+
     /**
      * Forces the owners to pick up any of their displays near the specified position, sending the snapshots to their stashes.
      * @param level The target level.
      * @param pos The center of the radius.
      * @param radius The maximum distance from pos displays can have in order to be picked up.
+     * @param enforceOwned Whether to affect only displays owned by the specified player.
      * @return The number of displays that were picked up.
      */
-    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius) {
+    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final Option<Player> enforceOwner) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
+                if(enforceOwner.isNoneOr(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
+                    continue;
+                }
 
                 // Add display name to the feedback message
                 if(!display.getItem().is(Items.AIR)) {
@@ -128,7 +141,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
             final Player owner = MinecraftUtils.getPlayerByUUID(entry.getKey());
             if(owner != null) {
                 final int removedAmount = entry.getValue().size();
-                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been converted into an item by an admin: ");
+                final Txt feedbackMsg = new Txt("" + r + " of your product displays " + (removedAmount == 1 ? "has" : "have") + " been converted into an item" + (enforceOwner.isNone() ? " by an admin" : "") + ": ");
                 for(int i = 0; i < removedAmount; ++i) {
                     feedbackMsg.cat(" \"" + entry.getValue().get(i) + "\"");
                     if(i < displayNames.size() - 1) feedbackMsg.cat(",");
@@ -139,6 +152,10 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         }
         return r;
     }
+
+
+
+
 
 
 

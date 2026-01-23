@@ -13,6 +13,7 @@ import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
+import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
@@ -44,14 +45,14 @@ public abstract class CommandManager {
 
 
     private static class HelpText {
-        private static final String[] SHOP = {
+        private static final String[] _s = {
             "/shop",
             "Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash"
         };
 
 
         private static class Op {
-            private static final String[] OP = {
+            private static final String[] _s = {
                 "/shop op",
                 "A collection of shop management commands only available to server operators."
             };
@@ -68,7 +69,7 @@ public abstract class CommandManager {
 
 
             private static class Bulk {
-                private static final String[] BULK = {
+                private static final String[] _s = {
                     "/shop op bulk",
                     "A collection of shop bulk management commands only available to server operators."
                 };
@@ -94,7 +95,7 @@ public abstract class CommandManager {
 
 
         private static class Bulk {
-            private static final String[] BULK = {
+            private static final String[] _s = {
                 "/shop bulk",
                 "A collection of shop bulk management commands. " +
                 "These only affect displays you own."
@@ -155,73 +156,53 @@ public abstract class CommandManager {
 
         // Shop main menu
         dispatcher.register(Commands.literal("shop")
-            .then(Commands.literal("help")
-                .executes(context -> executeSendHelpMessage(context, HelpText.SHOP))
-            )
+            .then(appendHelpText(HelpText._s))
             .executes(CommandManager::executeOpenMainMenu)
 
 
             // Balance claim
             .then(Commands.literal("claim")
-                .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HelpText.CLAIM))
-                )
+                .then(appendHelpText(HelpText.CLAIM))
                 .executes(CommandManager::executeClaim)
             )
 
 
             // Force close HUD
             .then(Commands.literal("close-hud")
-                .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HelpText.CLOSEHUD))
-                )
+                .then(appendHelpText(HelpText.CLOSEHUD))
                 .executes(CommandManager::executeCloseHud)
             )
 
 
             // Operator commands
             .then(Commands.literal("op")
-            .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HelpText.Op.OP))
-                )
+                .requires(source -> source.hasPermission(2))
+                .then(appendHelpText(HelpText.Op._s))
                 .then(Commands.literal("save-all")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.SAVE_ALL))
-                    )
+                    .then(appendHelpText(HelpText.Op.SAVE_ALL))
                     .executes(CommandManager::executeSaveAll)
                 )
                 .then(Commands.literal("force-restock")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.FORCE_RESTOCK))
-                    )
+                    .then(appendHelpText(HelpText.Op.FORCE_RESTOCK))
                     .executes(CommandManager::executeForceRestock)
                 )
                 .then(Commands.literal("bulk")
                 .requires(source -> source.hasPermission(2))
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.BULK))
-                    )
+                    .then(appendHelpText(HelpText.Op.Bulk._s))
                     .then(Commands.literal("purge")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.PURGE))
-                        )
+                        .then(appendHelpText(HelpText.Op.Bulk.PURGE))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(CommandManager::executeBulkPurge)
+                            .executes(context -> executeBulkPurge(context, false))
                         )
                     )
                     .then(Commands.literal("displace")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.DISPLACE))
-                        )
+                        .then(appendHelpText(HelpText.Op.Bulk.DISPLACE))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(CommandManager::executeBulkDisplace)
+                            .executes(context -> executeBulkDisplace(context, false))
                         )
                     )
                     .then(Commands.literal("fill")
-                        .then(Commands.literal("help")
-                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.FILL))
-                        )
+                        .then(appendHelpText(HelpText.Op.Bulk.FILL))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
                             .executes(CommandManager::executeBulkFill)
                         )
@@ -248,33 +229,39 @@ public abstract class CommandManager {
             )
 
 
-            // Operator bulk commands
+            // Bulk commands
             .then(Commands.literal("bulk")
-            // .requires(source -> source.hasPermission(2))
-            //     .then(Commands.literal("help")
-            //         .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.BULK))
-            //     )
-            //     .then(Commands.literal("purge")
-            //         .then(Commands.literal("help")
-            //             .executes(context -> executeSendHelpMessage(context, HelpText.Bulk.PURGE))
-            //         )
-            //         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-            //             .executes(CommandManager::executeBulkPurge)
-            //         )
-            //     )
-            //     .then(Commands.literal("displace")
-            //         .then(Commands.literal("help")
-            //             .executes(context -> executeSendHelpMessage(context, HelpText.Bulk.DISPLACE))
-            //         )
-            //         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-            //             .executes(CommandManager::executeBulkDisplace)
-            //         )
-            //     )
+            .requires(source -> source.hasPermission(2))
+                    .then(appendHelpText(HelpText.Bulk._s))
+                .then(Commands.literal("purge")
+                    .then(appendHelpText(HelpText.Bulk.PURGE))
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(context -> executeBulkPurge(context, true))
+                    )
+                )
+                .then(Commands.literal("displace")
+                    .then(appendHelpText(HelpText.Bulk.DISPLACE))
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(context -> executeBulkDisplace(context, true))
+                    )
+                )
             //TODO transfer
             //TODO move
             )
         );
     }); }
+
+
+    private static @NotNull LiteralArgumentBuilder<CommandSourceStack> appendHelpText(final String[] message) {
+        return Commands.literal("help").executes(context -> {
+            final ServerPlayer player = context.getSource().getPlayer();
+            player.displayClientMessage(new Txt()
+                .cat(new Txt(message[0]).bold().italic().lightGray())
+                .cat(new Txt(": " + message[1]).italic().lightGray())
+            .get(), false);
+            return 1;
+        });
+    }
 
     //TODO add /shop op view stash <playerName|playerUUID>
     //TODO add /shop op view balance <playerName|playerUUID>
@@ -367,19 +354,19 @@ public abstract class CommandManager {
     }
 
 
-    public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context) {
+    public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+        final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, enforceOwner ? Option.Some(player) : Option.None());
         player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
         return 1;
     }
 
 
-    public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context) {
+    public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius);
+        final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, enforceOwner ? Option.Some(player) : Option.None());
         player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
         return 1;
     }
@@ -390,16 +377,6 @@ public abstract class CommandManager {
         final float radius = FloatArgumentType.getFloat(context, "radius");
         final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
         player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
-        return 1;
-    }
-
-
-    public static int executeSendHelpMessage(final @NotNull CommandContext<CommandSourceStack> context, final String[] message) {
-        final ServerPlayer player = context.getSource().getPlayer();
-        player.displayClientMessage(new Txt()
-            .cat(new Txt(message[0]).bold().italic().lightGray())
-            .cat(new Txt(": " + message[1]).italic().lightGray())
-        .get(), false);
         return 1;
     }
 }

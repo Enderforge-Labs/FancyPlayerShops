@@ -853,7 +853,7 @@ public class ProductDisplay {
     public void pickUp(final boolean playerFeedback) {
 
         // Create the snapshot and give it to the player
-        final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
+        final @NotNull ItemStack snapshot = ProductDisplayManager.createDisplaySnapshot(this);
         StashManager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
     }
 

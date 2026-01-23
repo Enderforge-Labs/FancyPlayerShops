@@ -451,7 +451,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @param display The display.
      * @return The created product display item.
      */
-    public static @NotNull ItemStack createShopSnapshot(final @NotNull ProductDisplay display) {
+    public static @NotNull ItemStack createDisplaySnapshot(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
             return getProductDisplayItemCopy(display.getTier());
         }
