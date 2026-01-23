@@ -17,7 +17,6 @@ import com.snek.frameworklib.utils.Txt;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -34,64 +33,109 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A utility class that registers and handles in-game commands.
  */
-@SuppressWarnings("java:S1116") //! Empty semicolon statement
+@SuppressWarnings("java:S1700") //! Bad member names
 public abstract class CommandManager {
     private CommandManager() {}
 
 
 
 
-    private static final String[] HELP_TEXT_SHOP = {
-        "/shop",
-        ": Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash"
-    };
-
-        private static final String[] HELP_TEXT_SHOP_OP = {
-            "/shop op",
-            ": A collection of shop management commands only available to server operators."
+    private static class HelpText {
+        private static final String[] SHOP = {
+            "/shop",
+            "Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash"
         };
 
-            private static final String[] HELP_TEXT_SHOP_OP_SAVE_ALL = {
+
+        private static class Op {
+            private static final String[] OP = {
+                "/shop op",
+                "A collection of shop management commands only available to server operators."
+            };
+
+            private static final String[] SAVE_ALL = {
                 "/shop op save-all",
-                ": Save any queued data instantly, skipping configured save cooldowns."
+                "Save any queued data instantly, skipping configured save cooldowns."
             };
 
-            private static final String[] HELP_TEXT_SHOP_OP_FORCE_RESTOCK = {
+            private static final String[] FORCE_RESTOCK = {
                 "/shop op force-restock",
-                ": Forcefully restocks all active displays, skipping configured cooldowns."
+                "Forcefully restocks all active displays, skipping configured cooldowns."
             };
 
-        private static final String[] HELP_TEXT_SHOP_BULK = {
-            "/shop bulk",
-            ": A collection of shop bulk management commands only available to server operators."
-        };
 
-            private static final String[] HELP_TEXT_SHOP_BULK_FILL = {
-                "/shop bulk fill <radius>",
-                ": Create randomized product displays in every block within a specified radius. This is meant for testing."
+            private static class Bulk {
+                private static final String[] BULK = {
+                    "/shop op bulk",
+                    "A collection of shop bulk management commands only available to server operators."
+                };
+
+                private static final String[] FILL = {
+                    "/shop op bulk fill <radius>",
+                    "Create randomized product displays in every block within a specified radius. This is meant for testing."
+                };
+
+                private static final String[] PURGE = {
+                    "/shop op bulk purge <radius>",
+                    "Remove all product displays within a specified radius. " +
+                    "The stock and balance of deleted displays are automatically sent to their owner."
+                };
+
+                private static final String[] DISPLACE = {
+                    "/shop op bulk displace <radius>",
+                    "Convert all product displays within a specified radius into their item form. " +
+                    "The display snapshots are automatically sent to their owner."
+                };
+            }
+        }
+
+
+        private static class Bulk {
+            private static final String[] BULK = {
+                "/shop bulk",
+                "A collection of shop bulk management commands. " +
+                "These only affect displays you own."
             };
 
-            private static final String[] HELP_TEXT_SHOP_BULK_PURGE = {
+            private static final String[] PURGE = {
                 "/shop bulk purge <radius>",
-                ": Remove all product displays within a specified radius. The stock and balance of deleted displays are automatically sent to their owner."
+                "Remove all product displays within a specified radius. " +
+                "The stock and balance of deleted displays are automatically sent to you. " +
+                "This only affects displays you own"
             };
 
-            private static final String[] HELP_TEXT_SHOP_BULK_DISPLACE = {
+            private static final String[] DISPLACE = {
                 "/shop bulk displace <radius>",
-                ": Convert all product displays within a specified radius into their item form. The display snapshots are automatically sent to their owner."
+                "Convert all product displays within a specified radius into their item form. " +
+                "The display snapshots are automatically sent to you. " +
+                "This only affects displays you own"
             };
-        ;
 
-        private static final String[] HELP_TEXT_SHOP_CLOSEHUD = {
+            private static final String[] TRANSFER = {
+                "/shop bulk transfer <player> <radius>",
+                "Transfer all product displays within a specified radius to another player. " +
+                "This only affects displays you own"
+            };
+
+            private static final String[] MOVE = {
+                "/shop bulk move <shop> <radius>",
+                "Move all product displays within a specified radius to another shop. " +
+                "This only affects displays you own"
+            };
+        }
+
+
+        private static final String[] CLOSEHUD = {
             "/shop close-hud",
-            ": Forcibly close any currently open HUD."
+            "Forcibly close any currently open HUD."
         };
 
-        private static final String[] HELP_TEXT_SHOP_CLAIM = {
+
+        private static final String[] CLAIM = {
             "/shop claim",
-            ": Claim all of your shops' balances."
+            "Claim all of your shops' balances."
         };
-    ;
+    }
 
 
 
@@ -109,7 +153,7 @@ public abstract class CommandManager {
         // Shop main menu
         dispatcher.register(Commands.literal("shop")
             .then(Commands.literal("help")
-                .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP))
+                .executes(context -> executeSendHelpMessage(context, HelpText.SHOP))
             )
             .executes(CommandManager::executeOpenMainMenu)
 
@@ -117,7 +161,7 @@ public abstract class CommandManager {
             // Balance claim
             .then(Commands.literal("claim")
                 .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLAIM))
+                    .executes(context -> executeSendHelpMessage(context, HelpText.CLAIM))
                 )
                 .executes(CommandManager::executeClaim)
             )
@@ -126,7 +170,7 @@ public abstract class CommandManager {
             // Force close HUD
             .then(Commands.literal("close-hud")
                 .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_CLOSEHUD))
+                    .executes(context -> executeSendHelpMessage(context, HelpText.CLOSEHUD))
                 )
                 .executes(CommandManager::executeCloseHud)
             )
@@ -136,19 +180,49 @@ public abstract class CommandManager {
             .then(Commands.literal("op")
             .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP))
+                    .executes(context -> executeSendHelpMessage(context, HelpText.Op.OP))
                 )
                 .then(Commands.literal("save-all")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_SAVE_ALL))
+                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.SAVE_ALL))
                     )
                     .executes(CommandManager::executeSaveAll)
                 )
                 .then(Commands.literal("force-restock")
                     .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_FORCE_RESTOCK))
+                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.FORCE_RESTOCK))
                     )
                     .executes(CommandManager::executeForceRestock)
+                )
+                .then(Commands.literal("bulk")
+                .requires(source -> source.hasPermission(2))
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.BULK))
+                    )
+                    .then(Commands.literal("purge")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.PURGE))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                            .executes(CommandManager::executeBulkPurge)
+                        )
+                    )
+                    .then(Commands.literal("displace")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.DISPLACE))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                            .executes(CommandManager::executeBulkDisplace)
+                        )
+                    )
+                    .then(Commands.literal("fill")
+                        .then(Commands.literal("help")
+                            .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.FILL))
+                        )
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
+                            .executes(CommandManager::executeBulkFill)
+                        )
+                    )
                 )
                 .then(Commands.literal("give")
                     .then(Commands.literal("t1")
@@ -199,34 +273,28 @@ public abstract class CommandManager {
 
             // Operator bulk commands
             .then(Commands.literal("bulk")
-            .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("help")
-                    .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK))
-                )
-                .then(Commands.literal("purge")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_PURGE))
-                    )
-                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(CommandManager::executeBulkPurge)
-                    )
-                )
-                .then(Commands.literal("displace")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_DISPLACE))
-                    )
-                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(CommandManager::executeBulkDisplace)
-                    )
-                )
-                .then(Commands.literal("fill")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_BULK_FILL))
-                    )
-                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
-                        .executes(CommandManager::executeBulkFill)
-                    )
-                )
+            // .requires(source -> source.hasPermission(2))
+            //     .then(Commands.literal("help")
+            //         .executes(context -> executeSendHelpMessage(context, HelpText.Op.Bulk.BULK))
+            //     )
+            //     .then(Commands.literal("purge")
+            //         .then(Commands.literal("help")
+            //             .executes(context -> executeSendHelpMessage(context, HelpText.Bulk.PURGE))
+            //         )
+            //         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+            //             .executes(CommandManager::executeBulkPurge)
+            //         )
+            //     )
+            //     .then(Commands.literal("displace")
+            //         .then(Commands.literal("help")
+            //             .executes(context -> executeSendHelpMessage(context, HelpText.Bulk.DISPLACE))
+            //         )
+            //         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+            //             .executes(CommandManager::executeBulkDisplace)
+            //         )
+            //     )
+            //TODO transfer
+            //TODO move
             )
         );
     }); }
@@ -353,7 +421,7 @@ public abstract class CommandManager {
         final ServerPlayer player = context.getSource().getPlayer();
         player.displayClientMessage(new Txt()
             .cat(new Txt(message[0]).bold().italic().lightGray())
-            .cat(new Txt(message[1]).italic().lightGray())
+            .cat(new Txt(": " + message[1]).italic().lightGray())
         .get(), false);
         return 1;
     }
