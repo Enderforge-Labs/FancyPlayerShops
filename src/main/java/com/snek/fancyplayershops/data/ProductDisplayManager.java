@@ -411,6 +411,23 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
+    /**
+     * Forcefully updates all active displays, making them pull items from nearby inventories.
+     * <p>
+     * This bypasses configured restock limits.
+     */
+    public static void forcePullItems() {
+        for(final ProductDisplay display : displaysByCoords.values()) {
+            final ChunkPos chunkPos = new ChunkPos(display.getPos());
+            if(display.getLevel().hasChunk(chunkPos.x, chunkPos.z)) {
+                display.pullItems();
+            }
+        }
+    }
+
+
+
+
 
 
 

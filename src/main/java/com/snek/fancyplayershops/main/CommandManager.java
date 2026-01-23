@@ -41,51 +41,56 @@ public abstract class CommandManager {
 
 
 
-    public static final Component HELP_TEXT_SHOP = new Txt()
-        .cat(new Txt("/shop").bold().italic().lightGray())
-        .cat(new Txt(": Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash").italic().gray())
-    .get();
+    private static final String[] HELP_TEXT_SHOP = {
+        "/shop",
+        ": Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash"
+    };
 
-        public static final Component HELP_TEXT_SHOP_OP = new Txt()
-            .cat(new Txt("/shop op").bold().italic().lightGray())
-            .cat(new Txt(": A collection of shop management commands only available to server operators.").italic().lightGray())
-        .get();
+        private static final String[] HELP_TEXT_SHOP_OP = {
+            "/shop op",
+            ": A collection of shop management commands only available to server operators."
+        };
 
-            public static final Component HELP_TEXT_SHOP_OP_SAVE_ALL = new Txt()
-                .cat(new Txt("/shop op save-all").bold().italic().lightGray())
-                .cat(new Txt(": Save any queued data instantly, skipping configured save cooldowns.").italic().lightGray())
-            .get();
+            private static final String[] HELP_TEXT_SHOP_OP_SAVE_ALL = {
+                "/shop op save-all",
+                ": Save any queued data instantly, skipping configured save cooldowns."
+            };
 
-        public static final Component HELP_TEXT_SHOP_BULK = new Txt()
-            .cat(new Txt("/shop bulk").bold().italic().lightGray())
-            .cat(new Txt(": A collection of shop bulk management commands only available to server operators.").italic().lightGray())
-        .get();
+            private static final String[] HELP_TEXT_SHOP_OP_FORCE_RESTOCK = {
+                "/shop op force-restock",
+                ": Forcefully restocks all active displays, skipping configured cooldowns."
+            };
 
-            public static final Component HELP_TEXT_SHOP_BULK_FILL = new Txt()
-                .cat(new Txt("/shop bulk fill <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Create randomized product displays in every block within a specified radius. This is meant for testing.").italic().lightGray())
-            .get();
+        private static final String[] HELP_TEXT_SHOP_BULK = {
+            "/shop bulk",
+            ": A collection of shop bulk management commands only available to server operators."
+        };
 
-            public static final Component HELP_TEXT_SHOP_BULK_PURGE = new Txt()
-                .cat(new Txt("/shop bulk purge <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Remove all product displays within a specified radius. The stock and balance of deleted displays are automatically sent to their owner.").italic().lightGray())
-            .get();
+            private static final String[] HELP_TEXT_SHOP_BULK_FILL = {
+                "/shop bulk fill <radius>",
+                ": Create randomized product displays in every block within a specified radius. This is meant for testing."
+            };
 
-            public static final Component HELP_TEXT_SHOP_BULK_DISPLACE = new Txt()
-                .cat(new Txt("/shop bulk displace <radius>").bold().italic().lightGray())
-                .cat(new Txt(": Converts all product displays within a specified radius into their item form. The display snapshots are automatically sent to their owner.").italic().lightGray())
-            .get();
+            private static final String[] HELP_TEXT_SHOP_BULK_PURGE = {
+                "/shop bulk purge <radius>",
+                ": Remove all product displays within a specified radius. The stock and balance of deleted displays are automatically sent to their owner."
+            };
+
+            private static final String[] HELP_TEXT_SHOP_BULK_DISPLACE = {
+                "/shop bulk displace <radius>",
+                ": Convert all product displays within a specified radius into their item form. The display snapshots are automatically sent to their owner."
+            };
         ;
 
-        public static final Component HELP_TEXT_SHOP_CLOSEHUD = new Txt()
-            .cat(new Txt("/shop close-hud").bold().italic().lightGray())
-            .cat(new Txt(": Forcibly close any currently open HUD.").italic().lightGray())
-        .get();
+        private static final String[] HELP_TEXT_SHOP_CLOSEHUD = {
+            "/shop close-hud",
+            ": Forcibly close any currently open HUD."
+        };
 
-        public static final Component HELP_TEXT_SHOP_CLAIM = new Txt()
-            .cat(new Txt("/shop claim").bold().italic().lightGray())
-            .cat(new Txt(": Claim all of your shops' balances.").italic().lightGray())
-        .get();
+        private static final String[] HELP_TEXT_SHOP_CLAIM = {
+            "/shop claim",
+            ": Claim all of your shops' balances."
+        };
     ;
 
 
@@ -133,6 +138,18 @@ public abstract class CommandManager {
                 .then(Commands.literal("help")
                     .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP))
                 )
+                .then(Commands.literal("save-all")
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_SAVE_ALL))
+                    )
+                    .executes(CommandManager::executeSaveAll)
+                )
+                .then(Commands.literal("force-restock")
+                    .then(Commands.literal("help")
+                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_FORCE_RESTOCK))
+                    )
+                    .executes(CommandManager::executeForceRestock)
+                )
                 .then(Commands.literal("give")
                     .then(Commands.literal("t1")
                         .executes(context -> executeGiveDisplayItem(context, DisplayTier.T1, 1L))
@@ -176,12 +193,6 @@ public abstract class CommandManager {
                             .executes(context -> executeGiveAllDisplayItems(context, LongArgumentType.getLong(context, "amount")))
                         )
                     )
-                )
-                .then(Commands.literal("save-all")
-                    .then(Commands.literal("help")
-                        .executes(context -> executeSendHelpMessage(context, HELP_TEXT_SHOP_OP_SAVE_ALL))
-                    )
-                    .executes(CommandManager::executeSaveAll)
                 )
             )
 
@@ -255,6 +266,12 @@ public abstract class CommandManager {
 
 
 
+
+
+    public static int executeForceRestock(final @NotNull CommandContext<CommandSourceStack> context) {
+        ProductDisplayManager.forcePullItems();
+        return 1;
+    }
 
 
     public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
@@ -332,9 +349,12 @@ public abstract class CommandManager {
     }
 
 
-    public static int executeSendHelpMessage(final @NotNull CommandContext<CommandSourceStack> context, final Component message) {
+    public static int executeSendHelpMessage(final @NotNull CommandContext<CommandSourceStack> context, final String[] message) {
         final ServerPlayer player = context.getSource().getPlayer();
-        player.displayClientMessage(message, false);
+        player.displayClientMessage(new Txt()
+            .cat(new Txt(message[0]).bold().italic().lightGray())
+            .cat(new Txt(message[1]).italic().lightGray())
+        .get(), false);
         return 1;
     }
 }
