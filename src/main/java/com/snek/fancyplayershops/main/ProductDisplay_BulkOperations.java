@@ -18,7 +18,6 @@ import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Option;
-import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
@@ -60,7 +59,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-                if(enforceOwner.isNoneOr(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
+                if(enforceOwner.isSomeAnd(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
                     continue;
                 }
 
@@ -82,24 +81,12 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
-            "%1$d of your product displays %3$s been removed%6$s: %2$s." +
-            "%4$s balance%5$s %3$s been added to your personal balance" +
+            "%1$s of your product displays %3$s been removed%6$s: %2$s. " +
+            "%4$s balance%5$s %3$s been added to your personal balance. " +
             "You will find any remaining stock in your inventory and/or your stash"
         );
         return r;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -118,7 +105,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
-                if(enforceOwner.isNoneOr(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
+                if(enforceOwner.isSomeAnd(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
                     continue;
                 }
 
@@ -139,15 +126,11 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
-            "%1$d of your product displays %3$s been converted into an item%6$s: %2$s." +
+            "%1$s of your product displays %3$s been converted into an item%6$s: %2$s. " +
             "You will find %7$s in your inventory and/or your stash"
         );
         return r;
     }
-
-
-
-
 
 
 
@@ -215,7 +198,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      *     containing the names of the displays owned by the player that were affected by this operation.
      * @param formatString The format string to use for the message.
      * <ul>
-     * <li> %1$d The amount of affected displays.</li>
+     * <li> %1$s The amount of affected displays.</li>
      * <li> %2$s The list of names of the affected displays.</li>
      * <li> %3$s either "has" or "have", depending on the amount of effected displays.</li>
      * <li> %4$s either "its" or "their", depending on the amount of effected displays.</li>
@@ -234,20 +217,18 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 StringBuilder namesString = new StringBuilder();
                 for(int i = 0; i < affectedAmount; ++i) {
                     namesString.append(" \"").append(names.get(i)).append("\"");
-                    if(i < affectedDisplaysNames.size() - 1) namesString.append(",");
+                    if(i < affectedAmount - 1) namesString.append(",");
                 }
-                owner.displayClientMessage(new Txt()
-                    .cat(new Txt(String.format(
-                        formatString,
-                        Utils.formatAmount(affectedAmount),
-                        namesString,
-                        affectedAmount == 1 ? "has" : "have",
-                        affectedAmount == 1 ? "its" : "their",
-                        affectedAmount == 1 ? "" : "s",
-                        admin ? " by an admin" : "",
-                        affectedAmount == 1 ? "it" : "them"
-                    )).red().get())
-                .get(), false);
+                owner.displayClientMessage(new Txt(String.format(
+                    formatString,
+                    Utils.formatAmount(affectedAmount),
+                    namesString,
+                    affectedAmount == 1 ? "has" : "have",
+                    affectedAmount == 1 ? "its" : "their",
+                    affectedAmount == 1 ? "" : "s",
+                    admin ? " by an admin" : "",
+                    affectedAmount == 1 ? "it" : "them"
+                )).lightGray().get(), false);
             }
         }
     }
