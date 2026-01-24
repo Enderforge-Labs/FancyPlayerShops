@@ -81,8 +81,8 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
-            "%1$s of your product displays %3$s been removed%6$s: %2$s. " +
-            "%4$s balance%5$s %3$s been added to your personal balance. " +
+            "%1$ of your product displays %3$ been removed%6$: %2$. " +
+            "%4$ balance%5$ %3$ been added to your personal balance. " +
             "You will find any remaining stock in your inventory and/or your stash"
         );
         return r;
@@ -126,8 +126,8 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
-            "%1$s of your product displays %3$s been converted into an item%6$s: %2$s. " +
-            "You will find %7$s in your inventory and/or your stash"
+            "%1$ of your product displays %3$ been converted into an item%6$: %2$. " +
+            "You will find %7$ in your inventory and/or your stash"
         );
         return r;
     }
@@ -219,16 +219,16 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                     namesString.append(" \"").append(names.get(i)).append("\"");
                     if(i < affectedAmount - 1) namesString.append(",");
                 }
-                owner.displayClientMessage(new Txt(String.format(
+                owner.displayClientMessage(Txt.Format(
                     formatString,
-                    Utils.formatAmount(affectedAmount),
-                    namesString,
-                    affectedAmount == 1 ? "has" : "have",
-                    affectedAmount == 1 ? "its" : "their",
-                    affectedAmount == 1 ? "" : "s",
-                    admin ? " by an admin" : "",
-                    affectedAmount == 1 ? "it" : "them"
-                )).lightGray().get(), false);
+                    new Txt(Utils.formatAmount(affectedAmount)).white(),
+                    new Txt(namesString.toString()),
+                    new Txt(affectedAmount == 1 ? "has"          : "have"),
+                    new Txt(affectedAmount == 1 ? "its"          : "their"),
+                    new Txt(affectedAmount == 1 ? ""             : "s"),
+                    new Txt(admin               ? " by an admin" : ""),
+                    new Txt(affectedAmount == 1 ? "it"           : "them")
+                ).lightGray().get(), false);
             }
         }
     }

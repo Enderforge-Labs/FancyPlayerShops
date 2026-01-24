@@ -467,21 +467,11 @@ public class ProductDisplay {
             //! Stock change events are fired by sendItemsToPlayer call
 
             // Send feedback messages
-            owner.displayClientMessage(new Txt()
-                .cat(new Txt("You retrieved ").lightGray())
-                .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                .cat(new Txt(" from your product display").lightGray())
-            .get(), false);
-
-            // Send feedback message for the stashed items
-            if(stashedAmount > 0) {
-                owner.displayClientMessage(new Txt()
-                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
-                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                .get(), false);
-            }
+            StashManager.sendStashFeedbackMessage(
+                owner, item, amount, stashedAmount,
+                "You retrieved %3$ %5$ from your product display.",
+                "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+            );
         }
     }
 
@@ -522,21 +512,11 @@ public class ProductDisplay {
 
 
                 // Send feedback messages
-                buyer.displayClientMessage(new Txt()
-                    .cat(new Txt("Bought ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                .get(), false);
-
-                // Send feedback message for the stashed items
-                if(stashedAmount > 0) {
-                    buyer.displayClientMessage(new Txt()
-                        .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                        .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                    .get(), false);
-                }
+                StashManager.sendStashFeedbackMessage(
+                    buyer, item, amount, stashedAmount,
+                    "You bought %3$ %5$ " + " for " + Utils.formatPrice(totPrice) + ".",
+                    "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+                );
 
                 // Fire events
                 DisplayEvents.ITEMS_SOLD.invoker().onItemsSell(this, buyer, item, amount);
@@ -790,26 +770,11 @@ public class ProductDisplay {
 
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
-        if(player != null) {
-            final long removedAmount = givenAmount + stashedAmount;
-            if(removedAmount > 0) {
-                player.displayClientMessage(new Txt()
-                    .cat(new Txt("You picked up ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(removedAmount, true, true) + " ").white())
-                    .cat(new Txt("incompatible ").lightGray())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                    .cat(new Txt("from the product display").lightGray())
-                .get(), false);
-            }
-            if(stashedAmount > 0) {
-                player.displayClientMessage(new Txt()
-                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                .get(), false);
-            }
-        }
+        StashManager.sendStashFeedbackMessage(
+            player, item, givenAmount, stashedAmount,
+            "You picked up %3$ incompatible %5$ from the product display.",
+            "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+        );
 
 
         // Fire event and save this display
