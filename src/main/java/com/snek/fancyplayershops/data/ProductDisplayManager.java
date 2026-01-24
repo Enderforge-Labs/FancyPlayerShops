@@ -457,7 +457,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
         }
 
         // Get NBTs
-        final ItemStack item = productDisplayItems.get(display.getTier().getNumericalId()).copy();
+        final ItemStack item = productDisplayItems.get(display.getTier().ordinal()).copy();
         final CompoundTag nbt = item.getOrCreateTag();
         final CompoundTag nbtDisplay = nbt.getCompound("display");
         final ListTag lore = nbtDisplay.getList("Lore", Tag.TAG_STRING);
