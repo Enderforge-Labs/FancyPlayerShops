@@ -470,7 +470,7 @@ public class ProductDisplay {
             StashManager.sendStashFeedbackMessage(
                 owner, item, amount, stashedAmount,
                 "You retrieved %3$ %5$ from your product display.",
-                "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+                "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
             );
         }
     }
@@ -515,7 +515,7 @@ public class ProductDisplay {
                 StashManager.sendStashFeedbackMessage(
                     buyer, item, amount, stashedAmount,
                     "You bought %3$ %5$ " + " for " + Utils.formatPrice(totPrice) + ".",
-                    "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+                    "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
                 );
 
                 // Fire events
@@ -696,11 +696,12 @@ public class ProductDisplay {
     public void changeItem(final @NotNull ItemStack newItem) {
 
         // Change the item value and recalculate the UUID
+        final var oldItem = item;
         item = newItem.copyWithCount(1);
         itemUUID = MinecraftUtils.calcItemUUID(item);
 
         // Stash incompatible stacks
-        stashIncompatible();
+        stashIncompatible(oldItem);
 
         // Save the display
         ProductDisplayManager.scheduleDisplaySave(this);
@@ -739,8 +740,9 @@ public class ProductDisplay {
 
     /**
      * Sends any incompatible item stored in this display to the owner's inventory/stash.
+     * @param oldItem The item to use for the player feedback message.
      */
-    public void stashIncompatible() {
+    public void stashIncompatible(final @NotNull ItemStack oldItem) {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
         final long oldStock = stock;
@@ -771,9 +773,9 @@ public class ProductDisplay {
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
         StashManager.sendStashFeedbackMessage(
-            player, item, givenAmount, stashedAmount,
+            player, oldItem, givenAmount, stashedAmount,
             "You picked up %3$ incompatible %5$ from the product display.",
-            "%2$ %5$ that didn't fir in your inventory %4$ been sent to your stash."
+            "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
         );
 
 
@@ -1107,7 +1109,7 @@ public class ProductDisplay {
 
             // If the new setting filters NBTs, send non-compatible items to the stash
             if(nbtFilter) {
-                stashIncompatible();
+                stashIncompatible(item);
             }
 
             // If the new setting allows any NBT, change nothing

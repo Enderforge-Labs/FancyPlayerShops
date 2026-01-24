@@ -125,7 +125,7 @@ public final class StashManager extends UtilityClassBase {
         // Send feedback to player
         if(playerFeedback) {
             final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
-            sendStashFeedbackMessage(player, item, 0, count, "%2$x %5$ %3$ been sent to your stash", "");
+            sendStashFeedbackMessage(player, item, 0, count, "", "%2$ %5$ %4$ been sent to your stash");
         }
     }
 
