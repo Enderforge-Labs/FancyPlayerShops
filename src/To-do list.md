@@ -7,13 +7,6 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
-- Fix broken crafting recipe in Prom2 server
-  - it works fine in local test server, but no on the public prom2 one
-
-- Replace manual stash messages with a utility method
-  - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
-  - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
-
 - Make shops (not snapshots) spawn with a direction that faces the player
 
 - finish adding AE2 compatibility
@@ -23,6 +16,10 @@
   - AE2 auto crafting doesn't support using more than 1 item per slot, like vanilla crafting tables.
     - an okay solution would be to add intermediate materials that are craftable using more of the same item and use these in the final recipe.
     - keep the multi-item recipes as they are handy for manual crafting and EMI supports them
+
+- Fix restocking a display with ID player_head and NBTs off pulling in all snapshots, displays and player heads
+  - It should only pull player heads if a true player head.
+  - It should only pull displays if a true display.
 
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)

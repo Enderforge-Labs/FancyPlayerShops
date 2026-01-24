@@ -193,19 +193,19 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
     /**
      * Creates and sends bulk operation feedback messages to the affected players.
+     * <ul><li><b>Format string parameters</b></li><ul>
+     * <li> <b>%1$</b> The amount of affected displays.</li>
+     * <li> <b>%2$</b> The list of names of the affected displays.</li>
+     * <li> <b>%3$</b> either "has" or "have", depending on the amount of effected displays.</li>
+     * <li> <b>%4$</b> either "its" or "their", depending on the amount of effected displays.</li>
+     * <li> <b>%5$</b> either an empty string or "s", depending on the amount of effected displays.</li>
+     * <li> <b>%6$</b> either " by an admin" or an empty string, depending on the {@code admin} parameter.</li>
+     * <li> <b>%7$</b> either "it" or "them", depending on the amount of effected displays.</li>
+     * </ul></ul>
      * @param admin Whether the operation was performed by an admin or by the player. This changes the displayed message
      * @param affectedDisplaysNames A map that associates each affected player's UUID with a list
      *     containing the names of the displays owned by the player that were affected by this operation.
      * @param formatString The format string to use for the message.
-     * <ul>
-     * <li> %1$s The amount of affected displays.</li>
-     * <li> %2$s The list of names of the affected displays.</li>
-     * <li> %3$s either "has" or "have", depending on the amount of effected displays.</li>
-     * <li> %4$s either "its" or "their", depending on the amount of effected displays.</li>
-     * <li> %5$s either an empty string or "s", depending on the amount of effected displays.</li>
-     * <li> %6$s either " by an admin" or an empty string, depending on the {@code admin} parameter.</li>
-     * <li> %7$s either "it" or "them", depending on the amount of effected displays.</li>
-     * </ul>
      */
     private static void sendBulkOperationFeedbackMessages(final boolean admin, final @NotNull Map<@NotNull UUID, @NotNull List<String>> affectedDisplaysNames, final @NotNull String formatString) {
         // Create feedback messages and send them to the affected players, then return
