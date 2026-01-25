@@ -147,7 +147,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysOfPlayer(owner));
-        String newShopName = null;
+        String actualShopName = null;
         for(final ProductDisplay display : displays) {
             if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
 
@@ -159,7 +159,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
                 // Move the display, then increase the moved displays counter
                 display.changeShop(shopName);
-                if(newShopName == null) newShopName = display.getShop().getDisplayName();
+                if(actualShopName == null) actualShopName = display.getShop().getDisplayName();
                 DisplayEvents.DISPLAY_REMOVED.invoker().onDisplayRemove(display, DisplayRemovalReason.PICKED_UP);
                 ++r;
             }
@@ -168,7 +168,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         if(r > 0) sendBulkOperationFeedbackMessages(
             false, displayNames,
-            "%1$ of your product displays %3$ been moved to the shop \"" + newShopName + "\": %2$. "
+            "%1$ of your product displays %3$ been moved to the shop \"" + actualShopName + "\": %2$. "
         );
         return r;
     }

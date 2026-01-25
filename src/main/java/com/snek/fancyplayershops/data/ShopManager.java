@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.world.entity.player.Player;
@@ -288,6 +289,31 @@ public class ShopManager extends UtilityClassBase {
 
     public static List<Shop> getShops(final @NotNull Player player) {
         return shopsList.get(player.getUUID());
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Checks if the provided string is a valid shop display name.
+     * @param s The display name of the shop.
+     * @return An Option containing a description of the error if the string is not a valid name, or an empty Option otherwise.
+     */
+    public static Option<String> validateShopName(final @NotNull String s) {
+        final char c = s.charAt(0);
+        if(c == '.' || c == ' ' || c == ',') {
+            return Option.Some("Shop names can't start with \"" + c + "\"");
+        }
+        else if(Character.isDigit(c)) {
+            return Option.Some("Shop names can't start with a number");
+        }
+        else {
+            return Option.None();
+        }
     }
 }
 

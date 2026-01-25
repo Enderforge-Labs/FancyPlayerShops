@@ -270,7 +270,7 @@ public abstract class CommandManager {
                 )
                 .then(Commands.literal("move")
                     .then(appendHelpText(HelpText.Bulk.MOVE))
-                    .then(Commands.argument("groupName", StringArgumentType.string())
+                    .then(Commands.argument("shopname", StringArgumentType.string())
                     .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
                         .executes(CommandManager::executeBulkMove)
                     ))
@@ -332,12 +332,16 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
         StashManager.saveScheduledStashes();
         ProductDisplayManager.saveScheduledDisplays();
         ShopManager.saveScheduledShops();
         return 1;
     }
+
+
 
 
     public static int executeOpenMainMenu(final @NotNull CommandContext<CommandSourceStack> context) {
@@ -350,6 +354,8 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeClaim(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         // BalanceManager.claim(player);
@@ -358,11 +364,15 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeCloseHud(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         Context.closeContexts(player);
         return 1;
     }
+
+
 
 
     public static int executeGiveAllDisplayItems(final @NotNull CommandContext<CommandSourceStack> context, final long count) {
@@ -373,11 +383,15 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeGiveDisplayItem(final @NotNull CommandContext<CommandSourceStack> context, final @NotNull DisplayTier tier, final long count) {
         final ServerPlayer player = context.getSource().getPlayer();
         StashManager.giveItem(player.getUUID(), ProductDisplayManager.getProductDisplayItemCopy(tier), count, true);
         return 1;
     }
+
+
 
 
     public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
@@ -394,6 +408,8 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
@@ -408,6 +424,8 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeBulkFill(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
@@ -420,6 +438,8 @@ public abstract class CommandManager {
         player.displayClientMessage(new Txt("Created " + n + " displays").get(), false);
         return 1;
     }
+
+
 
 
     public static int executeBulkTransfer(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
@@ -443,18 +463,28 @@ public abstract class CommandManager {
     }
 
 
+
+
     public static int executeBulkMove(final @NotNull CommandContext<CommandSourceStack> context) {
-            final ServerPlayer player = context.getSource().getPlayer();
-            final String groupName = StringArgumentType.getString(context, "groupName");
-            final float radius = FloatArgumentType.getFloat(context, "radius");
+        final ServerPlayer player = context.getSource().getPlayer();
+        final String shopname = StringArgumentType.getString(context, "shopname");
+        final float radius = FloatArgumentType.getFloat(context, "radius");
+
+        final var validationResult = ShopManager.validateShopName(shopname);
+        if(validationResult.isSome()) {
+            context.getSource().sendFailure(new Txt(validationResult.unwrap() + "!").get());
+            return 0;
+        }
+        else {
             final int n = ProductDisplay_BulkOperations.move(
-                (ServerLevel)player.level(),
+               (ServerLevel)player.level(),
                 player.getPosition(1f).toVector3f(),
                 radius,
-                groupName,
+                shopname,
                 player
             );
             player.displayClientMessage(new Txt("Moved " + n + " displays").get(), false);
-        return 1;
+            return 1;
+        }
     }
 }

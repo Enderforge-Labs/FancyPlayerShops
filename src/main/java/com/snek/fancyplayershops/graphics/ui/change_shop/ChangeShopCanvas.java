@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_NameInput;
@@ -120,23 +121,16 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
      */
     public void attemptSetNewShop(final @NotNull String s) {
         final ServerPlayer player = (ServerPlayer)canvas.getContext().getPlayer();
-        final char c = s.charAt(0);
-        if(c == '.' || c == ' ' || c == ',') {
-            player.displayClientMessage(new Txt("Shop names can't start with \"" + c + "\"!").red().bold().get(), true);
-            failNameValidation();
-        }
-        else if(Character.isDigit(c)) {
-            player.displayClientMessage(new Txt("Shop names can't start with a number!").red().bold().get(), true);
-            failNameValidation();
+        final var validationResult = ShopManager.validateShopName(s);
+        if(validationResult.isSome()) {
+            player.displayClientMessage(new Txt(validationResult.unwrap() + "!").red().bold().get(), true);
+            newShopName = display.getShop().getDisplayName();
+            confirmButton.updateColor(false);
         }
         else {
             newShopName = s;
             confirmButton.updateColor(true);
         }
-    }
-    private void failNameValidation() {
-        newShopName = display.getShop().getDisplayName();
-        confirmButton.updateColor(false);
     }
 
 
