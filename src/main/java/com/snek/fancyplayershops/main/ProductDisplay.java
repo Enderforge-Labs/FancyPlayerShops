@@ -792,6 +792,7 @@ public class ProductDisplay {
      * <p> Any item left in the display is fully deleted and cannot be recovered.
      * <p> The balance is also deleted and cannot be recovered.
      * <p> The save file of this display is deleted as well.
+     * <p> This method doesn't fire shop removal events.
      */
     public void remove() {
         if(!removalState) {
@@ -946,32 +947,14 @@ public class ProductDisplay {
 
 
     /**
-     * Changes the owner of this display and sends a feedback message to the old owner.
+     * Changes the owner of this display and sends a feedback message to the players.
      * <p> If the new owner and the current one are the same player, this call will have no effect.
      * @param newOwner The new owner.
+     * @param playerFeedback Whether to send the player a feedback message.
      */
-    public void changeOwner(final @NotNull Player newOwner) {
+    public void changeOwner(final @NotNull Player newOwner, final boolean playerFeedback) {
         if(ownerUUID.equals(newOwner.getUUID())) return;
         final Player oldOwner = MinecraftUtils.getPlayerByUUID(ownerUUID);
-
-
-        // Send feedback to old owner
-        oldOwner.displayClientMessage(new Txt()
-            .cat(new Txt("You successfully transferred the ownership of your ").lightGray())
-            .cat(new Txt(getDecoratedName()).white())
-            .cat(new Txt(" to ").lightGray())
-            .cat(new Txt(newOwner.getName().getString()).white())
-        .get(), false);
-
-
-        // Send feedback to new owner
-        newOwner.displayClientMessage(new Txt()
-            .cat(new Txt(oldOwner.getName().getString()).white())
-            .cat(new Txt(" transferred ownership of their ").lightGray())
-            .cat(new Txt(getDecoratedName()).white())
-            .cat(new Txt(" to you.\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]").lightGray())
-            .cat(new Txt(" in the dimension " + level.dimension().location().toString()).lightGray())
-        .get(), false);
 
 
         // Force the display to unfocus in order to close any UI
@@ -987,6 +970,25 @@ public class ProductDisplay {
         ProductDisplayManager.registerDisplay(this);
         ShopManager.registerDisplay(this, getShop().getUuid());
         ProductDisplayManager.scheduleDisplaySave(this);
+
+
+        // Send feedback messages
+        if(playerFeedback) {
+            oldOwner.displayClientMessage(new Txt()
+                .cat(new Txt("You successfully transferred the ownership of your ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" to ").lightGray())
+                .cat(new Txt(newOwner.getName().getString()).white())
+            .get(), false);
+
+            newOwner.displayClientMessage(new Txt()
+                .cat(new Txt(oldOwner.getName().getString()).white())
+                .cat(new Txt(" transferred ownership of their ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" to you.\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]").lightGray())
+                .cat(new Txt(" in the dimension " + level.dimension().location().toString()).lightGray())
+            .get(), false);
+        }
 
 
         // Fire events

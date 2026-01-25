@@ -7,8 +7,10 @@ import org.joml.Vector3d;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
+import net.minecraft.commands.arguments.EntityArgument;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
@@ -83,6 +85,11 @@ public abstract class CommandManager {
                     "/shop op bulk purge <radius>",
                     "Remove all product displays within a specified radius. " +
                     "The stock and balance of deleted displays are automatically sent to their owner."
+                };
+
+                private static final String[] TRANSFER = {
+                    "/shop bulk transfer <player> <radius>",
+                    "Transfer all product displays within a specified radius to another player."
                 };
 
                 private static final String[] DISPLACE = {
@@ -201,6 +208,13 @@ public abstract class CommandManager {
                             .executes(context -> executeBulkDisplace(context, false))
                         )
                     )
+                    .then(Commands.literal("transfer")
+                        .then(appendHelpText(HelpText.Op.Bulk.TRANSFER))
+                        .then(Commands.argument("newOwner", EntityArgument.player())
+                        .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                            .executes(context -> executeBulkTransfer(context, true))
+                        ))
+                    )
                     .then(Commands.literal("fill")
                         .then(appendHelpText(HelpText.Op.Bulk.FILL))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f, 10f))
@@ -244,6 +258,13 @@ public abstract class CommandManager {
                     .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
                         .executes(context -> executeBulkDisplace(context, true))
                     )
+                )
+                .then(Commands.literal("transfer")
+                    .then(appendHelpText(HelpText.Bulk.TRANSFER))
+                    .then(Commands.argument("newOwner", EntityArgument.player())
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(context -> executeBulkTransfer(context, true))
+                    ))
                 )
             //TODO transfer
             //TODO move
@@ -357,7 +378,12 @@ public abstract class CommandManager {
     public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.purge((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, enforceOwner ? Option.Some(player) : Option.None());
+        final int n = ProductDisplay_BulkOperations.purge(
+            (ServerLevel)player.level(),
+            player.getPosition(1f).toVector3f(),
+            radius,
+            enforceOwner ? Option.Some(player) : Option.None()
+        );
         player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
         return 1;
     }
@@ -366,7 +392,12 @@ public abstract class CommandManager {
     public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.displace((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, enforceOwner ? Option.Some(player) : Option.None());
+        final int n = ProductDisplay_BulkOperations.displace(
+            (ServerLevel)player.level(),
+            player.getPosition(1f).toVector3f(),
+            radius,
+            enforceOwner ? Option.Some(player) : Option.None()
+        );
         player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
         return 1;
     }
@@ -375,8 +406,34 @@ public abstract class CommandManager {
     public static int executeBulkFill(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.fill((ServerLevel)player.level(), player.getPosition(1f).toVector3f(), radius, player);
+        final int n = ProductDisplay_BulkOperations.fill(
+            (ServerLevel)player.level(),
+            player.getPosition(1f).toVector3f(),
+            radius,
+            player
+        );
         player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
+        return 1;
+    }
+
+
+    public static int executeBulkTransfer(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
+        try {
+            final ServerPlayer player = context.getSource().getPlayer();
+            final ServerPlayer newOwner = EntityArgument.getPlayer(context, "newOwner");
+            final float radius = FloatArgumentType.getFloat(context, "radius");
+            final int n = ProductDisplay_BulkOperations.transfer(
+                (ServerLevel)player.level(),
+                player.getPosition(1f).toVector3f(),
+                radius,
+                newOwner,
+                enforceOwner ? Option.Some(player) : Option.None()
+            );
+            player.displayClientMessage(new Txt("Transferred " + n + " shops").get(), false);
+        } catch(CommandSyntaxException e) {
+            context.getSource().sendFailure(new Txt("The specified player is not online!").get());
+            return 0;
+        }
         return 1;
     }
 }

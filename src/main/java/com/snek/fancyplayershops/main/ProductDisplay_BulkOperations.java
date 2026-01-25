@@ -53,7 +53,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      * @param enforceOwned Whether to affect only displays owned by the specified player.
      * @return The number of displays that were removed.
      */
-    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final Option<Player> enforceOwner) {
+    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Option<Player> enforceOwner) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
@@ -99,7 +99,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
      * @param enforceOwned Whether to affect only displays owned by the specified player.
      * @return The number of displays that were picked up.
      */
-    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final Option<Player> enforceOwner) {
+    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Option<Player> enforceOwner) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
@@ -136,7 +136,61 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * Fill an area around the specified position with display.
+     * //TODO
+     */
+    public static int transfer(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player newOwner, final @NotNull Option<Player> enforceOwner) {
+        int r = 0;
+        final List<String> allNames = new ArrayList<>();
+        final Map<UUID, List<String>> displayNames = new HashMap<>();
+        final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysByCoords().values());
+        for(final ProductDisplay display : displays) {
+            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
+                if(enforceOwner.isSomeAnd(p -> { return !p.getUUID().equals(display.getOwnerUuid()); })) {
+                    continue;
+                }
+                if(display.getOwnerUuid().equals(newOwner.getUUID())) {
+                    continue;
+                }
+
+                // Add display name to the feedback message
+                if(!display.getItem().is(Items.AIR)) {
+                    final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
+                    final String name = MinecraftUtils.getFancyItemName(display.getItem()).getString();
+                    _displayNames.add(name);
+                    allNames.add(name);
+                }
+
+                // Stash and delete the display, then increase the transferred displays counter
+                final var oldOwner = MinecraftUtils.getPlayerByUUID(display.getOwnerUuid());
+                display.changeOwner(newOwner, false);
+                DisplayEvents.DISPLAY_TRANSFERRED.invoker().onDisplayTransfer(display, oldOwner, newOwner);
+                ++r;
+            }
+        }
+        if(r == 0) {
+            return r;
+        }
+
+        // Send feedback to previous owners
+        sendBulkOperationFeedbackMessages(
+            enforceOwner.isNone(), displayNames,
+            "%1$ of your product displays %3$ been transferred to " + newOwner.getName().getString() + "%6$: %2$. "
+        );
+
+        // Send feedback to the new owner
+        sendBulkOperationFeedbackMessages(
+            enforceOwner.isNone(), Map.of(newOwner.getUUID(), allNames),
+            "%1$ product displays %3$ been transferred to you%6$: %2$. "
+        );
+
+        return r;
+    }
+
+
+
+
+    /**
+     * Fill an area around the specified position with displays.
      * @param level The target level.
      * @param pos The center of the fill area.
      * @param radius The maximum distance to reach on each cardinal direction.
