@@ -79,7 +79,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         }
 
 
-        sendBulkOperationFeedbackMessages(
+        if(r > 0) sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
             "%1$ of your product displays %3$ been removed%6$: %2$. " +
             "%4$ balance%5$ %3$ been added to your personal balance. " +
@@ -124,7 +124,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         }
 
 
-        sendBulkOperationFeedbackMessages(
+        if(r > 0) sendBulkOperationFeedbackMessages(
             enforceOwner.isNone(), displayNames,
             "%1$ of your product displays %3$ been converted into an item%6$: %2$. " +
             "You will find %7$ in your inventory and/or your stash"
@@ -136,7 +136,54 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * //TODO
+     * Moves all displays near the specified position that are owned by the specified player to another shop.
+     * @param level The target level.
+     * @param pos The center of the radius.
+     * @param radius The maximum distance from pos displays can have in order to be picked up.
+     * @param shopName The name of the shop to move the displays to. Shops that don't already exist are created.
+     * @return The number of displays that were moved.
+     */
+    public static int move(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull String shopName, final @NotNull Player owner) {
+        int r = 0;
+        final Map<UUID, List<String>> displayNames = new HashMap<>();
+        final List<ProductDisplay> displays = new ArrayList<>(ProductDisplayManager.getDisplaysOfPlayer(owner));
+        String newShopName = null;
+        for(final ProductDisplay display : displays) {
+            if(display.getLevel() == level && display.calcDisplayPos().sub(pos).length() <= radius) {
+
+                // Add display name to the feedback message
+                if(!display.getItem().is(Items.AIR)) {
+                    final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
+                    _displayNames.add(MinecraftUtils.getFancyItemName(display.getItem()).getString());
+                }
+
+                // Move the display, then increase the moved displays counter
+                display.changeShop(shopName);
+                if(newShopName == null) newShopName = display.getShop().getDisplayName();
+                DisplayEvents.DISPLAY_REMOVED.invoker().onDisplayRemove(display, DisplayRemovalReason.PICKED_UP);
+                ++r;
+            }
+        }
+
+
+        if(r > 0) sendBulkOperationFeedbackMessages(
+            false, displayNames,
+            "%1$ of your product displays %3$ been moved to the shop \"" + newShopName + "\": %2$. "
+        );
+        return r;
+    }
+
+
+
+
+    /**
+     * Transfers all displays near the specified position to the specified player.
+     * @param level The target level.
+     * @param pos The center of the radius.
+     * @param radius The maximum distance from pos displays can have in order to be picked up.
+     * @param newOwner The player to transfer the displays to.
+     * @param enforceOwned Whether to affect only displays owned by the specified player.
+     * @return The number of displays that were transferred.
      */
     public static int transfer(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player newOwner, final @NotNull Option<Player> enforceOwner) {
         int r = 0;
@@ -167,21 +214,22 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 ++r;
             }
         }
-        if(r == 0) {
-            return r;
-        }
 
-        // Send feedback to previous owners
-        sendBulkOperationFeedbackMessages(
-            enforceOwner.isNone(), displayNames,
+
+        if(r > 0) {
+
+            // Send feedback to previous owners
+            sendBulkOperationFeedbackMessages(
+                enforceOwner.isNone(), displayNames,
             "%1$ of your product displays %3$ been transferred to " + newOwner.getName().getString() + "%6$: %2$. "
-        );
+            );
 
-        // Send feedback to the new owner
-        sendBulkOperationFeedbackMessages(
-            enforceOwner.isNone(), Map.of(newOwner.getUUID(), allNames),
-            "%1$ product displays %3$ been transferred to you%6$: %2$. "
-        );
+            // Send feedback to the new owner
+            sendBulkOperationFeedbackMessages(
+                enforceOwner.isNone(), Map.of(newOwner.getUUID(), allNames),
+                "%1$ product displays %3$ been transferred to you%6$: %2$. "
+            );
+        }
 
         return r;
     }
@@ -276,13 +324,13 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                 owner.displayClientMessage(Txt.Format(
                     formatString,
                     new Txt(Utils.formatAmount(affectedAmount)).white(),
-                    new Txt(namesString.toString()),
-                    new Txt(affectedAmount == 1 ? "has"          : "have"),
-                    new Txt(affectedAmount == 1 ? "its"          : "their"),
-                    new Txt(affectedAmount == 1 ? ""             : "s"),
-                    new Txt(admin               ? " by an admin" : ""),
-                    new Txt(affectedAmount == 1 ? "it"           : "them")
-                ).lightGray().get(), false);
+                    new Txt(namesString.toString()).lightGray(),
+                    new Txt(affectedAmount == 1 ? "has"          : "have" ).white(),
+                    new Txt(affectedAmount == 1 ? "its"          : "their").white(),
+                    new Txt(affectedAmount == 1 ? ""             : "s"    ).white(),
+                    new Txt(admin               ? " by an admin" : ""     ).white(),
+                    new Txt(affectedAmount == 1 ? "it"           : "them" ).white()
+                ).white().get(), false);
             }
         }
     }

@@ -7,6 +7,8 @@ import org.joml.Vector3d;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+
 import net.minecraft.commands.arguments.EntityArgument;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -266,8 +268,13 @@ public abstract class CommandManager {
                         .executes(context -> executeBulkTransfer(context, true))
                     ))
                 )
-            //TODO transfer
-            //TODO move
+                .then(Commands.literal("move")
+                    .then(appendHelpText(HelpText.Bulk.MOVE))
+                    .then(Commands.argument("groupName", StringArgumentType.string())
+                    .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
+                        .executes(CommandManager::executeBulkMove)
+                    ))
+                )
             )
         );
     }); }
@@ -277,8 +284,8 @@ public abstract class CommandManager {
         return Commands.literal("help").executes(context -> {
             final ServerPlayer player = context.getSource().getPlayer();
             player.displayClientMessage(new Txt()
-                .cat(new Txt(message[0]).bold().italic().lightGray())
-                .cat(new Txt(": " + message[1]).italic().lightGray())
+                .cat(new Txt(message[0]).white())
+                .cat(new Txt(": " + message[1]).lightGray())
             .get(), false);
             return 1;
         });
@@ -310,8 +317,6 @@ public abstract class CommandManager {
 
 
 
-
-    //TODO add a command that lets owners transfer all of the shop blocks in a radius to the specified shop.
 
 
     //TODO add a likes/score system to shops
@@ -384,7 +389,7 @@ public abstract class CommandManager {
             radius,
             enforceOwner ? Option.Some(player) : Option.None()
         );
-        player.displayClientMessage(new Txt("Purged " + n + " shops").get(), false);
+        player.displayClientMessage(new Txt("Purged " + n + " displays").get(), false);
         return 1;
     }
 
@@ -398,7 +403,7 @@ public abstract class CommandManager {
             radius,
             enforceOwner ? Option.Some(player) : Option.None()
         );
-        player.displayClientMessage(new Txt("Converted " + n + " shops into items").get(), false);
+        player.displayClientMessage(new Txt("Converted " + n + " displays into items").get(), false);
         return 1;
     }
 
@@ -412,7 +417,7 @@ public abstract class CommandManager {
             radius,
             player
         );
-        player.displayClientMessage(new Txt("Created " + n + " shops").get(), false);
+        player.displayClientMessage(new Txt("Created " + n + " displays").get(), false);
         return 1;
     }
 
@@ -429,11 +434,27 @@ public abstract class CommandManager {
                 newOwner,
                 enforceOwner ? Option.Some(player) : Option.None()
             );
-            player.displayClientMessage(new Txt("Transferred " + n + " shops").get(), false);
+            player.displayClientMessage(new Txt("Transferred " + n + " displays").get(), false);
         } catch(CommandSyntaxException e) {
             context.getSource().sendFailure(new Txt("The specified player is not online!").get());
             return 0;
         }
+        return 1;
+    }
+
+
+    public static int executeBulkMove(final @NotNull CommandContext<CommandSourceStack> context) {
+            final ServerPlayer player = context.getSource().getPlayer();
+            final String groupName = StringArgumentType.getString(context, "groupName");
+            final float radius = FloatArgumentType.getFloat(context, "radius");
+            final int n = ProductDisplay_BulkOperations.move(
+                (ServerLevel)player.level(),
+                player.getPosition(1f).toVector3f(),
+                radius,
+                groupName,
+                player
+            );
+            player.displayClientMessage(new Txt("Moved " + n + " displays").get(), false);
         return 1;
     }
 }

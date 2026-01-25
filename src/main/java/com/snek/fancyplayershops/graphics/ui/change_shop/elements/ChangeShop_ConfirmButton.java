@@ -11,7 +11,6 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_Toggle
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.Txt;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -38,7 +37,7 @@ public class ChangeShop_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
         // Change shop
         final ProductDisplay display = GetDisplay.get(this);
-        display.changeShop(menu.getNewShopName(), (ServerPlayer)menu.getContext().getPlayer());
+        display.changeShop(menu.getNewShopName());
         if(isActive()) Clickable.playSound(player);
 
         // Send feedback message

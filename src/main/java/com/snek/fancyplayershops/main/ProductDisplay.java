@@ -1069,13 +1069,13 @@ public class ProductDisplay {
      * If the name doesn't match any existing shop, a new one is created.
      * @param name The name of the new shop.
      */
-    public void changeShop(final @NotNull String name, final @NotNull ServerPlayer owner) {
+    public void changeShop(final @NotNull String name) {
         final Shop prevShop = shop;
         Shop newShop = null;
 
 
         // Try to find the shop
-        for(final Shop newShopCandidate : ShopManager.getShops(owner)) {
+        for(final Shop newShopCandidate : ShopManager.getShops(MinecraftUtils.getPlayerByUUID(ownerUUID))) {
             if(newShopCandidate.getDisplayName().equals(name)) {
                 newShop = newShopCandidate;
             }
