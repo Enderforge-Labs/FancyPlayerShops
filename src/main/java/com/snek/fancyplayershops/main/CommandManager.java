@@ -79,6 +79,7 @@ public abstract class CommandManager {
         final var function = awaitingConfirmation.get(player.getUUID());
         if(function != null) {
             function.run();
+            awaitingConfirmation.remove(player.getUUID());
         }
         else {
             player.displayClientMessage(new Txt("There is nothing to confirm!").lightGray().get(), false);
