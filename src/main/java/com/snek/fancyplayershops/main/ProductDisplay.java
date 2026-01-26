@@ -1053,7 +1053,7 @@ public class ProductDisplay {
      * Computes the name of the display.
      * This is meant for use in stand-alone text elements such as titles.
      * The name is capitalized and doesn't contain any additional text.
-     * @return The name of the display, or "Empty product display" if unconfigured.
+     * @return The name of the item, or "Empty product display" if unconfigured.
      */
     public @NotNull String getStandaloneName() {
         return item.is(Items.AIR) ? "Empty product display" : MinecraftUtils.getFancyItemName(item).getString();
