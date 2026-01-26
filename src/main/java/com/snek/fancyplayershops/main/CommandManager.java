@@ -18,6 +18,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.ProductDisplayManager;
 import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
@@ -28,6 +29,7 @@ import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
@@ -52,7 +54,7 @@ import net.minecraft.world.phys.Vec3;
 @SuppressWarnings("java:S1700") //! Bad member names
 public abstract class CommandManager {
     private CommandManager() {}
-    private static final @NotNull Map<@NotNull UUID, @Nullable Runnable> awaitingConfirmation = new HashMap<>();
+    private static final @NotNull Map<@NotNull UUID, @Nullable Pair<Runnable, Long>> awaitingConfirmation = new HashMap<>();
 
 
     /**
@@ -64,7 +66,7 @@ public abstract class CommandManager {
      *     The full message sent to them is "&ltwarningMessage&gt. Run "/shop confirm" to continue.".
      */
     public static void requireConfirmation(final @NotNull Player player, final @NotNull String warningMessage, final @NotNull Runnable function) {
-        awaitingConfirmation.put(player.getUUID(), function);
+        awaitingConfirmation.put(player.getUUID(), Pair.from(function, Scheduler.getTickNum()));
         player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" to continue.").lightGray().get(), false);
     }
 
@@ -78,8 +80,13 @@ public abstract class CommandManager {
         final Player player = context.getSource().getPlayer();
         final var function = awaitingConfirmation.get(player.getUUID());
         if(function != null) {
-            function.run();
-            awaitingConfirmation.remove(player.getUUID());
+            if(Scheduler.getTickNum() - function.getSecond() >= Configs.getMisc().confirm_timeout.getValue()) {
+                player.displayClientMessage(new Txt("This command has expired!").lightGray().get(), false);
+            }
+            else {
+                function.getFirst().run();
+                awaitingConfirmation.remove(player.getUUID());
+            }
         }
         else {
             player.displayClientMessage(new Txt("There is nothing to confirm!").lightGray().get(), false);
