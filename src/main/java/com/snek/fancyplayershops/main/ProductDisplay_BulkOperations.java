@@ -106,17 +106,17 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * Removes all displays near the specified position, sending all the items to their owner's stash.
-     * @param level The target level.
-     * @param pos The center of the purge radius.
-     * @param radius The maximum distance from pos displays can have in order to be purged.
-     * @param enforceOwned Whether to affect only displays owned by the specified player.
+     * Removes the specified displays, sending all the items to their owner's stash.
+     * <p>
+     * Use {@link #selectDisplays} to select them.
+     * @param displays The list of displays to remove.
+     * @param admin Whether the action was performed by an admin.
      * @return The number of displays that were removed.
      */
-    public static int purge(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Option<Player> enforceOwner) {
+    public static int purge(final @NotNull List<ProductDisplay> displays, final boolean admin) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
-        for(final var display : selectDisplays(Option.Some(level), Option.Some(Pair.from(pos, radius)), enforceOwner)) {
+        for(final var display : displays) {
 
             // Add display name to the feedback message
             final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
@@ -132,7 +132,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
         if(r > 0) sendBulkOperationFeedbackMessages(
-            enforceOwner.isNone(), displayNames,
+            admin, displayNames,
             "%1$ of your product displays %3$ been removed%6$: %2$. " +
             "%4$ balance%5$ %3$ been added to your personal balance. " +
             "You will find any remaining stock in your inventory and/or your stash"
@@ -144,17 +144,17 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * Forces the owners to pick up any of their displays near the specified position, sending the snapshots to their stashes.
-     * @param level The target level.
-     * @param pos The center of the radius.
-     * @param radius The maximum distance from pos displays can have in order to be picked up.
-     * @param enforceOwned Whether to affect only displays owned by the specified player.
+     * Forces the owners to pick up the specified displays, sending the snapshots to their stashes.
+     * <p>
+     * Use {@link #selectDisplays} to select them.
+     * @param displays The list of displays to pick up.
+     * @param admin Whether the action was performed by an admin.
      * @return The number of displays that were picked up.
      */
-    public static int displace(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Option<Player> enforceOwner) {
+    public static int displace(final @NotNull List<ProductDisplay> displays, final boolean admin) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
-        for(final var display : selectDisplays(Option.Some(level), Option.Some(Pair.from(pos, radius)), enforceOwner)) {
+        for(final var display : displays) {
 
             // Add display name to the feedback message
             final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
@@ -169,7 +169,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
         if(r > 0) sendBulkOperationFeedbackMessages(
-            enforceOwner.isNone(), displayNames,
+            admin, displayNames,
             "%1$ of your product displays %3$ been converted into an item%6$: %2$. " +
             "You will find %7$ in your inventory and/or your stash"
         );
@@ -180,18 +180,18 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * Moves all displays near the specified position that are owned by the specified player to another shop.
-     * @param level The target level.
-     * @param pos The center of the radius.
-     * @param radius The maximum distance from pos displays can have in order to be picked up.
+     * Moves multiple displays to another shop.
+     * <p>
+     * Use {@link #selectDisplays} to select them.
+     * @param displays The list of displays to move.
      * @param shopName The name of the shop to move the displays to. Shops that don't already exist are created.
      * @return The number of displays that were moved.
      */
-    public static int move(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull String shopName, final @NotNull Player owner) {
+    public static int move(final @NotNull List<ProductDisplay> displays, final @NotNull String shopName) {
         int r = 0;
         final Map<UUID, List<String>> displayNames = new HashMap<>();
         String actualShopName = null;
-        for(final var display : selectDisplays(Option.Some(level), Option.Some(Pair.from(pos, radius)), Option.Some(owner))) {
+        for(final var display : displays) {
 
             // Add display name to the feedback message
             final List<String> _displayNames = displayNames.computeIfAbsent(display.getOwnerUuid(), k -> new ArrayList<>());
@@ -217,19 +217,19 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
 
     /**
-     * Transfers all displays near the specified position to the specified player.
-     * @param level The target level.
-     * @param pos The center of the radius.
-     * @param radius The maximum distance from pos displays can have in order to be picked up.
+     * Transfers multiple displays to the specified player.
+     * <p>
+     * Use {@link #selectDisplays} to select them.
+     * @param displays The list of displays to move.
      * @param newOwner The player to transfer the displays to.
-     * @param enforceOwned Whether to affect only displays owned by the specified player.
+     * @param admin Whether the action was performed by an admin.
      * @return The number of displays that were transferred.
      */
-    public static int transfer(final @NotNull ServerLevel level, final @NotNull Vector3f pos, final float radius, final @NotNull Player newOwner, final @NotNull Option<Player> enforceOwner) {
+    public static int transfer(final @NotNull List<ProductDisplay> displays, final @NotNull Player newOwner, final boolean admin) {
         int r = 0;
         final List<String> allNames = new ArrayList<>();
         final Map<UUID, List<String>> displayNames = new HashMap<>();
-        for(final var display : selectDisplays(Option.Some(level), Option.Some(Pair.from(pos, radius)), enforceOwner)) {
+        for(final var display : displays) {
             if(display.getOwnerUuid().equals(newOwner.getUUID())) {
                 continue;
             }
@@ -252,13 +252,13 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
             // Send feedback to previous owners
             sendBulkOperationFeedbackMessages(
-                enforceOwner.isNone(), displayNames,
+                admin, displayNames,
             "%1$ of your product displays %3$ been transferred to " + newOwner.getName().getString() + "%6$: %2$. "
             );
 
             // Send feedback to the new owner
             sendBulkOperationFeedbackMessages(
-                enforceOwner.isNone(), Map.of(newOwner.getUUID(), allNames),
+                admin, Map.of(newOwner.getUUID(), allNames),
                 "%1$ product displays %3$ been transferred to you%6$: %2$. "
             );
         }

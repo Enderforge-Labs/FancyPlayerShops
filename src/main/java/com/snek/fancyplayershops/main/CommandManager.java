@@ -1,8 +1,12 @@
 package com.snek.fancyplayershops.main;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.mojang.brigadier.arguments.FloatArgumentType;
@@ -10,6 +14,7 @@ import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 import net.minecraft.commands.arguments.EntityArgument;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -18,15 +23,18 @@ import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.data.StashManager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.data_types.containers.Option;
+import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.Utils;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 
@@ -44,6 +52,43 @@ import net.minecraft.world.phys.Vec3;
 @SuppressWarnings("java:S1700") //! Bad member names
 public abstract class CommandManager {
     private CommandManager() {}
+    private static final @NotNull Map<@NotNull UUID, @Nullable Runnable> awaitingConfirmation = new HashMap<>();
+
+
+    /**
+     * Stores a function and calls it when the player runs the command /shop confirm.
+     * Only each player's last stored function is executed.
+     * @param player The player.
+     * @param warningMessage The warning message to show the player.
+     * @param function The function to store.
+     *     The full message sent to them is "&ltwarningMessage&gt. Run "/shop confirm" to continue.".
+     */
+    public static void requireConfirmation(final @NotNull Player player, final @NotNull String warningMessage, final @NotNull Runnable function) {
+        awaitingConfirmation.put(player.getUUID(), function);
+        player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" to continue.").lightGray().get(), false);
+    }
+
+
+    /**
+     * Confirms the last command sent by a player.
+     * @param context The command context.
+     * @return 1.
+     */
+    public static int confirm(final @NotNull CommandContext<CommandSourceStack> context) {
+        final Player player = context.getSource().getPlayer();
+        final var function = awaitingConfirmation.get(player.getUUID());
+        if(function != null) {
+            function.run();
+        }
+        else {
+            player.displayClientMessage(new Txt("There is nothing to confirm!").lightGray().get(), false);
+        }
+        return 1;
+    }
+
+
+
+
 
 
 
@@ -51,7 +96,22 @@ public abstract class CommandManager {
     private static class HelpText {
         private static final String[] _s = {
             "/shop",
-            "Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash"
+            "Open the main menu of FancyPlayerShops. From there, you will be able to view your shops, claim balances and access your stash."
+        };
+
+        private static final String[] CONFIRM = {
+            "/shop confirm",
+            "Confirm the previous command. This is required by some commands that modify large amounts of displays or change important things."
+        };
+
+        private static final String[] CLAIM = {
+            "/shop claim",
+            "Claim all of your shops' balances."
+        };
+
+        private static final String[] CLOSEHUD = {
+            "/shop close-hud",
+            "Forcibly close any currently open HUD."
         };
 
 
@@ -136,18 +196,6 @@ public abstract class CommandManager {
                 "This only affects displays you own"
             };
         }
-
-
-        private static final String[] CLOSEHUD = {
-            "/shop close-hud",
-            "Forcibly close any currently open HUD."
-        };
-
-
-        private static final String[] CLAIM = {
-            "/shop claim",
-            "Claim all of your shops' balances."
-        };
     }
 
 
@@ -167,6 +215,13 @@ public abstract class CommandManager {
         dispatcher.register(Commands.literal("shop")
             .then(appendHelpText(HelpText._s))
             .executes(CommandManager::executeOpenMainMenu)
+
+
+            // Command confirmation
+            .then(Commands.literal("confirm")
+                .then(appendHelpText(HelpText.CONFIRM))
+                .executes(CommandManager::confirm)
+            )
 
 
             // Balance claim
@@ -201,13 +256,13 @@ public abstract class CommandManager {
                     .then(Commands.literal("purge")
                         .then(appendHelpText(HelpText.Op.Bulk.PURGE))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(context -> executeBulkPurge(context, false))
+                            .executes(context -> executeBulkPurge(context, true))
                         )
                     )
                     .then(Commands.literal("displace")
                         .then(appendHelpText(HelpText.Op.Bulk.DISPLACE))
                         .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                            .executes(context -> executeBulkDisplace(context, false))
+                            .executes(context -> executeBulkDisplace(context, true))
                         )
                     )
                     .then(Commands.literal("transfer")
@@ -252,20 +307,20 @@ public abstract class CommandManager {
                 .then(Commands.literal("purge")
                     .then(appendHelpText(HelpText.Bulk.PURGE))
                     .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(context -> executeBulkPurge(context, true))
+                        .executes(context -> executeBulkPurge(context, false))
                     )
                 )
                 .then(Commands.literal("displace")
                     .then(appendHelpText(HelpText.Bulk.DISPLACE))
                     .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(context -> executeBulkDisplace(context, true))
+                        .executes(context -> executeBulkDisplace(context, false))
                     )
                 )
                 .then(Commands.literal("transfer")
                     .then(appendHelpText(HelpText.Bulk.TRANSFER))
                     .then(Commands.argument("newOwner", EntityArgument.player())
                     .then(Commands.argument("radius", FloatArgumentType.floatArg(0.1f))
-                        .executes(context -> executeBulkTransfer(context, true))
+                        .executes(context -> executeBulkTransfer(context, false))
                     ))
                 )
                 .then(Commands.literal("move")
@@ -394,32 +449,48 @@ public abstract class CommandManager {
 
 
 
-    public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
+    public static int executeBulkPurge(final @NotNull CommandContext<CommandSourceStack> context, final boolean admin) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.purge(
-            (ServerLevel)player.level(),
-            player.getPosition(1f).toVector3f(),
-            radius,
-            enforceOwner ? Option.Some(player) : Option.None()
+
+
+        final var displays = ProductDisplay_BulkOperations.selectDisplays(
+            Option.Some((ServerLevel)player.level()),
+            Option.Some(Pair.from(player.getPosition(1f).toVector3f(), radius)),
+            admin ? Option.None() : Option.Some(player)
         );
-        player.displayClientMessage(new Txt("Purged " + n + " displays").get(), false);
+        requireConfirmation(
+            player,
+            "You are about to remove " + Utils.formatAmount(displays.size()) + " displays",
+            () -> {
+                final int n = ProductDisplay_BulkOperations.purge(displays, admin);
+                player.displayClientMessage(new Txt("Purged " + n + " displays").get(), false);
+            }
+        );
         return 1;
     }
 
 
 
 
-    public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
+    public static int executeBulkDisplace(final @NotNull CommandContext<CommandSourceStack> context, final boolean admin) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.displace(
-            (ServerLevel)player.level(),
-            player.getPosition(1f).toVector3f(),
-            radius,
-            enforceOwner ? Option.Some(player) : Option.None()
+
+
+        final var displays = ProductDisplay_BulkOperations.selectDisplays(
+            Option.Some((ServerLevel)player.level()),
+            Option.Some(Pair.from(player.getPosition(1f).toVector3f(), radius)),
+            admin ? Option.None() : Option.Some(player)
         );
-        player.displayClientMessage(new Txt("Converted " + n + " displays into items").get(), false);
+        requireConfirmation(
+            player,
+            "You are about to displace " + Utils.formatAmount(displays.size()) + " displays",
+            () -> {
+                final int n = ProductDisplay_BulkOperations.displace(displays, admin);
+                player.displayClientMessage(new Txt("Converted " + n + " displays into items").get(), false);
+            }
+        );
         return 1;
     }
 
@@ -429,37 +500,52 @@ public abstract class CommandManager {
     public static int executeBulkFill(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         final float radius = FloatArgumentType.getFloat(context, "radius");
-        final int n = ProductDisplay_BulkOperations.fill(
-            (ServerLevel)player.level(),
-            player.getPosition(1f).toVector3f(),
-            radius,
-            player
+
+
+        requireConfirmation(
+            player,
+            "You are about to fill the area around you with randomly generated displays",
+            () -> {
+                final int n = ProductDisplay_BulkOperations.fill(
+                    (ServerLevel)player.level(),
+                    player.getPosition(1f).toVector3f(),
+                    radius,
+                    player
+                );
+                player.displayClientMessage(new Txt("Created " + n + " displays").get(), false);
+            }
         );
-        player.displayClientMessage(new Txt("Created " + n + " displays").get(), false);
         return 1;
     }
 
 
 
 
-    public static int executeBulkTransfer(final @NotNull CommandContext<CommandSourceStack> context, final boolean enforceOwner) {
+    public static int executeBulkTransfer(final @NotNull CommandContext<CommandSourceStack> context, final boolean admin) {
         try {
             final ServerPlayer player = context.getSource().getPlayer();
             final ServerPlayer newOwner = EntityArgument.getPlayer(context, "newOwner");
             final float radius = FloatArgumentType.getFloat(context, "radius");
-            final int n = ProductDisplay_BulkOperations.transfer(
-                (ServerLevel)player.level(),
-                player.getPosition(1f).toVector3f(),
-                radius,
-                newOwner,
-                enforceOwner ? Option.Some(player) : Option.None()
+
+
+            final var displays = ProductDisplay_BulkOperations.selectDisplays(
+                Option.Some((ServerLevel)player.level()),
+                Option.Some(Pair.from(player.getPosition(1f).toVector3f(), radius)),
+                admin ? Option.None() : Option.Some(player)
             );
-            player.displayClientMessage(new Txt("Transferred " + n + " displays").get(), false);
+            requireConfirmation(
+                player,
+                "You are about to transfer " + Utils.formatAmount(displays.size()) + " displays to " + newOwner.getName() + "?",
+                () -> {
+                    final int n = ProductDisplay_BulkOperations.transfer(displays, newOwner, admin);
+                    player.displayClientMessage(new Txt("Transferred " + n + " displays").get(), false);
+                }
+            );
+            return 1;
         } catch(CommandSyntaxException e) {
             context.getSource().sendFailure(new Txt("The specified player is not online!").get());
             return 0;
         }
-        return 1;
     }
 
 
@@ -470,20 +556,26 @@ public abstract class CommandManager {
         final String shopname = StringArgumentType.getString(context, "shopname");
         final float radius = FloatArgumentType.getFloat(context, "radius");
 
+
         final var validationResult = ShopManager.validateShopName(shopname);
         if(validationResult.isSome()) {
             context.getSource().sendFailure(new Txt(validationResult.unwrap() + "!").get());
             return 0;
         }
         else {
-            final int n = ProductDisplay_BulkOperations.move(
-               (ServerLevel)player.level(),
-                player.getPosition(1f).toVector3f(),
-                radius,
-                shopname,
-                player
+            final var displays = ProductDisplay_BulkOperations.selectDisplays(
+                Option.Some((ServerLevel)player.level()),
+                Option.Some(Pair.from(player.getPosition(1f).toVector3f(), radius)),
+                Option.Some(player)
             );
-            player.displayClientMessage(new Txt("Moved " + n + " displays").get(), false);
+            requireConfirmation(
+                player,
+                "You are about to move " + Utils.formatAmount(displays.size()) + " displays to \"" + shopname + "\"?",
+                () -> {
+                    final int n = ProductDisplay_BulkOperations.move(displays, shopname);
+                    player.displayClientMessage(new Txt("Moved " + n + " displays").get(), false);
+                }
+            );
             return 1;
         }
     }
