@@ -7,8 +7,6 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
-- Make shops (not snapshots) spawn with a direction that faces the player
-
 - finish adding AE2 compatibility
   - Make restocking follow the tier's speeds (no restocking for t2 and t1)
   - Implement wireless restocking

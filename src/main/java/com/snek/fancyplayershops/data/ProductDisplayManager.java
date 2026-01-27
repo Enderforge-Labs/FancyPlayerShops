@@ -357,6 +357,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * Deletes the data associated with this hop instance.
      * @param display The display to delete.
      */
+    @SuppressWarnings({ "java:S899", "java:S4042" }) //! Return value of file.delete() ignored
     public static void deleteDisplay(final @NotNull ProductDisplay display) {
 
         // Remove display from the runtime maps
