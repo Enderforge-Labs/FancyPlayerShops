@@ -5,17 +5,17 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.graphics.misc.styles.SimpleTextElmStyle_Small;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
+import com.snek.frameworklib.graphics.core.Canvas;
 
 
 
@@ -46,7 +46,7 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
 
 
         // Add message
-        e = bg.addChild(new SimpleTextElm(display.getLevel(), new SimpleTextElmStyle_Small()
+        e = bg.addChild(new TextElm(display.getLevel(), new TextStyle_Small()
             .withText(new Txt(
                 "\n" +
                 "This display contains products with mixed NBTs.\n" +
@@ -72,7 +72,7 @@ public class NbtDisclaimerCanvas extends ProductCanvasBase implements InputIndic
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(TOOLBAR_H + CanvasBorder.DEFAULT_HEIGHT);
+        e.setPosY(TOOLBAR_H + Canvas.DEFAULT_BORDER_H);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 

@@ -29,6 +29,7 @@ import com.snek.fancyplayershops.data.data_types.PlayerStash;
 import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -43,7 +44,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -84,25 +84,12 @@ public class ProductDisplay {
     public static final Component PRODUCT_DISPLAY_AMOUNT_TEXT = new Txt("This display doesn't have enough items in stock!").lightGray().get();
 
 
-    /**
-     * Computes the name of the direction of the item from its rotation.
-     * @param rotation The rotation of the item, in eighths.
-     * @return The direction of the item as a string.
-     */
-    public static String getOrientationName(final int rotation) {
-        return ROTATION_NAMES[rotation];
-    }
-    private static final String[] ROTATION_NAMES = new String[] {
-        //! By default, item elements face north. 0° = North
-        "North", "Northwest", "West", "Southwest", "South", "Southeast", "East", "Northeast"
-    };
-
-
     // Constant display data
-    private final @NotNull ServerLevel           level;                            // The level this display was placed in
-    private final @NotNull BlockPos              pos;                              // The position of the display
-    private final @NotNull String                displayIdentifierCache_noLevel;   // The cached display identifier, not including the level
-    private final @NotNull ProductDisplayKey     displayKeyCache;                  // The cached display key
+    private final @NotNull ServerLevel       level;                             // The level this display was placed in
+    private final @NotNull BlockPos          pos;                               // The position of the display
+    private final @NotNull String            displayIdentifierCache_noLevel;    // The cached display identifier, not including the level
+    private final @NotNull ProductDisplayKey displayKeyCache;                   // The cached display key
+    private final @NotNull DisplayTier       tier;                              // The tier of the display
 
 
     // Mutable display data
@@ -112,7 +99,7 @@ public class ProductDisplay {
     private           long      price;                                  // The configured price for each item
     private           long      stock;                                  // The current stock
     private           long      maxStock;                               // The configured maximum stock
-    private           int       defaultRotation;                        // The configured item rotation, in eighths
+    private @NotNull  Direction defaultDirection;                       // The configured item direction
     private           float     colorThemeHue;                          // The configured hue of the color theme
     private @NotNull  Shop      shop;                                   // The shop this display has been assigned to
     private           boolean   nbtFilter;                              // The configured nbt filter setting
@@ -151,7 +138,7 @@ public class ProductDisplay {
     public           long                   getBalance          () { return balance;                         }
     public           long                   getStock            () { return stock;                           }
     public           long                   getMaxStock         () { return maxStock;                        }
-    public           int                    getDefaultRotation  () { return defaultRotation;                 }
+    public @NotNull  Direction              getDefaultDirection () { return defaultDirection;                }
     public           boolean                isFocused           () { return focusState;                      }
     public           boolean                isRemoved           () { return removalState;                    }
     public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
@@ -159,6 +146,7 @@ public class ProductDisplay {
     public @Nullable Player                 getViewer           () { return viewer;                          }
     public           boolean                isScheduledForSave  () { return scheduledForSave;                }
     public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
+    public @NotNull  DisplayTier            getTier             () { return tier;                            }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
     public @NotNull  Shop                   getShop             () { return shop;                            }
@@ -220,7 +208,7 @@ public class ProductDisplay {
      * @param price The price of the item.
      * @param stock The current stock.
      * @param maxStock The stock limit.
-     * @param rotation The default rotation of the item display, in eighths.
+     * @param direction The default direction of the item display, in eighths.
      * @param hue The hue of the color theme.
      * @param balance The balance collected by this display.
      * @param nbtFilter The NBT filter setting.
@@ -235,12 +223,13 @@ public class ProductDisplay {
         final long price,
         final long stock,
         final long maxStock,
-        final int rotation,
+        final @NotNull Direction direction,
         final float hue,
         final long balance,
         final boolean nbtFilter,
         final @NotNull BlockPos position,
         final @NotNull ServerLevel level,
+        final @NotNull DisplayTier tier,
         final @NotNull ItemStack item,
         final @NotNull Map<@NotNull UUID, @NotNull Pair<@NotNull ItemStack, @NotNull Long>> storedItems
     ) {
@@ -250,12 +239,13 @@ public class ProductDisplay {
         this.price = price;
         this.stock = stock;
         this.maxStock = maxStock;
-        this.defaultRotation = rotation;
+        this.defaultDirection = direction;
         this.colorThemeHue = hue;
         this.balance = balance;
         this.nbtFilter = nbtFilter;
         this.pos = position;
         this.level = level;
+        this.tier = tier;
         this.item = item;
         this.storedItems = storedItems;
 
@@ -477,21 +467,11 @@ public class ProductDisplay {
             //! Stock change events are fired by sendItemsToPlayer call
 
             // Send feedback messages
-            owner.displayClientMessage(new Txt()
-                .cat(new Txt("You retrieved ").lightGray())
-                .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                .cat(new Txt(" from your product display").lightGray())
-            .get(), false);
-
-            // Send feedback message for the stashed items
-            if(stashedAmount > 0) {
-                owner.displayClientMessage(new Txt()
-                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " ").white())
-                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                .get(), false);
-            }
+            StashManager.sendStashFeedbackMessage(
+                owner, item, amount, stashedAmount,
+                "You retrieved %3$ %5$ from your product display.",
+                "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
+            );
         }
     }
 
@@ -532,21 +512,11 @@ public class ProductDisplay {
 
 
                 // Send feedback messages
-                buyer.displayClientMessage(new Txt()
-                    .cat(new Txt("Bought ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(amount, true, true) + " " + MinecraftUtils.getFancyItemName(item).getString()).white())
-                    .cat(new Txt(" for " + Utils.formatPrice(totPrice)).lightGray())
-                .get(), false);
-
-                // Send feedback message for the stashed items
-                if(stashedAmount > 0) {
-                    buyer.displayClientMessage(new Txt()
-                        .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                        .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                        .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                        .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                    .get(), false);
-                }
+                StashManager.sendStashFeedbackMessage(
+                    buyer, item, amount, stashedAmount,
+                    "You bought %3$ %5$ " + " for " + Utils.formatPrice(totPrice) + ".",
+                    "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
+                );
 
                 // Fire events
                 DisplayEvents.ITEMS_SOLD.invoker().onItemsSell(this, buyer, item, amount);
@@ -687,12 +657,13 @@ public class ProductDisplay {
      * @return Whether the new value could be set.
      */
     public boolean setStockLimit(final double newStockLimit) {
+        final long capacity = tier.getCapacity();
         if(newStockLimit < 0.9999) {
             if(user != null) user.displayClientMessage(new Txt("The stock limit must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(newStockLimit > Configs.getDisplay().stock_limit.getMax()) {
-            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(newStockLimit > capacity) {
+            if(user != null) user.displayClientMessage(new Txt("The stock limit cannot be greater than the display's capacity (" + Utils.formatAmount(capacity) + ")!").red().bold().get(), true);
             return false;
         }
         else maxStock = Math.round(newStockLimit);
@@ -704,15 +675,12 @@ public class ProductDisplay {
 
 
     /**
-     * Adds a specified rotation to the default rotation of the item display and saves the product display to its file.
+     * Adds a specified rotation to the default direction of the item display and saves the product display to its file.
      * @param _rotation The rotation to add, in eighths.
      *     Negative values are allowed and are converted to their positive equivalent.
      */
     public void addDefaultRotation(final int _rotation) {
-
-        // Add value to default rotation and save the display
-        //! Reduce range to [-7, 7], then add 8 to shift range to [1, 15], then reduce to [0, 7]
-        defaultRotation = ((defaultRotation + _rotation) % 8 + 8) % 8;
+        defaultDirection = Direction.fromEighths(defaultDirection.getEighths() + _rotation);
         ProductDisplayManager.scheduleDisplaySave(this);
     }
 
@@ -728,11 +696,12 @@ public class ProductDisplay {
     public void changeItem(final @NotNull ItemStack newItem) {
 
         // Change the item value and recalculate the UUID
+        final var oldItem = item;
         item = newItem.copyWithCount(1);
         itemUUID = MinecraftUtils.calcItemUUID(item);
 
         // Stash incompatible stacks
-        stashIncompatible();
+        stashIncompatible(oldItem);
 
         // Save the display
         ProductDisplayManager.scheduleDisplaySave(this);
@@ -771,8 +740,9 @@ public class ProductDisplay {
 
     /**
      * Sends any incompatible item stored in this display to the owner's inventory/stash.
+     * @param oldItem The item to use for the player feedback message.
      */
-    public void stashIncompatible() {
+    public void stashIncompatible(final @NotNull ItemStack oldItem) {
         if(stock == 0) return;
         if(item.is(Items.AIR)) return;
         final long oldStock = stock;
@@ -802,26 +772,11 @@ public class ProductDisplay {
 
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
-        if(player != null) {
-            final long removedAmount = givenAmount + stashedAmount;
-            if(removedAmount > 0) {
-                player.displayClientMessage(new Txt()
-                    .cat(new Txt("You picked up ").lightGray())
-                    .cat(new Txt(Utils.formatAmount(removedAmount, true, true) + " ").white())
-                    .cat(new Txt("incompatible ").lightGray())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                    .cat(new Txt("from the product display").lightGray())
-                .get(), false);
-            }
-            if(stashedAmount > 0) {
-                player.displayClientMessage(new Txt()
-                    .cat(new Txt(Utils.formatAmount(stashedAmount, true, true) + " ").white())
-                    .cat(new Txt(MinecraftUtils.getFancyItemName(item).getString() + " " ).white())
-                    .cat(new Txt("that didn't fit in your inventory ").lightGray())
-                    .cat(new Txt((stashedAmount > 1 ? "have" : "has") + " been sent to your stash").lightGray())
-                .get(), false);
-            }
-        }
+        StashManager.sendStashFeedbackMessage(
+            player, oldItem, givenAmount, stashedAmount,
+            "You picked up %3$ incompatible %5$ from the product display.",
+            "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
+        );
 
 
         // Fire event and save this display
@@ -837,6 +792,7 @@ public class ProductDisplay {
      * <p> Any item left in the display is fully deleted and cannot be recovered.
      * <p> The balance is also deleted and cannot be recovered.
      * <p> The save file of this display is deleted as well.
+     * <p> This method doesn't fire shop removal events.
      */
     public void remove() {
         if(!removalState) {
@@ -865,7 +821,7 @@ public class ProductDisplay {
     public void pickUp(final boolean playerFeedback) {
 
         // Create the snapshot and give it to the player
-        final @NotNull ItemStack snapshot = ProductDisplayManager.createShopSnapshot(this);
+        final @NotNull ItemStack snapshot = ProductDisplayManager.createDisplaySnapshot(this);
         StashManager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
     }
 
@@ -947,7 +903,7 @@ public class ProductDisplay {
 
 
         // Calculate side and find the storage block
-        final Direction direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
+        final var direction = (rel.getX() + rel.getY() + rel.getZ() == 0) ? null : net.minecraft.core.Direction.getNearest(-rel.getX(), -rel.getY(), rel.getZ());
         final Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, targetPos, direction);
 
 
@@ -991,32 +947,14 @@ public class ProductDisplay {
 
 
     /**
-     * Changes the owner of this display and sends a feedback message to the old owner.
+     * Changes the owner of this display and sends a feedback message to the players.
      * <p> If the new owner and the current one are the same player, this call will have no effect.
      * @param newOwner The new owner.
+     * @param playerFeedback Whether to send the player a feedback message.
      */
-    public void changeOwner(final @NotNull Player newOwner) {
+    public void changeOwner(final @NotNull Player newOwner, final boolean playerFeedback) {
         if(ownerUUID.equals(newOwner.getUUID())) return;
         final Player oldOwner = MinecraftUtils.getPlayerByUUID(ownerUUID);
-
-
-        // Send feedback to old owner
-        oldOwner.displayClientMessage(new Txt()
-            .cat(new Txt("You successfully transferred the ownership of your ").lightGray())
-            .cat(new Txt(getDecoratedName()).white())
-            .cat(new Txt(" to ").lightGray())
-            .cat(new Txt(newOwner.getName().getString()).white())
-        .get(), false);
-
-
-        // Send feedback to new owner
-        newOwner.displayClientMessage(new Txt()
-            .cat(new Txt(oldOwner.getName().getString()).white())
-            .cat(new Txt(" transferred ownership of their ").lightGray())
-            .cat(new Txt(getDecoratedName()).white())
-            .cat(new Txt(" to you.\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]").lightGray())
-            .cat(new Txt(" in the dimension " + level.dimension().location().toString()).lightGray())
-        .get(), false);
 
 
         // Force the display to unfocus in order to close any UI
@@ -1032,6 +970,25 @@ public class ProductDisplay {
         ProductDisplayManager.registerDisplay(this);
         ShopManager.registerDisplay(this, getShop().getUuid());
         ProductDisplayManager.scheduleDisplaySave(this);
+
+
+        // Send feedback messages
+        if(playerFeedback) {
+            oldOwner.displayClientMessage(new Txt()
+                .cat(new Txt("You successfully transferred the ownership of your ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" to ").lightGray())
+                .cat(new Txt(newOwner.getName().getString()).white())
+            .get(), false);
+
+            newOwner.displayClientMessage(new Txt()
+                .cat(new Txt(oldOwner.getName().getString()).white())
+                .cat(new Txt(" transferred ownership of their ").lightGray())
+                .cat(new Txt(getDecoratedName()).white())
+                .cat(new Txt(" to you.\nYou can find it at the coords [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]").lightGray())
+                .cat(new Txt(" in the dimension " + level.dimension().location().toString()).lightGray())
+            .get(), false);
+        }
 
 
         // Fire events
@@ -1096,7 +1053,7 @@ public class ProductDisplay {
      * Computes the name of the display.
      * This is meant for use in stand-alone text elements such as titles.
      * The name is capitalized and doesn't contain any additional text.
-     * @return The name of the display, or "Empty product display" if unconfigured.
+     * @return The name of the item, or "Empty product display" if unconfigured.
      */
     public @NotNull String getStandaloneName() {
         return item.is(Items.AIR) ? "Empty product display" : MinecraftUtils.getFancyItemName(item).getString();
@@ -1112,13 +1069,13 @@ public class ProductDisplay {
      * If the name doesn't match any existing shop, a new one is created.
      * @param name The name of the new shop.
      */
-    public void changeShop(final @NotNull String name, final @NotNull ServerPlayer owner) {
+    public void changeShop(final @NotNull String name) {
         final Shop prevShop = shop;
         Shop newShop = null;
 
 
         // Try to find the shop
-        for(final Shop newShopCandidate : ShopManager.getShops(owner)) {
+        for(final Shop newShopCandidate : ShopManager.getShops(MinecraftUtils.getPlayerByUUID(ownerUUID))) {
             if(newShopCandidate.getDisplayName().equals(name)) {
                 newShop = newShopCandidate;
             }
@@ -1154,7 +1111,7 @@ public class ProductDisplay {
 
             // If the new setting filters NBTs, send non-compatible items to the stash
             if(nbtFilter) {
-                stashIncompatible();
+                stashIncompatible(item);
             }
 
             // If the new setting allows any NBT, change nothing

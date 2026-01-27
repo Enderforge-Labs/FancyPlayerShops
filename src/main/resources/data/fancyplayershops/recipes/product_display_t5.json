@@ -1,0 +1,46 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["ae2"]
+        }
+    ],
+    "type": "frameworklib:enhanced_crafting_shaped",
+    "category": "misc",
+    "group": "Product displays",
+    "key": {
+        "Q": {
+            "tag": "ae2:smart_dense_cable",
+            "frameworklib:count": 16
+        },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t4" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t4"
+        },
+        "S": {
+            "item": "ae2:cell_component_256k",
+            "frameworklib:count": 16
+        },
+        "C": {
+            "item": "minecraft:nether_star",
+            "frameworklib:count": 4
+        },
+        "R": {
+            "item": "ae2:wireless_booster",
+            "frameworklib:count": 16
+        },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 64
+        }
+    },
+    "pattern": [
+        "QQQ",
+        "BDR",
+        "SCS"
+    ],
+    "result": {
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t5"
+    },
+    "show_notification": false
+}

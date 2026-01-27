@@ -8,7 +8,7 @@ import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 import net.minecraft.world.entity.Display.BillboardConstraints;
 
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 
 
 
@@ -17,7 +17,7 @@ import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 
 
 
-public class SimpleNameDisplay_S extends FancyTextElmStyle {
+public class SimpleNameDisplay_S extends PanelTextStyle {
 
     public SimpleNameDisplay_S() {
         super();

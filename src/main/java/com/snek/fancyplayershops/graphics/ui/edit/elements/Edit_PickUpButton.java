@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_PickUpButton extends SimpleButtonElm {
+public class Edit_PickUpButton extends ButtonElm {
     public Edit_PickUpButton(final @NotNull ProductDisplay display) {
         super(display.getLevel(), null, "Pick up product display", 1,  new Edit_SquareButton_S(display));
 

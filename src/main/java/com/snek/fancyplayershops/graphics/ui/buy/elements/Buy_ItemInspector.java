@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
 import com.snek.fancyplayershops.graphics.ui.inspect.InspectCanvas;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -23,7 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A button that allows the user of the display to view details about the item.
  */
-public class Buy_ItemInspector extends SimpleButtonElm {
+public class Buy_ItemInspector extends ButtonElm {
     final @NotNull Misc_BackButton backButton;
 
 

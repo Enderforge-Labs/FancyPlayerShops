@@ -40,6 +40,7 @@ import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -91,14 +92,17 @@ public class FancyPlayerShops implements ModInitializer {
     @Override
     public void onInitialize() {
 
-
         // Register commands
         CommandManager.register();
 
 
-
-
-
+        // Force display item cration
+        // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
+        try {
+            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         // Register initialization
         ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkConfig.PHASE_ID, PHASE_ID);
@@ -233,18 +237,21 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
+                        final double angleRadians = Math.atan2(-(player.getZ() - blockPos.getZ()), player.getX() - blockPos.getX()) + Math.PI / 2;
+                        final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
                             /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
                             /* price       */ 1000l,
                             /* stock       */ 0,
-                            /* maxStock    */ 1000,
-                            /* rotation    */ 0,
+                            /* maxStock    */ tier.getCapacity(),
+                            /* direction   */ Direction.fromRadians(angleRadians),
                             /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,
                             /* position    */ blockPos,
                             /* level       */ serverLevel,
+                            /* tier        */ tier,
                             /* item        */ Items.AIR.getDefaultInstance(),
                             /* storedItems */ new HashMap<>()
                         );

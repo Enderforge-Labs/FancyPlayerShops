@@ -24,11 +24,13 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
+import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -41,6 +43,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -137,19 +140,11 @@ public final class ProductDisplayManager extends UtilityClassBase {
     //! Don't use the name or tooltip to check the item. Displays should work even when renamed in an anvil or modified by mods
     public  static final @NotNull String DISPLAY_ITEM_NBT_KEY = FancyPlayerShops.MOD_ID + ".item.display_item";
     public  static final @NotNull String SNAPSHOT_NBT_KEY  = DISPLAY_ITEM_NBT_KEY + ".snapshot";
-    private static final @NotNull ItemStack productDisplayItem;
-
-    // Product display item texture
-    private static final @NotNull String DISPLAY_ITEM_TEXTURE =
-        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZj" +
-        "I3ODQzMDdiODkyZjUyYjkyZjc0ZmE5ZGI0OTg0YzRmMGYwMmViODFjNjc1MmU1ZWJhNjlhZDY3ODU4NDI3ZSJ9fX0="
-    ;
+    private static final @NotNull List<ItemStack> productDisplayItems = new ArrayList<>();
 
     // Product display item name
     public static final @NotNull Vector3i DISPLAY_ITEM_NAME_COLOR = new Vector3i(175, 140, 190);
-    public static final @NotNull Component DISPLAY_ITEM_NAME =
-        new Txt("Product display").noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR)
-    .get();
+    public static final @NotNull String DISPLAY_ITEM_NAME = "Product display";
 
     // Product display item description
     private static final @NotNull Vector3i DISPLAY_ITEM_DESCRITPION_COLOR = new Vector3i(225, 180, 230);
@@ -162,22 +157,46 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    // Initialize display item stack
     static {
 
-        // Create item and set custom name
-        productDisplayItem = MinecraftUtils.createCustomHead(DISPLAY_ITEM_TEXTURE, false);
-        productDisplayItem.setHoverName(DISPLAY_ITEM_NAME);
+        // Initialize display item stacks
+        for(final var tier : DisplayTier.values()) {
 
-        // Set identification tag
-        MinecraftUtils.addTag(productDisplayItem, DISPLAY_ITEM_NBT_KEY);
 
-        // Set lore
-        final ListTag lore = new ListTag();
-        for(final Component line : DISPLAY_ITEM_DESCRITPION) {
-            lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+            // Create item and set custom name
+            final var item = MinecraftUtils.createCustomHead(tier.getTexture(), false);
+            item.setHoverName(new Txt(DISPLAY_ITEM_NAME + " - " + tier.name()).noItalic().bold().color(DISPLAY_ITEM_NAME_COLOR).get());
+
+
+            // Set identification tag and tier tag (base item tag needs a copy to spawn the right tier of display)
+            //! Add the ID itself as a tag. This lets crafting recipes recognize the item
+            MinecraftUtils.addTag(item, DISPLAY_ITEM_NBT_KEY);
+            MinecraftUtils.addTag(item, new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()).toString());
+            item.getOrCreateTag().putInt("tier", tier.getNumericalId());
+
+
+            // Set lore
+            final ListTag lore = new ListTag();
+            for(final String s : tier.getStatsLines()) {
+                lore.add(StringTag.valueOf(Component.Serializer.toJson(new Txt(s).gray().noItalic().get())));
+            }
+            lore.add(StringTag.valueOf(Component.Serializer.toJson(Component.empty())));
+            for(final Component line : DISPLAY_ITEM_DESCRITPION) lore.add(StringTag.valueOf(Component.Serializer.toJson(line)));
+            item.getOrCreateTagElement("display").put("Lore", lore);
+
+
+            // Set item reference (creative one shouldn't be in any recipe)
+            productDisplayItems.add(item);
+
+
+            // Register recipe items
+            if(tier != DisplayTier.CREATIVE) {
+                EnhancedShapedRecipe.registerDynamicReference(
+                    new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
+                    ProductDisplayManager.getProductDisplayItemCopy(tier)
+                );
+            }
         }
-        productDisplayItem.getOrCreateTagElement("display").put("Lore", lore);
     }
 
 
@@ -338,6 +357,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * Deletes the data associated with this hop instance.
      * @param display The display to delete.
      */
+    @SuppressWarnings({ "java:S899", "java:S4042" }) //! Return value of file.delete() ignored
     public static void deleteDisplay(final @NotNull ProductDisplay display) {
 
         // Remove display from the runtime maps
@@ -359,6 +379,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * Updates PULL_UPDATES_PER_TICK displays each call, making them pull items from nearby inventories.
      * <p> Must be called each server tick.
      */
+    @SuppressWarnings("java:S127") //! Index changed by the loop's body
     public static void pullItems() {
         if(!updateCycleLimiter.attempt()) return;
 
@@ -367,6 +388,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
         if(updateIndex == 0) {
             updateSnapshot = new ArrayList<>(displaysByCoords.values());
         }
+
 
         // Update displays
         for(int i = 0; i < Configs.getPerf().pulls_per_tick.getValue() && updateIndex < updateSnapshot.size(); ++updateIndex) {
@@ -379,10 +401,28 @@ public final class ProductDisplayManager extends UtilityClassBase {
             }
         }
 
+
         // Reset snapshot if this iteration reached its end
         if(updateIndex >= updateSnapshot.size()) {
             updateCycleLimiter.renewCooldown(Configs.getPerf().pull_cycle_frequency.getValue());
             updateIndex = 0;
+        }
+    }
+
+
+
+
+    /**
+     * Forcefully updates all active displays, making them pull items from nearby inventories.
+     * <p>
+     * This bypasses configured restock limits.
+     */
+    public static void forcePullItems() {
+        for(final ProductDisplay display : displaysByCoords.values()) {
+            final ChunkPos chunkPos = new ChunkPos(display.getPos());
+            if(display.getLevel().hasChunk(chunkPos.x, chunkPos.z)) {
+                display.pullItems();
+            }
         }
     }
 
@@ -395,10 +435,11 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
     /**
      * Returns a copy if the default product display item.
+     * @param tier The tier of shop to create.
      * @return A copy of the product display item.
      */
-    public static @NotNull ItemStack getProductDisplayItemCopy() {
-        return productDisplayItem.copy();
+    public static @NotNull ItemStack getProductDisplayItemCopy(final @NotNull DisplayTier tier) {
+        return productDisplayItems.get(tier.ordinal()).copy();
     }
 
 
@@ -411,13 +452,13 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * @param display The display.
      * @return The created product display item.
      */
-    public static @NotNull ItemStack createShopSnapshot(final @NotNull ProductDisplay display) {
+    public static @NotNull ItemStack createDisplaySnapshot(final @NotNull ProductDisplay display) {
         if(display.getItem().is(Items.AIR)) {
-            return getProductDisplayItemCopy();
+            return getProductDisplayItemCopy(display.getTier());
         }
 
         // Get NBTs
-        final ItemStack item = productDisplayItem.copy();
+        final ItemStack item = productDisplayItems.get(display.getTier().ordinal()).copy();
         final CompoundTag nbt = item.getOrCreateTag();
         final CompoundTag nbtDisplay = nbt.getCompound("display");
         final ListTag lore = nbtDisplay.getList("Lore", Tag.TAG_STRING);
@@ -454,7 +495,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
             new Txt().cat(new Txt("Stock: "      ).lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getStock   (), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("Stock limit: ").lightGray().noItalic()).cat(new Txt(Utils.formatAmount(display.getMaxStock(), false, true))).white().noItalic().get(),
             new Txt().cat(new Txt("NBT filter:  ").lightGray().noItalic()).cat(new Txt(display.getNbtFilter() ? "on" : "off")).white().noItalic().get(),
-            new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(ProductDisplay.getOrientationName(display.getDefaultRotation()))).white().noItalic().get(),
+            new Txt().cat(new Txt("Direction: "  ).lightGray().noItalic()).cat(new Txt(display.getDefaultDirection().getName())).white().noItalic().get(),
             new Txt().cat(new Txt("Color: "      ).lightGray().noItalic()).cat(new Txt("█")).color(Utils.HSVtoRGB(new Vector3f(display.getColorThemeHue(), Edit_ColorSelector.S, Edit_ColorSelector.V))).noItalic().get(),
             new Txt().get()
         };

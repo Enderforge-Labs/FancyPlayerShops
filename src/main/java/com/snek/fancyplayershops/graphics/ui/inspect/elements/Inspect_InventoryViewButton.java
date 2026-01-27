@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_ItemInspector_S;
@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
 /**
  * A button that allows the user of the product displat to view the item as a stack in a vanilla inventory.
  */
-public class Inspect_InventoryViewButton extends SimpleButtonElm {
+public class Inspect_InventoryViewButton extends ButtonElm {
     private final @NotNull ItemInspectorInventory_Factory inventoryViewFactory;
 
 

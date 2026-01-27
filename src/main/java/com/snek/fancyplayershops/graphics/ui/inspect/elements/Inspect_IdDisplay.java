@@ -6,8 +6,8 @@ import org.joml.Vector3d;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
 /**
  * A UI element that shows the ID of the item.
  */
-public class Inspect_IdDisplay extends SimpleTextElm {
+public class Inspect_IdDisplay extends TextElm {
 
 
     /**
@@ -31,7 +31,7 @@ public class Inspect_IdDisplay extends SimpleTextElm {
      * @param display The target product display.
      */
     public Inspect_IdDisplay(@NotNull final ProductDisplay display) {
-        super(display.getLevel(), new SimpleTextElmStyle()
+        super(display.getLevel(), new TextStyle()
             .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
         );
     }
@@ -50,7 +50,7 @@ public class Inspect_IdDisplay extends SimpleTextElm {
     public void updateDisplay() {
 
         final ProductDisplay display = GetDisplay.get(this);
-        getStyle(SimpleTextElmStyle.class).setText(new Txt()
+        getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("ID: ").lightGray())
             .cat(new Txt(
                 display.getItem().is(Items.AIR) ? "-" :

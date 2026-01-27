@@ -18,7 +18,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 
 
 
@@ -248,13 +248,13 @@ public class ScrollableList extends PanelElm implements Scrollable {
 
 
         // Set bar styles
-        { final Flagged<PanelElmStyle> f = getListStyle().getFlaggedThumbStyle();
+        { final Flagged<PanelStyle> f = getListStyle().getFlaggedThumbStyle();
         if(f.isFlagged()) {
             barThumb.setStyle(f.get());
             barThumb.getStyle().flagAll();
             f.unflag();
         }}
-        { final Flagged<PanelElmStyle> f = getListStyle().getFlaggedTrackStyle();
+        { final Flagged<PanelStyle> f = getListStyle().getFlaggedTrackStyle();
         if(f.isFlagged()) {
             barTrack.setStyle(f.get());
             barTrack.getStyle().flagAll();

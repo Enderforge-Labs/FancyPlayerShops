@@ -1,4 +1,4 @@
-# Stuff to fix / add
+# v1.0
 
 - use spawn animations in list elements, actually animate scrolling with y scale changes
 
@@ -7,35 +7,24 @@
 
 - Limit hover events distance. players shouldn't be able to hover on stuff thats too far away. add a max distance config setting
 
-- Fix broken crafting recipe in Prom2 server
-  - it works fine in local test server, but no on the public prom2 one
+- finish adding AE2 compatibility
+  - Make restocking follow the tier's speeds (no restocking for t2 and t1)
+  - Implement wireless restocking
+  - Keep all the data of snapshots when used as an ingredient for T2 and higher displays. ! RN IT GETS WIPED
+  - AE2 auto crafting doesn't support using more than 1 item per slot, like vanilla crafting tables.
+    - an okay solution would be to add intermediate materials that are craftable using more of the same item and use these in the final recipe.
+    - keep the multi-item recipes as they are handy for manual crafting and EMI supports them
 
-- Replace manual stash messages with a utility method
-  - caller calls StashManager.sendGiveItemsMessage(playerUUID, "You picked up {} incompatible {} from the product display", givenAmount, item)
-  - caller calls StashManager.sendStashedItemsMessage(playerUUID, "{} {} that didn't fit in your inventory have been sent to your stash", stashedAmount, item)
-
-- add ae2 compatibility
-  - let players craft higher tiers of product displays that can contain more stock
-  - product displays don't pull any item by default but require manual restocking.
-    - Crafting them with an interface and a controller allows them to pull items from nearby inventories, or something annoying like that
-  - each tier can become wireless by crafting it with a wireless transmitter
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
-  - SPECIFY CAPABILITIES AND CAPACITY RIGHT UNDER THE NAME IN GREY. use a compact format, nothing fancy. don't change the name
+- Fix restocking a display with ID player_head and NBTs off pulling in all snapshots, displays and player heads
+  - It should only pull player heads if a true player head.
+  - It should only pull displays if a true display.
 
 - add shop setting to change HUD distance
 - add shop settings for click and scroll sounds (scrollable volume bar, mute with volume == 0)
 - add shop setting to send everything to the stash, skipping the inventory
-  - replace hand written inventory checks and calls with a generic give() method that checks for this option and also adds extra items to the stash
 - add shop setting to change element max render distance
   - This must be PER-PLAYER.
   - meaning the server needs to override the entity's max render distance when sending packets to each player based on their personal settings
-
-- add an undo command & chat message click command to undo item buy actions
-  - add undos for product display deletion too. moving a product display doesn't need undos
-  - add undos for product display transfer
-  - make undos expire after the next undoable action or after 5 seconds
 
 - Restrict product display placement to the owner's claims (Open Parties and Claims mod compatibility)
   - do something about ownership transfer, idk if it would bypass this or what
@@ -43,6 +32,52 @@
   - limit pulls to inventories players can access in survival, be that manually or through other mods.
   - e.g. don't pull from locked chests or creative storage blocks or other similar stuff
   - no idea how to check for this
+
+- "top shops" list that shows the shops that made the most money in the specified timeframe
+  - This is separate from the list of shops in the main menu. you access this from the stats
+- "best customers" list that shows the players that spent the most money in the specified timeframe
+  - This is separate from the list of shops in the main menu. you access this from the stats
+
+- add Jade mod compatibility
+  - Show a nicer name when the player looks at UI elements
+    - add an overridable method that returns a name for jade
+  - Show a nicer name when the player looks at product displays
+    - use the overridable method that returns a name for jade
+
+# Future versions
+
+- Sort bulk operation feedback names by number, only show top 10 (write "and 629 more")
+
+- add an undo command & chat message click command to undo item buy actions
+  - add undos for product display deletion too. moving a product display doesn't need undos
+  - add undos for product display transfer
+  - make undos expire after the next undoable action or after 5 seconds
+
+- add a bar at the left of HUDs that shows how long is left until they despawns
+
+- add performance options to skip unimportant animations and hide product displays when the TPS goes below certain thresholds
+
+- allow players to transfer entire shops
+
+- add a system to preorder items
+  - you can buy in advance and your items will be sent to the stash as soon as they are available in the product display
+  - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
+
+- Add configurable size bitmaps
+
+  - let players draw their own 8x8 icon for their shops
+    - add "flip x" and "flip y" buttons to the editor
+    - add "rotate cw" and "rotate ccw" buttons to the editor
+    - add "shift up", "shift down", "shift left" and "shift right" buttons to the editor
+
+  - use bitmaps as 3d texture to make simple 3d models
+  - add vendor profile lookup menus
+  - create 3d renderings of player skins to use in the profile of a seller/vendor
+    - get the texture data from the player cache, read the pixels and create one bitmap per face
+    - 72 entities per player model
+    - hide when tps are low
+  - or use fake players if they can be scaled down. this needs to be looked into
+    - might be useful for placeable npcs with the player's skin or something
 
 - make the sliding in text auto scroll possible to turn off. call it "smooth text scrolling" or something
 
@@ -61,43 +96,13 @@
   - music discs [Custom behaviour, vanilla doesn't show the name]
   - smithing template [Custom behaviour, vanilla doesn't show the name]
 
-- "top shops" list that shows the shops that made the most money in the specified timeframe
-  - This is separate from the list of shops in the main menu. you access this from the stats
-- "best customers" list that shows the players that spent the most money in the specified timeframe
-  - This is separate from the list of shops in the main menu. you access this from the stats
+# Cleanup
 
-- add a bar at the left of HUDs that shows how long is left until they despawns
-
-- add performance options to skip unimportant animations and hide product displays when the TPS goes below certain thresholds
-
-- allow players to transfer entire shops
-
-- add Jade mod compatibility
-  - Show a nicer name when the player looks at UI elements
-    - add an overridable method that returns a name for jade
-  - Show a nicer name when the player looks at product displays
-    - use the overridable method that returns a name for jade
-
-- add a system to preorder items
-  - you can buy in advance and your items will be sent to the stash as soon as they are available in the product display
-  - you get a refund if the order is not fullfilled within a specified amount of real life days (only missing items)
-
-- Add configurable size bitmaps
-  - use them as 3d texture to make simple 3d models
-  - add vendor profile lookup menus
-  - create 3d renderings of player skins to use in the profile of a seller/vendor
-    - get the texture data from the player cache, read the pixels and create one bitmap per face
-    - 72 entities per player model
-    - hide when tps are low
-  - or use fake players if they can be scaled down. this needs to be looked into
-    - might be useful for placeable npcs with the player's skin or something
-
-Cleanup:
-    - add @NotNull and @Null to everything
-    - Check and/or add documentation comments to all methods and classes. use <p> to separate paragraphs (put on its own line)
-    - delete commented code
-    - complete todos and fixmes
-    - remove spaces between if, for, while, do, else and (
-    - use a single space between ) and {
-    - Make sure that final variables, members and parameters are actually declared as final
-    - check protection level of all members and methods
+- add @NotNull and @Null to everything
+- Check and/or add documentation comments to all methods and classes. use <p> to separate paragraphs (put on its own line)
+- delete commented code
+- complete todos and fixmes
+- remove spaces between if, for, while, do, else and (
+- use a single space between ) and {
+- Make sure that final variables, members and parameters are actually declared as final
+- check protection level of all members and methods

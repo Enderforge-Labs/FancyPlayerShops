@@ -8,8 +8,8 @@ import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -22,7 +22,7 @@ import com.snek.frameworklib.utils.Easings;
 /**
  * The style of the DetailsUi_OwnerHeadBg UI element.
  */
-public class Details_OwnerHeadBg_S extends PanelElmStyle {
+public class Details_OwnerHeadBg_S extends PanelStyle {
     public static final float PRIMER_H = 0.001f;
 
 
@@ -49,7 +49,7 @@ public class Details_OwnerHeadBg_S extends PanelElmStyle {
     @Override
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetBgAlpha(0)
             .additiveTransform(new Transform().scaleY(PRIMER_H).moveY(DetailsCanvas.HEAD_BG_SIZE.y))
         );
@@ -57,7 +57,7 @@ public class Details_OwnerHeadBg_S extends PanelElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetBgAlpha(getDefaultAlpha())
             .additiveTransform(new Transform().scaleY(1f / PRIMER_H).moveY(-DetailsCanvas.HEAD_BG_SIZE.y))
         );

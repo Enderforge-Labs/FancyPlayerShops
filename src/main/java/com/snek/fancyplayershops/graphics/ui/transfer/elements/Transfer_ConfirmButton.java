@@ -36,7 +36,7 @@ public class Transfer_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
         // Change owner
         final ProductDisplay display = GetDisplay.get(this);
-        display.changeOwner(MinecraftUtils.getPlayerByUUID(menu.getNewOwnerUUID()));
+        display.changeOwner(MinecraftUtils.getPlayerByUUID(menu.getNewOwnerUUID()), true);
         if(isActive()) Clickable.playSound(player);
     }
 }

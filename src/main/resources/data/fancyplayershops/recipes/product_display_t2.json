@@ -1,0 +1,33 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["ae2"]
+        }
+    ],
+    "type": "frameworklib:enhanced_crafting_shaped",
+    "category": "misc",
+    "group": "Product displays",
+    "key": {
+        "Q": { "tag": "ae2:glass_cable" },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t1" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t1"
+        },
+        "S": { "item": "ae2:cell_component_1k" },
+        "C": { "item": "minecraft:end_crystal" },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 2
+        }
+    },
+    "pattern": [
+        "QQQ",
+        "BDB",
+        "SCS"
+    ],
+    "result": {
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t2"
+    },
+    "show_notification": false
+}

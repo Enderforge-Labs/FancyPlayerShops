@@ -1,0 +1,21 @@
+{
+    "type": "frameworklib:enhanced_crafting_shaped",
+    "category": "misc",
+    "group": "Product displays",
+    "key": {
+        "G": { "item": "minecraft:glass_pane"   },
+        "S": { "item": "minecraft:item_frame"   },
+        "R": { "item": "minecraft:comparator"   },
+        "H": { "item": "minecraft:hopper"       },
+        "C": { "tag":  "c:shulker_boxes"        }
+    },
+    "pattern": [
+        "GGG",
+        "GSG",
+        "HCR"
+    ],
+    "result": {
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t1"
+    },
+    "show_notification": false
+}

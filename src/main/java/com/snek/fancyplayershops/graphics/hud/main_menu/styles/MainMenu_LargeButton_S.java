@@ -7,17 +7,16 @@ import org.joml.Vector3i;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
-import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
-import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.presets.TextButtonStyle_Small;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 
 
 
-//TODO idk if overriding get methods is fine, this needs to be checked
 
-public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
+public class MainMenu_LargeButton_S extends TextButtonStyle_Small {
     public static final Vector3i HOVERED_COLOR = new Vector3i(64, 64, 64);
     public static final Vector3i DEFAULT_COLOR = Utils.interpolateRGB(CanvasBorder_S.COLOR, HOVERED_COLOR, 0.5f);
 
@@ -52,7 +51,7 @@ public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(HOVERED_COLOR)
         );
     }
@@ -60,7 +59,7 @@ public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .targetBgColor(DEFAULT_COLOR)
         );
     }
@@ -68,13 +67,5 @@ public class MainMenu_LargeButton_S extends FancyButtonElmStyle {
     @Override
     public @Nullable Animation getDefaultHoverInversePrimerAnimation() {
         return null;
-    }
-
-
-
-
-    @Override
-    public int getDefaultFontSize() {
-        return 6;
     }
 }

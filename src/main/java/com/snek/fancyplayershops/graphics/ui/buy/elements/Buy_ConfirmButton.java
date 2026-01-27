@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_ToggleableButton;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -57,7 +57,7 @@ public class Buy_ConfirmButton extends ProductDIsplay_ToggleableButton {
 
 
     public void updateDisplay() {
-        getStyle(FancyTextElmStyle.class).setText(new Txt("Buy " + Utils.formatAmountShort(menu.getAmount())).white().get());
+        getStyle(PanelTextStyle.class).setText(new Txt("Buy " + Utils.formatAmountShort(menu.getAmount())).white().get());
         flushStyle();
     }
 

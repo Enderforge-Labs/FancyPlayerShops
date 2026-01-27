@@ -27,5 +27,7 @@
         "frameworklib": ">=1.1.0",
         "frameworkconfig": ">=1.1.0"
     },
-    "suggests":{}
+    "suggests":{
+        "appliedenergistics2": ">=15.4.10"
+    }
 }

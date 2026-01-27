@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +18,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Hud_CloseButton extends SimpleButtonElm {
+public class Hud_CloseButton extends ButtonElm {
     public Hud_CloseButton(final @NotNull HudContext context) {
         super(context.getLevel(), null, "Close", 1, new Hud_SquareButton_S());
 

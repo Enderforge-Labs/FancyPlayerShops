@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_SipleBut
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -37,21 +37,21 @@ public class Edit_SquareButton_S extends ProductDisplay_SipleButton_S {
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
             new Transition()
-            .additiveTransform(new Transform().scaleY(__base_ButtonElmStyle.HIDDEN_W))
+            .additiveTransform(new Transform().scaleY(__base_ButtonStyle.HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleY(1f / __base_ButtonElmStyle.HIDDEN_W))
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleY(1f / __base_ButtonStyle.HIDDEN_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleY(__base_ButtonElmStyle.HIDDEN_W))
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            .additiveTransform(new Transform().scaleY(__base_ButtonStyle.HIDDEN_W))
         );
     }
 }

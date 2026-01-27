@@ -8,7 +8,7 @@ import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -20,7 +20,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class Edit_TransferButton extends SimpleButtonElm {
+public class Edit_TransferButton extends ButtonElm {
     public Edit_TransferButton(final @NotNull ProductDisplay display) {
         super(display.getLevel(), null, "Transfer ownership", 1,  new Edit_SquareButton_S(display));
 

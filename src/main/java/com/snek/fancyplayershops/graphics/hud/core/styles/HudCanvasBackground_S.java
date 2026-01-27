@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.core.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 
 
 
@@ -12,7 +12,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
 
-public class HudCanvasBackground_S extends PanelElmStyle {
+public class HudCanvasBackground_S extends PanelStyle {
     public static final @NotNull Vector3i COLOR = new Vector3i(3, 3, 7);
 
 

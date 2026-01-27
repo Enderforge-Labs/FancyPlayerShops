@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.configs.Configs;
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
@@ -19,7 +19,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_PriceDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -74,7 +74,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
     public BuyCanvas(final @NotNull ProductDisplay display) {
 
         // Call superconstructor
-        super(display, calculateTitle(display), 1, TITLE_H, CanvasBorder.DEFAULT_HEIGHT);
+        super(display, calculateTitle(display), 1, TITLE_H, Canvas.DEFAULT_BORDER_H);
         Div e;
 
 
@@ -152,7 +152,7 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
         // Add input indicators
         e = bg.addChild(new DualInputIndicator(display.getLevel()));
         e.setSize(DualInputIndicator.DEFAULT_DUAL_INDICATOR_SIZE);
-        e.setPosY(CanvasBorder.DEFAULT_HEIGHT * 2);
+        e.setPosY(Canvas.DEFAULT_BORDER_H * 2);
         e.setAlignmentX(AlignmentX.CENTER);
         inputIndicator = (DualInputIndicator)e;
 
@@ -185,13 +185,12 @@ public class BuyCanvas extends ProductCanvasBase implements InputIndicatorCanvas
 
 
     public boolean attemptChangeAmount(final @NotNull Player user, final float _amount) {
-
         if(_amount < 0.9999) {
             user.displayClientMessage(new Txt("The amount must be at least 1").red().bold().get(), true);
             return false;
         }
-        if(_amount > Configs.getDisplay().stock_limit.getMax()) {
-            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(Configs.getDisplay().stock_limit.getMax(), false, true)).red().bold().get(), true);
+        if(_amount > DisplayTier.getHighestCapacity()) {
+            user.displayClientMessage(new Txt("The amount cannot be greater than " + Utils.formatAmount(DisplayTier.getHighestCapacity())).red().bold().get(), true);
             return false;
         }
         else changeAmount(Math.round((double)_amount));

@@ -1,0 +1,37 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": ["ae2"]
+        }
+    ],
+    "type": "frameworklib:enhanced_crafting_shaped",
+    "category": "misc",
+    "group": "Product displays",
+    "key": {
+        "Q": {
+            "tag": "ae2:smart_cable",
+            "frameworklib:count": 8
+        },
+        "D": {
+            "frameworklib:all_nbts": [ "fancyplayershops:product_display_t3" ],
+            "frameworklib:client_override" : "fancyplayershops:product_display_t3"
+        },
+        "S": { "item": "ae2:cell_component_256k" },
+        "C": { "item": "minecraft:nether_star" },
+        "R": { "item": "ae2:wireless_receiver" },
+        "B": {
+            "item": "ae2:speed_card",
+            "frameworklib:count": 32
+        }
+    },
+    "pattern": [
+        "QQQ",
+        "BDR",
+        "SCS"
+    ],
+    "result": {
+        "frameworklib:dynamic_ref": "fancyplayershops:product_display_t4"
+    },
+    "show_notification": false
+}

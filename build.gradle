@@ -64,6 +64,9 @@ dependencies {
     modImplementation "maven.modrinth:solstice-economy:${project.solstice_economy_version}"
     modImplementation "com.snek:frameworklib:${project.frameworklib_version}"
     modImplementation "com.snek:frameworkconfig:${project.frameworkconfig_version}"
+
+    // Optional mod dependencies
+    modCompileOnly "maven.modrinth:ae2:${project.ae2_version}"
 }
 
 

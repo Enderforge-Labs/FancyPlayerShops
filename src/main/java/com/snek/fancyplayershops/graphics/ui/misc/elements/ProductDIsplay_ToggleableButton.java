@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TogglableButton_S;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.TextButtonElm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
@@ -17,7 +17,7 @@ import com.snek.frameworklib.utils.Txt;
 
 
 
-public class ProductDIsplay_ToggleableButton extends FancyButtonElm {
+public class ProductDIsplay_ToggleableButton extends TextButtonElm {
     private boolean active = true;
     public boolean isActive() { return active; }
 

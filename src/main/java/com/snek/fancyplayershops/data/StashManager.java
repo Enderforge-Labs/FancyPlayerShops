@@ -30,6 +30,7 @@ import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.Utils;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -124,13 +125,7 @@ public final class StashManager extends UtilityClassBase {
         // Send feedback to player
         if(playerFeedback) {
             final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
-            if(player != null) {
-                player.displayClientMessage(new Txt()
-                    .cat(Utils.formatAmount(count, false, true) + "x ")
-                    .cat(MinecraftUtils.getFancyItemName(item).getString())
-                    .cat(" " + (count == 1 ? "has" : "have") + " been sent to your stash")
-                .lightGray().get(), false);
-            }
+            sendStashFeedbackMessage(player, item, 0, count, "", "%2$ %5$ %4$ been sent to your stash");
         }
     }
 
@@ -244,6 +239,10 @@ public final class StashManager extends UtilityClassBase {
 
 
 
+
+
+
+
     /**
      * Loads all the player stashes into the runtime map if needed.
      * <p> Must be called on server started event (After the levels are loaded!).
@@ -290,5 +289,66 @@ public final class StashManager extends UtilityClassBase {
 
     public static PlayerStash getStash(final @NotNull ServerPlayer player) {
         return stashes.get(player.getUUID());
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Create a feedback message and sends it to the specified player.
+     * Does nothing if player is null.
+     * <ul><li><b>Format string parameters</b></li><ul>
+     * <li> <b>%1$</b> The amount of items that were sent to the player's inventory, followed by a "x".</li>
+     * <li> <b>%2$</b> The amount of items that were sent to the stash, followed by a "x".</li>
+     * <li> <b>%3$</b> The total amount of items that were moved, followed by a "x".</li>
+     * <li> <b>%4$</b> Either "has" or "have", depending on the amount of items sent.</li>
+     * <li> <b>%5$</b> The name of the provided item, or an empty string if null.</li>
+     * </ul></ul>
+     * @param player The player to send the message to.
+     * @param item The item. This is used to compute the name to make it available as a format parameter.
+     * @param givenAmount The amount of items that were sent to the player's inventory.
+     * @param stashedAmount The amount of items that were sent to the stash.
+     * @param givenFormatString The format string to use for the messagethat displays the items that were sent to the inventory.
+     * @param stashedFormatString The format string to use for the message that displays the items that were sent to the stash.
+     */
+    public static void sendStashFeedbackMessage(
+        final @Nullable Player player, final @Nullable ItemStack item, final long givenAmount,final long stashedAmount,
+        final @NotNull String givenFormatString, final @NotNull String stashedFormatString
+    ) {
+        if(player == null) return;
+
+        // Calculate amount strings
+        final Txt givenStr   = new Txt(Utils.formatAmount(givenAmount, true, true)).white();
+        final Txt stashedstr = new Txt(Utils.formatAmount(stashedAmount, true, true)).white();
+        final Txt totalStr   = new Txt(Utils.formatAmount(stashedAmount + givenAmount, true, true)).white();
+        final Txt itemName   = new Txt(item == null ? Component.literal("") : MinecraftUtils.getFancyItemName(item)).white();
+
+        // Send inventory feedback
+        if(givenAmount > 0) {
+            player.displayClientMessage(Txt.Format(
+                givenFormatString,
+                givenStr,
+                stashedstr,
+                totalStr,
+                new Txt(givenAmount == 1 ? "has" : "have"),
+                itemName
+            ).lightGray().get(), false);
+        }
+
+        // Send stash feedback
+        if(stashedAmount > 0) {
+            player.displayClientMessage(Txt.Format(
+                stashedFormatString,
+                givenStr,
+                stashedstr,
+                totalStr,
+                new Txt(stashedAmount == 1 ? "has" : "have"),
+                itemName
+            ).lightGray().get(), false);
+        }
     }
 }

@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_SipleBut
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.functional.styles.__base_ButtonElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -44,14 +44,14 @@ public class Edit_ColorSelector_S extends ProductDisplay_SipleButton_S {
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(new Transform().scaleX(1f / EditCanvas.COLOR_SELECTOR_HIDDEN_W).moveX(-SHIFT_X))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation() {
         return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransform(new Transform().scaleX(EditCanvas.COLOR_SELECTOR_HIDDEN_W).moveX(SHIFT_X))
         );
     }

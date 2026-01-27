@@ -7,7 +7,7 @@ import com.snek.fancyplayershops.graphics.hud.misc.styles.Hud_SquareButton_S;
 import com.snek.fancyplayershops.graphics.hud.stash.StashCanvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;
-import com.snek.frameworklib.graphics.functional.elements.SimpleButtonElm;
+import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 
 import net.minecraft.world.entity.player.Player;
@@ -20,7 +20,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public class MainMenu_OpenStashButton extends SimpleButtonElm {
+public class MainMenu_OpenStashButton extends ButtonElm {
     public MainMenu_OpenStashButton(final @NotNull HudContext context) {
         super(context.getLevel(), null, "Open stash", 1, new Hud_SquareButton_S());
 

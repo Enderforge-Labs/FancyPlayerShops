@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 
 
 
@@ -16,7 +16,7 @@ import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 /**
  * The style for the DetailsUi_OwnerHead UI element.
  */
-public class Details_OwnerHead_S extends ItemElmStyle {
+public class Details_OwnerHead_S extends ItemStyle {
     public static final float Z_SCALE = 0.001f;
 
 

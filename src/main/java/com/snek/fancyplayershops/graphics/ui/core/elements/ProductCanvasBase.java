@@ -8,10 +8,13 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBack_S;
 import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.core.UiCanvas;
 import com.snek.frameworklib.graphics.core.UiContext;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -105,13 +108,31 @@ public abstract class ProductCanvasBase extends UiCanvas {
 
 
     @Override
-    protected void rotate(final int from, final int to, final boolean animate) {
+    protected void rotate(final float from, final float to, final boolean animate) {
         updateItemDisplayRot(from, to, animate);
         super.rotate(from, to, animate);
     }
 
 
-    protected void updateItemDisplayRot(final int from, final int to, final boolean animate) {
+
+
+    /**
+     * Calculates the animations required to to go from a specified rotation to another, without rotating the item's model.
+     * @param from The starting rotation.
+     * @param to The new rotation.
+     * @return The item display animation.
+     */
+    public static @NotNull Animation calcItemDisplayRotationAnimation(final float from, final float to) {
+        final float rotation = (to - from);
+        return new Animation(
+            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
+            .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
+        );
+    }
+
+
+
+    protected void updateItemDisplayRot(final float from, final float to, final boolean animate) {
         final Animation animation = calcItemDisplayRotationAnimation(from, to);
         display.getItemDisplay().applyAnimation(animation, true, animate);
     }

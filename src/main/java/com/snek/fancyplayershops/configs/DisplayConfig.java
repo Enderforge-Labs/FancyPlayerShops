@@ -2,6 +2,7 @@ package com.snek.fancyplayershops.configs;
 
 import java.math.BigInteger;
 
+import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.frameworkconfig.ConfigFile;
 import com.snek.frameworkconfig.fields.ConstrainedConfigField;
 import com.snek.frameworkconfig.fields.DefaultConfigField;
@@ -24,16 +25,6 @@ public class DisplayConfig implements ConfigFile {
         0l,
         1_000l * 100l,
         10_000_000_000l * 100l
-    );
-    public final ConstrainedConfigField<Long> stock_limit = new ConstrainedConfigField<>(
-        new String[] {
-            "The stock limit players are allowed to set.",
-            "Must be >= 0.",
-            "(price.max * stock.max) must be between 0 and Long.MAX_VALUE."
-        },
-        0l,
-        1_000l,
-        1_000_000l
     );
     public final ValueConfigField<Float[]> theme_hues = new ValueConfigField<>(
         new String[] {
@@ -97,14 +88,6 @@ public class DisplayConfig implements ConfigFile {
         if(price.getDefault() > price.getMax()) throw new IllegalStateException("Default price must be <= price.max");
 
 
-        // Check stock limit
-        if(stock_limit.getMin    () < 0)                    throw new IllegalStateException("Minimum stock limit must be >= 0");
-        if(stock_limit.getDefault() < 0)                    throw new IllegalStateException("Default stock limit must be >= 0");
-        if(stock_limit.getMax    () < 0)                    throw new IllegalStateException("Maximum stock limit must be >= 0");
-        if(stock_limit.getDefault() < stock_limit.getMin()) throw new IllegalStateException("Default stock limit must be >= stock_limit.min");
-        if(stock_limit.getDefault() > stock_limit.getMax()) throw new IllegalStateException("Default stock limit must be <= stock_limit.max");
-
-
         // Check color theme index
         final Float[] h = theme_hues.getValue();
         if(h.length < 1) throw new IllegalStateException("The list of theme hues must contain at least 1 element");
@@ -129,13 +112,13 @@ public class DisplayConfig implements ConfigFile {
 
         // Check maximum possible price
         final BigInteger _price = BigInteger.valueOf(price.getMax());
-        final BigInteger _stock = BigInteger.valueOf(stock_limit.getMax());
+        final BigInteger _stock = BigInteger.valueOf(DisplayTier.getHighestCapacity());
         final BigInteger product = _price.multiply(_stock);
         final int excess = product.toString().length() - Long.toString(Long.MAX_VALUE).length();
         if(product.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             throw new IllegalStateException(
                 "Maximum possible transaction price is above the Long limit by " + excess + (excess == 1 ? " digit." : " digits.") +
-                " Adjust the price.max and stock.max config values")
+                " Adjust the price.max config value")
             ;
         }
     }
