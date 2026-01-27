@@ -1,5 +1,6 @@
 package com.snek.fancyplayershops.main;
 
+import java.io.ObjectInputFilter.Config;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,6 +30,8 @@ import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.Utils.DurationLabelType;
+import com.snek.frameworklib.utils.Utils.DurationPrecision;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -67,7 +70,8 @@ public abstract class CommandManager {
      */
     public static void requireConfirmation(final @NotNull Player player, final @NotNull String warningMessage, final @NotNull Runnable function) {
         awaitingConfirmation.put(player.getUUID(), Pair.from(function, Scheduler.getTickNum()));
-        player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" to continue.").lightGray().get(), false);
+        final String durationStr = Utils.formatDuration(Configs.getMisc().confirm_timeout.getValue(), DurationLabelType.INITIAL);
+        player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" within " + durationStr + " to continue.").lightGray().get(), false);
     }
 
 

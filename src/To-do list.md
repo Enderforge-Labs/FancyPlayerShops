@@ -1,4 +1,4 @@
-# To-do
+# v1.0
 
 - use spawn animations in list elements, actually animate scrolling with y scale changes
 
@@ -104,3 +104,7 @@ Cleanup:
     - use a single space between ) and {
     - Make sure that final variables, members and parameters are actually declared as final
     - check protection level of all members and methods
+
+# Future versions
+
+- Sort bulk operation feedback names by number, only show top 10 (write "and 629 more")
