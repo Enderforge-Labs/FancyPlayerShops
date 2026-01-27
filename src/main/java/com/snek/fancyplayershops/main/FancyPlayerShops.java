@@ -239,6 +239,7 @@ public class FancyPlayerShops implements ModInitializer {
 
                     // Spawn empty product display otherwise
                     else {
+                        final double angleRadians = Math.atan2(-(player.getZ() - blockPos.getZ()), player.getX() - blockPos.getX()) + Math.PI / 2;
                         final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
@@ -246,7 +247,7 @@ public class FancyPlayerShops implements ModInitializer {
                             /* price       */ 1000l,
                             /* stock       */ 0,
                             /* maxStock    */ tier.getCapacity(),
-                            /* direction   */ Direction.NORTH,
+                            /* direction   */ Direction.fromRadians(angleRadians),
                             /* hue         */ Configs.getDisplay().theme_hues.getValue()[Configs.getDisplay().theme.getDefault()],
                             /* balance     */ 0l,
                             /* nbtFilter   */ true,

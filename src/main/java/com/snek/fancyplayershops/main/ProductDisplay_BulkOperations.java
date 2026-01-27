@@ -368,6 +368,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                     for(final var mergedName : mergedNames.entrySet()) {
                         if(mergedName.getValue() > 1) {
                             namesString.append(Utils.formatAmount(mergedName.getValue(), true, true));
+                            namesString.append(" ");
                         }
                         namesString.append("\"");
                         namesString.append(mergedName.getKey());
