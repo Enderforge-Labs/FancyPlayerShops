@@ -14,10 +14,9 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.data.data_types.Shop;
+import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop;
+import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
@@ -25,8 +24,9 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
-import com.snek.fancyplayershops.data.data_types.PlayerStash;
-import com.snek.fancyplayershops.data.data_types.StashEntry;
+import com.snek.fancyplayershops.data.stash.PlayerStash;
+import com.snek.fancyplayershops.data.stash.StashEntry;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;

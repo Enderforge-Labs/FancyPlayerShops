@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.shop;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.snek.fancyplayershops.data.data_types.Shop;
+import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.containers.Option;

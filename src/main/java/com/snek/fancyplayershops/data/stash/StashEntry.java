@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data.data_types;
+package com.snek.fancyplayershops.data.stash;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public class StashEntry {
      * @param count The amount of itmes to remove. Must be {@code <= this.getCount()}.
      */
     public void remove(final long count) {
-        assert Require.condition(count <= getCount(), "Amount of removed items cannot be greater than the current count"):
+        assert Require.condition(count <= getCount(), "Amount of removed items cannot be greater than the current count");
         this.count -= count;
     }
 }

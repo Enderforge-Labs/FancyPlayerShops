@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.display;
 
 import java.io.File;
 import java.io.FileWriter;

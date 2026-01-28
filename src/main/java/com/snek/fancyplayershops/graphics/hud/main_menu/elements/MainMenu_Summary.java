@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.main_menu.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;

@@ -6,9 +6,9 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.StashManager;
-import com.snek.fancyplayershops.data.data_types.PlayerStash;
-import com.snek.fancyplayershops.data.data_types.StashEntry;
+import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.stash.PlayerStash;
+import com.snek.fancyplayershops.data.stash.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;

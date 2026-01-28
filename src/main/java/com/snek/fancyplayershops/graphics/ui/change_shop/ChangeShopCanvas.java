@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.data.ShopManager;
+import com.snek.fancyplayershops.data.shop.ShopManager;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_NameInput;

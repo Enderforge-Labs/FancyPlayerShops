@@ -28,9 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;

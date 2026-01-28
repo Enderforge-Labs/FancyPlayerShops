@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.events;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.data.data_types.Shop;
+import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.main.ProductDisplay;

@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.main.ProductDisplay;
