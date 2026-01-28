@@ -219,7 +219,7 @@ public class ShopManager extends UtilityClassBase {
             if(!shop.isDissolved() && !shop.getUuid().equals(DEFAULT_SHOP_UUID)) {
 
                 // Create the JSON objects that contains the shop data
-                final JsonObject jsonObject = new JsonObject();
+                final JsonObject jsonObject = new JsonObject(); //TODO move to dedicated serializer
                 jsonObject.addProperty("ownerUUID",   shop.getOwnerUuid().toString());
                 jsonObject.addProperty("uuid",        shop.getUuid().toString());
                 jsonObject.addProperty("displayName", shop.getDisplayName());
@@ -270,7 +270,7 @@ public class ShopManager extends UtilityClassBase {
                 // Load the data into the runtime map
                 final JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
                 createShop(new Shop(
-                    jsonObject.get("displayName").getAsString(),
+                    jsonObject.get("displayName").getAsString(),//TODO move to dedicated serializer
                     shopUUID,
                     UUID.fromString(jsonObject.get("ownerUUID").getAsString())
                 ));

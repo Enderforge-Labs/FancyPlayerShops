@@ -28,7 +28,6 @@ import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
-import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
 import com.snek.frameworklib.utils.MinecraftUtils;

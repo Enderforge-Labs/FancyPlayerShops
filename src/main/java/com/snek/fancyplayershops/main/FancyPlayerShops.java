@@ -31,6 +31,7 @@ import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.shop.ShopManager;
 import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
