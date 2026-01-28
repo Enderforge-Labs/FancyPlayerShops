@@ -1,6 +1,5 @@
 package com.snek.fancyplayershops.main;
 
-import java.io.ObjectInputFilter.Config;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -31,7 +30,6 @@ import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.Utils.DurationLabelType;
-import com.snek.frameworklib.utils.Utils.DurationPrecision;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -71,7 +69,7 @@ public abstract class CommandManager {
     public static void requireConfirmation(final @NotNull Player player, final @NotNull String warningMessage, final @NotNull Runnable function) {
         awaitingConfirmation.put(player.getUUID(), Pair.from(function, Scheduler.getTickNum()));
         final String durationStr = Utils.formatDuration(Configs.getMisc().confirm_timeout.getValue(), DurationLabelType.INITIAL);
-        player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" within " + durationStr + " to continue.").lightGray().get(), false);
+        player.displayClientMessage(new Txt(warningMessage + ". Run \"/shop confirm\" within " + durationStr + " to continue.").yellow().get(), false);
     }
 
 
@@ -476,7 +474,7 @@ public abstract class CommandManager {
             "You are about to remove " + Utils.formatAmount(displays.size()) + " displays",
             () -> {
                 final int n = ProductDisplay_BulkOperations.purge(displays, admin);
-                player.displayClientMessage(new Txt("Purged " + n + " displays").get(), false);
+                player.displayClientMessage(new Txt("Purged " + n + " display" + (n > 1 ? "s" : "")).lightGray().get(), false);
             }
         );
         return 1;
@@ -500,7 +498,7 @@ public abstract class CommandManager {
             "You are about to displace " + Utils.formatAmount(displays.size()) + " displays",
             () -> {
                 final int n = ProductDisplay_BulkOperations.displace(displays, admin);
-                player.displayClientMessage(new Txt("Converted " + n + " displays into items").get(), false);
+                player.displayClientMessage(new Txt("Converted " + n + " display" + (n > 1 ? "s" : "") + " into " + (n > 1 ? "items" : "an item")).lightGray().get(), false);
             }
         );
         return 1;
@@ -524,7 +522,7 @@ public abstract class CommandManager {
                     radius,
                     player
                 );
-                player.displayClientMessage(new Txt("Created " + n + " displays").get(), false);
+                player.displayClientMessage(new Txt("Created " + n + " display" + (n > 1 ? "s" : "")).lightGray().get(), false);
             }
         );
         return 1;
@@ -550,7 +548,7 @@ public abstract class CommandManager {
                 "You are about to transfer " + Utils.formatAmount(displays.size()) + " displays to " + newOwner.getName() + "?",
                 () -> {
                     final int n = ProductDisplay_BulkOperations.transfer(displays, newOwner, admin);
-                    player.displayClientMessage(new Txt("Transferred " + n + " displays").get(), false);
+                    player.displayClientMessage(new Txt("Transferred " + n + " display" + (n > 1 ? "s" : "")).lightGray().get(), false);
                 }
             );
             return 1;
@@ -585,7 +583,7 @@ public abstract class CommandManager {
                 "You are about to move " + Utils.formatAmount(displays.size()) + " displays to \"" + shopname + "\"?",
                 () -> {
                     final int n = ProductDisplay_BulkOperations.move(displays, shopname);
-                    player.displayClientMessage(new Txt("Moved " + n + " displays").get(), false);
+                    player.displayClientMessage(new Txt("Moved " + n + " display" + (n > 1 ? "s" : "")).lightGray().get(), false);
                 }
             );
             return 1;
