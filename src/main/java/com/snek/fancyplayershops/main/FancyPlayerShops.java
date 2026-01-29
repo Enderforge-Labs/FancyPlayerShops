@@ -67,9 +67,11 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
+    //TODO REMOVE
     public static Path getStorageDir() {
         return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
+    //TODO REMOVE
     public static Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
     }

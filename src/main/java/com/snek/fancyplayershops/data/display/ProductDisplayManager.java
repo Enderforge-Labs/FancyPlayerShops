@@ -278,6 +278,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
             // Skip deleted displays
             if(display.isRemoved()) {
+                //BUG write this in canBeSaved() when replacing with frameworkConfig
                 continue;
             }
 

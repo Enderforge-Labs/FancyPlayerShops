@@ -69,8 +69,8 @@ public abstract class HoverReceiver {
         if(updateIndex == 0) {
 
             // Reset the lists
-            playerListSnapshot   = new ArrayList<>();
-            targetedDisplays        = new LinkedHashSet<>();
+            playerListSnapshot = new ArrayList<>();
+            targetedDisplays   = new LinkedHashSet<>();
 
             // Recalculate player list snapshot
             for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
