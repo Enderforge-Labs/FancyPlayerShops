@@ -102,7 +102,7 @@ public class FancyPlayerShops implements ModInitializer {
         // Force display item cration
         // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
         try {
-            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+            Class.forName("com.snek.fancyplayershops.data.display.ProductDisplayManager");
         } catch(ClassNotFoundException e) {
             e.printStackTrace();
         }
