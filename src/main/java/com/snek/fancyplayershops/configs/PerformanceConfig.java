@@ -1,7 +1,7 @@
 package com.snek.fancyplayershops.configs;
 
-import com.snek.frameworkconfig.ConfigFile;
-import com.snek.frameworkconfig.fields.ValueConfigField;
+import com.snek.frameworkconfig.config.ConfigFile;
+import com.snek.frameworkconfig.config.fields.ValueConfigField;
 
 
 

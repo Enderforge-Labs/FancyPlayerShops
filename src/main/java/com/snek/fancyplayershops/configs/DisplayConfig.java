@@ -3,10 +3,10 @@ package com.snek.fancyplayershops.configs;
 import java.math.BigInteger;
 
 import com.snek.fancyplayershops.main.DisplayTier;
-import com.snek.frameworkconfig.ConfigFile;
-import com.snek.frameworkconfig.fields.ConstrainedConfigField;
-import com.snek.frameworkconfig.fields.DefaultConfigField;
-import com.snek.frameworkconfig.fields.ValueConfigField;
+import com.snek.frameworkconfig.config.ConfigFile;
+import com.snek.frameworkconfig.config.fields.ConstrainedConfigField;
+import com.snek.frameworkconfig.config.fields.DefaultConfigField;
+import com.snek.frameworkconfig.config.fields.ValueConfigField;
 
 
 

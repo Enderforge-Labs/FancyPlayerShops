@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.configs;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworkconfig.ConfigManager;
+import com.snek.frameworkconfig.config.ConfigManager;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 
 
