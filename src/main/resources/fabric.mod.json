@@ -24,8 +24,8 @@
         "fabricloader": ">=0.16.10",
         "fabric-api": "*",
         "solstice-economy": ">=0.2.3",
-        "frameworklib": ">=1.1.0",
-        "frameworkconfig": ">=1.1.0"
+        "frameworklib": ">=1.3.0",
+        "frameworkconfig": ">=2.0.0"
     },
     "suggests":{
         "appliedenergistics2": ">=15.4.10"
