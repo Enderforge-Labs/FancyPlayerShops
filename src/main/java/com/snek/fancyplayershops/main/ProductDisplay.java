@@ -259,9 +259,9 @@ public class ProductDisplay {
         displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
         displayKeyCache = calcDisplayKey(pos, level);
 
-        // Create and spawn the Item Display entity
-        itemDisplay = new ProductItemDisplayElm(this);
-        itemDisplay.spawn(calcDisplayPos(), true);
+        // // Create and spawn the Item Display entity //TODO REMOVE
+        // itemDisplay = new ProductItemDisplayElm(this);
+        // itemDisplay.spawn(calcDisplayPos(), true);
 
         // Save the display
         ProductDisplayManager.registerDisplay(this);

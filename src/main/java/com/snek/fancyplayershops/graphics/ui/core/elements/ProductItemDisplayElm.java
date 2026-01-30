@@ -90,7 +90,7 @@ public class ProductItemDisplayElm extends ItemElm {
     );
 
 
-    // Setup edit animiations
+    // Setup edit animations
     //! leaveEditAnimation not needed as the unfocus animation uses a target transform
     private static final @NotNull Animation enterEditAnimation = new Animation(
         new Transition(Canvas.CANVAS_ROTATION_TIME, Easings.cubicOut)
@@ -134,7 +134,7 @@ public class ProductItemDisplayElm extends ItemElm {
 
         // Spawn or despawn the name entity if necessary
         if(!productDisplay.isFocused()) spawnNameEntity();
-        else                despawnNameEntity();
+        else                          despawnNameEntity();
 
 
         // If the product display is unconfigured (item is AIR), display a barrier and EMPTY_PRODUCT_DISPLAY_NAME as name
