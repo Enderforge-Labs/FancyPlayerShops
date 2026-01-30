@@ -62,7 +62,8 @@ public class Edit_PriceInput extends ChatInputElm {
             if(display.setPrice(Double.parseDouble(s))) updateDisplayedText();
             return true;
 
-        } catch(final NumberFormatException e) {
+        }
+        catch(final NumberFormatException e) {
             return false;
         }
     }

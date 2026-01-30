@@ -271,7 +271,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
             final Path levelStorageDir = calcDisplayFileDirPath(display);
             try {
                 Files.createDirectories(levelStorageDir);
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", MinecraftUtils.getLevelId(display.getLevel()), e);
             }
 
@@ -287,7 +288,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
             final File displayStorageFile = calcDisplayFilePath(display).toFile();
             try (final Writer writer = new FileWriter(displayStorageFile)) {
                 writer.write(ProductDisplay_Serializer.serialize(display));
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the product display \"{}\"", display.getIdentifierNoLevel(), e);
             }
 
@@ -326,7 +328,8 @@ public final class ProductDisplayManager extends UtilityClassBase {
                     final String serializedDisplay = Files.readString(displayStorageFile.toPath());
                     final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay, null, null);
                     registerDisplay(retrievedDisplay);
-                } catch(final IOException e) {
+                }
+                catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the product display \"{}\"", displayStorageFile.getName(), e);
                 }
             }

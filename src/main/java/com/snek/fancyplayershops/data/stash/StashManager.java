@@ -187,7 +187,8 @@ public final class StashManager extends UtilityClassBase {
         final Path levelStorageDir = calcStashDirPath();
         try {
             Files.createDirectories(levelStorageDir);
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player stashes", e);
         }
 
@@ -223,7 +224,8 @@ public final class StashManager extends UtilityClassBase {
             final File stashStorageFile = calcStashFilePath(pair.getFirst()).toFile();
             try (final Writer writer = new FileWriter(stashStorageFile)) {
                 new Gson().toJson(jsonEntries, writer);
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst(), e);
             }
 
@@ -276,7 +278,8 @@ public final class StashManager extends UtilityClassBase {
                         jsonEntry.get("count").getAsLong()
                     );
                 }
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID, e);
             }
         }

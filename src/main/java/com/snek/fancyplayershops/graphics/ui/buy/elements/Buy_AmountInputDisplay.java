@@ -49,14 +49,16 @@ public class Buy_AmountInputDisplay extends ChatInputElm {
             if(menu.attemptChangeAmount(user, Integer.parseInt(s))) updateDisplayedText();
             return true;
 
-        } catch(final NumberFormatException e) {
+        }
+        catch(final NumberFormatException e) {
             try {
 
                 // Try to set the new amount
                 if(menu.attemptChangeAmount(user, Float.parseFloat(s))) updateDisplayedText();
                 return true;
 
-            } catch(final NumberFormatException e2) {
+            }
+            catch(final NumberFormatException e2) {
                 return false;
             }
         }

@@ -552,7 +552,8 @@ public abstract class CommandManager {
                 }
             );
             return 1;
-        } catch(CommandSyntaxException e) {
+        }
+        catch(CommandSyntaxException e) {
             context.getSource().sendFailure(new Txt("The specified player is not online!").get());
             return 0;
         }

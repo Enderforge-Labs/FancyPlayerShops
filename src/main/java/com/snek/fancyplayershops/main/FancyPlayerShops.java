@@ -103,7 +103,8 @@ public class FancyPlayerShops implements ModInitializer {
         // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
         try {
             Class.forName("com.snek.fancyplayershops.data.display.ProductDisplayManager");
-        } catch(ClassNotFoundException e) {
+        }
+        catch(ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -113,12 +114,13 @@ public class FancyPlayerShops implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(PHASE_ID, server -> {
 
 
-            // Create storage directories
+            // Create storage directories //TODO remove, replace with frameworkconfig
             try {
                 Files.createDirectories(ShopManager.calcShopDirPath());
                 Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
                 Files.createDirectories(StashManager.calcStashDirPath());
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
                 flagFatal();
                 return;

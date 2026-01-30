@@ -209,7 +209,8 @@ public class ShopManager extends UtilityClassBase {
         // Create directory for the shops
         try {
             Files.createDirectories(calcShopDirPath());
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player shops", e);
         }
 
@@ -229,7 +230,8 @@ public class ShopManager extends UtilityClassBase {
                 // Create this shop's config file if absent, then save the JSON in it
                 try(final Writer writer = new FileWriter(calcShopFilePath(shop).toFile())) {
                     new Gson().toJson(jsonObject, writer);
-                } catch(final IOException e) {
+                }
+                catch(final IOException e) {
                     FancyPlayerShops.LOGGER.error("Couldn't create storage file for the shop {}", shop.getDisplayName(), e);
                 }
             }
@@ -275,7 +277,8 @@ public class ShopManager extends UtilityClassBase {
                     shopUUID,
                     UUID.fromString(jsonObject.get("ownerUUID").getAsString())
                 ));
-            } catch(final IOException e) {
+            }
+            catch(final IOException e) {
                 FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the shop {}", shopStorageFile.getName(), e);
             }
         }
