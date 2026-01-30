@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.data.display;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.snek.fancyplayershops.main.DisplayTier;
+import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.MinecraftUtils;

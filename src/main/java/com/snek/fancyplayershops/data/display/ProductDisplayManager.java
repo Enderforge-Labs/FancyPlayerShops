@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.display;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,7 +28,6 @@ import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
-import com.snek.fancyplayershops.main.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -279,6 +278,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
             // Skip deleted displays
             if(display.isRemoved()) {
+                //BUG write this in canBeSaved() when replacing with frameworkConfig
                 continue;
             }
 

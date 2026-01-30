@@ -9,8 +9,7 @@ This deletes all caches, forcing it to recreate them.
     pkill -kill java
     rm -rf ./.gradle ./bin ./build
     rm -rf ~/.gradle/caches/
-    rm -rf ~/.config/VSCodium/User/workspaceStorage/
-    rm -rf ~/.config/VSCodium/User/globalStorage/</pre>
+    rm -rf ~/.config/VSCodium/User/workspaceStorage/</pre>
 
 2. Fully close and reopen all VSCode windows
 

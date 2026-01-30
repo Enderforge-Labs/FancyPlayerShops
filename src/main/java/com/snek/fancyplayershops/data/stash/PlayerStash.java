@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data.data_types;
+package com.snek.fancyplayershops.data.stash;
 
 import java.util.HashMap;
 import java.util.UUID;

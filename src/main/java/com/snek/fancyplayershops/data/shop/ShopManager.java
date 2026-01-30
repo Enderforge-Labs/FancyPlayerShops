@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.shop;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.snek.fancyplayershops.data.data_types.Shop;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.containers.Option;
@@ -111,6 +110,7 @@ public class ShopManager extends UtilityClassBase {
      * Deletes a shop and its associated data file.
      * @param shop The shop to delete.
      */
+    @SuppressWarnings({ "java:S899", "java:S4042" }) //! Return value of file.delete() ignored
     public static void deleteShop(final @NotNull Shop shop) {
 
         // Get the list of shops
@@ -217,9 +217,10 @@ public class ShopManager extends UtilityClassBase {
         // Iterate shops. Save them if they are not dissolved and their UUID doesn't match the default shop
         for(final Shop shop : scheduledForSaving) {
             if(!shop.isDissolved() && !shop.getUuid().equals(DEFAULT_SHOP_UUID)) {
+                //BUG write this in canBeSaved() when replacing with frameworkConfig
 
                 // Create the JSON objects that contains the shop data
-                final JsonObject jsonObject = new JsonObject();
+                final JsonObject jsonObject = new JsonObject(); //TODO move to dedicated serializer
                 jsonObject.addProperty("ownerUUID",   shop.getOwnerUuid().toString());
                 jsonObject.addProperty("uuid",        shop.getUuid().toString());
                 jsonObject.addProperty("displayName", shop.getDisplayName());
@@ -270,7 +271,7 @@ public class ShopManager extends UtilityClassBase {
                 // Load the data into the runtime map
                 final JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
                 createShop(new Shop(
-                    jsonObject.get("displayName").getAsString(),
+                    jsonObject.get("displayName").getAsString(),//TODO move to dedicated serializer
                     shopUUID,
                     UUID.fromString(jsonObject.get("ownerUUID").getAsString())
                 ));

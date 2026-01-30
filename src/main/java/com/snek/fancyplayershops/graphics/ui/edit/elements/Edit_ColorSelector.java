@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.data.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;

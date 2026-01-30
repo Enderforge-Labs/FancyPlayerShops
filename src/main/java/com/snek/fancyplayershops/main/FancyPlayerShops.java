@@ -28,9 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.data.StashManager;
+import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -66,9 +67,11 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
+    //TODO REMOVE
     public static Path getStorageDir() {
         return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + MOD_ID);
     }
+    //TODO REMOVE
     public static Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir().resolve(MOD_ID);
     }
@@ -99,7 +102,7 @@ public class FancyPlayerShops implements ModInitializer {
         // Force display item cration
         // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
         try {
-            Class.forName("com.snek.fancyplayershops.data.ProductDisplayManager");
+            Class.forName("com.snek.fancyplayershops.data.display.ProductDisplayManager");
         } catch(ClassNotFoundException e) {
             e.printStackTrace();
         }

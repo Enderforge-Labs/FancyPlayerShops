@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data;
+package com.snek.fancyplayershops.data.stash;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,8 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.snek.fancyplayershops.data.data_types.PlayerStash;
-import com.snek.fancyplayershops.data.data_types.StashEntry;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.utils.MinecraftUtils;

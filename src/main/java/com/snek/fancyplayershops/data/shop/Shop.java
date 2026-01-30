@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.data.data_types;
+package com.snek.fancyplayershops.data.shop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.data.ShopManager;
 import com.snek.fancyplayershops.main.ProductDisplay;
 
 

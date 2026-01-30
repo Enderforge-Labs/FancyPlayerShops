@@ -102,9 +102,16 @@ public class Edit_RotateButton extends ButtonElm {
         itemDisplay.applyAnimation(
             new Transition(ROTATION_ANIMATION_TIME, Easings.expOut)
             .targetTransform(
+
+                //! Copy transform but set rotation to 0
+                //! The item display's custom __calcTransform makes it face the right direction,
+                //! which includes a negative rotation to counter the context's rotation.
                 itemDisplay.genLastTransform()
                 .setRot(new Quaternionf())
-                .rotY(canvas.getContext().getRotation() / 8f * (float)(2f * Math.PI))
+
+                //! Add this negative rotation back into the transform.
+                //! Otherwise the item appears rotated with the UI, when it's supposed to face the direction in world-coordinates.
+                .rotY(-canvas.getContext().getRotation())
             ),
             false, true
         );

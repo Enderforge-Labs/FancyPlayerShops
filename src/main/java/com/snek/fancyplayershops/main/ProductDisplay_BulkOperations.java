@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.data.ProductDisplayManager;
-import com.snek.fancyplayershops.data.ShopManager;
-import com.snek.fancyplayershops.data.data_types.Shop;
+import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop;
+import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
