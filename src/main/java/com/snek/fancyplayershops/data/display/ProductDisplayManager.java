@@ -30,10 +30,10 @@ import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.fancyplayershops.main.ProductDisplayKey;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.BlockPos;

@@ -22,7 +22,7 @@ import com.snek.frameworklib.graphics.composite.elements.GuiItemElm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.layout.Flex;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.Axis2;

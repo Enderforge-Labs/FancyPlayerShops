@@ -21,7 +21,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.utils.scheduler.LoopTaskHandler;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 

@@ -15,7 +15,7 @@ import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.core.BlockPos;

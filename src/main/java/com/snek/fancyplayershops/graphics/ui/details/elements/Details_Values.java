@@ -10,9 +10,9 @@ import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Easings;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 import net.minecraft.world.item.Items;
 

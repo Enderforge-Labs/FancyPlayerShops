@@ -10,7 +10,7 @@ import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.world.InteractionHand;

@@ -11,7 +11,7 @@ import com.snek.frameworklib.graphics.functional.presets.TextButtonStyle_Small;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 
 

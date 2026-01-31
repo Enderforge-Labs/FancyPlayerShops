@@ -28,8 +28,8 @@ import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
-import com.snek.frameworklib.utils.Utils.DurationLabelType;
+import com.snek.frameworklib.utils.common.Utils;
+import com.snek.frameworklib.utils.common.Utils.DurationLabelType;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;

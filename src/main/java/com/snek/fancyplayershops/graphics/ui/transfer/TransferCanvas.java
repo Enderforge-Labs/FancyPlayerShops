@@ -20,7 +20,7 @@ import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 import com.snek.frameworklib.graphics.core.Canvas;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;

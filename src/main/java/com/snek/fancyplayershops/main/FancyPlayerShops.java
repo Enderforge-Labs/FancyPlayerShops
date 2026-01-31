@@ -42,7 +42,8 @@ import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
 import com.snek.fancyplayershops.input.HoverReceiver;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.Direction;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
+import com.snek.frameworklib.utils.common.NetworkUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
@@ -269,7 +270,7 @@ public class FancyPlayerShops implements ModInitializer {
                 // Update the held item
                 final ItemStack newStack = stack.copyWithCount(newCount);
                 player.setItemInHand(hand, newStack);
-                MinecraftUtils.sendClientSlotUpdate(player, player.getInventory().selected + 36, newStack);
+                NetworkUtils.sendClientSlotUpdate(player, player.getInventory().selected + 36, newStack);
             }
 
             // If not, send an error message to the player

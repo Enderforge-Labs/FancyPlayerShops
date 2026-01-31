@@ -10,7 +10,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.functional.styles.TextButtonStyle;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.utils.Easings;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 
 

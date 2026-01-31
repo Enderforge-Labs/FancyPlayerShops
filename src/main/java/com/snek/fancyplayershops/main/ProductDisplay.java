@@ -33,9 +33,9 @@ import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;

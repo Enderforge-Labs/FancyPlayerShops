@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 
 

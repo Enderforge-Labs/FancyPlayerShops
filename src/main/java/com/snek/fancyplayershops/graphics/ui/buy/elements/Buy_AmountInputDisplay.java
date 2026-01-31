@@ -9,7 +9,7 @@ import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_Input_S;
 import com.snek.frameworklib.graphics.functional.elements.ChatInputElm;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 import net.minecraft.world.entity.player.Player;
 

@@ -11,7 +11,7 @@ import com.snek.fancyplayershops.graphics.ui.misc.elements.ProductDIsplay_Toggle
 import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;

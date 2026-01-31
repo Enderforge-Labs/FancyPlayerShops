@@ -21,10 +21,10 @@ import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.UtilityClassBase;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;

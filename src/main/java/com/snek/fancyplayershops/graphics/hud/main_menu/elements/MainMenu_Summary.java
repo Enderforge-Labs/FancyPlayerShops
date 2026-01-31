@@ -9,7 +9,7 @@ import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.common.Utils;
 
 import net.minecraft.world.entity.player.Player;
 
