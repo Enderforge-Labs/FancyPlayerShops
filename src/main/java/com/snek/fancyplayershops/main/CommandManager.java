@@ -392,7 +392,9 @@ public abstract class CommandManager {
 
 
     public static int executeForceRestock(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
         ProductDisplayManager.forcePullItems();
+        player.displayClientMessage(new Txt("Restocked all displays.").white().get(), false);
         return 1;
     }
 
@@ -400,9 +402,11 @@ public abstract class CommandManager {
 
 
     public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
+        final ServerPlayer player = context.getSource().getPlayer();
         StashManager.saveScheduledStashes();
         ProductDisplayManager.saveScheduledDisplays();
         ShopManager.saveScheduledShops();
+        player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
         return 1;
     }
 
@@ -425,6 +429,7 @@ public abstract class CommandManager {
         final ServerPlayer player = context.getSource().getPlayer();
         // BalanceManager.claim(player);
         //FIXME claim all the shops
+        //TODO feedback message
         return 1;
     }
 
