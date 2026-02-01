@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.stash.Stash_Manager;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Key;
@@ -119,17 +119,17 @@ public class FancyPlayerShops implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(PHASE_ID, server -> {
 
 
-            // Create storage directories //TODO remove, replace with frameworkconfig
-            try {
-                // Files.createDirectories(ShopManager.calcShopDirPath());
-                // Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
-                Files.createDirectories(StashManager.calcStashDirPath());
-            }
-            catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
-                flagFatal();
-                return;
-            }
+            // // Create storage directories //TODO remove, replace with frameworkconfig
+            // try {
+            //     // Files.createDirectories(ShopManager.calcShopDirPath());
+            //     // Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
+            //     // Files.createDirectories(Stash_Manager.calcStashDirPath());
+            // }
+            // catch(final IOException e) {
+            //     FancyPlayerShops.LOGGER.error("Couldn't create storage directory", e);
+            //     flagFatal();
+            //     return;
+            // }
 
 
             // Read config files
@@ -159,17 +159,21 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            // Load all shops
-            //! Force loading lets HUDs display the entire list of shops.
-            //! Lazy loading doesn't allow for that.
-            //! Must be loaded before displays
-            Shop_Manager.REF.forceLoadAll();
-
             // Load all displays
             //! Force load displays to update chunk counts. This is needed in order to optimize focus detection.
             //! Lazy loading would cause the optimized detection system to not work at all
             ProductDisplay_Manager.REF.forceLoadAll();
-            StashManager.loadStashes(); //TODO prob not needed with frameworkconfig
+
+            // Load all shops
+            //! Force loading lets HUDs display the entire list of shops.
+            //! Lazy loading doesn't allow for that.
+            Shop_Manager.REF.forceLoadAll();
+
+            // Load all stashes
+            //! Force loading stashes lets HUDs display the entire list of items.
+            //! Lazy loading doesn't allow for that.
+            Stash_Manager.REF.forceLoadAll();
+
 
             // Schedule product display focus detection
             Scheduler.loop(0, 1, HoverReceiver::tick);
@@ -177,13 +181,13 @@ public class FancyPlayerShops implements ModInitializer {
             // Schedule product display pull updates
             Scheduler.loop(0, 1, ProductDisplay_Manager::pullItems);
 
-            //TODO remove. this won't be needed anymore, after updating all the stuff
-            // Schedule data saves
-            Scheduler.loop(0, 1, () -> {
-                // ShopManager.saveScheduledShops();
-                // ProductDisplayManager.saveScheduledDisplays();
-                StashManager.saveScheduledStashes();
-            });
+            // //TODO remove. this won't be needed anymore, after updating all the stuff
+            // // Schedule data saves
+            // Scheduler.loop(0, 1, () -> {
+            //     // ShopManager.saveScheduledShops();
+            //     // ProductDisplayManager.saveScheduledDisplays();
+            //     Stash_Manager.saveScheduledStashes();
+            // });
 
 
 

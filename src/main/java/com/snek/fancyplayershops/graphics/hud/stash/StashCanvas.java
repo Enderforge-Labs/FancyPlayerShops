@@ -6,7 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.stash.Stash_Manager;
 import com.snek.fancyplayershops.data.stash.PlayerStash;
 import com.snek.fancyplayershops.data.stash.StashEntry;
 import com.snek.fancyplayershops.graphics.ScrollableList;
@@ -49,7 +49,7 @@ public class StashCanvas extends HudCanvasBase {
 
 
         // Add "empty stash" text if the stash is empty
-        final PlayerStash stash = StashManager.getStash(player);
+        final PlayerStash stash = Stash_Manager.REF.get(player.getUUID());
         if(stash == null) {
             e = bg.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt(
@@ -76,7 +76,7 @@ public class StashCanvas extends HudCanvasBase {
 
             //FIXME update stash view when the stash is changed
             // For each material
-            final List<StashEntry> entries = new ArrayList<>(stash.values());
+            final List<StashEntry> entries = new ArrayList<>(stash.getItems().values());
             for(int i = 0; i < entries.size(); ++i) {
                 final StashEntry entry = entries.get(i);
                 e = list.storeElm(new Stash_ProductEntry(context, entry.getItem(), entry.getCount(), list));

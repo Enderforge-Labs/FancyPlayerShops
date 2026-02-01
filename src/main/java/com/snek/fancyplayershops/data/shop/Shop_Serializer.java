@@ -50,5 +50,4 @@ public class Shop_Serializer extends DataEntrySerializer<Shop> {
         // Create a new Shop and return it
         return new Shop(displayName, uuid, ownerUuid, false);
     }
-
 }

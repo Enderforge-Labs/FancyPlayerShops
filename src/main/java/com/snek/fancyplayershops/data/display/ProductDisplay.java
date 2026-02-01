@@ -16,7 +16,7 @@ import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.shop.Shop;
-import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.stash.Stash_Manager;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
@@ -46,7 +46,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -451,7 +450,7 @@ public class ProductDisplay extends DataEntry {
             //! Stock change events are fired by sendItemsToPlayer call
 
             // Send feedback messages
-            StashManager.sendStashFeedbackMessage(
+            Stash_Manager.sendStashFeedbackMessage(
                 owner, item, amount, stashedAmount,
                 "You retrieved %3$ %5$ from your product display.",
                 "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
@@ -496,7 +495,7 @@ public class ProductDisplay extends DataEntry {
 
 
                 // Send feedback messages
-                StashManager.sendStashFeedbackMessage(
+                Stash_Manager.sendStashFeedbackMessage(
                     buyer, item, amount, stashedAmount,
                     "You bought %3$ %5$ " + " for " + Utils.formatPrice(totPrice) + ".",
                     "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
@@ -710,7 +709,7 @@ public class ProductDisplay extends DataEntry {
             // Stash it
             final ItemStack entryItem  = entry.getValue().getFirst();
             final long      entryCount = entry.getValue().getSecond();
-            StashManager.giveItem(ownerUUID, entryItem, entryCount, playerFeedback);
+            Stash_Manager.giveItem(ownerUUID, entryItem, entryCount, playerFeedback);
         }
 
         // Clear stored items and reset stock, then fire events and save this display
@@ -745,7 +744,7 @@ public class ProductDisplay extends DataEntry {
 
                 // Stash it and remove it from the list of stored items
                 final long entryCount = entry.getValue().getSecond();
-                final var giveStats = StashManager.giveItem(ownerUUID, entryItem, entryCount, false);
+                final var giveStats = Stash_Manager.giveItem(ownerUUID, entryItem, entryCount, false);
                 iterator.remove();
                 stock -= entryCount;
                 givenAmount += giveStats.getFirst();
@@ -756,7 +755,7 @@ public class ProductDisplay extends DataEntry {
 
         // Send feedback message to the player
         final @Nullable Player player = MinecraftUtils.getPlayerByUUID(ownerUUID);
-        StashManager.sendStashFeedbackMessage(
+        Stash_Manager.sendStashFeedbackMessage(
             player, oldItem, givenAmount, stashedAmount,
             "You picked up %3$ incompatible %5$ from the product display.",
             "%2$ %5$ that didn't fit in your inventory %4$ been sent to your stash."
@@ -803,7 +802,7 @@ public class ProductDisplay extends DataEntry {
 
         // Create the snapshot and give it to the player
         final @NotNull ItemStack snapshot = ProductDisplay_Manager.createDisplaySnapshot(this);
-        StashManager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
+        Stash_Manager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
     }
 
 
@@ -1142,7 +1141,7 @@ public class ProductDisplay extends DataEntry {
             final ItemStack entryItem  = entry.getValue().getFirst();
             final long      entryCount = entry.getValue().getSecond();
             final long amountTaken = Math.min(entryCount, left);
-            final var stashStats = StashManager.giveItem(player.getUUID(), entryItem, amountTaken, false);
+            final var stashStats = Stash_Manager.giveItem(player.getUUID(), entryItem, amountTaken, false);
 
             // Update counters
             left -= amountTaken;
@@ -1238,8 +1237,8 @@ public class ProductDisplay extends DataEntry {
 
 
         // Check each slot in the player's stash
-        final @Nullable PlayerStash stash = StashManager.getStash((ServerPlayer)owner);
-        final var iterator = stash.entrySet().iterator();
+        final @Nullable PlayerStash stash = Stash_Manager.REF.get(ownerUUID);
+        final var iterator = stash.getItems().entrySet().iterator();
         while(iterator.hasNext()) {
             final var entry = iterator.next();
             final StashEntry stashEntry = entry.getValue();

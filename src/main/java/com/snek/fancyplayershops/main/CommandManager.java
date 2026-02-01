@@ -20,7 +20,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.shop.Shop_Manager;
-import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.stash.Stash_Manager;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
@@ -132,10 +132,10 @@ public abstract class CommandManager {
                 "A collection of shop management commands only available to server operators."
             };
 
-            private static final String[] SAVE_ALL = {
-                "/shop op save-all",
-                "Save any queued data instantly, skipping configured save cooldowns."
-            };
+            // private static final String[] SAVE_ALL = {
+            //     "/shop op save-all",
+            //     "Save any queued data instantly, skipping configured save cooldowns."
+            // };
 
             private static final String[] FORCE_RESTOCK = {
                 "/shop op force-restock",
@@ -253,10 +253,10 @@ public abstract class CommandManager {
             .then(Commands.literal("op")
                 .requires(source -> source.hasPermission(2))
                 .then(appendHelpText(HelpText.Op._s))
-                .then(Commands.literal("save-all")
-                    .then(appendHelpText(HelpText.Op.SAVE_ALL))
-                    .executes(CommandManager::executeSaveAll)
-                )
+                // .then(Commands.literal("save-all")
+                //     .then(appendHelpText(HelpText.Op.SAVE_ALL))
+                //     .executes(CommandManager::executeSaveAll)
+                // )
                 .then(Commands.literal("force-restock")
                     .then(appendHelpText(HelpText.Op.FORCE_RESTOCK))
                     .executes(CommandManager::executeForceRestock)
@@ -402,15 +402,14 @@ public abstract class CommandManager {
 
 
 
-    //TODO this command might become useless once everything uses the new system
-    public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
-        final ServerPlayer player = context.getSource().getPlayer();
-        StashManager.saveScheduledStashes();
-        // ProductDisplayManager.REF.();
-        // Shop_Manager.saveScheduledShops();
-        player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
-        return 1;
-    }
+    // public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
+    //     final ServerPlayer player = context.getSource().getPlayer();
+    //     Stash_Manager.saveScheduledStashes();
+    //     // ProductDisplayManager.REF.();
+    //     // Shop_Manager.saveScheduledShops();
+    //     player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
+    //     return 1;
+    // }
 
 
 
@@ -459,7 +458,7 @@ public abstract class CommandManager {
 
     public static int executeGiveDisplayItem(final @NotNull CommandContext<CommandSourceStack> context, final @NotNull DisplayTier tier, final long count) {
         final ServerPlayer player = context.getSource().getPlayer();
-        StashManager.giveItem(player.getUUID(), ProductDisplay_Manager.getProductDisplayItemCopy(tier), count, true);
+        Stash_Manager.giveItem(player.getUUID(), ProductDisplay_Manager.getProductDisplayItemCopy(tier), count, true);
         return 1;
     }
 

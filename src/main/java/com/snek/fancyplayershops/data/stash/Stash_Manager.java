@@ -1,0 +1,350 @@
+package com.snek.fancyplayershops.data.stash;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Map.Entry;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.snek.fancyplayershops.main.FancyPlayerShops;
+import com.snek.frameworkconfig.data.DataManager;
+import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
+import com.snek.frameworklib.utils.common.Utils;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+
+
+
+
+
+
+
+/**
+ * A class that handles player stashes.
+ */
+@SuppressWarnings("java:S6548") //! Singleton implementation
+public class Stash_Manager extends DataManager<PlayerStash> {
+
+    // Static manager reference
+    public static final Stash_Manager REF = new Stash_Manager();
+
+
+    // // Player stash data
+    // private static final @NotNull Map<UUID, @Nullable PlayerStash> stashes = new HashMap<>();
+    // private static boolean dataLoaded = false;
+
+
+    // // The list of stashes scheduled for saving
+    // private static @NotNull List<@NotNull Pair<@NotNull UUID, @Nullable PlayerStash>> scheduledForSaving = new ArrayList<>();
+
+
+
+
+    private Stash_Manager() {
+        super(FancyPlayerShops.MOD_ID, "stash", new Stash_Serializer());
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Adds an item with known UUID to the stash of the specified player and schedules it for save.
+     * <p>
+     * This fires stash item change events //TODO fix name of events? idk how they are called yet
+     * <p>
+     * Air is never stashed.
+     * @param playerUUID The UUID of the player.
+     * @param itemUUID The UUID of the item.
+     * @param item The item to add.
+     * @param count The amount of items to add.
+     * @param playerFeedback Whether to send the player a feedback message.
+     */
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull UUID itemUUID, final @NotNull ItemStack item, final long count, final boolean playerFeedback) {
+        if(count == 0) return;
+        if(item.is(Items.AIR)) return;
+        final PlayerStash stash = REF.getCache().computeIfAbsent(playerUUID, k -> new PlayerStash());
+        stash.add(itemUUID, item, count);
+        REF.schedule(playerUUID);
+
+        // Send feedback to player
+        if(playerFeedback) {
+            final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+            sendStashFeedbackMessage(player, item, 0, count, "", "%2$ %5$ %4$ been sent to your stash");
+        }
+    }
+
+
+
+
+    /**
+     * Adds an item to the stash of the specified player and schedules it for save.
+     * <p>
+     * This fires stash item change events //TODO fix name of events? idk how they are called yet
+     * <p>
+     * Air is never stashed.
+     * @param playerUUID The UUID of the player.
+     * @param item The item to add.
+     * @param count The amount of items to add.
+     * @param playerFeedback Whether to send the player a feedback message.
+     */
+    public static void stashItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final long count, final boolean playerFeedback) {
+        if(count == 0) return;
+        if(item.is(Items.AIR)) return;
+        stashItem(playerUUID, MinecraftUtils.calcItemUUID(item), item, count, playerFeedback);
+    }
+
+
+
+
+    /**
+     * Gives the specified player {@code amount} items.
+     * <p>
+     * Items that don't fit in the inventory are sent to the player's stash.
+     * <p>
+     * If the player is currently offline, all the items are sent to their stash.
+     * @param playerUUID The UUID of the player to give items to.
+     * @param item The item to give to the player.
+     * @param amount The number of items to give. Must be > 0.
+     * @param playerFeedback Whether to send the player a feedback message.
+     * @return A pair of integers representing the amount of items sent to the player's inventory and the amount of items sent to their stash.
+     */
+    public static @NotNull Pair<Long, Long> giveItem(final @NotNull UUID playerUUID, final @NotNull ItemStack item, final long amount, final boolean playerFeedback) {
+
+        // Try to put items in the inventory
+        long stashedAmount = amount;
+        final @Nullable Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+        if(player != null) {
+            stashedAmount = MinecraftUtils.attemptGive(player, item, amount);
+        }
+
+        // Send remaining items to the stash
+        if(stashedAmount > 0) {
+            Stash_Manager.stashItem(playerUUID, item, stashedAmount, player != null && playerFeedback);
+        }
+
+        // Return stats
+        return Pair.from(amount - stashedAmount, stashedAmount);
+    }
+
+
+
+
+
+
+
+
+    // /**
+    //  * Schedules the specified stash for saving.
+    //  * Call saveScheduledStashes to save all scheduled stashes.
+    //  * @param playerUUID The UUID of the player.
+    //  */
+    // public static void scheduleStashSave(final @NotNull UUID playerUUID) {
+    //     final PlayerStash stash = stashes.get(playerUUID);
+    //     if(stash != null && !stash.isScheduledForSave()) {
+    //         scheduledForSaving.add(Pair.from(playerUUID, stash));
+    //         stash.setScheduledForSave(true);
+    //     }
+    // }
+
+    // /**
+    //  * Saves the scheduled stashes in their config files.
+    //  */
+    // public static void saveScheduledStashes() {
+
+    //     // Create directory for the stashes
+    //     final Path levelStorageDir = calcStashDirPath();
+    //     try {
+    //         Files.createDirectories(levelStorageDir);
+    //     }
+    //     catch(final IOException e) {
+    //         FancyPlayerShops.LOGGER.error("Couldn't create storage directory for player stashes", e);
+    //     }
+
+
+    //     for(final Pair<UUID, PlayerStash> pair : scheduledForSaving) {
+
+    //         // Create the JSON array that contains the player's stash entries
+    //         final JsonArray jsonEntries = new JsonArray();
+    //         for(final Entry<UUID, StashEntry> entry : pair.getSecond().entrySet()) {
+    //             final JsonObject jsonEntry = new JsonObject();
+
+    //             final @NotNull ItemStack entryItem = entry.getValue().getItem();
+    //             final @NotNull long entryCount = entry.getValue().getCount();
+    //             final @Nullable String serializedItem = MinecraftUtils.serializeItem(entryItem);
+    //             if(serializedItem == null) {
+    //                 final Player player = MinecraftUtils.getPlayerByUUID(pair.getFirst());
+    //                 if(player != null) player.displayClientMessage(new Txt(
+    //                     "An item in your stash couldn't be saved. You should contact a server admin. " +
+    //                     "Item ID: " + MinecraftUtils.getItemId(entryItem) + ", " +
+    //                     "Count: " + entryCount
+    //                 ).red().get(), false);
+    //             }
+    //             else {
+    //                 jsonEntry.addProperty("uuid", entry.getKey().toString());
+    //                 jsonEntry.addProperty("item", serializedItem);
+    //                 jsonEntry.addProperty("count", entryCount);
+    //                 jsonEntries.add(jsonEntry);
+    //             }
+    //         }
+
+
+    //         // Create this player's config file if absent, then save the JSON in it
+    //         final File stashStorageFile = calcStashFilePath(pair.getFirst()).toFile();
+    //         try (final Writer writer = new FileWriter(stashStorageFile)) {
+    //             new Gson().toJson(jsonEntries, writer);
+    //         }
+    //         catch(final IOException e) {
+    //             FancyPlayerShops.LOGGER.error("Couldn't create storage file for the stash of the player {}", pair.getFirst(), e);
+    //         }
+
+
+    //         // Flag the stash as not scheduled
+    //         pair.getSecond().setScheduledForSave(false);
+    //     }
+    //     scheduledForSaving = new ArrayList<>();
+    // }
+
+
+
+
+
+
+
+
+    // /**
+    //  * Loads all the player stashes into the runtime map if needed.
+    //  * <p> Must be called on server started event (After the levels are loaded!).
+    //  * <p> If the data has already been loaded, the call will have no effect.
+    //  */
+    // public static void loadStashes() {
+    //     if(dataLoaded) return;
+    //     dataLoaded = true;
+
+
+    //     // For each stash storage file
+    //     final File[] stashStorageFiles = calcStashDirPath().toFile().listFiles();
+    //     if(stashStorageFiles != null) for(final File stashStorageFile : stashStorageFiles) {
+
+    //         // Read the file
+    //         final String fileName = stashStorageFile.getName();
+    //         final UUID playerUUID = UUID.fromString(fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName);
+    //         final JsonArray jsonEntries;
+    //         try(FileReader reader = new FileReader(stashStorageFile)) {
+    //             jsonEntries = new Gson().fromJson(reader, JsonArray.class);
+
+    //             // Load the data into the runtime map
+    //             for(final JsonElement _jsonEntry : jsonEntries.asList()) {
+    //                 final JsonObject jsonEntry = _jsonEntry.getAsJsonObject();
+    //                 final @NotNull ItemStack deserializedItem = MinecraftUtils.deserializeItem(jsonEntry.get("item").getAsString());
+    //                 if(deserializedItem == null) {
+    //                     final Player player = MinecraftUtils.getPlayerByUUID(playerUUID);
+    //                     if(player != null) player.displayClientMessage(new Txt("An item in your stash couldn't be loaded").red().get(), false);
+    //                 }
+    //                 else stashItem(playerUUID,
+    //                     UUID.fromString(jsonEntry.get("uuid").getAsString()),
+    //                     deserializedItem,
+    //                     jsonEntry.get("count").getAsLong()
+    //                 );
+    //             }
+    //         }
+    //         catch(final IOException e) {
+    //             FancyPlayerShops.LOGGER.error("Couldn't read the storage file for the stash of the player {}", playerUUID, e);
+    //         }
+    //     }
+    // }
+
+
+
+
+    // public static PlayerStash getStash(final @NotNull ServerPlayer player) {
+    //     return stashes.get(player.getUUID());
+    // }
+
+
+
+
+
+
+
+
+    /**
+     * Create a feedback message and sends it to the specified player.
+     * Does nothing if player is null.
+     * <ul><li><b>Format string parameters</b></li><ul>
+     * <li> <b>%1$</b> The amount of items that were sent to the player's inventory, followed by a "x".</li>
+     * <li> <b>%2$</b> The amount of items that were sent to the stash, followed by a "x".</li>
+     * <li> <b>%3$</b> The total amount of items that were moved, followed by a "x".</li>
+     * <li> <b>%4$</b> Either "has" or "have", depending on the amount of items sent.</li>
+     * <li> <b>%5$</b> The name of the provided item, or an empty string if null.</li>
+     * </ul></ul>
+     * @param player The player to send the message to. Can be null (no message is sent).
+     * @param item The item. This is used to compute the name to make it available as a format parameter.
+     * @param givenAmount The amount of items that were sent to the player's inventory.
+     * @param stashedAmount The amount of items that were sent to the stash.
+     * @param givenFormatString The format string to use for the messagethat displays the items that were sent to the inventory.
+     * @param stashedFormatString The format string to use for the message that displays the items that were sent to the stash.
+     */
+    public static void sendStashFeedbackMessage(
+        final @Nullable Player player, final @Nullable ItemStack item, final long givenAmount,final long stashedAmount,
+        final @NotNull String givenFormatString, final @NotNull String stashedFormatString
+    ) {
+        if(player == null) return;
+
+        // Calculate amount strings
+        final Txt givenStr   = new Txt(Utils.formatAmount(givenAmount, true, true)).white();
+        final Txt stashedstr = new Txt(Utils.formatAmount(stashedAmount, true, true)).white();
+        final Txt totalStr   = new Txt(Utils.formatAmount(stashedAmount + givenAmount, true, true)).white();
+        final Txt itemName   = new Txt(item == null ? Component.literal("") : MinecraftUtils.getFancyItemName(item)).white();
+
+        // Send inventory feedback
+        if(givenAmount > 0) {
+            player.displayClientMessage(Txt.Format(
+                givenFormatString,
+                givenStr,
+                stashedstr,
+                totalStr,
+                new Txt(givenAmount == 1 ? "has" : "have"),
+                itemName
+            ).lightGray().get(), false);
+        }
+
+        // Send stash feedback
+        if(stashedAmount > 0) {
+            player.displayClientMessage(Txt.Format(
+                stashedFormatString,
+                givenStr,
+                stashedstr,
+                totalStr,
+                new Txt(stashedAmount == 1 ? "has" : "have"),
+                itemName
+            ).lightGray().get(), false);
+        }
+    }
+}
