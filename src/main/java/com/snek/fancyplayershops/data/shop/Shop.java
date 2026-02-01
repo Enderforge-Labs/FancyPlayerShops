@@ -46,8 +46,8 @@ public class Shop {
 
     // Setters
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
-    public void addBalance(final long amount) { balance += amount; ShopManager.scheduleShopSave(this); }
-    public void subBalance(final long amount) { balance -= amount; ShopManager.scheduleShopSave(this); }
+    public void addBalance(final long amount) { balance += amount; Shop_Manager.scheduleShopSave(this); }
+    public void subBalance(final long amount) { balance -= amount; Shop_Manager.scheduleShopSave(this); }
 
 
     public void addDisplay(final @NotNull ProductDisplay display) {
@@ -107,7 +107,7 @@ public class Shop {
      */
     public void dissolve() {
         for(final ProductDisplay display : displays) {
-            ShopManager.unregisterDisplay(display);
+            Shop_Manager.unregisterDisplay(display);
         }
         dissolved = true;
     }

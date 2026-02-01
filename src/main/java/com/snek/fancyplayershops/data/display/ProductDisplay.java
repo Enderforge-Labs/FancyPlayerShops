@@ -14,7 +14,7 @@ import org.joml.Vector3i;
 
 import com.herrkatze.solsticeEconomy.modules.economy.EconomyManager;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.frameworklib.input.MessageReceiver;
@@ -87,7 +87,7 @@ public class ProductDisplay extends DataEntry {
     private final @NotNull ServerLevel       level;                             // The level this display was placed in
     private final @NotNull BlockPos          pos;                               // The position of the display
     private final @NotNull String            displayIdentifierCache_noLevel;    // The cached display identifier, not including the level
-    private final @NotNull ProductDisplayKey displayKeyCache;                   // The cached display key
+    private final @NotNull ProductDisplay_Key displayKeyCache;                   // The cached display key
     private final @NotNull DisplayTier       tier;                              // The tier of the display
 
 
@@ -142,7 +142,7 @@ public class ProductDisplay extends DataEntry {
     public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
     public @Nullable Player                 getuser             () { return user;                            }
     public @Nullable Player                 getViewer           () { return viewer;                          }
-    public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
+    public @NotNull  ProductDisplay_Key      getKey              () { return displayKeyCache;                 }
     public @NotNull  UUID                   getUUID             () { return displayKeyCache.getUUID();       }
     public @NotNull  DisplayTier            getTier             () { return tier;                            }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
@@ -242,14 +242,14 @@ public class ProductDisplay extends DataEntry {
         itemUUID = MinecraftUtils.calcItemUUID(item);
 
         // Register this display in the shop and store the shop instance locally
-        this.shop = ShopManager.registerDisplay(this, shopUUID);
+        this.shop = Shop_Manager.registerDisplay(this, shopUUID);
 
         // Recalculate identifier and key
         displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
-        displayKeyCache = new ProductDisplayKey(pos, level);
+        displayKeyCache = new ProductDisplay_Key(pos, level);
 
         // Save the display
-        ProductDisplayManager.REF.put(getUUID(), this);
+        ProductDisplay_Manager.REF.put(getUUID(), this);
     }
 
 
@@ -484,7 +484,7 @@ public class ProductDisplay extends DataEntry {
             // Handle payment
             final long totPrice = price * amount;
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                ProductDisplayManager.REF.schedule(getUUID(), this);
+                ProductDisplay_Manager.REF.schedule(getUUID(), this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
@@ -625,7 +625,7 @@ public class ProductDisplay extends DataEntry {
         else if(newPrice < 0.00001) price = 0;
         else if(newPrice < 0.01000) price = 1;
         else price = newPrice;
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
         return true;
     }
 
@@ -651,7 +651,7 @@ public class ProductDisplay extends DataEntry {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
         return true;
     }
 
@@ -665,7 +665,7 @@ public class ProductDisplay extends DataEntry {
      */
     public void addDefaultRotation(final int _rotation) {
         defaultDirection = Direction.fromEighths(defaultDirection.getEighths() + _rotation);
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 
@@ -688,7 +688,7 @@ public class ProductDisplay extends DataEntry {
         stashIncompatible(oldItem);
 
         // Save the display
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 
@@ -718,7 +718,7 @@ public class ProductDisplay extends DataEntry {
         final long oldStock = stock;
         stock = 0;
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 
@@ -765,7 +765,7 @@ public class ProductDisplay extends DataEntry {
 
         // Fire event and save this display
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 
@@ -786,8 +786,8 @@ public class ProductDisplay extends DataEntry {
         getItemDisplay().despawn(true);
 
         // Delete the data associated with this display
-        ShopManager.unregisterDisplay(this);
-        ProductDisplayManager.REF.remove(getUUID());
+        Shop_Manager.unregisterDisplay(this);
+        ProductDisplay_Manager.REF.remove(getUUID());
     }
 
 
@@ -802,7 +802,7 @@ public class ProductDisplay extends DataEntry {
     public void pickUp(final boolean playerFeedback) {
 
         // Create the snapshot and give it to the player
-        final @NotNull ItemStack snapshot = ProductDisplayManager.createDisplaySnapshot(this);
+        final @NotNull ItemStack snapshot = ProductDisplay_Manager.createDisplaySnapshot(this);
         StashManager.giveItem(ownerUUID, snapshot, 1, playerFeedback);
     }
 
@@ -862,7 +862,7 @@ public class ProductDisplay extends DataEntry {
         // Update stock, then fire events and save the display
         if(oldStock == stock) return;
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 
@@ -944,10 +944,10 @@ public class ProductDisplay extends DataEntry {
 
 
         // Update the owners' display lists, then change the owner and save this display
-        ProductDisplayManager.getDisplaysByOwner().get(getOwnerUuid()).remove(getUUID());
-        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(getOwnerUuid(), list -> { return new HashMap<>(); }).put(getUUID(), this);
+        ProductDisplay_Manager.getDisplaysByOwner().get(getOwnerUuid()).remove(getUUID());
+        ProductDisplay_Manager.getDisplaysByOwner().computeIfAbsent(getOwnerUuid(), list -> { return new HashMap<>(); }).put(getUUID(), this);
         ownerUUID = newOwner.getUUID();
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
 
 
         // Send feedback messages
@@ -982,7 +982,7 @@ public class ProductDisplay extends DataEntry {
      */
     public void setColorThemeHue(final float _hue) {
         colorThemeHue = _hue;
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
     /**
@@ -1053,7 +1053,7 @@ public class ProductDisplay extends DataEntry {
 
 
         // Try to find the shop
-        for(final Shop newShopCandidate : ShopManager.getShops(MinecraftUtils.getPlayerByUUID(ownerUUID))) {
+        for(final Shop newShopCandidate : Shop_Manager.getShops(MinecraftUtils.getPlayerByUUID(ownerUUID))) {
             if(newShopCandidate.getDisplayName().equals(name)) {
                 newShop = newShopCandidate;
             }
@@ -1063,13 +1063,13 @@ public class ProductDisplay extends DataEntry {
         // Create a new shop if one with the specified display name doesn't already exist
         if(newShop == null) {
             newShop = new Shop(name, ownerUUID);
-            ShopManager.createShop(newShop);
+            Shop_Manager.createShop(newShop);
         }
 
 
         // Change shop and update shop references
-        ShopManager.unregisterDisplay(this);
-        shop = ShopManager.registerDisplay(this, newShop.getUuid());
+        Shop_Manager.unregisterDisplay(this);
+        shop = Shop_Manager.registerDisplay(this, newShop.getUuid());
 
 
         // Fire events
@@ -1096,7 +1096,7 @@ public class ProductDisplay extends DataEntry {
             // This setting already allows any currently stored item
 
             // Save the display
-            ProductDisplayManager.REF.schedule(getUUID(), this);
+            ProductDisplay_Manager.REF.schedule(getUUID(), this);
         }
     }
 
@@ -1160,7 +1160,7 @@ public class ProductDisplay extends DataEntry {
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
 
         // Save the display and return the stats
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
         return Pair.from(givenAmount, stashedAmount);
     }
 
@@ -1189,7 +1189,7 @@ public class ProductDisplay extends DataEntry {
 
         // Update total stock and save the display
         stock += amount;
-        ProductDisplayManager.REF.schedule(getUUID(), this);
+        ProductDisplay_Manager.REF.schedule(getUUID(), this);
     }
 
 

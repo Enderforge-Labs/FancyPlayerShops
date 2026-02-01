@@ -28,7 +28,7 @@ import net.minecraft.world.item.Items;
 
 
 
-public class ProductDisplaySerializer extends DataEntrySerializer<ProductDisplay> {
+public class ProductDisplay_Serializer extends DataEntrySerializer<ProductDisplay> {
 
     @Override
     public @NotNull String serialize(final @NotNull ProductDisplay display) {

@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.shop.Shop;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
@@ -54,7 +54,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
 
 
         // Add no products text if the player doesn't own any product display
-        final @Nullable var displays = ProductDisplayManager.getDisplaysByOwner().get(player.getUUID());
+        final @Nullable var displays = ProductDisplay_Manager.getDisplaysByOwner().get(player.getUUID());
         if(displays == null || displays.isEmpty()) {
             e = bg.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt(
@@ -73,7 +73,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
         else {
 
             // Add shop header
-            final List<Shop> shops = ShopManager.getShops(player);
+            final List<Shop> shops = Shop_Manager.getShops(player);
             e = bg.addChild(new ManageShops_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);

@@ -19,10 +19,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.fancyplayershops.data.display.DisplayTier;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.data_types.containers.Pair;
@@ -394,7 +394,7 @@ public abstract class CommandManager {
 
     public static int executeForceRestock(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
-        ProductDisplayManager.forcePullItems();
+        ProductDisplay_Manager.forcePullItems();
         player.displayClientMessage(new Txt("Restocked all displays.").white().get(), false);
         return 1;
     }
@@ -407,7 +407,7 @@ public abstract class CommandManager {
         final ServerPlayer player = context.getSource().getPlayer();
         StashManager.saveScheduledStashes();
         // ProductDisplayManager.REF.();
-        ShopManager.saveScheduledShops();
+        Shop_Manager.saveScheduledShops();
         player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
         return 1;
     }
@@ -459,7 +459,7 @@ public abstract class CommandManager {
 
     public static int executeGiveDisplayItem(final @NotNull CommandContext<CommandSourceStack> context, final @NotNull DisplayTier tier, final long count) {
         final ServerPlayer player = context.getSource().getPlayer();
-        StashManager.giveItem(player.getUUID(), ProductDisplayManager.getProductDisplayItemCopy(tier), count, true);
+        StashManager.giveItem(player.getUUID(), ProductDisplay_Manager.getProductDisplayItemCopy(tier), count, true);
         return 1;
     }
 
@@ -575,7 +575,7 @@ public abstract class CommandManager {
         final float radius = FloatArgumentType.getFloat(context, "radius");
 
 
-        final var validationResult = ShopManager.validateShopName(shopname);
+        final var validationResult = Shop_Manager.validateShopName(shopname);
         if(validationResult.isSome()) {
             context.getSource().sendFailure(new Txt(validationResult.unwrap() + "!").get());
             return 0;

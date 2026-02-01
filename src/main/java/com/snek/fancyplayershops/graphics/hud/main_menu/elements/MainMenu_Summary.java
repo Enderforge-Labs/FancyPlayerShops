@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.main_menu.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.presets.TextStyle_Small;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
@@ -36,7 +36,7 @@ public class MainMenu_Summary extends TextElm {
         final Player player = getCanvas().getContext().getPlayer();
         getStyle(TextStyle.class).setText(new Txt()
             .cat(new Txt("You own ").white())
-            .cat(new Txt("" + ProductDisplayManager.getDisplaysByOwner().get(player.getUUID()).size()).color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
+            .cat(new Txt("" + ProductDisplay_Manager.getDisplaysByOwner().get(player.getUUID()).size()).color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR))
             .cat(new Txt(" displays.").white())
             .cat("\n")
             .cat(new Txt("You sold a total of ").white())

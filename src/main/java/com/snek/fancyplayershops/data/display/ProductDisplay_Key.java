@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 
 
 
-public class ProductDisplayKey {
+public class ProductDisplay_Key {
     private final int x;
     private final int y;
     private final int z;
@@ -24,7 +24,7 @@ public class ProductDisplayKey {
     private final @NotNull UUID uuid;
 
 
-    public ProductDisplayKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
+    public ProductDisplay_Key(final @NotNull BlockPos _pos, final @NotNull Level level) {
         x = _pos.getX();
         y = _pos.getY();
         z = _pos.getZ();
@@ -37,7 +37,7 @@ public class ProductDisplayKey {
     public boolean equals(final Object obj) {
         if(this == obj) return true;
         if(obj == null) return false;
-        if(obj instanceof final ProductDisplayKey other) {
+        if(obj instanceof final ProductDisplay_Key other) {
             return
                 x == other.x &&
                 y == other.y &&

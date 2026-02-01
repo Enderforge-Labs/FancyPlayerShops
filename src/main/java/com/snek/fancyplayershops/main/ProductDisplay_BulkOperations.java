@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
@@ -63,8 +63,8 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
         // For each active display
         final List<ProductDisplay> r = new ArrayList<>();
         final var displays = owner.isSome() ?
-            ProductDisplayManager.getDisplaysByOwner().get(owner.unwrap().getUUID()).values() :
-            ProductDisplayManager.REF.getCache().values()
+            ProductDisplay_Manager.getDisplaysByOwner().get(owner.unwrap().getUUID()).values() :
+            ProductDisplay_Manager.REF.getCache().values()
         ;
         for(final ProductDisplay display : displays) {
 
@@ -301,7 +301,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                         final var tier = DisplayTier.values()[Math.abs(rnd.nextInt() % DisplayTier.values().length)];
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ owner.getUUID(),
-                            /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
+                            /* shopUUID    */ Shop_Manager.DEFAULT_SHOP_UUID,
                             /* price       */ Math.abs(rnd.nextLong() % 100_000),
                             /* stock       */ 0,
                             /* maxStock    */ tier.getCapacity(),

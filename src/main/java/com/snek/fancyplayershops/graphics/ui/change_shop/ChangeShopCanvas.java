@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.display.ProductDisplay;
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_ConfirmButton;
 import com.snek.fancyplayershops.graphics.ui.change_shop.elements.ChangeShop_NameInput;
@@ -121,7 +121,7 @@ public class ChangeShopCanvas extends ProductCanvasBase implements InputIndicato
      */
     public void attemptSetNewShop(final @NotNull String s) {
         final ServerPlayer player = (ServerPlayer)canvas.getContext().getPlayer();
-        final var validationResult = ShopManager.validateShopName(s);
+        final var validationResult = Shop_Manager.validateShopName(s);
         if(validationResult.isSome()) {
             player.displayClientMessage(new Txt(validationResult.unwrap() + "!").red().bold().get(), true);
             newShopName = display.getShop().getDisplayName();

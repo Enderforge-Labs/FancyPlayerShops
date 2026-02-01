@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
-import com.snek.fancyplayershops.data.display.ProductDisplayKey;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Key;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.common.MinecraftUtils;
 
@@ -282,16 +282,16 @@ public abstract class HoverReceiver {
         // Check the number of displays in the chunks the player can reach
         final BlockPos playerPos = player.blockPosition();
         final ChunkPos playerChunk = new ChunkPos(playerPos);
-        boolean check = ProductDisplayManager.chunkHasDisplays(playerChunk);
+        boolean check = ProductDisplay_Manager.chunkHasDisplays(playerChunk);
         final int reach = Math.round(Configs.getPerf().reach_distance.getValue());
         final int minX = playerPos.getX() - reach;
         final int maxX = playerPos.getX() + reach;
         final int minZ = playerPos.getZ() - reach;
         final int maxZ = playerPos.getZ() + reach;
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
-        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplayManager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplay_Manager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplay_Manager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(minX, 0, maxZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplay_Manager.chunkHasDisplays(targetChunk); }
+        if(!check) { final ChunkPos targetChunk = new ChunkPos(new BlockPos(maxX, 0, minZ)); if(!targetChunk.equals(playerChunk)) check = ProductDisplay_Manager.chunkHasDisplays(targetChunk); }
 
 
         // If they contain at least one display
@@ -306,8 +306,8 @@ public abstract class HoverReceiver {
             // Find target display
             for(final Vec3 pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
-                final UUID displayUUID = new ProductDisplayKey(new BlockPos(blockPos), player.level()).getUUID();
-                final ProductDisplay display = ProductDisplayManager.REF.get(displayUUID);
+                final UUID displayUUID = new ProductDisplay_Key(new BlockPos(blockPos), player.level()).getUUID();
+                final ProductDisplay display = ProductDisplay_Manager.REF.get(displayUUID);
                 if(display != null) return display;
             }
         }

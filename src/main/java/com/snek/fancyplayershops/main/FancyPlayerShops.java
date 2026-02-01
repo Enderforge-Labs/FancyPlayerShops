@@ -29,13 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.shop.ShopManager;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
-import com.snek.fancyplayershops.data.display.ProductDisplayKey;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
-import com.snek.fancyplayershops.data.display.ProductDisplaySerializer;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Key;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Serializer;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -121,7 +121,7 @@ public class FancyPlayerShops implements ModInitializer {
 
             // Create storage directories //TODO remove, replace with frameworkconfig
             try {
-                Files.createDirectories(ShopManager.calcShopDirPath());
+                // Files.createDirectories(ShopManager.calcShopDirPath());
                 // Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
                 Files.createDirectories(StashManager.calcStashDirPath());
             }
@@ -160,22 +160,22 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Load persistent data
-            ShopManager.loadShops(); //! Must be loaded before displays //TODO prob not needed with frameworkconfig
+            Shop_Manager.loadShops(); //! Must be loaded before displays //TODO prob not needed with frameworkconfig
             //! Force load displays to update chunk counts. This is needed in order to optimize focus detection.
             //! Lazy loading would cause the optimized detection system to not work at all
-            ProductDisplayManager.REF.forceLoadAll();
+            ProductDisplay_Manager.REF.forceLoadAll();
             StashManager.loadStashes(); //TODO prob not needed with frameworkconfig
 
             // Schedule product display focus detection
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule product display pull updates
-            Scheduler.loop(0, 1, ProductDisplayManager::pullItems);
+            Scheduler.loop(0, 1, ProductDisplay_Manager::pullItems);
 
             //TODO remove. this won't be needed anymore, after updating all the stuff
             // Schedule data saves
             Scheduler.loop(0, 1, () -> {
-                ShopManager.saveScheduledShops();
+                // ShopManager.saveScheduledShops();
                 // ProductDisplayManager.saveScheduledDisplays();
                 StashManager.saveScheduledStashes();
             });
@@ -224,7 +224,7 @@ public class FancyPlayerShops implements ModInitializer {
      */
     public static @NotNull InteractionResult onItemUse(final @NotNull Level level, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull BlockHitResult hitResult) {
         final ItemStack stack = player.getItemInHand(hand);
-        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ProductDisplayManager.DISPLAY_ITEM_NBT_KEY)) {
+        if(stack != null && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, ProductDisplay_Manager.DISPLAY_ITEM_NBT_KEY)) {
 
             // If the level is a server level and the player is allowed to modify the level
             if(level instanceof final ServerLevel serverLevel && player.getAbilities().mayBuild) {
@@ -233,14 +233,14 @@ public class FancyPlayerShops implements ModInitializer {
                 // Calculate block position and create the new display if no other display is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 final CompoundTag tag = stack.getTag();
-                final UUID displayUUID = new ProductDisplayKey(blockPos, level).getUUID();
-                if(ProductDisplayManager.REF.get(displayUUID) == null) {
+                final UUID displayUUID = new ProductDisplay_Key(blockPos, level).getUUID();
+                if(ProductDisplay_Manager.REF.get(displayUUID) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
-                    if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
+                    if(MinecraftUtils.hasTag(stack, ProductDisplay_Manager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            ((ProductDisplaySerializer)ProductDisplayManager.REF.getSerializer()).deserialize(data.getString("product_display_data"), serverLevel, blockPos);
+                            ((ProductDisplay_Serializer)ProductDisplay_Manager.REF.getSerializer()).deserialize(data.getString("product_display_data"), serverLevel, blockPos);
                             player.displayClientMessage(new Txt("Display snapshot restored").lightGray().bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }
@@ -255,7 +255,7 @@ public class FancyPlayerShops implements ModInitializer {
                         final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
-                            /* shopUUID    */ ShopManager.DEFAULT_SHOP_UUID,
+                            /* shopUUID    */ Shop_Manager.DEFAULT_SHOP_UUID,
                             /* price       */ 1000l,
                             /* stock       */ 0,
                             /* maxStock    */ tier.getCapacity(),

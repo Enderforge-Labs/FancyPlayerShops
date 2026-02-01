@@ -54,10 +54,10 @@ import net.minecraft.world.level.ChunkPos;
  * A class that handles active product displays and takes care of loading and saving their data.
  */
 @SuppressWarnings("java:S6548") //! Singleton implementation
-public class ProductDisplayManager extends DataManager<ProductDisplay> {
+public class ProductDisplay_Manager extends DataManager<ProductDisplay> {
 
     // Static manager reference
-    public static final ProductDisplayManager REF = new ProductDisplayManager();
+    public static final ProductDisplay_Manager REF = new ProductDisplay_Manager();
 
 
 
@@ -68,8 +68,8 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
             java.util.Map.of(0L, "am", 1L, "pm"))
         .toFormatter(Locale.ENGLISH)
     ;
-    private ProductDisplayManager() {
-        super(FancyPlayerShops.MOD_ID, "product displays", new ProductDisplaySerializer());
+    private ProductDisplay_Manager() {
+        super(FancyPlayerShops.MOD_ID, "product displays", new ProductDisplay_Serializer());
     }
 
 
@@ -154,7 +154,7 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
             if(tier != DisplayTier.CREATIVE) {
                 EnhancedShapedRecipe.registerDynamicReference(
                     new ResourceLocation(FancyPlayerShops.MOD_ID, tier.getId()),
-                    ProductDisplayManager.getProductDisplayItemCopy(tier)
+                    ProductDisplay_Manager.getProductDisplayItemCopy(tier)
                 );
             }
         }
@@ -172,7 +172,7 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
         final ChunkPos chunkPos = new ChunkPos(data.getPos());
         chunkDisplayAmount.putIfAbsent(chunkPos, 0);
         chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) + 1);
-        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(data.getOwnerUuid(), list -> { return new HashMap<>(); }).put(data.getUUID(), data);
+        ProductDisplay_Manager.getDisplaysByOwner().computeIfAbsent(data.getOwnerUuid(), list -> { return new HashMap<>(); }).put(data.getUUID(), data);
     }
 
 
@@ -180,7 +180,7 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
     public void afterRemove(final @NotNull UUID uuid, final @NotNull ProductDisplay data) {
         final ChunkPos chunkPos = new ChunkPos(data.getPos());
         chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) - 1);
-        ProductDisplayManager.getDisplaysByOwner().get(data.getOwnerUuid()).remove(data.getUUID());
+        ProductDisplay_Manager.getDisplaysByOwner().get(data.getOwnerUuid()).remove(data.getUUID());
     }
 
 

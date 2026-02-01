@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.stash.StashManager;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
@@ -51,7 +51,7 @@ public class Edit_DeleteButton extends ButtonElm {
 
 
         // Give the player a default product display item
-        final ItemStack defaultProductDisplayItem =  ProductDisplayManager.getProductDisplayItemCopy(display.getTier());
+        final ItemStack defaultProductDisplayItem =  ProductDisplay_Manager.getProductDisplayItemCopy(display.getTier());
         StashManager.giveItem(player.getUUID(), defaultProductDisplayItem, 1, true);
 
 

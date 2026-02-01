@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.display.DisplayTier;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_CraftingGrid;
@@ -85,7 +85,7 @@ public class ModInfoCanvas extends HudCanvasBase {
             // Add text A
             e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
-                    .cat(new Txt("Shops").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" are a great way to sell your items.\n")
+                    .cat(new Txt("Shops").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR)).cat(" are a great way to sell your items.\n")
                     .cat("Other players can purchase products remotely\n")
                     .cat("or visit your shops for bulk options and orders.\n")
                     .white().get()
@@ -96,7 +96,7 @@ public class ModInfoCanvas extends HudCanvasBase {
 
 
             // Add display item
-            e = p.addChild(new GuiItemElm(context.getLevel(), ProductDisplayManager.getProductDisplayItemCopy(DisplayTier.T4)));
+            e = p.addChild(new GuiItemElm(context.getLevel(), ProductDisplay_Manager.getProductDisplayItemCopy(DisplayTier.T4)));
             e.setSize(new Vector2f(1f, P0_ITEM_H));
             e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
 
@@ -104,11 +104,11 @@ public class ModInfoCanvas extends HudCanvasBase {
             // Add text B
             e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
-                    .cat("To get started, craft a ").cat(new Txt("Product Display").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(".\n")
+                    .cat("To get started, craft a ").cat(new Txt("Product Display").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR)).cat(".\n")
                     .cat("Once placed, you will be able to\n")
                     .cat("select the item to sell, set a price, and\n")
                     .cat("adjust other settings to your liking.\n")
-                    .cat(new Txt("Enjoy :3").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
+                    .cat(new Txt("Enjoy :3").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR))
                     .white().get()
                 )
             ));
@@ -127,9 +127,9 @@ public class ModInfoCanvas extends HudCanvasBase {
             // Add text
             e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
-                    .cat(new Txt("Basic").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
+                    .cat(new Txt("Basic").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR)).cat(" product displays can be crafted\n")
                     .cat("using Vanilla materials.\n")
-                    .cat("They have a maximum stock of ").cat(new Txt(Utils.formatAmount(DisplayTier.T1.getCapacity())).color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" items.")
+                    .cat("They have a maximum stock of ").cat(new Txt(Utils.formatAmount(DisplayTier.T1.getCapacity())).color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR)).cat(" items.")
                     .white().get()
                 )
             ));
@@ -146,7 +146,7 @@ public class ModInfoCanvas extends HudCanvasBase {
             // Add text
             e = p.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt()
-                    .cat("They can be ").cat(new Txt("upgraded").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR)).cat(" using various items\n")
+                    .cat("They can be ").cat(new Txt("upgraded").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR)).cat(" using various items\n")
                     .cat("to increase their storage, let them restock\n")
                     .cat("automatically and retrieve items wirelessly.")
                     .white().get()
@@ -183,7 +183,7 @@ public class ModInfoCanvas extends HudCanvasBase {
                         final var lines = tier.getStatsLines();
                         e = d.addChild(new TextElm(level, new TextStyle_Small()
                             .withText(new Txt()
-                                .cat(new Txt(lines.get(0) + "\n").color(ProductDisplayManager.DISPLAY_ITEM_NAME_COLOR))
+                                .cat(new Txt(lines.get(0) + "\n").color(ProductDisplay_Manager.DISPLAY_ITEM_NAME_COLOR))
                                 .cat(new Txt(String.join("\n", lines.subList(1, lines.size()))).white())
                             .get())
                             .withTextAlignment(TextAlignment.LEFT)

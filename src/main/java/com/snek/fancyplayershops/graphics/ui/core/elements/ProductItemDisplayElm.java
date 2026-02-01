@@ -10,8 +10,8 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
-import com.snek.fancyplayershops.data.display.ProductDisplayKey;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Key;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -323,8 +323,8 @@ public class ProductItemDisplayElm extends ItemElm {
                     entity.remove(RemovalReason.KILLED);
 
                     // Respawn shop item display if needed
-                    final UUID displayUUID = new ProductDisplayKey(entity.blockPosition(), entity.level()).getUUID();
-                    final ProductDisplay display = ProductDisplayManager.REF.get(displayUUID);
+                    final UUID displayUUID = new ProductDisplay_Key(entity.blockPosition(), entity.level()).getUUID();
+                    final ProductDisplay display = ProductDisplay_Manager.REF.get(displayUUID);
                     if(display != null) {
                         display.invalidateItemDisplay();
                     }

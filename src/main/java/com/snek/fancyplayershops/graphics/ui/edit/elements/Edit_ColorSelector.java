@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
+import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.styles.ProductCanvasBackground_S;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
@@ -66,7 +66,7 @@ public class Edit_ColorSelector extends ButtonElm {
         // Change theme hue
         final ProductDisplay display = GetDisplay.get(this);
         display.setColorThemeHue(hue);
-        ProductDisplayManager.REF.schedule(display.getUUID());
+        ProductDisplay_Manager.REF.schedule(display.getUUID());
 
 
         // Reset colored backgrounds of themed elements

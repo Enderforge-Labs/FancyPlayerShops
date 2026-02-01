@@ -44,10 +44,10 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A class that handles player shops.
  */
-public class ShopManager extends UtilityClassBase {
+public class Shop_Manager extends UtilityClassBase {
     public static final UUID   DEFAULT_SHOP_UUID = UUID.fromString("def00000-0000-0000-0000-000000000000");
     public static final String DEFAULT_SHOP_NAME = "Uncategorized";
-    private ShopManager() {}
+    private Shop_Manager() {}
 
 
     // Player shop data
