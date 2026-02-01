@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.data.display.ProductDisplay;
+import com.snek.frameworkconfig.data.DataEntry;
 
 
 
@@ -14,15 +15,12 @@ import com.snek.fancyplayershops.data.display.ProductDisplay;
 
 
 
-//FIXME make subclasses and move the generic code to framework lib. automate data saving
-//FIXME - PersistentData
-//FIXME - PersistentDataManager
-public class Shop {
-    private boolean scheduledForSave = false;
-    private boolean dissolved = false;
-    public boolean isScheduledForSave() { return scheduledForSave; }
-    public boolean isDissolved() { return dissolved; }
-    public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
+public class Shop extends DataEntry {
+    // private boolean scheduledForSave = false;
+    // private boolean dissolved = false;
+    // public boolean isScheduledForSave() { return scheduledForSave; }
+    // public boolean isDissolved() { return dissolved; }
+    // public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
     // Shop data
     private final @NotNull UUID   ownerUuid;
@@ -33,6 +31,7 @@ public class Shop {
     // Runtime data
     private long balance;
     private final @NotNull List<@NotNull ProductDisplay> displays;
+    private final boolean isDefault;
     //TODO ^ this prob doesn't get updated correctly when loading in.
     //TODO shops are saved when they load into the world, not all at once when the server starts. though im not sure
     //TODO check this
@@ -43,11 +42,12 @@ public class Shop {
     public @NotNull String                        getDisplayName() { return displayName; }
     public          long                          getBalance    () { return balance;     }
     public @NotNull List<@NotNull ProductDisplay> getDisplays   () { return displays;    }
+    public          boolean                       isDefault     () { return isDefault;   }
 
     // Setters
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
-    public void addBalance(final long amount) { balance += amount; Shop_Manager.scheduleShopSave(this); }
-    public void subBalance(final long amount) { balance -= amount; Shop_Manager.scheduleShopSave(this); }
+    public void addBalance(final long amount) { balance += amount; Shop_Manager.REF.schedule(getUuid(), this); }
+    public void subBalance(final long amount) { balance -= amount; Shop_Manager.REF.schedule(getUuid(), this); }
 
 
     public void addDisplay(final @NotNull ProductDisplay display) {
@@ -69,9 +69,11 @@ public class Shop {
     /**
      * Creates a new empty shop with 0 balance and a random UUID.
      * @param _displayName The display name of the shop.
+     * @param _ownerUuid The UUID of the owner.
+     * @param isDefault Whether the shop is the default shop. Each player can only have 1 default shop.
      */
-    public Shop(final @NotNull String _displayName, final @NotNull UUID _ownerUuid) {
-        this(_displayName, UUID.randomUUID(), _ownerUuid);
+    public Shop(final @NotNull String _displayName, final @NotNull UUID _ownerUuid, final boolean isDefault) {
+        this(_displayName, UUID.randomUUID(), _ownerUuid, isDefault);
     }
 
 
@@ -80,11 +82,13 @@ public class Shop {
      * @param _displayName The display name of the shop.
      * @param _uuid The UUID of the shop. This must be unique among a player's shops.
      * @param _ownerUuid The UUID of the owner.
+     * @param isDefault Whether the shop is the default shop. Each player can only have 1 default shop.
      */
-    public Shop(final @NotNull String _displayName, final @NotNull UUID _uuid, final @NotNull UUID _ownerUuid) {
+    public Shop(final @NotNull String _displayName, final @NotNull UUID _uuid, final @NotNull UUID _ownerUuid, final boolean isDefault) {
         uuid = _uuid;
         ownerUuid = _ownerUuid;
         displayName = _displayName;
+        this.isDefault = isDefault;
         balance = 0;
         displays = new ArrayList<>();
     }
@@ -100,15 +104,21 @@ public class Shop {
     }
 
 
-    /**
-     * Removes all of the displays from this shop, then flags it as dissolved (which prevents it from getting saved to file).
-     * <p>
-     * This method doesn't claim the balance as removing all of the displays already results in the shop having 0 balance.
-     */
-    public void dissolve() {
-        for(final ProductDisplay display : displays) {
-            Shop_Manager.unregisterDisplay(display);
-        }
-        dissolved = true;
+    // /**
+    //  * Removes all of the displays from this shop, then flags it as dissolved (which prevents it from getting saved to file).
+    //  * <p>
+    //  * This method doesn't claim the balance as removing all of the displays already results in the shop having 0 balance.
+    //  */
+    // public void dissolve() {
+    //     for(final ProductDisplay display : displays) {
+    //         Shop_Manager.unregisterDisplay(display);
+    //     }
+    //     dissolved = true;
+    // }
+
+
+    @Override
+    public boolean canBeSavedToFile() {
+        return !isDefault;
     }
 }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.include.com.google.gson.GsonBuilder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,40 +31,41 @@ import net.minecraft.world.item.Items;
 
 public class ProductDisplay_Serializer extends DataEntrySerializer<ProductDisplay> {
 
+
     @Override
-    public @NotNull String serialize(final @NotNull ProductDisplay display) {
+    public @NotNull String serialize(final @NotNull ProductDisplay data) {
         final Gson gson = new Gson();
-        final Map<String, Object> data = new HashMap<>();
+        final Map<String, Object> r = new HashMap<>();
 
 
         // Store basic data
-        data.put("owner",      display.getOwnerUuid().toString());
-        data.put("shop_uuid",  display.getShop().getUuid().toString());
-        data.put("price",      display.getPrice());
-        data.put("stock",      display.getStock());
-        data.put("max_stock",  display.getMaxStock());
-        data.put("direction",  display.getDefaultDirection().getEighths());
-        data.put("hue",        display.getColorThemeHue());
-        data.put("balance",    display.getBalance());
-        data.put("nbt_filter", display.getNbtFilter());
-        data.put("tier",       display.getTier().getNumericalId());
+        r.put("owner",      data.getOwnerUuid().toString());
+        r.put("shop_uuid",  data.getShop().isDefault() ? "" : data.getShop().getUuid().toString());
+        r.put("price",      data.getPrice());
+        r.put("stock",      data.getStock());
+        r.put("max_stock",  data.getMaxStock());
+        r.put("direction",  data.getDefaultDirection().getEighths());
+        r.put("hue",        data.getColorThemeHue());
+        r.put("balance",    data.getBalance());
+        r.put("nbt_filter", data.getNbtFilter());
+        r.put("tier",       data.getTier().getNumericalId());
 
 
         // Store position data
-        final BlockPos pos = display.getPos();
-        data.put("position", new int[]{ pos.getX(), pos.getY(), pos.getZ() });
-        data.put("level_id", MinecraftUtils.getLevelId(display.getLevel()));
+        final BlockPos pos = data.getPos();
+        r.put("position", new int[]{ pos.getX(), pos.getY(), pos.getZ() });
+        r.put("level_id", MinecraftUtils.getLevelId(data.getLevel()));
 
 
         // Serialize and store item
-        final @Nullable String item = MinecraftUtils.serializeItem(display.getItem());
-        data.put("item", item != null ? item : MinecraftUtils.serializeItem(Items.AIR.getDefaultInstance()));
+        final @Nullable String item = MinecraftUtils.serializeItem(data.getItem());
+        r.put("item", item != null ? item : MinecraftUtils.serializeItem(Items.AIR.getDefaultInstance()));
         //! Error is printed by the serialize method
 
 
         // For each stored item
         final List<Object> storedItems = new ArrayList<>();
-        for(final var set : display.getStoredItems().entrySet()) {
+        for(final var set : data.getStoredItems().entrySet()) {
 
             // Serialize and store it
             final @Nullable String i = MinecraftUtils.serializeItem(set.getValue().getFirst());
@@ -74,11 +76,11 @@ public class ProductDisplay_Serializer extends DataEntrySerializer<ProductDispla
                 storedItems.add(storedItem);
             }
         }
-        data.put("stored_items", storedItems);
+        r.put("stored_items", storedItems);
 
 
         // Convert json to a json string and return it
-        return gson.toJson(data);
+        return gson.toJson(r);
     }
 
 
@@ -89,21 +91,22 @@ public class ProductDisplay_Serializer extends DataEntrySerializer<ProductDispla
 
 
     @Override
-    public @NotNull ProductDisplay deserialize(final @NotNull String json) {
-        return deserialize(json, null, null);
+    public @NotNull ProductDisplay deserialize(final @NotNull String string) {
+        return deserialize(string, null, null);
     }
 
 
 
 
-    public @NotNull ProductDisplay deserialize(final @NotNull String json, final @Nullable ServerLevel serverLevelOverride, final @Nullable BlockPos blockPosOverride) {
+    public @NotNull ProductDisplay deserialize(final @NotNull String string, final @Nullable ServerLevel serverLevelOverride, final @Nullable BlockPos blockPosOverride) {
         final Gson gson = new Gson();
-        final Map<String, Object> data = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
+        final Map<String, Object> data = gson.fromJson(string, new TypeToken<Map<String, Object>>(){}.getType());
 
 
         // Extract basic data
+        final @NotNull String rawShopUuidValue = (String)data.get("shop_uuid");
         final UUID        owner     = UUID.fromString((String)data.get("owner"));
-        final UUID        shopUuid  = UUID.fromString((String)data.get("shop_uuid"));
+        final UUID        shopUuid  = rawShopUuidValue.isEmpty() ? null : UUID.fromString(rawShopUuidValue);
         final long        price     = ((Number)data.get("price")).longValue();
         final long        stock     = ((Number)data.get("stock")).longValue();
         final long        maxStock  = ((Number)data.get("max_stock")).longValue();
@@ -165,6 +168,5 @@ public class ProductDisplay_Serializer extends DataEntrySerializer<ProductDispla
             owner, shopUuid, price, stock, maxStock, direction, hue, balance,
             nbtFilter, position, level, tier, item, storedItems
         );
-        //! display creation event not fired. That's the caller method's responsibility
     }
 }

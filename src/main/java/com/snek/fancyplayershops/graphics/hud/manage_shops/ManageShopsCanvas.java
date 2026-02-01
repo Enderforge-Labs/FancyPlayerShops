@@ -73,7 +73,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
         else {
 
             // Add shop header
-            final List<Shop> shops = Shop_Manager.getShops(player);
+            final List<Shop> shops = Shop_Manager.getShopsByOwner().get(player.getUUID());
             e = bg.addChild(new ManageShops_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);

@@ -407,7 +407,7 @@ public abstract class CommandManager {
         final ServerPlayer player = context.getSource().getPlayer();
         StashManager.saveScheduledStashes();
         // ProductDisplayManager.REF.();
-        Shop_Manager.saveScheduledShops();
+        // Shop_Manager.saveScheduledShops();
         player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
         return 1;
     }

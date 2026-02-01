@@ -81,7 +81,7 @@ public class ProductDisplay_Manager extends DataManager<ProductDisplay> {
 
     // Stores the displays of players, identifying them by their owner's UUID
     private static final @NotNull Map<UUID, Map<UUID, ProductDisplay>> displaysByOwner = new HashMap<>();
-    public  static       @NotNull Map<UUID, Map<UUID, ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
+    public  static final @NotNull Map<UUID, Map<UUID, ProductDisplay>> getDisplaysByOwner() { return displaysByOwner; }
 
     // Async update list
     private static int updateIndex = 0;

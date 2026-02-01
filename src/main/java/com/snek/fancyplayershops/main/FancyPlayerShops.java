@@ -29,13 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.stash.StashManager;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Key;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Serializer;
+import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -107,7 +107,7 @@ public class FancyPlayerShops implements ModInitializer {
         // Force display item cration
         // This loads them in the reference map, which is needed in order to use FrameworkLib's dynamic item references
         try {
-            Class.forName("com.snek.fancyplayershops.data.display.ProductDisplayManager");
+            Class.forName("com.snek.fancyplayershops.data.display.ProductDisplay_Manager");
         }
         catch(ClassNotFoundException e) {
             e.printStackTrace();
@@ -159,8 +159,13 @@ public class FancyPlayerShops implements ModInitializer {
 
 
 
-            // Load persistent data
-            Shop_Manager.loadShops(); //! Must be loaded before displays //TODO prob not needed with frameworkconfig
+            // Load all shops
+            //! Force loading lets HUDs display the entire list of shops.
+            //! Lazy loading doesn't allow for that.
+            //! Must be loaded before displays
+            Shop_Manager.REF.forceLoadAll();
+
+            // Load all displays
             //! Force load displays to update chunk counts. This is needed in order to optimize focus detection.
             //! Lazy loading would cause the optimized detection system to not work at all
             ProductDisplay_Manager.REF.forceLoadAll();
@@ -255,7 +260,7 @@ public class FancyPlayerShops implements ModInitializer {
                         final DisplayTier tier = DisplayTier.fromNumericalId(tag.getInt("tier"));
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ player.getUUID(),
-                            /* shopUUID    */ Shop_Manager.DEFAULT_SHOP_UUID,
+                            /* shopUUID    */ null,
                             /* price       */ 1000l,
                             /* stock       */ 0,
                             /* maxStock    */ tier.getCapacity(),

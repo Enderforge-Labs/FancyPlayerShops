@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.fancyplayershops.data.shop.Shop_Manager;
 import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplay;
@@ -301,7 +300,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
                         final var tier = DisplayTier.values()[Math.abs(rnd.nextInt() % DisplayTier.values().length)];
                         final ProductDisplay display = new ProductDisplay(
                             /* ownerUUID   */ owner.getUUID(),
-                            /* shopUUID    */ Shop_Manager.DEFAULT_SHOP_UUID,
+                            /* shopUUID    */ null,
                             /* price       */ Math.abs(rnd.nextLong() % 100_000),
                             /* stock       */ 0,
                             /* maxStock    */ tier.getCapacity(),

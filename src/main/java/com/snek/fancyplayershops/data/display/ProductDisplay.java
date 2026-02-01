@@ -193,7 +193,7 @@ public class ProductDisplay extends DataEntry {
     /**
      * Creates a new ProductDisplay and saves it in its own file.
      * @param ownerUUID The UUID of the owner of this display.
-     * @param shopUUID The UUID of this display's shop.
+     * @param shopUUID The UUID of this display's shop. Can be null (default shop).
      * @param price The price of the item.
      * @param stock The current stock.
      * @param maxStock The stock limit.
@@ -208,7 +208,7 @@ public class ProductDisplay extends DataEntry {
      */
     public ProductDisplay(
         final @NotNull UUID ownerUUID,
-        final @NotNull UUID shopUUID,
+        final @Nullable UUID shopUUID,
         final long price,
         final long stock,
         final long maxStock,
@@ -1053,7 +1053,7 @@ public class ProductDisplay extends DataEntry {
 
 
         // Try to find the shop
-        for(final Shop newShopCandidate : Shop_Manager.getShops(MinecraftUtils.getPlayerByUUID(ownerUUID))) {
+        for(final Shop newShopCandidate : Shop_Manager.getShopsByOwner().get(ownerUUID)) {
             if(newShopCandidate.getDisplayName().equals(name)) {
                 newShop = newShopCandidate;
             }
@@ -1062,8 +1062,9 @@ public class ProductDisplay extends DataEntry {
 
         // Create a new shop if one with the specified display name doesn't already exist
         if(newShop == null) {
-            newShop = new Shop(name, ownerUUID);
-            Shop_Manager.createShop(newShop);
+            newShop = new Shop(name, ownerUUID, false);
+            Shop_Manager.REF.put(newShop.getUuid(), newShop);
+            // Shop_Manager.createShop(newShop); //TODO remove
         }
 
 
