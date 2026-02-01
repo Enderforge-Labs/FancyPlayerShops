@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.include.com.google.gson.GsonBuilder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

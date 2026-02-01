@@ -16,11 +16,6 @@ import com.snek.frameworkconfig.data.DataEntry;
 
 
 public class Shop extends DataEntry {
-    // private boolean scheduledForSave = false;
-    // private boolean dissolved = false;
-    // public boolean isScheduledForSave() { return scheduledForSave; }
-    // public boolean isDissolved() { return dissolved; }
-    // public void setScheduledForSave(final boolean scheduled) { scheduledForSave = scheduled; }
 
     // Shop data
     private final @NotNull UUID   ownerUuid;
@@ -37,12 +32,12 @@ public class Shop extends DataEntry {
     //TODO check this
 
     // Getters
-    public @NotNull UUID                          getOwnerUuid  () { return ownerUuid;   }
-    public @NotNull UUID                          getUuid       () { return uuid;        }
-    public @NotNull String                        getDisplayName() { return displayName; }
-    public          long                          getBalance    () { return balance;     }
-    public @NotNull List<@NotNull ProductDisplay> getDisplays   () { return displays;    }
-    public          boolean                       isDefault     () { return isDefault;   }
+    public @NotNull UUID                 getOwnerUuid  () { return ownerUuid;   }
+    public @NotNull UUID                 getUuid       () { return uuid;        }
+    public @NotNull String               getDisplayName() { return displayName; }
+    public          long                 getBalance    () { return balance;     }
+    public @NotNull List<ProductDisplay> getDisplays   () { return displays;    }
+    public          boolean              isDefault     () { return isDefault;   }
 
     // Setters
     public void setDisplayName(final @NotNull String _displayName) { displayName = _displayName; }
@@ -102,19 +97,6 @@ public class Shop extends DataEntry {
             s.claimBalance();
         }
     }
-
-
-    // /**
-    //  * Removes all of the displays from this shop, then flags it as dissolved (which prevents it from getting saved to file).
-    //  * <p>
-    //  * This method doesn't claim the balance as removing all of the displays already results in the shop having 0 balance.
-    //  */
-    // public void dissolve() {
-    //     for(final ProductDisplay display : displays) {
-    //         Shop_Manager.unregisterDisplay(display);
-    //     }
-    //     dissolved = true;
-    // }
 
 
     @Override
