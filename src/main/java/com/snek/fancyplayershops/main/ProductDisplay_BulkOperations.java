@@ -62,7 +62,10 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         // For each active display
         final List<ProductDisplay> r = new ArrayList<>();
-        final var displays = owner.isSome() ? ProductDisplayManager.getDisplaysByOwner().get(owner.unwrap().getUUID()) : ProductDisplayManager.REF.getCache().values();
+        final var displays = owner.isSome() ?
+            ProductDisplayManager.getDisplaysByOwner().get(owner.unwrap().getUUID()).values() :
+            ProductDisplayManager.REF.getCache().values()
+        ;
         for(final ProductDisplay display : displays) {
 
             // Check level

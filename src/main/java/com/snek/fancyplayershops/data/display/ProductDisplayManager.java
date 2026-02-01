@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,9 +80,8 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
 
 
     // Stores the displays of players, identifying them by their owner's UUID
-    private static final @NotNull Map<@NotNull UUID, @Nullable HashSet<@NotNull ProductDisplay>> displaysByOwner = new HashMap<>();
-    public  static       @NotNull Map<@NotNull UUID, @Nullable HashSet<@NotNull ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
-    //TODO hash set of displays is prob not efficient. use the display's key instead
+    private static final @NotNull Map<UUID, Map<UUID, ProductDisplay>> displaysByOwner = new HashMap<>();
+    public  static       @NotNull Map<UUID, Map<UUID, ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
 
     // Async update list
     private static int updateIndex = 0;
@@ -174,7 +172,7 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
         final ChunkPos chunkPos = new ChunkPos(data.getPos());
         chunkDisplayAmount.putIfAbsent(chunkPos, 0);
         chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) + 1);
-        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(data.getOwnerUuid(), list -> { return new HashSet<>(); }).add(data);
+        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(data.getOwnerUuid(), list -> { return new HashMap<>(); }).put(data.getUUID(), data);
     }
 
 
@@ -182,7 +180,7 @@ public class ProductDisplayManager extends DataManager<ProductDisplay> {
     public void afterRemove(final @NotNull UUID uuid, final @NotNull ProductDisplay data) {
         final ChunkPos chunkPos = new ChunkPos(data.getPos());
         chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) - 1);
-        ProductDisplayManager.getDisplaysByOwner().get(data.getOwnerUuid()).remove(data);
+        ProductDisplayManager.getDisplaysByOwner().get(data.getOwnerUuid()).remove(data.getUUID());
     }
 
 

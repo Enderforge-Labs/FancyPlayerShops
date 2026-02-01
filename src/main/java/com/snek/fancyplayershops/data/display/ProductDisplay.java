@@ -3,7 +3,6 @@ package com.snek.fancyplayershops.data.display;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -945,8 +944,8 @@ public class ProductDisplay extends DataEntry {
 
 
         // Update the owners' display lists, then change the owner and save this display
-        ProductDisplayManager.getDisplaysByOwner().get(getOwnerUuid()).remove(this);
-        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(getOwnerUuid(), list -> { return new HashSet<>(); }).add(this);
+        ProductDisplayManager.getDisplaysByOwner().get(getOwnerUuid()).remove(getUUID());
+        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(getOwnerUuid(), list -> { return new HashMap<>(); }).put(getUUID(), this);
         ownerUUID = newOwner.getUUID();
         ProductDisplayManager.REF.schedule(getUUID(), this);
 
