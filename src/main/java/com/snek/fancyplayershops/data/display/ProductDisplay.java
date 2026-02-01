@@ -1053,7 +1053,7 @@ public class ProductDisplay extends DataEntry {
 
 
         // Try to find the shop
-        for(final Shop newShopCandidate : Shop_Manager.getShopsByOwner().get(ownerUUID)) {
+        for(final Shop newShopCandidate : Shop_Manager.getShopsByOwner().get(ownerUUID).values()) {
             if(newShopCandidate.getDisplayName().equals(name)) {
                 newShop = newShopCandidate;
             }

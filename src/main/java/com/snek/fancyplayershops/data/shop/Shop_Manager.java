@@ -1,8 +1,6 @@
 package com.snek.fancyplayershops.data.shop;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,8 +43,8 @@ public class Shop_Manager extends DataManager<Shop> {
     public static final String DEFAULT_SHOP_NAME = "Uncategorized";
 
     // Player shop data
-    private static final @NotNull Map<UUID, List<Shop>> shopsByOwner = new HashMap<>();
-    public  static final @NotNull Map<UUID, List<Shop>> getShopsByOwner() { return shopsByOwner; }
+    private static final @NotNull Map<UUID, Map<UUID, Shop>> shopsByOwner = new HashMap<>();
+    public  static final @NotNull Map<UUID, Map<UUID, Shop>> getShopsByOwner() { return shopsByOwner; }
 
 
 
@@ -62,7 +60,7 @@ public class Shop_Manager extends DataManager<Shop> {
     public void afterPut(final @NotNull UUID uuid, final @NotNull Shop shop) {
 
         // Update the list of shops of the owner
-        shopsByOwner.computeIfAbsent(shop.getOwnerUuid(), _uuid -> new ArrayList<>()).add(shop);
+        shopsByOwner.computeIfAbsent(shop.getOwnerUuid(), _uuid -> new HashMap<>()).put(shop.getUuid(), shop);
     }
 
 
@@ -73,7 +71,7 @@ public class Shop_Manager extends DataManager<Shop> {
         //! We expect this data to be valid. No need to check if the entry exists.
         //! A missing entry in shopsByOwner means something went wrong in the code.
         final var playerShops = shopsByOwner.get(shop.getOwnerUuid());
-        playerShops.remove(shop);
+        playerShops.remove(shop.getUuid());
 
         // Remove all the displays from the shop
         for(final ProductDisplay display : shop.getDisplays()) {
@@ -102,7 +100,7 @@ public class Shop_Manager extends DataManager<Shop> {
         //! This special shop is not stored to file or loaded
         if(shopUUID == null) {
             final var playerShops = shopsByOwner.get(display.getOwnerUuid());
-            if(playerShops != null) for(final var playerShop : playerShops) {
+            if(playerShops != null) for(final var playerShop : playerShops.values()) {
                 if(playerShop.isDefault()) {
                     shop = playerShop;
                     break;

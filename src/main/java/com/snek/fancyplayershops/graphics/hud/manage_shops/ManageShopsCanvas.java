@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.data.shop.Shop_Manager;
-import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.data.display.ProductDisplay_Manager;
 import com.snek.fancyplayershops.graphics.ScrollableList;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
@@ -73,7 +72,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
         else {
 
             // Add shop header
-            final List<Shop> shops = Shop_Manager.getShopsByOwner().get(player.getUUID());
+            final var shops = List.copyOf(Shop_Manager.getShopsByOwner().get(player.getUUID()).values());
             e = bg.addChild(new ManageShops_ShopHeader(_hud, shops));
             e.setSize(new Vector2f(1f, HEADER_H));
             e.setAlignmentX(AlignmentX.LEFT);
