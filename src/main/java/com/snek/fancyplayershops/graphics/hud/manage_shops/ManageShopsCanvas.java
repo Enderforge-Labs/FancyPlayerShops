@@ -1,7 +1,6 @@
 package com.snek.fancyplayershops.graphics.hud.manage_shops;
 
 import java.util.List;
-import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,6 @@ import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopEntry;
 import com.snek.fancyplayershops.graphics.hud.manage_shops.elements.ManageShops_ShopHeader;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.main.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -56,7 +54,7 @@ public class ManageShopsCanvas extends HudCanvasBase {
 
 
         // Add no products text if the player doesn't own any product display
-        final @Nullable Set<@NotNull ProductDisplay> displays = ProductDisplayManager.getDisplaysOfPlayer(player);
+        final @Nullable var displays = ProductDisplayManager.getDisplaysByOwner().get(player.getUUID());
         if(displays == null || displays.isEmpty()) {
             e = bg.addChild(new TextElm(level, new TextStyle_Small()
                 .withText(new Txt(

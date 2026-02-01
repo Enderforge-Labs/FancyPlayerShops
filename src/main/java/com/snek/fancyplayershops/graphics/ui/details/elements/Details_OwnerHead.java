@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.styles.Details_OwnerHead_S;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;

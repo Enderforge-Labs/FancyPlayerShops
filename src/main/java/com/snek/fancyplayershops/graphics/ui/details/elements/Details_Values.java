@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;

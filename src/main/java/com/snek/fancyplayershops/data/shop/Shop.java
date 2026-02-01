@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 
 
 

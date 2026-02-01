@@ -56,16 +56,6 @@ public class PerformanceConfig implements ConfigFile {
         },
         5 * 20
     );
-    public final ValueConfigField<Integer> data_save_frequency = new ValueConfigField<>(
-        new String[] {
-            "The time between data saves. Measured in ticks.",
-            "Must be >= 1.",
-            "Only modified data blocks are saved to file, so this config has little inpact on performance.",
-            "Very high values can occasionally create lag spikes. Lower values improve data safety and tps stability but slightly degrade performance.",
-            "1 is recommended for most servers."
-        },
-        1
-    );
 
 
 
@@ -89,9 +79,5 @@ public class PerformanceConfig implements ConfigFile {
 
         // Check ray casting batch size
         if(ray_casting_batches.getValue() < 1) throw new IllegalStateException("Ray casting batches must be >= 1");
-
-
-        // Check data save frequency
-        if(data_save_frequency.getValue() < 1) throw new IllegalStateException("Data save frequency must be >= 1");
     }
 }

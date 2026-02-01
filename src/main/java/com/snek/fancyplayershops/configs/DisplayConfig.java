@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.configs;
 
 import java.math.BigInteger;
 
-import com.snek.fancyplayershops.main.DisplayTier;
+import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.frameworkconfig.config.ConfigFile;
 import com.snek.frameworkconfig.config.fields.ConstrainedConfigField;
 import com.snek.frameworkconfig.config.fields.DefaultConfigField;

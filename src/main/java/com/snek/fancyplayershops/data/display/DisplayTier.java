@@ -1,4 +1,4 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.data.display;
 
 import java.util.ArrayList;
 import java.util.List;

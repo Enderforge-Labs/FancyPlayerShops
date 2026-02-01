@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.graphics.designs.ItemDesigns;

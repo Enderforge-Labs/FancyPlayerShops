@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.ui;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.graphics.core.UiContext;
 
 import net.minecraft.world.entity.player.Player;

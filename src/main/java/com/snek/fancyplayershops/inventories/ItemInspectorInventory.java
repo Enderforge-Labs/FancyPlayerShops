@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.inventories;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;

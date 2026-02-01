@@ -2,7 +2,7 @@ package com.snek.fancyplayershops.graphics.ui.details.elements;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;

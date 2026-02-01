@@ -1,8 +1,9 @@
-package com.snek.fancyplayershops.main;
+package com.snek.fancyplayershops.data.display;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,9 +25,9 @@ import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm
 import com.snek.fancyplayershops.graphics.ui.buy.BuyCanvas;
 import com.snek.fancyplayershops.graphics.ui.details.DetailsCanvas;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;
+import com.snek.frameworkconfig.data.DataEntry;
 import com.snek.fancyplayershops.data.stash.PlayerStash;
 import com.snek.fancyplayershops.data.stash.StashEntry;
-import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
@@ -53,7 +54,6 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -75,7 +75,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * This class manages a product display that is placed somewhere in a level.
  */
-public class ProductDisplay {
+public class ProductDisplay extends DataEntry {
 
     // Strings
     public static final Component EMPTY_PRODUCT_DISPLAY_NAME  = new Txt("[Empty]").italic().lightGray().get();
@@ -120,11 +120,11 @@ public class ProductDisplay {
     // Display state
     private @Nullable Player      user             = null;              // The current user of the display (the player that first opened a menu)
     private @Nullable Player      viewer           = null;              // The prioritized viewer
-    private           boolean     removalState    = false;             // True if the display has been deleted, false otherwise
     private           boolean     focusState       = false;             // True if the display is currently being looked at by at least one player, false otherwise
     private           boolean     focusStateNext   = false;             // The next focus state
     private @NotNull  RateLimiter menuOpenLimiter  = new RateLimiter();
-    private           boolean     scheduledForSave = false;             // True if the display is currently scheduled to be saved to file, false otherwise
+
+
 
 
     // Getters
@@ -140,12 +140,11 @@ public class ProductDisplay {
     public           long                   getMaxStock         () { return maxStock;                        }
     public @NotNull  Direction              getDefaultDirection () { return defaultDirection;                }
     public           boolean                isFocused           () { return focusState;                      }
-    public           boolean                isRemoved           () { return removalState;                    }
     public @NotNull  UUID                   getOwnerUuid        () { return ownerUUID;                       }
     public @Nullable Player                 getuser             () { return user;                            }
     public @Nullable Player                 getViewer           () { return viewer;                          }
-    public           boolean                isScheduledForSave  () { return scheduledForSave;                }
     public @NotNull  ProductDisplayKey      getKey              () { return displayKeyCache;                 }
+    public @NotNull  UUID                   getUUID             () { return displayKeyCache.getUUID();       }
     public @NotNull  DisplayTier            getTier             () { return tier;                            }
     public @NotNull  String                 getIdentifierNoLevel() { return displayIdentifierCache_noLevel;  }
     public           float                  getColorThemeHue    () { return colorThemeHue;                   }
@@ -155,7 +154,6 @@ public class ProductDisplay {
 
     // Setters
     public void setViewer          (final @Nullable Player  viewer        ) { this.viewer         = viewer;         }
-    public void setScheduledForSave(final           boolean scheduled     ) { scheduledForSave    = scheduled;      }
     public void setFocusStateNext  (final           boolean nextFocusState) { this.focusStateNext = nextFocusState; }
 
 
@@ -189,14 +187,6 @@ public class ProductDisplay {
      */
     public static String calcDisplayIdentifier(final @NotNull BlockPos _pos) {
         return String.format("%d,%d,%d", _pos.getX(), _pos.getY(), _pos.getZ());
-    }
-    /**
-     * Calculates a display identifier from the position. This identifier doesn't include the level ID.
-     * @param _pos The position.
-     * @return The generated identifier.
-     */
-    public static ProductDisplayKey calcDisplayKey(final @NotNull BlockPos _pos, final @NotNull Level level) {
-        return new ProductDisplayKey(_pos, level);
     }
 
 
@@ -257,15 +247,10 @@ public class ProductDisplay {
 
         // Recalculate identifier and key
         displayIdentifierCache_noLevel = calcDisplayIdentifier(pos);
-        displayKeyCache = calcDisplayKey(pos, level);
-
-        // // Create and spawn the Item Display entity //TODO REMOVE
-        // itemDisplay = new ProductItemDisplayElm(this);
-        // itemDisplay.spawn(calcDisplayPos(), true);
+        displayKeyCache = new ProductDisplayKey(pos, level);
 
         // Save the display
-        ProductDisplayManager.registerDisplay(this);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.put(getUUID(), this);
     }
 
 
@@ -500,7 +485,7 @@ public class ProductDisplay {
             // Handle payment
             final long totPrice = price * amount;
             if(EconomyManager.getCurrency(buyer.getUUID()) >= totPrice) {
-                ProductDisplayManager.scheduleDisplaySave(this);
+                ProductDisplayManager.REF.schedule(getUUID(), this);
                 EconomyManager.subtractCurrency(buyer.getUUID(), totPrice);
                 addBalance(totPrice);
 
@@ -641,7 +626,7 @@ public class ProductDisplay {
         else if(newPrice < 0.00001) price = 0;
         else if(newPrice < 0.01000) price = 1;
         else price = newPrice;
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
         return true;
     }
 
@@ -667,7 +652,7 @@ public class ProductDisplay {
             return false;
         }
         else maxStock = Math.round(newStockLimit);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
         return true;
     }
 
@@ -681,7 +666,7 @@ public class ProductDisplay {
      */
     public void addDefaultRotation(final int _rotation) {
         defaultDirection = Direction.fromEighths(defaultDirection.getEighths() + _rotation);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 
@@ -704,7 +689,7 @@ public class ProductDisplay {
         stashIncompatible(oldItem);
 
         // Save the display
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 
@@ -734,7 +719,7 @@ public class ProductDisplay {
         final long oldStock = stock;
         stock = 0;
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 
@@ -781,7 +766,7 @@ public class ProductDisplay {
 
         // Fire event and save this display
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 
@@ -795,18 +780,15 @@ public class ProductDisplay {
      * <p> This method doesn't fire shop removal events.
      */
     public void remove() {
-        if(!removalState) {
-            removalState = true;
 
-            // Despawn the ui context and the item display
-            if(ui != null) ui.despawn(true);
-            getItemDisplay().stopLoopAnimation();
-            getItemDisplay().despawn(true);
+        // Despawn the ui context and the item display
+        if(ui != null) ui.despawn(true);
+        getItemDisplay().stopLoopAnimation();
+        getItemDisplay().despawn(true);
 
-            // Delete the data associated with this display
-            ShopManager.unregisterDisplay(this);
-            ProductDisplayManager.deleteDisplay(this);
-        }
+        // Delete the data associated with this display
+        ShopManager.unregisterDisplay(this);
+        ProductDisplayManager.REF.remove(getUUID());
     }
 
 
@@ -881,7 +863,7 @@ public class ProductDisplay {
         // Update stock, then fire events and save the display
         if(oldStock == stock) return;
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 
@@ -962,14 +944,11 @@ public class ProductDisplay {
         updateFocusState();
 
 
-        // Unregister the display from the runtime maps to update any linked data,
-        // then change the owner, save the shop and register the display again
-        ShopManager.unregisterDisplay(this);
-        ProductDisplayManager.unregisterDisplay(this);
+        // Update the owners' display lists, then change the owner and save this display
+        ProductDisplayManager.getDisplaysByOwner().get(getOwnerUuid()).remove(this);
+        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(getOwnerUuid(), list -> { return new HashSet<>(); }).add(this);
         ownerUUID = newOwner.getUUID();
-        ProductDisplayManager.registerDisplay(this);
-        ShopManager.registerDisplay(this, getShop().getUuid());
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
 
 
         // Send feedback messages
@@ -1004,7 +983,7 @@ public class ProductDisplay {
      */
     public void setColorThemeHue(final float _hue) {
         colorThemeHue = _hue;
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
     /**
@@ -1118,7 +1097,7 @@ public class ProductDisplay {
             // This setting already allows any currently stored item
 
             // Save the display
-            ProductDisplayManager.scheduleDisplaySave(this);
+            ProductDisplayManager.REF.schedule(getUUID(), this);
         }
     }
 
@@ -1182,7 +1161,7 @@ public class ProductDisplay {
         DisplayEvents.STOCK_CHANGED.invoker().onStockChange(this, oldStock, stock);
 
         // Save the display and return the stats
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
         return Pair.from(givenAmount, stashedAmount);
     }
 
@@ -1211,7 +1190,7 @@ public class ProductDisplay {
 
         // Update total stock and save the display
         stock += amount;
-        ProductDisplayManager.scheduleDisplaySave(this);
+        ProductDisplayManager.REF.schedule(getUUID(), this);
     }
 
 

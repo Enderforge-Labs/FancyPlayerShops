@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;

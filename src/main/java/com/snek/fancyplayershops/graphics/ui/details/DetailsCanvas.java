@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductCanvasBase;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_Names;
 import com.snek.fancyplayershops.graphics.ui.details.elements.Details_OwnerHead;

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.fancyplayershops.data.shop.Shop;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

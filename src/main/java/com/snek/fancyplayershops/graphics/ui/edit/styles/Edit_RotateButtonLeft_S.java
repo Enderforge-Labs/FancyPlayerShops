@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.edit.styles;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.functional.styles.__base_ButtonStyle;
 import com.snek.frameworklib.data_types.animations.Animation;

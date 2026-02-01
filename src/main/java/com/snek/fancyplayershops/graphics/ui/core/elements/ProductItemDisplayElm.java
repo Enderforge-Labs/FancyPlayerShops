@@ -1,5 +1,7 @@
 package com.snek.fancyplayershops.graphics.ui.core.elements;
 
+import java.util.UUID;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
@@ -7,7 +9,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplayKey;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.ui.core.styles.SimpleNameDisplay_S;
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -312,17 +315,18 @@ public class ProductItemDisplayElm extends ItemElm {
                 entity.hasCustomName() &&
                 entity.getCustomName().getString().equals(ITEM_DISPLAY_CUSTOM_NAME)
             ) {
-                //! Force data loading in case this event gets called before the scheduled data loading
-                ProductDisplayManager.loadDisplays();
+                // //! Force data loading in case this event gets called before the scheduled data loading //TODO remove
+                // ProductDisplayManager.loadDisplays();
 
                 // Remove entity
                 if(!entity.isRemoved()) {
                     entity.remove(RemovalReason.KILLED);
 
                     // Respawn shop item display if needed
-                    final ProductDisplay shop = ProductDisplayManager.findDisplay(entity.blockPosition(), entity.level());
-                    if(shop != null) {
-                        shop.invalidateItemDisplay();
+                    final UUID displayUUID = new ProductDisplayKey(entity.blockPosition(), entity.level()).getUUID();
+                    final ProductDisplay display = ProductDisplayManager.REF.get(displayUUID);
+                    if(display != null) {
+                        display.invalidateItemDisplay();
                     }
                 }
             }

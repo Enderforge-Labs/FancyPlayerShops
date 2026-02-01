@@ -21,6 +21,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.shop.ShopManager;
 import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
 import com.snek.frameworklib.data_types.containers.Option;
@@ -401,10 +402,11 @@ public abstract class CommandManager {
 
 
 
+    //TODO this command might become useless once everything uses the new system
     public static int executeSaveAll(final @NotNull CommandContext<CommandSourceStack> context) {
         final ServerPlayer player = context.getSource().getPlayer();
         StashManager.saveScheduledStashes();
-        ProductDisplayManager.saveScheduledDisplays();
+        // ProductDisplayManager.REF.();
         ShopManager.saveScheduledShops();
         player.displayClientMessage(new Txt("Saved shop data.").white().get(), false);
         return 1;

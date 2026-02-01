@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.elements.Buy_ItemInspector;
 import com.snek.fancyplayershops.graphics.ui.edit.EditCanvas;

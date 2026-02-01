@@ -5,7 +5,7 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.inspect.styles.Inspect_ModDisplay_S;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.common.MinecraftUtils;

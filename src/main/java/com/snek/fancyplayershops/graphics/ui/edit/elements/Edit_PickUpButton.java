@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayRemovalReason;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_SquareButton_S;
 import com.snek.frameworklib.graphics.designs.SymbolDesigns;
 import com.snek.frameworklib.graphics.functional.elements.ButtonElm;

@@ -13,6 +13,8 @@ import org.joml.Vector3f;
 
 import com.snek.fancyplayershops.data.shop.ShopManager;
 import com.snek.fancyplayershops.data.shop.Shop;
+import com.snek.fancyplayershops.data.display.DisplayTier;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
@@ -60,7 +62,7 @@ public final class ProductDisplay_BulkOperations extends UtilityClassBase {
 
         // For each active display
         final List<ProductDisplay> r = new ArrayList<>();
-        final var displays = owner.isSome() ? ProductDisplayManager.getDisplaysByOwner().get(owner.unwrap().getUUID()) : ProductDisplayManager.getDisplaysByCoords().values();
+        final var displays = owner.isSome() ? ProductDisplayManager.getDisplaysByOwner().get(owner.unwrap().getUUID()) : ProductDisplayManager.REF.getCache().values();
         for(final ProductDisplay display : displays) {
 
             // Check level

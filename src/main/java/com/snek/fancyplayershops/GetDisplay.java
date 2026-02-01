@@ -3,7 +3,7 @@ package com.snek.fancyplayershops;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.fancyplayershops.graphics.ui.ProductDisplay_Context;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.layout.Div;

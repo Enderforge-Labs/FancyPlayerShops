@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
 import com.snek.fancyplayershops.graphics.hud.core.elements.HudCanvasBase;
 import com.snek.fancyplayershops.graphics.hud.main_menu.MainMenuCanvas;
@@ -13,7 +14,6 @@ import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_Crafting
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_NextButton;
 import com.snek.fancyplayershops.graphics.hud.mod_info.elements.ModInfo_PrevButton;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
-import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;

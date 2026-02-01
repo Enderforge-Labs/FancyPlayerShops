@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.GetDisplay;
 import com.snek.fancyplayershops.graphics.ui.core.elements.ProductItemDisplayElm;
 import com.snek.fancyplayershops.graphics.ui.edit.styles.Edit_RotateButtonLeft_S;

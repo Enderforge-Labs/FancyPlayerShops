@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.hud.mod_info.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.fancyplayershops.main.DisplayTier;
+import com.snek.fancyplayershops.data.display.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;

@@ -3,7 +3,7 @@ package com.snek.fancyplayershops.graphics.ui.misc.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.styles.ChatInputStyle;
 
 

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -30,8 +31,11 @@ import org.slf4j.LoggerFactory;
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.shop.ShopManager;
 import com.snek.fancyplayershops.data.stash.StashManager;
+import com.snek.fancyplayershops.data.display.DisplayTier;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplayKey;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
-import com.snek.fancyplayershops.data.display.ProductDisplay_Serializer;
+import com.snek.fancyplayershops.data.display.ProductDisplaySerializer;
 import com.snek.fancyplayershops.events.DisplayEvents;
 import com.snek.fancyplayershops.events.data.DisplayCreationReason;
 import com.snek.frameworkconfig.FrameworkConfig;
@@ -118,7 +122,7 @@ public class FancyPlayerShops implements ModInitializer {
             // Create storage directories //TODO remove, replace with frameworkconfig
             try {
                 Files.createDirectories(ShopManager.calcShopDirPath());
-                Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
+                // Files.createDirectories(ProductDisplayManager.calcDisplayDirPath());
                 Files.createDirectories(StashManager.calcStashDirPath());
             }
             catch(final IOException e) {
@@ -156,20 +160,23 @@ public class FancyPlayerShops implements ModInitializer {
 
 
             // Load persistent data
-            ShopManager.loadShops(); //! Must be loaded before displays
-            ProductDisplayManager.loadDisplays();
-            StashManager.loadStashes();
+            ShopManager.loadShops(); //! Must be loaded before displays //TODO prob not needed with frameworkconfig
+            //! Force load displays to update chunk counts. This is needed in order to optimize focus detection.
+            //! Lazy loading would cause the optimized detection system to not work at all
+            ProductDisplayManager.REF.forceLoadAll();
+            StashManager.loadStashes(); //TODO prob not needed with frameworkconfig
 
-
+            // Schedule product display focus detection
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
             // Schedule product display pull updates
             Scheduler.loop(0, 1, ProductDisplayManager::pullItems);
 
+            //TODO remove. this won't be needed anymore, after updating all the stuff
             // Schedule data saves
-            Scheduler.loop(0, Configs.getPerf().data_save_frequency.getValue(), () -> {
+            Scheduler.loop(0, 1, () -> {
                 ShopManager.saveScheduledShops();
-                ProductDisplayManager.saveScheduledDisplays();
+                // ProductDisplayManager.saveScheduledDisplays();
                 StashManager.saveScheduledStashes();
             });
 
@@ -226,13 +233,14 @@ public class FancyPlayerShops implements ModInitializer {
                 // Calculate block position and create the new display if no other display is already there. Send a feedback message to the player
                 final BlockPos blockPos = hitResult.getBlockPos().offset(hitResult.getDirection().getNormal());
                 final CompoundTag tag = stack.getTag();
-                if(ProductDisplayManager.findDisplay(blockPos, level) == null) {
+                final UUID displayUUID = new ProductDisplayKey(blockPos, level).getUUID();
+                if(ProductDisplayManager.REF.get(displayUUID) == null) {
 
                     // Spawn snapshot if the item has the snapshot tag
                     if(MinecraftUtils.hasTag(stack, ProductDisplayManager.SNAPSHOT_NBT_KEY)) {
                         final CompoundTag data = tag.getCompound(MOD_ID + ".snapshot_data");
                         if(data.getUUID("owner").equals(player.getUUID())) {
-                            ProductDisplay_Serializer.deserialize(data.getString("product_display_data"), serverLevel, blockPos);
+                            ((ProductDisplaySerializer)ProductDisplayManager.REF.getSerializer()).deserialize(data.getString("product_display_data"), serverLevel, blockPos);
                             player.displayClientMessage(new Txt("Display snapshot restored").lightGray().bold().get(), true);
                             if(!player.getAbilities().instabuild) --newCount;
                         }

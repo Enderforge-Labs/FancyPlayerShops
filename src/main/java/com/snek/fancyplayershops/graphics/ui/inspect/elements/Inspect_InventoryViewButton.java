@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.inventories.ItemInspectorInventory_Factory;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.graphics.functional.elements.ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.fancyplayershops.GetDisplay;

@@ -1,11 +1,5 @@
 package com.snek.fancyplayershops.data.display;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -15,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,30 +17,24 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.fancyplayershops.configs.Configs;
-import com.snek.fancyplayershops.main.DisplayTier;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.ProductDisplay;
-import com.snek.fancyplayershops.main.ProductDisplayKey;
+import com.snek.frameworkconfig.data.DataManager;
 import com.snek.fancyplayershops.graphics.ui.edit.elements.Edit_ColorSelector;
 import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
 import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 
 
 
@@ -67,43 +54,23 @@ import net.minecraft.world.level.Level;
 /**
  * A class that handles active product displays and takes care of loading and saving their data.
  */
-public final class ProductDisplayManager extends UtilityClassBase {
+@SuppressWarnings("java:S6548") //! Singleton implementation
+public class ProductDisplayManager extends DataManager<ProductDisplay> {
+
+    // Static manager reference
+    public static final ProductDisplayManager REF = new ProductDisplayManager();
+
+
+
+
     private static final DateTimeFormatter timeFormatter = new DateTimeFormatterBuilder()
         .appendPattern("MMMM d, yyyy 'at' h:mm ")
         .appendText(java.time.temporal.ChronoField.AMPM_OF_DAY,
             java.util.Map.of(0L, "am", 1L, "pm"))
         .toFormatter(Locale.ENGLISH)
     ;
-    private ProductDisplayManager() {}
-
-
-
-
-
-    /**
-     * Calculates the path to the directory where product displays are saved.
-     * @return The path to the save file directory.
-     */
-    public static @NotNull Path calcDisplayDirPath() {
-        return FancyPlayerShops.getStorageDir().resolve("product displays");
-    }
-
-    /**
-     * Calculates the path to the directory where the save file of the specified product display is saved.
-     * @param display The product display.
-     * @return The path to the directory of the save file of {@code display}.
-     */
-    public static @NotNull Path calcDisplayFileDirPath(final @NotNull ProductDisplay display) {
-        return calcDisplayDirPath().resolve(MinecraftUtils.getLevelId(display.getLevel()));
-    }
-
-    /**
-     * Calculates the path to the save file of the specified product display.
-     * @param display The product display.
-     * @return The path to the save file of {@code display}.
-     */
-    public static @NotNull Path calcDisplayFilePath(final @NotNull ProductDisplay display) {
-        return calcDisplayFileDirPath(display).resolve(display.getIdentifierNoLevel() + ".json");
+    private ProductDisplayManager() {
+        super(FancyPlayerShops.MOD_ID, "product displays", new ProductDisplaySerializer());
     }
 
 
@@ -113,13 +80,10 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    // Stores the displays of players, identifying them by their owner's UUID and their coordinates and level in the format "x,y,z,levelId"
-    private static final @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   displaysByCoords   = new HashMap<>();
-    private static final @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> displaysByOwner = new HashMap<>();
-    private static boolean dataLoaded = false;
-    public static @NotNull Map<@NotNull ProductDisplayKey, @Nullable ProductDisplay>                   getDisplaysByCoords() { return displaysByCoords; }
-    public static @NotNull Map<@NotNull UUID,              @Nullable HashSet<@NotNull ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
-    public static @Nullable Set<@NotNull ProductDisplay> getDisplaysOfPlayer(final @NotNull Player player) { return displaysByOwner.get(player.getUUID()); }
+    // Stores the displays of players, identifying them by their owner's UUID
+    private static final @NotNull Map<@NotNull UUID, @Nullable HashSet<@NotNull ProductDisplay>> displaysByOwner = new HashMap<>();
+    public  static       @NotNull Map<@NotNull UUID, @Nullable HashSet<@NotNull ProductDisplay>> getDisplaysByOwner()  { return displaysByOwner; }
+    //TODO hash set of displays is prob not efficient. use the display's key instead
 
     // Async update list
     private static int updateIndex = 0;
@@ -204,173 +168,33 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
 
 
-    /**
-     * Registers the displays in the runtime maps.
-     * <p> Calling this method on a display that's already registered will have no effect.
-     */
-    public static void registerDisplay(final @NotNull ProductDisplay display) {
-        if(displaysByCoords.put(display.getKey(), display) == null) {
-            displaysByOwner.putIfAbsent(display.getOwnerUuid(), new HashSet<>());
-            displaysByOwner.get(display.getOwnerUuid()).add(display);
 
-            final ChunkPos chunkPos = new ChunkPos(display.getPos());
-            chunkDisplayAmount.putIfAbsent(chunkPos, 0);
-            chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) + 1);
-        }
+    @Override
+    public void afterPut(final @NotNull UUID uuid, final @NotNull ProductDisplay data) {
+        final ChunkPos chunkPos = new ChunkPos(data.getPos());
+        chunkDisplayAmount.putIfAbsent(chunkPos, 0);
+        chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) + 1);
+        ProductDisplayManager.getDisplaysByOwner().computeIfAbsent(data.getOwnerUuid(), list -> { return new HashSet<>(); }).add(data);
     }
 
-    /**
-     * Unregisters the display from the runtime maps.
-     * <p>
-     * Calling this method on a display that's already not registered will have no effect.
-     * <p>
-     * This method doesn't remove the display from the world or modify its stock and balance in any way.
-     */
-    public static void unregisterDisplay(final @NotNull ProductDisplay display) {
-        if(displaysByCoords.remove(display.getKey(), display)) {
-            final HashSet<ProductDisplay> set = displaysByOwner.get(display.getOwnerUuid());
-            if(set != null) set.remove(display);
 
-            final ChunkPos chunkPos = new ChunkPos(display.getPos());
-            chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) - 1);
-        }
+    @Override
+    public void afterRemove(final @NotNull UUID uuid, final @NotNull ProductDisplay data) {
+        final ChunkPos chunkPos = new ChunkPos(data.getPos());
+        chunkDisplayAmount.put(chunkPos, chunkDisplayAmount.get(chunkPos) - 1);
+        ProductDisplayManager.getDisplaysByOwner().get(data.getOwnerUuid()).remove(data);
     }
 
+
+    /**
+     * Checks if the specified chunk contains any product displays.
+     * @param chunkPos The position of the chunk to check.
+     * @return True if the chunk contains at least 1 display, false otherwise.
+     */
     public static boolean chunkHasDisplays(final @NotNull ChunkPos chunkPos) {
         final Integer n = chunkDisplayAmount.get(chunkPos);
         return n != null && n > 0;
     }
-
-
-
-
-
-
-
-
-    /**
-     * Schedules a display for data saving.
-     * Call saveScheduledDisplays() to save schedules displays.
-     * @param display The display to save.
-     */
-    public static void scheduleDisplaySave(final @NotNull ProductDisplay display) {
-        if(!display.isScheduledForSave()) {
-            scheduledForSaving.add(display);
-            display.setScheduledForSave(true);
-        }
-    }
-
-    /**
-     * Saves the data of all the displays schedules for saving in their config files.
-     */
-    public static void saveScheduledDisplays() {
-
-        for(final ProductDisplay display : scheduledForSaving) {
-
-            // Create directory for the level
-            final Path levelStorageDir = calcDisplayFileDirPath(display);
-            try {
-                Files.createDirectories(levelStorageDir);
-            }
-            catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage directory for the product display data of the level \"{}\"", MinecraftUtils.getLevelId(display.getLevel()), e);
-            }
-
-
-            // Skip deleted displays
-            if(display.isRemoved()) {
-                //BUG write this in canBeSaved() when replacing with frameworkConfig
-                continue;
-            }
-
-
-            // Create this display's config file if absent, then save the JSON in it
-            final File displayStorageFile = calcDisplayFilePath(display).toFile();
-            try (final Writer writer = new FileWriter(displayStorageFile)) {
-                writer.write(ProductDisplay_Serializer.serialize(display));
-            }
-            catch(final IOException e) {
-                FancyPlayerShops.LOGGER.error("Couldn't create the storage file for the product display \"{}\"", display.getIdentifierNoLevel(), e);
-            }
-
-
-            // Flag the display as not scheduled
-            display.setScheduledForSave(false);
-        }
-        scheduledForSaving = new ArrayList<>();
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Loads all the player product displays into the runtime map if needed.
-     * <p> Must be called on server started event (After the levels are loaded!).
-     * <p> If the data has already been loaded, the call will have no effect.
-     */
-    public static void loadDisplays() {
-        if(dataLoaded) return;
-        dataLoaded = true;
-
-
-        for(final File levelStorageDir : calcDisplayDirPath().toFile().listFiles()) {
-
-            // For each display file
-            final File[] displayStorageFiles = levelStorageDir.listFiles();
-            if(displayStorageFiles != null) for(final File displayStorageFile : displayStorageFiles) {
-
-                // Read file and deserialize the data
-                try {
-                    final String serializedDisplay = Files.readString(displayStorageFile.toPath());
-                    final ProductDisplay retrievedDisplay = ProductDisplay_Serializer.deserialize(serializedDisplay, null, null);
-                    registerDisplay(retrievedDisplay);
-                }
-                catch(final IOException e) {
-                    FancyPlayerShops.LOGGER.error("Couldn't read the storage file of the product display \"{}\"", displayStorageFile.getName(), e);
-                }
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Returns the {@link ProductDisplay} instance present at a certain block position.
-     * @param pos The block position.
-     * @param level The level the display is in.
-     * @return The display, or null if no display is there.
-    */
-    public static ProductDisplay findDisplay(final @NotNull BlockPos pos, final @NotNull Level level) {
-        return displaysByCoords.get(ProductDisplay.calcDisplayKey(pos, level));
-    }
-
-
-
-
-    /**
-     * Deletes the data associated with this hop instance.
-     * @param display The display to delete.
-     */
-    @SuppressWarnings({ "java:S899", "java:S4042" }) //! Return value of file.delete() ignored
-    public static void deleteDisplay(final @NotNull ProductDisplay display) {
-
-        // Remove display from the runtime maps
-        unregisterDisplay(display);
-
-        // Delete the config file
-        final File displayStorageFile = calcDisplayFilePath(display).toFile();
-        displayStorageFile.delete();
-    }
-
 
 
 
@@ -389,7 +213,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
 
         // Refresh snapshot if needed
         if(updateIndex == 0) {
-            updateSnapshot = new ArrayList<>(displaysByCoords.values());
+            updateSnapshot = new ArrayList<>(REF.getCache().values());
         }
 
 
@@ -421,7 +245,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
      * This bypasses configured restock limits.
      */
     public static void forcePullItems() {
-        for(final ProductDisplay display : displaysByCoords.values()) {
+        for(final ProductDisplay display : REF.getCache().values()) {
             final ChunkPos chunkPos = new ChunkPos(display.getPos());
             if(display.getLevel().hasChunk(chunkPos.x, chunkPos.z)) {
                 display.pullItems();
@@ -473,7 +297,7 @@ public final class ProductDisplayManager extends UtilityClassBase {
         final CompoundTag data = new CompoundTag();
         data.putUUID  ("owner", display.getOwnerUuid());
         data.putString("owner_name", MinecraftUtils.getPlayerByUUID(display.getOwnerUuid()).getName().getString());
-        data.putString("product_display_data", ProductDisplay_Serializer.serialize(display));
+        data.putString("product_display_data", REF.getSerializer().serialize(display));
 
 
         // Create description

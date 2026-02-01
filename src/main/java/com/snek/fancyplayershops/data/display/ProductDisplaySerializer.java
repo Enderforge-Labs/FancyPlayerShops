@@ -11,12 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.snek.fancyplayershops.main.DisplayTier;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.frameworkconfig.data.DataEntrySerializer;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.graphics.Direction;
 import com.snek.frameworklib.utils.common.MinecraftUtils;
-import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -30,9 +28,10 @@ import net.minecraft.world.item.Items;
 
 
 
-public final class ProductDisplay_Serializer extends UtilityClassBase {
+public class ProductDisplaySerializer extends DataEntrySerializer<ProductDisplay> {
 
-    public static @NotNull String serialize(final @NotNull ProductDisplay display) {
+    @Override
+    public @NotNull String serialize(final @NotNull ProductDisplay display) {
         final Gson gson = new Gson();
         final Map<String, Object> data = new HashMap<>();
 
@@ -89,7 +88,15 @@ public final class ProductDisplay_Serializer extends UtilityClassBase {
 
 
 
-    public static @NotNull ProductDisplay deserialize(final @NotNull String json, final @Nullable ServerLevel serverLevelOverride, final @Nullable BlockPos blockPosOverride) {
+    @Override
+    public @NotNull ProductDisplay deserialize(final @NotNull String json) {
+        return deserialize(json, null, null);
+    }
+
+
+
+
+    public @NotNull ProductDisplay deserialize(final @NotNull String json, final @Nullable ServerLevel serverLevelOverride, final @Nullable BlockPos blockPosOverride) {
         final Gson gson = new Gson();
         final Map<String, Object> data = gson.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
 

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.ui.misc.styles.ProductDisplay_TextInput_S;
 import com.snek.fancyplayershops.graphics.ui.transfer.TransferCanvas;
 import com.snek.frameworklib.graphics.functional.elements.ChatInputElm;

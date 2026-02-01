@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,8 @@ import org.joml.Vector3d;
 
 import com.snek.fancyplayershops.configs.Configs;
 import com.snek.fancyplayershops.data.display.ProductDisplayManager;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplayKey;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.common.MinecraftUtils;
 
@@ -141,7 +143,9 @@ public abstract class HoverReceiver {
         // Unfocus all the displays that don't have any viewer anymore. Set their viewer to null
         targetedDisplaysOld.removeAll(targetedDisplays);
         for(final ProductDisplay display : targetedDisplaysOld) {
-            if(!display.isRemoved()) {
+
+            //! But only do that if they haven't been removed since the last tick.
+            if(!display.isDeleted()) {
                 display.setViewer(null);
                 display.updateFocusState();
             }
@@ -149,8 +153,9 @@ public abstract class HoverReceiver {
 
 
         // Update looked-at displays
+        //! isDeleted() check is prob not needed here, but we check it anyway, just to be sure
         for(final ProductDisplay display : targetedDisplays) {
-            if(!display.isRemoved() && display.getuser() != null) {
+            if(!display.isDeleted() && display.getuser() != null) {
 
                 // If the user isn't looking at the display anymore, unfocus it
                 if(display.getViewer() != display.getuser()) {
@@ -301,7 +306,8 @@ public abstract class HoverReceiver {
             // Find target display
             for(final Vec3 pos : collidingBlocks) {
                 final Vec3i blockPos = MinecraftUtils.doubleToBlockCoords(new Vector3d(pos.toVector3f()));
-                final ProductDisplay display = ProductDisplayManager.findDisplay(new BlockPos(blockPos), player.level());
+                final UUID displayUUID = new ProductDisplayKey(new BlockPos(blockPos), player.level()).getUUID();
+                final ProductDisplay display = ProductDisplayManager.REF.get(displayUUID);
                 if(display != null) return display;
             }
         }

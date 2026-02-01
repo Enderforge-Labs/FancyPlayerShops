@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.snek.fancyplayershops.main.FancyPlayerShops;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.frameworklib.data_types.containers.Option;
 import com.snek.frameworklib.utils.UtilityClassBase;
 

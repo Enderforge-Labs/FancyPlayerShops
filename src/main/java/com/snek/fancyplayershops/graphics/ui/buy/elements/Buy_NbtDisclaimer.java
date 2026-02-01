@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.fancyplayershops.graphics.ui.nbt_disclaimer.NbtDisclaimerCanvas;
 import com.snek.fancyplayershops.GetDisplay;
-import com.snek.fancyplayershops.main.ProductDisplay;
+import com.snek.fancyplayershops.data.display.ProductDisplay;
 import com.snek.fancyplayershops.graphics.misc.elements.Misc_BackButton;
 import com.snek.fancyplayershops.graphics.ui.buy.styles.Buy_NbtDisclaimer_S;
 import com.snek.frameworklib.graphics.core.Context;
